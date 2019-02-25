@@ -1,0 +1,33 @@
+{
+  "name": "gancio",
+  "main": "server.js",
+  "scripts": {
+    "serve": "NODE_ENV=production PORT=9000 nodemon server.js",
+    "dev": "NODE_ENV=development PORT=9000 nodemon server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.2",
+    "body-parser": "^1.15.0",
+    "cors": "^2.8.4",
+    "email-templates": "^5.0.2",
+    "express": "^4.13.4",
+    "ics": "^2.13.1",
+    "jsonwebtoken": "^5.7.0",
+    "mastodon-api": "^1.3.0",
+    "mongoose": "^5.2.17",
+    "morgan": "^1.7.0",
+    "multer": "^1.4.1",
+    "mysql2": "^1.6.4",
+    "pug": "^2.0.3",
+    "sequelize": "^4.41.0",
+    "sqlite3": "^4.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^5.8.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0"
+  }
+}

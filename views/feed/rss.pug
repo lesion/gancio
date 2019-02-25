@@ -1,0 +1,23 @@
+doctype xml
+rss(version='2.0', xmlns:atom='<a href="http://www.w3.org/2005/Atom" rel="nofollow">http://www.w3.org/2005/Atom</a>')
+    channel
+        title #{config.title}
+        link <a href="#{config.baseurl}" rel="nofollow">#{config.baseurl}</a>
+        atom:link(href='<a href="#{config.apiurl}/export/feed/rss" rel="nofollow">#{config.apiurl}/export/feed/rss</a>', rel='self', type='application/rss+xml')
+        description #{config.description}
+        language #{config.locale}
+        //- if events.length
+            lastBuildDate= new Date(posts[0].publishedAt).toUTCString()
+        each event in events
+            item
+                title= event.title
+                link <a href=#{config.baseurl}/event/#{event.id}" rel="nofollow">#{config.baseurl}/event/#{event.id}</a>
+                description
+                    | <![CDATA[
+                    | <h4>#{event.title}</h4>
+                    | <strong>#{event.place.name} - #{event.place.address}</strong>
+                    | #{moment(event.start_datetime).format("ddd, D MMMM HH:mm")}<br/>
+                    | !{event.description}
+                    | ]]>
+                pubDate= new Date(event.start_datetime).toUTCString()
+                guid(isPermaLink='false') <a href="#{config.baseurl}/event/#{event.id}" rel="nofollow">#{config.baseurl}/event/#{event.id}</a>
