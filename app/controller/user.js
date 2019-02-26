@@ -151,7 +151,7 @@ const userController = {
       const mastodon_auth = { client_id, client_secret, access_token: token }
       req.user.mastodon_auth = mastodon_auth
       await req.user.save()
-      await bot.add(token)
+      await bot.add(req.user, token)
       res.json(req.user)
     } catch (e) {
       res.json(e)

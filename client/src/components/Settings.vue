@@ -31,7 +31,7 @@ export default {
 
     const user = await api.getUser()
     this.user = user
-    this.mastodon_instance = user.instance
+    this.mastodon_instance = user.mastodon_instance
   },
   methods: {
       async associate () {

@@ -25,7 +25,7 @@ const botController = {
     })
     console.log(botController.bots)
   },
-  add (user) {
+  add (user, token) {
     const bot = new Mastodon({ access_token: user.mastodon_auth.access_token, api_url: `https://${user.mastodon_instance}/api/v1/` })
     const listener = bot.stream('streaming/direct')
     listener.on('message', botController.message)
