@@ -138,8 +138,8 @@ export default {
     }
   },
   methods: {
-    update (e) {
-      if (this.multiple && e.data === ',') {
+    update (e, value) {
+      if (this.multiple && this.search[this.search.length-1] === ',') {
         this.search = this.search.substr(0, this.search.length-1)
         this.hit(e)
         return

@@ -14,7 +14,7 @@ const mail = {
         }
       },
       message: {
-        from: 'Gancio <eventi@cisti.org>'
+        from: `${config.title} <${config.admin}>`
       },
       send: true,
       i18n: {},

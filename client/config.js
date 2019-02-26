@@ -4,6 +4,7 @@ const beConf = require('../config/config.' + env + '.json')
 const conf = {
   // environment
   title: beConf.title,
+  description: beConf.description,
 
   // base url
   baseurl: beConf.baseurl,

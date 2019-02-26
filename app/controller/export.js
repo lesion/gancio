@@ -1,43 +1,62 @@
-const jwt = require('jsonwebtoken')
-const { User, Event, Comment, Tag, Place } = require('../model')
-const config = require('../config')
-const mail = require('../mail')
-const moment = require('moment')
+const { Event, Comment, Tag, Place } = require('../model')
 const Sequelize = require('sequelize')
+const config = require('../config')
+const moment = require('moment')
 const ics = require('ics')
 
 const exportController = {
-  async getAll (req, res) {
+  async export (req, res) {
+    console.log('type ', req.params.type)
+    const type = req.params.type
+    const tags = req.query.tags
+    const places = req.query.places
+    const whereTag = {}
+    const wherePlace = {}
+    const yesterday = moment().subtract('1', 'day')
+    if (tags) {
+      whereTag.tag = tags.split(',')
+    }
+    if (places) {
+      wherePlace.name = places.split(',')
+    }
+    console.log(wherePlace.name)
     const events = await Event.findAll({
-      where: {
-        [Sequelize.Op.and]: [
-          { start_datetime: { [Sequelize.Op.gte]: start } },
-          { start_datetime: { [Sequelize.Op.lte]: end } }
-        ]
-      },
-      order: [['createdAt', 'DESC']],
-      include: [User, Comment, Tag, Place]
+      order: [['start_datetime', 'ASC']],
+      where: { start_datetime: { [Sequelize.Op.gte]: yesterday } },
+      include: [Comment, {
+        model: Tag,
+        where: whereTag
+      }, { model: Place, where: wherePlace } ]
     })
-    res.json(events)
+    switch (type) {
+      case 'feed':
+        return exportController.feed(res, events)
+      case 'ics':
+        return exportController.ics(res, events)
+    }
   },
-  async feed (req, res) {
-    const events = await Event.findAll({include: [Comment, Tag, Place]})
+  async feed (res, events) {
     res.type('application/rss+xml; charset=UTF-8')
-    res.render('feed/rss.pug', {events, config, moment})
+    res.render('feed/rss.pug', { events, config, moment })
   },
-  async ics (req, res) {
-    const events = await Event.findAll({include: [Comment, Tag, Place]})
-    console.log(events)
-    const eventsMap = events.map(e => ({
-      start: [2019, 2, 2],
-      end: [2019, 2, 3],
-      title: e.title,
-      description: e.description,
-      location: e.place.name
-    }))
+
+  async ics (res, events) {
+    const eventsMap = events.map(e => {
+      const tmpStart = moment(e.start_datetime)
+      const tmpEnd = moment(e.end_datetime)
+      const start = [tmpStart.year(), tmpStart.month() + 1, tmpStart.date(), tmpStart.hour(), tmpStart.minute()]
+      const end = [tmpEnd.year(), tmpEnd.month() + 1, tmpEnd.date(), tmpEnd.hour(), tmpEnd.minute()]
+      return {
+        start,
+        end,
+        title: e.title,
+        description: e.description,
+        location: e.place.name + ' ' + e.place.address
+      }
+    })
     res.type('text/calendar; charset=UTF-8')
     const { error, value } = ics.createEvents(eventsMap)
-    console.log(value)
+    console.log(error, value)
     res.send(value)
   }
 }

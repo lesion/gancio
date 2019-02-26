@@ -4,6 +4,6 @@ import Settings from '@/components/Settings'
 import newEvent from '@/components/newEvent'
 import eventDetail from '@/components/EventDetail'
 import Home from '@/components/Home'
-import Event from '@/components/event'
+import Event from '@/components/Event'
 
-module.exports = { Home, eventDetail, newEvent, Settings, Login, Register, Event }
+export default { Home, eventDetail, newEvent, Settings, Login, Register, Event }

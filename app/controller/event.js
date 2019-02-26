@@ -49,7 +49,7 @@ const eventController = {
           { start_datetime: { [Sequelize.Op.lte]: end } }
         ]
       },
-      order: [['createdAt', 'ASC']],
+      order: [['start_datetime', 'ASC']],
       include: [User, Comment, Tag, Place]
     })
     res.json(events)

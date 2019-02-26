@@ -35,9 +35,9 @@ api.get('/event/meta', eventController.getMeta)
 api.route('/event/:event_id')
   .get(eventController.get)
 
-
-api.get('/export/feed', exportController.feed)
-api.get('/export/ics', exportController.ics)
+// api.get('/export/feed', exportController.feed)
+// api.get('/export/ics', exportController.ics)
+api.get('/export/:type', exportController.export)
 
 api.route('/event/:year/:month')
   .get(eventController.getAll)

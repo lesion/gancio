@@ -66,7 +66,7 @@ export default {
             backgroundColor: '#aaffaa'
           },
           popover: {label: this.$t('Today')}
-        },
+        }, 
         ...this.events.map(this.eventToAttribute)
       ]
     }
