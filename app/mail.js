@@ -1,6 +1,6 @@
 const Email = require('email-templates')
 const path = require('path')
-const config = require('./config');
+const config = require('./config')
 
 const mail = {
   send (addresses, template, locals) {

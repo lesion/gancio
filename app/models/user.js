@@ -3,18 +3,19 @@ const db = require('../db')
 const Sequelize = require('sequelize')
 
 const User = db.define('user', {
-  email: { 
+  email: {
     type: Sequelize.STRING,
-    unique: {msg: 'Email already exists'},
-    index: true, allowNull: false },
+    unique: { msg: 'Email already exists' },
+    index: true,
+    allowNull: false
+  },
   description: Sequelize.TEXT,
   password: Sequelize.STRING,
   is_admin: Sequelize.BOOLEAN,
   is_active: Sequelize.BOOLEAN,
-  instance: Sequelize.STRING,
+  mastodon_instance: Sequelize.STRING,
   mastodon_auth: Sequelize.JSON
 })
-
 
 User.prototype.comparePassword = async function (pwd) {
   if (!this.password) return false

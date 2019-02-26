@@ -10,7 +10,7 @@ const Auth = {
     jwt.verify(token, config.secret, async (err, decoded) => {
       if (err) return res.status(403).send({ message: 'Failed to authenticate token ' + err })
       console.log('DECODED TOKEN', decoded)
-      req.user = await User.findOne({ where: {email: decoded.email}})
+      req.user = await User.findOne({ where: { email: decoded.email } })
       next()
     })
   },

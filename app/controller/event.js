@@ -1,7 +1,4 @@
-const jwt = require('jsonwebtoken')
 const { User, Event, Comment, Tag, Place } = require('../model')
-const config = require('../config')
-const mail = require('../mail')
 const moment = require('moment')
 const Sequelize = require('sequelize')
 
@@ -9,9 +6,9 @@ const eventController = {
 
   async addComment (req, res) {
     // comment could be added to an event or to another comment
-    let event = await Event.findOne({where: {activitypub_id: req.body.id}})
+    let event = await Event.findOne({ where: { activitypub_id: req.body.id } })
     if (!event) {
-      const comment = await Comment.findOne({where: {activitypub_id: req.body.id}, include: Event})
+      const comment = await Comment.findOne({ where: { activitypub_id: req.body.id }, include: Event })
       event = comment.event
     }
     const comment = new Comment(req.body)
@@ -19,16 +16,11 @@ const eventController = {
     res.json(comment)
   },
 
-  // async boost (req, res) {
-  //   const event = await Event.findById(req.body.id)
-  //   req.user.addBoost(event)
-  //   res.status(200)
-  // },
-
-  async getMeta(req, res) {
+  async getMeta (req, res) {
+    console.log('GET META')
     const places = await Place.findAll()
     const tags = await Tag.findAll()
-    res.json({tags, places})
+    res.json({ tags, places })
   },
 
   async updateTag (req, res) {
@@ -41,17 +33,15 @@ const eventController = {
     }
   },
 
-  async get(req, res) {
+  async get (req, res) {
     const id = req.params.event_id
-    const event = await Event.findByPk(id, { include: [User, Tag, Comment, Place]})
+    const event = await Event.findByPk(id, { include: [User, Tag, Comment, Place] })
     res.json(event)
   },
 
   async getAll (req, res) {
     const start = moment().year(req.params.year).month(req.params.month).startOf('month').subtract(1, 'week')
     const end = moment().year(req.params.year).month(req.params.month).endOf('month').add(1, 'week')
-    console.log('start', start)
-    console.log('end', end)
     const events = await Event.findAll({
       where: {
         [Sequelize.Op.and]: [
@@ -63,7 +53,7 @@ const eventController = {
       include: [User, Comment, Tag, Place]
     })
     res.json(events)
-  },
+  }
 
 }
 

@@ -31,11 +31,9 @@ api.route('/user/event')
 api.route('/user/event/:id')
   .delete(isAuth, userController.delEvent)
 
+api.get('/event/meta', eventController.getMeta)
 api.route('/event/:event_id')
   .get(eventController.get)
-
-api.route('/event/meta')
-  .get(eventController.getMeta)
 
 
 api.get('/export/feed', exportController.feed)
