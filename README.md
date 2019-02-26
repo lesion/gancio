@@ -3,7 +3,7 @@ an event manager for radical communities
 [WIP]
  
 # dev
-both backend (`/app`) and frontend(`/client) are in this repo.
+both backend (`/app`) and frontend(`/client`) are in this repo.
 
 backend stack: node.js, express, sequelize.  
 frontend stack: vue, webpack, boostrap
