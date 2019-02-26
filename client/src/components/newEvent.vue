@@ -32,7 +32,7 @@
               label.text-muted {{$t('time_end_explanation')}}
               el-time-select(
                 v-model='time.end'
-                :picker-options="{start: `${event.multidate?'00:00':time.start}`, step: '00:30', end: '24:00'}"
+                :picker-options="{start: '00:00', step: '00:30', end: '24:00'}"
               )
           
       b-tab

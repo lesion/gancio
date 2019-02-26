@@ -60,4 +60,4 @@ const it = {
     carne e sangue, scrivici quindi due righe per farci capire che eventi vorresti pubblicare.`
 }
 
-module.exports = it
+export default it

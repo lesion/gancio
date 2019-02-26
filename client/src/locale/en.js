@@ -26,4 +26,4 @@ const en = {
   register_explanation: `..`
 }
 
-module.exports = en
+export default en
