@@ -1,7 +1,5 @@
-const jwt = require('jsonwebtoken')
 const { User, Event, Comment, Tag } = require('../model')
 const config = require('../config')
-const mail = require('../mail')
 const Mastodon = require('mastodon-api')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op

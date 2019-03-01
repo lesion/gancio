@@ -23,6 +23,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import './assets/main.css'
+
 import itLocale from '@/locale/it'
 import enLocale from '@/locale/en'
 

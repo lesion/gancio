@@ -30,7 +30,7 @@ const exportController = {
     })
     switch (type) {
       case 'feed':
-        return exportController.feed(res, events)
+        return exportController.feed(res, events.slice(0, 20))
       case 'ics':
         return exportController.ics(res, events)
     }

@@ -12,7 +12,8 @@
         v-icon(name='map-marker-alt')
         span  {{event.place.name}} - {{event.place.address}}
         br
-      b-card-footer(v-if='event.description || event.tags') {{event.description}}
+      b-card-body(v-if='event.description || event.tags')
+        pre {{event.description}}
         br
         b-badge(:style='{backgroundColor: tag.color}' v-for='tag in event.tags') {{tag.tag}}
       b-navbar(v-if='mine' type="dark" variant="dark" toggleable='lg')

@@ -3,3 +3,10 @@
   overflow: hidden;
 } */
 
+pre {
+  display: inline-block;
+  color: unset;
+  white-space: pre-line;
+  font-family: unset;
+  font-size: 1em;
+}
