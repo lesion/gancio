@@ -29,7 +29,6 @@
                 img(v-if='event.image_path' slot="aside" :src="imgPath(event)" alt="Media Aside" style='max-height: 60px')
                 small.float-right {{event.start_datetime|short_datetime}}
                 h5.mb-1 {{event.title}}
-                small.mb-1 {{event.description}}
               b-badge.float-right.ml-1(v-for='tag in event.tags') {{tag.tag}}
               small.float-right(v-b-popover.hover='event.place.address') {{event.place.name}}
       Calendar(v-else)

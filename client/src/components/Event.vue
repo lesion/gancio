@@ -2,7 +2,7 @@
   b-card(bg-variant='dark' text-variant='white'
     @click='$router.push("/event/" + event.id)'
      :img-src='imgPath')
-      h4 {{event.title}}
+      h5 {{event.title}}
       div <v-icon name='clock'/> {{event.start_datetime|datetime}}
       span(v-b-popover.hover="event.place && event.place.address || ''")  <v-icon name='map-marker-alt'/> {{event.place.name}}
       br

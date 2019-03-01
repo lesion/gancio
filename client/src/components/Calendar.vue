@@ -10,6 +10,7 @@
 import { mapState, mapActions } from 'vuex'
 import filters from '@/filters'
 import moment from 'moment'
+import { intersection } from 'lodash'
 
 export default {
   name: 'Calendar',
@@ -58,7 +59,21 @@ export default {
     }
   },
   computed: {
-    ...mapState(['events', 'tags']),
+    filteredEvents () {
+      if (!this.filters.tags.length && !this.filters.places.length) return this.events
+      return this.events.filter(e => {
+        if (this.filters.tags.length) {
+          const m = intersection(e.tags.map(t => t.tag), this.filters.tags)
+          if (m.length>0) return true
+        }
+        if (this.filters.places.length) {
+          if (this.filters.places.find(p => p === e.place.name))
+            return true
+        }
+        return 0
+      })
+    },
+    ...mapState(['events', 'tags', 'filters']),
     attributes () {
       return [
         { key: 'todaly', dates: new Date(),
@@ -67,7 +82,7 @@ export default {
           },
           popover: {label: this.$t('Today')}
         }, 
-        ...this.events.map(this.eventToAttribute)
+        ...this.filteredEvents.map(this.eventToAttribute)
       ]
     }
   }

@@ -19,7 +19,6 @@ const exportController = {
     if (places) {
       wherePlace.name = places.split(',')
     }
-    console.log(wherePlace.name)
     const events = await Event.findAll({
       order: [['start_datetime', 'ASC']],
       where: { start_datetime: { [Sequelize.Op.gte]: yesterday } },

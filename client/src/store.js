@@ -62,6 +62,8 @@ export default new Vuex.Store({
     addSearchTag (state, tag) {
       if (!state.filters.tags.find(t => t === tag.tag)) {
         state.filters.tags.push(tag.tag)
+      } else {
+        state.filters.tags = state.filters.tags.filter(t => t !== tag.tag)
       }
     },
     setSearchTags (state, tags) {

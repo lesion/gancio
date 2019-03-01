@@ -19,7 +19,7 @@
     div
       b-badge.mr-1(@click="removeSelected(sel)"
         v-for="sel in selectedLabel"
-        :key="sel") {{sel}}
+        :key="sel") <v-icon color='orange' name='times' /> {{sel}}
 
     b-list-group.groupMenu(v-show='showDropdown')
       b-list-group-item(:key="$index" v-for="(item, $index) in matched"

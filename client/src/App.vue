@@ -6,7 +6,6 @@
       b-collapse#nav_collapse(is-nav)
         b-navbar-nav.ml-auto(v-if='logged')
           b-nav-item(to='/new_event') <v-icon color='lightgreen' name='plus'/> {{$t('Add Event')}}
-          b-nav-item(@click='search=!search') <v-icon color='lightgreen' name='search'/> {{$t('Search')}}
           b-nav-item(to='/settings') <v-icon color='orange' name='cog'/> {{$t('Settings')}}
           b-nav-item(v-if='user.is_admin' to='/admin') <v-icon color='lightblue' name='tools'/> {{$t('Admin')}}
           b-nav-item(variant='danger' @click='logout') <v-icon color='red' name='sign-out-alt'/> {{$t('Logout')}}
@@ -15,24 +14,29 @@
           b-nav-item(to='/register') {{$t('Register')}}
           b-nav-item(to='/login') {{$t('Login')}}
     transition(name='toggle')
-      b-navbar#search(v-if='search' type='dark' variant="dark" toggleable='lg')
-        b-navbar-nav
-          b-nav-form
-            typeahead.ml-1(v-model='filters_places' 
-              textField='name' valueField='name'
-              updateOnMatchOnly
-              :data='places' multiple placeholder='Luogo')
-          b-nav-form
-            typeahead.ml-1(v-model='filters_tags'
-              updateOnMatchOnly
-              textField='tag' valueField='tag'
-              :data='tags' multiple placeholder='Tags')
-        b-navbar-nav.ml-auto(variant='dark')
-          b-nav-item(to='/export/feed' href='#') <v-icon color='orange' name='rss'/> feed
-          b-nav-item(to='/export/ics') <v-icon color='orange' name='calendar'/> cal
-          b-nav-item(to='/export/email') <v-icon color='orange' name='envelope'/> mail
-          b-nav-item(to='/export/embed') <v-icon color='orange' name='code'/> embed
-          b-nav-item(to='/export/print') <v-icon color='orange' name='print'/> print
+      b-navbar#search(type='dark' variant="dark" toggleable='lg')
+        b-navbar-toggle(target='nav_search')
+          v-icon(name='search')
+        b-collapse#nav_search(is-nav)
+          <template slot="button-content"><em>User</em></template>
+
+          b-navbar-nav
+            b-nav-form
+              typeahead.ml-1.mt-1(v-model='filters_places' 
+                textField='name' valueField='name'
+                updateOnMatchOnly
+                :data='places' multiple placeholder='Luogo')
+            b-nav-form
+              typeahead.ml-1.mt-1(v-model='filters_tags'
+                updateOnMatchOnly
+                textField='tag' valueField='tag'
+                :data='tags' multiple placeholder='Tags')
+          b-navbar-nav.ml-auto(variant='dark')
+            b-nav-item(to='/export/feed' href='#') <v-icon color='orange' name='rss'/> feed
+            b-nav-item(to='/export/ics') <v-icon color='orange' name='calendar'/> cal
+            b-nav-item(to='/export/email') <v-icon color='orange' name='envelope'/> mail
+            b-nav-item(to='/export/embed') <v-icon color='orange' name='code'/> embed
+            b-nav-item(to='/export/print') <v-icon color='orange' name='print'/> print
     Home
     transition(name="fade" mode="out-in")
       router-view(name='modal')
@@ -54,20 +58,14 @@ export default {
   mounted () {
     this.updateMeta()
   },
-  data () {
-    return {search: false}
-  },
   components: { Register, Login, Home, Settings, newEvent, eventDetail },
   computed: {
     ...mapState(['logged', 'user', 'filters', 'tags', 'places']),
     filters_tags: {
       set (value) {
-        console.log('dentro set ', value)
         this.setSearchTags(value)
       },
       get () {
-        console.log('dentro get')
-        console.log(this.filters)
         return this.filters.tags
       }
     },
