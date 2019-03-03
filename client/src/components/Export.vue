@@ -1,39 +1,56 @@
 <template lang="pug">
   b-modal(hide-footer hide-header
     @hide='$router.replace("/")' size='lg' :visible='true' v-if='type')
-    h3.text-center Export {{type}}
-    b-input-group.mb-2(v-if='showLink')
-      b-form-input( v-model='link' autocomplete='off')
-      b-input-group-append
-        b-button(variant="success" v-clipboard:copy="link") <v-icon name='clipboard'/> Copy 
+    h3.text-center Export
     p {{$t('export_intro')}}
-    p(v-html='$t(`export_${type}_explanation`)')
-    li(v-if='filters.tags.length') {{$t('Tags')}} ->
-      b-badge.ml-1(v-for='tag in filters.tags') {{tag}}
-    li(v-if='filters.places.length') {{$t('Places')}}
+    
+    li(v-if='filters.tags.length') {{$t('Tags')}}:
+      b-badge.ml-1(:style='{backgroundColor: tag.color}' v-for='tag in filters.tags') {{tag}}
+    li(v-if='filters.places.length') {{$t('Places')}}:
       b-badge.ml-1(v-for='place in filters.places') {{place}}
-    b-form(v-if="type==='email'")
-      el-switch(v-model='mail.sendOnInsert' :active-text="$t('notify_on_insert')")
-      br
-      el-switch(v-model='mail.reminder' :active-text="$t('send_reminder')") 
-      b-form-input.mt-1(v-model='mail.mail' :placeholder="$t('Insert your address')")
-      b-button.mt-1.float-right(variant='success' @click='activate_email') {{$t('Send')}}
+    b-tabs(pills vertical)
+      b-tab.pt-1(title='feed rss' :active="type === 'feed'" @click='type="feed"')
+        p(v-html='$t(`export_feed_explanation`)')
+        b-input-group.mb-2(v-if='showLink')
+          b-form-input( v-model='link' autocomplete='off')
+          b-input-group-append
+            b-button(variant="success" v-clipboard:copy="link") <v-icon name='clipboard'/> Copy 
 
-    div(v-if="type==='embed'"  style='max-width: 400px;')
-      el-switch(v-model='export_list' :active-text="$t('export_list')")
-      b-card(v-if='export_list' no-body header='Eventi')
-        b-list-group(flush)
-          b-list-group-item.flex-column.align-items-start(v-for="event in filteredEvents" 
-            :href='`/event/${event.id}`')
-              b-media
-                img(v-if='event.image_path' slot="aside" :src="imgPath(event)" alt="Media Aside" style='max-height: 60px')
-                small.float-right {{event.start_datetime|short_datetime}}
-                h5.mb-1 {{event.title}}
-              b-badge.float-right.ml-1(v-for='tag in event.tags') {{tag.tag}}
-              small.float-right(v-b-popover.hover='event.place.address') {{event.place.name}}
-      Calendar(v-else)
-      br
-      b-form-textarea(v-model='script')
+      b-tab.pt-1(title='ics/ical' :active="type === 'ics'" @click='type="ics"')
+        p(v-html='$t(`export_ical_explanation`)')
+        b-input-group.mb-2(v-if='showLink')
+          b-form-input( v-model='link' autocomplete='off')
+          b-input-group-append
+            b-button(variant="success" v-clipboard:copy="link") <v-icon name='clipboard'/> Copy 
+
+      b-tab.pt-1(title='email' :active="type === 'email'" @click='type="email"')
+        p(v-html='$t(`export_email_explanation`)')
+        b-form
+          el-switch(v-model='mail.sendOnInsert' :active-text="$t('notify_on_insert')")
+          br
+          el-switch(v-model='mail.reminder' :active-text="$t('send_reminder')") 
+          b-form-input.mt-1(v-model='mail.mail' :placeholder="$t('Insert your address')")
+          b-button.mt-1.float-right(variant='success' @click='activate_email') {{$t('Send')}}
+
+      b-tab.pt-1(title='list' :active="type === 'list'" @click='type="list"')
+        p(v-html='$t(`export_list_explanation`)')
+        b-card.mb-1(no-body header='Eventi')
+          b-list-group#list(flush)
+            b-list-group-item.flex-column.align-items-start(v-for="event in filteredEvents" 
+              :to='`/event/${event.id}`')
+                //- b-media
+                  img(v-if='event.image_path' slot="aside" :src="imgPath(event)" alt="Media Aside" style='max-height: 60px')
+                small.float-right {{event.start_datetime|datetime}}
+                strong.mb-1 {{event.title}}
+                br
+                small.float-right {{event.place.name}}
+                b-badge.float-left.ml-1(:style='{backgroundColor: tag.color}' v-for='tag in event.tags') {{tag.tag}}
+        b-form-textarea(v-model='script')
+
+      b-tab.pt-1(title='calendar' :active="type === 'calendar'" @click='type="calendar"')
+        p(v-html='$t(`export_calendar_explanation`)')
+        Calendar
+        b-form-textarea(v-model='script')
 
 </template>
 <script>
@@ -49,7 +66,7 @@ export default {
   components: { Calendar },
   data () {
     return {
-      type: '',
+      type: 'feed',
       link: '',
       mail: {},
       export_list: true,
@@ -58,10 +75,11 @@ export default {
   },
   filters,
   mounted () {
-    this.type = this.$route.params.type
     this.link = this.loadLink()
-    if (this.type === 'email' && this.logged) {
-      this.mail.mail = this.user.email
+  },
+  watch: {
+    type (value) {
+      this.link = this.loadLink()
     }
   },
   methods: {
@@ -91,18 +109,7 @@ export default {
   computed: {
     ...mapState(['filters', 'user', 'logged', 'events']),
     filteredEvents () {
-      if (!this.filters.tags.length && !this.filters.places.length) return this.events
-      return this.events.filter(e => {
-        if (this.filters.tags.length) {
-          const m = intersection(e.tags.map(t => t.tag), this.filters.tags)
-          if (m.length>0) return true
-        }
-        if (this.filters.places.length) {
-          if (this.filters.places.find(p => p === e.place.name))
-            return true
-        }
-        return 0
-      })
+      return this.$store.getters.filteredEvents.filter(e => !e.past)
     },
     showLink () {
       return (['feed', 'ics'].indexOf(this.type)>-1)
@@ -110,4 +117,11 @@ export default {
   }
 }
 </script>
+<style>
+#list {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+</style>
+
 

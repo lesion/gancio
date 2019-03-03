@@ -1,42 +1,27 @@
 <template lang='pug'>
   #app
     b-navbar(type="dark" variant="dark" toggleable='lg')
-      b-navbar-brand(to='/') Gancio 
+      b-navbar-brand(to='/') <img id='logo' src='gancio_logo.svg'/>
       b-navbar-toggle(target='nav_collapse')
       b-collapse#nav_collapse(is-nav)
-        b-navbar-nav.ml-auto(v-if='logged')
-          b-nav-item(to='/new_event') <v-icon color='lightgreen' name='plus'/> {{$t('Add Event')}}
-          b-nav-item(to='/settings') <v-icon color='orange' name='cog'/> {{$t('Settings')}}
-          b-nav-item(v-if='user.is_admin' to='/admin') <v-icon color='lightblue' name='tools'/> {{$t('Admin')}}
-          b-nav-item(variant='danger' @click='logout') <v-icon color='red' name='sign-out-alt'/> {{$t('Logout')}}
-        b-navbar-nav.ml-auto(v-else)
-          b-nav-item(@click='search=!search') <v-icon color='lightgreen' name='search'/> {{$t('Search')}}
-          b-nav-item(to='/register') {{$t('Register')}}
-          b-nav-item(to='/login') {{$t('Login')}}
-    transition(name='toggle')
-      b-navbar#search(type='dark' variant="dark" toggleable='lg')
-        b-navbar-toggle(target='nav_search')
-          v-icon(name='search')
-        b-collapse#nav_search(is-nav)
-          <template slot="button-content"><em>User</em></template>
-
-          b-navbar-nav
-            b-nav-form
-              typeahead.ml-1.mt-1(v-model='filters_places' 
-                textField='name' valueField='name'
-                updateOnMatchOnly
-                :data='places' multiple placeholder='Luogo')
-            b-nav-form
-              typeahead.ml-1.mt-1(v-model='filters_tags'
-                updateOnMatchOnly
-                textField='tag' valueField='tag'
-                :data='tags' multiple placeholder='Tags')
-          b-navbar-nav.ml-auto(variant='dark')
-            b-nav-item(to='/export/feed' href='#') <v-icon color='orange' name='rss'/> feed
-            b-nav-item(to='/export/ics') <v-icon color='orange' name='calendar'/> cal
-            b-nav-item(to='/export/email') <v-icon color='orange' name='envelope'/> mail
-            b-nav-item(to='/export/embed') <v-icon color='orange' name='code'/> embed
-            b-nav-item(to='/export/print') <v-icon color='orange' name='print'/> print
+        b-navbar-nav(v-if='logged')
+          b-nav-item(to='/new_event' v-b-tooltip :title='$t("Add Event")' ) <v-icon color='lightgreen' name='plus' scale='2'/> 
+          b-nav-item(to='/settings' v-b-tooltip :title='$t("Settings")') <v-icon color='orange' name='cog' scale='2'/>
+          b-nav-item(v-if='user.is_admin' to='/admin' v-b-tooltip :title='$t("Admin")') <v-icon color='lightblue' name='tools' scale='2'/>
+          b-nav-item(to='/export' v-b-tooltip :title='$t("Export")') <v-icon name='file-export' scale='2' color='yellow'/>
+          b-nav-item(variant='danger' @click='logout' v-b-tooltip :title='$t("Logout")') <v-icon color='red' name='sign-out-alt' scale='2'/>
+        b-navbar-nav#search.ml-auto
+          b-nav-item <v-icon name='search' color='orange' scale='2'/>
+          b-nav-form
+            typeahead.ml-1.mt-1(v-model='filters_places' 
+              textField='name' valueField='name'
+              updateOnMatchOnly
+              :data='places' multiple placeholder='Luogo')
+          b-nav-form
+            typeahead.ml-1.mt-1(v-model='filters_tags'
+              updateOnMatchOnly
+              textField='tag' valueField='tag'
+              :data='tags' multiple placeholder='Tags')
     Home
     transition(name="fade" mode="out-in")
       router-view(name='modal')
@@ -84,10 +69,12 @@ export default {
 </script>
 
 <style>
-#footer {
-  position: absolute;
-  width: 100%;
-  bottom: 0px;
+#logo {
+  max-height: 60px;
+}
+
+.navbar-brand {
+  padding: 0px;
 }
 
 #search,
