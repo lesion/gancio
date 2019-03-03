@@ -33,6 +33,7 @@ export default {
   getAllEvents: (month, year) => get(`/event/${year}/${month}/`),
   addEvent: event => post('/user/event', event),
   updateEvent: event => put('/user/event', event),
+  updatePlace: place => put('/place', place),
   delEvent: eventId => del(`/user/event/${eventId}`),
   getEvent: eventId => get(`/event/${eventId}`),
   getMeta: () => get('/event/meta'),

@@ -15,8 +15,17 @@
         template(slot='title')
           v-icon(name='map-marker-alt')
           span  {{$t('Places')}}
-        b-table(:items='places' :fields='placeFields' striped hover)
-      b-tab
+        p You can change place's name or address
+        b-form.mb-2(inline)
+          b-input.mr-1(:placeholder='$t("Name")' v-model='place.name')
+          b-input.mr-1(:placeholder='$t("Address")' v-model='place.address')
+          b-button(variant='primary' @click='savePlace') {{$t('Save')}}
+        b-table(selectable :items='places' :fields='placeFields' striped hover 
+          small selectedVariant='success'  primary-key='id' 
+          select-mode="single" @row-selected='placeSelected'
+          :per-page='5' :current-page='placePage')
+        b-pagination(:per-page='5' v-model='placePage' :total-rows='places.length')
+      b-tab.pt-1
         template(slot='title')
           v-icon(name='tag')
           span  {{$t('Tags')}}
@@ -51,6 +60,16 @@ export default {
   },
   computed: mapState(['tags', 'places']),
   methods: {
+    placeSelected (items) {
+      const item = items[0]
+      this.place.name = item.name
+      this.place.address = item.address
+      this.place.id = item.id
+    },
+    async savePlace () {
+      const place = await api.updatePlace(this.place)
+
+    },
     async toggle(user) {
       user.is_active = !user.is_active
       const newuser = await api.updateUser(user)

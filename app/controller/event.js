@@ -32,7 +32,12 @@ const eventController = {
       res.send(404)
     }
   },
-
+  async updatePlace (req, res) {
+    const place = await Place.findByPk(req.body.id)
+    console.log(place)
+    await place.update(req.body)
+    res.json(place)
+  },
   async get (req, res) {
     const id = req.params.event_id
     const event = await Event.findByPk(id, { include: [User, Tag, Comment, Place] })

@@ -22,6 +22,7 @@ api.route('/user')
 
 api.get('/users', isAuth, isAdmin, userController.getAll)
 api.put('/tag', isAuth, isAdmin, eventController.updateTag)
+api.put('/place', isAuth, isAdmin, eventController.updatePlace)
 
 api.route('/user/event')
   .post(isAuth, upload.single('image'), userController.addEvent)
