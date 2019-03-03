@@ -1,7 +1,6 @@
 <template lang='pug'>
   #app
     b-navbar(type="dark" variant="dark" toggleable='lg')
-      b-navbar-brand(to='/') <img id='logo' src='gancio_logo.svg'/>
       b-navbar-toggle(target='nav_collapse')
       b-collapse#nav_collapse(is-nav)
         b-navbar-nav(v-if='logged')
