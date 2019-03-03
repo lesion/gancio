@@ -9,6 +9,11 @@
   "apiurl": "https://example.com/api",
 
   "db": {
+    "dialect": "postgres",
+    "host": "localhost",
+    "database": "gancio",
+    "user": "user",
+    "password": "password"
   },
   "admin": "admin@example.com",
 

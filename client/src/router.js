@@ -44,7 +44,7 @@ export default new Router({
       props: { edit: true }
     },
     {
-      path: '/export/:type',
+      path: '/export',
       components: { modal: Export }
     }
   ]

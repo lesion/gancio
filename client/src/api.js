@@ -23,7 +23,6 @@ function put (path, data) {
 }
 
 function del (path) {
-  console.log(store.state.token)
   return api.delete(path, { headers: { 'x-access-token': store.state.token } }).then(ret => ret.data)
 }
 

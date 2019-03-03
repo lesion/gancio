@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
+import { intersection } from 'lodash'
 import api from './api'
+import moment from 'moment'
 Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
@@ -12,7 +14,29 @@ const vuexLocal = new VuexPersistence({
 export default new Vuex.Store({
   plugins: [vuexLocal.plugin],
   getters: {
-    token: state => state.token
+    token: state => state.token,
+    filteredEvents: state => {
+      const events = state.events.map(e => {
+        const past = (moment().diff(e.start_datetime, 'minutes') > 0)
+        e.past = past
+        return e
+      })
+      if (!state.filters.tags.length && !state.filters.places.length) {
+        return events
+      }
+      return events.filter(e => {
+        if (state.filters.tags.length) {
+          const m = intersection(e.tags.map(t => t.tag), state.filters.tags)
+          if (m.length > 0) return true
+        }
+        if (state.filters.places.length) {
+          if (state.filters.places.find(p => p === e.place.name)) {
+            return true
+          }
+        }
+        return 0
+      })
+    }
   },
   state: {
     logged: false,

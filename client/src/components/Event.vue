@@ -2,9 +2,9 @@
   b-card(bg-variant='dark' text-variant='white'
     @click='$router.push("/event/" + event.id)'
      :img-src='imgPath')
-      h5 {{event.title}}
+      strong {{event.title}}
       div <v-icon name='clock'/> {{event.start_datetime|datetime}}
-      span(v-b-popover.hover="event.place && event.place.address || ''")  <v-icon name='map-marker-alt'/> {{event.place.name}}
+      span <v-icon name='map-marker-alt'/> {{event.place.name}}
       br
       b-badge(:style='{backgroundColor: tag.color}' v-for='tag in event.tags' href='#' 
         @click.stop='addSearchTag(tag)') {{tag.tag}}

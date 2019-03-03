@@ -13,24 +13,15 @@ import filters from '@/filters.js'
 import Event from '@/components/Event'
 import Calendar from '@/components/Calendar'
 import {intersection} from 'lodash'
+import moment from 'moment'
+
 export default {
   name: 'Home',
   components: { Event, Calendar },
   computed: {
     ...mapState(['events', 'filters']),
     filteredEvents () {
-      if (!this.filters.tags.length && !this.filters.places.length) return this.events
-      return this.events.filter(e => {
-        if (this.filters.tags.length) {
-          const m = intersection(e.tags.map(t => t.tag), this.filters.tags)
-          if (m.length>0) return true
-        }
-        if (this.filters.places.length) {
-          if (this.filters.places.find(p => p === e.place.name))
-            return true
-        }
-        return 0
-      })
+      return this.$store.getters.filteredEvents.filter(e => !e.past)
     }
   }
 }

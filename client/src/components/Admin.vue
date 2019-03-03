@@ -1,17 +1,20 @@
 <template lang="pug">
   b-modal(hide-footer hide-header
-    @hide='$router.go(-1)' size='lg' :visible='true')
+    @hide='$router.replace("/")' size='lg' :visible='true')
     h4.text-center Admin
     b-tabs(pills)
-      b-tab
+
+      b-tab.pt-1
         template(slot='title')
           v-icon(name='users')
           span  {{$t('Users')}}
-        b-table(:items='users' :fields='userFields' striped hover)
+        b-table(:items='users' :fields='userFields' striped small hover
+          :per-page='5' :current-page='userPage')
           template(slot='action' slot-scope='data')
             b-button.mr-1(:variant='data.item.is_active?"warning":"success"' @click='toggle(data.item)') {{data.item.is_active?$t('Deactivate'):$t('Activate')}}
             b-button(:variant='data.item.is_admin?"danger":"warning"' @click='toggleAdmin(data.item)') {{data.item.is_admin?$t('Remove Admin'):$t('Admin')}}
-      b-tab
+        b-pagination(:per-page='5' v-model='userPage' :total-rows='users.length')
+      b-tab.pt-1
         template(slot='title')
           v-icon(name='map-marker-alt')
           span  {{$t('Places')}}
@@ -29,12 +32,15 @@
         template(slot='title')
           v-icon(name='tag')
           span  {{$t('Tags')}}
-        b-table(:items='tags' :fields='tagFields' striped hover)
+        p You can choose colors of your tags
+        b-table(:items='tags' :fields='tagFields' 
+          striped small hover :per-page='10' :current-page='tagPage')
           template(slot='tag' slot-scope='data')
             b-badge(:style='{backgroundColor: data.item.color}') {{data.item.tag}}
           template(slot='color' slot-scope='data')
             el-color-picker(v-model='data.item.color' @change='updateColor(data.item)')
-      b-tab
+        b-pagination(:per-page='10' v-model='tagPage' :total-rows='tags.length')
+      b-tab.pt-1
         template(slot='title')
           v-icon(name='tools')
           span  {{$t('Settings')}}
@@ -51,8 +57,12 @@ export default {
       users: [],
       userFields: ['email', 'action'],
       placeFields: ['name', 'address'],
+      placePage: 1,
+      userPage: 1,
+      tagPage: 1,
       tagFields: ['tag', 'color'],
       description: '',
+      place: {name: '', address: '' }
     }
   },
   async mounted () {

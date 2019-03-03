@@ -1,6 +1,6 @@
 <template lang="pug">
   b-modal(hide-header hide-footer no-close-on-backdrop
-    @hide='$router.go(-1)' no-close-on-esc size='lg' :visible='true')
+    @hide='$router.replace("/")' no-close-on-esc size='lg' :visible='true')
     h4.text-center.center {{edit?$t('Edit event'):$t('New event')}}
     b-tabs#tabss(pills v-model='activeTab')
       b-form

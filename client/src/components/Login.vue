@@ -1,6 +1,6 @@
 <template lang='pug'>
   b-modal(hide-header hide-footer @shown="$refs.email.focus()"
-    @hide='$router.go(-1)' :visible='true')
+    @hide='$router.replace("/")' :visible='true')
     h4.text-center.center {{$t('Login')}}
     b-form
       //- p.text-muted Sign In to your account

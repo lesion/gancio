@@ -43,7 +43,8 @@ export default {
         }
       }
       
-      const color = event.tags.length && event.tags[0].color ? event.tags[0].color : 'rgba(200,200,200,0.5)'
+      let color = event.tags.length && event.tags[0].color ? event.tags[0].color : 'rgba(200,200,200,0.5)'
+      if (event.past) color = 'rgba(200,200,200,0.5)'
       if (event.multidate) {
         e.dates = {
           start: event.start_datetime, end: event.end_datetime
@@ -60,18 +61,19 @@ export default {
   },
   computed: {
     filteredEvents () {
-      if (!this.filters.tags.length && !this.filters.places.length) return this.events
-      return this.events.filter(e => {
-        if (this.filters.tags.length) {
-          const m = intersection(e.tags.map(t => t.tag), this.filters.tags)
-          if (m.length>0) return true
-        }
-        if (this.filters.places.length) {
-          if (this.filters.places.find(p => p === e.place.name))
-            return true
-        }
-        return 0
-      })
+      return this.$store.getters.filteredEvents
+      // if (!this.filters.tags.length && !this.filters.places.length) return this.events
+      // return this.events.filter(e => {
+      //   if (this.filters.tags.length) {
+      //     const m = intersection(e.tags.map(t => t.tag), this.filters.tags)
+      //     if (m.length>0) return true
+      //   }
+      //   if (this.filters.places.length) {
+      //     if (this.filters.places.find(p => p === e.place.name))
+      //       return true
+      //   }
+      //   return 0
+      // })
     },
     ...mapState(['events', 'tags', 'filters']),
     attributes () {

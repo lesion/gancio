@@ -1,6 +1,6 @@
 <template lang='pug'>
   b-modal(hide-header hide-footer
-    @hide='$router.go(-1)' :visible='true' @shown='$refs.email.focus()')
+    @hide='$router.replace("/")' :visible='true' @shown='$refs.email.focus()')
     h4.text-center.center {{$t('Register')}}
     b-form
       p.text-muted(v-html="$t('register_explanation')")
@@ -42,8 +42,6 @@ export default {
     async register () {
       try {
         const user = await api.register(this.user)
-        // this.login(user)
-        // this.user = { name: '' }
         this.$router.go(-1)
         this.$message({
           message: this.$t('registration_complete'),

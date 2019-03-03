@@ -1,6 +1,6 @@
 <template lang="pug">
   b-modal#eventDetail(hide-footer hide-header
-    @hide='$router.go(-1)' size='lg' :visible='true')
+    @hide='$router.replace("/")' size='lg' :visible='true')
 
     b-card(bg-variant='dark' href='#' text-variant='white' 
       no-body, :img-src='imgPath')
