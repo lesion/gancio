@@ -10,6 +10,11 @@
           b-nav-item(v-if='user.is_admin' to='/admin' v-b-tooltip :title='$t("Admin")') <v-icon color='lightblue' name='tools' scale='2'/>
           b-nav-item(to='/export' v-b-tooltip :title='$t("Export")') <v-icon name='file-export' scale='2' color='yellow'/>
           b-nav-item(variant='danger' @click='logout' v-b-tooltip :title='$t("Logout")') <v-icon color='red' name='sign-out-alt' scale='2'/>
+        b-navbar-nav(v-else)
+          b-nav-item(to='/login' v-b-tooltip :title='$t("Login")' ) <v-icon color='lightgreen' name='lock'/> Login
+          b-nav-item(to='/register' v-b-tooltip :title='$t("Register")' ) <v-icon color='orange' name='user'/> Register
+        b-navbar-nav.ml-auto
+          b-navbar-brand(to='/') <img id='logo' src='gancio_logo.svg'/>
         b-navbar-nav#search.ml-auto
           b-nav-item <v-icon name='search' color='orange' scale='2'/>
           b-nav-form
