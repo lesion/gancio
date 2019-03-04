@@ -34,5 +34,5 @@ module.exports = {
     }
   },
 
-  secret: process.env.SMTP_SECRET
+  secret: process.env.SECRET
 }
