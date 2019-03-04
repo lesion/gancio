@@ -10,3 +10,17 @@ pre {
   font-family: unset;
   font-size: 1em;
 }
+
+.el-tag {
+  color: white;
+  font-size: 15px;
+  font-family: Lato;
+}
+
+.el-tag--info {
+  color: #909399
+}
+
+.el-tag:hover {
+  cursor: pointer;
+}

@@ -2,7 +2,6 @@
   b-container
     b-card-group(columns)
       Calendar
-      //- transition-group(name="list" tag="div")
       Event.item(v-for='event in filteredEvents'
         :key='event.id'
         :event='event')
@@ -30,7 +29,7 @@ export default {
 
 .card-columns {
   column-count: 1;
-  column-gap: 0.3em;
+  column-gap: 0.2em;
 }
 @media (min-width: 576px) {
   .container {
@@ -38,7 +37,6 @@ export default {
   }
   .card-columns {
     column-count: 2;
-    column-gap: 0.3em;
   }
 }
 
@@ -48,7 +46,6 @@ export default {
   }
   .card-columns {
     column-count: 3;
-    column-gap: 0.3em;
   }
 }
 

@@ -1,5 +1,5 @@
 <template lang="pug">
-  b-modal(hide-header hide-footer @hide='$router.push("/")' :visible='true')
+  b-modal(hide-header hide-footer @hide='$router.go(-1)' :visible='true')
     h4.text-center {{$t('Settings')}}
       b-form
         b-input-group.mt-1(prepend='Email')

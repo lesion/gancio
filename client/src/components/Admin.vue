@@ -1,47 +1,48 @@
 <template lang="pug">
-  b-modal(hide-footer hide-header
-    @hide='$router.replace("/")' size='lg' :visible='true')
-    h4.text-center Admin
-    b-tabs(pills)
-
-      b-tab.pt-1
-        template(slot='title')
+  el-dialog(@close='$router.replace("/")' :title='$t("Admin")' center width='900px' :visible='true')
+    el-tabs
+      el-tab-pane.pt-1
+        template(slot='label')
           v-icon(name='users')
-          span  {{$t('Users')}}
+          span.ml-1 {{$t('Users')}}
         b-table(:items='users' :fields='userFields' striped small hover
           :per-page='5' :current-page='userPage')
           template(slot='action' slot-scope='data')
-            b-button.mr-1(:variant='data.item.is_active?"warning":"success"' @click='toggle(data.item)') {{data.item.is_active?$t('Deactivate'):$t('Activate')}}
-            b-button(:variant='data.item.is_admin?"danger":"warning"' @click='toggleAdmin(data.item)') {{data.item.is_admin?$t('Remove Admin'):$t('Admin')}}
+            el-button.mr-1(size='mini' :type='data.item.is_active?"warning":"success"' @click='toggle(data.item)') {{data.item.is_active?$t('Deactivate'):$t('Activate')}}
+            el-button(size='mini' :type='data.item.is_admin?"danger":"warning"' @click='toggleAdmin(data.item)') {{data.item.is_admin?$t('Remove Admin'):$t('Admin')}}
         b-pagination(:per-page='5' v-model='userPage' :total-rows='users.length')
-      b-tab.pt-1
-        template(slot='title')
+      el-tab-pane.pt-1
+        template(slot='label')
           v-icon(name='map-marker-alt')
-          span  {{$t('Places')}}
+          span.ml-1 {{$t('Places')}}
         p You can change place's name or address
-        b-form.mb-2(inline)
-          b-input.mr-1(:placeholder='$t("Name")' v-model='place.name')
-          b-input.mr-1(:placeholder='$t("Address")' v-model='place.address')
-          b-button(variant='primary' @click='savePlace') {{$t('Save')}}
+        el-form.mb-2(:inline='true' label-width='120px')
+          el-form-item(:label="$t('Name')")
+            el-input.mr-1(:placeholder='$t("Name")' v-model='place.name')
+          el-form-item(:label="$t('Address')")
+            el-input.mr-1(:placeholder='$t("Address")' v-model='place.address')
+          el-button(variant='primary' @click='savePlace') {{$t('Save')}}
         b-table(selectable :items='places' :fields='placeFields' striped hover 
           small selectedVariant='success'  primary-key='id' 
           select-mode="single" @row-selected='placeSelected'
           :per-page='5' :current-page='placePage')
         b-pagination(:per-page='5' v-model='placePage' :total-rows='places.length')
-      b-tab.pt-1
-        template(slot='title')
+
+      el-tab-pane.pt-1
+        template(slot='label')
           v-icon(name='tag')
           span  {{$t('Tags')}}
         p You can choose colors of your tags
-        b-table(:items='tags' :fields='tagFields' 
-          striped small hover :per-page='10' :current-page='tagPage')
-          template(slot='tag' slot-scope='data')
-            b-badge(:style='{backgroundColor: data.item.color}') {{data.item.tag}}
-          template(slot='color' slot-scope='data')
-            el-color-picker(v-model='data.item.color' @change='updateColor(data.item)')
+        el-table(:data='tags' striped small hover :per-page='10' :current-page='tagPage')
+          el-table-column(label='Tag')
+            template(slot-scope='data')
+              el-tag(:color='data.row.color' size='mini') {{data.row.tag}}
+          el-table-column(label='Color')
+            template(slot-scope='data')
+              el-color-picker(v-model='data.row.color' @change='updateColor(data.row)')
         b-pagination(:per-page='10' v-model='tagPage' :total-rows='tags.length')
-      b-tab.pt-1
-        template(slot='title')
+      el-tab-pane.pt-1
+        template(slot='label')
           v-icon(name='tools')
           span  {{$t('Settings')}}
         

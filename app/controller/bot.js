@@ -43,23 +43,23 @@ ${event.description} - ${event.tags.map(t => '#' + t.tag).join(' ')} ${config.ba
     if (!replyid) return
     // const event = await Event.findOne({ where: { activitypub_id: replyid } })
     // if (!event) {
-      // check for comment..
-      // const comment = await Comment.findOne( {where: { }})
+    // check for comment..
+    // const comment = await Comment.findOne( {where: { }})
     // }
     // const comment = await Comment.create({activitypub_id: msg.data.last_status.id, text: msg.data.last_status.content, author: msg.data.accounts[0].username })
     // event.addComment(comment)
     // console.log(event)
     // const comment = await Comment.findOne( { where: {activitypub_id: msg.data.in_reply_to}} )
     // console.log('dentro message ', data)
-    
+
     // add comment to specified event
     // let comment
-    //if (!event) {
-      //const comment = await Comment.findOne({where: {activitypub_id: req.body.id}, include: Event})
-      //event = comment.event
-    //}
-    //const comment = new Comment(req.body)
-    //event.addComment(comment)
+    // if (!event) {
+    // const comment = await Comment.findOne({where: {activitypub_id: req.body.id}, include: Event})
+    // event = comment.event
+    // }
+    // const comment = new Comment(req.body)
+    // event.addComment(comment)
   },
   error (err) {
     console.log('error ', err)

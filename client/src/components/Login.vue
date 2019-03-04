@@ -1,20 +1,15 @@
 <template lang='pug'>
-  b-modal(hide-header hide-footer @shown="$refs.email.focus()"
-    @hide='$router.replace("/")' :visible='true')
-    h4.text-center.center {{$t('Login')}}
-    b-form
-      //- p.text-muted Sign In to your account
-      b-input-group.mb-1
-        b-input-group-prepend
-          b-input-group-text
-            v-icon(name="user")
-        b-form-input(ref='email' v-model="email" type="text" class="form-control" placeholder="E-mail" autocomplete="email")
-      b-input-group.mb-3
-        b-input-group-prepend
-          b-input-group-text
-            v-icon(name="lock")
-        b-form-input(v-model="password" type="password" class="form-control" placeholder="Password" autocomplete="current-password")
-      b-button.float-right(variant="success"  @click='submit') Login
+  el-dialog(@show="$refs.email.focus()" :title='$t("Login")' center width='400px'
+    @close='$router.replace("/")' :visible='true')
+    el-form
+      span {{$t('login_explanation')}}
+      el-input.mb-2(v-model='email' type='email' :placeholder='$t("Email")' autocomplete='email' ref='email')
+        v-icon(name='user' slot='prepend')
+      el-input.mb-2(v-model='password' type='password' :placeholder='$t("Password")')
+        v-icon(name="lock" slot='prepend')
+      router-link(to='/register')
+        a {{$t('Not registered?')}}
+      el-button.float-right(plain type="success" icon='el-icon-arrow-right' @click='submit') {{$t('Login')}}
 </template>
 
 <script>

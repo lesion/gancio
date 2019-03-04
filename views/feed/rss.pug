@@ -17,7 +17,7 @@ rss(version='2.0', xmlns:atom='<a href="http://www.w3.org/2005/Atom" rel="nofoll
                     | <h4>#{event.title}</h4>
                     | <strong>#{event.place.name} - #{event.place.address}</strong>
                     | #{moment(event.start_datetime).format("ddd, D MMMM HH:mm")}<br/>
-                    | !{event.description}
+                    | <pre>!{event.description}</pre>
                     | ]]>
-                pubDate= new Date(event.start_datetime).toUTCString()
+                pubDate= new Date(event.createdAt).toUTCString()
                 guid(isPermaLink='false') <a href="#{config.baseurl}/event/#{event.id}" rel="nofollow">#{config.baseurl}/event/#{event.id}</a>

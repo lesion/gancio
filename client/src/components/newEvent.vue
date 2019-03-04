@@ -1,68 +1,66 @@
 <template lang="pug">
-  b-modal(hide-header hide-footer no-close-on-backdrop
-    @hide='$router.replace("/")' no-close-on-esc size='lg' :visible='true')
-    h4.text-center.center {{edit?$t('Edit event'):$t('New event')}}
-    b-tabs#tabss(pills v-model='activeTab')
-      b-form
-      b-tab
-        template(slot='title')
-          v-icon(name='map-marker-alt')
-          span  {{$t('Where')}}
-        b-card-body
-          span.text-muted {{$t('where_explanation')}}
-          typeahead.mb-3(v-model='event.place.name' :data='places_name' @enter='placeChoosed')
-          span.text-muted {{$t('address_explanation')}}
-          b-form-input(ref='address' v-model='event.place.address' @keydown.native.enter='next')
-      b-tab
-        template(slot='title')
-          v-icon(name='clock')
-          span  {{$t('When')}}
-        b-card-body
+  el-dialog(@close='$router.replace("/")' :title="edit?$t('Edit event'):$t('New event')" center :close-on-press-escape='false' :visible='true')
+    el-tabs.mb-2(v-model='activeTab' v-loading='sending')
+
+      el-tab-pane
+        span(slot='label') {{$t('Where')}} <v-icon name='map-marker-alt'/>
+        p {{$t('where_explanation')}}
+        el-form(label-width='120px')
+          el-form-item(:label='$t("Where")')
+            el-select(v-model='event.place.name' @change='placeChoosed' filterable allow-create default-first-option)
+              el-option(v-for='place in places_name' :label='place' :value='place')
+          el-form-item(:label='$t("Address")')
+            el-input(ref='address' v-model='event.place.address' @keydown.native.enter='next')
+          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
+
+      el-tab-pane
+        span(slot='label') {{$t('When')}} <v-icon name='clock'/>
+        el-form(label-width='120px')
+          span {{event.multidate ? $t('dates_explanation') : $t('date_explanation')}}
           el-switch.float-right(v-model='event.multidate' :active-text="$t('multidate_explanation')")
-          span.text-muted {{event.multidate ? $t('dates_explanation') : $t('date_explanation')}}
           v-date-picker.mb-3(:mode='event.multidate ? "range" : "single"' v-model='date' is-inline
             is-expanded :min-date='new Date()' @input='date ? $refs.time_start.focus() : false')
-          b-row
-            b-col
-              label.text-muted {{$t('time_start_explanation')}}
-              el-time-select(ref='time_start'
-                v-model="time.start"
-                :picker-options="{ start: '00:00', step: '00:30', end: '24:00'}")
-            b-col.text-right
-              label.text-muted {{$t('time_end_explanation')}}
-              el-time-select(
-                v-model='time.end'
-                :picker-options="{start: '00:00', step: '00:30', end: '24:00'}"
-              )
-          
-      b-tab
-        template(slot='title')
-          v-icon(name='file-alt')
-          span  {{$t('What')}}
-        b-card-body
-          span.text-muted {{$t('what_explanation')}}
-          b-form-input.mb-3(v-model.trim='event.title' autocomplete='off')
-          span.text-muted {{$t('description_explanation')}}
-          b-form-textarea.mb-3(v-model='event.description' :rows='3')
-          span.text-muted {{$t('tag_explanation')}}
-          typeahead(v-model="event.tags" :data='tags' multiple)
-      b-tab
-        template(slot='title')
-          v-icon(name='image')
-          span  {{$t('Media')}}
-        b-card-body
-          span.text-muted {{$t('media_explanation')}}
-          b-form-file(v-model='event.image', :placeholder='$t("Poster")' accept='image/*')
-      b-button(v-if='activeTab==0' variant='danger' @click='$router.go(-1)') {{$t('Cancel')}}
-      b-button.float-left(v-else variant='danger' @click='prev') {{$t('Prev')}}
-      b-button.float-right(v-if='activeTab<3' variant='success' @click='next' :disabled='!couldProceed') {{$t('Next')}}
-      b-button.float-right(v-else variant='success' @click='done') {{edit?$t('Edit'):$t('Send')}}
+          el-form-item(:label="$t('time_start_explanation')")
+            el-time-select(ref='time_start'
+              v-model="time.start"
+              :picker-options="{ start: '00:00', step: '00:30', end: '24:00'}")
+          el-form-item(:label="$t('time_end_explanation')")
+            el-time-select(v-model='time.end'
+              :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
+          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
+
+      el-tab-pane
+        span(slot='label') {{$t('What')}} <v-icon name='file-alt'/>
+        span {{$t('what_explanation')}}
+        el-input.mb-3(v-model='event.title')
+        span {{$t('description_explanation')}}
+        el-input.mb-3(v-model='event.description' type='textarea' :rows='3')
+        span {{$t('tag_explanation')}}
+        br 
+        //- typeahead(v-model="event.tags" :data='tags' multiple)
+        el-select(v-model='event.tags' multiple filterable allow-create
+          default-first-option placeholder='Tag')
+          el-option(v-for='tag in tags' :key='tag'
+            :label='tag' :value='tag') 
+
+        el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
+
+      el-tab-pane
+        span(slot='label') {{$t('Media')}} <v-icon name='image'/>
+        span {{$t('media_explanation')}}
+        b-form-file.mb-2(v-model='event.image', :placeholder='$t("Poster")' accept='image/*')
+        el-button.float-right(@click='done') {{edit?$t('Edit'):$t('Send')}}
+
+
+
 </template>
 <script>
 import api from '@/api'
 import { mapActions, mapState } from 'vuex'
 import moment from 'moment'
+import Calendar from './Calendar'
 export default {
+  components: { Calendar },
   data() {
     return {
       event: { 
@@ -70,11 +68,13 @@ export default {
         title: '', description: '', tags: [],
         multidate: false,
       },
+      visible: true,
       id: null,
-      activeTab: 0,
+      activeTab: "0",
       date: null,
       time: { start: '00:00', end: null },
-      edit: false
+      edit: false,
+      sending: false,
     }
   },
   name: 'newEvent',
@@ -107,12 +107,12 @@ export default {
       places: state => state.places
     }),
     couldProceed () {
-      switch(this.activeTab) {
+      switch(Number(this.activeTab)) {
         case 0:
           return this.event.place.name.length>0 && 
             this.event.place.address.length>0
         case 1:
-          return true
+          if (this.date && this.time.start) return true
           break
         case 2:
           return this.event.title.length>0
@@ -126,12 +126,13 @@ export default {
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta']),
     next () {
-      this.activeTab++
+      this.activeTab = String(Number(this.activeTab)+1)
     },
     prev () {
-      this.activeTab--
+      this.activeTab = String(Number(this.activeTab-1))
     },
     placeChoosed () {
+      console.log('dentro placeChoosed')
       const place = this.places.find( p => p.name === this.event.place.name )
       if (place && place.address) {
         this.event.place.address = place.address
@@ -173,7 +174,7 @@ export default {
       }
       if (this.event.tags)
         this.event.tags.forEach(tag => formData.append('tags[]', tag))
-
+      this.sending = true
       try {
         if (this.edit) {
           await this.updateEvent(formData)
@@ -181,26 +182,13 @@ export default {
           await this.addEvent(formData)
         }
         this.updateMeta()
+        this.sending = false
         this.$router.go(-1)
       } catch (e) {
+        this.sending = false
         console.error(e)
       }
     }
   }
 }
 </script>
-
-<style scope>
-#tabss ul {
-  justify-content: space-evenly;
-  background: linear-gradient( #fff, #FFF 22px, #007bff, #fff 23px, #fff)
-}
-
-#tabss ul .nav-link {
-  background-color: white;
-}
-
-#tabss ul .nav-link.active {
-  background-color: #007bff;
-}
-</style>

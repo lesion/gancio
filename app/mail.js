@@ -14,7 +14,7 @@ const mail = {
         }
       },
       message: {
-        from: `${config.title} <${config.admin}>`
+        from: `${config.title} <${config.smtp.auth.user}>`
       },
       send: true,
       i18n: {},

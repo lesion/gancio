@@ -2,30 +2,27 @@
   #app
     b-navbar(type="dark" variant="dark" toggleable='lg')
       b-navbar-toggle(target='nav_collapse')
+      b-navbar-brand(to='/') <img id='logo' src='gancio_logo.svg'/>
       b-collapse#nav_collapse(is-nav)
-        b-navbar-nav(v-if='logged')
-          b-nav-item(to='/new_event' v-b-tooltip :title='$t("Add Event")' ) <v-icon color='lightgreen' name='plus' scale='2'/> 
-          b-nav-item(to='/settings' v-b-tooltip :title='$t("Settings")') <v-icon color='orange' name='cog' scale='2'/>
-          b-nav-item(v-if='user.is_admin' to='/admin' v-b-tooltip :title='$t("Admin")') <v-icon color='lightblue' name='tools' scale='2'/>
-          b-nav-item(to='/export' v-b-tooltip :title='$t("Export")') <v-icon name='file-export' scale='2' color='yellow'/>
-          b-nav-item(variant='danger' @click='logout' v-b-tooltip :title='$t("Logout")') <v-icon color='red' name='sign-out-alt' scale='2'/>
-        b-navbar-nav(v-else)
-          b-nav-item(to='/login' v-b-tooltip :title='$t("Login")' ) <v-icon color='lightgreen' name='lock'/> Login
-          b-nav-item(to='/register' v-b-tooltip :title='$t("Register")' ) <v-icon color='orange' name='user'/> Register
-        b-navbar-nav.ml-auto
-          b-navbar-brand(to='/') <img id='logo' src='gancio_logo.svg'/>
+        b-navbar-nav
+          b-nav-item(v-if='!logged' to='/login'  v-b-tooltip :title='$t("Login")') <v-icon color='lightgreen' name='lock' /> {{$t('User')}}
+          //- b-nav-item(v-if='!logged' to='/register' v-b-tooltip :title='$t("Register")' ) <v-icon color='orange' name='user' scale='2'/>
+          b-nav-item(v-if='logged' to='/new_event' v-b-tooltip :title='$t("Add Event")' ) <v-icon color='lightgreen' name='plus'/> 
+          b-nav-item(v-if='logged' to='/settings' v-b-tooltip :title='$t("Settings")') <v-icon color='orange' name='cog'/>
+          b-nav-item(v-if='user.is_admin' to='/admin' v-b-tooltip :title='$t("Admin")') <v-icon color='lightblue' name='tools'/>
+          b-nav-item(to='/export' v-b-tooltip :title='$t("Export")') <v-icon name='file-export' color='yellow'/>
+          b-nav-item(v-if='logged' variant='danger' @click='logout' v-b-tooltip :title='$t("Logout")') <v-icon color='red' name='sign-out-alt'/>
         b-navbar-nav#search.ml-auto
-          b-nav-item <v-icon name='search' color='orange' scale='2'/>
+          b-nav-item <v-icon name='search' color='orange' />
           b-nav-form
-            typeahead.ml-1.mt-1(v-model='filters_places' 
-              textField='name' valueField='name'
-              updateOnMatchOnly
-              :data='places' multiple placeholder='Luogo')
-          b-nav-form
-            typeahead.ml-1.mt-1(v-model='filters_tags'
-              updateOnMatchOnly
-              textField='tag' valueField='tag'
-              :data='tags' multiple placeholder='Tags')
+            el-select.mr-1(v-model='filters_places' multiple filterable collapse-tags
+              default-first-option :placeholder='$t("Where")')
+              el-option(v-for='place in places' :value='place.name'
+                :label='place.name' :key='place.id')
+            el-select(v-model='filters_tags' multiple filterable collapse-tags
+              default-first-option :placeholder='$t("Tags")')
+              el-option(v-for='tag in tags' :key='tag.tag'
+                :label='tag.tag' :value='tag.tag') 
     Home
     transition(name="fade" mode="out-in")
       router-view(name='modal')

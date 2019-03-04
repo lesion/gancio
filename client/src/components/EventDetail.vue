@@ -1,25 +1,23 @@
 <template lang="pug">
-  b-modal#eventDetail(hide-footer hide-header
-    @hide='$router.replace("/")' size='lg' :visible='true')
-
-    b-card(bg-variant='dark' href='#' text-variant='white' 
-      no-body, :img-src='imgPath')
-      b-card-header 
-        h3 {{event.title}}
-        v-icon(name='clock')
-        span  {{event.start_datetime|datetime}}
-        br
-        v-icon(name='map-marker-alt')
-        span  {{event.place.name}} - {{event.place.address}}
-        br
-      b-card-body(v-if='event.description || event.tags')
-        pre {{event.description}}
-        br
-        b-badge(:style='{backgroundColor: tag.color}' v-for='tag in event.tags') {{tag.tag}}
-      b-navbar(v-if='mine' type="dark" variant="dark" toggleable='lg')
-        b-navbar-nav.ml-auto
-          b-nav-item(@click.prevent='remove') <v-icon color='red' name='times'/> {{$t('Remove')}} 
-          b-nav-item(:to='"/edit/"+event.id') <v-icon color='orange' name='edit'/> {{$t('Edit')}}
+  el-dialog#eventDetail(@close='$router.replace("/")' :visible='true' top='4vh')
+    img(:src='imgPath')
+    el-card(v-loading='loading')
+      h4 {{event.title}}
+      h6 <v-icon name='clock' /> {{event.start_datetime|datetime}}
+      h6 <v-icon name='map-marker-alt' />  {{event.place.name}} - {{event.place.address}}
+    el-card(v-if='event.description || event.tags && event.tags.length')
+      pre.mb-2 {{event.description}}
+      el-tag.mr-1(:color='tag.color' v-for='tag in event.tags'
+        size='mini') {{tag.tag}}
+      .ml-auto(v-if='mine')
+        hr
+        el-button(plain type='danger' @click.prevent='remove' icon='el-icon-remove') {{$t('Remove')}} 
+        el-button(plain type='primary' @click='$router.replace("/edit/"+event.id)') <v-icon color='orange' name='edit'/> {{$t('Edit')}}
+    //- b-navbar(type="dark" variant="dark" toggleable='lg')
+    //- template(slot='footer')
+      //- b-navbar-nav
+        //- b-button(variant='success') {{$t('Share')}} <v-icon name='share'/>
+        //- b-nav-item( {{$t('')}})
       //- b-card-footer.text-right
         //- span.mr-3 {{event.comments.length}} <v-icon name='comments'/>
         //- a(href='#', @click='remove')
@@ -48,6 +46,7 @@ export default {
     return {
       event: { comments: [], place: {}},
       id: null,
+      loading: true,
     }
   },
   mounted () {
@@ -60,6 +59,7 @@ export default {
     async load () {
       const event = await api.getEvent(this.id)
       this.event = event
+      this.loading = false
     },
     async remove () {
       await api.delEvent(this.event.id)
@@ -70,23 +70,21 @@ export default {
 }
 </script>
 <style>
-#eventDetail .modal-body {
-  padding: 0px;
+#eventDetail .el-dialog {
+  min-width: 800px;
 }
 
-/* .card::before {
-  border-top: 4px solid black;
-  content: ''
-} */
-#eventDetail .card {
-  margin-left: -5px;
+#eventDetail .el-dialog__header {
+  display: none;
 }
-/* #eventDetail .card-img {
-  max-height: 150px;
-  object-fit: cover;
-} */
-#eventDetail .badge {
-  margin-left: 0.1rem;
+
+#eventDetail .el-dialog__body {
+  padding: 0px;
+  font-size: 17px;
+}
+
+#eventDetail img {
+  width: 100%;
 }
 </style>
 

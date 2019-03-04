@@ -6,8 +6,8 @@
       div <v-icon name='clock'/> {{event.start_datetime|datetime}}
       span <v-icon name='map-marker-alt'/> {{event.place.name}}
       br
-      b-badge(:style='{backgroundColor: tag.color}' v-for='tag in event.tags' href='#' 
-        @click.stop='addSearchTag(tag)') {{tag.tag}}
+      el-tag.mr-1(:color='tag.color' v-for='tag in event.tags'
+        size='mini' @click.stop='addSearchTag(tag)') {{tag.tag}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
@@ -43,8 +43,16 @@ export default {
   content: ''
 } */
 
+.el-card {
+  border: none;
+}
+
+.el-card img {
+  width: 100%;
+}
+
 .card-columns .card {
-  margin-top: 0.3em;
+  margin-top: 0.2em;
   margin-bottom: 0em;
 }
 
@@ -53,8 +61,5 @@ export default {
   object-fit: cover;
 }
 
-.badge {
-  margin-left: 0.1rem;
-}
 </style>
 

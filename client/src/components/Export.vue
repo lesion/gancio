@@ -1,38 +1,32 @@
 <template lang="pug">
-  b-modal(hide-footer hide-header
-    @hide='$router.replace("/")' size='lg' :visible='true' v-if='type')
-    h3.text-center Export
+  el-dialog(@close='$router.replace("/")' :title='$t("Export")' :visible='true' center width='600px')
     p {{$t('export_intro')}}
     
     li(v-if='filters.tags.length') {{$t('Tags')}}:
-      b-badge.ml-1(:style='{backgroundColor: tag.color}' v-for='tag in filters.tags') {{tag}}
+      el-tag.ml-1(color='#409EFF' size='mini' v-for='tag in filters.tags') {{tag}}
     li(v-if='filters.places.length') {{$t('Places')}}:
-      b-badge.ml-1(v-for='place in filters.places') {{place}}
-    b-tabs(pills vertical)
-      b-tab.pt-1(title='feed rss' :active="type === 'feed'" @click='type="feed"')
-        p(v-html='$t(`export_feed_explanation`)')
-        b-input-group.mb-2(v-if='showLink')
-          b-form-input( v-model='link' autocomplete='off')
-          b-input-group-append
-            b-button(variant="success" v-clipboard:copy="link") <v-icon name='clipboard'/> Copy 
+      el-tag.ml-1(color='#409EFF' size='mini' v-for='place in filters.places') {{place}}
+    el-tabs.mt-2(tabPosition='left' v-model='type')
+      el-tab-pane.pt-1(label='feed rss' name='feed')
+        span(v-html='$t(`export_feed_explanation`)')
+        el-input(v-model='link')
+          el-button(slot='append' plain type="primary" icon='el-icon-document' v-clipboard:copy="link") {{$t("Copy")}}
 
-      b-tab.pt-1(title='ics/ical' :active="type === 'ics'" @click='type="ics"')
+      el-tab-pane.pt-1(label='ics/ical' name='ics')
         p(v-html='$t(`export_ical_explanation`)')
-        b-input-group.mb-2(v-if='showLink')
-          b-form-input( v-model='link' autocomplete='off')
-          b-input-group-append
-            b-button(variant="success" v-clipboard:copy="link") <v-icon name='clipboard'/> Copy 
-
-      b-tab.pt-1(title='email' :active="type === 'email'" @click='type="email"')
+        el-input(v-model='link')
+          el-button(slot='append' plain type="primary" icon='el-icon-document' v-clipboard:copy="link") {{$t("Copy")}}
+        
+      el-tab-pane.pt-1(label='email' name='email')
         p(v-html='$t(`export_email_explanation`)')
         b-form
           el-switch(v-model='mail.sendOnInsert' :active-text="$t('notify_on_insert')")
           br
-          el-switch(v-model='mail.reminder' :active-text="$t('send_reminder')") 
-          b-form-input.mt-1(v-model='mail.mail' :placeholder="$t('Insert your address')")
-          b-button.mt-1.float-right(variant='success' @click='activate_email') {{$t('Send')}}
+          el-switch.mt-2(v-model='mail.reminder' :active-text="$t('send_reminder')") 
+          el-input.mt-2(v-model='mail.mail' :placeholder="$t('Insert your address')")
+          el-button.mt-2.float-right(type='success' @click='activate_email') {{$t('Send')}}
 
-      b-tab.pt-1(title='list' :active="type === 'list'" @click='type="list"')
+      el-tab-pane.pt-1(label='list' name='list')
         p(v-html='$t(`export_list_explanation`)')
         b-card.mb-1(no-body header='Eventi')
           b-list-group#list(flush)
@@ -44,13 +38,16 @@
                 strong.mb-1 {{event.title}}
                 br
                 small.float-right {{event.place.name}}
-                b-badge.float-left.ml-1(:style='{backgroundColor: tag.color}' v-for='tag in event.tags') {{tag.tag}}
-        b-form-textarea(v-model='script')
+                el-tag.mr-1(:color='tag.color' size='mini' v-for='tag in event.tags') {{tag.tag}}
+        el-input.mb-1(type='textarea' v-model='script')
+        el-button.float-right(plain type="primary" icon='el-icon-document' v-clipboard:copy="script") Copy
 
-      b-tab.pt-1(title='calendar' :active="type === 'calendar'" @click='type="calendar"')
+
+      el-tab-pane.pt-1(label='calendar' name='calendar')
         p(v-html='$t(`export_calendar_explanation`)')
-        Calendar
-        b-form-textarea(v-model='script')
+        Calendar.mb-1
+        el-input.mb-1(type='textarea' v-model='script')
+        el-button.float-right(plain type="primary" icon='el-icon-document' v-clipboard:copy="script") Copy
 
 </template>
 <script>

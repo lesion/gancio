@@ -12,13 +12,13 @@ const it = {
   description_explanation: 'Descrivi l\'evento, dajene di copia/incolla',
   date_explanation: 'Seleziona il giorno',
   dates_explanation: 'Seleziona i giorni',
-  time_start_explanation: 'Inserisci un orario di inizio',
-  time_end_explanation: 'Puoi inserire un orario di fine',
+  time_start_explanation: 'Orario di inizio',
+  time_end_explanation: 'Orario di fine',
   media_explanation: 'Se vuoi puoi mettere una locandina/manifesto',
   tag_explanation: 'Puoi inserire un tag (es. concerto, corteo)',
   export_intro: `Contrariamente alle piattaforme del capitalismo, che fanno di tutto per tenere
   i dati e gli utenti al loro interno, crediamo che le informazioni, come le persone,
-  debbano essere libere. Per questo puoi rimanere aggiornata sugli eventi che vuoi, come meglio credi, senza necessariamente passare da qui.`,
+  debbano essere libere. Per questo puoi rimanere aggiornata sugli eventi che vuoi, come meglio credi, senza necessariamente passare da questo sito.`,
   export_feed_explanation: `Per seguire gli aggiornamenti da computer o smartphone senza la necessità di aprire periodicamente il sito, il metodo consigliato è quello dei Feed RSS.</p>
 
   <p>Con i feed rss utilizzi un'apposita applicazione per ricevere aggiornamenti dai siti che più ti interessano.  È un buon metodo per seguire anche molti siti in modo molto rapido, senza necessità di creare un account o altre complicazioni.</p>
@@ -41,6 +41,7 @@ const it = {
   Login: 'Entra',
   SignIn: 'Registrati',
   Cancel: 'Annulla',
+  Copy: 'Copia',
   Next: 'Continua',
   Prev: 'Indietro',
   Username: 'Utente',
@@ -68,7 +69,8 @@ const it = {
   registration_email: `Ciao, la tua registrazione sarà confermata nei prossimi giorni. Riceverai una conferma non temere.`,
   register_explanation: `I movimenti hanno bisogno di organizzarsi e autofinanziarsi. <br/>Questo è un dono per voi, non possiamo più vedervi usare le piattaforme del capitalismo. Solo eventi non commerciali e ovviamente antifascisti, antisessisti, antirazzisti. 
     <br/>Prima di poter pubblicare <strong>dobbiamo approvare l'account</strong>, considera che <strong>dietro questo sito ci sono delle persone</strong> di
-    carne e sangue, scrivici quindi due righe per farci capire che eventi vorresti pubblicare.`
+    carne e sangue, scrivici quindi due righe per farci capire che eventi vorresti pubblicare.`,
+  login_explanation: ``
 }
 
 export default it
