@@ -52,7 +52,6 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import config from '../../config'
 import path from 'path'
 import filters from '../filters'
 import Calendar from '@/components/Calendar'
@@ -97,10 +96,10 @@ export default {
         }
       }
 
-      return `${config.apiurl}/export/${this.type}${query}`
+      return `${process.env.BASE_URL}/api/export/${this.type}${query}`
     },
     imgPath (event) {
-      return event.image_path && config.apiurl + '/../' + event.image_path
+      return event.image_path && event.image_path
     },
   },
   computed: {

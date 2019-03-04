@@ -13,14 +13,13 @@
 import { mapState, mapActions } from 'vuex';
 import api from '@/api'
 import filters from '@/filters'
-import config from '../../config'
 
 export default {
   props: ['event'],
   computed: {
     ...mapState(['user']),
     imgPath () {
-      return this.event.image_path && config.apiurl + '/../' + this.event.image_path
+      return this.event.image_path && this.event.image_path
     },
     mine () {
       return this.event.userId === this.user.id

@@ -1,0 +1,27 @@
+
+version: '3.5'
+
+services:
+  db:
+    image: 'postgres:latest'
+    environment:
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_USER: postgres
+      POSTGRES_DB: gancio
+
+  app:
+    build: .
+    ports:
+      - '12300:12300'
+
+    env_file: .env
+    environment:
+      PORT: 12300
+      DB_HOST: db
+      DB_PASS: 12345
+      DB_USER: postgres
+      DB_NAME: gancio
+
+    links:
+      - db
+

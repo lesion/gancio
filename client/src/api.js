@@ -1,8 +1,7 @@
 import axios from 'axios'
-import config from '../config'
 import store from './store'
 const api = axios.create({
-  baseURL: config.apiurl,
+  baseURL: '/api',
   withCredentials: false,
   responseType: 'json',
   headers: {
