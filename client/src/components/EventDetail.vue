@@ -1,18 +1,24 @@
 <template lang="pug">
-  el-dialog#eventDetail(@close='$router.replace("/")' :visible='true' top='4vh')
-    img(:src='imgPath')
-    el-card(v-loading='loading')
-      h4 {{event.title}}
-      h6 <v-icon name='clock' /> {{event.start_datetime|datetime}}
-      h6 <v-icon name='map-marker-alt' />  {{event.place.name}} - {{event.place.address}}
-    el-card(v-if='event.description || event.tags && event.tags.length')
-      pre.mb-2 {{event.description}}
-      el-tag.mr-1(:color='tag.color' v-for='tag in event.tags'
-        size='mini') {{tag.tag}}
-      .ml-auto(v-if='mine')
-        hr
-        el-button(plain type='danger' @click.prevent='remove' icon='el-icon-remove') {{$t('Remove')}} 
-        el-button(plain type='primary' @click='$router.replace("/edit/"+event.id)') <v-icon color='orange' name='edit'/> {{$t('Edit')}}
+  b-modal#eventDetail(hide-body hide-header hide-footer @hidden='$router.replace("/")' size='lg' :visible='true')
+    b-card(bg-variant='dark' href='#' text-variant='white' 
+      no-body, :img-src='imgPath')
+      b-card-header 
+        h3 {{event.title}}
+        v-icon(name='clock')
+        span  {{event.start_datetime|datetime}}
+        br
+        v-icon(name='map-marker-alt')
+        span  {{event.place.name}} - {{event.place.address}}
+        br
+      b-card-body(v-if='event.description || event.tags')
+        pre {{event.description}}
+        br
+        el-tag.mr-1(:color='tag.color' v-for='tag in event.tags'
+          size='mini') {{tag.tag}}
+        .ml-auto(v-if='mine')
+          hr
+          el-button(plain type='danger' @click.prevent='remove' icon='el-icon-remove') {{$t('Remove')}} 
+          el-button(plain type='primary' @click='$router.replace("/edit/"+event.id)') <v-icon color='orange' name='edit'/> {{$t('Edit')}}
     //- b-navbar(type="dark" variant="dark" toggleable='lg')
     //- template(slot='footer')
       //- b-navbar-nav
@@ -69,20 +75,8 @@ export default {
 }
 </script>
 <style>
-#eventDetail .el-dialog {
-  min-width: 800px;
-}
-
-#eventDetail .el-dialog__header {
-  display: none;
-}
-
-#eventDetail .el-dialog__body {
+#eventDetail .modal-body {
   padding: 0px;
-  font-size: 17px;
-}
-
-#eventDetail img {
   width: 100%;
 }
 </style>

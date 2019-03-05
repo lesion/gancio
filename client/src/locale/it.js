@@ -56,6 +56,9 @@ const it = {
   Save: 'Salva',
   Address: 'Indirizzo',
   Remove: 'Elimina',
+  Password: 'Password',
+  Email: 'Email',
+  User: 'Utente',
   Edit: 'Modifica',
   Admin: 'Amministra',
   Today: 'Oggi',
@@ -70,6 +73,7 @@ const it = {
   register_explanation: `I movimenti hanno bisogno di organizzarsi e autofinanziarsi. <br/>Questo è un dono per voi, non possiamo più vedervi usare le piattaforme del capitalismo. Solo eventi non commerciali e ovviamente antifascisti, antisessisti, antirazzisti. 
     <br/>Prima di poter pubblicare <strong>dobbiamo approvare l'account</strong>, considera che <strong>dietro questo sito ci sono delle persone</strong> di
     carne e sangue, scrivici quindi due righe per farci capire che eventi vorresti pubblicare.`,
+  'Not registered?': `Non sei registrata?`,
   login_explanation: ``
 }
 

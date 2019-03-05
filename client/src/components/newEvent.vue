@@ -1,55 +1,57 @@
 <template lang="pug">
-  el-dialog(@close='$router.replace("/")' :title="edit?$t('Edit event'):$t('New event')" center :close-on-press-escape='false' :visible='true')
-    el-tabs.mb-2(v-model='activeTab' v-loading='sending')
+  //- el-dialog(@close='$router.replace("/")' :title="edit?$t('Edit event'):$t('New event')" center :close-on-press-escape='false' :visible='true')
+  b-modal(@hidden='$router.replace("/")' :title="edit?$t('Edit event'):$t('New event')" size='md' :visible='true' hide-footer)
+    b-container
+      el-tabs.mb-2(v-model='activeTab' v-loading='sending')
 
-      el-tab-pane
-        span(slot='label') {{$t('Where')}} <v-icon name='map-marker-alt'/>
-        p {{$t('where_explanation')}}
-        el-form(label-width='120px')
-          el-form-item(:label='$t("Where")')
-            el-select(v-model='event.place.name' @change='placeChoosed' filterable allow-create default-first-option)
-              el-option(v-for='place in places_name' :label='place' :value='place')
-          el-form-item(:label='$t("Address")')
-            el-input(ref='address' v-model='event.place.address' @keydown.native.enter='next')
+        el-tab-pane
+          span(slot='label') {{$t('Where')}} <v-icon name='map-marker-alt'/>
+          p {{$t('where_explanation')}}
+          el-form(label-width='120px')
+            el-form-item(:label='$t("Where")')
+              el-select(v-model='event.place.name' @change='placeChoosed' filterable allow-create default-first-option)
+                el-option(v-for='place in places_name' :label='place' :value='place')
+            el-form-item(:label='$t("Address")')
+              el-input(ref='address' v-model='event.place.address' @keydown.native.enter='next')
+            el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
+
+        el-tab-pane
+          span(slot='label') {{$t('When')}} <v-icon name='clock'/>
+          el-form(label-width='120px')
+            span {{event.multidate ? $t('dates_explanation') : $t('date_explanation')}}
+            el-switch.float-right(v-model='event.multidate' :active-text="$t('multidate_explanation')")
+            v-date-picker.mb-3(:mode='event.multidate ? "range" : "single"' v-model='date' is-inline
+              is-expanded :min-date='new Date()' @input='date ? $refs.time_start.focus() : false')
+            el-form-item(:label="$t('time_start_explanation')")
+              el-time-select(ref='time_start'
+                v-model="time.start"
+                :picker-options="{ start: '00:00', step: '00:30', end: '24:00'}")
+            el-form-item(:label="$t('time_end_explanation')")
+              el-time-select(v-model='time.end'
+                :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
+            el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
+
+        el-tab-pane
+          span(slot='label') {{$t('What')}} <v-icon name='file-alt'/>
+          span {{$t('what_explanation')}}
+          el-input.mb-3(v-model='event.title')
+          span {{$t('description_explanation')}}
+          el-input.mb-3(v-model='event.description' type='textarea' :rows='3')
+          span {{$t('tag_explanation')}}
+          br 
+          //- typeahead(v-model="event.tags" :data='tags' multiple)
+          el-select(v-model='event.tags' multiple filterable allow-create
+            default-first-option placeholder='Tag')
+            el-option(v-for='tag in tags' :key='tag'
+              :label='tag' :value='tag') 
+
           el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
 
-      el-tab-pane
-        span(slot='label') {{$t('When')}} <v-icon name='clock'/>
-        el-form(label-width='120px')
-          span {{event.multidate ? $t('dates_explanation') : $t('date_explanation')}}
-          el-switch.float-right(v-model='event.multidate' :active-text="$t('multidate_explanation')")
-          v-date-picker.mb-3(:mode='event.multidate ? "range" : "single"' v-model='date' is-inline
-            is-expanded :min-date='new Date()' @input='date ? $refs.time_start.focus() : false')
-          el-form-item(:label="$t('time_start_explanation')")
-            el-time-select(ref='time_start'
-              v-model="time.start"
-              :picker-options="{ start: '00:00', step: '00:30', end: '24:00'}")
-          el-form-item(:label="$t('time_end_explanation')")
-            el-time-select(v-model='time.end'
-              :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
-          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
-
-      el-tab-pane
-        span(slot='label') {{$t('What')}} <v-icon name='file-alt'/>
-        span {{$t('what_explanation')}}
-        el-input.mb-3(v-model='event.title')
-        span {{$t('description_explanation')}}
-        el-input.mb-3(v-model='event.description' type='textarea' :rows='3')
-        span {{$t('tag_explanation')}}
-        br 
-        //- typeahead(v-model="event.tags" :data='tags' multiple)
-        el-select(v-model='event.tags' multiple filterable allow-create
-          default-first-option placeholder='Tag')
-          el-option(v-for='tag in tags' :key='tag'
-            :label='tag' :value='tag') 
-
-        el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
-
-      el-tab-pane
-        span(slot='label') {{$t('Media')}} <v-icon name='image'/>
-        span {{$t('media_explanation')}}
-        b-form-file.mb-2(v-model='event.image', :placeholder='$t("Poster")' accept='image/*')
-        el-button.float-right(@click='done') {{edit?$t('Edit'):$t('Send')}}
+        el-tab-pane
+          span(slot='label') {{$t('Media')}} <v-icon name='image'/>
+          span {{$t('media_explanation')}}
+          b-form-file.mb-2(v-model='event.image', :placeholder='$t("Poster")' accept='image/*')
+          el-button.float-right(@click='done') {{edit?$t('Edit'):$t('Send')}}
 
 
 

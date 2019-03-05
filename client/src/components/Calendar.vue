@@ -1,10 +1,10 @@
 <template lang="pug">
-  v-calendar#calendar.card(
-    :attributes='attributes'
-    :from-page.sync='page'
-    is-expanded is-inline)
-    div(slot='popover', slot-scope='{ customData }')
-      router-link(:to="`/event/${customData.id}`") {{customData.start_datetime|hour}} - {{customData.title}} @{{customData.place.name}}
+    v-calendar#calendar.card(
+      :attributes='attributes'
+      :from-page.sync='page'
+      is-expanded is-inline)
+      div(slot='popover', slot-scope='{ customData }')
+        router-link(:to="`/event/${customData.id}`") {{customData.start_datetime|hour}} - {{customData.title}} @{{customData.place.name}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
@@ -62,20 +62,8 @@ export default {
   computed: {
     filteredEvents () {
       return this.$store.getters.filteredEvents
-      // if (!this.filters.tags.length && !this.filters.places.length) return this.events
-      // return this.events.filter(e => {
-      //   if (this.filters.tags.length) {
-      //     const m = intersection(e.tags.map(t => t.tag), this.filters.tags)
-      //     if (m.length>0) return true
-      //   }
-      //   if (this.filters.places.length) {
-      //     if (this.filters.places.find(p => p === e.place.name))
-      //       return true
-      //   }
-      //   return 0
-      // })
     },
-    ...mapState(['events', 'tags', 'filters']),
+    ...mapState(['events', 'filters', 'user', 'logged']),
     attributes () {
       return [
         { key: 'todaly', dates: new Date(),

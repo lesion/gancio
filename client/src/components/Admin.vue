@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-dialog(@close='$router.replace("/")' :title='$t("Admin")' center width='900px' :visible='true')
+  b-modal(@hidden='$router.replace("/")' :title='$t("Admin")' :visible='true' size='lg')
     el-tabs
       el-tab-pane.pt-1
         template(slot='label')

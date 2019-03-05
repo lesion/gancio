@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-dialog(@close='$router.replace("/")' :title='$t("Export")' :visible='true' center width='600px')
+  b-modal(@hidden='$router.replace("/")' :title='$t("Export")' :visible='true' size='lg' hide-footer)
     p {{$t('export_intro')}}
     
     li(v-if='filters.tags.length') {{$t('Tags')}}:
@@ -7,16 +7,7 @@
     li(v-if='filters.places.length') {{$t('Places')}}:
       el-tag.ml-1(color='#409EFF' size='mini' v-for='place in filters.places') {{place}}
     el-tabs.mt-2(tabPosition='left' v-model='type')
-      el-tab-pane.pt-1(label='feed rss' name='feed')
-        span(v-html='$t(`export_feed_explanation`)')
-        el-input(v-model='link')
-          el-button(slot='append' plain type="primary" icon='el-icon-document' v-clipboard:copy="link") {{$t("Copy")}}
 
-      el-tab-pane.pt-1(label='ics/ical' name='ics')
-        p(v-html='$t(`export_ical_explanation`)')
-        el-input(v-model='link')
-          el-button(slot='append' plain type="primary" icon='el-icon-document' v-clipboard:copy="link") {{$t("Copy")}}
-        
       el-tab-pane.pt-1(label='email' name='email')
         p(v-html='$t(`export_email_explanation`)')
         b-form
@@ -26,6 +17,16 @@
           el-input.mt-2(v-model='mail.mail' :placeholder="$t('Insert your address')")
           el-button.mt-2.float-right(type='success' @click='activate_email') {{$t('Send')}}
 
+      el-tab-pane.pt-1(label='feed rss' name='feed')
+        span(v-html='$t(`export_feed_explanation`)')
+        el-input(v-model='link')
+          el-button(slot='append' plain type="primary" icon='el-icon-document' v-clipboard:copy="link") {{$t("Copy")}}
+
+      el-tab-pane.pt-1(label='ics/ical' name='ics')
+        p(v-html='$t(`export_ical_explanation`)')
+        el-input(v-model='link')
+          el-button(slot='append' plain type="primary" icon='el-icon-document' v-clipboard:copy="link") {{$t("Copy")}}
+
       el-tab-pane.pt-1(label='list' name='list')
         p(v-html='$t(`export_list_explanation`)')
         b-card.mb-1(no-body header='Eventi')
@@ -33,7 +34,7 @@
             b-list-group-item.flex-column.align-items-start(v-for="event in filteredEvents" 
               :to='`/event/${event.id}`')
                 //- b-media
-                  img(v-if='event.image_path' slot="aside" :src="imgPath(event)" alt="Media Aside" style='max-height: 60px')
+                  img(v-if='event.image_path' slot="aside" :src="imgPath(event)" alt="Meia Aside" style='max-height: 60px')
                 small.float-right {{event.start_datetime|datetime}}
                 strong.mb-1 {{event.title}}
                 br

@@ -1,7 +1,9 @@
 <template lang="pug">
   b-container
-    b-card-group(columns)
-      Calendar
+    b-card-group.card-horiz
+      b-form-group.mt-1
+        Search#search
+        Calendar
       Event.item(v-for='event in filteredEvents'
         :key='event.id'
         :event='event')
@@ -13,10 +15,11 @@ import Event from '@/components/Event'
 import Calendar from '@/components/Calendar'
 import {intersection} from 'lodash'
 import moment from 'moment'
+import Search from '@/components/Search'
 
 export default {
   name: 'Home',
-  components: { Event, Calendar },
+  components: { Event, Calendar, Search },
   computed: {
     ...mapState(['events', 'filters']),
     filteredEvents () {
@@ -26,6 +29,19 @@ export default {
 }
 </script>
 <style>
+
+#search {
+  display: inline-flex;
+}
+/* 
+.card-horiz {
+  flex-flow: row wrap;
+  display: flex;
+  /*! margin-left: -8px; */
+}
+.card-horiz .card {
+  width: 400px !important;
+} */
 
 .card-columns {
   column-count: 1;

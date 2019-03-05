@@ -1,15 +1,15 @@
 <template lang='pug'>
-  el-dialog(@show="$refs.email.focus()" :title='$t("Login")' center width='400px'
-    @close='$router.replace("/")' :visible='true')
+  b-modal(@show="$refs.email.focus()" :title='$t("Login")' hide-footer
+    @hidden='$router.replace("/")' :visible='true')
     el-form
       span {{$t('login_explanation')}}
       el-input.mb-2(v-model='email' type='email' :placeholder='$t("Email")' autocomplete='email' ref='email')
         v-icon(name='user' slot='prepend')
       el-input.mb-2(v-model='password' type='password' :placeholder='$t("Password")')
         v-icon(name="lock" slot='prepend')
-      router-link(to='/register')
+      el-button(plain type="success" icon='el-icon-arrow-right' @click='submit') {{$t('Login')}}
+      router-link.float-right(to='/register')
         a {{$t('Not registered?')}}
-      el-button.float-right(plain type="success" icon='el-icon-arrow-right' @click='submit') {{$t('Login')}}
 </template>
 
 <script>
