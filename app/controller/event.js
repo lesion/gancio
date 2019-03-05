@@ -34,7 +34,6 @@ const eventController = {
   },
   async updatePlace (req, res) {
     const place = await Place.findByPk(req.body.id)
-    console.log(place)
     await place.update(req.body)
     res.json(place)
   },

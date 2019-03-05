@@ -52,11 +52,14 @@ const userController = {
     }
   },
 
-  async addEvent (req, res, next) {
+  async addEvent (req, res) {
     const body = req.body
+    const description = body.description
+      .replace(/(<([^>]+)>)/ig, '')
+      .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>')
     const eventDetails = {
       title: body.title,
-      description: body.description,
+      description,
       multidate: body.multidate,
       start_datetime: body.start_datetime,
       end_datetime: body.end_datetime
@@ -99,6 +102,11 @@ const userController = {
   async updateEvent (req, res) {
     const body = req.body
     const event = await Event.findByPk(body.id)
+
+    body.description = body.description
+      .replace(/(<([^>]+)>)/ig, '') // remove all tags from description
+      .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>') // add links
+
     await event.update(body)
     let place
     try {

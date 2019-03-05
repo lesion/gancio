@@ -11,7 +11,7 @@
         span  {{event.place.name}} - {{event.place.address}}
         br
       b-card-body(v-if='event.description || event.tags')
-        pre {{event.description}}
+        pre(v-html='event.description')
         br
         el-tag.mr-1(:color='tag.color' v-for='tag in event.tags'
           size='mini') {{tag.tag}}

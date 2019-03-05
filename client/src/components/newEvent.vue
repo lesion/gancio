@@ -93,7 +93,7 @@ export default {
       this.time.start = moment(event.start_datetime).format('HH:mm')
       this.time.end = moment(event.end_datetime).format('HH:mm')
       this.event.title = event.title
-      this.event.description = event.description
+      this.event.description = event.description.replace(/(<([^>]+)>)/ig, '')
       this.event.id = event.id
       if (event.tags) {
         this.event.tags = event.tags.map(t => t.tag)

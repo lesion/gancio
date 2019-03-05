@@ -24,3 +24,7 @@ pre {
 .el-tag:hover {
   cursor: pointer;
 }
+
+a, a:hover {
+  color: orange;
+}
