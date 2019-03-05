@@ -10,12 +10,13 @@ const Auth = {
     jwt.verify(token, config.secret, async (err, decoded) => {
       if (err) return res.status(403).send({ message: 'Failed to authenticate token ' + err })
       console.log('DECODED TOKEN', decoded)
-      req.user = await User.findOne({ where: { email: decoded.email } })
+      req.user = await User.findOne({ where: { email: decoded.email, is_active: true } })
+      if (!req.user) return res.status(403).send({ message: 'Failed to authenticate token ' + err })
       next()
     })
   },
   async isAdmin (req, res, next) {
-    if (req.user.is_admin) return next()
+    if (req.user.is_admin && req.user.is_active) return next()
     return res.status(403).send({ message: 'Admin needed' })
   }
 }

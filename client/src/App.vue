@@ -87,7 +87,6 @@ html, body {
   scrollbar-face-color: #313543;
   scrollbar-track-color: rgba(0, 0, 0, 0.1); 
   font-family: Lato,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
-  font-size: 1.1em;
   color: #2c3e50;
   background: black;
 }

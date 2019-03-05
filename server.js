@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const api = require('./app/api')
 const cors = require('cors')
 const path = require('path')
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 9000
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from './store'
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:9000/api' : '/api',
   withCredentials: false,
   responseType: 'json',
   headers: {
@@ -11,14 +11,29 @@ const api = axios.create({
 })
 
 function get (path) {
-  return api.get(path, { headers: { 'x-access-token': store.state.token } }).then(ret => ret.data)
+  return api.get(path, { headers: { 'x-access-token': store.state.token } })
+    .then(res => res.data)
+    .catch(e => {
+      if (e.response.status === 403) {
+        store.commit('logout')
+        return false
+      }
+    })
 }
 
 function post (path, data) {
-  return api.post(path, data, { headers: { 'x-access-token': store.state.token } }).then(ret => ret.data)
+  return api.post(path, data, { headers: { 'x-access-token': store.state.token } })
+    .then(res => res.data)
+    .catch(e => {
+      if (e.response.status === 403) {
+        store.commit('logout')
+        return false
+      }
+    })
 }
 function put (path, data) {
-  return api.put(path, data, { headers: { 'x-access-token': store.state.token } }).then(ret => ret.data)
+  return api.put(path, data, { headers: { 'x-access-token': store.state.token } })
+    .then(ret => ret.data)
 }
 
 function del (path) {

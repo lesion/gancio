@@ -1,5 +1,5 @@
 let db = {}
-if (process.env.NODE_ENV==='production') {
+if (process.env.NODE_ENV === 'production') {
   db = {
     host: process.env.DB_HOST,
     username: process.env.DB_USER,
@@ -34,5 +34,5 @@ module.exports = {
     }
   },
 
-  secret: process.env.SECRET
+  secret: process.env.SECRET || 'notsosecret'
 }
