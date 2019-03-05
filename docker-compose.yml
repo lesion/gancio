@@ -8,6 +8,8 @@ services:
       POSTGRES_PASSWORD: 12345
       POSTGRES_USER: postgres
       POSTGRES_DB: gancio
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   app:
     build: .
