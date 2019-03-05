@@ -37,7 +37,7 @@ export default {
 .card-horiz {
   flex-flow: row wrap;
   display: flex;
-  /*! margin-left: -8px; */
+  /*! margin-left: -8px; 
 }
 .card-horiz .card {
   width: 400px !important;
