@@ -1,6 +1,6 @@
 <template lang="pug">
   b-container
-    b-card-group.card-horiz
+    b-card-group(columns)
       b-form-group.mt-1
         Search#search
         Calendar
