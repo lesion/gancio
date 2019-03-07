@@ -110,6 +110,9 @@ const userController = {
   async updateEvent (req, res) {
     const body = req.body
     const event = await Event.findByPk(body.id)
+    if (!req.user.is_admin && event.userId !== req.user.id) {
+      return res.sendStatus(403)
+    }
 
     body.description = body.description
       .replace(/(<([^>]+)>)/ig, '') // remove all tags from description
@@ -140,11 +143,6 @@ const userController = {
       await event.save()
     }
     return res.json(newEvent)
-  },
-
-  async getMyEvents (req, res) {
-    const events = await req.user.getEvents()
-    res.json(events)
   },
 
   async getAuthURL (req, res) {

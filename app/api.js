@@ -2,44 +2,74 @@ const express = require('express')
 const { fillUser, isAuth, isAdmin } = require('./auth')
 const eventController = require('./controller/event')
 const exportController = require('./controller/export')
+const userController = require('./controller/user')
 // const botController = require('./controller/bot')
 
+const path = require('path')
 const multer = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const crypto = require('crypto')
+
+const storage = require('./storage')({
+  destination: 'uploads/',
+  filename: (req, file, cb) => {
+    cb(null, crypto.randomBytes(16).toString('hex') + path.extname(file.originalname))
+  }
+})
+const upload = multer({ storage })
 const api = express.Router()
 
-// USER API
-const userController = require('./controller/user')
-
+// login
 api.post('/login', userController.login)
 
 api.route('/user')
+  // register
   .post(userController.register)
+  // get current user
   .get(isAuth, userController.current)
+  // update user (eg. confirm)
   .put(isAuth, isAdmin, userController.update)
 
+// get all users
 api.get('/users', isAuth, isAdmin, userController.getAll)
+
+// update a tag (modify color)
 api.put('/tag', isAuth, isAdmin, eventController.updateTag)
+
+// update a place (modify address..)
 api.put('/place', isAuth, isAdmin, eventController.updatePlace)
 
 api.route('/user/event')
+  // add event
   .post(fillUser, upload.single('image'), userController.addEvent)
-  .get(isAuth, userController.getMyEvents)
+  // update event
   .put(isAuth, upload.single('image'), userController.updateEvent)
 
+// remove event
 api.delete('/user/event/:id', isAuth, userController.delEvent)
 
+// get tags/places
 api.get('/event/meta', eventController.getMeta)
-api.get('/event/unconfirmed', isAuth, isAdmin, eventController.getUnconfirmed)
-api.post('/event/reminder', eventController.addReminder)
 
+// get unconfirmed events
+api.get('/event/unconfirmed', isAuth, isAdmin, eventController.getUnconfirmed)
+
+// add event reminder
+api.post('/event/reminder', eventController.addReminder)
+// api.del('/event/reminder/:id', eventController.delReminder)
+
+// get event
 api.get('/event/:event_id', eventController.get)
+
+// confirm event
 api.get('/event/confirm/:event_id', isAuth, isAdmin, eventController.confirm)
 
+// export events (rss/ics)
 api.get('/export/:type', exportController.export)
 
+// get events in this range
 api.get('/event/:year/:month', eventController.getAll)
 
+// mastodon oauth auth
 api.post('/user/getauthurl', isAuth, userController.getAuthURL)
 api.post('/user/code', isAuth, userController.code)
 

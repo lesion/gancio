@@ -57,7 +57,7 @@
 <script>
 import api from '@/api'
 import { mapActions, mapState } from 'vuex'
-import moment from 'moment'
+import moment from 'dayjs'
 import Calendar from './Calendar'
 export default {
   components: { Calendar },
@@ -158,10 +158,9 @@ export default {
         end_datetime = moment(this.date.end)
           .hour(end_hour).minute(end_minute)
       } else {
-        start_datetime = moment(this.date)
-          .hour(start_hour).minute(start_minute)
-        end_datetime = moment(this.date)
-          .hour(end_hour).minute(end_minute)
+        console.log(this.date)
+        start_datetime = moment(this.date).set('hour', start_hour).set('minute', start_minute)
+        end_datetime = moment(this.date).set('hour', end_hour).set('minute', end_minute)
       }
       const formData = new FormData()
 

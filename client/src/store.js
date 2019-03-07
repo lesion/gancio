@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import { intersection } from 'lodash'
 import api from './api'
-import moment from 'moment'
+import moment from 'dayjs'
 Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({

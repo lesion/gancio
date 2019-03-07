@@ -9,7 +9,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import filters from '@/filters'
-import moment from 'moment'
+import moment from 'dayjs'
 import { intersection } from 'lodash'
 
 export default {

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from 'dayjs'
 import api from '@/api'
 import { mapActions } from 'vuex';
 import Register from '@/components/Register'
