@@ -56,7 +56,7 @@
           span  {{$t('Tags')}}
         p Select a tag to change it's color 
           el-tag(v-if='tag.tag' :color='tag.color || "grey"' size='mini') {{tag.tag}}
-        el-form.mb-2(:inline='true' label-width='120px')
+        el-form(:inline='true' label-width='120px')
           el-form-item(:label="$t('Color')")
             el-color-picker(v-model='tag.color' @change='updateColor')
         el-table(:data='paginatedTags' striped small hover
