@@ -12,15 +12,17 @@ const en = {
   media_explanation: 'You can upload a media',
   tag_explanation: 'Insert a tag',
   export_intro: `Sharing is caring.`,
-  export_feed_explanation: `Per seguire gli aggiornamenti da computer o smartphone senza la necessità di aprire periodicamente il sito, il metodo consigliato è quello dei Feed RSS.<br/>
-  Con i feed rss utilizzi un'apposita applicazione per ricevere aggiornamenti dai siti che più ti interessano. 
-  È un buon metodo per seguire anche molti siti in modo molto rapido, senza necessità di creare un account o altre complicazioni.<br/>
+  export_feed_explanation: `To follow updates from pc and mobile with, we reccomend the use of RSS.<br/>
+  Thanks to RSS you can use any application able to receive updates from the websites you like. 
+  Using RSS you can to follow in a quick way all the websites you like with no need to create an account<br/>
 
-  Se hai Android, ti consigliamo <a href="https://play.google.com/store/apps/details?id=net.frju.flym">Flym</a> o Feeder<br />
-  Per iPhone/iPad puoi usare <a href="https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8">Feed4U</a><br />
-  Per il computer fisso/portatile consigliamo  Feedbro, da installare all'interno <a href="https://addons.mozilla.org/en-GB/firefox/addon/feedbroreader/">di Firefox </a>o <a href="https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa">di Chrome</a> e compatibile con tutti i principali sistemi operativi.</p>
-<br/>
-  Aggiungendo il link sopra, rimarrai aggiornata sui seguenti eventi:`,
+  If you have Android, you can use <a href="https://play.google.com/store/apps/details?id=net.frju.flym">Flym</a> or Feeder<br />
+  If you have iOS you can use <a href="https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8">Feed4U</a><br />
+  For computers you can use the Browser plugin Feedbro, 
+  <a href="https://addons.mozilla.org/en-GB/firefox/addon/feedbroreader/">[ for Firefox ] </a>
+  and <a href="https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa">[ for Chrome ]</a> </br>
+  Feedbro is compatible with every computer using Firefox or Chrome.</p><br/>
+  Using the link above you will be updated on the following events:`,
   SignIn: 'Sign In',
   registration_email: `Hi, your registration will be confirmed soon.`,
   register_explanation: `..`
