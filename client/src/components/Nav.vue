@@ -6,7 +6,7 @@
       b-navbar-nav
         b-nav-item(v-if='!logged' to='/login'  v-b-tooltip :title='$t("Login")') <v-icon color='lightgreen' name='lock' /> 
           span.d-md-none  {{$t('User')}}
-        b-nav-item(v-if='logged' to='/new_event' v-b-tooltip :title='$t("Add Event")' ) <v-icon color='lightgreen' name='plus'/> 
+        b-nav-item(to='/new_event' v-b-tooltip :title='$t("Add Event")' ) <v-icon color='lightgreen' name='plus'/> 
           span.d-md-none  {{$t('Add Event')}}
         b-nav-item(v-if='logged' to='/settings' v-b-tooltip :title='$t("Settings")') <v-icon color='orange' name='cog'/>
           span.d-md-none  {{$t('Settings')}}

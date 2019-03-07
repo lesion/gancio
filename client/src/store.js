@@ -113,7 +113,9 @@ export default new Vuex.Store({
     },
     async addEvent ({ commit }, formData) {
       const event = await api.addEvent(formData)
-      commit('addEvent', event)
+      if (this.state.logged) {
+        commit('addEvent', event)
+      }
     },
     async updateEvent ({ commit }, formData) {
       const event = await api.updateEvent(formData)

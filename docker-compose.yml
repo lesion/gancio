@@ -16,6 +16,8 @@ services:
     build: .
     ports:
       - '12300:12300'
+    volumes:
+      - ./uploads:/usr/src/app/uploads
 
     env_file: .env
     environment:

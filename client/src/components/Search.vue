@@ -9,6 +9,7 @@
       el-option(v-for='tag in tags' :key='tag.tag'
         :label='tag.tag' :value='tag.tag') 
 </template>
+
 <script>
 import {mapState, mapActions} from 'vuex'
 

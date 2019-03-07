@@ -1,13 +1,14 @@
 <template lang="pug">
   b-container
     b-card-group(columns)
-      b-form-group.mt-1
+      div.mt-1
         Search#search
         Calendar
       Event.item(v-for='event in filteredEvents'
         :key='event.id'
         :event='event')
 </template>
+
 <script>
 import { mapState } from 'vuex'
 import filters from '@/filters.js'

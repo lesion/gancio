@@ -1,4 +1,7 @@
+/* backend configuration */
 let db = {}
+let apiurl
+
 if (process.env.NODE_ENV === 'production') {
   db = {
     host: process.env.DB_HOST,
@@ -7,11 +10,13 @@ if (process.env.NODE_ENV === 'production') {
     database: process.env.DB_NAME,
     dialect: 'postgres'
   }
+  apiurl = process.env.BASE_URL + '/api'
 } else {
   db = {
     dialect: 'sqlite',
     storage: './db.sqlite'
   }
+  apiurl = 'http://localhost:9000'
 }
 
 module.exports = {
@@ -21,7 +26,7 @@ module.exports = {
   description: process.env.DESCRIPTION || 'A calendar for radical communities',
 
   baseurl: process.env.BASE_URL || 'http://localhost:8080',
-  apiurl: process.env.API_URL || 'http://localhost:9000',
+  apiurl,
   db,
   admin: process.env.ADMIN_EMAIL,
 

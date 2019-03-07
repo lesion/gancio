@@ -1,6 +1,5 @@
 const express = require('express')
-const { isAuth, isAdmin } = require('./auth')
-
+const { fillUser, isAuth, isAdmin } = require('./auth')
 const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 // const botController = require('./controller/bot')
@@ -12,8 +11,7 @@ const api = express.Router()
 // USER API
 const userController = require('./controller/user')
 
-api.route('/login')
-  .post(userController.login)
+api.post('/login', userController.login)
 
 api.route('/user')
   .post(userController.register)
@@ -25,23 +23,22 @@ api.put('/tag', isAuth, isAdmin, eventController.updateTag)
 api.put('/place', isAuth, isAdmin, eventController.updatePlace)
 
 api.route('/user/event')
-  .post(isAuth, upload.single('image'), userController.addEvent)
+  .post(fillUser, upload.single('image'), userController.addEvent)
   .get(isAuth, userController.getMyEvents)
   .put(isAuth, upload.single('image'), userController.updateEvent)
 
-api.route('/user/event/:id')
-  .delete(isAuth, userController.delEvent)
+api.delete('/user/event/:id', isAuth, userController.delEvent)
 
 api.get('/event/meta', eventController.getMeta)
-api.route('/event/:event_id')
-  .get(eventController.get)
+api.get('/event/unconfirmed', isAuth, isAdmin, eventController.getUnconfirmed)
+api.post('/event/reminder', eventController.addReminder)
 
-// api.get('/export/feed', exportController.feed)
-// api.get('/export/ics', exportController.ics)
+api.get('/event/:event_id', eventController.get)
+api.get('/event/confirm/:event_id', isAuth, isAdmin, eventController.confirm)
+
 api.get('/export/:type', exportController.export)
 
-api.route('/event/:year/:month')
-  .get(eventController.getAll)
+api.get('/event/:year/:month', eventController.getAll)
 
 api.post('/user/getauthurl', isAuth, userController.getAuthURL)
 api.post('/user/code', isAuth, userController.code)

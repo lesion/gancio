@@ -3,6 +3,16 @@ const config = require('./config')
 const User = require('./models/user')
 
 const Auth = {
+  async fillUser (req, res, next) {
+    const token = req.body.token || req.params.token || req.headers['x-access-token']
+    console.log('[AUTH] ', token)
+    if (!token) next()
+    jwt.verify(token, config.secret, async (err, decoded) => {
+      if (err) next()
+      req.user = await User.findOne({ where: { email: decoded.email, is_active: true } })
+      next()
+    })
+  },
   async isAuth (req, res, next) {
     const token = req.body.token || req.params.token || req.headers['x-access-token']
     console.log('[AUTH] ', token)

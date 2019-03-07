@@ -5,13 +5,12 @@ import VCalendar from 'v-calendar'
 
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
-import Typeahead from '@/components/Typeahead'
 
 import VueClipboard from 'vue-clipboard2'
 
 import 'v-calendar/lib/v-calendar.min.css'
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+// import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -35,7 +34,6 @@ Vue.use(VCalendar, {
 Vue.use(BootstrapVue)
 Vue.use(VueI18n)
 Vue.use(VueClipboard)
-Vue.component('typeahead', Typeahead)
 Vue.component('v-icon', Icon)
 
 const messages = {

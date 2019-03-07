@@ -84,4 +84,8 @@ export default {
   margin-bottom: 0em;
   margin-top: 0.3em;
 }
+
+#calendar a { 
+  color: blue;
+}
 </style>

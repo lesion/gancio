@@ -6,20 +6,22 @@
       div <v-icon name='clock'/> {{event.start_datetime|datetime}}
       span <v-icon name='map-marker-alt'/> {{event.place.name}}
       br
-      el-tag.mr-1(:color='tag.color' v-for='tag in event.tags'
-        size='mini' @click.stop='addSearchTag(tag)') {{tag.tag}}
+      el-tag.mr-1(:color='tag.color' v-for='tag in event.tags' :key='tag.tag'
+        size='small' @click.stop='addSearchTag(tag)') {{tag.tag}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
 import api from '@/api'
 import filters from '@/filters'
 
+console.log(process.env)
+
 export default {
   props: ['event'],
   computed: {
     ...mapState(['user']),
     imgPath () {
-      return this.event.image_path && this.event.image_path
+      return this.event.image_path && process.env.VUE_APP_API + '/' + this.event.image_path
     },
     mine () {
       return this.event.userId === this.user.id

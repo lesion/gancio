@@ -1,4 +1,4 @@
-const { User, Event, Comment, Tag, Place } = require('../model')
+const { User, Event, Comment, Tag, Place, MailReminder } = require('../model')
 const moment = require('moment')
 const Sequelize = require('sequelize')
 
@@ -32,22 +32,51 @@ const eventController = {
       res.send(404)
     }
   },
+
   async updatePlace (req, res) {
     const place = await Place.findByPk(req.body.id)
     await place.update(req.body)
     res.json(place)
   },
+
   async get (req, res) {
     const id = req.params.event_id
     const event = await Event.findByPk(id, { include: [User, Tag, Comment, Place] })
     res.json(event)
   },
 
+  async confirm (req, res) {
+    const id = req.params.event_id
+    const event = await Event.findByPk(id)
+    try {
+      await event.update({ is_visible: true })
+      res.send(200)
+    } catch (e) {
+      res.send(404)
+    }
+  },
+
+  async getUnconfirmed (req, res) {
+    const events = await Event.findAll({
+      where: {
+        is_visible: false
+      },
+      order: [['start_datetime', 'ASC']],
+      include: [Tag, Place]
+    })
+    res.json(events)
+  },
+
+  async addReminder (req, res) {
+    await MailReminder.create(req.body.reminder)
+    res.json(200)
+  },
   async getAll (req, res) {
     const start = moment().year(req.params.year).month(req.params.month).startOf('month').subtract(1, 'week')
     const end = moment().year(req.params.year).month(req.params.month).endOf('month').add(1, 'week')
     const events = await Event.findAll({
       where: {
+        is_visible: true,
         [Sequelize.Op.and]: [
           { start_datetime: { [Sequelize.Op.gte]: start } },
           { start_datetime: { [Sequelize.Op.lte]: end } }

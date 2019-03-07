@@ -1,4 +1,17 @@
 # Gancio
+an event manager for local communities
+
+##Install
+We provide a docker way to run **gancio**.
+
+```
+git clone 
+```
+
+##Development
+```
+```
+
 
 ## Project setup
 ```
@@ -13,9 +26,4 @@ yarn run serve
 ### Compiles and minifies for production
 ```
 yarn run build
-```
-
-### Lints and fixes files
-```
-yarn run lint
 ```

@@ -3,7 +3,7 @@ rss(version='2.0', xmlns:atom='<a href="http://www.w3.org/2005/Atom" rel="nofoll
     channel
         title #{config.title}
         link <a href="#{config.baseurl}" rel="nofollow">#{config.baseurl}</a>
-        atom:link(href='<a href="#{config.apiurl}/export/feed/rss" rel="nofollow">#{config.apiurl}/export/feed/rss</a>', rel='self', type='application/rss+xml')
+        <atom:link href="#{config.apiurl}/export/feed/rss" rel='self' type='application/rss+xml' />
         description #{config.description}
         language #{config.locale}
         //- if events.length
@@ -17,6 +17,7 @@ rss(version='2.0', xmlns:atom='<a href="http://www.w3.org/2005/Atom" rel="nofoll
                     | <h4>#{event.title}</h4>
                     | <strong>#{event.place.name} - #{event.place.address}</strong>
                     | #{moment(event.start_datetime).format("ddd, D MMMM HH:mm")}<br/>
+                    | <img src="#{config.apiurl}/#{event.image_path}"/>
                     | <pre>!{event.description}</pre>
                     | ]]>
                 pubDate= new Date(event.createdAt).toUTCString()

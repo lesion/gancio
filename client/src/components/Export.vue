@@ -3,18 +3,18 @@
     p {{$t('export_intro')}}
     
     li(v-if='filters.tags.length') {{$t('Tags')}}:
-      el-tag.ml-1(color='#409EFF' size='mini' v-for='tag in filters.tags') {{tag}}
+      el-tag.ml-1(color='#409EFF' size='mini' v-for='tag in filters.tags' :key='tag.tag') {{tag}}
     li(v-if='filters.places.length') {{$t('Places')}}:
-      el-tag.ml-1(color='#409EFF' size='mini' v-for='place in filters.places') {{place}}
+      el-tag.ml-1(color='#409EFF' size='mini' v-for='place in filters.places' :key='place.id') {{place}}
     el-tabs.mt-2(tabPosition='left' v-model='type')
 
       el-tab-pane.pt-1(label='email' name='email')
         p(v-html='$t(`export_email_explanation`)')
         b-form
-          el-switch(v-model='mail.sendOnInsert' :active-text="$t('notify_on_insert')")
+          el-switch(v-model='reminder.send_on_insert' :active-text="$t('notify_on_insert')")
           br
-          el-switch.mt-2(v-model='mail.reminder' :active-text="$t('send_reminder')") 
-          el-input.mt-2(v-model='mail.mail' :placeholder="$t('Insert your address')")
+          el-switch.mt-2(v-model='reminder.send_reminder' :active-text="$t('send_reminder')") 
+          el-input.mt-2(v-model='reminder.mail' :placeholder="$t('Insert your address')")
           el-button.mt-2.float-right(type='success' @click='activate_email') {{$t('Send')}}
 
       el-tab-pane.pt-1(label='feed rss' name='feed')
@@ -31,7 +31,7 @@
         p(v-html='$t(`export_list_explanation`)')
         b-card.mb-1(no-body header='Eventi')
           b-list-group#list(flush)
-            b-list-group-item.flex-column.align-items-start(v-for="event in filteredEvents" 
+            b-list-group-item.flex-column.align-items-start(v-for="event in filteredEvents" :key='event.id'
               :to='`/event/${event.id}`')
                 //- b-media
                   img(v-if='event.image_path' slot="aside" :src="imgPath(event)" alt="Meia Aside" style='max-height: 60px')
@@ -39,7 +39,7 @@
                 strong.mb-1 {{event.title}}
                 br
                 small.float-right {{event.place.name}}
-                el-tag.mr-1(:color='tag.color' size='mini' v-for='tag in event.tags') {{tag.tag}}
+                el-tag.mr-1(:color='tag.color' size='mini' v-for='tag in event.tags' :key='tag.tag') {{tag.tag}}
         el-input.mb-1(type='textarea' v-model='script')
         el-button.float-right(plain type="primary" icon='el-icon-document' v-clipboard:copy="script") Copy
 
@@ -65,7 +65,7 @@ export default {
     return {
       type: 'feed',
       link: '',
-      mail: {},
+      reminder: { send_on_insert: true, send_reminder: false },
       export_list: true,
       script: `<iframe>Ti piacerebbe</iframe>`,
     }
@@ -97,7 +97,7 @@ export default {
         }
       }
 
-      return `${process.env.BASE_URL}/api/export/${this.type}${query}`
+      return `${process.env.VUE_APP_API}/api/export/${this.type}${query}`
     },
     imgPath (event) {
       return event.image_path && event.image_path

@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 COPY package.json .
 
 # install backend dependencies
-RUN yarn install
+RUN yarn
 
 # copy source
 COPY . .

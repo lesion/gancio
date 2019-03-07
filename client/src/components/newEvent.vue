@@ -1,5 +1,4 @@
 <template lang="pug">
-  //- el-dialog(@close='$router.replace("/")' :title="edit?$t('Edit event'):$t('New event')" center :close-on-press-escape='false' :visible='true')
   b-modal(@hidden='$router.replace("/")' :title="edit?$t('Edit event'):$t('New event')" size='md' :visible='true' hide-footer)
     b-container
       el-tabs.mb-2(v-model='activeTab' v-loading='sending')
@@ -10,7 +9,7 @@
           el-form(label-width='120px')
             el-form-item(:label='$t("Where")')
               el-select(v-model='event.place.name' @change='placeChoosed' filterable allow-create default-first-option)
-                el-option(v-for='place in places_name' :label='place' :value='place')
+                el-option(v-for='place in places_name' :label='place' :value='place' :key='place.id')
             el-form-item(:label='$t("Address")')
               el-input(ref='address' v-model='event.place.address' @keydown.native.enter='next')
             el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
@@ -39,10 +38,9 @@
           el-input.mb-3(v-model='event.description' type='textarea' :rows='3')
           span {{$t('tag_explanation')}}
           br 
-          //- typeahead(v-model="event.tags" :data='tags' multiple)
           el-select(v-model='event.tags' multiple filterable allow-create
             default-first-option placeholder='Tag')
-            el-option(v-for='tag in tags' :key='tag'
+            el-option(v-for='tag in tags' :key='tag.tag'
               :label='tag' :value='tag') 
 
           el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
@@ -80,6 +78,12 @@ export default {
     }
   },
   name: 'newEvent',
+  watch: {
+    'time.start' (value) {
+      let [h, m] = value.split(':')
+      this.time.end = (Number(h)+1) + ':' + m
+    }
+  },
   async mounted () {
     if (this.$route.params.id) {
       this.id = this.$route.params.id

@@ -15,10 +15,9 @@ const userController = {
       res.status(404).json({ success: false, message: 'AUTH_FAIL' })
     } else if (user) {
       if (!user.is_active) {
-        res.status(403).json({ success: false, message: 'NOT)CONFIRMED' })
-      }
+        res.status(403).json({ success: false, message: 'NOT_CONFIRMED' })
       // check if password matches
-      else if (!await user.comparePassword(req.body.password)) {
+      } else if (!await user.comparePassword(req.body.password)) {
         res.status(403).json({ success: false, message: 'AUTH_FAIL' })
       } else {
         // if user is found and password is right
@@ -48,21 +47,26 @@ const userController = {
       await event.destroy()
       res.sendStatus(200)
     } else {
-      res.sendStatus(404)
+      res.sendStatus(403)
     }
   },
 
+  // ADD EVENT
   async addEvent (req, res) {
     const body = req.body
+
+    // remove description tag and create anchor tag
     const description = body.description
       .replace(/(<([^>]+)>)/ig, '')
       .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>')
+
     const eventDetails = {
       title: body.title,
       description,
       multidate: body.multidate,
       start_datetime: body.start_datetime,
-      end_datetime: body.end_datetime
+      end_datetime: body.end_datetime,
+      is_visible: req.user ? true : false
     }
 
     if (req.file) {
@@ -88,14 +92,18 @@ const userController = {
       const tags = await Tag.findAll({ where: { tag: body.tags } })
       await event.addTags(tags)
     }
-    await req.user.addEvent(event)
+    if (req.user) await req.user.addEvent(event)
     event = await Event.findByPk(event.id, { include: [User, Tag, Place] })
+
     // check if bot exists
-    if (req.user.mastodon_auth) {
+    if (req.user && req.user.mastodon_auth) {
       const post = await bot.post(req.user, event)
       event.activitypub_id = post.id
       event.save()
     }
+
+    mail.send(config.admin, 'event', { event })
+
     return res.json(event)
   },
 

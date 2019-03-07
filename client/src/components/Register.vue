@@ -1,7 +1,6 @@
 <template lang='pug'>
-  b-modal(hide-header hide-footer
-    @hide='$router.replace("/")' :visible='true' @shown='$refs.email.focus()')
-    h4.text-center.center {{$t('Register')}}
+  b-modal(hide-footer
+    @hidden='$router.replace("/")' :title="$t('Register')" :visible='true' @shown='$refs.email.focus()')
     b-form
       p.text-muted(v-html="$t('register_explanation')")
       b-input-group.mb-1
@@ -46,7 +45,7 @@ export default {
         this.$message({
           message: this.$t('registration_complete'),
           type: 'success'
-        });
+        })
       } catch (e) {
         console.error(e)
       }

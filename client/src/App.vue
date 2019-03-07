@@ -5,6 +5,7 @@
     transition(name="fade" mode="out-in")
       router-view(name='modal')
 </template>
+
 <script>
 import moment from 'moment'
 import api from '@/api'
@@ -14,7 +15,6 @@ import Login from '@/components/Login'
 import Settings from '@/components/Settings'
 import newEvent from '@/components/newEvent'
 import eventDetail from '@/components/EventDetail'
-import Timeline from '@/components/Timeline'
 import Home from '@/components/Home'
 import Nav from '@/components/Nav'
 
@@ -30,7 +30,7 @@ export default {
 
 <style>
 #logo {
-  max-height: 60px;
+  max-height: 40px;
 }
 
 .navbar-brand {

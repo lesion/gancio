@@ -4,12 +4,13 @@ const User = require('./user')
 
 const Event = db.define('event', {
   title: Sequelize.STRING,
-  description: Sequelize.STRING,
+  description: Sequelize.TEXT,
   multidate: Sequelize.BOOLEAN,
   start_datetime: { type: Sequelize.DATE, index: true },
   end_datetime: { type: Sequelize.DATE, index: true },
   image_path: Sequelize.STRING,
-  activitypub_id: { type: Sequelize.INTEGER, index: true }
+  activitypub_id: { type: Sequelize.INTEGER, index: true },
+  is_visible: Sequelize.BOOLEAN
 })
 
 const Tag = db.define('tag', {
@@ -23,11 +24,11 @@ const Comment = db.define('comment', {
   text: Sequelize.STRING
 })
 
-const MailSubscription = db.define('subscription', {
+const MailReminder = db.define('reminder', {
   filters: Sequelize.JSON,
-  mail: Sequelize.TEXT,
+  mail: Sequelize.STRING,
   send_on_add: Sequelize.BOOLEAN,
-  send_reminder: Sequelize.INTEGER
+  send_reminder: Sequelize.BOOLEAN
 })
 
 const Place = db.define('place', {
@@ -47,4 +48,4 @@ Event.belongsTo(Place)
 User.hasMany(Event)
 Place.hasMany(Event)
 
-module.exports = { Event, Comment, Tag, Place, MailSubscription }
+module.exports = { Event, Comment, Tag, Place, MailReminder }
