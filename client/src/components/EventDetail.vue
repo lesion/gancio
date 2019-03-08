@@ -14,7 +14,7 @@
       b-card-body(v-if='event.description || event.tags')
         pre(v-html='event.description')
         br
-        el-tag.mr-1(:color='tag.color' v-for='tag in event.tags'
+        el-tag.mr-1(:color='tag.color || "grey"' v-for='tag in event.tags'
           size='mini' :key='tag.tag') {{tag.tag}}
         .ml-auto(v-if='mine')
           hr
@@ -74,7 +74,7 @@ export default {
     async remove () {
       await api.delEvent(this.event.id)
       this.delEvent(this.event.id)
-      this.$router.go(-1)
+      this.$refs.modal.hide()
     }
   }
 }

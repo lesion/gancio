@@ -1,7 +1,6 @@
 <template lang="pug">
-  b-container
-    b-card-group(columns)
-      div.mt-1
+    magic-grid(animate :gap=5 :maxCols=4 :maxColWidth='300')
+      div.mt-1.item
         Search#search
         Calendar
       Event.item(v-for='event in filteredEvents'
@@ -34,15 +33,11 @@ export default {
 #search {
   display: inline-flex;
 }
-/* 
-.card-horiz {
-  flex-flow: row wrap;
-  display: flex;
-  /*! margin-left: -8px; 
+
+.item {
+  /* min-width: 350px; */
+  width: 100%;
 }
-.card-horiz .card {
-  width: 400px !important;
-} */
 
 .card-columns {
   column-count: 1;
@@ -66,12 +61,12 @@ export default {
   }
 }
 
-.item {
+/* .item {
   transition: all .2s;
   display: inline-block;
   width: 100%;
-}
-.list-enter, .list-leave-to {
+} */
+/* .list-enter, .list-leave-to {
   opacity: 0;
   transform: translateY(30px);
 }
@@ -82,5 +77,5 @@ export default {
   left: 0px;
   height: 0px;
   z-index: -10;
-}
+} */
 </style>

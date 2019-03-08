@@ -1,5 +1,6 @@
 <template lang="pug">
-  b-modal(@hidden='$router.replace("/")' :title='$t("Export")' :visible='true' size='lg' hide-footer)
+  b-modal(ref='modal' @hidden='$router.replace("/")' 
+    :title='$t("Export")' :visible='true' size='lg' hide-footer)
     p {{$t('export_intro')}}
     
     li(v-if='filters.tags.length') {{$t('Tags')}}:
@@ -63,7 +64,7 @@ export default {
   components: { Calendar },
   data () {
     return {
-      type: 'feed',
+      type: 'email',
       link: '',
       reminder: { send_on_insert: true, send_reminder: false },
       export_list: true,
@@ -81,7 +82,7 @@ export default {
   },
   methods: {
     activate_email () {
-      this.$router.go(-1)
+      this.$refs.modal.hide()
     },
     loadLink () {
       const tags = this.filters.tags.join(',')

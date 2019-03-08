@@ -30,7 +30,7 @@ import { Button, Select, Tag, Option, Table, FormItem,
   Form, Tabs, TabPane, Switch, Input, Loading, TimeSelect,
   TableColumn, ColorPicker, Pagination } from 'element-ui'
 import ElementLocale from 'element-ui/lib/locale'
-
+import MagicGrid from 'vue-magic-grid'
 
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -62,6 +62,8 @@ Vue.use(FormItem)
 Vue.use(Form)
 Vue.use(TimeSelect)
 Vue.use(Loading.directive)
+
+Vue.use(MagicGrid)
 
 // Use v-calendar, v-date-picker & v-popover components
 Vue.use(VCalendar, {

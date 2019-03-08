@@ -6,7 +6,7 @@
       div <v-icon name='clock'/> {{event.start_datetime|datetime}}
       span <v-icon name='map-marker-alt'/> {{event.place.name}}
       br
-      el-tag.mr-1(:color='tag.color' v-for='tag in event.tags' :key='tag.tag'
+      el-tag.mr-1(:color='tag.color || "grey"' v-for='tag in event.tags' :key='tag.tag'
         size='small' @click.stop='addSearchTag(tag)') {{tag.tag}}
 </template>
 <script>

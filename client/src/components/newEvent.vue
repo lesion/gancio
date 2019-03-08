@@ -1,5 +1,6 @@
 <template lang="pug">
-  b-modal(@hidden='$router.replace("/")' :title="edit?$t('Edit event'):$t('New event')" size='md' :visible='true' hide-footer)
+  b-modal(ref='modal' @hidden='$router.replace("/")' size='md' :visible='true'
+    :title="edit?$t('Edit event'):$t('New event')" hide-footer)
     b-container
       el-tabs.mb-2(v-model='activeTab' v-loading='sending')
 
@@ -188,7 +189,7 @@ export default {
         }
         this.updateMeta()
         this.sending = false
-        this.$router.go(-1)
+        this.$refs.modal.hide()
       } catch (e) {
         this.sending = false
         console.error(e)
