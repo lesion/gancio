@@ -77,7 +77,7 @@ const it = {
   'Insert your address': 'Inserisci il tuo indirizzo',
   registration_complete: 'Controlla la tua posta (anche la cartella spam)',
   registration_email: `Ciao, la tua registrazione sarà confermata nei prossimi giorni. Riceverai una conferma non temere.`,
-  register_explanation: `I movimenti hanno bisogno di organizzarsi e autofinanziarsi. <br/>Questo è un dono per voi, non possiamo più vedervi usare le piattaforme del capitalismo. Solo eventi non commerciali e ovviamente antifascisti, antisessisti, antirazzisti. 
+  register_explanation: `I movimenti hanno bisogno di organizzarsi e autofinanziarsi. <br/>Questo è un dono per voi, usatelo solo per eventi non commerciali e ovviamente antifascisti, antisessisti, antirazzisti. 
     <br/>Prima di poter pubblicare <strong>dobbiamo approvare l'account</strong>, considera che <strong>dietro questo sito ci sono delle persone</strong> di
     carne e sangue, scrivici quindi due righe per farci capire che eventi vorresti pubblicare.`,
   'Not registered?': `Non sei registrata?`,

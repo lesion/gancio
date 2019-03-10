@@ -20,9 +20,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  locale: 'en',
+  locale: 'it',
 
-  title: process.env.TITLE || 'Put here your site name',
+  title: process.env.TITLE || 'GANCIO',
   description: process.env.DESCRIPTION || 'A calendar for radical communities',
 
   baseurl: process.env.BASE_URL || 'http://localhost:8080',

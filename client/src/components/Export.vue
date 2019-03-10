@@ -12,11 +12,11 @@
       el-tab-pane.pt-1(label='email' name='email')
         p(v-html='$t(`export_email_explanation`)')
         b-form
-          el-switch(v-model='reminder.send_on_insert' :active-text="$t('notify_on_insert')")
+          el-switch(v-model='reminder.notify_on_add' :active-text="$t('notify_on_insert')")
           br
-          el-switch.mt-2(v-model='reminder.send_reminder' :active-text="$t('send_reminder')") 
-          el-input.mt-2(v-model='reminder.mail' :placeholder="$t('Insert your address')")
-          el-button.mt-2.float-right(type='success' @click='activate_email') {{$t('Send')}}
+          //- el-switch.mt-2(v-model='reminder.send_reminder' :active-text="$t('send_reminder')") 
+          el-input.mt-2(v-model='reminder.email' :placeholder="$t('Insert your address')")
+          el-button.mt-2.float-right(type='success' @click='add_reminder') {{$t('Send')}}
 
       el-tab-pane.pt-1(label='feed rss' name='feed')
         span(v-html='$t(`export_feed_explanation`)')
@@ -30,7 +30,7 @@
 
       el-tab-pane.pt-1(label='list' name='list')
         p(v-html='$t(`export_list_explanation`)')
-        b-card.mb-1(no-body header='Eventi')
+        el-card.mb-1(no-body header='Eventi')
           b-list-group#list(flush)
             b-list-group-item.flex-column.align-items-start(v-for="event in filteredEvents" :key='event.id'
               :to='`/event/${event.id}`')
@@ -40,7 +40,7 @@
                 strong.mb-1 {{event.title}}
                 br
                 small.float-right {{event.place.name}}
-                el-tag.mr-1(:color='tag.color' size='mini' v-for='tag in event.tags' :key='tag.tag') {{tag.tag}}
+                el-tag.mr-1(:color='tag.color || "grey"' size='mini' v-for='tag in event.tags' :key='tag.tag') {{tag.tag}}
         el-input.mb-1(type='textarea' v-model='script')
         el-button.float-right(plain type="primary" icon='el-icon-document' v-clipboard:copy="script") Copy
 
@@ -58,6 +58,7 @@ import path from 'path'
 import filters from '../filters'
 import Calendar from '@/components/Calendar'
 import {intersection} from 'lodash'
+import api from '@/api'
 
 export default {
   name: 'Export',
@@ -66,7 +67,7 @@ export default {
     return {
       type: 'email',
       link: '',
-      reminder: { send_on_insert: true, send_reminder: false },
+      reminder: { notify_on_add: true, send_reminder: false },
       export_list: true,
       script: `<iframe>Ti piacerebbe</iframe>`,
     }
@@ -81,7 +82,8 @@ export default {
     }
   },
   methods: {
-    activate_email () {
+    async add_reminder () {
+      await api.emailReminder({ ...this.reminder, filters: this.filters})
       this.$refs.modal.hide()
     },
     loadLink () {

@@ -1,16 +1,19 @@
 const Email = require('email-templates')
 const path = require('path')
 const config = require('./config')
+const moment = require('moment')
+moment.locale('it')
 
 const mail = {
   send (addresses, template, locals) {
     locals.locale = config.locale
     const email = new Email({
+      views: { root: path.join(__dirname, 'emails') },
       juice: true,
       juiceResources: {
         preserveImportant: true,
         webResources: {
-          relativeTo: path.join(__dirname, '..', 'emails')
+          relativeTo: path.join(__dirname, 'emails')
         }
       },
       message: {
@@ -26,7 +29,7 @@ const mail = {
         to: addresses,
         bcc: config.admin
       },
-      locals
+      locals: { ...locals, config, datetime: datetime => moment(datetime).format('ddd, D MMMM HH:mm') }
     })
   }
 }

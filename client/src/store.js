@@ -48,8 +48,7 @@ export default new Vuex.Store({
     //
     filters: {
       tags: [],
-      places: [],
-      hidePast: false
+      places: []
     }
   },
   mutations: {

@@ -1,5 +1,7 @@
 <template lang="pug">
     v-calendar#calendar.card(
+      show-caps
+      :popover-expanded='true'
       :attributes='attributes'
       :from-page.sync='page'
       is-expanded is-inline)
@@ -22,8 +24,8 @@ export default {
       page: { month, year},
     }
   },
-  mounted () {
-    this.updateEvents(this.page)
+  async mounted () {
+    await this.updateEvents(this.page)
   },
   watch: {
     page () {

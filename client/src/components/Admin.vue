@@ -37,7 +37,7 @@
           v-icon(name='calendar')
           span.ml-1 {{$t('Events')}}
         p {{$t('event_confirm_explanation')}}
-        el-table(:data='paginatedEvents' small primary-key='id')
+        el-table(:data='paginatedEvents' small primary-key='id' v-loading='loading')
           el-table-column(:label='$t("Name")')
             template(slot-scope='data') {{data.row.title}}
           el-table-column(:label='$t("Where")')
@@ -76,6 +76,7 @@
 <script>
 import { mapState } from 'vuex'
 import api from '@/api'
+import { Message } from 'element-ui'
 
 export default {
   name: 'Admin',
@@ -94,6 +95,7 @@ export default {
       place: {name: '', address: '' },
       tag: {name: '', color: ''},
       events: [],
+      loading: false
     }
   },
   async mounted () {
@@ -147,8 +149,10 @@ export default {
     async confirm (id) {
       console.log('dentro confirm', id)
       try {
+        this.loading = true
         await api.confirmEvent(id)
-        this.$message({
+        this.loading = false
+        Message({
           message: this.$t('event_confirmed'),
           type: 'success'
         })

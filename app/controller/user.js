@@ -3,14 +3,16 @@ const Mastodon = require('mastodon-api')
 
 const User = require('../models/user')
 const { Event, Tag, Place } = require('../models/event')
+const eventController = require('./event')
 const config = require('../config')
 const mail = require('../mail')
 const bot = require('./bot')
+const { Op } = require('sequelize')
 
 const userController = {
   async login (req, res) {
     // find the user
-    const user = await User.findOne({ where: { email: req.body.email } })
+    const user = await User.findOne({ where: { email: { [Op.eq]: req.body.email } } })
     if (!user) {
       res.status(404).json({ success: false, message: 'AUTH_FAIL' })
     } else if (user) {
@@ -82,6 +84,7 @@ const userController = {
     } catch (e) {
       console.log(e)
     }
+
     let event = await Event.create(eventDetails)
     await event.setPlace(place)
 
@@ -89,7 +92,7 @@ const userController = {
     console.log(body.tags)
     if (body.tags) {
       await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
-      const tags = await Tag.findAll({ where: { tag: body.tags } })
+      const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
       await event.addTags(tags)
     }
     if (req.user) await req.user.addEvent(event)
@@ -102,7 +105,9 @@ const userController = {
       event.save()
     }
 
-    mail.send(config.admin, 'event', { event })
+    // insert reminder
+    const reminders = await eventController.getReminders(event)
+    await event.setReminders(reminders)
 
     return res.json(event)
   },
@@ -121,7 +126,7 @@ const userController = {
     await event.update(body)
     let place
     try {
-      place = await Place.findOrCreate({ where: { name: body.place_name },
+      place = await Place.findOrCreate({ where: { name: { [Op.eq]: body.place_name } },
         defaults: { address: body.place_address } })
         .spread((place, created) => place)
     } catch (e) {
@@ -132,7 +137,7 @@ const userController = {
     console.log(body.tags)
     if (body.tags) {
       await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
-      const tags = await Tag.findAll({ where: { tag: body.tags } })
+      const tags = await Tag.findAll({ where: { tag: { [Op.eq]: body.tags } } })
       await event.addTags(tags)
     }
     const newEvent = await Event.findByPk(event.id, { include: [User, Tag, Place] })

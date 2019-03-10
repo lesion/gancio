@@ -74,7 +74,7 @@ export default {
     async remove () {
       await api.delEvent(this.event.id)
       this.delEvent(this.event.id)
-      this.$refs.modal.hide()
+      this.$refs.eventDetail.hide()
     }
   }
 }

@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "name": "GANCIO",
+      "script": "./app/server.js"
+    },
+    {
+      "name": "WORKER",
+      "script": "./app/cron.js"
+    }
+  ]
+}

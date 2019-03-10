@@ -1,9 +1,10 @@
 <template lang="pug">
-    magic-grid(animate :gap=5 :maxCols=4 :maxColWidth='300')
+    magic-grid(:animate="false" useMin :gap=5 :maxCols=4
+      :maxColWidth='400' ref='magicgrid')
       div.mt-1.item
         Search#search
         Calendar
-      Event.item(v-for='event in filteredEvents'
+      Event.item.mt-1(v-for='event in filteredEvents'
         :key='event.id'
         :event='event')
 </template>
@@ -20,10 +21,17 @@ import Search from '@/components/Search'
 export default {
   name: 'Home',
   components: { Event, Calendar, Search },
+  watch: {
+    filteredEvents () {
+      this.$nextTick( this.$refs.magicgrid.positionItems)
+    }
+  },
   computed: {
     ...mapState(['events', 'filters']),
     filteredEvents () {
-      return this.$store.getters.filteredEvents.filter(e => !e.past)
+      return this.$store.getters.filteredEvents
+        .filter(e => !e.past)
+        .sort((a, b) => { a.start_datetime > b.start_datetime})
     }
   }
 }
@@ -35,8 +43,11 @@ export default {
 }
 
 .item {
-  /* min-width: 350px; */
   width: 100%;
+  max-width: 400px;
+  margin-top: 4px;
+  position: absolute;
+  cursor: pointer;
 }
 
 .card-columns {

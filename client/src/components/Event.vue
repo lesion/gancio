@@ -1,5 +1,5 @@
 <template lang="pug">
-  b-card(bg-variant='dark' text-variant='white'
+  b-card(bg-variant='dark' text-variant='white' :class="{ withImg: event.image_path ? true : false }"
     @click='$router.push("/event/" + event.id)'
      :img-src='imgPath')
       strong {{event.title}}
@@ -58,7 +58,8 @@ export default {
 }
 
 .card-img {
-  max-height: 180px;
+  height: 180px;
+
   object-fit: cover;
 }
 

@@ -4,6 +4,7 @@ import BootstrapVue from 'bootstrap-vue'
 import VCalendar from 'v-calendar'
 
 import 'vue-awesome/icons/lock'
+import 'vue-awesome/icons/user'
 import 'vue-awesome/icons/plus'
 import 'vue-awesome/icons/cog'
 import 'vue-awesome/icons/tools'
@@ -17,6 +18,7 @@ import 'vue-awesome/icons/tag'
 import 'vue-awesome/icons/users'
 import 'vue-awesome/icons/calendar'
 import 'vue-awesome/icons/edit'
+import 'vue-awesome/icons/envelope-open-text'
 
 import Icon from 'vue-awesome/components/Icon'
 
@@ -26,7 +28,7 @@ import 'v-calendar/lib/v-calendar.min.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import { Button, Select, Tag, Option, Table, FormItem,
+import { Button, Select, Tag, Option, Table, FormItem, Card,
   Form, Tabs, TabPane, Switch, Input, Loading, TimeSelect,
   TableColumn, ColorPicker, Pagination } from 'element-ui'
 import ElementLocale from 'element-ui/lib/locale'
@@ -47,6 +49,7 @@ import itLocale from '@/locale/it'
 import enLocale from '@/locale/en'
 
 Vue.use(Button)
+Vue.use(Card)
 Vue.use(Select)
 Vue.use(Tag)
 Vue.use(Input)

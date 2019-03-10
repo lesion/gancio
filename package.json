@@ -3,7 +3,7 @@
   "main": "server.js",
   "scripts": {
     "serve": "NODE_ENV=production nodemon server.js",
-    "dev": "NODE_ENV=development nodemon server.js"
+    "dev": "NODE_ENV=development nodemon app/server.js"
   },
   "dependencies": {
     "bcrypt": "^3.0.2",

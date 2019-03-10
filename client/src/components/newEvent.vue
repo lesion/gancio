@@ -2,7 +2,7 @@
   b-modal(ref='modal' @hidden='$router.replace("/")' size='md' :visible='true'
     :title="edit?$t('Edit event'):$t('New event')" hide-footer)
     b-container
-      el-tabs.mb-2(v-model='activeTab' v-loading='sending')
+      el-tabs.mb-2(v-model='activeTab' v-loading='sending' @tab-click.native='changeTab')
 
         el-tab-pane
           span(slot='label') {{$t('Where')}} <v-icon name='map-marker-alt'/>
@@ -34,7 +34,7 @@
         el-tab-pane
           span(slot='label') {{$t('What')}} <v-icon name='file-alt'/>
           span {{$t('what_explanation')}}
-          el-input.mb-3(v-model='event.title')
+          el-input.mb-3(v-model='event.title' ref='title')
           span {{$t('description_explanation')}}
           el-input.mb-3(v-model='event.description' type='textarea' :rows='3')
           span {{$t('tag_explanation')}}
@@ -44,7 +44,7 @@
             el-option(v-for='tag in tags' :key='tag.tag'
               :label='tag' :value='tag') 
 
-          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
+          el-button.float-right(@click.native='next' :disabled='!couldProceed') {{$t('Next')}}
 
         el-tab-pane
           span(slot='label') {{$t('Media')}} <v-icon name='image'/>
@@ -132,14 +132,19 @@ export default {
   },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta']),
+    changeTab (tab) {
+      if (this.activeTab === "2") this.$refs.title.focus()
+    },
     next () {
       this.activeTab = String(Number(this.activeTab)+1)
+      if (this.activeTab === "2") {
+        this.$refs.title.focus()
+      }
     },
     prev () {
       this.activeTab = String(Number(this.activeTab-1))
     },
     placeChoosed () {
-      console.log('dentro placeChoosed')
       const place = this.places.find( p => p.name === this.event.place.name )
       if (place && place.address) {
         this.event.place.address = place.address
@@ -186,6 +191,7 @@ export default {
           await this.updateEvent(formData)
         } else {
           await this.addEvent(formData)
+          // this.$router.push('/')
         }
         this.updateMeta()
         this.sending = false

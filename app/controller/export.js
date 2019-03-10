@@ -1,5 +1,5 @@
 const { Event, Comment, Tag, Place } = require('../model')
-const Sequelize = require('sequelize')
+const { Op } = require('sequelize')
 const config = require('../config')
 const moment = require('moment')
 const ics = require('ics')
@@ -21,7 +21,7 @@ const exportController = {
     }
     const events = await Event.findAll({
       order: [['start_datetime', 'ASC']],
-      where: { start_datetime: { [Sequelize.Op.gte]: yesterday } },
+      where: { start_datetime: { [Op.gte]: yesterday } },
       include: [Comment, {
         model: Tag,
         where: whereTag

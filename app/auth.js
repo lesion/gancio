@@ -1,26 +1,24 @@
 const jwt = require('jsonwebtoken')
 const config = require('./config')
 const User = require('./models/user')
+const { Op } = require('sequelize')
 
 const Auth = {
   async fillUser (req, res, next) {
     const token = req.body.token || req.params.token || req.headers['x-access-token']
-    console.log('[AUTH] ', token)
-    if (!token) next()
+    if (!token) return next()
     jwt.verify(token, config.secret, async (err, decoded) => {
-      if (err) next()
-      req.user = await User.findOne({ where: { email: decoded.email, is_active: true } })
+      if (err) return next()
+      req.user = await User.findOne({ where: { email: { [Op.eq]: decoded.email }, is_active: true } })
       next()
     })
   },
   async isAuth (req, res, next) {
     const token = req.body.token || req.params.token || req.headers['x-access-token']
-    console.log('[AUTH] ', token)
     if (!token) return res.status(403).send({ message: 'Token not found' })
     jwt.verify(token, config.secret, async (err, decoded) => {
       if (err) return res.status(403).send({ message: 'Failed to authenticate token ' + err })
-      console.log('DECODED TOKEN', decoded)
-      req.user = await User.findOne({ where: { email: decoded.email, is_active: true } })
+      req.user = await User.findOne({ where: { email: { [Op.eq]: decoded.email }, is_active: true } })
       if (!req.user) return res.status(403).send({ message: 'Failed to authenticate token ' + err })
       next()
     })

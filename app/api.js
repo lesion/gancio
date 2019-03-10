@@ -4,16 +4,10 @@ const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 const userController = require('./controller/user')
 // const botController = require('./controller/bot')
-
-const path = require('path')
 const multer = require('multer')
-const crypto = require('crypto')
 
 const storage = require('./storage')({
-  destination: 'uploads/',
-  filename: (req, file, cb) => {
-    cb(null, crypto.randomBytes(16).toString('hex') + path.extname(file.originalname))
-  }
+  destination: 'uploads/'
 })
 const upload = multer({ storage })
 const api = express.Router()

@@ -1,0 +1,10 @@
+h3 #{event.title}
+p Dove: #{event.place.name} - #{event.place.address}
+p Quando: #{datetime(event.start_datetime)}
+br
+<img style="width: 100%" src="#{config.apiurl}/#{event.image_path}" />
+p #{event.description}
+
+<a href="#{config.baseurl}/event/#{event.id}">#{config.baseurl}/event/#{event.id}</a>
+hr
+<a href="#{config.baseurl}">#{config.title} - #{config.description}</a>

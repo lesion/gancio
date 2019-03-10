@@ -4,15 +4,17 @@ FROM node:10
 WORKDIR /usr/src/app
 
 COPY package.json .
+COPY pm2.json .
 
 # install backend dependencies
-RUN yarn
+RUN yarn --prod
 
 # copy source
-COPY . .
+COPY app app/
+COPY client client/
 
 # install nodemon
-RUN yarn global add nodemon
+RUN yarn global add pm2
 
 WORKDIR /usr/src/app/client
 
@@ -26,4 +28,4 @@ WORKDIR /usr/src/app
 
 EXPOSE 12300
 
-CMD [ "yarn", "run", "serve" ]
+CMD [ "pm2-runtime", "start", "pm2.json" ]
