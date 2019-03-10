@@ -73,7 +73,7 @@ export default {
       id: null,
       activeTab: "0",
       date: null,
-      time: { start: '00:00', end: null },
+      time: { start: '20:00', end: null },
       edit: false,
       sending: false,
     }

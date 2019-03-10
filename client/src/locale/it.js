@@ -67,7 +67,6 @@ const it = {
   Admin: 'Amministra',
   Today: 'Oggi',
   Export: 'Esporta',
-  send_reminder: 'Ricordamelo il giorno prima',
   event_confirmed: 'Evento confermato!',
   notify_on_insert: `Notifica all'inserimento`,
   'event_confirm_explanation': 'Puoi approvare gli eventi inseriti da utenti non registrati',

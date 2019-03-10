@@ -7,7 +7,7 @@ COPY package.json .
 COPY pm2.json .
 
 # install backend dependencies
-RUN yarn --prod
+RUN yarn
 
 # copy source
 COPY app app/

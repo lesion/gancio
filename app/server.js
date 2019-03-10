@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const api = require('./api')
 const cors = require('cors')
 const path = require('path')
+const config = require('./config')
 const port = process.env.PORT || 9000
 
 app.set('views', path.join(__dirname, 'views'))
@@ -19,4 +20,4 @@ app.use('/js', express.static(path.join(__dirname, '..', 'client', 'dist', 'js')
 app.use('*', express.static(path.join(__dirname, '..', 'client', 'dist', 'index.html')))
 
 app.listen(port)
-console.log('Magic happens at http://localhost:' + port)
+console.log(`[${config.title}] Started ${process.env.NODE_ENV} mode at ${config.baseurl} (api @ ${config.apiurl})`, config)

@@ -46,7 +46,7 @@ export default {
   getAllEvents: (month, year) => get(`/event/${year}/${month}/`),
   getUnconfirmedEvents: () => get('/event/unconfirmed'),
   confirmEvent: id => get(`/event/confirm/${id}`),
-  emailReminder: reminder => post('/event/reminder', reminder),
+  addNotification: notification => post('/event/notification', notification),
   addEvent: event => post('/user/event', event),
   updateEvent: event => put('/user/event', event),
   updatePlace: place => put('/place', place),

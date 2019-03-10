@@ -47,9 +47,9 @@ api.get('/event/meta', eventController.getMeta)
 // get unconfirmed events
 api.get('/event/unconfirmed', isAuth, isAdmin, eventController.getUnconfirmed)
 
-// add event reminder
-api.post('/event/reminder', eventController.addReminder)
-// api.del('/event/reminder/:id', eventController.delReminder)
+// add event notification
+api.post('/event/notification', eventController.addNotification)
+api.delete('/event/del_notification/:code', eventController.delNotification)
 
 // get event
 api.get('/event/:event_id', eventController.get)

@@ -1,5 +1,6 @@
 import moment from 'dayjs'
-// moment.locale('it')
+import 'dayjs/locale/it'
+moment.locale('it')
 
 export default {
   datetime (value) {

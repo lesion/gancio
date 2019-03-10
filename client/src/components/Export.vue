@@ -12,11 +12,11 @@
       el-tab-pane.pt-1(label='email' name='email')
         p(v-html='$t(`export_email_explanation`)')
         b-form
-          el-switch(v-model='reminder.notify_on_add' :active-text="$t('notify_on_insert')")
-          br
-          //- el-switch.mt-2(v-model='reminder.send_reminder' :active-text="$t('send_reminder')") 
-          el-input.mt-2(v-model='reminder.email' :placeholder="$t('Insert your address')")
-          el-button.mt-2.float-right(type='success' @click='add_reminder') {{$t('Send')}}
+          //- el-switch(v-model='notification.notify_on_add' :active-text="$t('notify_on_insert')")
+          //- br
+          //- el-switch.mt-2(v-model='notification.send_notification' :active-text="$t('send_notification')") 
+          el-input.mt-2(v-model='notification.email' :placeholder="$t('Insert your address')")
+          el-button.mt-2.float-right(type='success' @click='add_notification') {{$t('Send')}}
 
       el-tab-pane.pt-1(label='feed rss' name='feed')
         span(v-html='$t(`export_feed_explanation`)')
@@ -67,9 +67,9 @@ export default {
     return {
       type: 'email',
       link: '',
-      reminder: { notify_on_add: true, send_reminder: false },
       export_list: true,
       script: `<iframe>Ti piacerebbe</iframe>`,
+      notification: { email: '' },
     }
   },
   filters,
@@ -82,8 +82,8 @@ export default {
     }
   },
   methods: {
-    async add_reminder () {
-      await api.emailReminder({ ...this.reminder, filters: this.filters})
+    async add_notification () {
+      await api.addNotification({ ...this.notification, filters: this.filters})
       this.$refs.modal.hide()
     },
     loadLink () {

@@ -1,14 +1,9 @@
 <template lang="pug">
-  b-modal(hide-header hide-footer @hide='$router.go(-1)' :visible='true')
-    h4.text-center {{$t('Settings')}}
-      b-form
-        b-input-group.mt-1(prepend='Email')
-          b-form-input(v-model="user.email")
-        //- b-form-checkbox(v-model="tmpUser.user.autoboost") Autoboost
-        b-input-group.mt-1(prepend='Mastodon instance')
-          b-form-input(v-model="mastodon_instance")
-          b-input-group-append
-            b-button(@click='associate', variant='primary') Associate
+  b-modal(:title="$t('Settings')" hide-footer @hide='$router.go(-1)' :visible='true')
+    el-form(inline)
+      el-input(v-model="mastodon_instance")
+        span(slot='prepend') Mastodon instance
+        el-button(slot='append' @click='associate' type='success') Associate
 
 </template>
 <script>
@@ -35,6 +30,7 @@ export default {
   },
   methods: {
       async associate () {
+        if (!this.mastodon_instance) return
         const url = await api.getAuthURL({instance: this.mastodon_instance})
         setTimeout( () => window.location.href=url, 100);
     }

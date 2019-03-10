@@ -24,11 +24,14 @@ const Comment = db.define('comment', {
   text: Sequelize.STRING
 })
 
-const Reminder = db.define('reminder', {
+const Notification = db.define('notification', {
   filters: Sequelize.JSON,
   email: Sequelize.STRING,
-  notify_on_add: Sequelize.BOOLEAN,
-  send_reminder: Sequelize.BOOLEAN
+  remove_code: Sequelize.STRING,
+  type: {
+    type: Sequelize.ENUM,
+    values: ['mail', 'admin_mail', 'activity_pub']
+  }
 })
 
 const Place = db.define('place', {
@@ -42,9 +45,9 @@ Event.hasMany(Comment)
 Event.belongsToMany(Tag, { through: 'tagEvent' })
 Tag.belongsToMany(Event, { through: 'tagEvent' })
 
-const EventReminder = db.define('EventReminder')
-Event.belongsToMany(Reminder, { through: EventReminder })
-Reminder.belongsToMany(Event, { through: EventReminder })
+const EventNotification = db.define('EventNotification')
+Event.belongsToMany(Notification, { through: EventNotification })
+Notification.belongsToMany(Event, { through: EventNotification })
 
 Event.belongsTo(User)
 Event.belongsTo(Place)
@@ -52,4 +55,4 @@ Event.belongsTo(Place)
 User.hasMany(Event)
 Place.hasMany(Event)
 
-module.exports = { Event, Comment, Tag, Place, Reminder, EventReminder }
+module.exports = { Event, Comment, Tag, Place, Notification, EventNotification }

@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const Mastodon = require('mastodon-api')
 
 const User = require('../models/user')
-const { Event, Tag, Place } = require('../models/event')
+const { Event, Tag, Place, Notification } = require('../models/event')
 const eventController = require('./event')
 const config = require('../config')
 const mail = require('../mail')
@@ -105,9 +105,14 @@ const userController = {
       event.save()
     }
 
-    // insert reminder
-    const reminders = await eventController.getReminders(event)
-    await event.setReminders(reminders)
+    if (req.user) {
+      // insert notifications
+      const notifications = await eventController.getNotifications(event)
+      await event.setNotifications(notifications)
+    } else {
+      const notification = await Notification.create({ type: 'admin_email' })
+      await event.setNotification(notification)
+    }
 
     return res.json(event)
   },
