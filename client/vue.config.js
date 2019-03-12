@@ -17,6 +17,5 @@ module.exports = {
   transpileDependencies: [
     /\bvue-awesome\b/,
     'vuex-persist',
-    'bootstrap-vue'
   ]
 }

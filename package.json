@@ -2,7 +2,7 @@
   "name": "gancio",
   "main": "server.js",
   "scripts": {
-    "serve": "NODE_ENV=production nodemon server.js",
+    "serve": "NODE_ENV=production nodemon app/server.js",
     "dev": "NODE_ENV=development nodemon app/server.js"
   },
   "dependencies": {
