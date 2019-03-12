@@ -19,7 +19,6 @@ const eventController = {
   },
 
   async getMeta (req, res) {
-    console.log('GET META')
     const places = await Place.findAll()
     const tags = await Tag.findAll()
     res.json({ tags, places })
@@ -28,6 +27,7 @@ const eventController = {
   async getNotifications (event) {
     function match (event, filters) {
       // matches if no filter specified
+      if (!filters) return true
       if (!filters.tags.length && !filters.places.length) return true
       if (filters.tags.length) {
         const m = lodash.intersection(event.tags.map(t => t.tag), filters.tags)
@@ -47,7 +47,6 @@ const eventController = {
 
   async updateTag (req, res) {
     const tag = await Tag.findByPk(req.body.tag)
-    console.log(tag)
     if (tag) {
       res.json(await tag.update(req.body))
     } else {

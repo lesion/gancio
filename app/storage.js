@@ -23,10 +23,10 @@ DiskStorage.prototype._handleFile = function _handleFile (req, file, cb) {
   that.getDestination(req, file, function (err, destination) {
     if (err) return cb(err)
 
-    const filename = crypto.randomBytes(16).toString('hex') + '.webp'
+    const filename = crypto.randomBytes(16).toString('hex') + '.jpg'
     const finalPath = path.join(destination, filename)
     const outStream = fs.createWriteStream(finalPath)
-    const resizer = sharp().resize(800).webp()
+    const resizer = sharp().resize(800).jpeg({ quality: 80 })
 
     file.stream.pipe(resizer).pipe(outStream)
     outStream.on('error', cb)

@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken')
 const Mastodon = require('mastodon-api')
 
 const User = require('../models/user')
-const { Event, Tag, Place, Notification } = require('../models/event')
+const { Event, Tag, Place } = require('../models/event')
+const settingsController = require('./settings')
 const eventController = require('./event')
 const config = require('../config')
 const mail = require('../mail')
@@ -57,7 +58,7 @@ const userController = {
   async addEvent (req, res) {
     const body = req.body
 
-    // remove description tag and create anchor tag
+    // remove description tag and create anchor tags
     const description = body.description
       .replace(/(<([^>]+)>)/ig, '')
       .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>')
@@ -68,12 +69,14 @@ const userController = {
       multidate: body.multidate,
       start_datetime: body.start_datetime,
       end_datetime: body.end_datetime,
-      is_visible: req.user ? true : false
+      is_visible: !!req.user
     }
 
     if (req.file) {
       eventDetails.image_path = req.file.path
     }
+
+    let event = await Event.create(eventDetails)
 
     // create place
     let place
@@ -81,15 +84,12 @@ const userController = {
       place = await Place.findOrCreate({ where: { name: body.place_name },
         defaults: { address: body.place_address } })
         .spread((place, created) => place)
+      await event.setPlace(place)
     } catch (e) {
-      console.log(e)
+      console.error(e)
     }
 
-    let event = await Event.create(eventDetails)
-    await event.setPlace(place)
-
     // create/assign tags
-    console.log(body.tags)
     if (body.tags) {
       await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
       const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
@@ -98,22 +98,11 @@ const userController = {
     if (req.user) await req.user.addEvent(event)
     event = await Event.findByPk(event.id, { include: [User, Tag, Place] })
 
-    // check if bot exists
-    if (req.user && req.user.mastodon_auth) {
-      const post = await bot.post(req.user, event)
-      event.activitypub_id = post.id
-      event.save()
-    }
-
     if (req.user) {
       // insert notifications
       const notifications = await eventController.getNotifications(event)
       await event.setNotifications(notifications)
-    } else {
-      const notification = await Notification.create({ type: 'admin_email' })
-      await event.setNotification(notification)
     }
-
     return res.json(event)
   },
 
@@ -139,7 +128,6 @@ const userController = {
     }
     await event.setPlace(place)
     await event.setTags([])
-    console.log(body.tags)
     if (body.tags) {
       await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
       const tags = await Tag.findAll({ where: { tag: { [Op.eq]: body.tags } } })
@@ -157,26 +145,47 @@ const userController = {
 
   async getAuthURL (req, res) {
     const instance = req.body.instance
-    const { client_id, client_secret } = await Mastodon.createOAuthApp(`https://${instance}/api/v1/apps`, 'eventi', 'read write', `${config.baseurl}/settings`)
-    const url = await Mastodon.getAuthorizationUrl(client_id, client_secret, `https://${instance}`, 'read write', `${config.baseurl}/settings`)
-    console.log(req.user)
-    req.user.mastodon_instance = instance
-    req.user.mastodon_auth = { client_id, client_secret }
-    await req.user.save()
+    const is_admin = req.body.admin && req.user.is_admin
+    const callback = `${config.baseurl}/${is_admin ? 'admin/oauth' : 'settings'}`
+    const { client_id, client_secret } = await Mastodon.createOAuthApp(`https://${instance}/api/v1/apps`,
+      config.title, 'read write', callback)
+    const url = await Mastodon.getAuthorizationUrl(client_id, client_secret,
+      `https://${instance}`, 'read write', callback)
+
+    if (is_admin) {
+      await settingsController.setAdminSetting('mastodon_auth', { client_id, client_secret, instance })
+    } else {
+      req.user.mastodon_auth = { client_id, client_secret, instance }
+      await req.user.save()
+    }
     res.json(url)
   },
 
   async code (req, res) {
-    const code = req.body.code
-    const { client_id, client_secret } = req.user.mastodon_auth
-    const instance = req.user.mastodon_instance
+    const { code, is_admin } = req.body
+    let client_id, client_secret, instance
+    const callback = `${config.baseurl}/${is_admin ? 'admin/oauth' : 'settings'}`
+
+    if (is_admin) {
+      const settings = await settingsController.settings();
+      ({ client_id, client_secret, instance } = settings.mastodon_auth)
+    } else {
+      ({ client_id, client_secret, instance } = req.user.mastodon_auth)
+    }
+
     try {
-      const token = await Mastodon.getAccessToken(client_id, client_secret, code, `https://${instance}`, `${config.baseurl}/settings`)
-      const mastodon_auth = { client_id, client_secret, access_token: token }
-      req.user.mastodon_auth = mastodon_auth
-      await req.user.save()
-      await bot.add(req.user, token)
-      res.json(req.user)
+      const token = await Mastodon.getAccessToken(client_id, client_secret, code,
+        `https://${instance}`, callback)
+      const mastodon_auth = { client_id, client_secret, access_token: token, instance }
+      if (is_admin) {
+        await settingsController.setAdminSetting('mastodon_auth', mastodon_auth)
+        res.json(instance)
+      } else {
+        req.user.mastodon_auth = mastodon_auth
+        await req.user.save()
+        // await bot.add(req.user, token)
+        res.json(req.user)
+      }
     } catch (e) {
       res.json(e)
     }
@@ -204,13 +213,18 @@ const userController = {
   },
 
   async register (req, res) {
+    const n_users = await User.count()
     try {
-      req.body.is_active = false
+      if (n_users === 0) {
+        // admin will be the first registered user
+        req.body.is_active = req.body.is_admin = true
+      } else {
+        req.body.is_active = false
+      }
       const user = await User.create(req.body)
       try {
         mail.send(user.email, 'register', { user })
       } catch (e) {
-        console.log(e)
         return res.status(400).json(e)
       }
       const payload = { email: user.email }

@@ -46,6 +46,10 @@ export default new Router({
     {
       path: '/export',
       components: { modal: Export }
+    },
+    {
+      path: '/admin/oauth',
+      components: { modal: Admin }
     }
   ]
 })

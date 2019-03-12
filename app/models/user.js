@@ -13,7 +13,6 @@ const User = db.define('user', {
   password: Sequelize.STRING,
   is_admin: Sequelize.BOOLEAN,
   is_active: Sequelize.BOOLEAN,
-  mastodon_instance: Sequelize.STRING,
   mastodon_auth: Sequelize.JSON
 })
 

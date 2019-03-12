@@ -60,5 +60,7 @@ export default {
   getAuthURL: mastodonInstance => post('/user/getauthurl', mastodonInstance),
   setCode: code => post('/user/code', code),
   getKnowLocations: () => get('/locations'),
-  getKnowTags: () => get('/tags')
+  getKnowTags: () => get('/tags'),
+  getAdminSettings: () => get('/settings')
+  // setAdminSetting: (key, value) => post('/settings', { key, value })
 }

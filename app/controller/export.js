@@ -5,6 +5,7 @@ const moment = require('moment')
 const ics = require('ics')
 
 const exportController = {
+
   async export (req, res) {
     console.log('type ', req.params.type)
     const type = req.params.type
@@ -34,6 +35,7 @@ const exportController = {
         return exportController.ics(res, events)
     }
   },
+
   async feed (res, events) {
     res.type('application/rss+xml; charset=UTF-8')
     res.render('feed/rss.pug', { events, config, moment })

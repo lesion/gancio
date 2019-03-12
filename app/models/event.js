@@ -30,9 +30,12 @@ const Notification = db.define('notification', {
   remove_code: Sequelize.STRING,
   type: {
     type: Sequelize.ENUM,
-    values: ['mail', 'admin_mail', 'activity_pub']
+    values: ['mail', 'admin_mail', 'mastodon']
   }
 })
+
+Notification.findOrCreate({ where: { type: 'mastodon' } })
+Notification.findOrCreate({ where: { type: 'admin_email' } })
 
 const Place = db.define('place', {
   name: { type: Sequelize.STRING, unique: true, index: true },

@@ -1,6 +1,6 @@
 <template lang="pug">
   b-modal(hide-footer @hidden='$router.replace("/")' :title='$t("Admin")' :visible='true' size='lg')
-    el-tabs
+    el-tabs(tabPosition='left' v-model='tab')
       //- USERS
       el-tab-pane.pt-1
         template(slot='label')
@@ -54,7 +54,7 @@
         template(slot='label')
           v-icon(name='tag')
           span  {{$t('Tags')}}
-        p Select a tag to change it's color 
+        p {{$t('admin_tag_explanation')}}
           el-tag(v-if='tag.tag' :color='tag.color || "grey"' size='mini') {{tag.tag}}
         el-form(:inline='true' label-width='120px')
           el-form-item(:label="$t('Color')")
@@ -71,7 +71,12 @@
         template(slot='label')
           v-icon(name='tools')
           span  {{$t('Settings')}}
-        
+        el-form(inline)
+          span {{$t('admin_mastodon_explanation')}}
+          el-input(v-model="mastodon_instance")
+            span(slot='prepend') {{$t('Mastodon instance')}}
+            el-button(slot='append' @click='associate' variant='success' type='success') {{$t('Associate')}}
+
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -95,17 +100,26 @@ export default {
       place: {name: '', address: '' },
       tag: {name: '', color: ''},
       events: [],
-      loading: false
+      loading: false,
+      mastodon_instance: '',
+      settings: {},
+      tab: "0",
     }
   },
   async mounted () {
+    const code = this.$route.query.code
+    if (code) {
+      this.tab = "4"
+      const instance = await api.setCode({code, is_admin: true})
+    }
     this.users = await api.getUsers()
     this.events = await api.getUnconfirmedEvents()
+    this.settings = await api.getAdminSettings()
+    this.mastodon_instance = this.settings.mastodon_auth && this.settings.mastodon_auth.instance
   },
   computed: {
     ...mapState(['tags', 'places']),
     paginatedEvents () {
-      console.log(this.events)
       return this.events.slice((this.eventPage-1) * this.perPage,
         this.eventPage * this.perPage)
     },
@@ -146,8 +160,12 @@ export default {
     preview (id) {
       this.$router.push(`/event/${id}`)
     },
+    async associate () {
+      if (!this.mastodon_instance) return
+      const url = await api.getAuthURL({instance: this.mastodon_instance, admin: true})
+      setTimeout( () => window.location.href=url, 100);
+    },
     async confirm (id) {
-      console.log('dentro confirm', id)
       try {
         this.loading = true
         await api.confirmEvent(id)

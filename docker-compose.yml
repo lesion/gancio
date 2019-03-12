@@ -13,13 +13,13 @@ services:
       - ./postgres:/var/lib/postgresql/data
 
   app:
+    env_file: .env
     build: .
     ports:
       - '12300:12300'
     volumes:
       - ./app/uploads:/usr/src/app/app/uploads
 
-    env_file: .env
     environment:
       PORT: 12300
       DB_HOST: db

@@ -1,10 +1,13 @@
-const { User, Event, Comment, Tag } = require('../model')
+// const { User, Event, Comment, Tag } = require('../model')
 const config = require('../config')
 const Mastodon = require('mastodon-api')
-const Sequelize = require('sequelize')
-const Op = Sequelize.Op
+// const Sequelize = require('sequelize')
+// const Op = Sequelize.Op
+const fs = require('fs')
+const path = require('path')
 const moment = require('moment')
 moment.locale('it')
+
 const botController = {
   bots: [],
   // async initialize () {
@@ -30,12 +33,20 @@ const botController = {
   //   listener.on('error', botController.error)
   //   botController.bots.push({ email: user.email, bot })
   // },
-  post (user, event) {
-    const { client_id, client_secret, access_token } = user.mastodon_auth
-    const bot = new Mastodon({ access_token, api_url: `https://${user.mastodon_instance}/api/v1/` })
+  async post (mastodon_auth, event) {
+    const { access_token, instance } = mastodon_auth
+    const bot = new Mastodon({ access_token, api_url: `https://${instance}/api/v1/` })
     const status = `${event.title} @ ${event.place.name} ${moment(event.start_datetime).format('ddd, D MMMM HH:mm')} - 
 ${event.description} - ${event.tags.map(t => '#' + t.tag).join(' ')} ${config.baseurl}/event/${event.id}`
-    return bot.post('/statuses', { status, visibility: 'private' })
+
+    let media
+    if (event.image_path) {
+      const file = path.join(__dirname, '..', '..', event.image_path)
+      if (fs.statSync(file)) {
+        media = await bot.post('media', { file: fs.createReadStream(file) })
+      }
+    }
+    return bot.post('statuses', { status, visibility: 'direct', media_ids: media ? [media.data.id] : [] })
   }
   // async message (msg) {
   //   console.log(msg)

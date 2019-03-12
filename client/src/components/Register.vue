@@ -1,5 +1,5 @@
 <template lang='pug'>
-  b-modal(hide-footer @hidden='$router.replace("/")'
+  b-modal(hide-footer @hidden='$router.replace("/")' ref='modal'
     :title="$t('Register')" :visible='true' @shown='$refs.email.focus()')
     el-form
       p(v-html="$t('register_explanation')")
@@ -35,11 +35,18 @@ export default {
     async register () {
       try {
         const user = await api.register(this.user)
-        this.$router.go(-1)
-        Message({
-          message: this.$t('registration_complete'),
-          type: 'success'
-        })
+        this.$refs.modal.hide()
+        if (!user.is_admin) {
+          Message({
+            message: this.$t('registration_complete'),
+            type: 'success'
+          })
+        } else {
+          Message({
+            message: this.$t('admin_registration_complete'),
+            type: 'success'
+          })
+        }
       } catch (e) {
         console.error(e)
       }

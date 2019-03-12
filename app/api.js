@@ -3,6 +3,8 @@ const { fillUser, isAuth, isAdmin } = require('./auth')
 const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 const userController = require('./controller/user')
+const settingsController = require('./controller/settings')
+
 // const botController = require('./controller/bot')
 const multer = require('multer')
 
@@ -50,6 +52,9 @@ api.get('/event/unconfirmed', isAuth, isAdmin, eventController.getUnconfirmed)
 // add event notification
 api.post('/event/notification', eventController.addNotification)
 api.delete('/event/del_notification/:code', eventController.delNotification)
+
+api.get('/settings', settingsController.getAdminSettings)
+api.post('/settings', settingsController.setAdminSetting)
 
 // get event
 api.get('/event/:event_id', eventController.get)

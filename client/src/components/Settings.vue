@@ -1,7 +1,7 @@
 <template lang="pug">
   b-modal(:title="$t('Settings')" hide-footer @hide='$router.go(-1)' :visible='true')
     el-form(inline)
-      el-input(v-model="mastodon_instance")
+      el-input(v-model="mastodon_instance" type='success')
         span(slot='prepend') Mastodon instance
         el-button(slot='append' @click='associate' type='success') Associate
 
