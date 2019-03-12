@@ -30,7 +30,7 @@ const Notification = db.define('notification', {
   remove_code: Sequelize.STRING,
   type: {
     type: Sequelize.ENUM,
-    values: ['mail', 'admin_mail', 'mastodon']
+    values: ['mail', 'admin_email', 'mastodon']
   }
 })
 
