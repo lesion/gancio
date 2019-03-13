@@ -46,7 +46,7 @@ ${event.description} - ${event.tags.map(t => '#' + t.tag).join(' ')} ${config.ba
         media = await bot.post('media', { file: fs.createReadStream(file) })
       }
     }
-    return bot.post('statuses', { status, visibility: 'direct', media_ids: media ? [media.data.id] : [] })
+    return bot.post('statuses', { status, visibility: 'public', media_ids: media ? [media.data.id] : [] })
   }
   // async message (msg) {
   //   console.log(msg)
