@@ -130,16 +130,10 @@ const userController = {
     await event.setTags([])
     if (body.tags) {
       await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
-      const tags = await Tag.findAll({ where: { tag: { [Op.eq]: body.tags } } })
+      const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
       await event.addTags(tags)
     }
     const newEvent = await Event.findByPk(event.id, { include: [User, Tag, Place] })
-    // check if bot exists
-    if (req.user.mastodon_auth) {
-      const post = await bot.post(req.user, newEvent)
-      event.activitypub_id = post.id
-      await event.save()
-    }
     return res.json(newEvent)
   },
 
