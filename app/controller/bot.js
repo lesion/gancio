@@ -37,7 +37,7 @@ const botController = {
     const { access_token, instance } = mastodon_auth
     const bot = new Mastodon({ access_token, api_url: `https://${instance}/api/v1/` })
     const status = `${event.title} @ ${event.place.name} ${moment(event.start_datetime).format('ddd, D MMMM HH:mm')} - 
-${event.description} - ${event.tags.map(t => '#' + t.tag).join(' ')} ${config.baseurl}/event/${event.id}`
+${event.description.length > 200 ? event.description.substr(0, 200) + '...' : event.description} - ${event.tags.map(t => '#' + t.tag).join(' ')} ${config.baseurl}/event/${event.id}`
 
     let media
     if (event.image_path) {
