@@ -7,7 +7,6 @@ const settingsController = require('./settings')
 const eventController = require('./event')
 const config = require('../config')
 const mail = require('../mail')
-const bot = require('./bot')
 const { Op } = require('sequelize')
 
 const userController = {
@@ -44,8 +43,8 @@ const userController = {
   },
 
   async delEvent (req, res) {
-    // check if event is mine
     const event = await Event.findByPk(req.params.id)
+    // check if event is mine (or user is admin)
     if (event && (req.user.is_admin || req.user.id === event.userId)) {
       await event.destroy()
       res.sendStatus(200)

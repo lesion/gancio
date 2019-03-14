@@ -21,7 +21,7 @@ async function sendNotification (notification, event, eventNotification) {
         break
       case 'mastodon':
         // instance publish
-        if (settings.mastodon_auth.instance) {
+        if (settings.mastodon_auth.instance && settings.mastodon_auth.access_token) {
           const b = bot.post(settings.mastodon_auth, event)
           promises.push(b)
         }
