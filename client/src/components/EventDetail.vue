@@ -18,6 +18,8 @@
           size='mini' :key='tag.tag') {{tag.tag}}
         .ml-auto(v-if='mine')
           hr
+          el-button(v-if='event.is_visible' plain type='warning' @click.prevents='toggle' icon='el-icon-remove') {{$t('Unconfirm')}}
+          el-button(v-else plain type='success' @click.prevents='toggle' icon='el-icon-remove') {{$t('Confirm')}}
           el-button(plain type='danger' @click.prevent='remove' icon='el-icon-remove') {{$t('Remove')}} 
           el-button(plain type='primary' @click='$router.replace("/edit/"+event.id)') <v-icon color='orange' name='edit'/> {{$t('Edit')}}
     
@@ -75,6 +77,20 @@ export default {
       await api.delEvent(this.event.id)
       this.delEvent(this.event.id)
       this.$refs.eventDetail.hide()
+    },
+    async toggle () {
+      try {
+        if (this.event.is_visible) {
+
+          await api.unconfirmEvent(this.id)
+          this.event.is_visible = false
+        } else {
+          await api.confirmEvent(this.id)
+          this.event.is_visible = true
+        }
+      } catch (e) {
+
+      }
     }
   }
 }

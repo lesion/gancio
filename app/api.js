@@ -61,6 +61,7 @@ api.get('/event/:event_id', eventController.get)
 
 // confirm event
 api.get('/event/confirm/:event_id', isAuth, isAdmin, eventController.confirm)
+api.get('/event/unconfirm/:event_id', isAuth, isAdmin, eventController.unconfirm)
 
 // export events (rss/ics)
 api.get('/export/:type', exportController.export)

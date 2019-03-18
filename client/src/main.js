@@ -19,6 +19,8 @@ import 'vue-awesome/icons/users'
 import 'vue-awesome/icons/calendar'
 import 'vue-awesome/icons/edit'
 import 'vue-awesome/icons/envelope-open-text'
+import 'vue-awesome/icons/user-secret'
+import 'vue-awesome/icons/question-circle'
 
 import Icon from 'vue-awesome/components/Icon'
 
@@ -30,7 +32,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import { Button, Select, Tag, Option, Table, FormItem, Card,
   Form, Tabs, TabPane, Switch, Input, Loading, TimeSelect,
-  TableColumn, ColorPicker, Pagination } from 'element-ui'
+  TableColumn, ColorPicker, Pagination, Popover } from 'element-ui'
 import ElementLocale from 'element-ui/lib/locale'
 import MagicGrid from 'vue-magic-grid'
 
@@ -49,6 +51,7 @@ import itLocale from '@/locale/it'
 import enLocale from '@/locale/en'
 
 Vue.use(Button)
+Vue.use(Popover)
 Vue.use(Card)
 Vue.use(Select)
 Vue.use(Tag)

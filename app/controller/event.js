@@ -82,6 +82,18 @@ const eventController = {
     }
   },
 
+  async unconfirm (req, res) {
+    const id = req.params.event_id
+    const event = await Event.findByPk(id)
+
+    try {
+      await event.update({ is_visible: false })
+      res.send(200)
+    } catch (e) {
+      res.send(404)
+    }
+  },
+
   async getUnconfirmed (req, res) {
     const events = await Event.findAll({
       where: {

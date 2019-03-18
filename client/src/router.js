@@ -8,6 +8,7 @@ import Login from './components/Login'
 import Register from './components/Register'
 import Export from './components/Export'
 import Admin from './components/Admin'
+import About from './components/About'
 
 Vue.use(Router)
 
@@ -50,6 +51,10 @@ export default new Router({
     {
       path: '/admin/oauth',
       components: { modal: Admin }
+    },
+    {
+      path: '/about',
+      components: { modal: About }
     }
   ]
 })

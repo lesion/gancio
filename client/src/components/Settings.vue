@@ -1,5 +1,5 @@
 <template lang="pug">
-  b-modal(:title="$t('Settings')" hide-footer @hide='$router.go(-1)' :visible='true')
+  b-modal(:title="$t('Settings')" hide-footer @hidden='$router.replace("/")' :visible='true')
     el-form(inline)
       el-input(v-model="mastodon_instance" type='success')
         span(slot='prepend') Mastodon instance

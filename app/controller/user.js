@@ -198,6 +198,9 @@ const userController = {
   async update (req, res) {
     const user = await User.findByPk(req.body.id)
     if (user) {
+      if (!user.is_active && req.body.is_active) {
+        await mail.send(user.email, 'confirm', { user, config })
+      }
       await user.update(req.body)
       res.json(user)
     } else {
@@ -209,7 +212,7 @@ const userController = {
     const n_users = await User.count()
     try {
       if (n_users === 0) {
-        // admin will be the first registered user
+        // the first registered user will be an active admin
         req.body.is_active = req.body.is_admin = true
       } else {
         req.body.is_active = false

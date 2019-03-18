@@ -35,8 +35,8 @@ export default {
     async register () {
       try {
         const user = await api.register(this.user)
-        this.$refs.modal.hide()
         if (!user.is_admin) {
+          this.$refs.modal.hide()
           Message({
             message: this.$t('registration_complete'),
             type: 'success'
@@ -48,6 +48,10 @@ export default {
           })
         }
       } catch (e) {
+        Message({
+          message: e,
+          type: 'error'
+        })
         console.error(e)
       }
     }

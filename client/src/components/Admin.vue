@@ -1,16 +1,26 @@
 <template lang="pug">
-  b-modal(hide-footer @hidden='$router.replace("/")' :title='$t("Admin")' :visible='true' size='lg')
+  b-modal(hide-footer @hidden='$router.replace("/")' :title='$t("Admin")' 
+    :visible='true' size='lg')
     el-tabs(tabPosition='left' v-model='tab')
+
       //- USERS
       el-tab-pane.pt-1
         template(slot='label')
           v-icon(name='users')
           span.ml-1 {{$t('Users')}}
-        b-table(:items='users' :fields='userFields' striped small hover
-          :per-page='5' :current-page='userPage')
-          template(slot='action' slot-scope='data')
-            el-button.mr-1(size='mini' :type='data.item.is_active?"warning":"success"' @click='toggle(data.item)') {{data.item.is_active?$t('Deactivate'):$t('Activate')}}
-            el-button(size='mini' :type='data.item.is_admin?"danger":"warning"' @click='toggleAdmin(data.item)') {{data.item.is_admin?$t('Remove Admin'):$t('Admin')}}
+        el-table(:data='paginatedUsers' small)
+          el-table-column(label='Email')
+            template(slot-scope='data')
+              el-popover(trigger='hover' :content='data.row.description' width='400')
+                span(slot='reference') {{data.row.email}}
+          el-table-column(label='Azioni')
+            template(slot-scope='data')
+              el-button.mr-1(size='mini'
+                :type='data.row.is_active?"warning":"success"'
+                @click='toggle(data.row)') {{data.row.is_active?$t('Deactivate'):$t('Activate')}}
+              el-button(size='mini'
+                :type='data.row.is_admin?"danger":"warning"'
+                @click='toggleAdmin(data.row)') {{data.row.is_admin?$t('Remove Admin'):$t('Admin')}}
         el-pagination(:page-size='perPage' :currentPage.sync='userPage' :total='users.length')
 
       //- PLACES
@@ -124,8 +134,12 @@ export default {
         this.eventPage * this.perPage)
     },
     paginatedTags () {
-      return this.tags.slice((this.tagPage-1) * this.perPage, 
+      return this.tags.slice((this.tagPage-1) * this.perPage,
         this.tagPage * this.perPage)
+    },
+    paginatedUsers () {
+      return this.users.slice((this.userPage-1) * this.perPage,
+        this.userPage * this.perPage)
     }
   },
   methods: {

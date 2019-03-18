@@ -48,7 +48,15 @@ Event.hasMany(Comment)
 Event.belongsToMany(Tag, { through: 'tagEvent' })
 Tag.belongsToMany(Event, { through: 'tagEvent' })
 
-const EventNotification = db.define('EventNotification')
+const EventNotification = db.define('EventNotification', {
+  status: {
+    type: Sequelize.ENUM,
+    values: ['new', 'sent', 'error'],
+    defaultValue: 'new',
+    index: true
+  }
+})
+
 Event.belongsToMany(Notification, { through: EventNotification })
 Notification.belongsToMany(Event, { through: EventNotification })
 

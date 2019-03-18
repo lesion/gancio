@@ -17,7 +17,8 @@ export default new Vuex.Store({
     token: state => state.token,
     filteredEvents: state => {
       const events = state.events.map(e => {
-        const past = (moment().diff(e.start_datetime, 'minutes') > 0)
+        const end_datetime = e.end_datetime || moment(e.start_datetime).add('3', 'hour')
+        const past = (moment().diff(end_datetime, 'minutes') > 0)
         e.past = past
         return e
       })

@@ -18,6 +18,8 @@ function get (path) {
         store.commit('logout')
         return false
       }
+      throw e.response && e.response.data &&
+        e.response.data.errors && e.response.data.errors[0].message
     })
 }
 
@@ -29,6 +31,8 @@ function post (path, data) {
         store.commit('logout')
         return false
       }
+      throw e.response && e.response.data &&
+        e.response.data.errors && e.response.data.errors[0].message
     })
 }
 function put (path, data) {
@@ -43,12 +47,18 @@ function del (path) {
 export default {
   login: (email, password) => post('/login', { email, password }),
   register: user => post('/user', user),
+
   getAllEvents: (month, year) => get(`/event/${year}/${month}/`),
   getUnconfirmedEvents: () => get('/event/unconfirmed'),
+
   confirmEvent: id => get(`/event/confirm/${id}`),
+  unconfirmEvent: id => get(`/event/unconfirm/${id}`),
+
   addNotification: notification => post('/event/notification', notification),
+
   addEvent: event => post('/user/event', event),
   updateEvent: event => put('/user/event', event),
+
   updatePlace: place => put('/place', place),
   delEvent: eventId => del(`/user/event/${eventId}`),
   getEvent: eventId => get(`/event/${eventId}`),
@@ -59,8 +69,6 @@ export default {
   updateUser: user => put('/user', user),
   getAuthURL: mastodonInstance => post('/user/getauthurl', mastodonInstance),
   setCode: code => post('/user/code', code),
-  getKnowLocations: () => get('/locations'),
-  getKnowTags: () => get('/tags'),
   getAdminSettings: () => get('/settings')
   // setAdminSetting: (key, value) => post('/settings', { key, value })
 }

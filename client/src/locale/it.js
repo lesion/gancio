@@ -77,6 +77,8 @@ const it = {
   'admin_place_explanation': 'Puoi modificare i luoghi inseriti',
   'Edit event': 'Modifica evento',
   'New event': 'Nuovo evento',
+  anon_newevent: 'Evento senza autore',
+  anon_newevent_explanation: `Puoi inserire un evento senza registrarti o fare il login, ma in questo caso dovrai aspettare che qualcuno lo legga confermando che si tratta di un evento adatto a questo spazio, delegando questa scelta.<br/><br/>Ti consigliamo quindi di fare il <a href="/login">login</a> o di <a href="/register">registrarti</a>, ma se vuoi continuare fai pure (ti devi sentire un po' in colpa però).`,
   'Insert your address': 'Inserisci il tuo indirizzo',
   registration_complete: 'Controlla la tua posta (anche la cartella spam)',
   registration_email: `Ciao, la tua registrazione sarà confermata nei prossimi giorni. Riceverai una conferma non temere.`,

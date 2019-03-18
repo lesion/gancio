@@ -14,8 +14,12 @@
           span.d-md-none  {{$t('Admin')}}
         b-nav-item(to='/export' v-b-tooltip :title='$t("Export")') <v-icon name='file-export' color='yellow'/>
           span.d-md-none  {{$t('Export')}}
-        b-nav-item(v-if='logged' variant='danger' @click='logout' v-b-tooltip :title='$t("Logout")') <v-icon color='red' name='sign-out-alt'/>
+        b-nav-item(v-if='logged' @click='logout' v-b-tooltip :title='$t("Logout")') <v-icon color='red' name='sign-out-alt'/>
           span.d-md-none  {{$t('Logout')}}
+    b-navbar-nav.ml-auto
+        b-nav-item(to='/about')
+          span  {{$t('Info')}} <v-icon color='#ff9fc4' name='question-circle'/>
+
 </template>
 <script>
 import {mapState, mapActions} from 'vuex'

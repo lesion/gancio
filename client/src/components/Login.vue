@@ -15,7 +15,8 @@
 <script>
 import api from '@/api'
 import { mapActions } from 'vuex'
-import { log } from 'util';
+import { Message } from 'element-ui'
+
 
 export default {
   name: 'Login',
@@ -29,13 +30,19 @@ export default {
     ...mapActions(['login']),
     async submit (e) {
       e.preventDefault()
-      const user = await api.login(this.email, this.password)
-      if (!user) {
-        return;
+      try {
+        const user = await api.login(this.email, this.password)
+        if (!user) {
+          Message({ message: this.$t('login error'), type: 'error' })
+          return;
+        }
+        this.login(user)
+        Message({ message: this.$t('Logged'), type: 'success' })
+      } catch (e) {
+        Message({ message: this.$t('login error'), type: 'error' })
       }
-      this.login(user)
       this.email = this.password = ''
-      this.$router.go(-1)
+      this.$router.replace("/")
     }
   }
 }
