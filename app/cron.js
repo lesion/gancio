@@ -53,7 +53,7 @@ async function loop () {
     try {
       await sendNotification(notification, event, e)
       e.status = 'sent'
-      e.save()
+      return e.save()
     } catch (e) {
       console.error(e)
       e.status = 'error'
