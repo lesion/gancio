@@ -5,7 +5,7 @@
       el-tabs.mb-2(v-model='activeTab' v-loading='sending' @tab-click.native='changeTab')
 
         //- NOT LOGGED EVENT
-        el-tab-pane(v-show='!user')
+        el-tab-pane(v-if='!logged')
           span(slot='label') {{$t('anon_newevent')}} <v-icon name='user-secret'/>
           p(v-html="$t('anon_newevent_explanation')")
           el-button.float-right(@click='next' :disabled='!couldProceed') Mi sento in colpa
@@ -117,22 +117,24 @@ export default {
       tags: state => state.tags.map(t => t.tag ),
       places_name: state => state.places.map(p => p.name ),
       places: state => state.places,
-      user: state => state.user
+      user: state => state.user,
+      logged: state => state.logged
     }),
     couldProceed () {
+      const t = this.logged ? -1 : 0
       switch(Number(this.activeTab)) {
-        case 0:
+        case 0+t:
           return true
-        case 1:
+        case 1+t:
           return this.event.place.name.length>0 && 
             this.event.place.address.length>0
-        case 2:
+        case 2+t:
           if (this.date && this.time.start) return true
           break
-        case 3:
+        case 3+t:
           return this.event.title.length>0
           break
-        case 4:
+        case 4+t:
           return true
           break
       }
