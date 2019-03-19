@@ -112,6 +112,14 @@ const userController = {
       return res.sendStatus(403)
     }
 
+    if (req.file) {
+      if (event.image_path) {
+        const old_path = path.resolve(__dirname, '..', '..', event.image_path)
+        await fs.unlink(old_path, e => console.error(e))
+      }
+      body.image_path = req.file.path
+    }
+
     body.description = body.description
       .replace(/(<([^>]+)>)/ig, '') // remove all tags from description
       .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>') // add links
