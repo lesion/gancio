@@ -119,7 +119,7 @@ const userController = {
     await event.update(body)
     let place
     try {
-      place = await Place.findOrCreate({ where: { name: { [Op.eq]: body.place_name } },
+      place = await Place.findOrCreate({ where: { name: body.place_name },
         defaults: { address: body.place_address } })
         .spread((place, created) => place)
     } catch (e) {
