@@ -18,8 +18,8 @@
           size='mini' :key='tag.tag') {{tag.tag}}
         .ml-auto(v-if='mine')
           hr
-          el-button(v-if='event.is_visible' plain type='warning' @click.prevents='toggle' icon='el-icon-remove') {{$t('Unconfirm')}}
-          el-button(v-else plain type='success' @click.prevents='toggle' icon='el-icon-remove') {{$t('Confirm')}}
+          el-button(v-if='event.is_visible' plain type='warning' @click.prevents='toggle' icon='el-icon-view') {{$t('Unconfirm')}}
+          el-button(v-else plain type='success' @click.prevents='toggle' icon='el-icon-view') {{$t('Confirm')}}
           el-button(plain type='danger' @click.prevent='remove' icon='el-icon-remove') {{$t('Remove')}} 
           el-button(plain type='primary' @click='$router.replace("/edit/"+event.id)') <v-icon color='orange' name='edit'/> {{$t('Edit')}}
     
@@ -48,7 +48,7 @@ export default {
   computed: {
     ...mapState(['user']),
     imgPath () {
-      return this.event.image_path && process.env.VUE_APP_API + '/' + this.event.image_path
+      return this.event.image_path && process.env.VUE_APP_API + '/uploads/' + this.event.image_path
     },    
     mine () {
       return this.event.userId === this.user.id || this.user.is_admin

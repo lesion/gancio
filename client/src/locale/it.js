@@ -60,6 +60,7 @@ const it = {
   Password: 'Password',
   Email: 'Email',
   User: 'Utente',
+  Unconfirm: 'Disabilita',
   Confirm: 'Conferma',
   Events: 'Eventi',
   Color: 'Colore',

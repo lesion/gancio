@@ -8,6 +8,8 @@ const eventController = require('./event')
 const config = require('../config')
 const mail = require('../mail')
 const { Op } = require('sequelize')
+const fs = require('fs')
+const path = require('path')
 
 const userController = {
   async login (req, res) {
@@ -46,6 +48,12 @@ const userController = {
     const event = await Event.findByPk(req.params.id)
     // check if event is mine (or user is admin)
     if (event && (req.user.is_admin || req.user.id === event.userId)) {
+      if (event.image_path) {
+        const old_path = path.resolve(__dirname, '..', '..', 'uploads', event.image_path)
+        const old_thumb_path = path.resolve(__dirname, '..', '..', 'uploads', 'thumb', event.image_path)
+        await fs.unlink(old_path)
+        await fs.unlink(old_thumb_path)
+      }
       await event.destroy()
       res.sendStatus(200)
     } else {
@@ -72,7 +80,7 @@ const userController = {
     }
 
     if (req.file) {
-      eventDetails.image_path = req.file.path
+      eventDetails.image_path = req.file.filename
     }
 
     let event = await Event.create(eventDetails)
@@ -114,10 +122,12 @@ const userController = {
 
     if (req.file) {
       if (event.image_path) {
-        const old_path = path.resolve(__dirname, '..', '..', event.image_path)
+        const old_path = path.resolve(__dirname, '..', '..', 'uploads', event.image_path)
+        const old_thumb_path = path.resolve(__dirname, '..', '..', 'uploads', 'thumb', event.image_path)
         await fs.unlink(old_path, e => console.error(e))
+        await fs.unlink(old_thumb_path, e => console.error(e))
       }
-      body.image_path = req.file.path
+      body.image_path = req.file.filename
     }
 
     body.description = body.description

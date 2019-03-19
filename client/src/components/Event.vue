@@ -21,7 +21,7 @@ export default {
   computed: {
     ...mapState(['user']),
     imgPath () {
-      return this.event.image_path && process.env.VUE_APP_API + '/' + this.event.image_path
+      return this.event.image_path && process.env.VUE_APP_API + '/uploads/thumb/' + this.event.image_path
     },
     mine () {
       return this.event.userId === this.user.id
