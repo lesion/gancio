@@ -31,7 +31,7 @@ const it = {
   export_email_explanation: `Puoi ricevere via mail gli eventi che ti interessano [WIP]`,
   export_list_explanation: `Se hai un sito web e vuoi mostrare una lista di eventi, puoi usare il seguente codice [WIP]`,
   export_calendar_explanation: `Se hai un sito web e vuoi mostrare un calendario di eventi, puoi usare il seguente codice [WIP]`,
-  export_ical_explanation: `I computer e gli smartphone sono comunemente attre zzati con un'applicazione per gestire un calendario. A questi programmi solitamente è possibile far importare un calendario remoto.`,
+  export_ical_explanation: `I computer e gli smartphone sono comunemente attrezzati con un'applicazione per gestire un calendario. A questi programmi solitamente è possibile far importare un calendario remoto.`,
   Poster: 'Locandina',
   Settings: 'Impostazioni',
   'Change password': 'Cambia password',

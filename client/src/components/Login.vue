@@ -40,6 +40,7 @@ export default {
         Message({ message: this.$t('Logged'), type: 'success' })
       } catch (e) {
         Message({ message: this.$t('login error'), type: 'error' })
+        return
       }
       this.email = this.password = ''
       this.$refs.modal.hide()
