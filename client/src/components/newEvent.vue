@@ -65,6 +65,7 @@ import api from '@/api'
 import { mapActions, mapState } from 'vuex'
 import moment from 'dayjs'
 import Calendar from './Calendar'
+import { Message } from 'element-ui'
 export default {
   components: { Calendar },
   data() {
@@ -201,11 +202,11 @@ export default {
           await this.updateEvent(formData)
         } else {
           await this.addEvent(formData)
-          // this.$router.push('/')
         }
         this.updateMeta()
         this.sending = false
         this.$refs.modal.hide()
+        Message({ type: 'success', message: this.logged ? this.$t('new_event_added') : this.$t('new_anon_event_added')})
       } catch (e) {
         this.sending = false
         console.error(e)

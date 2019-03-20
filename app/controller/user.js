@@ -105,11 +105,10 @@ const userController = {
     if (req.user) await req.user.addEvent(event)
     event = await Event.findByPk(event.id, { include: [User, Tag, Place] })
 
-    if (req.user) {
-      // insert notifications
-      const notifications = await eventController.getNotifications(event)
-      await event.setNotifications(notifications)
-    }
+    // insert notifications
+    const notifications = await eventController.getNotifications(event)
+    await event.setNotifications(notifications)
+
     return res.json(event)
   },
 

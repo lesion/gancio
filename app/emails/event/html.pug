@@ -2,14 +2,17 @@ h3 #{event.title}
 p Dove: #{event.place.name} - #{event.place.address}
 p Quando: #{datetime(event.start_datetime)}
 br
-<img style="width: 100%" src="#{config.apiurl}/#{event.image_path}" />
+if event.image_path
+  <img style="width: 100%" src="#{config.apiurl}/uploads/#{event.image_path}" />
 p #{event.description}
 
+each tag in event.tags
+  span ##{tag.tag}
+br
 <a href="#{config.baseurl}/event/#{event.id}">#{config.baseurl}/event/#{event.id}</a>
-p #{event.tags.join(', ')}
 hr
 if to_confirm
-  p Puoi confermare questo evento <a href="#{config.apiurl}/api/event/confirm/#{event.id}">#{config.apiurl}qui</a>
-else
+  p Puoi confermare questo evento <a href="#{config.baseurl}/admin/confirm/#{event.id}">qui</a>
+//- else
   p Puoi eliminare queste notifiche <a href="#{confir.apiurl}/api/del_notification/#{notification.remove_code}">qui</a>
 <a href="#{config.baseurl}">#{config.title} - #{config.description}</a>

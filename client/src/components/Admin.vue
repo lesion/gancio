@@ -144,7 +144,6 @@ export default {
   },
   methods: {
     placeSelected (items) {
-      console.log('dentro place selected ', items, items.length)
       if (items.length === 0 ) {
         this.place.name = this.place.address = ''
         return

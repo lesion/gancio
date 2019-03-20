@@ -1,6 +1,6 @@
 <template lang='pug'>
   b-modal(@shown="$refs.email.focus()" :title='$t("Login")' hide-footer
-    @hidden='$router.replace("/")' :visible='true')
+    @hidden='$router.replace("/")' :visible='true' ref='modal')
     el-form
       p {{$t('login_explanation')}}
       el-input.mb-2(v-model='email' type='email' :placeholder='$t("Email")' autocomplete='email' ref='email')
@@ -42,7 +42,7 @@ export default {
         Message({ message: this.$t('login error'), type: 'error' })
       }
       this.email = this.password = ''
-      this.$router.replace("/")
+      this.$refs.modal.hide()
     }
   }
 }

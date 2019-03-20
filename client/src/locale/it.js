@@ -87,6 +87,8 @@ const it = {
     <br/>Prima di poter pubblicare <strong>dobbiamo approvare l'account</strong>, considera che <strong>dietro questo sito ci sono delle persone</strong> di
     carne e sangue, scrivici quindi due righe per farci capire che eventi vorresti pubblicare.`,
   'Not registered?': `Non sei registrata?`,
+  new_event_added: `Evento aggiunto.`,
+  new_anon_event_added: `Evento inserito, verrà confermato quanto prima.`,
   login_explanation: ``
 }
 

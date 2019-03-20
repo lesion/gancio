@@ -28,6 +28,11 @@ const eventController = {
     function match (event, filters) {
       // matches if no filter specified
       if (!filters) return true
+
+      // check for visibility
+      if (filters.is_visible && filters.is_visible !== event.is_visible) return false
+
+      if (!filters.tags && !filters.places) return true
       if (!filters.tags.length && !filters.places.length) return true
       if (filters.tags.length) {
         const m = lodash.intersection(event.tags.map(t => t.tag), filters.tags)
@@ -70,12 +75,11 @@ const eventController = {
     const id = req.params.event_id
     const event = await Event.findByPk(id)
 
-    // insert notification
-    const notifications = await eventController.getNotifications(event)
-    await event.setNotifications(notifications)
-
     try {
       await event.update({ is_visible: true })
+      // insert notification
+      const notifications = await eventController.getNotifications(event)
+      await event.setNotifications(notifications)
       res.send(200)
     } catch (e) {
       res.send(404)

@@ -23,7 +23,7 @@ export default {
   components: { Event, Calendar, Search },
   watch: {
     filteredEvents () {
-      this.$nextTick( this.$refs.magicgrid.positionItems)
+      this.$nextTick(this.$refs.magicgrid.positionItems)
     }
   },
   computed: {
