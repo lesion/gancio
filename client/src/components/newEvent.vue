@@ -8,7 +8,7 @@
         el-tab-pane(v-if='!logged')
           span(slot='label') {{$t('anon_newevent')}} <v-icon name='user-secret'/>
           p(v-html="$t('anon_newevent_explanation')")
-          el-button.float-right(@click='next' :disabled='!couldProceed') Mi sento in colpa
+          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
 
         //- WHERE
         el-tab-pane

@@ -79,7 +79,7 @@ const it = {
   'Edit event': 'Modifica evento',
   'New event': 'Nuovo evento',
   anon_newevent: 'Evento senza autore',
-  anon_newevent_explanation: `Puoi inserire un evento senza registrarti o fare il login, ma in questo caso dovrai aspettare che qualcuno lo legga confermando che si tratta di un evento adatto a questo spazio, delegando questa scelta.<br/><br/>Ti consigliamo quindi di fare il <a href="/login">login</a> o di <a href="/register">registrarti</a>, ma se vuoi continuare fai pure (ti devi sentire un po' in colpa però).`,
+  anon_newevent_explanation: `Puoi inserire un evento senza rigistrarti o fare il login, ma in questo caso dovrai aspettare che qualcuno lo legga confermando che si tratta di un evento adatto a questo spazio, delegando questa scelta.<br/><br/> Puoi fare il <a href='/login'>login</a> o <a href='/registrarti'>registrarti</a>, altrimenti vai avanti e riceverai una risposta il prima possibile!`,
   'Insert your address': 'Inserisci il tuo indirizzo',
   registration_complete: 'Controlla la tua posta (anche la cartella spam)',
   registration_email: `Ciao, la tua registrazione sarà confermata nei prossimi giorni. Riceverai una conferma non temere.`,
