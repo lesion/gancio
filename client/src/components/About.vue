@@ -12,9 +12,9 @@
       Dentro gancio puoi trovare e inserire eventi.
       Gancio, come tutto <a href='https://cisti.org'>cisti.org</a> è uno strumento
       antisessista, antirazzista, antifascista e anticapitalista, riflettici quando
-      stai pubblicando un evento.
+      pubblichi un evento.
 
-    h5 Ok, ma cosa vuol dire?
+    h5 Ok, ma cosa vuol dire gancio?
     blockquote.
       Se vieni a Torino e dici: "ehi, ci diamo un gancio alle 8?" nessuno si presenterà con i guantoni per fare a mazzate.
       Darsi un gancio vuol dire beccarsi alle ore X in un posto Y

@@ -16,6 +16,9 @@ const api = express.Router()
 
 // login
 api.post('/login', userController.login)
+api.post('/user/recover', userController.forgotPassword)
+api.post('/user/check_recover_code', userController.checkRecoverCode)
+api.post('/user/recover_password', userController.updatePasswordWithRecoverCode)
 
 api.route('/user')
   // register
@@ -51,7 +54,7 @@ api.get('/event/unconfirmed', isAuth, isAdmin, eventController.getUnconfirmed)
 
 // add event notification
 api.post('/event/notification', eventController.addNotification)
-api.delete('/event/del_notification/:code', eventController.delNotification)
+api.delete('/event/notification/:code', eventController.delNotification)
 
 api.get('/settings', settingsController.getAdminSettings)
 api.post('/settings', settingsController.setAdminSetting)

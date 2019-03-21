@@ -1,8 +1,8 @@
 <template lang="pug">
   b-modal(ref='modal' @hidden='$router.replace("/")' size='lg' :visible='true'
     :title="edit?$t('Edit event'):$t('New event')" hide-footer)
-    b-container
-      el-tabs.mb-2(v-model='activeTab' v-loading='sending' @tab-click.native='changeTab')
+    el-form
+      el-tabs.mb-2(v-model='activeTab' v-loading='sending')
 
         //- NOT LOGGED EVENT
         el-tab-pane(v-if='!logged')
@@ -36,12 +36,13 @@
             :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
           el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
 
+        //- WHAT
         el-tab-pane
           span(slot='label') {{$t('What')}} <v-icon name='file-alt'/>
           span {{$t('what_explanation')}}
           el-input.mb-3(v-model='event.title' ref='title')
           span {{$t('description_explanation')}}
-          el-input.mb-3(v-model='event.description' type='textarea' :rows='3')
+          el-input.mb-3(v-model='event.description' type='textarea' :rows='9')
           span {{$t('tag_explanation')}}
           br 
           el-select(v-model='event.tags' multiple filterable allow-create
@@ -143,9 +144,6 @@ export default {
   },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta']),
-    changeTab (tab) {
-      if (this.activeTab === "2") this.$refs.title.focus()
-    },
     next () {
       this.activeTab = String(Number(this.activeTab)+1)
       if (this.activeTab === "2") {
@@ -171,9 +169,9 @@ export default {
       const [ end_hour, end_minute ] = this.time.end.split(':')
       if (this.event.multidate) {
         start_datetime = moment(this.date.start)
-          .hour(start_hour).minute(start_minute)
+          .set('hour', start_hour).set('minute', start_minute)
         end_datetime = moment(this.date.end)
-          .hour(end_hour).minute(end_minute)
+          .set('hour', end_hour).set('minute', end_minute)
       } else {
         console.log(this.date)
         start_datetime = moment(this.date).set('hour', start_hour).set('minute', start_minute)

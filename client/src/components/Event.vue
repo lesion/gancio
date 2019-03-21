@@ -14,8 +14,6 @@ import { mapState, mapActions } from 'vuex';
 import api from '@/api'
 import filters from '@/filters'
 
-console.log(process.env)
-
 export default {
   props: ['event'],
   computed: {

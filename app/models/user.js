@@ -11,6 +11,7 @@ const User = db.define('user', {
   },
   description: Sequelize.TEXT,
   password: Sequelize.STRING,
+  recover_code: Sequelize.STRING,
   is_admin: Sequelize.BOOLEAN,
   is_active: Sequelize.BOOLEAN,
   mastodon_auth: Sequelize.JSON

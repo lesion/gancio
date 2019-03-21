@@ -28,7 +28,7 @@ const it = {
   <li>Per il computer fisso/portatile consigliamo  Feedbro, da installare all'interno <a href="https://addons.mozilla.org/en-GB/firefox/addon/feedbroreader/">di Firefox </a>o <a href="https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa">di Chrome</a> e compatibile con tutti i principali sistemi operativi.</li>
   <br/>
   Aggiungendo questo link al tuo lettore di feed, rimarrai aggiornata.`,
-  export_email_explanation: `Puoi ricevere via mail gli eventi che ti interessano [WIP]`,
+  export_email_explanation: `Puoi ricevere via mail gli eventi che ti interessano.`,
   export_list_explanation: `Se hai un sito web e vuoi mostrare una lista di eventi, puoi usare il seguente codice [WIP]`,
   export_calendar_explanation: `Se hai un sito web e vuoi mostrare un calendario di eventi, puoi usare il seguente codice [WIP]`,
   export_ical_explanation: `I computer e gli smartphone sono comunemente attrezzati con un'applicazione per gestire un calendario. A questi programmi solitamente è possibile far importare un calendario remoto.`,
@@ -51,6 +51,8 @@ const it = {
   Deactivate: 'Disattiva',
   Activate: 'Attiva',
   'Remove Admin': 'Rimuovi Admin',
+  'Remove notification': 'Rimuovi notifiche',
+  Yes: 'Sì',
   Users: 'Utenti',
   Places: 'Luoghi',
   Tags: 'Etichette',
@@ -70,6 +72,7 @@ const it = {
   Admin: 'Amministra',
   Today: 'Oggi',
   Export: 'Esporta',
+  'Forgot password?': 'Hai dimenticato la password?',
   'Mastodon instance': 'Istanza Mastodon',
   'admin_mastodon_explanation': 'Puoi associare un account mastodon a questa istanza di gancio, ogni evento verrà pubblicato lì',
   Associate: 'Associa',
@@ -91,7 +94,16 @@ const it = {
   'Not registered?': `Non sei registrata?`,
   new_event_added: `Evento aggiunto.`,
   new_anon_event_added: `Evento inserito, verrà confermato quanto prima.`,
-  login_explanation: ``
+  login_explanation: `Entrando puoi pubblicare nuovi eventi.`,
+  recover_explanation: `Inserisci una nuova password:`,
+  'New password': 'Nuova password',
+  'Password reset': 'Password reset',
+  password_changed: 'Password cambiata con successo',
+  password_not_changed: 'Errore nella modifica della password!',
+  'Insert your email': 'Inserisci la tua email',
+  error_recover_code: `Ops, c'è stato un problema, hai richiesto più reset password?`,
+  email_notification_activated: 'Notifiche via mail attivate. Per disattivarle puoi usare il link in fondo ad ogni email che ricevi.'
+
 }
 
 export default it

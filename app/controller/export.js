@@ -21,8 +21,7 @@ const exportController = {
       wherePlace.name = places.split(',')
     }
     const events = await Event.findAll({
-      // order: [['start_datetime', 'ASC']],
-      where: { start_datetime: { [Op.gte]: yesterday } },
+      where: { is_visible: true, start_datetime: { [Op.gte]: yesterday } },
       include: [Comment, {
         model: Tag,
         where: whereTag

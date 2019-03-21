@@ -111,9 +111,12 @@ const eventController = {
 
   async addNotification (req, res) {
     try {
-      const notification = req.body
-      notification.remove_code = crypto.randomBytes(16).toString('hex')
-      await Notification.create(req.body)
+      const notification = {
+        email: req.body.email,
+        type: 'mail',
+        remove_code: crypto.randomBytes(16).toString('hex')
+      }
+      await Notification.create(notification)
       res.sendStatus(200)
     } catch (e) {
       res.sendStatus(404)
@@ -126,7 +129,7 @@ const eventController = {
       const notification = await Notification.findOne({ where: { remove_code: { [Op.eq]: remove_code } } })
       await notification.destroy()
     } catch (e) {
-      return res.send('Error')
+      return res.status(404).send('Error')
     }
     res.send('Ok, notification removed')
   },

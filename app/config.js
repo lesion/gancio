@@ -1,32 +1,13 @@
 /* backend configuration */
-let db = {}
-let apiurl
-
-if (process.env.NODE_ENV === 'production') {
-  db = {
-    host: process.env.DB_HOST,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    dialect: 'postgres'
-  }
-  apiurl = process.env.BASE_URL + '/api'
-} else {
-  db = {
-    dialect: 'sqlite',
-    storage: './db.sqlite'
-  }
-  apiurl = 'http://localhost:9000'
-}
+const env = process.env.NODE_ENV || 'development'
+const db = require('./config/config.json')[env]
 
 module.exports = {
-  locale: 'it',
-
+  locale: process.env.LOCALE || 'it',
   title: process.env.TITLE || 'GANCIO',
   description: process.env.DESCRIPTION || 'A calendar for radical communities',
-
   baseurl: process.env.BASE_URL || 'http://localhost:8080',
-  apiurl,
+  apiurl: env === 'production' ? process.env.BASE_URL + '/api' : 'http://localhost:9000',
   db,
   admin: process.env.ADMIN_EMAIL,
 

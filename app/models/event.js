@@ -34,9 +34,6 @@ const Notification = db.define('notification', {
   }
 })
 
-Notification.findOrCreate({ where: { type: 'mastodon', filters: { is_visible: true } } })
-Notification.findOrCreate({ where: { type: 'admin_email', filters: { is_visible: false } } })
-
 const Place = db.define('place', {
   name: { type: Sequelize.STRING, unique: true, index: true },
   address: { type: Sequelize.STRING }
@@ -66,4 +63,10 @@ Event.belongsTo(Place)
 User.hasMany(Event)
 Place.hasMany(Event)
 
+async function init () {
+  await Notification.findOrCreate({ where: { type: 'mastodon', filters: { is_visible: true } } })
+  await Notification.findOrCreate({ where: { type: 'admin_email', filters: { is_visible: false } } })
+}
+
+init()
 module.exports = { Event, Comment, Tag, Place, Notification, EventNotification }

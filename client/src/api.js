@@ -48,6 +48,11 @@ export default {
   login: (email, password) => post('/login', { email, password }),
   register: user => post('/user', user),
 
+  // password recovery
+  forgotPassword: email => post('/user/recover', { email }),
+  checkRecoverCode: recover_code => post('/user/check_recover_code', { recover_code }),
+  recoverPassword: (recover_code, password) => post('/user/recover_password', { recover_code, password }),
+
   getAllEvents: (month, year) => get(`/event/${year}/${month}/`),
   getUnconfirmedEvents: () => get('/event/unconfirmed'),
 
@@ -55,6 +60,7 @@ export default {
   unconfirmEvent: id => get(`/event/unconfirm/${id}`),
 
   addNotification: notification => post('/event/notification', notification),
+  delNotification: code => del(`/event/notification/${code}`),
 
   addEvent: event => post('/user/event', event),
   updateEvent: event => put('/user/event', event),

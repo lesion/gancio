@@ -13,6 +13,6 @@ br
 hr
 if to_confirm
   p Puoi confermare questo evento <a href="#{config.baseurl}/admin/confirm/#{event.id}">qui</a>
-//- else
-  p Puoi eliminare queste notifiche <a href="#{confir.apiurl}/api/del_notification/#{notification.remove_code}">qui</a>
+else
+  p Puoi eliminare queste notifiche <a href="#{config.baseurl}/del_notification/#{notification.remove_code}">qui</a>
 <a href="#{config.baseurl}">#{config.title} - #{config.description}</a>

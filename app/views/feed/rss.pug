@@ -16,8 +16,8 @@ rss(version='2.0', xmlns:atom='<a href="http://www.w3.org/2005/Atom" rel="nofoll
                     | <![CDATA[
                     | <h4>#{event.title}</h4>
                     | <strong>#{event.place.name} - #{event.place.address}</strong>
-                    | #{moment(event.start_datetime).format("ddd, D MMMM HH:mm")}<br/>
-                    | <img src="#{config.apiurl}/#{event.image_path}"/>
+                    | #{moment(event.start_datetime).format("dddd, D MMMM HH:mm")}<br/>
+                    | <img src="#{config.apiurl}/uploads/#{event.image_path}"/>
                     | <pre>!{event.description}</pre>
                     | ]]>
                 pubDate= new Date(event.createdAt).toUTCString()

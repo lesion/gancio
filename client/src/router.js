@@ -9,6 +9,8 @@ import Register from './components/Register'
 import Export from './components/Export'
 import Admin from './components/Admin'
 import About from './components/About'
+import DelNotification from './components/DelNotification'
+import Recover from './components/Recover'
 
 Vue.use(Router)
 
@@ -55,6 +57,14 @@ export default new Router({
     {
       path: '/about',
       components: { modal: About }
+    },
+    {
+      path: '/del_notification/:code',
+      components: { modal: DelNotification }
+    },
+    {
+      path: '/recover/:recover_code',
+      components: { modal: Recover }
     }
   ]
 })

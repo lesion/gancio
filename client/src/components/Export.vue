@@ -11,12 +11,12 @@
 
       el-tab-pane.pt-1(label='email' name='email')
         p(v-html='$t(`export_email_explanation`)')
-        b-form
+        el-form(@submit.native.prevent='add_notification')
           //- el-switch(v-model='notification.notify_on_add' :active-text="$t('notify_on_insert')")
           //- br
           //- el-switch.mt-2(v-model='notification.send_notification' :active-text="$t('send_notification')") 
-          el-input.mt-2(v-model='notification.email' :placeholder="$t('Insert your address')")
-          el-button.mt-2.float-right(type='success' @click='add_notification') {{$t('Send')}}
+          el-input.mt-2(v-model='notification.email' :placeholder="$t('Insert your address')" ref='email')
+          el-button.mt-2.float-right(native-type= 'submit' type='success' @click='add_notification') {{$t('Send')}}
 
       el-tab-pane.pt-1(label='feed rss' name='feed')
         span(v-html='$t(`export_feed_explanation`)')
@@ -59,6 +59,7 @@ import filters from '../filters'
 import Calendar from '@/components/Calendar'
 import {intersection} from 'lodash'
 import api from '@/api'
+import { Message } from 'element-ui'
 
 export default {
   name: 'Export',
@@ -83,8 +84,13 @@ export default {
   },
   methods: {
     async add_notification () {
+      if (!this.notification.email){
+        Message({message:'Inserisci una mail', type: 'error'})
+        return this.$refs.email.focus()
+      }
       await api.addNotification({ ...this.notification, filters: this.filters})
       this.$refs.modal.hide()
+      Message({message: this.$t('email_notification_activated'), type: 'success'})
     },
     loadLink () {
       const tags = this.filters.tags.join(',')

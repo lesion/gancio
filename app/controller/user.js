@@ -10,6 +10,7 @@ const mail = require('../mail')
 const { Op } = require('sequelize')
 const fs = require('fs')
 const path = require('path')
+const crypto = require('crypto')
 
 const userController = {
   async login (req, res) {
@@ -201,6 +202,36 @@ const userController = {
     }
   },
 
+  async forgotPassword (req, res) {
+    const email = req.body.email
+    const user = await User.findOne({ where: { email: { [Op.eq]: email } } })
+    if (!user) return res.sendStatus(200)
+
+    user.recover_code = crypto.randomBytes(16).toString('hex')
+    mail.send(user.email, 'recover', { user, config })
+    await user.save()
+    res.sendStatus(200)
+  },
+
+  async checkRecoverCode (req, res) {
+    const recover_code = req.body.recover_code
+    if (!recover_code) return res.sendStatus(400)
+    const user = await User.findOne({ where: { recover_code: { [Op.eq]: recover_code } } })
+    if (!user) return res.sendStatus(400)
+    res.json(user)
+  },
+
+  async updatePasswordWithRecoverCode (req, res) {
+    const recover_code = req.body.recover_code
+    if (!recover_code) return res.sendStatus(400)
+    const password = req.body.password
+    const user = await User.findOne({ where: { recover_code: { [Op.eq]: recover_code } } })
+    if (!user) return res.sendStatus(400)
+    user.password = password
+    await user.save()
+    res.sendStatus(200)
+  },
+
   async current (req, res) {
     res.json(req.user)
   },
@@ -236,7 +267,7 @@ const userController = {
       }
       const user = await User.create(req.body)
       try {
-        mail.send(user.email, 'register', { user })
+        mail.send([user.email, config.admin], 'register', { user, config })
       } catch (e) {
         return res.status(400).json(e)
       }

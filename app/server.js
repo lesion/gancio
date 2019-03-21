@@ -4,9 +4,12 @@ const bodyParser = require('body-parser')
 const api = require('./api')
 const cors = require('cors')
 const path = require('path')
+const morgan = require('morgan')
 const config = require('./config')
+const db = require('./db')
 const port = process.env.PORT || 9000
 
+app.use(morgan('dev'))
 app.set('views', path.join(__dirname, 'views'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -19,5 +22,7 @@ app.use('/css', express.static(path.join(__dirname, '..', 'client', 'dist', 'css
 app.use('/js', express.static(path.join(__dirname, '..', 'client', 'dist', 'js')))
 app.use('*', express.static(path.join(__dirname, '..', 'client', 'dist', 'index.html')))
 
-app.listen(port)
-console.log(`[${config.title}] Started ${process.env.NODE_ENV} mode at ${config.baseurl} (api @ ${config.apiurl})`, config)
+app.listen(port, () => {
+  console.log(`[${config.title}] Started ${process.env.NODE_ENV} mode at ${config.baseurl} (api @ ${config.apiurl})\n\nCONFIG`, config)
+  db.sync()
+})
