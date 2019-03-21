@@ -9,6 +9,8 @@ We provide a docker way to run **gancio**.
 ```
 git clone https://git.lattuga.net/lesion/gancio.git
 cd gancio 
+
+# copy .env into .env.production and edit it
 docker-compose up -d
 ```
 
@@ -32,4 +34,3 @@ yarn
 # run front-end in development mode
 yarn dev
 ```
-

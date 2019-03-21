@@ -15,12 +15,53 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: enum_EventNotifications_status; Type: TYPE; Schema: public; Owner: docker
+--
+
+CREATE TYPE public."enum_EventNotifications_status" AS ENUM (
+    'new',
+    'sent',
+    'error'
+);
+
+
+ALTER TYPE public."enum_EventNotifications_status" OWNER TO docker;
+
+--
+-- Name: enum_notifications_type; Type: TYPE; Schema: public; Owner: docker
+--
+
+CREATE TYPE public.enum_notifications_type AS ENUM (
+    'mail',
+    'admin_email',
+    'mastodon'
+);
+
+
+ALTER TYPE public.enum_notifications_type OWNER TO docker;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
 --
--- Name: comments; Type: TABLE; Schema: public; Owner: postgres
+-- Name: EventNotifications; Type: TABLE; Schema: public; Owner: docker
+--
+
+CREATE TABLE public."EventNotifications" (
+    status public."enum_EventNotifications_status" DEFAULT 'new'::public."enum_EventNotifications_status",
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    "eventId" integer NOT NULL,
+    "notificationId" integer NOT NULL
+);
+
+
+ALTER TABLE public."EventNotifications" OWNER TO docker;
+
+--
+-- Name: comments; Type: TABLE; Schema: public; Owner: docker
 --
 
 CREATE TABLE public.comments (
@@ -34,10 +75,10 @@ CREATE TABLE public.comments (
 );
 
 
-ALTER TABLE public.comments OWNER TO postgres;
+ALTER TABLE public.comments OWNER TO docker;
 
 --
--- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: docker
 --
 
 CREATE SEQUENCE public.comments_id_seq
@@ -49,28 +90,29 @@ CREATE SEQUENCE public.comments_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.comments_id_seq OWNER TO postgres;
+ALTER TABLE public.comments_id_seq OWNER TO docker;
 
 --
--- Name: comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: docker
 --
 
 ALTER SEQUENCE public.comments_id_seq OWNED BY public.comments.id;
 
 
 --
--- Name: events; Type: TABLE; Schema: public; Owner: postgres
+-- Name: events; Type: TABLE; Schema: public; Owner: docker
 --
 
 CREATE TABLE public.events (
     id integer NOT NULL,
     title character varying(255),
-    description character varying(255),
+    description text,
     multidate boolean,
     start_datetime timestamp with time zone,
     end_datetime timestamp with time zone,
     image_path character varying(255),
     activitypub_id integer,
+    is_visible boolean,
     "createdAt" timestamp with time zone NOT NULL,
     "updatedAt" timestamp with time zone NOT NULL,
     "userId" integer,
@@ -78,10 +120,10 @@ CREATE TABLE public.events (
 );
 
 
-ALTER TABLE public.events OWNER TO postgres;
+ALTER TABLE public.events OWNER TO docker;
 
 --
--- Name: events_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: events_id_seq; Type: SEQUENCE; Schema: public; Owner: docker
 --
 
 CREATE SEQUENCE public.events_id_seq
@@ -93,17 +135,56 @@ CREATE SEQUENCE public.events_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.events_id_seq OWNER TO postgres;
+ALTER TABLE public.events_id_seq OWNER TO docker;
 
 --
--- Name: events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: docker
 --
 
 ALTER SEQUENCE public.events_id_seq OWNED BY public.events.id;
 
 
 --
--- Name: places; Type: TABLE; Schema: public; Owner: postgres
+-- Name: notifications; Type: TABLE; Schema: public; Owner: docker
+--
+
+CREATE TABLE public.notifications (
+    id integer NOT NULL,
+    filters json,
+    email character varying(255),
+    remove_code character varying(255),
+    type public.enum_notifications_type,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.notifications OWNER TO docker;
+
+--
+-- Name: notifications_id_seq; Type: SEQUENCE; Schema: public; Owner: docker
+--
+
+CREATE SEQUENCE public.notifications_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.notifications_id_seq OWNER TO docker;
+
+--
+-- Name: notifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: docker
+--
+
+ALTER SEQUENCE public.notifications_id_seq OWNED BY public.notifications.id;
+
+
+--
+-- Name: places; Type: TABLE; Schema: public; Owner: docker
 --
 
 CREATE TABLE public.places (
@@ -115,10 +196,10 @@ CREATE TABLE public.places (
 );
 
 
-ALTER TABLE public.places OWNER TO postgres;
+ALTER TABLE public.places OWNER TO docker;
 
 --
--- Name: places_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: places_id_seq; Type: SEQUENCE; Schema: public; Owner: docker
 --
 
 CREATE SEQUENCE public.places_id_seq
@@ -130,56 +211,31 @@ CREATE SEQUENCE public.places_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.places_id_seq OWNER TO postgres;
+ALTER TABLE public.places_id_seq OWNER TO docker;
 
 --
--- Name: places_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: places_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: docker
 --
 
 ALTER SEQUENCE public.places_id_seq OWNED BY public.places.id;
 
 
 --
--- Name: subscriptions; Type: TABLE; Schema: public; Owner: postgres
+-- Name: settings; Type: TABLE; Schema: public; Owner: docker
 --
 
-CREATE TABLE public.subscriptions (
-    id integer NOT NULL,
-    filters json,
-    mail text,
-    send_on_add boolean,
-    send_reminder integer,
+CREATE TABLE public.settings (
+    key character varying(255) NOT NULL,
+    value json,
     "createdAt" timestamp with time zone NOT NULL,
     "updatedAt" timestamp with time zone NOT NULL
 );
 
 
-ALTER TABLE public.subscriptions OWNER TO postgres;
+ALTER TABLE public.settings OWNER TO docker;
 
 --
--- Name: subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.subscriptions_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.subscriptions_id_seq OWNER TO postgres;
-
---
--- Name: subscriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.subscriptions_id_seq OWNED BY public.subscriptions.id;
-
-
---
--- Name: tagEvent; Type: TABLE; Schema: public; Owner: postgres
+-- Name: tagEvent; Type: TABLE; Schema: public; Owner: docker
 --
 
 CREATE TABLE public."tagEvent" (
@@ -190,10 +246,10 @@ CREATE TABLE public."tagEvent" (
 );
 
 
-ALTER TABLE public."tagEvent" OWNER TO postgres;
+ALTER TABLE public."tagEvent" OWNER TO docker;
 
 --
--- Name: tags; Type: TABLE; Schema: public; Owner: postgres
+-- Name: tags; Type: TABLE; Schema: public; Owner: docker
 --
 
 CREATE TABLE public.tags (
@@ -204,10 +260,10 @@ CREATE TABLE public.tags (
 );
 
 
-ALTER TABLE public.tags OWNER TO postgres;
+ALTER TABLE public.tags OWNER TO docker;
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: postgres
+-- Name: users; Type: TABLE; Schema: public; Owner: docker
 --
 
 CREATE TABLE public.users (
@@ -215,19 +271,19 @@ CREATE TABLE public.users (
     email character varying(255) NOT NULL,
     description text,
     password character varying(255),
+    recover_code character varying(255),
     is_admin boolean,
     is_active boolean,
-    mastodon_instance character varying(255),
     mastodon_auth json,
     "createdAt" timestamp with time zone NOT NULL,
     "updatedAt" timestamp with time zone NOT NULL
 );
 
 
-ALTER TABLE public.users OWNER TO postgres;
+ALTER TABLE public.users OWNER TO docker;
 
 --
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: docker
 --
 
 CREATE SEQUENCE public.users_id_seq
@@ -239,52 +295,60 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_id_seq OWNER TO postgres;
+ALTER TABLE public.users_id_seq OWNER TO docker;
 
 --
--- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: docker
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: comments id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: comments id; Type: DEFAULT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.comments ALTER COLUMN id SET DEFAULT nextval('public.comments_id_seq'::regclass);
 
 
 --
--- Name: events id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: events id; Type: DEFAULT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.events ALTER COLUMN id SET DEFAULT nextval('public.events_id_seq'::regclass);
 
 
 --
--- Name: places id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: notifications id; Type: DEFAULT; Schema: public; Owner: docker
+--
+
+ALTER TABLE ONLY public.notifications ALTER COLUMN id SET DEFAULT nextval('public.notifications_id_seq'::regclass);
+
+
+--
+-- Name: places id; Type: DEFAULT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.places ALTER COLUMN id SET DEFAULT nextval('public.places_id_seq'::regclass);
 
 
 --
--- Name: subscriptions id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.subscriptions ALTER COLUMN id SET DEFAULT nextval('public.subscriptions_id_seq'::regclass);
-
-
---
--- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
--- Data for Name: comments; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: EventNotifications; Type: TABLE DATA; Schema: public; Owner: docker
+--
+
+COPY public."EventNotifications" (status, "createdAt", "updatedAt", "eventId", "notificationId") FROM stdin;
+\.
+
+
+--
+-- Data for Name: comments; Type: TABLE DATA; Schema: public; Owner: docker
 --
 
 COPY public.comments (id, activitypub_id, author, text, "createdAt", "updatedAt", "eventId") FROM stdin;
@@ -292,15 +356,23 @@ COPY public.comments (id, activitypub_id, author, text, "createdAt", "updatedAt"
 
 
 --
--- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: docker
 --
 
-COPY public.events (id, title, description, multidate, start_datetime, end_datetime, image_path, activitypub_id, "createdAt", "updatedAt", "userId", "placeId") FROM stdin;
+COPY public.events (id, title, description, multidate, start_datetime, end_datetime, image_path, activitypub_id, is_visible, "createdAt", "updatedAt", "userId", "placeId") FROM stdin;
 \.
 
 
 --
--- Data for Name: places; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: notifications; Type: TABLE DATA; Schema: public; Owner: docker
+--
+
+COPY public.notifications (id, filters, email, remove_code, type, "createdAt", "updatedAt") FROM stdin;
+\.
+
+
+--
+-- Data for Name: places; Type: TABLE DATA; Schema: public; Owner: docker
 --
 
 COPY public.places (id, name, address, "createdAt", "updatedAt") FROM stdin;
@@ -308,15 +380,15 @@ COPY public.places (id, name, address, "createdAt", "updatedAt") FROM stdin;
 
 
 --
--- Data for Name: subscriptions; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: settings; Type: TABLE DATA; Schema: public; Owner: docker
 --
 
-COPY public.subscriptions (id, filters, mail, send_on_add, send_reminder, "createdAt", "updatedAt") FROM stdin;
+COPY public.settings (key, value, "createdAt", "updatedAt") FROM stdin;
 \.
 
 
 --
--- Data for Name: tagEvent; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: tagEvent; Type: TABLE DATA; Schema: public; Owner: docker
 --
 
 COPY public."tagEvent" ("createdAt", "updatedAt", "eventId", "tagTag") FROM stdin;
@@ -324,7 +396,7 @@ COPY public."tagEvent" ("createdAt", "updatedAt", "eventId", "tagTag") FROM stdi
 
 
 --
--- Data for Name: tags; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: tags; Type: TABLE DATA; Schema: public; Owner: docker
 --
 
 COPY public.tags (tag, color, "createdAt", "updatedAt") FROM stdin;
@@ -332,50 +404,58 @@ COPY public.tags (tag, color, "createdAt", "updatedAt") FROM stdin;
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: docker
 --
 
-COPY public.users (id, email, description, password, is_admin, is_active, mastodon_instance, mastodon_auth, "createdAt", "updatedAt") FROM stdin;
+COPY public.users (id, email, description, password, recover_code, is_admin, is_active, mastodon_auth, "createdAt", "updatedAt") FROM stdin;
 \.
 
 
 --
--- Name: comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: docker
 --
 
 SELECT pg_catalog.setval('public.comments_id_seq', 1, false);
 
 
 --
--- Name: events_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: events_id_seq; Type: SEQUENCE SET; Schema: public; Owner: docker
 --
 
 SELECT pg_catalog.setval('public.events_id_seq', 1, false);
 
 
 --
--- Name: places_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: notifications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: docker
+--
+
+SELECT pg_catalog.setval('public.notifications_id_seq', 1, false);
+
+
+--
+-- Name: places_id_seq; Type: SEQUENCE SET; Schema: public; Owner: docker
 --
 
 SELECT pg_catalog.setval('public.places_id_seq', 1, false);
 
 
 --
--- Name: subscriptions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.subscriptions_id_seq', 1, false);
-
-
---
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: docker
 --
 
 SELECT pg_catalog.setval('public.users_id_seq', 1, false);
 
 
 --
--- Name: comments comments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: EventNotifications EventNotifications_pkey; Type: CONSTRAINT; Schema: public; Owner: docker
+--
+
+ALTER TABLE ONLY public."EventNotifications"
+    ADD CONSTRAINT "EventNotifications_pkey" PRIMARY KEY ("eventId", "notificationId");
+
+
+--
+-- Name: comments comments_pkey; Type: CONSTRAINT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.comments
@@ -383,7 +463,7 @@ ALTER TABLE ONLY public.comments
 
 
 --
--- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.events
@@ -391,7 +471,15 @@ ALTER TABLE ONLY public.events
 
 
 --
--- Name: places places_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: docker
+--
+
+ALTER TABLE ONLY public.notifications
+    ADD CONSTRAINT notifications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: places places_name_key; Type: CONSTRAINT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.places
@@ -399,7 +487,7 @@ ALTER TABLE ONLY public.places
 
 
 --
--- Name: places places_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: places places_pkey; Type: CONSTRAINT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.places
@@ -407,15 +495,15 @@ ALTER TABLE ONLY public.places
 
 
 --
--- Name: subscriptions subscriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: settings settings_pkey; Type: CONSTRAINT; Schema: public; Owner: docker
 --
 
-ALTER TABLE ONLY public.subscriptions
-    ADD CONSTRAINT subscriptions_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.settings
+    ADD CONSTRAINT settings_pkey PRIMARY KEY (key);
 
 
 --
--- Name: tagEvent tagEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tagEvent tagEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public."tagEvent"
@@ -423,7 +511,7 @@ ALTER TABLE ONLY public."tagEvent"
 
 
 --
--- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.tags
@@ -431,7 +519,7 @@ ALTER TABLE ONLY public.tags
 
 
 --
--- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.users
@@ -439,7 +527,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.users
@@ -447,7 +535,23 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: comments comments_eventId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: EventNotifications EventNotifications_eventId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: docker
+--
+
+ALTER TABLE ONLY public."EventNotifications"
+    ADD CONSTRAINT "EventNotifications_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES public.events(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: EventNotifications EventNotifications_notificationId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: docker
+--
+
+ALTER TABLE ONLY public."EventNotifications"
+    ADD CONSTRAINT "EventNotifications_notificationId_fkey" FOREIGN KEY ("notificationId") REFERENCES public.notifications(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: comments comments_eventId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.comments
@@ -455,7 +559,7 @@ ALTER TABLE ONLY public.comments
 
 
 --
--- Name: events events_placeId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: events events_placeId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.events
@@ -463,7 +567,7 @@ ALTER TABLE ONLY public.events
 
 
 --
--- Name: events events_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: events events_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public.events
@@ -471,7 +575,7 @@ ALTER TABLE ONLY public.events
 
 
 --
--- Name: tagEvent tagEvent_eventId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tagEvent tagEvent_eventId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public."tagEvent"
@@ -479,7 +583,7 @@ ALTER TABLE ONLY public."tagEvent"
 
 
 --
--- Name: tagEvent tagEvent_tagTag_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tagEvent tagEvent_tagTag_fkey; Type: FK CONSTRAINT; Schema: public; Owner: docker
 --
 
 ALTER TABLE ONLY public."tagEvent"

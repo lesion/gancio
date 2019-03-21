@@ -6,7 +6,6 @@ moment.locale('it')
 
 const mail = {
   send (addresses, template, locals) {
-    locals.locale = config.locale
     const email = new Email({
       views: { root: path.join(__dirname, 'emails') },
       juice: true,
@@ -20,7 +19,10 @@ const mail = {
         from: `${config.title} <${config.smtp.auth.user}>`
       },
       send: true,
-      i18n: {},
+      i18n: {
+        locales: ['en', 'es', 'it'],
+        defaultLocale: config.locale
+      },
       transport: config.smtp
     })
     return email.send({
@@ -29,7 +31,12 @@ const mail = {
         to: addresses,
         bcc: config.admin
       },
-      locals: { ...locals, config, datetime: datetime => moment(datetime).format('ddd, D MMMM HH:mm') }
+      locals: {
+        ...locals,
+        locale: config.locale,
+        config,
+        datetime: datetime => moment(datetime).format('ddd, D MMMM HH:mm')
+      }
     })
   }
 }

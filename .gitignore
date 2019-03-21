@@ -2,12 +2,11 @@
 node_modules
 client/dist
 
-# local env files
-.env.local
-.env.*.local
 
-config.development.js
-config.production.js
+uploads
+
+# local env files
+.env.production
 
 # Log files
 npm-debug.log*

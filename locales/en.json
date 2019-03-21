@@ -1,4 +1,6 @@
 {
   "registration_email": "Ciao, la tua registrazione sarà confermata nei prossimi giorni. Riceverai una conferma non temere.",
-  "confirm_email": "confirm_email"
+  "confirm_email": "confirm_email",
+  "recover_email": "recover_email",
+  "press here": "press here"
 }

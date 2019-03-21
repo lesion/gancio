@@ -1,4 +1,6 @@
 {
   "registration_email": "registration_email",
-  "confirm_email": "confirm_email"
+  "confirm_email": "confirm_email",
+  "recover_email": "recover_email",
+  "press here": "press here"
 }
