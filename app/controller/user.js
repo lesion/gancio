@@ -252,7 +252,7 @@ const userController = {
       await user.update(req.body)
       res.json(user)
     } else {
-      res.send(400)
+      res.sendStatus(400)
     }
   },
 

@@ -55,7 +55,7 @@ const eventController = {
     if (tag) {
       res.json(await tag.update(req.body))
     } else {
-      res.send(404)
+      res.sendStatus(404)
     }
   },
 
@@ -92,9 +92,9 @@ const eventController = {
 
     try {
       await event.update({ is_visible: false })
-      res.send(200)
+      res.sendStatus(200)
     } catch (e) {
-      res.send(404)
+      res.sendStatus(404)
     }
   },
 
@@ -112,6 +112,7 @@ const eventController = {
   async addNotification (req, res) {
     try {
       const notification = {
+        filters: { is_visible: true },
         email: req.body.email,
         type: 'mail',
         remove_code: crypto.randomBytes(16).toString('hex')
@@ -129,9 +130,9 @@ const eventController = {
       const notification = await Notification.findOne({ where: { remove_code: { [Op.eq]: remove_code } } })
       await notification.destroy()
     } catch (e) {
-      return res.status(404).send('Error')
+      return res.sendStatus(404)
     }
-    res.send('Ok, notification removed')
+    res.sendStatus(200)
   },
 
   async getAll (req, res) {
