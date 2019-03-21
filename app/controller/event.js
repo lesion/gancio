@@ -80,9 +80,9 @@ const eventController = {
       // insert notification
       const notifications = await eventController.getNotifications(event)
       await event.setNotifications(notifications)
-      res.send(200)
+      res.sendStatus(200)
     } catch (e) {
-      res.send(404)
+      res.sendStatus(404)
     }
   },
 
