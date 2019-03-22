@@ -11,7 +11,7 @@
 
       el-tab-pane.pt-1(label='email' name='email')
         p(v-html='$t(`export_email_explanation`)')
-        el-form(@submit.native.prevent='add_notification')
+        el-form(@submit.native.prevent)
           //- el-switch(v-model='notification.notify_on_add' :active-text="$t('notify_on_insert')")
           //- br
           //- el-switch.mt-2(v-model='notification.send_notification' :active-text="$t('send_notification')") 
