@@ -30,7 +30,7 @@ const eventController = {
       if (!filters) return true
 
       // check for visibility
-      if (filters.is_visible && filters.is_visible !== event.is_visible) return false
+      if (typeof filters.is_visible !== 'undefined' && filters.is_visible !== event.is_visible) return false
 
       if (!filters.tags && !filters.places) return true
       if (!filters.tags.length && !filters.places.length) return true
@@ -136,8 +136,13 @@ const eventController = {
   },
 
   async getAll (req, res) {
-    const start = moment().year(req.params.year).month(req.params.month).startOf('month').subtract(1, 'week')
-    const end = moment().year(req.params.year).month(req.params.month).endOf('month').add(1, 'week')
+    // this is due how v-calendar shows dates
+    let start = moment().year(req.params.year).month(req.params.month)
+      .startOf('month').startOf('isoWeek')
+    let end = moment().year(req.params.year).month(req.params.month).endOf('month')
+    const shownDays = end.diff(start, 'days')
+    if (shownDays <= 34) end = end.add(1, 'week')
+    end = end.endOf('isoWeek')
     const events = await Event.findAll({
       where: {
         is_visible: true,

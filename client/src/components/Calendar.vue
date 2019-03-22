@@ -45,7 +45,7 @@ export default {
         }
       }
       
-      let color = event.tags.length && event.tags[0].color ? event.tags[0].color : 'rgba(200,200,200,0.5)'
+      let color = event.tags.length && event.tags[0].color ? event.tags[0].color : 'rgba(170,170,250,0.7)'
       if (event.past) color = 'rgba(200,200,200,0.5)'
       if (event.multidate) {
         e.dates = {

@@ -5,7 +5,7 @@ an event manager for radical communities
 if something is not working as expected, it's expected :D
 
 #### Install
-We provide a docker way to run **gancio**.
+We provide a docker way to run **gancio** but you can also manually install it.
 ```
 git clone https://git.lattuga.net/lesion/gancio.git
 cd gancio 
@@ -34,3 +34,8 @@ yarn
 # run front-end in development mode
 yarn dev
 ```
+
+
+#### Migrate / Backup
+- db
+- images

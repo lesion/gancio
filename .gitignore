@@ -8,6 +8,8 @@ uploads
 # local env files
 .env.production
 
+db.sqlite
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
