@@ -8,7 +8,7 @@ module.exports = {
   publicPath: process.env.BASE_URL,
   configureWebpack: {
     plugins: [
-      new webpack.NormalModuleReplacementPlugin(/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/, 'element-ui/lib/locale/lang/en')
+      new webpack.NormalModuleReplacementPlugin(/element-ui[/\\]lib[/\\]locale[/\\]lang[/\\]zh-CN/, 'element-ui/lib/locale/lang/en')
     ]
   },
   devServer: {
@@ -16,6 +16,6 @@ module.exports = {
   },
   transpileDependencies: [
     /\bvue-awesome\b/,
-    'vuex-persist',
+    'vuex-persist'
   ]
 }

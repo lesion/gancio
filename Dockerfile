@@ -3,8 +3,10 @@ FROM node:10
 
 WORKDIR /usr/src/app
 
+
 COPY package.json .
 COPY pm2.json .
+COPY .env.production .
 
 # install backend dependencies
 RUN yarn
@@ -22,7 +24,7 @@ WORKDIR /usr/src/app/client
 RUN yarn
 
 # build frontend
-RUN yarn build
+RUN  export $(cat /usr/src/app/.env.production); yarn build
 
 WORKDIR /usr/src/app
 

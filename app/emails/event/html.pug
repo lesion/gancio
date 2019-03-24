@@ -7,7 +7,7 @@ if event.image_path
 p #{event.description}
 
 each tag in event.tags
-  span ##{tag.tag}
+  span ##{tag.tag} 
 br
 <a href="#{config.baseurl}/event/#{event.id}">#{config.baseurl}/event/#{event.id}</a>
 hr
