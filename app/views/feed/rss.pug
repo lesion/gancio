@@ -1,9 +1,8 @@
 doctype xml
-rss(version='2.0', xmlns:atom='<a href="http://www.w3.org/2005/Atom" rel="nofollow">http://www.w3.org/2005/Atom</a>')
+rss(version='2.0')
     channel
         title #{config.title}
-        link <a href="#{config.baseurl}" rel="nofollow">#{config.baseurl}</a>
-        <atom:link href="#{config.apiurl}/export/feed/rss" rel='self' type='application/rss+xml' />
+        link #{config.baseurl}
         description #{config.description}
         language #{config.locale}
         //- if events.length
@@ -11,7 +10,7 @@ rss(version='2.0', xmlns:atom='<a href="http://www.w3.org/2005/Atom" rel="nofoll
         each event in events
             item
                 title= event.title
-                link <a href="#{config.baseurl}/event/#{event.id}" rel="nofollow">#{config.baseurl}/event/#{event.id}</a>
+                link #{config.baseurl}/event/#{event.id}
                 description
                     | <![CDATA[
                     | <h4>#{event.title}</h4>
@@ -21,4 +20,4 @@ rss(version='2.0', xmlns:atom='<a href="http://www.w3.org/2005/Atom" rel="nofoll
                     | <pre>!{event.description}</pre>
                     | ]]>
                 pubDate= new Date(event.createdAt).toUTCString()
-                guid(isPermaLink='false') <a href="#{config.baseurl}/event/#{event.id}" rel="nofollow">#{config.baseurl}/event/#{event.id}</a>
+                guid(isPermaLink='false') #{config.baseurl}/event/#{event.id}
