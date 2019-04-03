@@ -53,7 +53,7 @@ export default {
   checkRecoverCode: recover_code => post('/user/check_recover_code', { recover_code }),
   recoverPassword: (recover_code, password) => post('/user/recover_password', { recover_code, password }),
 
-  getAllEvents: (month, year) => get(`/event/${year}/${month}/`),
+  getAllEvents: (month, year) => get(`/event/${year}/${month}`),
   getUnconfirmedEvents: () => get('/event/unconfirmed'),
 
   confirmEvent: id => get(`/event/confirm/${id}`),
