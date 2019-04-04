@@ -1,21 +1,21 @@
-const jwt = require('jsonwebtoken')
-const Mastodon = require('mastodon-api')
-
-const User = require('../models/user')
-const { Event, Tag, Place } = require('../models/event')
-const settingsController = require('./settings')
-const eventController = require('./event')
-const config = require('../config')
-const mail = require('../mail')
-const { Op } = require('sequelize')
 const fs = require('fs')
 const path = require('path')
 const crypto = require('crypto')
+const jwt = require('jsonwebtoken')
+const Mastodon = require('mastodon-api')
+const { Op } = require('sequelize')
+
+const User = require('../models/user')
+const config = require('../config')
+const mail = require('../mail')
+const { Event, Tag, Place } = require('../models/event')
+const settingsController = require('./settings')
+const eventController = require('./event')
 
 const userController = {
-  async login (req, res) {
+  async login(req, res) {
     // find the user
-    const user = await User.findOne({ where: { email: { [Op.eq]: req.body.email } } })
+    const user = await User.findOne({ where: { email: { [Op.eq]: req.body && req.body.email } } })
     if (!user) {
       res.status(404).json({ success: false, message: 'AUTH_FAIL' })
     } else if (user) {
@@ -28,7 +28,7 @@ const userController = {
         // if user is found and password is right
         // create a token
         const payload = { email: user.email }
-        var token = jwt.sign(payload, config.secret)
+        const token = jwt.sign(payload, config.secret)
         res.json({
           success: true,
           message: 'Enjoy your token!',
@@ -39,13 +39,13 @@ const userController = {
     }
   },
 
-  async setToken (req, res) {
+  async setToken(req, res) {
     req.user.mastodon_auth = req.body
     await req.user.save()
     res.json(req.user)
   },
 
-  async delEvent (req, res) {
+  async delEvent(req, res) {
     const event = await Event.findByPk(req.params.id)
     // check if event is mine (or user is admin)
     if (event && (req.user.is_admin || req.user.id === event.userId)) {
@@ -63,7 +63,7 @@ const userController = {
   },
 
   // ADD EVENT
-  async addEvent (req, res) {
+  async addEvent(req, res) {
     const body = req.body
 
     // remove description tag and create anchor tags
@@ -113,7 +113,7 @@ const userController = {
     return res.json(event)
   },
 
-  async updateEvent (req, res) {
+  async updateEvent(req, res) {
     const body = req.body
     const event = await Event.findByPk(body.id)
     if (!req.user.is_admin && event.userId !== req.user.id) {
@@ -154,7 +154,7 @@ const userController = {
     return res.json(newEvent)
   },
 
-  async getAuthURL (req, res) {
+  async getAuthURL(req, res) {
     const instance = req.body.instance
     const is_admin = req.body.admin && req.user.is_admin
     const callback = `${config.baseurl}/${is_admin ? 'admin/oauth' : 'settings'}`
@@ -172,7 +172,7 @@ const userController = {
     res.json(url)
   },
 
-  async code (req, res) {
+  async code(req, res) {
     const { code, is_admin } = req.body
     let client_id, client_secret, instance
     const callback = `${config.baseurl}/${is_admin ? 'admin/oauth' : 'settings'}`
@@ -202,7 +202,7 @@ const userController = {
     }
   },
 
-  async forgotPassword (req, res) {
+  async forgotPassword(req, res) {
     const email = req.body.email
     const user = await User.findOne({ where: { email: { [Op.eq]: email } } })
     if (!user) return res.sendStatus(200)
@@ -213,7 +213,7 @@ const userController = {
     res.sendStatus(200)
   },
 
-  async checkRecoverCode (req, res) {
+  async checkRecoverCode(req, res) {
     const recover_code = req.body.recover_code
     if (!recover_code) return res.sendStatus(400)
     const user = await User.findOne({ where: { recover_code: { [Op.eq]: recover_code } } })
@@ -221,7 +221,7 @@ const userController = {
     res.json(user)
   },
 
-  async updatePasswordWithRecoverCode (req, res) {
+  async updatePasswordWithRecoverCode(req, res) {
     const recover_code = req.body.recover_code
     if (!recover_code) return res.sendStatus(400)
     const password = req.body.password
@@ -232,18 +232,18 @@ const userController = {
     res.sendStatus(200)
   },
 
-  async current (req, res) {
+  async current(req, res) {
     res.json(req.user)
   },
 
-  async getAll (req, res) {
+  async getAll(req, res) {
     const users = await User.findAll({
       order: [['createdAt', 'DESC']]
     })
     res.json(users)
   },
 
-  async update (req, res) {
+  async update(req, res) {
     const user = await User.findByPk(req.body.id)
     if (user) {
       if (!user.is_active && req.body.is_active) {
@@ -256,7 +256,8 @@ const userController = {
     }
   },
 
-  async register (req, res) {
+  async register(req, res) {
+    console.error('register !!', req)
     const n_users = await User.count()
     try {
       if (n_users === 0) {

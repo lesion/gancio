@@ -1,8 +1,13 @@
 const express = require('express')
 const consola = require('consola')
+const bodyParser = require('body-parser')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 const cors = require('cors')
+const corsConfig = {
+  allowedHeaders: ['Authorization'],
+  exposeHeaders: ['Authorization']
+}
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
@@ -23,7 +28,11 @@ async function start() {
   }
 
   // Give nuxt middleware to express
-  app.use(cors())
+  app.use(cors(corsConfig))
+  // app.use(morgan('dev'))
+  // app.set('views', path.join)
+  app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(bodyParser.json())
   app.use(nuxt.render)
 
   // Listen the server

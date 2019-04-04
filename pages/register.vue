@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import api from '~/plugins/api'
-import { mapActions } from 'vuex';
+import api from '@/plugins/api'
+import { mapActions } from 'vuex'
 import { Message } from 'element-ui'
 
 export default {
