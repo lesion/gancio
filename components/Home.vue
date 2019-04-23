@@ -40,7 +40,7 @@ export default {
   },
   watch: {
     filteredEvents() {
-      // this.$nextTick(this.$refs.magicgrid.positionItems) TOFIX
+      this.$nextTick(this.$refs.magicgrid.positionItems)
     }
   }
 }

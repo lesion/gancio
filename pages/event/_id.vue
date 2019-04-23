@@ -1,8 +1,9 @@
 <template lang="pug">
   b-modal#eventDetail(ref='eventDetail' hide-body hide-header hide-footer @hidden='$router.replace("/")' size='lg' :visible='true')
     b-card(no-body, :img-src='imgPath' v-loading='loading')
-      el-button.close_button(circle icon='el-icon-close' type='success'
-        @click='$refs.eventDetail.hide()')
+      nuxt-link(to='/')
+        el-button.close_button(circle icon='el-icon-close' type='success'
+          @click='$refs.eventDetail.hide()')
       b-card-header
         h3 {{event.title}}
         v-icon(name='clock')
@@ -40,7 +41,7 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
-import api from '@/plugins/api'
+// import api from '@/plugins/api'
 //import filters from '@/filters'
 
 export default {
@@ -61,17 +62,25 @@ export default {
       loading: true,
     }
   },
-  mounted () {
-    this.id = this.$route.params.id
-    this.load()
+  // mounted () {
+  //   this.id = this.$route.params.id
+  //   this.load()
+  // },
+  async asyncData ( { $axios, params }) {
+    console.error('daje dentro asyncData!')
+    console.error('async data porcod')
+    const event = await $axios.$get(`/event/${params.id}`)
+    // this.event = event
+    // this.loading = false
+    return { event, id: params.id, loading: false }
   },
   methods: {
     ...mapActions(['delEvent']),
-    async load () {
-      const event = await api.getEvent(this.id)
-      this.event = event
-      this.loading = false
-    },
+    // async load () {
+    //   const event = await this.api.getEvent(this.id)
+    //   this.event = event
+    //   this.loading = false
+    // },
     async remove () {
       await api.delEvent(this.event.id)
       this.delEvent(this.event.id)
@@ -80,11 +89,12 @@ export default {
     async toggle () {
       try {
         if (this.event.is_visible) {
-
-          await api.unconfirmEvent(this.id)
+          await this.$axios.$get(`/event/unconfirm/${this.id}`)
+          // await api.unconfirmEvent(this.id)
           this.event.is_visible = false
         } else {
-          await api.confirmEvent(this.id)
+          await this.$axios.$get(`/event/confirm/${this.id}`)
+          // await api.confirmEvent(this.id)
           this.event.is_visible = true
         }
       } catch (e) {
@@ -95,6 +105,12 @@ export default {
 }
 </script>
 <style>
+
+/* #eventDetail {
+  display: block !important;
+  opacity: 1;
+} */
+
 #eventDetail .modal-body {
   padding: 0px;
   width: 100%;

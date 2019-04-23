@@ -16,7 +16,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { Message } from 'element-ui'
-import api from '@/plugins/api'
+// import api from '@/plugins/api'
 
 export default {
   name: 'Login',
@@ -36,7 +36,7 @@ export default {
         return
       }
       this.loading = true
-      await api.forgotPassword(this.email)
+      // await api.forgotPassword(this.email)
       this.loading = false
       Message({ message: this.$t('Check your email!'), type: 'success' })
     },
@@ -44,7 +44,7 @@ export default {
       e.preventDefault()
       try {
         this.loading = true
-        const user = await api.login(this.email, this.password)
+        const user = await this.$axios.$post('/login', { email: this.email, password: this.password })
         this.loading = false
         if (!user) {
           Message({ message: this.$t('Login error'), type: 'error' })

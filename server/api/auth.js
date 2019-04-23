@@ -6,7 +6,7 @@ const User = require('./models/user')
 const Auth = {
   fillUser(req, res, next) {
     const token =
-      req.body.token || req.params.token || req.headers['x-access-token']
+      req.body.token || req.params.token || req.headers.authorization
     if (!token) return next()
     jwt.verify(token, config.secret, async (err, decoded) => {
       if (err) return next()
@@ -20,7 +20,8 @@ const Auth = {
     const token =
       (req.body && req.body.token) ||
       req.params.token ||
-      req.headers['x-access-token']
+      req.headers.authorization
+    console.error('sono dentro isAuth ', token, req.headers)
     if (!token) return res.status(403).send({ message: 'Token not found' })
     jwt.verify(token, config.secret, async (err, decoded) => {
       if (err) {

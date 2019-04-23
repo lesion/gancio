@@ -1,12 +1,11 @@
 <template lang="pug">
     v-calendar#calendar.card(
       show-caps
-      :popover-expanded='true'
       :attributes='attributes'
       :from-page.sync='page'
       is-expanded is-inline)
-      div(slot='popover', slot-scope='{ customData }')
-        router-link(:to="`/event/${customData.id}`") {{customData.start_datetime|hour}} - {{customData.title}} @{{customData.place.name}}
+      //- div(slot='popover', slot-scope='{ customData }')
+      //- router-link(:to="`/event/${customData.id}`") {{customData.start_datetime|hour}} - {{customData.title}} @{{customData.place.name}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
@@ -40,10 +39,10 @@ export default {
         key: event.id,
         customData: event,
         order: event.start_datetime,
-        popover: {
-          slot: 'popover',
-          visibility: 'hover'
-        }
+        // popover: {
+        //   slot: 'popover',
+        //   visibility: 'hover'
+        // }
       }
       
       let color = event.tags && event.tags.length && event.tags[0].color ? event.tags[0].color : 'rgba(170,170,250,0.7)'
@@ -73,7 +72,7 @@ export default {
           highlight: {
             backgroundColor: '#aaffaa'
           },
-          popover: {label: this.$t('Today')}
+          // popover: {label: this.$t('Today')}
         }, 
         ...this.filteredEvents.map(this.eventToAttribute)
       ]

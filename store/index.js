@@ -51,7 +51,6 @@ export const getters = {
       return 0
     })
   }
-
 }
 
 export const mutations = {
@@ -112,40 +111,34 @@ export const actions = {
     // set user if logged! TODO
 
     const now = new Date()
-    const events = await api.getAllEvents(now.getMonth() - 1, now.getFullYear())
+    // const events = await api.getAllEvents(now.getMonth() - 1, now.getFullYear())
+    const events = await this.$axios.$get(`/event/${now.getMonth() - 1}/${now.getFullYear()}`)
     commit('setEvents', events)
   },
-  async updateEvents({ commit }, date) {
-    console.log('dentro updateEvents ', date.month, api)
-    try {
-      const events = await api.getAllEvents(date.month - 1, date.year)
-      console.log('dopo getAll events', events)
-      commit('setEvents', events)
-    } catch (e) {
-      console.log(e)
-    }
-  },
   async updateMeta({ commit }) {
-    const { tags, places } = await api.getMeta()
+    const { tags, places } = await this.$axios.$get('/event/meta')
     commit('update', { tags, places })
   },
   async addEvent({ commit }, formData) {
-    const event = await api.addEvent(formData)
+    console.log('ciao addEvent')
+    const event = await this.$axios.$post('/user/event', formData) // .addEvent(formData)
     if (this.state.logged) {
       commit('addEvent', event)
     }
   },
   async updateEvent({ commit }, formData) {
-    const event = await api.updateEvent(formData)
+    const event = await this.$axios.$put('/user/event', formData)
     commit('updateEvent', event)
   },
   delEvent({ commit }, eventId) {
     commit('delEvent', eventId)
   },
   login({ commit }, user) {
+    this.$axios.setToken(user.token)
     commit('login', user)
   },
   logout({ commit }) {
+    this.$axios.setToken(false)
     commit('logout')
   },
   // search

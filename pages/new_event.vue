@@ -62,7 +62,7 @@
 
 </template>
 <script>
-import api from '@/plugins/api'
+// import api from '@/plugins/api'
 import { mapActions, mapState } from 'vuex'
 import moment from 'dayjs'
 import Calendar from '@/components/Calendar'
@@ -110,7 +110,6 @@ export default {
       if (event.tags) {
         this.event.tags = event.tags.map(t => t.tag)
       }
-
     }
     this.updateMeta()
   },

@@ -6,14 +6,13 @@
       el-input.mb-2(ref='email' v-model='user.email' type='email'
         :placeholder='$t("Email")' autocomplete='email')
         span(slot='prepend') @
-      
+
       el-input.mb-2(v-model='user.password' type="password" placeholder="Password")
         v-icon(name='lock' slot='prepend')
 
       el-input.mb-2(v-model='user.description' type="textarea" rows='3' :placeholder="$t('Description')")
           v-icon(name='envelope-open-text')
 
-      
       el-button.float-right(plain type="success" icon='el-icon-arrow-right' @click='register') {{$t('Send')}}
 </template>
 
@@ -34,7 +33,8 @@ export default {
     ...mapActions(['login']),
     async register () {
       try {
-        const user = await api.register(this.user)
+        const user = await this.$axios.$post('/user', this.user) //api.register(this.user)
+        console.log(user)
         if (!user.is_admin) {
           this.$refs.modal.hide()
           Message({

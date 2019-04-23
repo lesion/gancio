@@ -2,7 +2,10 @@ import Vue from 'vue'
 import { Button, Select, Tag, Option, Table, FormItem, Card,
   Form, Tabs, TabPane, Switch, Input, Loading, TimeSelect,
   TableColumn, ColorPicker, Pagination, Popover } from 'element-ui'
-// import locale from 'element-ui/lib/locale/lang/en'
+import localeEn from 'element-ui/lib/locale/lang/en'
+import localeIt from 'element-ui/lib/locale/lang/it'
+import locale from 'element-ui/lib/locale'
+locale.use(localeIt)
 
 export default () => {
   Vue.use(Button)

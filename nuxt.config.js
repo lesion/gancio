@@ -16,7 +16,9 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
 
-  serverMiddleware: [{ path: '/api', handler: '@/server/api/index.js' }],
+  serverMiddleware: [
+    { path: '/api', handler: '@/server/api/index.js' }
+  ],
 
   /*
    ** Customize the progress-bar color
@@ -39,7 +41,8 @@ module.exports = {
   plugins: ['@/plugins/element-ui', '@/plugins/filters',
     '@/plugins/i18n', '@/plugins/bootstrap-vue',
     '@/plugins/vue-awesome',
-    { src: '@/plugins/v-calendar', ssr: false },
+    '@/plugins/v-calendar',
+    { src: '@/plugins/vuex-persist', ssr: false },
     '@/plugins/magic-grid'],
 
   /*
@@ -53,6 +56,8 @@ module.exports = {
    ** Axios module configuration
    */
   axios: {
+    prefix: '/api',
+    credentials: true
     // See https://github.com/nuxt-community/axios-module#options
   },
 
@@ -60,7 +65,7 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    transpile: [/^element-ui/, /^vue-awesome/, /^vue-magic-grid/],
+    transpile: [/^element-ui/, /^vue-awesome/, /^vue-magic-grid/, /^vuex-persist/],
 
     /*
      ** You can extend webpack config here

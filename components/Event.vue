@@ -1,13 +1,14 @@
 <template lang="pug">
-  b-card(bg-variant='dark' text-variant='white' :class="{ withImg: event.image_path ? true : false }"
-    @click='$router.push("/event/" + event.id)'
-     :img-src='imgPath')
-      strong {{event.title}}
-      div <v-icon name='clock'/> {{event.start_datetime|datetime}}
-      //- span <v-icon name='map-marker-alt'/> {{event.place.name}}
-      br
-      el-tag.mr-1(:color='tag.color || "grey"' v-for='tag in event.tags' :key='tag.tag'
-        size='small' @click.stop='addSearchTag(tag)') {{tag.tag}}
+  nuxt-link(:to='`/event/${event.id}`')
+    //- @click='$router.push("/event/" + event.id)'
+    b-card(bg-variant='dark' text-variant='white' :class="{ withImg: event.image_path ? true : false }"
+      :img-src='imgPath')
+        strong {{event.title}}
+        div <v-icon name='clock'/> {{event.start_datetime|datetime}}
+        //- span <v-icon name='map-marker-alt'/> {{event.place.name}}
+        br
+        el-tag.mr-1(:color='tag.color || "grey"' v-for='tag in event.tags' :key='tag.tag'
+          size='small' @click.stop='addSearchTag(tag)') {{tag.tag}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'

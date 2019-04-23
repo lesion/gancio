@@ -1,5 +1,6 @@
 const express = require('express')
 const consola = require('consola')
+const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
@@ -29,7 +30,7 @@ async function start() {
 
   // Give nuxt middleware to express
   app.use(cors(corsConfig))
-  // app.use(morgan('dev'))
+  app.use(morgan('dev'))
   // app.set('views', path.join)
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())

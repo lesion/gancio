@@ -127,6 +127,10 @@ export default {
     // this.settings = await api.getAdminSettings()
     this.mastodon_instance = this.settings.mastodon_auth && this.settings.mastodon_auth.instance
   },
+  async asyncData ({ $axios, params }) {
+    const users = await $axios.$get('/users')
+    return { users }
+  },
   computed: {
     ...mapState(['tags', 'places']),
     paginatedEvents () {
