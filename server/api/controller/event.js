@@ -160,7 +160,7 @@ const eventController = {
         // { model: Place, required: false }
       // ]
     })
-    console.log(events)
+    // console.log(events)
     res.json(events)
   }
 

@@ -21,7 +21,6 @@ const Auth = {
       (req.body && req.body.token) ||
       req.params.token ||
       req.headers.authorization
-    console.error('sono dentro isAuth ', token, req.headers)
     if (!token) return res.status(403).send({ message: 'Token not found' })
     jwt.verify(token, config.secret, async (err, decoded) => {
       if (err) {

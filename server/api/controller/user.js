@@ -4,7 +4,7 @@ const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const Mastodon = require('mastodon-api')
 const { Op } = require('sequelize')
-
+const jsonwebtoken = require('jsonwebtoken')
 const User = require('../models/user')
 const config = require('../config')
 const mail = require('../mail')
@@ -27,16 +27,22 @@ const userController = {
       } else {
         // if user is found and password is right
         // create a token
-        const payload = { email: user.email }
-        const token = jwt.sign(payload, config.secret)
-        res.json({
-          success: true,
-          message: 'Enjoy your token!',
-          token,
-          user
-        })
+        const accessToken = jsonwebtoken.sign({ user:
+          {
+            id: user.id,
+            email: user.email,
+            scope: [user.is_admin ? 'admin' : 'user']
+          }},
+          config.secret
+        )
+      
+        res.json({token: accessToken})        
       }
     }
+  },
+
+  async logout(req, res) {
+
   },
 
   async setToken(req, res) {

@@ -3,29 +3,15 @@
     Nav
     Home
     transition(name="fade" mode="out-in")
-      //- router-view(name='modal')
       nuxt
 </template>
 
 <script>
-// import moment from 'dayjs'
-// import api from './api'
-// import { mapActions } from 'vuex';
-// import Register from './components/Register.vue'
-// import Login from './components/Login.vue'
-// import Settings from './components/Settings.vue'
-// import newEvent from './components/newEvent.vue'
-// import eventDetail from './components/EventDetail.vue'
 import Home from '~/components/Home.vue'
 import Nav from '~/components/Nav.vue'
 
 export default {
   name: 'App',
-  // mounted () {
-  //   this.updateMeta()
-  // },
-  // methods: mapActions(['updateMeta']),
-  // components: { Nav, Register, Login, Home, Settings, newEvent, eventDetail },
   components: { Nav, Home },
 }
 </script>

@@ -5,8 +5,10 @@ const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 const userController = require('./controller/user')
 const settingsController = require('./controller/settings')
+const config = require('./config')
 
 // const botController = require('./controller/bot')
+const jwt = require('express-jwt')({secret: config.secret})
 
 const storage = require('./storage')({
   destination: 'uploads/'
@@ -14,8 +16,12 @@ const storage = require('./storage')({
 
 const upload = multer({ storage })
 const api = express.Router()
-// login
-api.post('/login', userController.login)
+
+// AUTH
+api.post('/auth/login', userController.login)
+api.post('/auth/logout', userController.logout)
+api.get('/auth/user', jwt, userController.current)
+
 api.post('/user/recover', userController.forgotPassword)
 api.post('/user/check_recover_code', userController.checkRecoverCode)
 api.post('/user/recover_password', userController.updatePasswordWithRecoverCode)
@@ -25,7 +31,7 @@ api
   // register
   .post(userController.register)
   // get current user
-  .get(isAuth, userController.current)
+  // .get(isAuth, userController.current)
   // update user (eg. confirm)
   .put(isAuth, isAdmin, userController.update)
 

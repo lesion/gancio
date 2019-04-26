@@ -4,21 +4,21 @@
     b-navbar-brand(to='/') <img id='logo' src='gancio_logo.svg'/>
     b-collapse#nav_collapse(is-nav)
       b-navbar-nav
-        b-nav-item(v-if='!logged' to='/login'  v-b-tooltip :title='$t("Login")') <v-icon color='lightgreen' name='lock' /> 
-          span.d-md-none  {{$t('User')}}
-        b-nav-item(to='/new_event' v-b-tooltip :title='$t("Add Event")' ) <v-icon color='lightgreen' name='plus'/> 
-          span.d-md-none  {{$t('Add Event')}}
-        b-nav-item(v-if='logged' to='/settings' v-b-tooltip :title='$t("Settings")') <v-icon color='orange' name='cog'/>
-          span.d-md-none  {{$t('Settings')}}
-        b-nav-item(v-if='user.is_admin' to='/admin' v-b-tooltip :title='$t("Admin")') <v-icon color='lightblue' name='tools'/>
-          span.d-md-none  {{$t('Admin')}}
-        b-nav-item(to='/export' v-b-tooltip :title='$t("Export")') <v-icon name='file-export' color='yellow'/>
-          span.d-md-none  {{$t('Export')}}
-        b-nav-item(v-if='logged' @click='logout' v-b-tooltip :title='$t("Logout")') <v-icon color='red' name='sign-out-alt'/>
-          span.d-md-none  {{$t('Logout')}}
+        b-nav-item(v-if='!$auth.loggedIn' to='/login'  v-b-tooltip :title='$t("common.login")') <v-icon color='lightgreen' name='lock' /> 
+          span.d-md-none  {{$t('common.login')}}
+        b-nav-item(to='/add' v-b-tooltip :title='$t("common.add_event")' ) <v-icon color='lightgreen' name='plus'/> 
+          span.d-md-none  {{$t('common.add_event')}}
+        b-nav-item(v-if='$auth.loggedIn' to='/settings' v-b-tooltip :title='$t("common.settings")') <v-icon color='orange' name='cog'/>
+          span.d-md-none  {{$t('common.settings')}}
+        b-nav-item(v-if='$auth.hasScope(`admin`)' to='/admin' v-b-tooltip :title='$t("common.admin")') <v-icon color='lightblue' name='tools'/>
+          span.d-md-none  {{$t('common.admin')}}
+        b-nav-item(to='/export' v-b-tooltip :title='$t("common.export")') <v-icon name='file-export' color='yellow'/>
+          span.d-md-none  {{$t('common.export')}}
+        b-nav-item(v-if='auth.loggedIn' @click='logout' v-b-tooltip :title='$t("common.logout")') <v-icon color='red' name='sign-out-alt'/>
+          span.d-md-none  {{$t('common.logout')}}
     b-navbar-nav.ml-auto
         b-nav-item(to='/about')
-          span  {{$t('Info')}} <v-icon color='#ff9fc4' name='question-circle'/>
+          span  {{$t('common.info')}} <v-icon color='#ff9fc4' name='question-circle'/>
 
 </template>
 <script>
@@ -26,7 +26,7 @@ import {mapState, mapActions} from 'vuex'
 export default {
   name: 'Nav',
   computed: {
-    ...mapState(['logged', 'user','filters']),
+    ...mapState(['filters', 'auth']),
     filters_tags: {
       set (value) {
         this.setSearchTags(value)

@@ -1,19 +1,11 @@
 import moment from 'dayjs'
 import { intersection } from 'lodash'
-import api from '~/plugins/api'
 import Vue from 'vue'
-
-Vue.config.errorHandler = function (err, vm, info) {
-  // handle error
-  // `info` is a Vue-specific error info, e.g. which lifecycle hook
-  // the error was found in. Only available in 2.2.0+
-  console.error(err)
-  console.error(info)
-}
 
 export const state = () => ({
   events: [],
   user: {},
+  locale: 'it',
   logged: false,
   token: '',
   tags: [],
@@ -109,10 +101,13 @@ export const actions = {
   // get current month's event
   async nuxtServerInit({ commit }, { req }) {
     // set user if logged! TODO
-
     const now = new Date()
     // const events = await api.getAllEvents(now.getMonth() - 1, now.getFullYear())
     const events = await this.$axios.$get(`/event/${now.getMonth() - 1}/${now.getFullYear()}`)
+    commit('setEvents', events)
+  },
+  async updateEvents({ commit }, page) {
+    const events = await this.$axios.$get(`/event/${page.month}/${page.year}`)
     commit('setEvents', events)
   },
   async updateMeta({ commit }) {
@@ -120,7 +115,6 @@ export const actions = {
     commit('update', { tags, places })
   },
   async addEvent({ commit }, formData) {
-    console.log('ciao addEvent')
     const event = await this.$axios.$post('/user/event', formData) // .addEvent(formData)
     if (this.state.logged) {
       commit('addEvent', event)
@@ -132,14 +126,6 @@ export const actions = {
   },
   delEvent({ commit }, eventId) {
     commit('delEvent', eventId)
-  },
-  login({ commit }, user) {
-    this.$axios.setToken(user.token)
-    commit('login', user)
-  },
-  logout({ commit }) {
-    this.$axios.setToken(false)
-    commit('logout')
   },
   // search
   addSearchTag({ commit }, tag) {

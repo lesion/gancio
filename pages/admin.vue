@@ -95,6 +95,7 @@ import { Message } from 'element-ui'
 
 export default {
   name: 'Admin',
+  middleware: ['auth'],
   data () {
     return {
       perPage: 10,
@@ -116,18 +117,19 @@ export default {
       tab: "0",
     }
   },
-  async mounted () {
-    const code = this.$route.query.code
-    if (code) {
-      this.tab = "4"
-      const instance = await api.setCode({code, is_admin: true})
-    }
-    // this.users = await api.getUsers()
-    // this.events = await api.getUnconfirmedEvents()
-    // this.settings = await api.getAdminSettings()
-    this.mastodon_instance = this.settings.mastodon_auth && this.settings.mastodon_auth.instance
-  },
-  async asyncData ({ $axios, params }) {
+  // async mounted () {
+  //   const code = this.$route.query.code
+  //   if (code) {
+  //     this.tab = "4"
+  //     const instance = await api.setCode({code, is_admin: true})
+  //   }
+  //   // this.users = await api.getUsers()
+  //   // this.events = await api.getUnconfirmedEvents()
+  //   // this.settings = await api.getAdminSettings()
+  //   this.mastodon_instance = this.settings.mastodon_auth && this.settings.mastodon_auth.instance
+  // },
+  async asyncData ({ $axios, params, store }) {
+    console.log(store.state)
     const users = await $axios.$get('/users')
     return { users }
   },

@@ -1,62 +1,62 @@
 <template lang="pug">
   b-modal(ref='modal' @hidden='$router.replace("/")' size='lg' :visible='true'
-    :title="edit?$t('Edit event'):$t('New event')" hide-footer)
+    :title="edit?$t('common.edit_event'):$t('common.add_event')" hide-footer)
     el-form
       el-tabs.mb-2(v-model='activeTab' v-loading='sending')
 
         //- NOT LOGGED EVENT
         el-tab-pane(v-if='!logged')
-          span(slot='label') {{$t('anon_newevent')}} <v-icon name='user-secret'/>
-          p(v-html="$t('anon_newevent_explanation')")
-          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
+          span(slot='label') {{$t('event.anon')}} <v-icon name='user-secret'/>
+          p(v-html="$t('event.anon_description')")
+          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
 
         //- WHERE
         el-tab-pane
-          span(slot='label') {{$t('Where')}} <v-icon name='map-marker-alt'/>
-          div {{$t('where_explanation')}}
+          span(slot='label') {{$t('common.where')}} <v-icon name='map-marker-alt'/>
+          div {{$t('common.where')}} 
           el-select.mb-3(v-model='event.place.name' @change='placeChoosed' filterable allow-create default-first-option)
             el-option(v-for='place in places_name' :label='place' :value='place' :key='place.id')
-          div {{$t("Address")}}
-          el-input.mb-3(ref='address' v-model='event.place.address' @keydown.native.enter='next')
-          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
+          div {{$t("common.address")}}
+          el-input.mb-3(ref='address' v-model='event.place.address' :disabled='places_name.indexOf(event.place.name)>-1' @keydown.native.enter='next')
+          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
 
         //- WHEN
         el-tab-pane
-          span(slot='label') {{$t('When')}} <v-icon name='clock'/>
-          span {{event.multidate ? $t('dates_explanation') : $t('date_explanation')}}
-            el-switch.float-right(v-model='event.multidate' :active-text="$t('multidate_explanation')")
+          span(slot='label') {{$t('common.when')}} <v-icon name='clock'/>
+          span {{event.multidate ? $t('event.dates_description') : $t('event.date_description')}}
+            el-switch.float-right(v-model='event.multidate' :active-text="$t('event.multidate_description')")
           v-date-picker.mb-3(:mode='event.multidate ? "range" : "single"' v-model='date' is-inline
             is-expanded :min-date='new Date()' @input='date ? $refs.time_start.focus() : false')
-          div {{$t('time_start_explanation')}}
+          div {{$t('event.time_start_description')}}
           el-time-select.mb-3(ref='time_start'
             v-model="time.start"
             :picker-options="{ start: '00:00', step: '00:30', end: '24:00'}")
-          div {{$t('time_end_explanation')}}
+          div {{$t('event.time_end_description')}}
           el-time-select(v-model='time.end'
             :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
-          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('Next')}}
+          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
 
         //- WHAT
         el-tab-pane
-          span(slot='label') {{$t('What')}} <v-icon name='file-alt'/>
-          span {{$t('what_explanation')}}
+          span(slot='label') {{$t('common.what')}} <v-icon name='file-alt'/>
+          span {{$t('event.what_description')}}
           el-input.mb-3(v-model='event.title' ref='title')
-          span {{$t('description_explanation')}}
+          span {{$t('event.description_description')}}
           el-input.mb-3(v-model='event.description' type='textarea' :rows='9')
-          span {{$t('tag_explanation')}}
+          span {{$t('event.tag_description')}}
           br 
           el-select(v-model='event.tags' multiple filterable allow-create
             default-first-option placeholder='Tag')
             el-option(v-for='tag in tags' :key='tag.tag'
               :label='tag' :value='tag') 
 
-          el-button.float-right(@click.native='next' :disabled='!couldProceed') {{$t('Next')}}
+          el-button.float-right(@click.native='next' :disabled='!couldProceed') {{$t('common.next')}}
 
         el-tab-pane
-          span(slot='label') {{$t('Media')}} <v-icon name='image'/>
-          span {{$t('media_explanation')}}
-          b-form-file.mb-2(v-model='event.image', :placeholder='$t("Poster")' accept='image/*')
-          el-button.float-right(@click='done') {{edit?$t('Edit'):$t('Send')}}
+          span(slot='label') {{$t('common.media')}} <v-icon name='image'/>
+          span {{$t('event.media_description')}}
+          b-form-file.mb-2(v-model='event.image', :placeholder='$t("common.poster")' accept='image/*')
+          el-button.float-right(@click='done') {{edit?$t('common.edit'):$t('common.send')}}
 
 
 
@@ -121,6 +121,12 @@ export default {
       user: state => state.user,
       logged: state => state.logged
     }),
+    disableAddress () {
+      console.log('dentro disable Address')
+      const ret = this.places_name.find(p => p.name === this.event.place.name)
+      console.log(ret)
+      return ret
+    },
     couldProceed () {
       const t = this.logged ? -1 : 0
       switch(Number(this.activeTab)) {
@@ -203,7 +209,7 @@ export default {
         this.updateMeta()
         this.sending = false
         this.$refs.modal.hide()
-        Message({ type: 'success', message: this.logged ? this.$t('new_event_added') : this.$t('new_anon_event_added')})
+        Message({ type: 'success', message: this.logged ? this.$t('event.added') : this.$t('event.added_anon')})
       } catch (e) {
         this.sending = false
         console.error(e)
