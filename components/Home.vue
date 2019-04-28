@@ -1,18 +1,18 @@
 <template lang="pug">
-  div
-    magic-grid(:animate="false" useMin :gap=5 :maxCols=4
+  div(v-loading='loading')
+    magic-grid(:animate="true" useMin :gap=5 :maxCols=4
       :maxColWidth='400' ref='magicgrid')
       div.mt-1.item
         //- Search#search
         no-ssr
           Calendar
-    Event.item.mt-1(v-for='event in events'
-      :key='event.id'
-      :event='event')
+      Event.item.mt-1(v-for='event in events'
+        :key='event.id'
+        :event='event')
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
 // import filters from '@/filters.js'
 import Event from '@/components/Event'
@@ -23,10 +23,13 @@ import Calendar from '@/components/Calendar'
 
 export default {
   name: 'Home',
-  // async asyncData ({req}) {
-  //   console.log('dentro asyncData')
-  //   const { data } = await axios.get('http://localhost:3000/api/event/2019/2')
-  //   return { events: data }
+  data () {
+    return { loading: true }
+  },
+  // created () {
+  //   const now = new Date()
+  //   const page = { month: now.getMonth() - 1, year: now.getFullYear() }
+  //   this.updateEvents(page)
   // },
   components: { Event, Calendar }, // , Calendar, Search },
   computed: {
@@ -38,9 +41,14 @@ export default {
         .sort((a, b) => a.start_datetime > b.start_datetime)
     }
   },
+  mounted () {
+    this.loading = false
+  },
+  methods: mapActions(['updateEvents']),
   watch: {
     filteredEvents() {
       this.$nextTick(this.$refs.magicgrid.positionItems)
+      this.loading = false
     }
   }
 }

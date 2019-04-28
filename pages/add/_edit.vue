@@ -5,7 +5,7 @@
       el-tabs.mb-2(v-model='activeTab' v-loading='sending')
 
         //- NOT LOGGED EVENT
-        el-tab-pane(v-if='!logged')
+        el-tab-pane(v-if='!$auth.loggedIn')
           span(slot='label') {{$t('event.anon')}} <v-icon name='user-secret'/>
           p(v-html="$t('event.anon_description')")
           el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
@@ -13,7 +13,14 @@
         //- WHERE
         el-tab-pane
           span(slot='label') {{$t('common.where')}} <v-icon name='map-marker-alt'/>
-          div {{$t('common.where')}} 
+          div {{$t('common.where')}}
+            el-popover(
+              placement="top-start"
+              width="400"
+              trigger="hover")
+              v-icon(slot='reference' color='#ff9fc4' name='question-circle')
+              slot
+                p {{$t('event.where_description')}}
           el-select.mb-3(v-model='event.place.name' @change='placeChoosed' filterable allow-create default-first-option)
             el-option(v-for='place in places_name' :label='place' :value='place' :key='place.id')
           div {{$t("common.address")}}
@@ -119,7 +126,6 @@ export default {
       places_name: state => state.places.map(p => p.name ),
       places: state => state.places,
       user: state => state.user,
-      logged: state => state.logged
     }),
     disableAddress () {
       console.log('dentro disable Address')
@@ -128,7 +134,7 @@ export default {
       return ret
     },
     couldProceed () {
-      const t = this.logged ? -1 : 0
+      const t = this.$auth.loggedIn ? -1 : 0
       switch(Number(this.activeTab)) {
         case 0+t:
           return true
@@ -209,7 +215,7 @@ export default {
         this.updateMeta()
         this.sending = false
         this.$refs.modal.hide()
-        Message({ type: 'success', message: this.logged ? this.$t('event.added') : this.$t('event.added_anon')})
+        Message({ type: 'success', message: this.$auth.loggedIn ? this.$t('event.added') : this.$t('event.added_anon')})
       } catch (e) {
         this.sending = false
         console.error(e)

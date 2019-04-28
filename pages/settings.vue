@@ -26,7 +26,7 @@ export default {
     // if (code) {
       // const res = await api.setCode({code})
     // }
-    const user = await $axios.$get('/user')
+    const user = await $axios.$get('/auth/user')
     user.mastodon_auth = ''
     return { user } //, mastodon_instance: user.mastodon_auth.instance }
     // this.user = user

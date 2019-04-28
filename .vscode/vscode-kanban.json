@@ -1,6 +1,39 @@
 {
-  "done": [],
-  "in-progress": [],
+  "done": [
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:50:00.973Z",
+      "description": {
+        "content": "- export page ok\n- usare un'altra api per retrieve di eventi (perche' devo mostrarli tutti, non solo quelli del mese corrente)\n- non devo fare il load degli eventi nel nuxtServerInit (o dentro il layout normale oppure nelle pagine, tipo nella home)",
+        "mime": "text/markdown"
+      },
+      "details": {
+        "content": "- export page ok\n- usare un'altra api per retrieve di eventi (perche' devo mostrarli tutti, non solo quelli del mese corrente)\n- non devo fare il load degli eventi nel nuxtServerInit (o dentro il layout normale oppure nelle pagine, tipo nella home)\n",
+        "mime": "text/markdown"
+      },
+      "id": "7",
+      "prio": 1,
+      "references": [],
+      "title": "export page",
+      "type": "bug"
+    }
+  ],
+  "in-progress": [
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:46:46.332Z",
+      "id": "3",
+      "prio": 0,
+      "references": [],
+      "title": "export lista"
+    }
+  ],
   "testing": [
     {
       "assignedTo": {
@@ -15,18 +48,6 @@
     }
   ],
   "todo": [
-    {
-      "assignedTo": {
-        "name": "lesion"
-      },
-      "category": "feature",
-      "creation_time": "2019-04-23T19:50:00.973Z",
-      "id": "7",
-      "prio": 1,
-      "references": [],
-      "title": "export page",
-      "type": "bug"
-    },
     {
       "assignedTo": {
         "name": "lesion"
@@ -99,21 +120,19 @@
         "name": "lesion"
       },
       "category": "feature",
-      "creation_time": "2019-04-23T19:46:46.332Z",
-      "id": "3",
-      "prio": 0,
+      "creation_time": "2019-04-23T19:44:56.705Z",
+      "id": "1",
       "references": [],
-      "title": "export lista"
+      "title": "popup sul calendario"
     },
     {
       "assignedTo": {
         "name": "lesion"
       },
-      "category": "feature",
-      "creation_time": "2019-04-23T19:44:56.705Z",
-      "id": "1",
+      "creation_time": "2019-04-27T19:44:33.769Z",
+      "id": "12",
       "references": [],
-      "title": "popup sul calendario"
+      "title": "rifare il calendario o solo il popup"
     },
     {
       "assignedTo": {
@@ -137,6 +156,15 @@
       "references": [],
       "title": "documentare sorgenti",
       "type": "bug"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-04-28T09:25:50.701Z",
+      "id": "13",
+      "references": [],
+      "title": "test altra visualizzazione"
     }
   ]
 }

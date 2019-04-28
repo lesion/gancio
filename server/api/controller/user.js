@@ -27,12 +27,12 @@ const userController = {
       } else {
         // if user is found and password is right
         // create a token
-        const accessToken = jsonwebtoken.sign({ user:
+        const accessToken = jsonwebtoken.sign(
           {
             id: user.id,
             email: user.email,
             scope: [user.is_admin ? 'admin' : 'user']
-          }},
+          },
           config.secret
         )
       

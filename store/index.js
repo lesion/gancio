@@ -103,11 +103,13 @@ export const actions = {
     // set user if logged! TODO
     const now = new Date()
     // const events = await api.getAllEvents(now.getMonth() - 1, now.getFullYear())
-    const events = await this.$axios.$get(`/event/${now.getMonth() - 1}/${now.getFullYear()}`)
+    const events = await this.$axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
     commit('setEvents', events)
+    const { tags, places } = await this.$axios.$get('/event/meta')
+    commit('update', { tags, places })    
   },
   async updateEvents({ commit }, page) {
-    const events = await this.$axios.$get(`/event/${page.month}/${page.year}`)
+    const events = await this.$axios.$get(`/event/${page.month-1}/${page.year}`)
     commit('setEvents', events)
   },
   async updateMeta({ commit }) {
@@ -116,9 +118,7 @@ export const actions = {
   },
   async addEvent({ commit }, formData) {
     const event = await this.$axios.$post('/user/event', formData) // .addEvent(formData)
-    if (this.state.logged) {
-      commit('addEvent', event)
-    }
+    commit('addEvent', event)
   },
   async updateEvent({ commit }, formData) {
     const event = await this.$axios.$put('/user/event', formData)

@@ -3,26 +3,26 @@
     b-card(no-body, :img-src='imgPath' v-loading='loading')
       nuxt-link(to='/')
         el-button.close_button(circle icon='el-icon-close' type='success'
-          @click='$refs.eventDetail.hide()')
+          @click.prevent='$refs.eventDetail.hide()')
       b-card-header
         h3 {{event.title}}
         v-icon(name='clock')
         span  {{event.start_datetime|datetime}}
         br
         v-icon(name='map-marker-alt')
-        //- span  {{event.place.name}} - {{event.place.address}}
+        span  {{event.place.name}} - {{event.place.address}}
         br
       b-card-body(v-if='event.description || event.tags')
         pre(v-html='event.description')
         br
-        el-tag.mr-1(:color='tag.color || "grey"' v-for='tag in event.tags'
+        el-tag.mr-1(:color='tag.color' v-for='tag in event.tags'
           size='mini' :key='tag.tag') {{tag.tag}}
-        .ml-auto(v-if='mine')
+        div(v-if='mine')
           hr
-          el-button(v-if='event.is_visible' plain type='warning' @click.prevents='toggle' icon='el-icon-view') {{$t('Unconfirm')}}
-          el-button(v-else plain type='success' @click.prevents='toggle' icon='el-icon-view') {{$t('Confirm')}}
-          el-button(plain type='danger' @click.prevent='remove' icon='el-icon-remove') {{$t('Remove')}} 
-          el-button(plain type='primary' @click='$router.replace("/edit/"+event.id)') <v-icon color='orange' name='edit'/> {{$t('Edit')}}
+          el-button(v-if='event.is_visible' plain type='warning' @click.prevents='toggle' icon='el-icon-view') {{$t('common.hide')}}
+          el-button(v-else plain type='success' @click.prevents='toggle' icon='el-icon-view') {{$t('common.confirm')}}
+          el-button(plain type='danger' @click.prevent='remove' icon='el-icon-remove') {{$t('common.remove')}} 
+          el-button(plain type='primary' @click='$router.replace("/edit/"+event.id)') <v-icon color='orange' name='edit'/> {{$t('common.edit')}}
 
     //- COMMENTS ... 
     //- b-navbar(type="dark" variant="dark" toggleable='lg')
@@ -34,10 +34,17 @@
         //- span.mr-3 {{event.comments.length}} <v-icon name='comments'/>
         //- a(href='#', @click='remove')
           v-icon(color='orange' name='times')
-      //- b-card-footer(v-for='comment in event.comments')
-        strong {{comment.author}}
-        div(v-html='comment.text')
+    //- el-footer(v-for='comment in event.comments')
+      strong {{comment.author}}
+      div(v-html='comment.text')
 
+    //- el-timeline
+    //-   el-timeline-item(v-for='comment in event.comments')
+    //-     p(v-html='comment.text')
+    //-     a.el-timeline-item__timestamp(href='') {{comment.createdAt}}
+    strong {{$t('common.comments')}}
+      div.text.item(v-for='comment in event.comments')
+        span(v-html='comment.text')
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
@@ -46,13 +53,27 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'Event',
+  head () {
+    return {
+      title: this.event.title,
+      meta: [
+        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+        { hid: 'description', name: 'description', content: this.event.description },
+        { hid: 'og-description', name: 'og:description', content: this.event.description },
+        { hid: 'og-title', property: 'og:title', content: this.event.title },   
+        { hid: 'og-url', property: 'og:url', content: `event/${this.event.id}` },   
+        { property: 'og:type', content: 'event'},
+        { property: 'og:image', content: this.imgPath }
+      ]
+    }
+  },
   computed: {
-    ...mapState(['user']),
+    ...mapState([]),
     imgPath () {
-      return this.event.image_path && process.env.VUE_APP_API + '/uploads/' + this.event.image_path
+      return this.event.image_path && '/media/' + this.event.image_path
     },    
     mine () {
-      return this.event.userId === this.user.id || this.user.is_admin
+      return this.event.userId === this.$auth.user.id || this.$auth.user.is_admin
     }
   },
   data () {
@@ -90,11 +111,9 @@ export default {
       try {
         if (this.event.is_visible) {
           await this.$axios.$get(`/event/unconfirm/${this.id}`)
-          // await api.unconfirmEvent(this.id)
           this.event.is_visible = false
         } else {
           await this.$axios.$get(`/event/confirm/${this.id}`)
-          // await api.confirmEvent(this.id)
           this.event.is_visible = true
         }
       } catch (e) {

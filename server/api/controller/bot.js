@@ -1,17 +1,29 @@
-// const { User, Event, Comment, Tag } = require('../model')
+const { User, Event, Comment, Tag } = require('../model')
 const config = require('../config')
 const Mastodon = require('mastodon-api')
 // const Sequelize = require('sequelize')
 // const Op = Sequelize.Op
+const settingsController = require('./settings')
 const fs = require('fs')
 const path = require('path')
 const moment = require('moment')
 moment.locale('it')
 
 const botController = {
-  bots: [],
-  // async initialize () {
-  //   console.log('initialize bots')
+  bot: null,
+  async initialize () {
+    console.log('initialize bot')
+    const settings = await settingsController.settings()
+    if (!settings.mastodon_auth) return
+    const mastodon_auth = settings.mastodon_auth
+    console.log('instance ', `https://${mastodon_auth.instance}/api/v1/`)
+    botController.bot = new Mastodon({ 
+      access_token: mastodon_auth.access_token,
+      api_url: `https://${mastodon_auth.instance}/api/v1`
+    })
+    const listener = botController.bot.stream('/streaming/direct')
+    listener.on('message', botController.message)
+    listener.on('error', botController.error)
   //   const botUsers = await User.findAll({ where: { mastodon_auth: { [Op.ne]: null } } })
   //   console.log(botUsers)
   //   botController.bots = botUsers.map(user => {
@@ -21,7 +33,6 @@ const botController = {
   //     const bot = new Mastodon({ access_token, api_url: `https://${user.mastodon_instance}/api/v1/` })
   //     const listener = bot.stream('streaming/direct')
   //     listener.on('message', botController.message)
-  //     listener.on('error', botController.error)
   //     return { email: user.email, bot }
   //   })
   // console.log(botController.bots)
@@ -32,8 +43,9 @@ const botController = {
   //   listener.on('message', botController.message)
   //   listener.on('error', botController.error)
   //   botController.bots.push({ email: user.email, bot })
-  // },
+  },
   async post (mastodon_auth, event) {
+    console.log('dentro post!')
     const { access_token, instance } = mastodon_auth
     const bot = new Mastodon({ access_token, api_url: `https://${instance}/api/v1/` })
     const status = `${event.title} @ ${event.place.name} ${moment(event.start_datetime).format('ddd, D MMMM HH:mm')} - 
@@ -41,28 +53,30 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
 
     let media
     if (event.image_path) {
-      const file = path.join(__dirname, '..', '..', 'uploads', event.image_path)
+      const file = path.join(__dirname, '..', '..', '..', 'uploads', event.image_path)
       if (fs.statSync(file)) {
         media = await bot.post('media', { file: fs.createReadStream(file) })
       }
     }
-    return bot.post('statuses', { status, visibility: 'public', media_ids: media ? [media.data.id] : [] })
-  }
-  // async message (msg) {
-  //   console.log(msg)
-  //   console.log(msg.data.accounts)
-  //   const replyid = msg.data.in_reply_to_id || msg.data.last_status.in_reply_to_id
-  //   if (!replyid) return
-  // const event = await Event.findOne({ where: { activitypub_id: replyid } })
-  // if (!event) {
-  // check for comment..
-  // const comment = await Comment.findOne( {where: { }})
-  // }
-  // const comment = await Comment.create({activitypub_id: msg.data.last_status.id, text: msg.data.last_status.content, author: msg.data.accounts[0].username })
-  // event.addComment(comment)
-  // console.log(event)
-  // const comment = await Comment.findOne( { where: {activitypub_id: msg.data.in_reply_to}} )
-  // console.log('dentro message ', data)
+    return bot.post('statuses', { status, visibility: 'direct', media_ids: media ? [media.data.id] : [] })
+  },
+  async message (msg) {
+    console.log(msg)
+    console.log(msg.data.accounts)
+    const replyid = msg.data.in_reply_to_id || msg.data.last_status.in_reply_to_id
+    if (!replyid) return
+    const event = await Event.findOne({ where: { activitypub_id: replyid } })
+    if (!event) {
+      console.error('associated event not found !')
+      // check for comment..
+      // const comment = await Comment.findOne( {where: { }})
+      return 
+    }
+    const comment = await Comment.create({activitypub_id: msg.data.last_status.id, text: msg.data.last_status.content, author: msg.data.accounts[0].username })
+    event.addComment(comment)
+    console.log(event)
+    // const comment = await Comment.findOne( { where: {activitypub_id: msg.data.in_reply_to}} )
+    // console.log('dentro message ', data)
 
   // add comment to specified event
   // let comment
@@ -72,11 +86,11 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
   // }
   // const comment = new Comment(req.body)
   // event.addComment(comment)
-  // },
-  // error (err) {
-  //   console.log('error ', err)
-  // }
+  },
+  error (err) {
+    console.log('error ', err)
+  }
 }
 
-// setTimeout(botController.initialize, 2000)
+setTimeout(botController.initialize, 2000)
 module.exports = botController

@@ -32,6 +32,8 @@ const exportController = {
         return exportController.feed(res, events.slice(0, 20))
       case 'ics':
         return exportController.ics(res, events)
+      case 'json':
+        return res.json(events)
     }
   },
 

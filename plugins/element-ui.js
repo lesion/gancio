@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import { Button, Select, Tag, Option, Table, FormItem, Card,
   Form, Tabs, TabPane, Switch, Input, Loading, TimeSelect,
-  TableColumn, ColorPicker, Pagination, Popover } from 'element-ui'
+  TableColumn, ColorPicker, Pagination, Popover, Tooltip,
+  Container, Footer , Timeline, TimelineItem} from 'element-ui'
 import localeEn from 'element-ui/lib/locale/lang/en'
 import localeIt from 'element-ui/lib/locale/lang/it'
 import locale from 'element-ui/lib/locale'
@@ -9,6 +10,11 @@ locale.use(localeIt)
 
 export default () => {
   Vue.use(Button)
+  Vue.use(Container)
+  Vue.use(Timeline)
+  Vue.use(TimelineItem)
+  Vue.use(Footer)
+  Vue.use(Tooltip)
   Vue.use(Popover)
   Vue.use(Card)
   Vue.use(Select)

@@ -5,9 +5,9 @@
       :img-src='imgPath')
         strong {{event.title}}
         div <v-icon name='clock'/> {{event.start_datetime|datetime}}
-        //- span <v-icon name='map-marker-alt'/> {{event.place.name}}
+        span <v-icon name='map-marker-alt'/> {{event.place.name}}
         br
-        el-tag.mr-1(:color='tag.color || "grey"' v-for='tag in event.tags' :key='tag.tag'
+        el-tag.mr-1(:color='tag.color' v-for='tag in event.tags' :key='tag.tag'
           size='small' @click.stop='addSearchTag(tag)') {{tag.tag}}
 </template>
 <script>
@@ -20,7 +20,7 @@ export default {
   computed: {
     ...mapState(['user']),
     imgPath() {
-      return this.event.image_path && '/uploads/thumb/' + this.event.image_path
+      return this.event.image_path && '/media/thumb/' + this.event.image_path
     },
     mine() {
       return this.event.userId === this.user.id

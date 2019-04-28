@@ -9,8 +9,9 @@ const Event = db.define('event', {
   start_datetime: { type: Sequelize.DATE, index: true },
   end_datetime: { type: Sequelize.DATE, index: true },
   image_path: Sequelize.STRING,
+  is_visible: Sequelize.BOOLEAN,
   activitypub_id: { type: Sequelize.INTEGER, index: true },
-  is_visible: Sequelize.BOOLEAN
+  // activitypub_ids: { type: Sequelize.ARRAY, index}
 })
 
 const Tag = db.define('tag', {
@@ -20,6 +21,8 @@ const Tag = db.define('tag', {
 
 const Comment = db.define('comment', {
   activitypub_id: { type: Sequelize.INTEGER, index: true },
+  url: Sequelize.STRING,
+  media_attachments: { type: Sequelize.ARRAY(Sequelize.STRING) },
   author: Sequelize.STRING,
   text: Sequelize.STRING
 })
@@ -63,10 +66,10 @@ Event.belongsTo(Place)
 User.hasMany(Event)
 Place.hasMany(Event)
 
-// async function init() {
-//   await Notification.findOrCreate({ where: { type: 'mastodon', filters: { is_visible: true } } })
-//   await Notification.findOrCreate({ where: { type: 'admin_email', filters: { is_visible: false } } })
-// }
+async function init() {
+  await Notification.findOrCreate({ where: { type: 'mastodon', filters: { is_visible: true } } })
+  // await Notification.findOrCreate({ where: { type: 'admin_email', filters: { is_visible: false } } })
+}
 
-// init()
+init()
 module.exports = { Event, Comment, Tag, Place, Notification, EventNotification }

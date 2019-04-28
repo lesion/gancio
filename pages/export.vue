@@ -1,53 +1,58 @@
 <template lang="pug">
   b-modal(ref='modal' @hidden='$router.replace("/")' 
-    :title='$t("Export")' :visible='true' size='lg' hide-footer)
-    p {{$t('export_intro')}}
+    :title='$t("common.export")' :visible='true' size='lg' hide-footer)
+    p {{$t('export.intro')}}
     
-    li(v-if='filters.tags.length') {{$t('Tags')}}:
+    li(v-if='filters.tags.length') {{$t('common.tags')}}:
       el-tag.ml-1(color='#409EFF' size='mini' v-for='tag in filters.tags' :key='tag.tag') {{tag}}
-    li(v-if='filters.places.length') {{$t('Places')}}:
+    li(v-if='filters.places.length') {{$t('common.places')}}:
       el-tag.ml-1(color='#409EFF' size='mini' v-for='place in filters.places' :key='place.id') {{place}}
     el-tabs.mt-2(tabPosition='left' v-model='type')
 
       el-tab-pane.pt-1(label='email' name='email')
-        p(v-html='$t(`export_email_explanation`)')
+        p(v-html='$t(`export.email_description`)')
         el-form(@submit.native.prevent)
           //- el-switch(v-model='notification.notify_on_add' :active-text="$t('notify_on_insert')")
           //- br
           //- el-switch.mt-2(v-model='notification.send_notification' :active-text="$t('send_notification')") 
-          el-input.mt-2(v-model='notification.email' :placeholder="$t('Insert your address')" ref='email')
+          el-input.mt-2(v-model='notification.email' :placeholder="$t('common.insert_your_address')" ref='email')
           el-button.mt-2.float-right(native-type= 'submit' type='success' @click='add_notification') {{$t('Send')}}
 
       el-tab-pane.pt-1(label='feed rss' name='feed')
-        span(v-html='$t(`export_feed_explanation`)')
+        span(v-html='$t(`export.feed_description`)')
         el-input(v-model='link')
-          el-button(slot='append' plain type="primary" icon='el-icon-document' v-clipboard:copy="link") {{$t("Copy")}}
+          el-button(slot='append' plain type="primary" icon='el-icon-document' v-clipboard:copy="link") {{$t("common.copy")}}
 
       el-tab-pane.pt-1(label='ics/ical' name='ics')
-        p(v-html='$t(`export_ical_explanation`)')
+        p(v-html='$t(`export.ical_description`)')
         el-input(v-model='link')
-          el-button(slot='append' plain type="primary" icon='el-icon-document' v-clipboard:copy="link") {{$t("Copy")}}
+          el-button(slot='append' plain type="primary" icon='el-icon-document' v-clipboard:copy="link") {{$t("common.opy")}}
 
       el-tab-pane.pt-1(label='list' name='list')
-        p(v-html='$t(`export_list_explanation`)')
-        el-card.mb-1(no-body header='Eventi')
-          b-list-group#list(flush)
-            b-list-group-item.flex-column.align-items-start(v-for="event in filteredEvents" :key='event.id'
-              :to='`/event/${event.id}`')
-                //- b-media
-                  img(v-if='event.image_path' slot="aside" :src="imgPath(event)" alt="Meia Aside" style='max-height: 60px')
-                small.float-right {{event.start_datetime|datetime}}
-                strong.mb-1 {{event.title}}
-                br
-                small.float-right {{event.place.name}}
-                el-tag.mr-1(:color='tag.color || "grey"' size='mini' v-for='tag in event.tags' :key='tag.tag') {{tag.tag}}
+        p(v-html='$t(`export.list_description`)')
+        //- el-form-item(:label="$t('export.show_tags')")
+        el-switch(v-model='list.show_tags')
+        
+        iframe(:src='`http://localhost:3000/embed/list?tags=cia&showtags=${list.show_tags?"true":""}`' height='300')
+        //- el-card.mb-1(no-body header='Eventi')
+        //-   b-list-group#list(flush)
+        //-     b-list-group-item.flex-column.align-items-start(v-for="event in filteredEvents" :key='event.id'
+        //-       :to='`/event/${event.id}`')
+        //-         //- b-media
+        //-           img(v-if='event.image_path' slot="aside" :src="imgPath(event)" alt="Meia Aside" style='max-height: 60px')
+        //-         small.float-right {{event.start_datetime|datetime}}
+        //-         strong.mb-1 {{event.title}}
+        //-         br
+        //-         small.float-right {{event.place.name}}
+        //-         el-tag.mr-1(:color='tag.color || "grey"' size='mini' v-for='tag in event.tags' :key='tag.tag') {{tag.tag}}
         el-input.mb-1(type='textarea' v-model='script')
         el-button.float-right(plain type="primary" icon='el-icon-document' v-clipboard:copy="script") Copy
 
 
       el-tab-pane.pt-1(label='calendar' name='calendar')
-        p(v-html='$t(`export_calendar_explanation`)')
-        Calendar.mb-1
+        p(v-html='$t(`export.calendar_description`)')
+        //- no-ssr
+          Calendar.mb-1
         el-input.mb-1(type='textarea' v-model='script')
         el-button.float-right(plain type="primary" icon='el-icon-document' v-clipboard:copy="script") Copy
 
@@ -57,13 +62,14 @@ import { mapState } from 'vuex'
 import path from 'path'
 // import filters from '../filters'
 import Calendar from '@/components/Calendar'
+import List from '@/components/List'
 import {intersection} from 'lodash'
 // import api from '@/api'
 import { Message } from 'element-ui'
 
 export default {
   name: 'Export',
-  components: { Calendar },
+  components: { List },
   data () {
     return {
       type: 'email',
@@ -71,6 +77,7 @@ export default {
       export_list: true,
       script: `<iframe>Ti piacerebbe</iframe>`,
       notification: { email: '' },
+      list: { show_tags: true },
     }
   },
   // filters,
@@ -113,7 +120,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(['filters', 'user', 'logged', 'events']),
+    ...mapState(['filters', 'events']),
     filteredEvents () {
       return this.$store.getters.filteredEvents.filter(e => !e.past)
     },

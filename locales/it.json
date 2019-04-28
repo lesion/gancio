@@ -17,7 +17,25 @@
     "next": "Avanti",
     "what": "Cosa",
     "address": "Indirizzo",
-    "media": "Media"
+    "media": "Media",
+    "today": "Oggi",
+    "users": "Utenti",
+    "places": "Posti",
+    "events": "Eventi",
+    "tags": "Etichette",
+    "deactivate": "Disattiva",
+    "activate": "Attiva",
+    "remove_admin": "Rimuovi Admin",
+    "name": "Nome",
+    "save": "Salva",
+    "confirm": "Conferma",
+    "tag": "Etichetta",
+    "color": "Colore",
+    "associate": "Associa",
+    "hide": "Nascondi",
+    "remove": "Elimina",
+    "edit": "Modifica",
+    "actions": "Azioni"
   },
 
   "login": {
@@ -41,6 +59,14 @@
     "where_description" : "Dov'è il gancio? Se è un luogo fisico, scrivi il suo nome del per esteso (tipo 'Mezcal Squat'), se è una Piazza/Via metti quella (tipo 'Piazza Castello, Torino'). Se trovi già il luogo dell'evento premilo e l'indirizzo verrà autocompletato.",
     "address_description": "",
     "tag_description": "Puoi inserire un tag (es. concerto, corteo)"
+  },
+
+  "admin": {
+    "event_confirm_description": "Qui puoi confermare gli eventi inseriti da utenti non iscritti",
+    "tag_description": "Cambia il colore delle etichette",
+    "place_description": "Modifica l'indirizzo di un posto",
+    "mastodon_description": "Puoi associare un account mastodon a questa istanza di gancio. Tutti gli eventi verranno pubblicati li'",
+    "mastodon_instance": "Istanza mastodon"
   }
 }
 

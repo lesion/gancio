@@ -6,11 +6,11 @@ module.exports = {
   locale: process.env.LOCALE || 'it',
   title: process.env.TITLE || 'GANCIO',
   description: process.env.DESCRIPTION || 'A calendar for radical communities',
-  baseurl: process.env.BASE_URL || 'http://localhost:8080',
+  baseurl: process.env.BASE_URL || 'http://localhost:3000',
   apiurl:
     env === 'production'
       ? process.env.BASE_URL + '/api'
-      : 'http://localhost:9000',
+      : 'http://localhost:3000/api',
   db,
   admin: process.env.ADMIN_EMAIL,
 

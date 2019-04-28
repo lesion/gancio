@@ -136,7 +136,6 @@ const eventController = {
   },
 
   async getAll(req, res) {
-    console.log('sono qui dentro !')
     // this is due how v-calendar shows dates
     const start = moment().year(req.params.year).month(req.params.month)
       .startOf('month').startOf('isoWeek')
@@ -145,20 +144,20 @@ const eventController = {
     if (shownDays <= 34) end = end.add(1, 'week')
     end = end.endOf('isoWeek')
     const events = await Event.findAll({
-      // where: {
-        // is_visible: true,
-        // [Op.and]: [
-          // { start_datetime: { [Op.gte]: start } },
-          // { start_datetime: { [Op.lte]: end } }
-        // ]
-      // },
-      // order: [['start_datetime', 'ASC']],
-      // include: [
-        // { model: User, required: false },
-        // Comment,
-        // Tag,
-        // { model: Place, required: false }
-      // ]
+      where: {
+        is_visible: true,
+        [Op.and]: [
+          { start_datetime: { [Op.gte]: start } },
+          { start_datetime: { [Op.lte]: end } }
+        ]
+      },
+      order: [['start_datetime', 'ASC']],
+      include: [
+        { model: User, required: false },
+        Comment,
+        Tag,
+        { model: Place, required: false }
+      ]
     })
     // console.log(events)
     res.json(events)

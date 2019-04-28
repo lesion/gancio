@@ -41,8 +41,8 @@ module.exports = {
   plugins: ['@/plugins/element-ui', '@/plugins/filters',
     '@/plugins/i18n', '@/plugins/bootstrap-vue',
     '@/plugins/vue-awesome',
-    '@/plugins/v-calendar',
-    { src: '@/plugins/vuex-persist', ssr: false },
+    { src: '@/plugins/v-calendar', ssr: false },
+    { src: '@/plugins/vuex-persist.js', ssr: false },
     '@/plugins/magic-grid'],
 
   /*
@@ -68,7 +68,7 @@ module.exports = {
         endpoints: {
           login: { url: '/auth/login', method: 'post', propertyName: 'token' },
           logout: { url: '/auth/logout', method: 'post' },
-          user: { url: '/auth/user', method: 'get', propertyName: 'user' }
+          user: { url: '/auth/user', method: 'get', propertyName: false }
         },
         // tokenRequired: true,
         // tokenType: 'bearer',
