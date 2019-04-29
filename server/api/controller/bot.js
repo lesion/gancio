@@ -72,7 +72,12 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
       // const comment = await Comment.findOne( {where: { }})
       return 
     }
-    const comment = await Comment.create({activitypub_id: msg.data.last_status.id, text: msg.data.last_status.content, author: msg.data.accounts[0].username })
+    const comment = await Comment.create({
+      activitypub_id: msg.data.last_status.id, 
+      text: msg.data.last_status.content,
+      data: msg.data,
+      author: msg.data.accounts[0].username 
+    })
     event.addComment(comment)
     console.log(event)
     // const comment = await Comment.findOne( { where: {activitypub_id: msg.data.in_reply_to}} )

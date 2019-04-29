@@ -35,7 +35,9 @@
     "hide": "Nascondi",
     "remove": "Elimina",
     "edit": "Modifica",
-    "actions": "Azioni"
+    "actions": "Azioni",
+    "resources": "Risorse",
+    "add": "Aggiungi"
   },
 
   "login": {
@@ -58,7 +60,8 @@
     "anon_description": "",
     "where_description" : "Dov'è il gancio? Se è un luogo fisico, scrivi il suo nome del per esteso (tipo 'Mezcal Squat'), se è una Piazza/Via metti quella (tipo 'Piazza Castello, Torino'). Se trovi già il luogo dell'evento premilo e l'indirizzo verrà autocompletato.",
     "address_description": "",
-    "tag_description": "Puoi inserire un tag (es. concerto, corteo)"
+    "tag_description": "Puoi inserire un tag (es. concerto, corteo)",
+    "added": "Avento aggiunto"
   },
 
   "admin": {
@@ -69,4 +72,3 @@
     "mastodon_instance": "Istanza mastodon"
   }
 }
-

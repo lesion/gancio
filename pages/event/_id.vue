@@ -14,7 +14,6 @@
         br
       b-card-body(v-if='event.description || event.tags')
         pre(v-html='event.description')
-        br
         el-tag.mr-1(:color='tag.color' v-for='tag in event.tags'
           size='mini' :key='tag.tag') {{tag.tag}}
         div(v-if='mine')
@@ -24,27 +23,17 @@
           el-button(plain type='danger' @click.prevent='remove' icon='el-icon-remove') {{$t('common.remove')}} 
           el-button(plain type='primary' @click='$router.replace("/edit/"+event.id)') <v-icon color='orange' name='edit'/> {{$t('common.edit')}}
 
-    //- COMMENTS ... 
-    //- b-navbar(type="dark" variant="dark" toggleable='lg')
-    //- template(slot='footer')
-      //- b-navbar-nav
-        //- b-button(variant='success') {{$t('Share')}} <v-icon name='share'/>
-        //- b-nav-item( {{$t('')}})
-      //- b-card-footer.text-right
-        //- span.mr-3 {{event.comments.length}} <v-icon name='comments'/>
-        //- a(href='#', @click='remove')
-          v-icon(color='orange' name='times')
-    //- el-footer(v-for='comment in event.comments')
-      strong {{comment.author}}
-      div(v-html='comment.text')
-
-    //- el-timeline
-    //-   el-timeline-item(v-for='comment in event.comments')
-    //-     p(v-html='comment.text')
-    //-     a.el-timeline-item__timestamp(href='') {{comment.createdAt}}
-    strong {{$t('common.comments')}}
-      div.text.item(v-for='comment in event.comments')
-        span(v-html='comment.text')
+    b-card-body(v-if='event.activitypub_id')
+      strong {{$t('common.resources')}} - 
+      a(:href='`https://mastodon.cisti.org/web/statuses/${event.activitypub_id}`') {{$t('common.add')}}
+    b-card-header(v-for='comment in event.comments' :key='comment.id')
+      img.avatar(:src='comment.data.last_status.account.avatar') 
+      strong  {{comment.author}} 
+      a.float-right(:href='comment.data.last_status.url')
+        small  {{comment.data.last_status.created_at|datetime}}
+      div.mt-1(v-html='comment_filter(comment.text)')
+      img(v-for='img in comment.data.last_status.media_attachments' :src='img.preview_url')
+      //- span {{comment}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
@@ -74,7 +63,7 @@ export default {
     },    
     mine () {
       return this.event.userId === this.$auth.user.id || this.$auth.user.is_admin
-    }
+    },
   },
   data () {
     return {
@@ -83,25 +72,25 @@ export default {
       loading: true,
     }
   },
-  // mounted () {
-  //   this.id = this.$route.params.id
-  //   this.load()
-  // },
   async asyncData ( { $axios, params }) {
-    console.error('daje dentro asyncData!')
-    console.error('async data porcod')
     const event = await $axios.$get(`/event/${params.id}`)
-    // this.event = event
-    // this.loading = false
     return { event, id: params.id, loading: false }
   },
   methods: {
     ...mapActions(['delEvent']),
-    // async load () {
-    //   const event = await this.api.getEvent(this.id)
-    //   this.event = event
-    //   this.loading = false
-    // },
+    comment_filter (value) {
+      console.log('dentro comment_filter')
+      return value.replace(/<a.*href="([^">]+).*>(?:.(?!\<\/a\>))*.<\/a>/, (orig, url) => {
+        // get extension
+        const ext = url.slice(-4)
+        console.log('dentro il replace ', ext)
+        if (['.mp3', '.ogg'].indexOf(ext)>-1) {
+          return `<audio controls><source src='${url}'></audio>`
+        } else {
+          return orig
+        }
+      })
+    },
     async remove () {
       await api.delEvent(this.event.id)
       this.delEvent(this.event.id)
@@ -125,6 +114,15 @@ export default {
 </script>
 <style>
 
+#eventDetail .avatar {
+  height: 40px;
+  border-radius: 5px;
+}
+
+#eventDetail .image {
+  max-height: 200px;
+}
+
 /* #eventDetail {
   display: block !important;
   opacity: 1;
@@ -144,10 +142,10 @@ export default {
 }
 
 #eventDetail .close_button {
-  background-color: rgba(100, 100, 100, 0.4);
+  background-color: rgba(100, 100, 100, 0.3);
   color: red;
   font-size: 20px;
-  border: none;
+  border: 1px dashed rgba(20,20,20,0.3);
   position: absolute;
   top: 10px;
   right: 10px;

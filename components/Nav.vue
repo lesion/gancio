@@ -10,7 +10,7 @@
           span.d-md-none  {{$t('common.add_event')}}
         b-nav-item(v-if='$auth.loggedIn' to='/settings' v-b-tooltip :title='$t("common.settings")') <v-icon color='orange' name='cog'/>
           span.d-md-none  {{$t('common.settings')}}
-        b-nav-item(v-if='$auth.user.is_admin' to='/admin' v-b-tooltip :title='$t("common.admin")') <v-icon color='lightblue' name='tools'/>
+        b-nav-item(v-if='$auth.user && $auth.user.is_admin' to='/admin' v-b-tooltip :title='$t("common.admin")') <v-icon color='lightblue' name='tools'/>
           span.d-md-none  {{$t('common.admin')}}
         b-nav-item(to='/export' v-b-tooltip :title='$t("common.export")') <v-icon name='file-export' color='yellow'/>
           span.d-md-none  {{$t('common.export')}}

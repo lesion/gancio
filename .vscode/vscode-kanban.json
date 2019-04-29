@@ -32,6 +32,17 @@
       "prio": 0,
       "references": [],
       "title": "export lista"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:56:46.263Z",
+      "id": "11",
+      "prio": 1,
+      "references": [],
+      "title": "get comments / media from mastodon"
     }
   ],
   "testing": [
@@ -77,17 +88,6 @@
         "name": "lesion"
       },
       "category": "feature",
-      "creation_time": "2019-04-23T19:56:46.263Z",
-      "id": "11",
-      "prio": 1,
-      "references": [],
-      "title": "get comments / media from mastodon"
-    },
-    {
-      "assignedTo": {
-        "name": "lesion"
-      },
-      "category": "feature",
       "creation_time": "2019-04-23T19:45:27.613Z",
       "description": {
         "content": "probabilmente devo far diventare il campo senza timezone",
@@ -119,6 +119,15 @@
       "assignedTo": {
         "name": "lesion"
       },
+      "creation_time": "2019-04-29T10:01:01.632Z",
+      "id": "14",
+      "references": [],
+      "title": "gestione errori quando non c'e' un evento"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
       "category": "feature",
       "creation_time": "2019-04-23T19:44:56.705Z",
       "id": "1",
@@ -133,6 +142,15 @@
       "id": "12",
       "references": [],
       "title": "rifare il calendario o solo il popup"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-04-28T09:25:50.701Z",
+      "id": "13",
+      "references": [],
+      "title": "test altra visualizzazione"
     },
     {
       "assignedTo": {
@@ -156,15 +174,6 @@
       "references": [],
       "title": "documentare sorgenti",
       "type": "bug"
-    },
-    {
-      "assignedTo": {
-        "name": "lesion"
-      },
-      "creation_time": "2019-04-28T09:25:50.701Z",
-      "id": "13",
-      "references": [],
-      "title": "test altra visualizzazione"
     }
   ]
 }
