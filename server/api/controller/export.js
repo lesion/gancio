@@ -1,6 +1,6 @@
 const { Event, Comment, Tag, Place } = require('../model')
 const { Op } = require('sequelize')
-const config = require('../config')
+const config = require('../../../config')
 const moment = require('moment')
 const ics = require('ics')
 

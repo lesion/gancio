@@ -5,6 +5,17 @@
         "name": "lesion"
       },
       "category": "feature",
+      "creation_time": "2019-04-23T19:47:35.777Z",
+      "id": "5",
+      "prio": 3,
+      "references": [],
+      "title": "server side auth"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
       "creation_time": "2019-04-23T19:50:00.973Z",
       "description": {
         "content": "- export page ok\n- usare un'altra api per retrieve di eventi (perche' devo mostrarli tutti, non solo quelli del mese corrente)\n- non devo fare il load degli eventi nel nuxtServerInit (o dentro il layout normale oppure nelle pagine, tipo nella home)",
@@ -19,19 +30,6 @@
       "references": [],
       "title": "export page",
       "type": "bug"
-    }
-  ],
-  "in-progress": [
-    {
-      "assignedTo": {
-        "name": "lesion"
-      },
-      "category": "feature",
-      "creation_time": "2019-04-23T19:46:46.332Z",
-      "id": "3",
-      "prio": 0,
-      "references": [],
-      "title": "export lista"
     },
     {
       "assignedTo": {
@@ -43,21 +41,31 @@
       "prio": 1,
       "references": [],
       "title": "get comments / media from mastodon"
-    }
-  ],
-  "testing": [
+    },
     {
       "assignedTo": {
         "name": "lesion"
       },
       "category": "feature",
-      "creation_time": "2019-04-23T19:47:35.777Z",
-      "id": "5",
-      "prio": 3,
+      "creation_time": "2019-04-23T19:46:46.332Z",
+      "id": "3",
+      "prio": 0,
       "references": [],
-      "title": "server side auth"
+      "title": "export lista"
     }
   ],
+  "in-progress": [
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-04-30T12:31:20.056Z",
+      "id": "15",
+      "references": [],
+      "title": "test deploy"
+    }
+  ],
+  "testing": [],
   "todo": [
     {
       "assignedTo": {
@@ -174,6 +182,15 @@
       "references": [],
       "title": "documentare sorgenti",
       "type": "bug"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-04-30T12:46:42.208Z",
+      "id": "16",
+      "references": [],
+      "title": "riesco a rimuovere bootstrap-vue e usare solo element ?"
     }
   ]
 }

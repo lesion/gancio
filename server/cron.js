@@ -20,7 +20,6 @@ async function sendNotification (notification, event, eventNotification) {
       // instance publish
       if (settings.mastodon_auth.instance && settings.mastodon_auth.access_token) {
         const b = bot.post(settings.mastodon_auth, event).then(b => {
-          console.log('ho postato admin post cose', b.data.id)
           event.activitypub_id = b.data.id
           return event.save()
         })

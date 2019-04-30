@@ -1,8 +1,8 @@
 const Email = require('email-templates')
 const path = require('path')
-const config = require('./config')
+const config = require('../../config')
 const moment = require('moment')
-moment.locale('it')
+moment.locale(config.locale)
 
 const mail = {
   send (addresses, template, locals) {

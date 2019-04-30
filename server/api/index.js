@@ -5,7 +5,7 @@ const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 const userController = require('./controller/user')
 const settingsController = require('./controller/settings')
-const config = require('./config')
+const config = require('../../config')
 
 const botController = require('./controller/bot')
 const jwt = require('express-jwt')({secret: config.secret})

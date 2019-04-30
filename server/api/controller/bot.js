@@ -1,5 +1,5 @@
 const { User, Event, Comment, Tag } = require('../model')
-const config = require('../config')
+const config = require('../../../config')
 const Mastodon = require('mastodon-api')
 // const Sequelize = require('sequelize')
 // const Op = Sequelize.Op
@@ -12,11 +12,9 @@ moment.locale('it')
 const botController = {
   bot: null,
   async initialize () {
-    console.log('initialize bot')
     const settings = await settingsController.settings()
     if (!settings.mastodon_auth) return
     const mastodon_auth = settings.mastodon_auth
-    console.log('instance ', `https://${mastodon_auth.instance}/api/v1/`)
     botController.bot = new Mastodon({ 
       access_token: mastodon_auth.access_token,
       api_url: `https://${mastodon_auth.instance}/api/v1`
@@ -45,7 +43,6 @@ const botController = {
   //   botController.bots.push({ email: user.email, bot })
   },
   async post (mastodon_auth, event) {
-    console.log('dentro post!')
     const { access_token, instance } = mastodon_auth
     const bot = new Mastodon({ access_token, api_url: `https://${instance}/api/v1/` })
     const status = `${event.title} @ ${event.place.name} ${moment(event.start_datetime).format('ddd, D MMMM HH:mm')} - 
@@ -67,7 +64,6 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
     if (!replyid) return
     const event = await Event.findOne({ where: { activitypub_id: replyid } })
     if (!event) {
-      console.error('associated event not found !')
       // check for comment..
       // const comment = await Comment.findOne( {where: { }})
       return 
@@ -79,7 +75,6 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
       author: msg.data.accounts[0].username 
     })
     event.addComment(comment)
-    console.log(event)
     // const comment = await Comment.findOne( { where: {activitypub_id: msg.data.in_reply_to}} )
     // console.log('dentro message ', data)
 

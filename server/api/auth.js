@@ -1,5 +1,5 @@
 const { Op } = require('sequelize')
-const config = require('./config')
+const config = require('../../config')
 const User = require('./models/user')
 
 const Auth = {

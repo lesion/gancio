@@ -57,6 +57,7 @@ module.exports = {
    ** Axios module configuration
    */
   axios: {
+    baseURL: '',
     prefix: '/api',
     credentials: true
     // See https://github.com/nuxt-community/axios-module#options
@@ -70,11 +71,11 @@ module.exports = {
           logout: { url: '/auth/logout', method: 'post' },
           user: { url: '/auth/user', method: 'get', propertyName: false }
         },
-        // tokenRequired: true,
-        // tokenType: 'bearer',
       }
     }
   },
+
+
   /*
    ** Build configuration
    */
