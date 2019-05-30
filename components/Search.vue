@@ -1,23 +1,64 @@
 <template lang="pug">
-  div
-    el-select.mr-1(v-model='filters_places' multiple filterable collapse-tags
-      default-first-option :placeholder='$t("Where")')
-      el-option(v-for='place in places' :value='place.name'
-        :label='place.name' :key='place.id')
-    el-select(v-model='filters_tags' multiple filterable collapse-tags
-      default-first-option :placeholder='$t("Tags")')
-      el-option(v-for='tag in tags' :key='tag.tag'
-        :label='tag.tag' :value='tag.tag') 
+  div.ml-2.mt-1
+    el-switch.mb-1(v-if='$auth.loggedIn'
+      active-text='solo miei'
+      inactive-text='tutti'
+      inactive-color='lightgreen'
+      v-model='onlyMine'
+    )
+    el-switch.mt-1.mb-1.ml-2.d-block(
+      inactive-text='futuri'
+      active-text='anche passati'
+      inactive-color='lightgreen'
+      v-model='showPast'
+    )
+
+    el-select.search(v-model='filter' multiple 
+      filterable collapse-tags default-first-option
+      :placeholder='$t("common.search")')
+      el-option(v-for='(keyword, id) in keywords' :key='keyword.value'
+        :label='keyword.label' :value='keyword.value')
+
 </template>
 
 <script>
 import {mapState, mapActions} from 'vuex'
 
 export default {
+  data () {
+    return {
+      onlyMine: false,
+      withPast: true,
+    }
+  },
   name :'Search',
-  methods: mapActions(['setSearchPlaces', 'setSearchTags']),
+  methods: mapActions(['setSearchPlaces', 'setSearchTags', 'showPastEvents']),
   computed: {
-    ...mapState(['tags', 'places', 'filters']),
+    ...mapState(['tags', 'places', 'filters', 'show_past_events']),
+    keywords () {
+      const tags = this.tags.map( t => ({ value: 't' + t.tag, label: t.tag, count: +t.eventsCount }))
+      const places = this.places.map( p => ({ value: 'p' + p.id, label: p.name, count: +p.eventsCount }))
+      return tags.concat(places)
+    },
+    showPast : {
+      set (value) {
+        this.showPastEvents(value)
+      },
+      get () {
+        return this.show_past_events
+      }
+    },
+    filter: {
+      set (filters) {
+        const tags = filters.filter(f => f[0] === 't').map(t => t.slice(1))
+        this.setSearchTags(tags)
+        const places = filters.filter(f => f[0] === 'p').map(p => +p.slice(1))
+        this.setSearchPlaces(places)
+      },
+      get () {
+        return this.filters.tags.map(t => 't' + t).concat(this.filters.places.map(p => 'p' + p))
+      }
+    },
     filters_tags: {
       set (value) {
         this.setSearchTags(value)
@@ -37,3 +78,5 @@ export default {
   }
 }
 </script>
+<style lang="less">
+</style>

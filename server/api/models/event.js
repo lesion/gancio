@@ -10,19 +10,23 @@ const Event = db.define('event', {
   end_datetime: { type: Sequelize.DATE, index: true },
   image_path: Sequelize.STRING,
   is_visible: Sequelize.BOOLEAN,
-  activitypub_id: { type: Sequelize.STRING, index: true },
-  // activitypub_ids: { type: Sequelize.ARRAY, index}
+  activitypub_id: { type: Sequelize.BIGINT, index: true },
+  activitypub_ids: { 
+    type: Sequelize.ARRAY(Sequelize.BIGINT),
+    index: true,
+    defaultValue: []
+  }
 })
 
 const Tag = db.define('tag', {
-  tag: { type: Sequelize.STRING, index: true, unique: true, primaryKey: true },
+  tag: { type: Sequelize.STRING, index: true, unique: true, },
   color: { type: Sequelize.STRING }
 })
 
 const Comment = db.define('comment', {
-  activitypub_id: { type: Sequelize.STRING, index: true },
+  activitypub_id: { type: Sequelize.BIGINT, index: true },
   data: Sequelize.JSON,
-  url: Sequelize.STRING,
+  // url: Sequelize.STRING,
   author: Sequelize.STRING,
   text: Sequelize.STRING
 })

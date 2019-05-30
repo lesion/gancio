@@ -1,37 +1,29 @@
 <template lang="pug">
-    v-calendar#calendar.card(
+  #calendar
+    v-calendar(
       title-position='left'
       locale='it'
       is-dark
-      show-caps
       :attributes='attributes'
       :from-page.sync='page'
-      is-expanded is-inline)
-      div(slot='popover', slot-scope='{ customData, attributes }')
-        p {{attributes}}
-        //- router-link(:to="`/event/${customData.id}`") {{customData.start_datetime|hour}} - {{customData.title}}
-        //- div(v-if='customData.days && customData.days[selectedEvent]')
-          p {{customData.days[customData.selectedEvent].title}}
-          p {{customData.days[customData.selectedEvent].tags}}
-          el-button(@click='customData.selectedEvent=customData.selectedEvent+1') {{customData.selectedEvent}}/{{customData.days.length}} 
-            v-icon(name='clock' @click='customData.selectedEvent=customData.selectedEvent+1')
-        //- @{{customData.place.name}}
+      is-expanded
+      show-clear-margin
+      is-inline
+      @dayclick='click')
+
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import moment from 'dayjs'
 import { intersection } from 'lodash'
 
 export default {
   name: 'Calendar',
-  // filters,
   data () {
     const month = moment().month()+1
     const year = moment().year()
     return {
       page: { month, year},
-      selectedEvent: {},
-      daysWithEvents: {}
     }
   },
   
@@ -42,8 +34,9 @@ export default {
   },
   methods: {
     ...mapActions(['updateEvents']),
-    nextEvent () {
-
+    click (day) {
+      const element = document.getElementById(day.day)
+      if (element) element.scrollIntoView();   //Even IE6 supports this
     },
     eventToAttribute(event) {
       let e = {
@@ -52,18 +45,6 @@ export default {
         order: event.start_datetime,
       }
       const day = moment(event.start_datetime).date()
-      if (!this.daysWithEvents[day]) {
-        this.daysWithEvents[day] = []
-        e.popover = {
-          slot: 'popover',
-          visibility: 'hover',
-          isInteractive: true,
-          hideIndicator: true,
-        }
-        e.customData.days = this.daysWithEvents[day]
-      }
-      this.daysWithEvents[day].push({title: event.title, when: event.start_datetime, tags: event.tags })
-
       let color = event.tags && event.tags.length && event.tags[0].color ? event.tags[0].color : 'rgba(170,170,250,0.7)'
       if (event.past) color = 'rgba(200,200,200,0.5)'
       if (event.multidate) {
@@ -71,7 +52,7 @@ export default {
           start: event.start_datetime, end: event.end_datetime
         }
         e.highlight = { backgroundColor: color,
-          borderColor: 'transparent',
+          // borderColor: 'transparent',
           borderWidth: '4px' }
       } else {
         e.dates = event.start_datetime
@@ -81,17 +62,13 @@ export default {
     }
   },
   computed: {
-    filteredEvents () {
-      return this.$store.getters.filteredEvents
-    },
-    ...mapState(['events', 'filters']),
+    ...mapGetters(['filteredEvents']),
     attributes () {
       return [
         { key: 'today', dates: new Date(),
           highlight: {
             backgroundColor: '#aaffaa'
           },
-          popover: {label: this.$t('common.today')}
         }, 
         ...this.filteredEvents.map(this.eventToAttribute)
       ]
@@ -102,11 +79,9 @@ export default {
 
 <style>
 #calendar {
-  margin-bottom: 0em;
-  margin-top: 0.3em;
+  margin: 0 auto;
+  max-width: 500px;
+  align-self: center;
 }
 
-#calendar a { 
-  color: blue;
-}
 </style>

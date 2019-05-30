@@ -1,51 +1,59 @@
 <template lang="pug">
-  b-navbar(type="dark" variant="dark" toggleable='md')
-    b-navbar-toggle(target='nav_collapse')
-    b-navbar-brand(to='/') <img id='logo' src='gancio_logo.svg'/>
-    b-collapse#nav_collapse(is-nav)
-      b-navbar-nav
-        b-nav-item(v-if='!$auth.loggedIn' to='/login'  v-b-tooltip :title='$t("common.login")') <v-icon color='lightgreen' name='lock' /> 
-          span.d-md-none  {{$t('common.login')}}
-        b-nav-item(to='/add' v-b-tooltip :title='$t("common.add_event")' ) <v-icon color='lightgreen' name='plus'/> 
-          span.d-md-none  {{$t('common.add_event')}}
-        b-nav-item(v-if='$auth.loggedIn' to='/settings' v-b-tooltip :title='$t("common.settings")') <v-icon color='orange' name='cog'/>
-          span.d-md-none  {{$t('common.settings')}}
-        b-nav-item(v-if='$auth.user && $auth.user.is_admin' to='/admin' v-b-tooltip :title='$t("common.admin")') <v-icon color='lightblue' name='tools'/>
-          span.d-md-none  {{$t('common.admin')}}
-        b-nav-item(to='/export' v-b-tooltip :title='$t("common.export")') <v-icon name='file-export' color='yellow'/>
-          span.d-md-none  {{$t('common.export')}}
-        b-nav-item(v-if='$auth.loggedIn' @click='logout' v-b-tooltip :title='$t("common.logout")') <v-icon color='red' name='sign-out-alt'/>
-          span.d-md-none  {{$t('common.logout')}}
-        b-nav-item
-    b-navbar-nav.ml-auto
-        b-nav-item(to='/about')
-          span  {{$t('common.info')}} <v-icon color='#ff9fc4' name='question-circle'/>
+  el-menu.d-grid.nav(mode='horizontal' router background-color="#222C32")
+
+    el-menu-item(v-if='!$auth.loggedIn' index='/login' :title="$t('common.login')")
+      v-icon(color='lightgreen' name='user')
+
+    el-menu-item(index='/add' :title="$t('common.add_event')")
+      v-icon(color='lightgreen' name='plus')
+
+    el-menu-item(v-if='$auth.loggedIn' index='/settings' :title="$t('common.settings')")
+      v-icon(color='orange' name='cog')
+
+    el-menu-item(v-if='$auth.user && $auth.user.is_admin' index='/admin' :title="$t('common.admin')")
+      v-icon(color='lightblue' name='tools')
+
+    el-menu-item(index='/export' :title="$t('common.share')")
+      v-icon(name='share' color='yellow')
+
+    el-menu-item(v-if='$auth.loggedIn' @click='logout' :title="$t('common.logout')")
+      v-icon(color='red' name='sign-out-alt')
+
+    el-popover(
+      placement="bottom"
+      trigger="click")
+      Search
+      el-menu-item(slot='reference')
+        v-icon(color='lightblue' name='search')
+
+    el-menu-item.float-right(index='/about' :title="$t('common.info')")
+      img#logo(src='/favicon.ico')
+
 
 </template>
 <script>
-import {mapState, mapActions} from 'vuex'
+import { Message } from 'element-ui'
+import Search from '@/components/Search'
+
 export default {
   name: 'Nav',
-  computed: {
-    ...mapState(['filters']),
-    filters_tags: {
-      set (value) {
-        this.setSearchTags(value)
-      },
-      get () {
-        return this.filters.tags
-      }
-    },
-    filters_places: {
-      set (value) {
-        this.setSearchPlaces(value)
-      },
-      get () {
-        return this.filters.places
-      }
-    },
-  },
-  methods: mapActions(['logout']),
+  components: { Search },
+  methods: {
+    logout () {
+      Message({
+        message: this.$t('common.logout_ok'),
+        type: 'success'
+      })
+      this.$auth.logout()
+    }
+  }
 }
 </script>
 
+<style>
+
+.el-menu.el-menu--horizontal {
+  border-bottom: none;
+}
+
+</style>

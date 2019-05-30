@@ -1,6 +1,7 @@
 import moment from 'dayjs'
-import { intersection } from 'lodash'
-import Vue from 'vue'
+import intersection from 'lodash/intersection'
+import map from 'lodash/map'
+
 
 export const state = () => ({
   events: [],
@@ -13,51 +14,61 @@ export const state = () => ({
   filters: {
     tags: [],
     places: []
-  }
+  },
+  show_past_events: false,
 })
 
 export const getters = {
   token: state => state.token,
   // filter current + future events only
   // plus, filter matches search tag/place
+
   filteredEvents: (state) => {
-    const events = state.events.map((e) => {
-      const end_datetime = e.end_datetime || moment(e.start_datetime).add('3', 'hour')
-      const past = (moment().diff(end_datetime, 'minutes') > 0)
-      e.past = past
+
+    let events = state.events
+
+    // TOFIX: use lodash
+    if (state.filters.tags.length || state.filters.places.length){
+      events = events.filter((e) => {
+        if (state.filters.tags.length) {
+          const m = intersection(e.tags.map(t => t.tag), state.filters.tags)
+          if (m.length > 0) return true
+        }
+        if (state.filters.places.length) {
+          if (state.filters.places.find(p => p === e.place.id)) {
+            return true
+          }
+        }
+        return 0
+      })
+    }
+
+    if (!state.show_past_events) {
+      events = events.filter( e => !e.past )
+    }
+
+    let lastDay = null
+    events = map(events, e => {
+      const currentDay = moment(e.start_datetime).date()
+      console.log(currentDay)
+      e.newDay = (!lastDay || lastDay!==currentDay) && currentDay
+      lastDay = currentDay
       return e
     })
-    if (!state.filters.tags.length && !state.filters.places.length) {
-      return events
-    }
-    return events.filter((e) => {
-      if (state.filters.tags.length) {
-        const m = intersection(e.tags.map(t => t.tag), state.filters.tags)
-        if (m.length > 0) return true
-      }
-      if (state.filters.places.length) {
-        if (state.filters.places.find(p => p === e.place.name)) {
-          return true
-        }
-      }
-      return 0
-    })
+
+    return events
   }
 }
 
 export const mutations = {
-  logout(state) {
-    state.logged = false
-    state.token = ''
-    state.user = {}
-  },
-  login(state, user) {
-    state.logged = true
-    state.user = user.user
-    state.token = user.token
-  },
   setEvents(state, events) {
-    state.events = events
+    // set a `past` flag
+    state.events = events.map((e) => {
+      const end_datetime = e.end_datetime || moment(e.start_datetime).add('3', 'hour')
+      const past = (moment().diff(end_datetime, 'minutes') > 0)
+      e.past = !!past
+      return e
+    })
   },
   addEvent(state, event) {
     state.events.push(event)
@@ -69,7 +80,9 @@ export const mutations = {
     })
   },
   delEvent(state, eventId) {
-    state.events = state.events.filter(ev => ev.id !== eventId)
+    state.events = state.events.filter(ev => {
+      return ev.id !== eventId
+    })
   },
   update(state, { tags, places }) {
     state.tags = tags
@@ -93,21 +106,13 @@ export const mutations = {
   },
   setSearchPlaces(state, places) {
     state.filters.places = places
+  },
+  showPastEvents (state, show) {
+    state.show_past_events = show
   }
 }
 
 export const actions = {
-  // called on server request
-  // get current month's event
-  async nuxtServerInit({ commit }, { req }) {
-    // set user if logged! TODO
-    const now = new Date()
-    // const events = await api.getAllEvents(now.getMonth() - 1, now.getFullYear())
-    const events = await this.$axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
-    commit('setEvents', events)
-    const { tags, places } = await this.$axios.$get('/event/meta')
-    commit('update', { tags, places })    
-  },
   async updateEvents({ commit }, page) {
     const events = await this.$axios.$get(`/event/${page.month-1}/${page.year}`)
     commit('setEvents', events)
@@ -139,8 +144,8 @@ export const actions = {
   },
   setSearchPlaces({ commit }, places) {
     commit('setSearchPlaces', places)
+  },
+  showPastEvents({ commit }, show) {
+    commit('showPastEvents', show)
   }
 }
-// export const getters = {
-//   filteredEvents: state => state.events
-// }

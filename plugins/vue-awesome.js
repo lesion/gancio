@@ -17,6 +17,14 @@ import 'vue-awesome/icons/edit'
 import 'vue-awesome/icons/envelope-open-text'
 import 'vue-awesome/icons/user-secret'
 import 'vue-awesome/icons/question-circle'
+import 'vue-awesome/icons/share'
+import 'vue-awesome/icons/comment'
+import 'vue-awesome/icons/comments'
+import 'vue-awesome/icons/tags'
+import 'vue-awesome/icons/chevron-right'
+import 'vue-awesome/icons/chevron-left'
+import 'vue-awesome/icons/search'
+
 import Icon from 'vue-awesome/components/Icon'
 
 export default () => {

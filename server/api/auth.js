@@ -4,7 +4,7 @@ const User = require('./models/user')
 
 const Auth = {
   async fillUser(req, res, next) {
-    if (!req.user) return next(new Error('ERROR! No user'))
+    if (!req.user) return next()
     req.user = await User.findOne({
       where: { id: { [Op.eq]: req.user.id }, is_active: true }
     })

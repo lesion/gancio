@@ -1,6 +1,6 @@
 <template lang="pug">
-  b-modal(hide-footer @hidden='$router.replace("/")' :title='$t("About")' 
-    :visible='true' size='lg')
+  el-dialog(:title='$t("common.info")' visible
+    :before-close='close')
     h5 Chi siamo
     p.
       Gancio e' un progetto dell'<a href='https://autistici.org/underscore'>underscore hacklab</a> e uno dei
@@ -18,11 +18,9 @@
     blockquote.
       Se vieni a Torino e dici: "ehi, ci diamo un gancio alle 8?" nessuno si presenterà con i guantoni per fare a mazzate.
       Darsi un gancio vuol dire beccarsi alle ore X in un posto Y
-    p 
-      small A: a che ora è il gancio in radio per andare al presidio?
-    p
-      small B: non so ma domani non posso venire, ho gia' un gancio per caricare il bar.
-
+    li A: a che ora è il gancio in radio per andare al presidio?
+    li B: non so ma domani non posso venire, ho gia' un gancio per caricare il bar.
+    br
 
     h5 Contatti
     p.
@@ -32,3 +30,18 @@
       su underscore chicciola autistici.org
 
 </template>
+<script>
+export default {
+  data () {
+    return {
+      open: true,
+    }
+  },
+  methods: {
+    close (done) {
+      this.$router.replace('/')
+      done()
+    }
+  }
+}
+</script>

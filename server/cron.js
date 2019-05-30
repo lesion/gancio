@@ -1,7 +1,7 @@
 // const mail = require('./mail')
 const bot = require('./api/controller/bot')
 const settingsController = require('./api/controller/settings')
-const config = require('./api/config.js')
+// const config = require('./api/config.js')
 
 const { Event, Notification, EventNotification,
   User, Place, Tag } = require('./api/model')
@@ -25,15 +25,6 @@ async function sendNotification (notification, event, eventNotification) {
         })
         promises.push(b)
       }
-      // user publish
-      if (event.user && event.user.mastodon_auth && event.user.mastodon_auth.access_token) {
-        const b = bot.post(event.user.mastodon_auth, event).then(ret => {
-          event.activitypub_id = ret.id
-          return event.save()
-        })
-        promises.push(b)
-      }
-      break
   }
   return Promise.all(promises)
 }

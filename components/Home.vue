@@ -1,108 +1,40 @@
 <template lang="pug">
-  div(v-loading='loading')
-    magic-grid(:animate="true" useMin :gap=5 :maxCols=4
-      :maxColWidth='400' ref='magicgrid')
-      div.mt-1.item
-        //- Search#search
-        no-ssr
-          Calendar
-      Event.item.mt-1(v-for='event in events'
-        :key='event.id'
-        :event='event')
+  section
+
+    .row.m-0
+      no-ssr
+        Calendar.col-sm-12.col-lg-8.col-xl-6
+      .p-0.col-sm-6.col-lg-4.col-xl-3(v-for='event in filteredEvents')
+        a(:id='event.newDay' v-if='event.newDay')
+          .d-block.d-sm-none
+            el-divider {{event.start_datetime|day}}
+        Event(
+          :id='event.start_datetime'
+          :key='event.id'
+          :event='event'
+        )
+
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import axios from 'axios'
-// import filters from '@/filters.js'
+import { mapGetters } from 'vuex'
 import Event from '@/components/Event'
 import Calendar from '@/components/Calendar'
-// import { intersection } from 'lodash'
-// import moment from 'dayjs'
-// import Search from '@/components/Search'
+import Search from '@/components/Search'
 
 export default {
   name: 'Home',
   data () {
-    return { loading: true }
+    return { }
   },
-  // created () {
-  //   const now = new Date()
-  //   const page = { month: now.getMonth() - 1, year: now.getFullYear() }
-  //   this.updateEvents(page)
-  // },
-  components: { Event, Calendar }, // , Calendar, Search },
-  computed: {
-    ...mapState(['events', 'filters']),
-    filteredEvents() {
-      return this.events
-      // return this.$store.getters.filteredEvents
-        .filter(e => !e.past)
-        .sort((a, b) => a.start_datetime > b.start_datetime)
-    }
-  },
-  mounted () {
-    this.loading = false
-  },
-  methods: mapActions(['updateEvents']),
-  watch: {
-    filteredEvents() {
-      this.$nextTick(this.$refs.magicgrid.positionItems)
-      this.loading = false
-    }
-  }
+  components: { Calendar, Event, Search },
+  computed: mapGetters(['filteredEvents']),
 }
 </script>
-<style>
-#search {
-  display: inline-flex;
-}
-
-.item {
+<style lang="less">
+section {
   width: 100%;
-  max-width: 400px;
-  margin-top: 4px;
-  position: absolute;
-  cursor: pointer;
+  max-width: 1500px;
+  margin: 0 auto;
 }
-
-.card-columns {
-  column-count: 1;
-  column-gap: 0.2em;
-}
-@media (min-width: 576px) {
-  .container {
-    max-width: none;
-  }
-  .card-columns {
-    column-count: 2;
-  }
-}
-
-@media (min-width: 950px) {
-  .container {
-    max-width: 1400px;
-  }
-  .card-columns {
-    column-count: 3;
-  }
-}
-
-/* .item {
-  transition: all .2s;
-  display: inline-block;
-  width: 100%;
-} */
-/* .list-enter, .list-leave-to {
-  opacity: 0;
-  transform: translateY(30px);
-}
-.list-leave-active {
-  position: absolute;
-  top: 0px;
-  width: 0px;
-  left: 0px;
-  height: 0px;
-  z-index: -10;
-} */
 </style>

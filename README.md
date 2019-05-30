@@ -1,22 +1,34 @@
-# gancio
+## gancio
+### event manager for radical communities
 
-> My well-made Nuxt.js project
+> :warning: Gancio is under heavy development,
+> if something is not working as expected, it's expected :D
 
-## Build Setup
 
+## Install
 ``` bash
 # install dependencies
 $ yarn install
 
-# serve with hot reload at localhost:3000
-$ yarn run dev
-
 # build for production and launch server
-$ yarn run build
+$ yarn build
 $ yarn start
 
-# generate static project
-$ yarn run generate
 ```
 
+##### nginx setup
+https://nuxtjs.org/faq/nginx-proxy
+
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+
+
+## Hacking
+
+``` bash
+$ yarn dev
+
+```
+
+#### Add a new icon
+
+plugin/vue-awesome.js

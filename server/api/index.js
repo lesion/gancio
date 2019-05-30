@@ -5,10 +5,23 @@ const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 const userController = require('./controller/user')
 const settingsController = require('./controller/settings')
-const config = require('../../config')
+const { SECRET_CONF } = require('../../config')
+const cookieParser = require('cookie-parser')
 
-const botController = require('./controller/bot')
-const jwt = require('express-jwt')({secret: config.secret})
+const expressJwt = require('express-jwt')
+const jwt = expressJwt({
+  secret: SECRET_CONF.secret,
+  credentialsRequired: false,
+  getToken: req => {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+      return req.headers.authorization.split(' ')[1];
+    } else if (req.cookies && req.cookies['auth._token.local']) {
+      const tmp = req.cookies['auth._token.local'].split(' ');
+      return tmp[1]
+    }
+    return null 
+  }
+})
 
 const storage = require('./storage')({
   destination: 'uploads/'
@@ -16,7 +29,7 @@ const storage = require('./storage')({
 
 const upload = multer({ storage })
 const api = express.Router()
-
+api.use(cookieParser())
 // AUTH
 api.post('/auth/login', userController.login)
 api.post('/auth/logout', userController.logout)
@@ -81,7 +94,7 @@ api.get('/export/:type', exportController.export)
 api.get('/event/:month/:year', eventController.getAll)
 
 // mastodon oauth auth
-api.post('/user/getauthurl', jwt, isAuth, userController.getAuthURL)
-api.post('/user/code', jwt, isAuth, userController.code)
+api.post('/settings/getauthurl', jwt, isAuth, isAdmin, settingsController.getAuthURL)
+api.get('/settings/oauth', jwt, isAuth, isAdmin, settingsController.code)
 
 module.exports = api

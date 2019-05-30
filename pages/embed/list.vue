@@ -1,22 +1,26 @@
 <template lang="pug">
-  div
-    p porcodio
+  List(:events="events" :title='title')
 </template>
 <script>
 import { mapState } from 'vuex'
-// import List from '../../components/List'
+import { SHARED_CONF } from '../../config'
+import List from '../../components/List'
 import moment from 'dayjs'
 
 export default {
-  name: 'diocane',
   layout: 'iframe',
-  // components: { List },
+  components: { List },
   async asyncData ({ $axios, req, res }) {
+    const title = req.query.title || SHARED_CONF.title
     const show_tags = req.query.showtags
     const tags = req.query.tags
     const places = req.query.places
-    const events = await $axios.$get('/export/json')
-    return { events, show_tags }
+    const now = new Date()
+
+    // TODO: filter future events based on tags/places/userid
+    const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
+
+    return { show_tags, events, title }
   },
 }
 </script>

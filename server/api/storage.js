@@ -28,8 +28,8 @@ DiskStorage.prototype._handleFile = function _handleFile(req, file, cb) {
     const thumbPath = path.join(destination, 'thumb', filename)
     const outStream = fs.createWriteStream(finalPath)
     const thumbStream = fs.createWriteStream(thumbPath)
-    const resizer = sharp().resize(800).jpeg({ quality: 80 })
-    const thumbnailer = sharp().resize(400).jpeg({ quality: 60 })
+    const resizer = sharp().resize(800).jpeg({ quality: 90 })
+    const thumbnailer = sharp().resize(400).jpeg({ quality: 90 })
 
     file.stream.pipe(thumbnailer).pipe(thumbStream)
     thumbStream.on('error', e => console.log('thumbStream error ', e))

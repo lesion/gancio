@@ -1,65 +1,139 @@
 <template lang="pug">
-  nuxt-link(:to='`/event/${event.id}`')
-    //- @click='$router.push("/event/" + event.id)'
-    b-card(bg-variant='dark' text-variant='white' :class="{ withImg: event.image_path ? true : false }"
-      :img-src='imgPath')
-        strong {{event.title}}
-        div <v-icon name='clock'/> {{event.start_datetime|datetime}}
-        span <v-icon name='map-marker-alt'/> {{event.place.name}}
-        br
-        el-tag.mr-1(:color='tag.color' v-for='tag in event.tags' :key='tag.tag'
-          size='small' @click.stop='addSearchTag(tag)') {{tag.tag}}
+    nuxt-link.event(:to='`event/${event.id}`' :class='{ withImg: event.image_path }')
+      //- image
+      img(v-if='showImage && event.image_path' :src='`/media/thumb/${event.image_path}`')
+
+      .event-info
+        .content-info
+
+          //-  title
+          h2 {{event.title}}
+
+          //- date / place
+          .date 
+            div {{event|event_when}}
+            div {{event.place.name}}
+
+          //- p(v-if='showDescription') {{event.description}}
+
+            //- div(v-if='event.comments && event.comments.length')
+            //-   v-icon(name='comments' color='dark') 
+            //-   span  {{event.comments.length}} {{$t('common.comments')}}
+
+        ul.tags(v-if='showTags && event.tags')
+          li(v-for='tag in event.tags' :key='tag.tag') {{tag.tag}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-// import api from '@/server/api'
-// import filters from '@/filters'
 
 export default {
-  props: ['event'],
-  computed: {
-    ...mapState(['user']),
-    imgPath() {
-      return this.event.image_path && '/media/thumb/' + this.event.image_path
+  props: {
+    event: Object,
+    showTags: {
+      type: Boolean,
+      default: true
     },
-    mine() {
-      return this.event.userId === this.user.id
+    showImage: {
+      type: Boolean,
+      default: true
+    },
+    showDescription: {
+      type: Boolean,
+      default: true
+    },
+    selected: {
+      type: Boolean,
+      default: false
     }
   },
-  // filters: {
-  //   datetime: this.datetime
-  // },
-  methods: {
-    ...mapActions(['delEvent', 'addSearchTag']),
-    async remove() {
-      // await api.delEvent(this.event.id)
-      // this.delEvent(this.event.id)
+  computed: {
+    date () { 
+      return new Date(this.event.start_datetime).getDate()
     }
   }
 }
 </script>
-<style scoped>
-/* .card::before {
-  border-top: 4px solid black;
-  content: ''
-} */
+<style lang='less'>
 
-.el-card {
-  border: none;
+@media only screen and (min-width: 574px) {
+  .event {
+    height: 100%;
+  }
+}
+.event {
+  padding: 3px;
+  display: flex;
+  flex-direction: column;
+
+  // height: 100%;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .event-info {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #222;
+
+  }
+
+  .content-info {
+    font-size: 12px;
+    font-size: 0.8em;
+    padding: 0.8em 1em;
+    max-height: 200px;
+    color: rgb(255, 122, 204);
+
+    h2 {
+      color: yellow;
+      font-size: 16px;
+      font-size: 1.1rem;
+      margin: 0px;
+    }
+
+    p {
+      max-height: 92px;
+      overflow: hidden;
+      color: white;
+      margin: 0px;
+    }
+
+    .date {
+      font-weight: 800;
+      font-size: 16px;
+      font-size: 1rem;
+    }    
+  }
+
+  .tags {
+    font-size: 12px;
+    padding: 1px;
+    margin-bottom: 0;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    li {
+      background: #40484D;
+      display: inline-block;
+      padding: 2px 10px;
+      color: rgba(255,255,255,0.7);
+      margin: 1px;
+      text-align: center;
+      flex-grow: 1;
+    }
+
+  }
 }
 
-.el-card img {
-  width: 100%;
-}
-
-.card-columns .card {
-  margin-top: 0.2em;
-  margin-bottom: 0em;
-}
-
-.card-img {
-  height: 180px;
-
-  object-fit: cover;
-}
 </style>

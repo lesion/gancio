@@ -3,6 +3,7 @@ const moment = require('moment')
 const { Op } = require('sequelize')
 const lodash = require('lodash')
 const { User, Event, Comment, Tag, Place, Notification } = require('../model')
+const Sequelize = require('sequelize')
 
 const eventController = {
 
@@ -19,8 +20,26 @@ const eventController = {
   },
 
   async getMeta(req, res) {
-    const places = await Place.findAll()
-    const tags = await Tag.findAll()
+    const places = await Place.findAll({
+      group: ['place.id'],
+      order: [[Sequelize.fn("COUNT", Sequelize.col('events.id')), 'DESC']],
+      attributes: {
+        include: [[Sequelize.fn("COUNT", Sequelize.col('events.id')), 'eventsCount']],
+        exclude: ['createdAt', 'updatedAt']
+      },
+      include: { model: Event, attributes: [] }
+    })
+
+    const tags = await Tag.findAll({
+      group: ['tag'],
+      order: [[Sequelize.fn("COUNT", Sequelize.col('events.id')), 'DESC']],
+      includeIgnoreAttributes:false,
+      attributes: {
+        include: [[Sequelize.fn("COUNT", Sequelize.col('events.id')), 'eventsCount']],
+        exclude: ['createdAt', 'updatedAt']
+      },
+      include: { model: Event, attributes: [] }})
+
     res.json({ tags, places })
   },
 
@@ -67,7 +86,14 @@ const eventController = {
 
   async get(req, res) {
     const id = req.params.event_id
-    const event = await Event.findByPk(id, { include: [User, Tag, Comment, Place] })
+    const event = await Event.findByPk(id, { include:
+      [
+        Tag,
+        Comment,
+        { model: Place, attributes: ['name', 'address'] }
+      ] ,
+      order: [ [Comment, 'id', 'DESC'] ]
+    })
     res.json(event)
   },
 

@@ -2,14 +2,12 @@ const fs = require('fs')
 const path = require('path')
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
-const Mastodon = require('mastodon-api')
 const { Op } = require('sequelize')
 const jsonwebtoken = require('jsonwebtoken')
 const User = require('../models/user')
-const config = require('../../../config')
+const { SECRET_CONF, SHARED_CONF } = require('../../../config')
 const mail = require('../mail')
 const { Event, Tag, Place } = require('../models/event')
-const settingsController = require('./settings')
 const eventController = require('./event')
 
 const userController = {
@@ -17,13 +15,13 @@ const userController = {
     // find the user
     const user = await User.findOne({ where: { email: { [Op.eq]: req.body && req.body.email } } })
     if (!user) {
-      res.status(404).json({ success: false, message: 'AUTH_FAIL' })
+      res.status(403).json({ success: false, message: 'auth.fail' })
     } else if (user) {
       if (!user.is_active) {
-        res.status(403).json({ success: false, message: 'NOT_CONFIRMED' })
+        res.status(403).json({ success: false, message: 'auth.not_confirmed' })
       // check if password matches
       } else if (!await user.comparePassword(req.body.password)) {
-        res.status(403).json({ success: false, message: 'AUTH_FAIL' })
+        res.status(403).json({ success: false, message: 'auth.fail' })
       } else {
         // if user is found and password is right
         // create a token
@@ -33,7 +31,7 @@ const userController = {
             email: user.email,
             scope: [user.is_admin ? 'admin' : 'user']
           },
-          config.secret
+          SECRET_CONF.secret
         )
       
         res.json({token: accessToken})        
@@ -58,8 +56,12 @@ const userController = {
       if (event.image_path) {
         const old_path = path.resolve(__dirname, '..', '..', 'uploads', event.image_path)
         const old_thumb_path = path.resolve(__dirname, '..', '..', 'uploads', 'thumb', event.image_path)
-        await fs.unlink(old_path)
-        await fs.unlink(old_thumb_path)
+        try {
+          await fs.unlink(old_path)
+          await fs.unlink(old_thumb_path)
+        } catch (e) {
+          console.error(e)
+        }
       }
       await event.destroy()
       res.sendStatus(200)
@@ -160,61 +162,14 @@ const userController = {
     return res.json(newEvent)
   },
 
-  async getAuthURL(req, res) {
-    const instance = req.body.instance
-    const is_admin = req.body.admin && req.user.is_admin
-    const callback = `${config.baseurl}/${is_admin ? 'admin/oauth' : 'settings'}`
-    const { client_id, client_secret } = await Mastodon.createOAuthApp(`https://${instance}/api/v1/apps`,
-      config.title, 'read write', callback)
-    const url = await Mastodon.getAuthorizationUrl(client_id, client_secret,
-      `https://${instance}`, 'read write', callback)
-
-    if (is_admin) {
-      await settingsController.setAdminSetting('mastodon_auth', { client_id, client_secret, instance })
-    } else {
-      req.user.mastodon_auth = { client_id, client_secret, instance }
-      await req.user.save()
-    }
-    res.json(url)
-  },
-
-  async code(req, res) {
-    const { code, is_admin } = req.body
-    let client_id, client_secret, instance
-    const callback = `${config.baseurl}/${is_admin ? 'admin/oauth' : 'settings'}`
-
-    if (is_admin) {
-      const settings = await settingsController.settings();
-      ({ client_id, client_secret, instance } = settings.mastodon_auth)
-    } else {
-      ({ client_id, client_secret, instance } = req.user.mastodon_auth)
-    }
-
-    try {
-      const token = await Mastodon.getAccessToken(client_id, client_secret, code,
-        `https://${instance}`, callback)
-      const mastodon_auth = { client_id, client_secret, access_token: token, instance }
-      if (is_admin) {
-        await settingsController.setAdminSetting('mastodon_auth', mastodon_auth)
-        res.json(instance)
-      } else {
-        req.user.mastodon_auth = mastodon_auth
-        await req.user.save()
-        // await bot.add(req.user, token)
-        res.json(req.user)
-      }
-    } catch (e) {
-      res.json(e)
-    }
-  },
-
   async forgotPassword(req, res) {
     const email = req.body.email
     const user = await User.findOne({ where: { email: { [Op.eq]: email } } })
     if (!user) return res.sendStatus(200)
 
     user.recover_code = crypto.randomBytes(16).toString('hex')
-    mail.send(user.email, 'recover', { user, config })
+    mail.send(user.email, 'recover', { user, config: SHARED_CONF })
+
     await user.save()
     res.sendStatus(200)
   },
@@ -229,13 +184,17 @@ const userController = {
 
   async updatePasswordWithRecoverCode(req, res) {
     const recover_code = req.body.recover_code
-    if (!recover_code) return res.sendStatus(400)
     const password = req.body.password
+    if (!recover_code || !password) return res.sendStatus(400)
     const user = await User.findOne({ where: { recover_code: { [Op.eq]: recover_code } } })
     if (!user) return res.sendStatus(400)
     user.password = password
-    await user.save()
-    res.sendStatus(200)
+    try {
+      await user.save()
+      res.sendStatus(200)
+    } catch(e) {
+      res.sendStatus(400)
+    }
   },
 
   async current(req, res) {
@@ -253,7 +212,7 @@ const userController = {
     const user = await User.findByPk(req.body.id)
     if (user) {
       if (!user.is_active && req.body.is_active) {
-        await mail.send(user.email, 'confirm', { user, config })
+        await mail.send(user.email, 'confirm', { user, config: SHARED_CONF })
       }
       await user.update(req.body)
       res.json(user)
@@ -263,25 +222,29 @@ const userController = {
   },
 
   async register(req, res) {
-    console.error('register !!', req)
+    
     const n_users = await User.count()
     try {
+
+      // the first registered user will be an active admin
       if (n_users === 0) {
-        // the first registered user will be an active admin
         req.body.is_active = req.body.is_admin = true
       } else {
         req.body.is_active = false
       }
+
       const user = await User.create(req.body)
       try {
-        mail.send([user.email, config.admin], 'register', { user, config })
+        mail.send([user.email, SECRET_CONF.admin], 'register', { user, config: SHARED_CONF })
       } catch (e) {
+        console.error(e)
         return res.status(400).json(e)
       }
       const payload = { email: user.email }
-      const token = jwt.sign(payload, config.secret)
+      const token = jwt.sign(payload, SECRET_CONF.secret)
       res.json({ user, token })
     } catch (e) {
+      console.error(e)
       res.status(404).json(e)
     }
   }

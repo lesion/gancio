@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
+import it from '@/locales/it.js'
 
 Vue.use(VueI18n)
 
@@ -10,7 +11,7 @@ export default ({ app, store }) => {
     locale: store.state.locale,
     fallbackLocale: 'it',
     messages: {
-      'it': require('~/locales/it.json')
+      it 
     //   'fr': require('~/locales/fr.json')
     }
   })

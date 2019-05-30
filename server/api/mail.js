@@ -1,40 +1,40 @@
 const Email = require('email-templates')
 const path = require('path')
-const config = require('../../config')
+const { SECRET_CONF, SHARED_CONF } = require('../../config')
 const moment = require('moment')
-moment.locale(config.locale)
+moment.locale(SHARED_CONF.locale)
 
 const mail = {
   send (addresses, template, locals) {
     const email = new Email({
-      views: { root: path.join(__dirname, 'emails') },
+      views: { root: path.join(__dirname, '..', 'emails') },
       juice: true,
       juiceResources: {
         preserveImportant: true,
         webResources: {
-          relativeTo: path.join(__dirname, 'emails')
+          relativeTo: path.join(__dirname, '..', 'emails')
         }
       },
       message: {
-        from: `${config.title} <${config.smtp.auth.user}>`
+        from: `${SHARED_CONF.title} <${SECRET_CONF.smtp.auth.user}>`
       },
       send: true,
       i18n: {
-        locales: ['en', 'es', 'it'],
-        defaultLocale: config.locale
+        directory: path.join(__dirname, '..', '..', 'locales', 'email'),
+        defaultLocale: SHARED_CONF.locale
       },
-      transport: config.smtp
+      transport: SECRET_CONF.smtp
     })
     return email.send({
       template,
       message: {
         to: addresses,
-        bcc: config.admin
+        bcc: SECRET_CONF.admin
       },
       locals: {
         ...locals,
-        locale: config.locale,
-        config,
+        locale: SHARED_CONF.locale,
+        config: SHARED_CONF,
         datetime: datetime => moment(datetime).format('ddd, D MMMM HH:mm')
       }
     })

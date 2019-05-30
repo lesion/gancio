@@ -52,6 +52,24 @@
       "prio": 0,
       "references": [],
       "title": "export lista"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-04-30T12:46:42.208Z",
+      "id": "16",
+      "references": [],
+      "title": "riesco a rimuovere bootstrap-vue e usare solo element ?"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-04-28T09:25:50.701Z",
+      "id": "13",
+      "references": [],
+      "title": "test altra visualizzazione"
     }
   ],
   "in-progress": [
@@ -127,10 +145,64 @@
       "assignedTo": {
         "name": "lesion"
       },
+      "creation_time": "2019-05-27T15:42:35.467Z",
+      "id": "21",
+      "references": [],
+      "title": "all'admin deve mostrare un badge se ci sono pending operation"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-27T15:16:22.839Z",
+      "id": "20",
+      "references": [],
+      "title": "check password reset"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-27T15:45:39.093Z",
+      "id": "23",
+      "references": [],
+      "title": "colori te prego!"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-27T15:45:18.012Z",
+      "id": "22",
+      "references": [],
+      "title": "filtri per luogo!"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
       "creation_time": "2019-04-29T10:01:01.632Z",
       "id": "14",
       "references": [],
       "title": "gestione errori quando non c'e' un evento"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-02T16:15:07.106Z",
+      "id": "19",
+      "references": [],
+      "title": "modifica eventi multigiorno"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-02T11:50:28.476Z",
+      "id": "18",
+      "references": [],
+      "title": "notifiche email / iscrizione / evento da confermare"
     },
     {
       "assignedTo": {
@@ -146,19 +218,19 @@
       "assignedTo": {
         "name": "lesion"
       },
-      "creation_time": "2019-04-27T19:44:33.769Z",
-      "id": "12",
+      "creation_time": "2019-04-30T22:00:29.237Z",
+      "id": "17",
       "references": [],
-      "title": "rifare il calendario o solo il popup"
+      "title": "porcoddio la config arriva anche al client ovviamente, devo separare!"
     },
     {
       "assignedTo": {
         "name": "lesion"
       },
-      "creation_time": "2019-04-28T09:25:50.701Z",
-      "id": "13",
+      "creation_time": "2019-04-27T19:44:33.769Z",
+      "id": "12",
       "references": [],
-      "title": "test altra visualizzazione"
+      "title": "rifare il calendario o solo il popup"
     },
     {
       "assignedTo": {
@@ -187,10 +259,10 @@
       "assignedTo": {
         "name": "lesion"
       },
-      "creation_time": "2019-04-30T12:46:42.208Z",
-      "id": "16",
+      "creation_time": "2019-05-27T20:42:22.581Z",
+      "id": "24",
       "references": [],
-      "title": "riesco a rimuovere bootstrap-vue e usare solo element ?"
+      "title": "copy to clipboard"
     }
   ]
 }

@@ -1,6 +1,5 @@
 <template lang="pug">
-  b-modal(hide-footer @hidden='$router.replace("/")' :title='$t("common.admin")' 
-    :visible='true' size='lg')
+  el-dialog(:title='$t("common.admin")' width='80%' :visible='open' :before-close='close')
     el-tabs(tabPosition='left' v-model='tab')
 
       //- USERS
@@ -35,7 +34,7 @@
           el-form-item(:label="$t('common.address')")
             el-input.mr-1(:placeholder='$t("common.address")' v-model='place.address')
           el-button(variant='primary' @click='savePlace') {{$t('common.save')}}
-        el-table(:data='paginatedPlaces' small)
+        el-table(:data='paginatedPlaces' small @current-change="val => place=val")
           el-table-column(:label="$t('common.name')")
             template(slot-scope='data') {{data.row.name}}
           el-table-column(:label="$t('common.address')")
@@ -61,26 +60,26 @@
         el-pagination(:page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
 
       //- TAGS
-      el-tab-pane.pt-1
-        template(slot='label')
-          v-icon(name='tag')
-          span  {{$t('common.tags')}}
-        p {{$t('admin.tag_description')}}
-          el-tag(v-if='tag.tag' :color='tag.color' size='mini') {{tag.tag}}
-        el-form(:inline='true' label-width='120px')
-          el-form-item(:label="$t('common.color')")
-            el-color-picker(v-model='tag.color' @change='updateColor')
-        el-table(:data='paginatedTags' striped small hover
-          highlight-current-row @current-change="tagSelected")
-          el-table-column(:label="$t('common.tag')")
-            template(slot-scope='data')
-              el-tag(:color='data.row.color' size='mini') {{data.row.tag}}
-        el-pagination(:page-size='perPage' :currentPage.sync='tagPage' :total='tags.length')
+      //- el-tab-pane.pt-1
+      //-   template(slot='label')
+      //-     v-icon(name='tags')
+      //-     span  {{$t('common.tags')}}
+      //-   p {{$t('admin.tag_description')}}
+      //-     el-tag(v-if='tag.tag' :color='tag.color' size='mini') {{tag.tag}}
+      //-   el-form(:inline='true' label-width='120px')
+      //-     el-form-item(:label="$t('common.color')")
+      //-       el-color-picker(v-model='tag.color' @change='updateColor')
+      //-   el-table(:data='paginatedTags' striped small hover
+      //-     highlight-current-row @current-change="tagSelected")
+      //-     el-table-column(:label="$t('common.tag')")
+      //-       template(slot-scope='data')
+      //-         el-tag(:color='data.row.color' size='mini') {{data.row.tag}}
+      //-   el-pagination(:page-size='perPage' :currentPage.sync='tagPage' :total='tags.length')
 
       //- SETTINGS
       el-tab-pane.pt-1
         template(slot='label')
-          v-icon(name='tools')
+          v-icon(name='cog')
           span  {{$t('common.settings')}}
         el-form(inline @submit.prevent.stop='associatemastodon_instance')
           span {{$t('admin.mastodon_description')}}
@@ -91,7 +90,6 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import api from '@/plugins/api'
 import { Message } from 'element-ui'
 
 export default {
@@ -116,22 +114,18 @@ export default {
       mastodon_instance: '',
       settings: {},
       tab: "0",
+      open: true
     }
   },
   async mounted () {
-    console.log('sono dentro mounted', this.$route)
     const code = this.$route.query.code
 
     if (code) {
       this.tab = "4"
       const instance = await this.$axios.$post('/user/code', {code, is_admin: true})
     }
-  //   // this.users = await api.getUsers()
-  //   // this.events = await api.getUnconfirmedEvents()
-  //   // this.settings = await api.getAdminSettings()
   },
   async asyncData ({ $axios, params, store }) {
-    console.log(store.state)
     try {
       const users = await $axios.$get('/users')
       const events = await $axios.$get('/event/unconfirmed')
@@ -158,7 +152,7 @@ export default {
     paginatedPlaces () {
       return this.places.slice((this.placePage-1) * this.perPage,
         this.placePage * this.perPage)
-    },    
+    },
   },
   methods: {
     placeSelected (items) {
@@ -175,15 +169,15 @@ export default {
       this.tag = { color: tag.color, tag: tag.tag }
     },
     async savePlace () {
-      const place = await api.updatePlace(this.place)
+      // const place = await api.updatePlace(this.place)
     },
     async toggle(user) {
       user.is_active = !user.is_active
-      const newuser = await api.updateUser(user)
+      // const newuser = await api.updateUser(user)
     },
     async toggleAdmin(user) {
       user.is_admin = !user.is_admin
-      const newuser = await api.updateUser(user)
+      // const newuser = await api.updateUser(user)
     },
     async updateColor () {
       // try {
@@ -198,7 +192,7 @@ export default {
     async associate () {
       if (!this.mastodon_instance) return
 
-      const url = await this.$axios.$post('/user/getauthurl', {instance: this.mastodon_instance, admin: true})
+      const url = await this.$axios.$post('/settings/getauthurl', {instance: this.mastodon_instance})
       setTimeout( () => window.location.href=url, 100);
     },
     async confirm (id) {
@@ -207,13 +201,18 @@ export default {
         await this.$axios.$get(`/event/confirm/${id}`)
         this.loading = false
         Message({
-          message: this.$t('event_confirmed'),
+          message: this.$t('common.event_confirmed'),
           type: 'success'
         })
         this.events = this.events.filter(e => e.id !== id)
       } catch (e) {
       }
-    }
+    },
+    close (done) {
+      console.log('oppure qui !')
+      this.$router.replace('/')
+      // done()
+    }    
   }
 }
 </script>

@@ -1,34 +1,83 @@
 <template lang="pug">
-  div#gancio-widget
-    //- el-card.mb-1(no-body header='Eventi')
-    //- b-list-group#list(flush)
-    p minimal {{minimal}}
-    ul
-      li.flex-column.align-items-start(v-for="event in events" :key='event.id'
-          :to='`/event/${event.id}`' target='_parent')
-          img(v-if='event.image_path' slot="aside" :src="`http://localhost:3000/media/${event.image_path}`" alt="Meia Aside" style='max-height: 60px')
-          strong.mb-1 {{event.title}}
-          br
-          small.float-right {{event.place.name}}
-          //- el-tag.mr-1(v-if='showtags' :color='tag.color || "rgba(64,158,255,.1)"' size='mini' v-for='tag in event.tags' :key='tag.tag') {{tag.tag}}    
+div#list
+  el-divider {{title}}
+  el-timeline
+    el-timeline-item(
+      v-for='event in events'
+      :key='event.id'
+      :timestamp='event|event_when'
+      placement='top' icon='el-icon-arrow-down' size='large'
+    )
+
+      div.float-right
+        small @{{event.place.name}}
+
+      a(:href='"/event/" + event.id' target='_blank') {{event.title}}
+      hr
 </template>
 <script>
-import axios from 'axios'
+import { mapGetters } from 'vuex'
+const { SHARED_CONF } = require('@/config')
+
 export default {
   name: 'List',
   data () {
-    return {
-      events: []
-    }
+    return { SHARED_CONF }
   },
   props: {
+    title: {
+      type: String,
+      default: SHARED_CONF.title
+    },
+    events: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
+    maxEvents: {
+      type: Number,
+      default: 0
+    },
     minimal: {
       type: Boolean,
       default: false
+    },
+    showTags: {
+      type: Boolean,
+      default: true,
+    },
+    showImage: {
+      type: Boolean,
+      default: true,
+    },
+    showDescription: {
+      type: Boolean,
+      default: true
     }
   },
-  async mounted () {
-    this.events = (await axios.get('http://localhost:3000/api/export/json')).data
-  }
 }
 </script>
+<style lang='less'>
+  #list {
+    max-width: 500px;
+
+    .el-timeline {
+      padding-left: 5px;
+
+      hr {
+        margin-top: 4px;
+        margin-bottom: 4px;
+      }
+    }
+
+    .el-timeline-item {
+      padding-bottom: 1px;
+    }
+
+    .el-timeline-item__timestamp {
+      margin: 0px;
+      padding: 0px;
+    }
+  }
+</style>
