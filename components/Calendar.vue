@@ -7,7 +7,6 @@
       :attributes='attributes'
       :from-page.sync='page'
       is-expanded
-      show-clear-margin
       is-inline
       @dayclick='click')
 
@@ -15,7 +14,7 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import moment from 'dayjs'
-import { intersection } from 'lodash'
+import { intersection, sample, get } from 'lodash'
 
 export default {
   name: 'Calendar',
@@ -45,18 +44,19 @@ export default {
         order: event.start_datetime,
       }
       const day = moment(event.start_datetime).date()
-      let color = event.tags && event.tags.length && event.tags[0].color ? event.tags[0].color : 'rgba(170,170,250,0.7)'
-      if (event.past) color = 'rgba(200,200,200,0.5)'
+      let color = event.past ? 'rgba(200,200,200,0.5)' : get(event, 'tags[0].color') || 'rgba(170,170,250,0.7)'
+
+      console.error(color)
       if (event.multidate) {
         e.dates = {
           start: event.start_datetime, end: event.end_datetime
         }
-        e.highlight = { backgroundColor: color,
-          // borderColor: 'transparent',
-          borderWidth: '4px' }
+        e.highlight = { 
+          color: 'red' // : sample(['purple', 'red', 'green', 'blue']),
+        }
       } else {
         e.dates = event.start_datetime
-        e.dot = { backgroundColor: color, borderColor: color, borderWidth: '3px' }
+        e.dot = { color: 'rgba(102,10,20)' }
       }
       return e
     }
@@ -82,6 +82,13 @@ export default {
   margin: 0 auto;
   max-width: 500px;
   align-self: center;
+}
+
+.vc-highlight {
+  /* color: red; */
+  height: 22px !important;
+  opacity: 0.4;
+  border-radius: 15px;
 }
 
 </style>

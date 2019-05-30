@@ -74,17 +74,14 @@ const userController = {
   async addEvent(req, res) {
     const body = req.body
 
-    // remove description tag and create anchor tags
-    const description = body.description
-      .replace(/(<([^>]+)>)/ig, '')
-      .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>')
-
     const eventDetails = {
       title: body.title,
-      description,
+      description: body.description.replace(/(<([^>]+)>)/ig, ''),
       multidate: body.multidate,
       start_datetime: body.start_datetime,
       end_datetime: body.end_datetime,
+
+      // publish this event if authenticated
       is_visible: !!req.user
     }
 
@@ -94,7 +91,7 @@ const userController = {
 
     let event = await Event.create(eventDetails)
 
-    // create place
+    // create place if needs to
     let place
     try {
       place = await Place.findOrCreate({ where: { name: body.place_name },
@@ -140,7 +137,7 @@ const userController = {
 
     body.description = body.description
       .replace(/(<([^>]+)>)/ig, '') // remove all tags from description
-      .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>') // add links
+      // .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>') // add links
 
     await event.update(body)
     let place

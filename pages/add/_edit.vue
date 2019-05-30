@@ -26,10 +26,9 @@
             filterable allow-create
             default-first-option
           )
-            el-option(v-for='place in places_name' :label='place' :value='place' :key='place.id')
-          br
-          br
-          div {{$t("common.address")}} {{event.place.name}}
+            el-option(v-for='place in places' :label='place.name' :value='place.name' :key='place.id')
+              span {{place.name}} - {{place.weigth}}
+          div {{$t("common.address")}}
           el-input.mb-3(ref='address' v-model='event.place.address'
             :disabled='places_name.indexOf(event.place.name)>-1'
             @keydown.native.enter='next')
@@ -89,9 +88,9 @@
             :on-change='uploadedFile'
             :multiple='false'
             :file-list="fileList"
-            )
-              i.el-icon-upload
-              div.el-upload__text {{$t('event.media_description')}}
+          )
+            i.el-icon-upload
+            div.el-upload__text {{$t('event.media_description')}}
           el-button.float-right(@click='done' :disabled='!couldProceed') {{edit?$t('common.edit'):$t('common.send')}}
 
 </template>
@@ -153,7 +152,7 @@ export default {
   computed: {
     ...mapState({
       tags: state => state.tags.map(t => t.tag ),
-      places_name: state => state.places.map(p => p.name ),
+      places_name: state => state.places.map(p => p.name ).sort((a, b) => b.weigth-a.weigth),
       places: state => state.places,
       user: state => state.user,
       events: state => state.events

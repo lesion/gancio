@@ -21,6 +21,7 @@ async function sendNotification (notification, event, eventNotification) {
       if (settings.mastodon_auth.instance && settings.mastodon_auth.access_token) {
         const b = bot.post(settings.mastodon_auth, event).then(b => {
           event.activitypub_id = b.data.id
+          // event.activitypub_ids.push(b.data.id)
           return event.save()
         })
         promises.push(b)
@@ -29,7 +30,8 @@ async function sendNotification (notification, event, eventNotification) {
   return Promise.all(promises)
 }
 
-async function loop () {
+async function notify() {
+  console.error('dentro il loop di notify')
   settings = await settingsController.settings()
   // get all event notification in queue
   const eventNotifications = await EventNotification.findAll({ where: { status: 'new' } })
@@ -51,5 +53,14 @@ async function loop () {
   return Promise.all(promises)
 }
 
-setInterval(loop, 260000)
-loop()
+let interval
+function startLoop(seconds) {
+  console.error('starting notifier loop')
+  interval = setInterval(notify, seconds*1000)
+}
+
+function stopLoop() {
+  stopInterval(interval)
+}
+
+module.exports = { startLoop, stopLoop }

@@ -13,9 +13,9 @@
     h5.text-center {{event.title}}
     div.nextprev
       nuxt-link(v-if='prev' :to='`/event/${prev.id}`')
-        el-button(icon='el-icon-arrow-left' round size='small' type='success' plain)
+        el-button(icon='el-icon-arrow-left' round type='success')
       nuxt-link.float-right(v-if='next' :to='`/event/${next.id}`')
-        el-button(icon='el-icon-arrow-right' round size='small' plain type='success') 
+        el-button(icon='el-icon-arrow-right' round type='success') 
   
     //- image
     img(:src='imgPath' v-if='event.image_path')

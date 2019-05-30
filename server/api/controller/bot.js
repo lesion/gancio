@@ -12,6 +12,7 @@ moment.locale('it')
 const botController = {
   bot: null,
   async initialize () {
+    console.error('dentro bot inizialiteds')
     const settings = await settingsController.settings()
     if (!settings.mastodon_auth || !settings.mastodon_auth.access_token) return
     const mastodon_auth = settings.mastodon_auth

@@ -27,7 +27,7 @@
         template(slot='label')
           v-icon(name='map-marker-alt')
           span.ml-1 {{$t('common.places')}}
-        p {{$t('admin.place_description')}}
+        p(v-html="$t('admin.place_description')")
         el-form.mb-2(:inline='true' label-width='120px')
           el-form-item(:label="$t('common.name')")
             el-input.mr-1(:placeholder='$t("common.name")' v-model='place.name')
@@ -201,7 +201,7 @@ export default {
         await this.$axios.$get(`/event/confirm/${id}`)
         this.loading = false
         Message({
-          message: this.$t('common.event_confirmed'),
+          message: this.$t('event.confirmed'),
           type: 'success'
         })
         this.events = this.events.filter(e => e.id !== id)

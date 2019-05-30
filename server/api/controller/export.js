@@ -8,6 +8,7 @@ const exportController = {
 
   async export (req, res) {
     console.log('type ', req.params.type)
+    console.error(req)
     const type = req.params.type
     const tags = req.query.tags
     const places = req.query.places
@@ -18,14 +19,20 @@ const exportController = {
       whereTag.tag = tags.split(',')
     }
     if (places) {
-      wherePlace.name = places.split(',')
+      wherePlace.id = places.split(',')
     }
+    console.error(places)
     const events = await Event.findAll({
-      where: { is_visible: true, start_datetime: { [Op.gte]: yesterday } },
-      include: [Comment, {
-        model: Tag,
-        where: whereTag
-      }, { model: Place, where: wherePlace } ]
+      order: ['start_datetime'],
+      where: { 
+        is_visible: true, 
+        start_datetime: { [Op.gte]: yesterday },
+        placeId: places.split(',')
+      },
+      attributes: {
+        exclude: ['createdAt', 'updatedAt']
+      },
+      include: [{model: Place, attributes: ['name', 'id', 'address', 'weigth']}]
     })
     switch (type) {
       case 'feed':

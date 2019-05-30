@@ -41,12 +41,9 @@ export default {
         })
         this.$router.replace("/")
       } catch (e) {
-        console.log('DENTRO CATCH!!!', e)
         const error = e && e.response && e.response.data && e.response.data.errors[0].message || e
-        console.error(error)
-        console.error(e)
         Message({
-          message: this.$t('register.error') + error,
+          message: this.$t('register.error') + this.$t(error),
           type: 'error'
         })
       }

@@ -11,6 +11,7 @@ const Auth = {
     next()
   },
   async isAuth(req, res, next) {
+    console.error('ma sono dentro auth ?!?!', req.user)
     if (!req.user) {
       return res
         .status(403)

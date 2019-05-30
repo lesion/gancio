@@ -36,6 +36,18 @@
         "name": "lesion"
       },
       "category": "feature",
+      "creation_time": "2019-04-23T19:55:59.993Z",
+      "id": "10",
+      "prio": 1,
+      "references": [],
+      "title": "gestione errori form aggiungi evento",
+      "type": "bug"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
       "creation_time": "2019-04-23T19:56:46.263Z",
       "id": "11",
       "prio": 1,
@@ -77,6 +89,15 @@
       "assignedTo": {
         "name": "lesion"
       },
+      "creation_time": "2019-04-30T22:00:29.237Z",
+      "id": "17",
+      "references": [],
+      "title": "porcoddio la config arriva anche al client ovviamente, devo separare!"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
       "creation_time": "2019-04-30T12:31:20.056Z",
       "id": "15",
       "references": [],
@@ -85,18 +106,6 @@
   ],
   "testing": [],
   "todo": [
-    {
-      "assignedTo": {
-        "name": "lesion"
-      },
-      "category": "feature",
-      "creation_time": "2019-04-23T19:55:59.993Z",
-      "id": "10",
-      "prio": 1,
-      "references": [],
-      "title": "gestione errori form aggiungi evento",
-      "type": "bug"
-    },
     {
       "assignedTo": {
         "name": "lesion"
@@ -172,6 +181,24 @@
       "assignedTo": {
         "name": "lesion"
       },
+      "creation_time": "2019-05-27T20:42:22.581Z",
+      "id": "24",
+      "references": [],
+      "title": "copy to clipboard"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-29T13:08:20.887Z",
+      "id": "25",
+      "references": [],
+      "title": "creazione script di backup"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
       "creation_time": "2019-05-27T15:45:18.012Z",
       "id": "22",
       "references": [],
@@ -218,15 +245,6 @@
       "assignedTo": {
         "name": "lesion"
       },
-      "creation_time": "2019-04-30T22:00:29.237Z",
-      "id": "17",
-      "references": [],
-      "title": "porcoddio la config arriva anche al client ovviamente, devo separare!"
-    },
-    {
-      "assignedTo": {
-        "name": "lesion"
-      },
       "creation_time": "2019-04-27T19:44:33.769Z",
       "id": "12",
       "references": [],
@@ -259,10 +277,10 @@
       "assignedTo": {
         "name": "lesion"
       },
-      "creation_time": "2019-05-27T20:42:22.581Z",
-      "id": "24",
+      "creation_time": "2019-05-29T13:10:04.463Z",
+      "id": "26",
       "references": [],
-      "title": "copy to clipboard"
+      "title": "v-calendar colori e eventi multidays..."
     }
   ]
 }

@@ -7,10 +7,13 @@ const path = require('path')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 const cors = require('cors')
+const notifier = require('./notifier')
+
 const corsConfig = {
   allowedHeaders: ['Authorization'],
   exposeHeaders: ['Authorization']
 }
+
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
@@ -47,3 +50,4 @@ async function start() {
   })
 }
 start()
+notifier.startLoop(20)

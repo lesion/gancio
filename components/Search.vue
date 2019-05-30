@@ -23,7 +23,6 @@
 
 <script>
 import {mapState, mapActions} from 'vuex'
-
 export default {
   data () {
     return {
@@ -35,10 +34,11 @@ export default {
   methods: mapActions(['setSearchPlaces', 'setSearchTags', 'showPastEvents']),
   computed: {
     ...mapState(['tags', 'places', 'filters', 'show_past_events']),
+    // TOFIX: optimize
     keywords () {
-      const tags = this.tags.map( t => ({ value: 't' + t.tag, label: t.tag, count: +t.eventsCount }))
-      const places = this.places.map( p => ({ value: 'p' + p.id, label: p.name, count: +p.eventsCount }))
-      return tags.concat(places)
+      const tags = this.tags.map( t => ({ value: 't' + t.tag, label: t.tag, weigth: t.weigth }))
+      const places = this.places.map( p => ({ value: 'p' + p.id, label: p.name, weigth: p.weigth }))
+      return tags.concat(places).sort((a, b) => b.weigth-a.weigth)
     },
     showPast : {
       set (value) {
@@ -59,24 +59,6 @@ export default {
         return this.filters.tags.map(t => 't' + t).concat(this.filters.places.map(p => 'p' + p))
       }
     },
-    filters_tags: {
-      set (value) {
-        this.setSearchTags(value)
-      },
-      get () {
-        return this.filters.tags
-      }
-    },
-    filters_places: {
-      set (value) {
-        this.setSearchPlaces(value)
-      },
-      get () {
-        return this.filters.places
-      }
-    },    
   }
 }
 </script>
-<style lang="less">
-</style>

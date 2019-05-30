@@ -1,11 +1,11 @@
 <template lang="pug">
   el-dialog(:title='$t("common.export")' visible :before-close='close')
     p {{$t('export.intro')}}
-    
-    li(v-if='filters.tags.length') {{$t('common.tags')}}:
-      el-tag.ml-1(size='mini' v-for='tag in filters.tags' :key='tag.tag') {{tag}}
-    li(v-if='filters.places.length') {{$t('common.places')}}:
-      el-tag.ml-1(size='mini' v-for='place in filters.places' :key='place.id') {{place}}
+    Search
+    //- li(v-if='filters.tags.length') {{$t('common.tags')}}:
+    //-   el-tag.ml-1(size='mini' v-for='tag in filters.tags' :key='tag.tag') {{tag}}
+    //- li(v-if='filters.places.length') {{$t('common.places')}}:
+    //-   el-tag.ml-1(size='mini' v-for='place in filters.places' :key='place.id') {{place}}
     el-tabs.mt-2(v-model='type')
 
       el-tab-pane.pt-1(label='email' name='email')
@@ -55,13 +55,15 @@ import { mapState, mapGetters } from 'vuex'
 import path from 'path'
 import Calendar from '@/components/Calendar'
 import List from '@/components/List'
+import Search from '@/components/Search'
+
 import {intersection} from 'lodash'
 import { Message } from 'element-ui'
 const { SHARED_CONF } = require('@/config')
 
 export default {
   name: 'Export',
-  components: { List },
+  components: { List, Search },
   data () {
     return {
       type: 'email',
@@ -96,6 +98,11 @@ export default {
       if (this.list.title) {
         params.push(`title=${this.list.title}`)
       }
+
+      if (this.filters.places) {
+        params.push(`places=${this.filters.places}`)
+      }
+
       return `<iframe src="${SHARED_CONF.baseurl}/embed/list?${params.join('&')}"></iframe>`
     },
     link () {

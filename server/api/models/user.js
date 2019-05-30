@@ -5,7 +5,7 @@ const db = require('../db')
 const User = db.define('user', {
   email: {
     type: Sequelize.STRING,
-    unique: { msg: 'Email already exists' },
+    unique: { msg: 'err.register_error' },
     index: true,
     allowNull: false
   },

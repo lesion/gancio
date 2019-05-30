@@ -19,7 +19,8 @@ const Event = db.define('event', {
 })
 
 const Tag = db.define('tag', {
-  tag: { type: Sequelize.STRING, index: true, unique: true, },
+  tag: { type: Sequelize.STRING, index: true, unique: true, primaryKey: true },
+  weigth: { type: Sequelize.INTEGER, defaultValue: 0 },
   color: { type: Sequelize.STRING }
 })
 
@@ -43,6 +44,7 @@ const Notification = db.define('notification', {
 
 const Place = db.define('place', {
   name: { type: Sequelize.STRING, unique: true, index: true },
+  weigth: { type: Sequelize.INTEGER, defaultValue: 0 },
   address: { type: Sequelize.STRING }
 })
 

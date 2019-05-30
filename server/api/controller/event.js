@@ -21,24 +21,22 @@ const eventController = {
 
   async getMeta(req, res) {
     const places = await Place.findAll({
-      group: ['place.id'],
-      order: [[Sequelize.fn("COUNT", Sequelize.col('events.id')), 'DESC']],
+      order: [[Sequelize.literal('weigth'), 'DESC']],
       attributes: {
-        include: [[Sequelize.fn("COUNT", Sequelize.col('events.id')), 'eventsCount']],
-        exclude: ['createdAt', 'updatedAt']
+        include: [[Sequelize.fn('count', Sequelize.col('events.placeId')) ,'weigth']], // <---- Here you will get the total count of user
+        exclude: ['weigth', 'createdAt', 'updatedAt']
       },
-      include: { model: Event, attributes: [] }
+      include: [{ model: Event, attributes: [] }],
+      group: ['place.id']
     })
 
     const tags = await Tag.findAll({
-      group: ['tag'],
-      order: [[Sequelize.fn("COUNT", Sequelize.col('events.id')), 'DESC']],
-      includeIgnoreAttributes:false,
+      order: [['weigth' , 'DESC']],
+      includeIgnoreAttributes: false,
       attributes: {
-        include: [[Sequelize.fn("COUNT", Sequelize.col('events.id')), 'eventsCount']],
         exclude: ['createdAt', 'updatedAt']
-      },
-      include: { model: Event, attributes: [] }})
+      }
+    })
 
     res.json({ tags, places })
   },
@@ -92,7 +90,7 @@ const eventController = {
         Comment,
         { model: Place, attributes: ['name', 'address'] }
       ] ,
-      order: [ [Comment, 'id', 'DESC'] ]
+      order: [ [Comment, 'id', 'DESC'], [Tag, 'weigth', 'DESC'] ]
     })
     res.json(event)
   },
@@ -177,15 +175,17 @@ const eventController = {
           { start_datetime: { [Op.lte]: end } }
         ]
       },
-      order: [['start_datetime', 'ASC']],
+      order: [
+        ['start_datetime', 'ASC'], 
+        [Tag, 'weigth', 'DESC']
+      ],
       include: [
-        { model: User, required: false },
-        Comment,
-        Tag,
-        { model: Place, required: false }
+        // { model: User, required: false },
+        // { type: Comment, required: false, attributes: ['']
+        { model: Tag, required: false, attributes: ['tag', 'weigth','color'] },
+        { model: Place, required: false, attributes: ['id', 'name', 'address'] }
       ]
     })
-    // console.log(events)
     res.json(events)
   }
 

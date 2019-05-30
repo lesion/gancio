@@ -20,9 +20,9 @@ export const state = () => ({
 
 export const getters = {
   token: state => state.token,
+
   // filter current + future events only
   // plus, filter matches search tag/place
-
   filteredEvents: (state) => {
 
     let events = state.events
@@ -50,7 +50,6 @@ export const getters = {
     let lastDay = null
     events = map(events, e => {
       const currentDay = moment(e.start_datetime).date()
-      console.log(currentDay)
       e.newDay = (!lastDay || lastDay!==currentDay) && currentDay
       lastDay = currentDay
       return e
@@ -88,21 +87,8 @@ export const mutations = {
     state.tags = tags
     state.places = places
   },
-  // search
-  addSearchTag(state, tag) {
-    if (!state.filters.tags.find(t => t === tag.tag)) {
-      state.filters.tags.push(tag.tag)
-    } else {
-      state.filters.tags = state.filters.tags.filter(t => t !== tag.tag)
-    }
-  },
   setSearchTags(state, tags) {
     state.filters.tags = tags
-  },
-  addSearchPlace(state, place) {
-    if (state.filters.places.find(p => p.name === place.name)) {
-      state.filters.places.push(place)
-    }
   },
   setSearchPlaces(state, places) {
     state.filters.places = places
@@ -122,25 +108,22 @@ export const actions = {
     commit('update', { tags, places })
   },
   async addEvent({ commit }, formData) {
-    const event = await this.$axios.$post('/user/event', formData) // .addEvent(formData)
-    commit('addEvent', event)
+    const event = await this.$axios.$post('/user/event', formData)
+    if (event.user) {
+      commit('addEvent', event)
+    }
   },
   async updateEvent({ commit }, formData) {
     const event = await this.$axios.$put('/user/event', formData)
-    commit('updateEvent', event)
+    if (event.user) {
+      commit('updateEvent', event)
+    }
   },
   delEvent({ commit }, eventId) {
     commit('delEvent', eventId)
   },
-  // search
-  addSearchTag({ commit }, tag) {
-    commit('addSearchTag', tag)
-  },
   setSearchTags({ commit }, tags) {
     commit('setSearchTags', tags)
-  },
-  addSearchPlace({ commit }, place) {
-    commit('addSearchPlace', place)
   },
   setSearchPlaces({ commit }, places) {
     commit('setSearchPlaces', places)

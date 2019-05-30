@@ -12,15 +12,18 @@ export default {
   components: { List },
   async asyncData ({ $axios, req, res }) {
     const title = req.query.title || SHARED_CONF.title
-    const show_tags = req.query.showtags
     const tags = req.query.tags
     const places = req.query.places
     const now = new Date()
 
-    // TODO: filter future events based on tags/places/userid
-    const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
+    let params = []
+    if (places) params.push(`places=${places}`)
+    if (tags) params.push(`tags=${tags}`)
 
-    return { show_tags, events, title }
+    params = params.length ? `?${params.join('&')}` : ''
+    const events = await $axios.$get(`/export/json${params}`)
+
+    return { events, title }
   },
 }
 </script>
