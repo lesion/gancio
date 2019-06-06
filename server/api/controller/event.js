@@ -2,7 +2,7 @@ const crypto = require('crypto')
 const moment = require('moment')
 const { Op } = require('sequelize')
 const lodash = require('lodash')
-const { User, Event, Comment, Tag, Place, Notification } = require('../model')
+const { event: Event, comment: Comment, tag: Tag, place: Place, notification: Notification } = require('../models')
 const Sequelize = require('sequelize')
 
 const eventController = {

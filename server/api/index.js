@@ -1,27 +1,16 @@
 const express = require('express')
 const multer = require('multer')
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+const expressJwt = require('express-jwt')
+
 const { fillUser, isAuth, isAdmin } = require('./auth')
 const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 const userController = require('./controller/user')
 const settingsController = require('./controller/settings')
-const { SECRET_CONF } = require('../../config')
-const cookieParser = require('cookie-parser')
 
-const expressJwt = require('express-jwt')
-const jwt = expressJwt({
-  secret: SECRET_CONF.secret,
-  credentialsRequired: false,
-  getToken: req => {
-    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-      return req.headers.authorization.split(' ')[1];
-    } else if (req.cookies && req.cookies['auth._token.local']) {
-      const tmp = req.cookies['auth._token.local'].split(' ');
-      return tmp[1]
-    }
-    return null 
-  }
-})
+const { SECRET_CONF } = require('../config')
 
 const storage = require('./storage')({
   destination: 'uploads/'
@@ -30,6 +19,24 @@ const storage = require('./storage')({
 const upload = multer({ storage })
 const api = express.Router()
 api.use(cookieParser())
+api.use(bodyParser.urlencoded({ extended: false }))
+api.use(bodyParser.json())
+
+const jwt = expressJwt({
+  secret: SECRET_CONF.secret,
+  credentialsRequired: false,
+  // getToken: req => {
+  //   // if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+  //     // return req.headers.authorization.split(' ')[1];
+  //   if (req.cookies && req.cookies['token']) {
+  //     console.error(req.cookies['token'])
+  //     return req.cookies['token']
+  //   }
+  //   return null 
+  // }
+})
+
+
 // AUTH
 api.post('/auth/login', userController.login)
 api.post('/auth/logout', userController.logout)
@@ -77,8 +84,9 @@ api.get('/event/unconfirmed', jwt, isAuth, isAdmin, eventController.getUnconfirm
 api.post('/event/notification', eventController.addNotification)
 api.delete('/event/notification/:code', eventController.delNotification)
 
-api.get('/settings', settingsController.getAdminSettings)
-api.post('/settings', settingsController.setAdminSetting)
+api.get('/config', settingsController.getConfig)
+api.get('/settings', jwt, fillUser, isAdmin, settingsController.getAdminSettings)
+api.post('/settings', jwt, fillUser, isAdmin, settingsController.setAdminSetting)
 
 // get event
 api.get('/event/:event_id', eventController.get)

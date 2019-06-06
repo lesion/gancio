@@ -2,29 +2,26 @@ import moment from 'dayjs'
 import intersection from 'lodash/intersection'
 import map from 'lodash/map'
 
-
 export const state = () => ({
+  config: {},
   events: [],
-  user: {},
-  locale: 'it',
-  logged: false,
-  token: '',
   tags: [],
   places: [],
+  settings: {},
   filters: {
     tags: [],
-    places: []
+    places: [],
+    show_past_events: false,
+    show_recurrent_events: false,
+    show_pinned_event: false
   },
-  show_past_events: false,
 })
 
 export const getters = {
-  token: state => state.token,
 
   // filter current + future events only
   // plus, filter matches search tag/place
   filteredEvents: (state) => {
-
     let events = state.events
 
     // TOFIX: use lodash
@@ -95,6 +92,12 @@ export const mutations = {
   },
   showPastEvents (state, show) {
     state.show_past_events = show
+  },
+  setSettings (state, settings) {
+    state.settings = settings
+  },
+  setConfig (state, config) {
+    state.config = config
   }
 }
 
@@ -130,5 +133,11 @@ export const actions = {
   },
   showPastEvents({ commit }, show) {
     commit('showPastEvents', show)
+  },
+  setSettings({ commit }, settings) {
+    commit('setSettings', settings)
+  },
+  setConfig({ commit }, config) {
+    commit('setConfig', config)
   }
 }

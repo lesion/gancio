@@ -1,5 +1,11 @@
 <template lang="pug">
-  el-dialog(:title='$t("common.export")' visible :before-close='close')
+  el-card
+
+    nuxt-link.float-right(to='/')
+      v-icon(name='times' color='red')
+    h5 {{$t('common.export')}}
+
+
     p {{$t('export.intro')}}
     Search
     //- li(v-if='filters.tags.length') {{$t('common.tags')}}:
@@ -59,7 +65,6 @@ import Search from '@/components/Search'
 
 import {intersection} from 'lodash'
 import { Message } from 'element-ui'
-const { SHARED_CONF } = require('@/config')
 
 export default {
   name: 'Export',
@@ -68,7 +73,7 @@ export default {
     return {
       type: 'email',
       notification: { email: '' },
-      list: { title: SHARED_CONF.title },
+      list: { title: 'Gancio' },
     }
   },
   // filters,
@@ -76,7 +81,7 @@ export default {
     async add_notification () {
       if (!this.notification.email){
         Message({message:'Inserisci una mail', type: 'error'})
-        return this.$refs.email.focus()
+        // return this.$refs.email.focus()
       }
       // await api.addNotification({ ...this.notification, filters: this.filters})
       // this.$refs.modal.hide()
@@ -103,7 +108,7 @@ export default {
         params.push(`places=${this.filters.places}`)
       }
 
-      return `<iframe src="${SHARED_CONF.baseurl}/embed/list?${params.join('&')}"></iframe>`
+      return `<iframe src="/embed/list?${params.join('&')}"></iframe>`
     },
     link () {
       const tags = this.filters.tags.join(',')
@@ -119,7 +124,7 @@ export default {
         }
       }
 
-      return `${SHARED_CONF.baseurl}/api/export/${this.type}${query}`
+      return `/api/export/${this.type}${query}`
     },    
     showLink () {
       return (['feed', 'ics'].indexOf(this.type)>-1)

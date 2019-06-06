@@ -3,15 +3,15 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { SHARED_CONF } from '../../config'
 import List from '../../components/List'
 import moment from 'dayjs'
 
 export default {
   layout: 'iframe',
   components: { List },
+  computed: mapState(['config']),
   async asyncData ({ $axios, req, res }) {
-    const title = req.query.title || SHARED_CONF.title
+    const title = req.query.title || config.title
     const tags = req.query.tags
     const places = req.query.places
     const now = new Date()

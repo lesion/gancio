@@ -53,7 +53,6 @@
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import config from '@/config'
 
 export default {
   name: 'Event',

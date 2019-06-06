@@ -1,6 +1,6 @@
-const { Event, Comment, Tag, Place } = require('../model')
+const { event: Event, place: Place } = require('../models')
 const { Op } = require('sequelize')
-const config = require('../../../config')
+const config = require('../../config').SHARED_CONF
 const moment = require('moment')
 const ics = require('ics')
 
@@ -65,7 +65,6 @@ const exportController = {
     })
     res.type('text/calendar; charset=UTF-8')
     const { error, value } = ics.createEvents(eventsMap)
-    console.log(error, value)
     res.send(value)
   }
 }

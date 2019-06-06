@@ -1,17 +1,24 @@
 <template lang='pug'>
 
-  el-dialog(:title='$t("common.login")' :before-close='close' visible)
+  el-card
 
-    el-form(v-loading='loading')
+    nuxt-link.float-right(to='/')
+      v-icon(name='times' color='red')
+    h5 {{$t('common.login')}}
+
+    el-form(v-loading='loading' method='POST' action='/api/auth/login')
       p(v-html="$t('login.description')")
 
-      el-input.mb-2(v-model='email' type='email' :placeholder='$t("common.email")' autocomplete='email' ref='email')
-        i.el-icon-user(slot='prepend')
+      el-input.mb-2(v-model='email' type='email' name='email'
+        :placeholder='$t("common.email")' autocomplete='email' ref='email')
+        v-icon(name='user' slot='prepend')
 
-      el-input.mb-1(v-model='password'  @keyup.enter.native="submit" type='password' :placeholder='$t("common.password")')
-        i.el-icon-lock(slot='prepend')
+      el-input.mb-1(v-model='password'  @keyup.enter.native="submit" name='password'
+        type='password' :placeholder='$t("common.password")')
+        v-icon(name='lock' slot='prepend')
 
-      el-button.mr-1(plain type="success" :disabled='!email || !password' @click='submit') {{$t('common.login')}}
+      el-button.mr-1(plain type="success" native-type='submit'
+        :disabled='disabled' @click='submit') {{$t('common.login')}}
 
       nuxt-link(to='/register')
         el-button.mt-1(plain type="primary") {{$t('login.not_registered')}}
@@ -33,6 +40,12 @@ export default {
       password: '',
       email: '',
       loading: false
+    }
+  },
+  computed: {
+    disabled () {
+      if (process.server) return false
+      return !this.email || !this.password
     }
   },
   methods: {

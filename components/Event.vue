@@ -12,7 +12,7 @@
           //- date / place
           .date 
             div {{event|event_when}}
-            div {{event.place.name}}
+            div @{{event.place.name}}
 
           //- p(v-if='showDescription') {{event.description}}
 
@@ -54,6 +54,7 @@ export default {
 }
 </script>
 <style lang='less'>
+@import '../assets/style.less';
 
 @media only screen and (min-width: 574px) {
   .event {
@@ -83,21 +84,18 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #222;
+    background-color: #111214;
 
   }
 
   .content-info {
-    font-size: 12px;
-    font-size: 0.8em;
     padding: 0.8em 1em;
-    max-height: 200px;
-    color: rgb(255, 122, 204);
 
     h2 {
-      color: yellow;
+      color: @success;
       font-size: 16px;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
+      font-weight: 400;
       margin: 0px;
     }
 
@@ -109,9 +107,10 @@ export default {
     }
 
     .date {
-      font-weight: 800;
-      font-size: 16px;
-      font-size: 1rem;
+      font-weight: 300;
+      font-size: 12px;
+      font-size: 0.95rem;
+      color: #ff917a;
     }    
   }
 
@@ -124,7 +123,7 @@ export default {
     justify-content: center;
 
     li {
-      background: #40484D;
+      background: #1B1F21;
       display: inline-block;
       padding: 2px 10px;
       color: rgba(255,255,255,0.7);

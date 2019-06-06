@@ -52,17 +52,18 @@ export default {
           start: event.start_datetime, end: event.end_datetime
         }
         e.highlight = { 
-          color: 'red' // : sample(['purple', 'red', 'green', 'blue']),
+          color: sample(['purple', 'red', 'green', 'blue']),
         }
       } else {
         e.dates = event.start_datetime
-        e.dot = { color: 'rgba(102,10,20)' }
+        e.dot = { color: sample(['purple', 'red', 'green', 'blue']) }
       }
       return e
     }
   },
   computed: {
     ...mapGetters(['filteredEvents']),
+    ...mapState(['events']),
     attributes () {
       return [
         { key: 'today', dates: new Date(),

@@ -17,17 +17,16 @@ div#list
 </template>
 <script>
 import { mapGetters } from 'vuex'
-const { SHARED_CONF } = require('@/config')
 
 export default {
   name: 'List',
   data () {
-    return { SHARED_CONF }
+    return { }
   },
   props: {
     title: {
       type: String,
-      default: SHARED_CONF.title
+      default: ''
     },
     events: {
       type: Array,

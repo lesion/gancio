@@ -1,7 +1,10 @@
 <template lang="pug">
-  el-dialog(:title='$t("common.info")' visible
-    :before-close='close')
-    h5 Chi siamo
+  el-card
+
+    nuxt-link.float-right(to='/')
+      v-icon(name='times' color='red')
+    h3 {{$t('common.info')}}
+
     p.
       Gancio e' un progetto dell'<a href='https://autistici.org/underscore'>underscore hacklab</a> e uno dei
       servizi di <a href='https://cisti.org'>cisti.org</a>.

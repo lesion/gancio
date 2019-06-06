@@ -1,18 +1,25 @@
 <template lang='pug'>
-  el-dialog(:title="$t('common.register')" visible :before-close='() => $router.replace("/")' @open='$refs.email.focus()')
-    el-form
+  el-card
+
+    nuxt-link.float-right(to='/')
+      v-icon(name='times' color='red')
+    h5 {{$t('common.register')}}
+
+    el-form(method='POST' action='/api/user')
       p(v-html="$t('register.description')")
       el-input.mb-2(ref='email' v-model='user.email' type='email' required
-        :placeholder='$t("common.email")' autocomplete='email')
+        :placeholder='$t("common.email")' autocomplete='email' name='email')
         span(slot='prepend') @
 
-      el-input.mb-2(v-model='user.password' type="password" placeholder="Password")
+      el-input.mb-2(v-model='user.password' type="password" placeholder="Password" name='password')
         v-icon(name='lock' slot='prepend')
 
       el-input.mb-2(v-model='user.description' type="textarea" rows='3' :placeholder="$t('common.description')")
           v-icon(name='envelope-open-text')
 
-      el-button(plain type="success" icon='el-icon-arrow-right' :disabled='!user.password || !user.email || !user.description' @click='register') {{$t('common.send')}}
+      el-button(plain type="success" native-type='submit'
+        :disabled='disabled'
+        @click='register') {{$t('common.send')}} <v-icon name='chevron-right'/>
 </template>
 
 <script>
@@ -28,7 +35,10 @@ export default {
     }
   },
   computed: {
-    
+    disabled () {
+      if (process.server) return false
+      return !this.user.password || !this.user.email || !this.user.description
+    }
   },
   methods: {
     ...mapActions(['login']),

@@ -1,5 +1,9 @@
 <template lang="pug">
-  el-dialog(:before-close='close' :visible='open' :title="edit?$t('common.edit_event'):$t('common.add_event')")
+  el-card
+    nuxt-link.float-right(to='/')
+      v-icon(name='times' color='red')
+    h5 {{edit?$t('common.edit_event'):$t('common.add_event')}}
+
     el-form(v-loading='loading')
       el-tabs.mb-2(v-model='activeTab')
 
@@ -12,14 +16,7 @@
         //- WHERE
         el-tab-pane
           span(slot='label') <v-icon name='map-marker-alt'/> {{$t('common.where')}} 
-          div {{$t('common.where')}} 
-            el-popover(
-              placement="top-start"
-              width="400"
-              trigger="click")
-              v-icon(slot='reference' color='#ff9fc4' name='question-circle')
-              slot
-                p(v-html="$t('event.where_description')") 
+          p(v-html="$t('event.where_description')") 
 
           el-select.mb-3(v-model='event.place.name'
             @change='placeChoosed'
@@ -27,7 +24,7 @@
             default-first-option
           )
             el-option(v-for='place in places' :label='place.name' :value='place.name' :key='place.id')
-              span {{place.name}} - {{place.weigth}}
+              span {{place.name}}
           div {{$t("common.address")}}
           el-input.mb-3(ref='address' v-model='event.place.address'
             :disabled='places_name.indexOf(event.place.name)>-1'
@@ -190,11 +187,6 @@ export default {
   },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta']),
-    close (done) {
-      
-      this.$router.replace('/')
-      done()
-    },
     eventToAttribute(event) {
       let e = {
         key: event.id,

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { Button, Select, Tag, Option, Table, FormItem, Card, Row, Col, Upload, Checkbox,
-  Form, Tabs, TabPane, Switch, Input, Loading, TimeSelect, Badge, ButtonGroup, Divider,
+  Form, Tabs, TabPane, Switch, Input, Loading, TimeSelect, Badge, ButtonGroup, Divider, Step, Steps,
   TableColumn, ColorPicker, Pagination, Popover, Tooltip, Dialog, Calendar, Carousel, CarouselItem,
   Container, Footer , Timeline, TimelineItem, Menu, MenuItem } from 'element-ui'
 import localeEn from 'element-ui/lib/locale/lang/en'
@@ -11,6 +11,8 @@ locale.use(localeIt)
 export default () => {
   Vue.use(Button)
   Vue.use(Divider)
+  Vue.use(Step)
+  Vue.use(Steps)
   Vue.use(Checkbox)
   Vue.use(Upload)
   Vue.use(ButtonGroup)

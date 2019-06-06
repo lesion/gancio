@@ -24,6 +24,7 @@ import 'vue-awesome/icons/tags'
 import 'vue-awesome/icons/chevron-right'
 import 'vue-awesome/icons/chevron-left'
 import 'vue-awesome/icons/search'
+import 'vue-awesome/icons/times'
 
 import Icon from 'vue-awesome/components/Icon'
 

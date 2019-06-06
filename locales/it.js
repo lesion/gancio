@@ -80,11 +80,11 @@ const it = {
 
   event: {
     anon: 'Anonimo',
-    anon_description: `Puoi inserire un evento senza rigistrarti o fare il login, 
+    anon_description: `Puoi inserire un evento senza registrarti o fare il login, 
       ma in questo caso dovrai aspettare che qualcuno lo legga confermando che si
-      tratta di un evento adatto a questo spazio, delegando questa scelta.<br/><br/> 
-      Puoi fare il <a href='/login'>login</a> o <a href='/registrarti'>registrarti</a>,
-      altrimenti vai avanti e riceverai una risposta il prima possibile.`,
+      tratta di un evento adatto a questo spazio, delegando questa scelta. Inoltre non sarà possibile modificarlo.<br/><br/> 
+      Puoi invece fare il <a href='/login'>login</a> o <a href='/registrarti'>registrarti</a>,
+      altrimenti vai avanti e riceverai una risposta il prima possibile. `,
     multidate_description: 'tanti giorni',
     date_description: `Quand'è il gancio?`,
     dates_description: 'Che giorni?',
@@ -97,7 +97,7 @@ const it = {
     time_end_description: 'Se vuoi puoi specificare un orario di fine.',
     added: 'Evento aggiunto',
     added_anon: 'Evento aggiunto, verrà confermato quanto prima.',
-    where_description: `Dov'è il gancio?<br/>Se il posto non è presente, scrivilo e premi invio. `,
+    where_description: `Dov'è il gancio? Se il posto non è presente, scrivilo e <b>premi invio</b>. `,
     confirmed: 'Evento confermato'
   },
 
@@ -119,6 +119,13 @@ const it = {
 
   err: {
     register_error: 'Errore nella registrazione'
+  },
+
+  firstrun: {
+    basic: `Inserisci titolo e descrizione della tua istanza di gancio.`,
+    database: `Gancio ha bisogno di un database postgresql!`,
+    smtp: `Inserisci un account SMTP relativo a questa istanza di gancio.`,
+
   }
 }
 

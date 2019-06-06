@@ -1,8 +1,9 @@
 <template lang="pug">
   el-menu.d-grid.nav(mode='horizontal' router background-color="#222C32")
 
-    el-menu-item(v-if='!$auth.loggedIn' index='/login' :title="$t('common.login')")
-      v-icon(color='lightgreen' name='user')
+    nuxt-link(to='/login')
+      el-menu-item(v-if='!$auth.loggedIn' index='/login' :title="$t('common.login')")
+        v-icon(color='lightgreen' name='user')
 
     el-menu-item(index='/add' :title="$t('common.add_event')")
       v-icon(color='lightgreen' name='plus')

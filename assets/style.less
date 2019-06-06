@@ -1,6 +1,10 @@
+@background: #222C32;
+@success: #c7ffbc;
+// @info 
+
 html, body {
   margin: 0px;
-  background-color: #222C32 !important;
+  background-color: @background !important;
   width: 100%;
   overflow-x: hidden;
   box-sizing: border-box;
@@ -9,6 +13,20 @@ html, body {
 
 * {
   box-sizing: border-box;
+}
+
+.el-form-item {
+  margin-bottom: 5px;
+}
+.el-divider__text {
+  background-color: @background;
+  color: white;
+  border-radius: 5px;
+}
+
+.el-card {
+  max-width: 600px;
+  margin: 30px auto;
 }
 
 .el-dialog {

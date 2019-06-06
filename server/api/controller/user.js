@@ -4,14 +4,14 @@ const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
 const jsonwebtoken = require('jsonwebtoken')
-const User = require('../models/user')
-const { SECRET_CONF, SHARED_CONF } = require('../../../config')
+const { SECRET_CONF, SHARED_CONF } = require('../../config')
 const mail = require('../mail')
-const { Event, Tag, Place } = require('../models/event')
+const { user: User, event: Event, tag: Tag, place: Place } = require('../models')
 const eventController = require('./event')
 
 const userController = {
   async login(req, res) {
+
     // find the user
     const user = await User.findOne({ where: { email: { [Op.eq]: req.body && req.body.email } } })
     if (!user) {
@@ -33,7 +33,7 @@ const userController = {
           },
           SECRET_CONF.secret
         )
-      
+
         res.json({token: accessToken})        
       }
     }
@@ -89,7 +89,9 @@ const userController = {
       eventDetails.image_path = req.file.filename
     }
 
+    console.error('prima la creazione di evento')
     let event = await Event.create(eventDetails)
+    console.error('dopo la creazione di evento')
 
     // create place if needs to
     let place
@@ -195,7 +197,10 @@ const userController = {
   },
 
   async current(req, res) {
-    res.json(req.user)
+    if (req.user)
+      res.json(req.user)
+    else 
+      res.sendStatus(404)
   },
 
   async getAll(req, res) {
@@ -219,7 +224,6 @@ const userController = {
   },
 
   async register(req, res) {
-    
     const n_users = await User.count()
     try {
 
@@ -234,14 +238,17 @@ const userController = {
       try {
         mail.send([user.email, SECRET_CONF.admin], 'register', { user, config: SHARED_CONF })
       } catch (e) {
-        console.error(e)
         return res.status(400).json(e)
       }
-      const payload = { email: user.email }
+      const payload = {
+        id: user.id,
+        email: user.email,
+        scope: [user.is_admin ? 'admin' : 'user']
+      }
       const token = jwt.sign(payload, SECRET_CONF.secret)
-      res.json({ user, token })
+      res.json({ token })
+      // res.redirect('/')
     } catch (e) {
-      console.error(e)
       res.status(404).json(e)
     }
   }

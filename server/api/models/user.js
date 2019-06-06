@@ -1,34 +1,39 @@
-const Sequelize = require('sequelize')
+'use strict';
 const bcrypt = require('bcrypt')
-const db = require('../db')
 
-const User = db.define('user', {
-  email: {
-    type: Sequelize.STRING,
-    unique: { msg: 'err.register_error' },
-    index: true,
-    allowNull: false
-  },
-  description: Sequelize.TEXT,
-  password: Sequelize.STRING,
-  recover_code: Sequelize.STRING,
-  is_admin: Sequelize.BOOLEAN,
-  is_active: Sequelize.BOOLEAN,
-  mastodon_auth: Sequelize.JSON
-})
+module.exports = (sequelize, DataTypes) => {
+  const user = sequelize.define('user', {
+    email: {
+      type: DataTypes.STRING,
+      unique: { msg: 'err.register_error' },
+      index: true,
+      allowNull: false
+    },
+    description: DataTypes.TEXT,
+    password: DataTypes.STRING,
+    recover_code: DataTypes.STRING,
+    is_admin: DataTypes.BOOLEAN,
+    is_active: DataTypes.BOOLEAN
+  }, {});
 
-User.prototype.comparePassword = async function (pwd) {
-  if (!this.password) return false
-  const ret = await bcrypt.compare(pwd, this.password)
-  return ret
-}
+  user.associate = function(models) {
+    // associations can be defined here
+    user.hasMany(models.event)
+  };
 
-User.beforeSave(async (user, options) => {
-  if (user.changed('password')) {
-    const salt = await bcrypt.genSalt(10)
-    const hash = await bcrypt.hash(user.password, salt)
-    user.password = hash
+  user.prototype.comparePassword = async function (pwd) {
+    if (!this.password) return false
+    const ret = await bcrypt.compare(pwd, this.password)
+    return ret
   }
-})
+  
+  user.beforeSave(async (user, options) => {
+    if (user.changed('password')) {
+      const salt = await bcrypt.genSalt(10)
+      const hash = await bcrypt.hash(user.password, salt)
+      user.password = hash
+    }
+  })
 
-module.exports = User
+  return user;
+};

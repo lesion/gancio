@@ -1,81 +1,31 @@
-const Sequelize = require('sequelize')
-const db = require('../db')
-const User = require('./user')
-
-const Event = db.define('event', {
-  title: Sequelize.STRING,
-  description: Sequelize.TEXT,
-  multidate: Sequelize.BOOLEAN,
-  start_datetime: { type: Sequelize.DATE, index: true },
-  end_datetime: { type: Sequelize.DATE, index: true },
-  image_path: Sequelize.STRING,
-  is_visible: Sequelize.BOOLEAN,
-  activitypub_id: { type: Sequelize.BIGINT, index: true },
-  activitypub_ids: { 
-    type: Sequelize.ARRAY(Sequelize.BIGINT),
-    index: true,
-    defaultValue: []
-  }
-})
-
-const Tag = db.define('tag', {
-  tag: { type: Sequelize.STRING, index: true, unique: true, primaryKey: true },
-  weigth: { type: Sequelize.INTEGER, defaultValue: 0 },
-  color: { type: Sequelize.STRING }
-})
-
-const Comment = db.define('comment', {
-  activitypub_id: { type: Sequelize.BIGINT, index: true },
-  data: Sequelize.JSON,
-  // url: Sequelize.STRING,
-  author: Sequelize.STRING,
-  text: Sequelize.STRING
-})
-
-const Notification = db.define('notification', {
-  filters: Sequelize.JSON,
-  email: Sequelize.STRING,
-  remove_code: Sequelize.STRING,
-  type: {
-    type: Sequelize.ENUM,
-    values: ['mail', 'admin_email', 'mastodon']
-  }
-})
-
-const Place = db.define('place', {
-  name: { type: Sequelize.STRING, unique: true, index: true },
-  weigth: { type: Sequelize.INTEGER, defaultValue: 0 },
-  address: { type: Sequelize.STRING }
-})
-
-Comment.belongsTo(Event)
-Event.hasMany(Comment)
-
-Event.belongsToMany(Tag, { through: 'tagEvent' })
-Tag.belongsToMany(Event, { through: 'tagEvent' })
-
-const EventNotification = db.define('EventNotification', {
-  status: {
-    type: Sequelize.ENUM,
-    values: ['new', 'sent', 'error'],
-    defaultValue: 'new',
-    index: true
-  }
-})
-
-Event.belongsToMany(Notification, { through: EventNotification })
-Notification.belongsToMany(Event, { through: EventNotification })
-
-Event.belongsTo(User)
-Event.belongsTo(Place)
-
-User.hasMany(Event)
-Place.hasMany(Event)
-
-async function init() {
-  await Notification.findOrCreate({ where: { type: 'mastodon', filters: { is_visible: true } } })
-  // await Notification.findOrCreate({ where: { type: 'admin_email', filters: { is_visible: false } } })
-}
-
-init()
-module.exports = { Event, Comment, Tag, Place, Notification, EventNotification }
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const event = sequelize.define('event', {
+    title: DataTypes.STRING,
+    slug: DataTypes.STRING,
+    description: DataTypes.TEXT,
+    multidate: DataTypes.BOOLEAN,
+    start_datetime: { 
+      type: DataTypes.DATE,
+      index: true
+    },
+    end_datetime: DataTypes.DATE,
+    image_path: DataTypes.STRING,
+    is_visible: DataTypes.BOOLEAN,
+    activitypub_id: {
+      type: DataTypes.BIGINT,
+      index: true
+    }
+  }, {});
+  event.associate = function(models) {
+    event.belongsTo(models.place)
+    event.belongsTo(models.user)
+    event.belongsToMany(models.tag, { through: 'event_tags' })
+    event.belongsToMany(models.notification, { through: 'event_notification' })
+    event.hasMany(models.comment)
+    // Tag.belongsToMany(Event, { through: 'tagEvent' })    
+    // Event.hasMany(models.Tag)
+    // associations can be defined here
+  };
+  return event;
+};

@@ -1,12 +1,10 @@
-const { User, Event, Comment, Tag } = require('../model')
-const { SHARED_CONF } = require('../../../config')
-const Mastodon = require('mastodon-api')
-// const Sequelize = require('sequelize')
-// const Op = Sequelize.Op
-const settingsController = require('./settings')
 const fs = require('fs')
 const path = require('path')
 const moment = require('moment')
+const { event: Event, comment: Comment, tag: Tag } = require('../model')
+const config = require('../../config').SHARED_CONF
+const Mastodon = require('mastodon-api')
+const settingsController = require('./settings')
 moment.locale('it')
 
 const botController = {
@@ -47,7 +45,7 @@ const botController = {
     const { access_token, instance } = mastodon_auth
     const bot = new Mastodon({ access_token, api_url: `https://${instance}/api/v1/` })
     const status = `${event.title} @ ${event.place.name} ${moment(event.start_datetime).format('ddd, D MMMM HH:mm')} - 
-${event.description.length > 200 ? event.description.substr(0, 200) + '...' : event.description} - ${event.tags.map(t => '#' + t.tag).join(' ')} ${SHARED_CONF.baseurl}/event/${event.id}`
+${event.description.length > 200 ? event.description.substr(0, 200) + '...' : event.description} - ${event.tags.map(t => '#' + t.tag).join(' ')} ${config.baseurl}/event/${event.id}`
 
     let media
     if (event.image_path) {
@@ -58,9 +56,9 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
     }
     return bot.post('statuses', { status, visibility: 'direct', media_ids: media ? [media.data.id] : [] })
   },
+
+  // TOFIX: enable message deletion
   async message (msg) {
-    console.log(msg)
-    console.log(msg.data.accounts)
     const replyid = msg.data.in_reply_to_id || msg.data.last_status.in_reply_to_id
     if (!replyid) return
     const event = await Event.findOne({ where: { activitypub_id: replyid } })
@@ -71,9 +69,9 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
     }
     const comment = await Comment.create({
       activitypub_id: msg.data.last_status.id, 
-      text: msg.data.last_status.content,
+      // text: msg.data.last_status.content,
       data: msg.data,
-      author: msg.data.accounts[0].username 
+      // author: msg.data.accounts[0].username 
     })
     event.addComment(comment)
     // const comment = await Comment.findOne( { where: {activitypub_id: msg.data.in_reply_to}} )
@@ -93,5 +91,5 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
   }
 }
 
-setTimeout(botController.initialize, 2000)
+// setTimeout(botController.initialize, 2000)
 module.exports = botController

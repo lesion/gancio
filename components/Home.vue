@@ -4,10 +4,9 @@
     a(href='#totop')
       el-button.top.d-block.d-sm-none(icon='el-icon-top' circle type='primary' plain)
     a.totop(name='totop')
+    no-ssr
+      Calendar
     .row.m-0
-
-      no-ssr
-        Calendar.col-sm-12.col-lg-8.col-xl-6
 
       .p-0.col-sm-6.col-lg-4.col-xl-3(v-for='event in filteredEvents')
         a(:id='event.newDay' v-if='event.newDay')

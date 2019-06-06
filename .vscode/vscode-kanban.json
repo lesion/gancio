@@ -154,6 +154,15 @@
       "assignedTo": {
         "name": "lesion"
       },
+      "creation_time": "2019-06-01T21:00:22.155Z",
+      "id": "28",
+      "references": [],
+      "title": "activitypub stream"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
       "creation_time": "2019-05-27T15:42:35.467Z",
       "id": "21",
       "references": [],
@@ -167,6 +176,15 @@
       "id": "20",
       "references": [],
       "title": "check password reset"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-06-01T21:23:46.941Z",
+      "id": "30",
+      "references": [],
+      "title": "choose listening port"
     },
     {
       "assignedTo": {
@@ -194,6 +212,15 @@
       "id": "25",
       "references": [],
       "title": "creazione script di backup"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-06-01T21:00:07.431Z",
+      "id": "27",
+      "references": [],
+      "title": "eventi ricorrenti"
     },
     {
       "assignedTo": {
@@ -254,12 +281,30 @@
       "assignedTo": {
         "name": "lesion"
       },
+      "creation_time": "2019-06-01T21:15:42.190Z",
+      "id": "29",
+      "references": [],
+      "title": "settings di istanza (default filter, eg, eventi ricorrenti)"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
       "category": "feature",
       "creation_time": "2019-04-23T19:47:10.704Z",
       "id": "4",
       "prio": 0,
       "references": [],
       "title": "traduzione in inglese"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-29T13:10:04.463Z",
+      "id": "26",
+      "references": [],
+      "title": "v-calendar colori e eventi multidays..."
     },
     {
       "assignedTo": {
@@ -277,10 +322,10 @@
       "assignedTo": {
         "name": "lesion"
       },
-      "creation_time": "2019-05-29T13:10:04.463Z",
-      "id": "26",
+      "creation_time": "2019-06-05T20:39:59.287Z",
+      "id": "31",
       "references": [],
-      "title": "v-calendar colori e eventi multidays..."
+      "title": "scroll h su mobile"
     }
   ]
 }

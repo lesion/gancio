@@ -130,7 +130,8 @@ export default {
       const users = await $axios.$get('/users')
       const events = await $axios.$get('/event/unconfirmed')
       const settings = await $axios.$get('/settings')
-      return { users, events, settings, mastodon_instance: settings.mastodon_auth && settings.mastodon_auth.instance}
+
+      return { users, events, settings, mastodon_instance: settings && settings.mastodon_auth && settings.mastodon_auth.instance || ''}
     } catch ( e ) {
       console.error(e)
     }
