@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 const bcrypt = require('bcrypt')
 
 module.exports = (sequelize, DataTypes) => {
@@ -14,19 +14,23 @@ module.exports = (sequelize, DataTypes) => {
     recover_code: DataTypes.STRING,
     is_admin: DataTypes.BOOLEAN,
     is_active: DataTypes.BOOLEAN
-  }, {});
+  }, {
+    defaultScope: {
+      exclude: ['password', 'recover_code']
+    }
+  })
 
-  user.associate = function(models) {
+  user.associate = function (models) {
     // associations can be defined here
     user.hasMany(models.event)
-  };
+  }
 
   user.prototype.comparePassword = async function (pwd) {
     if (!this.password) return false
     const ret = await bcrypt.compare(pwd, this.password)
     return ret
   }
-  
+
   user.beforeSave(async (user, options) => {
     if (user.changed('password')) {
       const salt = await bcrypt.genSalt(10)
@@ -35,5 +39,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   })
 
-  return user;
+  return user
 };

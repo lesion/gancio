@@ -5,26 +5,26 @@
       v-icon(name='times' color='red')
     h5 {{$t('common.register')}}
 
-    el-form(method='POST' action='/api/user')
+    el-form(@submit.native.prevent='register' method='POST' action='/api/user')
       p(v-html="$t('register.description')")
       el-input.mb-2(ref='email' v-model='user.email' type='email' required
         :placeholder='$t("common.email")' autocomplete='email' name='email')
         span(slot='prepend') @
 
-      el-input.mb-2(v-model='user.password' type="password" placeholder="Password" name='password')
+      el-input.mb-2(v-model='user.password' type="password" placeholder="Password" name='password' required)
         v-icon(name='lock' slot='prepend')
 
       el-input.mb-2(v-model='user.description' type="textarea" rows='3' :placeholder="$t('common.description')")
           v-icon(name='envelope-open-text')
 
       el-button(plain type="success" native-type='submit'
-        :disabled='disabled'
-        @click='register') {{$t('common.send')}} <v-icon name='chevron-right'/>
+        :disabled='disabled') {{$t('common.send')}} <v-icon name='chevron-right'/>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import { Message } from 'element-ui'
+import get from 'lodash/get'
 
 export default {
   name: 'Register',
@@ -44,14 +44,14 @@ export default {
     ...mapActions(['login']),
     async register () {
       try {
-        const user = await this.$axios.$post('/user', this.user)
+        const { user } = await this.$axios.$post('/user', this.user)
         Message({
-          message: this.$t(`register.${user.is_admin && 'admin_'}complete`),
+          message: this.$t(`register.${user.is_admin ? 'admin_' : ''}complete`),
           type: 'success'
         })
         this.$router.replace("/")
       } catch (e) {
-        const error = e && e.response && e.response.data && e.response.data.errors[0].message || e
+        const error = get(e, 'e.response.data.errors[0].message', String(e))
         Message({
           message: this.$t('register.error') + this.$t(error),
           type: 'error'

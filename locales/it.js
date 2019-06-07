@@ -41,7 +41,7 @@ const it = {
     logout_ok: 'Uscita correttamente',
     copy: 'Copia'
   },
-  
+
   login: {
     description: `Entrando puoi pubblicare nuovi eventi.`,
     check_email: 'Controlla la tua posta (anche lo spam)',
@@ -75,7 +75,9 @@ const it = {
     description: `I movimenti hanno bisogno di organizzarsi e autofinanziarsi. <br/>Questo è un dono per voi, usatelo solo per eventi non commerciali e ovviamente antifascisti, antisessisti, antirazzisti. 
       <br/>Prima di poter pubblicare <strong>dobbiamo approvare l'account</strong>, considera che <strong>dietro questo sito ci sono delle persone</strong> di
       carne e sangue, scrivici quindi due righe per farci capire che eventi vorresti pubblicare.`,
-    error: 'Errore: '
+    error: 'Errore: ',
+    admin_complete: 'Sei il primo utente e quindi sei amministratore!',
+    complete: 'Confermeremo la registrazione quanto prima.'
   },
 
   event: {
@@ -124,7 +126,7 @@ const it = {
   firstrun: {
     basic: `Inserisci titolo e descrizione della tua istanza di gancio.`,
     database: `Gancio ha bisogno di un database postgresql!`,
-    smtp: `Inserisci un account SMTP relativo a questa istanza di gancio.`,
+    smtp: `Inserisci un account SMTP relativo a questa istanza di gancio.`
 
   }
 }

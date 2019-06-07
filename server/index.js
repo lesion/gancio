@@ -1,13 +1,14 @@
-const firstRun = require('./firstrun')
+#!/bin/env node
+const path = require('path')
 const express = require('express')
 const consola = require('consola')
 const morgan = require('morgan')
-const path = require('path')
-const app = express()
 const { Nuxt, Builder } = require('nuxt')
+const firstRun = require('./firstrun')
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
 
+const app = express()
 async function start() {
   // Init Nuxt.js
   const nuxt = new Nuxt(config)

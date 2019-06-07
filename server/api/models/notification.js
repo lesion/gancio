@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 module.exports = (sequelize, DataTypes) => {
   const notification = sequelize.define('notification', {
     filters: DataTypes.JSON,
@@ -8,10 +8,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM,
       values: ['mail', 'admin_email', 'mastodon']
     }
-  }, {});
-  notification.associate = function(models) {
-    notification.belongsToMany(models.event, { through: 'event_notification' })    
+  }, {})
+  notification.associate = function (models) {
+    notification.belongsToMany(models.event, { through: 'event_notification' })
     // associations can be defined here
-  };
-  return notification;
-};
+  }
+  return notification
+}

@@ -2,10 +2,10 @@ const Email = require('email-templates')
 const path = require('path')
 const moment = require('moment')
 const config = require('../config')
-moment.locale(config.SHARED_CONF.locale)
 
+moment.locale(config.SHARED_CONF.locale)
 const mail = {
-  send (addresses, template, locals) {
+  send(addresses, template, locals) {
     const email = new Email({
       views: { root: path.join(__dirname, '..', 'emails') },
       juice: true,

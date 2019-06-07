@@ -1,4 +1,8 @@
-const config = require('./server/config').SHARED_CONF
+const argv = require('yargs').argv
+const path = require('path')
+const config_path = path.resolve(argv.config || './config.js')
+
+const config = require(config_path).SHARED_CONF
 
 module.exports = {
   mode: 'universal',
@@ -15,7 +19,6 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   dev: (process.env.NODE_ENV !== 'production'),
-
   serverMiddleware: [
     { path: '/api', handler: '@/server/api/index.js' }
   ],
@@ -30,18 +33,20 @@ module.exports = {
    */
   css: [
     'bootstrap/dist/css/bootstrap.css',
-    'element-ui/lib/theme-chalk/index.css',
+    'element-ui/lib/theme-chalk/index.css'
   ],
-
+  env: {
+    config
+  },
   /*
    ** Plugins to load before mounting the App
    */
   plugins: [
     '@/plugins/element-ui', // UI library -> https://element.eleme.io/#/en-US/
-    '@/plugins/filters',    // text filters, datetime, etc.
-    '@/plugins/i18n',       // localization plugin
+    '@/plugins/filters', // text filters, datetime, etc.
+    '@/plugins/i18n', // localization plugin
     '@/plugins/vue-awesome', // icon
-    { src: '@/plugins/v-calendar', ssr: false }, // calendar, TO-REDO
+    { src: '@/plugins/v-calendar', ssr: false } // calendar, TO-REDO
   ],
 
   /*
@@ -58,7 +63,7 @@ module.exports = {
   axios: {
     baseURL: config.baseurl + '/api',
     browserBaseURL: config.baseurl + '/api',
-    prefix: '/api',
+    prefix: '/api'
     // credentials: true
     // See https://github.com/nuxt-community/axios-module#options
   },
@@ -68,37 +73,19 @@ module.exports = {
         endpoints: {
           login: { url: '/auth/login', method: 'post', propertyName: 'token' },
           logout: false,
-          user: { url: '/auth/user', method: 'get', propertyName: false },
-        },
+          user: { url: '/auth/user', method: 'get', propertyName: false }
+        }
       }
     }
   },
-
 
   /*
    ** Build configuration
    */
   build: {
-    // babel: {
-    //   presets: ['@nuxt/babel-preset-app']
-    // },
     transpile: [/^element-ui/, /^vue-awesome/],
     splitChunks: {
       layouts: true
     }
-    /*
-     ** You can extend webpack config here
-     */
-    // extend(config, ctx) {
-      // Run ESLint on save
-      // if (ctx.isDev && ctx.isClient) {
-      //   config.module.rules.push({
-      //     enforce: 'pre',
-      //     test: /\.(js|vue)$/,
-      //     loader: 'eslint-loader',
-      //     exclude: /(node_modules)/
-      //   })
-      // }
-    // }
   }
 }

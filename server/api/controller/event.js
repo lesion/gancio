@@ -23,7 +23,7 @@ const eventController = {
     const places = await Place.findAll({
       order: [[Sequelize.literal('weigth'), 'DESC']],
       attributes: {
-        include: [[Sequelize.fn('count', Sequelize.col('events.placeId')) ,'weigth']], // <---- Here you will get the total count of user
+        include: [[Sequelize.fn('count', Sequelize.col('events.placeId')) , 'weigth']], // <---- Here you will get the total count of user
         exclude: ['weigth', 'createdAt', 'updatedAt']
       },
       include: [{ model: Event, attributes: [] }],
@@ -31,7 +31,7 @@ const eventController = {
     })
 
     const tags = await Tag.findAll({
-      order: [['weigth' , 'DESC']],
+      order: [['weigth', 'DESC']],
       includeIgnoreAttributes: false,
       attributes: {
         exclude: ['createdAt', 'updatedAt']
@@ -89,8 +89,8 @@ const eventController = {
         Tag,
         Comment,
         { model: Place, attributes: ['name', 'address'] }
-      ] ,
-      order: [ [Comment, 'id', 'DESC'], [Tag, 'weigth', 'DESC'] ]
+      ],
+    order: [ [Comment, 'id', 'DESC'], [Tag, 'weigth', 'DESC'] ]
     })
     res.json(event)
   },
@@ -176,13 +176,13 @@ const eventController = {
         ]
       },
       order: [
-        ['start_datetime', 'ASC'], 
+        ['start_datetime', 'ASC'],
         [Tag, 'weigth', 'DESC']
       ],
       include: [
         // { model: User, required: false },
         // { type: Comment, required: false, attributes: ['']
-        { model: Tag, required: false, attributes: ['tag', 'weigth','color'] },
+        { model: Tag, required: false, attributes: ['tag', 'weigth', 'color'] },
         { model: Place, required: false, attributes: ['id', 'name', 'address'] }
       ]
     })

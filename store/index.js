@@ -14,7 +14,7 @@ export const state = () => ({
     show_past_events: false,
     show_recurrent_events: false,
     show_pinned_event: false
-  },
+  }
 })
 
 export const getters = {
@@ -25,7 +25,7 @@ export const getters = {
     let events = state.events
 
     // TOFIX: use lodash
-    if (state.filters.tags.length || state.filters.places.length){
+    if (state.filters.tags.length || state.filters.places.length) {
       events = events.filter((e) => {
         if (state.filters.tags.length) {
           const m = intersection(e.tags.map(t => t.tag), state.filters.tags)
@@ -41,13 +41,13 @@ export const getters = {
     }
 
     if (!state.show_past_events) {
-      events = events.filter( e => !e.past )
+      events = events.filter(e => !e.past)
     }
 
     let lastDay = null
     events = map(events, e => {
       const currentDay = moment(e.start_datetime).date()
-      e.newDay = (!lastDay || lastDay!==currentDay) && currentDay
+      e.newDay = (!lastDay || lastDay !== currentDay) && currentDay
       lastDay = currentDay
       return e
     })
@@ -90,20 +90,20 @@ export const mutations = {
   setSearchPlaces(state, places) {
     state.filters.places = places
   },
-  showPastEvents (state, show) {
+  showPastEvents(state, show) {
     state.show_past_events = show
   },
-  setSettings (state, settings) {
+  setSettings(state, settings) {
     state.settings = settings
   },
-  setConfig (state, config) {
+  setConfig(state, config) {
     state.config = config
   }
 }
 
 export const actions = {
   async updateEvents({ commit }, page) {
-    const events = await this.$axios.$get(`/event/${page.month-1}/${page.year}`)
+    const events = await this.$axios.$get(`/event/${page.month - 1}/${page.year}`)
     commit('setEvents', events)
   },
   async updateMeta({ commit }) {

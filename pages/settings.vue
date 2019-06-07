@@ -1,5 +1,9 @@
 <template lang="pug">
-  el-dialog(:title="$t('common.settings')" :before-close='close' visible)
+  el-card
+    nuxt-link.float-right(to='/')
+      v-icon(name='times' color='red')
+    h5 {{$t('common.settings')}}
+
     //- el-form
       //- el-form-item {{$t('settings.change_password')}}
     el-divider {{$t('settings.change_password')}}
@@ -23,11 +27,11 @@ export default {
   methods: {
     async change () {
       if (!this.password) return
-      const user = this.user
-      user.password = this.password
+      // this.$auth.user.password = this.password
+      const user_data = { id : this.$auth.user.id, password: this.password }
       try {
-        // this.$axios.
-        // await api.updateUser(user)
+        const user = await this.$axios.$put('/user', user_data)
+        console.error(user)
       } catch (e) {
         console.log(e)
       }

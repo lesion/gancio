@@ -3,14 +3,13 @@ const multer = require('multer')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const expressJwt = require('express-jwt')
+const config = require('../config')
 
 const { fillUser, isAuth, isAdmin } = require('./auth')
 const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 const userController = require('./controller/user')
 const settingsController = require('./controller/settings')
-
-const { SECRET_CONF } = require('../config')
 
 const storage = require('./storage')({
   destination: 'uploads/'
@@ -23,19 +22,20 @@ api.use(bodyParser.urlencoded({ extended: false }))
 api.use(bodyParser.json())
 
 const jwt = expressJwt({
-  secret: SECRET_CONF.secret,
-  credentialsRequired: false,
-  // getToken: req => {
-  //   // if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-  //     // return req.headers.authorization.split(' ')[1];
-  //   if (req.cookies && req.cookies['token']) {
-  //     console.error(req.cookies['token'])
-  //     return req.cookies['token']
-  //   }
-  //   return null 
-  // }
+  secret: config.SECRET_CONF.secret,
+  credentialsRequired: false
 })
 
+function errorHandler(fn) {
+  return async (req, res) => {
+    try {
+      await fn(req, res)
+    } catch (e) {
+      console.error(String(e))
+      return res.status(500).json(e)
+    }
+  }
+}
 
 // AUTH
 api.post('/auth/login', userController.login)
@@ -84,7 +84,6 @@ api.get('/event/unconfirmed', jwt, isAuth, isAdmin, eventController.getUnconfirm
 api.post('/event/notification', eventController.addNotification)
 api.delete('/event/notification/:code', eventController.delNotification)
 
-api.get('/config', settingsController.getConfig)
 api.get('/settings', jwt, fillUser, isAdmin, settingsController.getAdminSettings)
 api.post('/settings', jwt, fillUser, isAdmin, settingsController.setAdminSetting)
 
@@ -99,7 +98,7 @@ api.get('/event/unconfirm/:event_id', jwt, isAuth, isAdmin, eventController.unco
 api.get('/export/:type', exportController.export)
 
 // get events in this range
-api.get('/event/:month/:year', eventController.getAll)
+api.get('/event/:month/:year', errorHandler(eventController.getAll))
 
 // mastodon oauth auth
 api.post('/settings/getauthurl', jwt, isAuth, isAdmin, settingsController.getAuthURL)

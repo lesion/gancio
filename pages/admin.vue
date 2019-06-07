@@ -1,5 +1,9 @@
 <template lang="pug">
-  el-dialog(:title='$t("common.admin")' width='80%' :visible='open' :before-close='close')
+  el-card(:title='$t("common.admin")' width='80%' :visible='open' :before-close='close')
+    nuxt-link.float-right(to='/')
+      v-icon(name='times' color='red')
+    h5 {{$t('common.admin')}}
+
     el-tabs(tabPosition='left' v-model='tab')
 
       //- USERS
@@ -81,9 +85,18 @@
         template(slot='label')
           v-icon(name='cog')
           span  {{$t('common.settings')}}
+
+        //- el-form(inline @submit.prevent.stop='save_settings' label-width='140px')
+        //-   p {{$t('settings.name_description')}}
+        //-   el-form-item(:label="$t('settings.name')")
+        //-     el-input(v-model="settings.title")
+        //-   el-form-item(:label="$t('settings.description')")
+        //-     el-input(v-model="settings.description")
+        //-   el-button(slot='append' @click='associate' :disabled='!mastodon_instance.length') {{$t('common.associate')}}
+        
         el-form(inline @submit.prevent.stop='associatemastodon_instance')
           span {{$t('admin.mastodon_description')}}
-          el-input(v-model="mastodon_instance")
+          el-input(v-model="settings.mastodon_instance")
             span(slot='prepend') {{$t('admin.mastodon_instance')}}
             el-button(slot='append' @click='associate' :disabled='!mastodon_instance.length') {{$t('common.associate')}}
 
@@ -111,7 +124,9 @@ export default {
       tag: {name: '', color: ''},
       events: [],
       loading: false,
-      mastodon_instance: '',
+      settings: {
+        mastodon_instance: '',
+      },
       settings: {},
       tab: "0",
       open: true

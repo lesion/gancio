@@ -1,12 +1,11 @@
 const { event: Event, place: Place } = require('../models')
 const { Op } = require('sequelize')
-const config = require('../../config').SHARED_CONF
 const moment = require('moment')
 const ics = require('ics')
 
 const exportController = {
 
-  async export (req, res) {
+  async export(req, res) {
     console.log('type ', req.params.type)
     console.error(req)
     const type = req.params.type
@@ -21,18 +20,17 @@ const exportController = {
     if (places) {
       wherePlace.id = places.split(',')
     }
-    console.error(places)
     const events = await Event.findAll({
       order: ['start_datetime'],
-      where: { 
-        is_visible: true, 
+      where: {
+        is_visible: true,
         start_datetime: { [Op.gte]: yesterday },
         placeId: places.split(',')
       },
       attributes: {
         exclude: ['createdAt', 'updatedAt']
       },
-      include: [{model: Place, attributes: ['name', 'id', 'address', 'weigth']}]
+      include: [{ model: Place, attributes: ['name', 'id', 'address', 'weigth'] }]
     })
     switch (type) {
       case 'feed':
@@ -44,12 +42,12 @@ const exportController = {
     }
   },
 
-  async feed (res, events) {
+  feed(res, events) {
     res.type('application/rss+xml; charset=UTF-8')
-    res.render('feed/rss.pug', { events, config, moment })
+    res.render('feed/rss.pug', { events, config: process.env.config, moment })
   },
 
-  async ics (res, events) {
+  ics(res, events) {
     const eventsMap = events.map(e => {
       const tmpStart = moment(e.start_datetime)
       const tmpEnd = moment(e.end_datetime)

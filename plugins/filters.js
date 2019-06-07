@@ -23,11 +23,9 @@ export default (a) => {
     const end = moment(event.end_datetime)
     if (event.multidate) {
       return `${start.format('ddd, D MMMM')} (${short_hour(start)}) - ${end.format('ddd, D MMMM')} (${short_hour(end)})`
-    } else {
-      if (event.end_datetime && event.end_datetime !== event.start_datetime)
+    } else if (event.end_datetime && event.end_datetime !== event.start_datetime)
         return `${start.format('ddd, D MMMM')} (${short_hour(start)}-${short_hour(end)}`
       else
         return `${start.format('dddd, D MMMM')} (${short_hour(start)})`
-    }
   })
 }

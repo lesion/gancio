@@ -7,13 +7,13 @@ const { Event, Notification, EventNotification,
   User, Place, Tag } = require('./api/models')
 let settings
 
-async function sendNotification (notification, event, eventNotification) {
+async function sendNotification(notification, event, eventNotification) {
   const promises = []
   switch (notification.type) {
     // case 'mail':
-      // return mail.send(notification.email, 'event', { event, config, notification })
+    // return mail.send(notification.email, 'event', { event, config, notification })
   //  case 'admin_email':
-   //   const admins = await User.findAll({ where: { is_admin: true } })
+    //   const admins = await User.findAll({ where: { is_admin: true } })
     //  const admin_emails = admins.map(admin => admin.email)
     //  return mail.send(admin_emails, 'event', { event, to_confirm: true, notification })
     case 'mastodon':
@@ -56,7 +56,7 @@ async function notify() {
 let interval
 function startLoop(seconds) {
   console.error('starting notifier loop')
-  interval = setInterval(notify, seconds*1000)
+  interval = setInterval(notify, seconds * 1000)
 }
 
 function stopLoop() {

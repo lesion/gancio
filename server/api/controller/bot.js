@@ -9,12 +9,12 @@ moment.locale('it')
 
 const botController = {
   bot: null,
-  async initialize () {
+  async initialize() {
     console.error('dentro bot inizialiteds')
     const settings = await settingsController.settings()
     if (!settings.mastodon_auth || !settings.mastodon_auth.access_token) return
     const mastodon_auth = settings.mastodon_auth
-    botController.bot = new Mastodon({ 
+    botController.bot = new Mastodon({
       access_token: mastodon_auth.access_token,
       api_url: `https://${mastodon_auth.instance}/api/v1`
     })
@@ -41,7 +41,7 @@ const botController = {
   //   listener.on('error', botController.error)
   //   botController.bots.push({ email: user.email, bot })
   },
-  async post (mastodon_auth, event) {
+  async post(mastodon_auth, event) {
     const { access_token, instance } = mastodon_auth
     const bot = new Mastodon({ access_token, api_url: `https://${instance}/api/v1/` })
     const status = `${event.title} @ ${event.place.name} ${moment(event.start_datetime).format('ddd, D MMMM HH:mm')} - 
@@ -58,20 +58,20 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
   },
 
   // TOFIX: enable message deletion
-  async message (msg) {
+  async message(msg) {
     const replyid = msg.data.in_reply_to_id || msg.data.last_status.in_reply_to_id
     if (!replyid) return
     const event = await Event.findOne({ where: { activitypub_id: replyid } })
     if (!event) {
       // check for comment..
       // const comment = await Comment.findOne( {where: { }})
-      return 
+      return
     }
     const comment = await Comment.create({
-      activitypub_id: msg.data.last_status.id, 
+      activitypub_id: msg.data.last_status.id,
       // text: msg.data.last_status.content,
-      data: msg.data,
-      // author: msg.data.accounts[0].username 
+      data: msg.data
+      // author: msg.data.accounts[0].username
     })
     event.addComment(comment)
     // const comment = await Comment.findOne( { where: {activitypub_id: msg.data.in_reply_to}} )
@@ -86,7 +86,7 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
   // const comment = new Comment(req.body)
   // event.addComment(comment)
   },
-  error (err) {
+  error(err) {
     console.log('error ', err)
   }
 }

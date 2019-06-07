@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('notifications', {
@@ -19,7 +19,7 @@ module.exports = {
       },
       type: {
         type: Sequelize.ENUM,
-        values: ['mail', 'admin_email', 'mastodon']        
+        values: ['mail', 'admin_email', 'mastodon']
       },
       createdAt: {
         allowNull: false,
@@ -29,9 +29,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    })
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('notifications');
+    return queryInterface.dropTable('notifications')
   }
-};
+}

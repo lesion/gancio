@@ -11,9 +11,9 @@ export default {
   components: { List },
   computed: mapState(['config']),
   async asyncData ({ $axios, req, res }) {
-    const title = req.query.title || config.title
-    const tags = req.query.tags
-    const places = req.query.places
+    const title = req && req.query && req.query.title || this.config.title
+    const tags = req && req.query && req.query.tags
+    const places = req && req.query && req.query.places
     const now = new Date()
 
     let params = []

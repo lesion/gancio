@@ -1,10 +1,11 @@
 const Mastodon = require('mastodon-api')
 const { setting: Setting } = require('../models')
-const config = require('../../config').SHARED_CONF
+
+const baseurl = process.env.baseurl
 
 const settingsController = {
 
-  async setAdminSetting (key, value) {
+  async setAdminSetting(key, value) {
     await Setting.findOrCreate({ where: { key },
       defaults: { value } })
       .spread((settings, created) => {
@@ -12,20 +13,16 @@ const settingsController = {
       })
   },
 
-  async getAdminSettings (req, res) {
+  async getAdminSettings(req, res) {
     const settings = await settingsController.settings()
     res.json(settings)
   },
 
-  async getConfig (req, res) {
-    res.json(config)
-  },
-
   async getAuthURL(req, res) {
     const instance = req.body.instance
-    const callback = `${config.baseurl}/api/settings/oauth`
+    const callback = `${baseurl}/api/settings/oauth`
     const { client_id, client_secret } = await Mastodon.createOAuthApp(`https://${instance}/api/v1/apps`,
-      config.title, 'read write', callback)
+      'gancio', 'read write', callback)
     const url = await Mastodon.getAuthorizationUrl(client_id, client_secret,
       `https://${instance}`, 'read write', callback)
 
@@ -36,7 +33,7 @@ const settingsController = {
   async code(req, res) {
     const code = req.query.code
     let client_id, client_secret, instance
-    const callback = `${config.baseurl}/api/settings/oauth`
+    const callback = `${baseurl}/api/settings/oauth`
 
     const settings = await settingsController.settings()
 
@@ -47,18 +44,17 @@ const settingsController = {
         `https://${instance}`, callback)
       const mastodon_auth = { client_id, client_secret, access_token: token, instance }
       await settingsController.setAdminSetting('mastodon_auth', mastodon_auth)
-      
+
       res.redirect('/admin')
     } catch (e) {
       res.json(e)
     }
   },
 
-  async settings () {
-    console.error('ma sono dentro settings ?!?!')
+  async settings() {
     const settings = await Setting.findAll()
     return settings
-  },
+  }
 
 }
 

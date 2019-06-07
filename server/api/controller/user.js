@@ -4,14 +4,13 @@ const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
 const jsonwebtoken = require('jsonwebtoken')
-const { SECRET_CONF, SHARED_CONF } = require('../../config')
 const mail = require('../mail')
 const { user: User, event: Event, tag: Tag, place: Place } = require('../models')
 const eventController = require('./event')
+const config = require('../../config')
 
 const userController = {
   async login(req, res) {
-
     // find the user
     const user = await User.findOne({ where: { email: { [Op.eq]: req.body && req.body.email } } })
     if (!user) {
@@ -31,10 +30,10 @@ const userController = {
             email: user.email,
             scope: [user.is_admin ? 'admin' : 'user']
           },
-          SECRET_CONF.secret
+          config.SECRET_CONF.secret
         )
 
-        res.json({token: accessToken})        
+        res.json({ token: accessToken })
       }
     }
   },
@@ -89,9 +88,7 @@ const userController = {
       eventDetails.image_path = req.file.filename
     }
 
-    console.error('prima la creazione di evento')
     let event = await Event.create(eventDetails)
-    console.error('dopo la creazione di evento')
 
     // create place if needs to
     let place
@@ -167,7 +164,7 @@ const userController = {
     if (!user) return res.sendStatus(200)
 
     user.recover_code = crypto.randomBytes(16).toString('hex')
-    mail.send(user.email, 'recover', { user, config: SHARED_CONF })
+    mail.send(user.email, 'recover', { user, config: config.SHARED_CONF })
 
     await user.save()
     res.sendStatus(200)
@@ -191,16 +188,13 @@ const userController = {
     try {
       await user.save()
       res.sendStatus(200)
-    } catch(e) {
+    } catch (e) {
       res.sendStatus(400)
     }
   },
 
-  async current(req, res) {
-    if (req.user)
-      res.json(req.user)
-    else 
-      res.sendStatus(404)
+  current(req, res) {
+    if (req.user) { res.json(req.user) } else { res.sendStatus(404) }
   },
 
   async getAll(req, res) {
@@ -212,9 +206,10 @@ const userController = {
 
   async update(req, res) {
     const user = await User.findByPk(req.body.id)
+    console.error(req.body.id)
     if (user) {
       if (!user.is_active && req.body.is_active) {
-        await mail.send(user.email, 'confirm', { user, config: SHARED_CONF })
+        await mail.send(user.email, 'confirm', { user, config: config.SHARED_CONF })
       }
       await user.update(req.body)
       res.json(user)
@@ -226,7 +221,6 @@ const userController = {
   async register(req, res) {
     const n_users = await User.count()
     try {
-
       // the first registered user will be an active admin
       if (n_users === 0) {
         req.body.is_active = req.body.is_admin = true
@@ -236,7 +230,7 @@ const userController = {
 
       const user = await User.create(req.body)
       try {
-        mail.send([user.email, SECRET_CONF.admin], 'register', { user, config: SHARED_CONF })
+        mail.send([user.email, config.SECRET_CONF.admin], 'register', { user, config: config.SHARED_CONF })
       } catch (e) {
         return res.status(400).json(e)
       }
@@ -245,9 +239,8 @@ const userController = {
         email: user.email,
         scope: [user.is_admin ? 'admin' : 'user']
       }
-      const token = jwt.sign(payload, SECRET_CONF.secret)
-      res.json({ token })
-      // res.redirect('/')
+      const token = jwt.sign(payload, config.SECRET_CONF.secret)
+      res.json({ token, user })
     } catch (e) {
       res.status(404).json(e)
     }

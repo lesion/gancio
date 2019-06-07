@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 module.exports = (sequelize, DataTypes) => {
   const eventNotification = sequelize.define('eventNotification', {
     status: {
@@ -7,10 +7,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'new',
       index: true
     }
-  }, {});
-  
-  eventNotification.associate = function(models) {
+  }, {})
+
+  eventNotification.associate = function (models) {
     // associations can be defined here
-  };
-  return eventNotification;
-};
+  }
+  return eventNotification
+}

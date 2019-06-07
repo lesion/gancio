@@ -27,7 +27,6 @@
 </template>
 
 <script>
-const Cookie = process.client ? require('js-cookie') : undefined
 import { mapActions } from 'vuex'
 import { Message } from 'element-ui'
 import get from 'lodash/get'
