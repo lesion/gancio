@@ -1,6 +1,7 @@
 {
   "recover_email": "recover_email",
   "press here": "press here",
-  "register.request": "register.request",
-  "email.registration": "porcodio"
+  "email.register.subject": "Richiesta registrazione ricevuta",
+  "email.register": "Abbiamo ricevuto la richiesta di registrazione. La confermeremo quanto prima.\n Ciao",
+  "email.registration": "email.registration"
 }

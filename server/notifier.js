@@ -1,7 +1,7 @@
 // const mail = require('./mail')
 const bot = require('./api/controller/bot')
 const settingsController = require('./api/controller/settings')
-const config = require('./config.js')
+// const config = require('./config.js')
 
 const { Event, Notification, EventNotification,
   User, Place, Tag } = require('./api/models')

@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const moment = require('moment')
-const { event: Event, comment: Comment, tag: Tag } = require('../model')
+const { event: Event, comment: Comment } = require('../models')
 const config = require('../../config').SHARED_CONF
 const Mastodon = require('mastodon-api')
 const settingsController = require('./settings')
@@ -90,5 +90,5 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
   }
 }
 
-// setTimeout(botController.initialize, 2000)
+return setTimeout(botController.initialize, 2000)
 module.exports = botController

@@ -11,8 +11,8 @@
 
           //- date / place
           .date 
-            div {{event|event_when}}
-            div @{{event.place.name}}
+            div <v-icon name='clock'/> {{event|event_when}}
+            div <v-icon name='map-marker-alt' /> {{event.place.name}}
 
           //- p(v-if='showDescription') {{event.description}}
 
@@ -108,14 +108,13 @@ export default {
 
     .date {
       font-weight: 400;
-      font-size: 12px;
-      font-size: 0.95rem;
-      color: #ff917a;
+      font-size: 1rem;
+      color: white;
     }    
   }
 
   .tags {
-    font-size: 12px;
+    font-size: 15px;
     padding: 1px;
     margin-bottom: 0;
     display:flex;

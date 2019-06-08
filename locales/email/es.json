@@ -3,5 +3,7 @@
   "recover_email": "recover_email",
   "press here": "press here",
   "register.request": "register.request",
-  "email.registration": "email.registration"
+  "email.registration": "email.registration",
+  "email.register.subject": "email.register.subject",
+  "email.register": "email.register"
 }
