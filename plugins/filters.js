@@ -5,9 +5,9 @@ moment.locale('it')
 
 function short_hour(datetime) {
   if (datetime.minute() === 0) {
-    return 'h' + datetime.format('HH')
+    return datetime.format('HH')
   } else {
-    return 'h' + datetime.format('HH:mm')
+    return datetime.format('HH:mm')
   }
 }
 
@@ -24,7 +24,7 @@ export default (a) => {
     if (event.multidate) {
       return `${start.format('ddd, D MMMM')} (${short_hour(start)}) - ${end.format('ddd, D MMMM')} (${short_hour(end)})`
     } else if (event.end_datetime && event.end_datetime !== event.start_datetime)
-        return `${start.format('ddd, D MMMM')} (${short_hour(start)}-${short_hour(end)}`
+        return `${start.format('ddd, D MMMM')} (${short_hour(start)}-${short_hour(end)})`
       else
         return `${start.format('dddd, D MMMM')} (${short_hour(start)})`
   })

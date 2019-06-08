@@ -31,7 +31,6 @@ async function sendNotification(notification, event, eventNotification) {
 }
 
 async function notify() {
-  console.error('dentro il loop di notify')
   settings = await settingsController.settings()
   // get all event notification in queue
   const eventNotifications = await EventNotification.findAll({ where: { status: 'new' } })

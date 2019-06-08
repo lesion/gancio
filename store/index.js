@@ -40,7 +40,7 @@ export const getters = {
       })
     }
 
-    if (!state.show_past_events) {
+    if (!state.filters.show_past_events) {
       events = events.filter(e => !e.past)
     }
 
@@ -91,7 +91,7 @@ export const mutations = {
     state.filters.places = places
   },
   showPastEvents(state, show) {
-    state.show_past_events = show
+    state.filters.show_past_events = show
   },
   setSettings(state, settings) {
     state.settings = settings

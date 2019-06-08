@@ -44,19 +44,18 @@ export default {
         order: event.start_datetime,
       }
       const day = moment(event.start_datetime).date()
-      let color = event.past ? 'rgba(200,200,200,0.5)' : get(event, 'tags[0].color') || 'rgba(170,170,250,0.7)'
+      // let color = event.past ? 'rgba(200,200,200,0.5)' : get(event, 'tags[0].color') || 'rgba(170,170,250,0.7)'
 
-      console.error(color)
       if (event.multidate) {
         e.dates = {
           start: event.start_datetime, end: event.end_datetime
         }
         e.highlight = { 
-          color: sample(['purple', 'red', 'green', 'blue']),
+          color: sample(['purple', 'yellow', 'orange', 'red', 'green', 'blue']),
         }
       } else {
         e.dates = event.start_datetime
-        e.dot = { color: sample(['purple', 'red', 'green', 'blue']) }
+        e.dot = { color: sample(['purple', 'red', 'orange', 'yellow', 'green', 'blue']) }
       }
       return e
     }
@@ -85,11 +84,11 @@ export default {
   align-self: center;
 }
 
-.vc-highlight {
-  /* color: red; */
+/* .vc-highlight {
+  color: red;
   height: 22px !important;
   opacity: 0.4;
   border-radius: 15px;
-}
+} */
 
 </style>

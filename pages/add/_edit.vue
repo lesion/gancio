@@ -269,9 +269,9 @@ export default {
           await this.addEvent(formData)
         }
         this.updateMeta()
-        this.loading = false
         this.$router.replace('/')
         Message({ type: 'success', message: this.$auth.loggedIn ? this.$t('event.added') : this.$t('event.added_anon')})
+        this.loading = false
       } catch (e) {
         this.loading = false
         console.error(e)

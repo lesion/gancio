@@ -5,46 +5,50 @@
     nuxt-link.float-right(to='/')
       el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
 
-    //- title, where, when
-    h5.text-center {{event.title}}
-    div.nextprev
-      nuxt-link(v-if='prev' :to='`/event/${prev.id}`')
-        el-button(icon='el-icon-arrow-left' round type='success')
-      nuxt-link.float-right(v-if='next' :to='`/event/${next.id}`')
-        el-button(icon='el-icon-arrow-right' round type='success') 
-  
-    //- image
-    img(:src='imgPath' v-if='event.image_path')
+    div(v-if='!event')
+      h5 {{$t('event.not_found')}}
 
-    .info
-      div {{event|event_when}}
-      div {{event.place.name}} - {{event.place.address}}
+    div(v-else)
+      //- title, where, when
+      h5.text-center {{event.title}}
+      div.nextprev
+        nuxt-link(v-if='prev' :to='`/event/${prev.id}`')
+          el-button(icon='el-icon-arrow-left' round type='success')
+        nuxt-link.float-right(v-if='next' :to='`/event/${next.id}`')
+          el-button(icon='el-icon-arrow-right' round type='success') 
+    
+      //- image
+      img(:src='imgPath' v-if='event.image_path')
 
-    //- description and tags
-    div(v-if='event.description || event.tags')
-      pre(v-html='event.description')
-      el-tag.mr-1(v-for='tag in event.tags'
-        size='mini' :key='tag.tag') {{tag.tag}}
+      .info
+        div {{event|event_when}}
+        div {{event.place.name}} - {{event.place.address}}
 
-    //- show hide, confirm, delete, edit buttons when allowed
-    div(v-if='mine')
-      hr
-      el-button(v-if='event.is_visible' size='mini' plain type='warning' @click.prevents='toggle' icon='el-icon-view') {{$t('common.hide')}}
-      el-button(v-else plain type='success' size='mini' @click.prevents='toggle' icon='el-icon-view') {{$t('common.confirm')}}
-      el-button(plain type='danger' size='mini' @click.prevent='remove' icon='el-icon-remove') {{$t('common.remove')}}
-      el-button(plain type='primary' size='mini' @click='$router.replace(`/add/${event.id}`)' icon='el-icon-edit') {{$t('common.edit')}}
+      //- description and tags
+      div(v-if='event.description || event.tags')
+        pre(v-html='event.description')
+        el-tag.mr-1(v-for='tag in event.tags'
+          size='mini' :key='tag.tag') {{tag.tag}}
 
-    //- comments
-    .card-body(v-if='event.activitypub_id')
-      strong {{$t('common.related')}} - 
-      a(:href='`https://mastodon.cisti.org/web/statuses/${event.activitypub_id}`') {{$t('common.add')}}
-    .card-header(v-for='comment in event.comments' :key='comment.id')
-      img.avatar(:src='comment.data.last_status.account.avatar') 
-      strong  {{comment.author}} 
-      a.float-right(:href='comment.data.last_status.url')
-        small  {{comment.data.last_status.created_at|datetime}}
-      div.mt-1(v-html='comment_filter(comment.text)')
-      img(v-for='img in comment.data.last_status.media_attachments' :src='img.preview_url')
+      //- show hide, confirm, delete, edit buttons when allowed
+      div(v-if='mine')
+        hr
+        el-button(v-if='event.is_visible' size='mini' plain type='warning' @click.prevents='toggle' icon='el-icon-view') {{$t('common.hide')}}
+        el-button(v-else plain type='success' size='mini' @click.prevents='toggle' icon='el-icon-view') {{$t('common.confirm')}}
+        el-button(plain type='danger' size='mini' @click.prevent='remove' icon='el-icon-remove') {{$t('common.remove')}}
+        el-button(plain type='primary' size='mini' @click='$router.replace(`/add/${event.id}`)' icon='el-icon-edit') {{$t('common.edit')}}
+
+      //- comments
+      .card-body(v-if='event.activitypub_id')
+        strong {{$t('common.related')}} - 
+        a(:href='`https://mastodon.cisti.org/web/statuses/${event.activitypub_id}`') {{$t('common.add')}}
+      .card-header(v-for='comment in event.comments' :key='comment.id')
+        img.avatar(:src='comment.data.last_status.account.avatar') 
+        strong  {{comment.author}} 
+        a.float-right(:href='comment.data.last_status.url')
+          small  {{comment.data.last_status.created_at|datetime}}
+        div.mt-1(v-html='comment_filter(comment.text)')
+        img(v-for='img in comment.data.last_status.media_attachments' :src='img.preview_url')
 
 </template>
 <script>
@@ -64,12 +68,13 @@ export default {
   // },
 
   head () {
+    if (!this.event) return {}
     return {
       title: this.event.title,
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        // { hid: 'description', name: 'description', content: this.event.description },
-        // { hid: 'og-description', name: 'og:description', content: this.event.description },
+        { hid: 'description', name: 'description', content: this.event.description.slice(0, 1000) },
+        { hid: 'og-description', name: 'og:description', content: this.event.description.slice(0, 100) },
         { hid: 'og-title', property: 'og:title', content: this.event.title },   
         { hid: 'og-url', property: 'og:url', content: `event/${this.event.id}` },   
         { property: 'og:type', content: 'event'},
@@ -77,6 +82,10 @@ export default {
       ]
     }
   },
+  async asyncData ( { $axios, params }) {
+    const event = await $axios.$get(`/event/${params.id}`)
+    return { event, id: params.id}
+  },  
   computed: {
     ...mapGetters(['filteredEvents']),
     next () {
@@ -101,10 +110,6 @@ export default {
       if (!this.$auth.user) return false
       return this.event.userId === this.$auth.user.id || this.$auth.user.is_admin
     },
-  },
-  async asyncData ( { $axios, params }) {
-    const event = await $axios.$get(`/event/${params.id}`)
-    return { event, id: params.id}
   },
   methods: {
     ...mapActions(['delEvent']),

@@ -7,14 +7,18 @@ module.exports = {
         references: {
           model: 'events',
           key: 'id'
-        }
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
       },
       tagTag: {
         type: Sequelize.STRING,
         references: {
           model: 'tags',
           key: 'tag'
-        }
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
       },
       createdAt: {
         allowNull: false,

@@ -18,14 +18,14 @@ html, body {
 .el-form-item {
   margin-bottom: 5px;
 }
-.el-divider__text {
-  background-color: @background;
-  color: white;
-  border-radius: 5px;
-}
+// .el-divider__text {
+//   background-color: @background;
+//   color: white;
+//   border-radius: 5px;
+// }
 
 .el-card {
-  max-width: 600px;
+  max-width: 650px;
   margin: 30px auto;
 }
 
@@ -64,10 +64,14 @@ pre {
   word-break: normal;
 }
 
-@media only screen and (min-width: 768px) {
-  .el-dialog {
-    margin-top: 10vh !important;
-    width: 700px;
-    border-radius: 3px;
+@media only screen and (max-width: 768px) {
+  .el-card {
+    margin-top: 0px !important;
+    border-radius: 0px;
+    padding: 0px;
+  }
+
+  .el-menu-item {
+    padding: 0px 17px;
   }
 }

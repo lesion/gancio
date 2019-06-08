@@ -105,7 +105,8 @@ const it = {
     added: 'Evento aggiunto',
     added_anon: 'Evento aggiunto, verrà confermato quanto prima.',
     where_description: `Dov'è il gancio? Se il posto non è presente, scrivilo e <b>premi invio</b>. `,
-    confirmed: 'Evento confermato'
+    confirmed: 'Evento confermato',
+    not_found: 'Evento non trovato'
   },
 
   admin: {
@@ -126,14 +127,16 @@ const it = {
 
   err: {
     register_error: 'Errore nella registrazione'
-  },
-
-  firstrun: {
-    basic: `Inserisci titolo e descrizione della tua istanza di gancio.`,
-    database: `Gancio ha bisogno di un database postgresql!`,
-    smtp: `Inserisci un account SMTP relativo a questa istanza di gancio.`
-
   }
+
+  // firstrun: {
+  //   basic: `Inserisci titolo e descrizione della tua istanza di gancio.`,
+  //   database: `Gancio ha bisogno di un database postgresql!`,
+  //   smtp: `Inserisci un account SMTP relativo a questa istanza di gancio.`
+  // },
+  // email: {
+  //   registration: `Abbiamo ricevuto la richiesta di registrazione. La confermeremo quanto prima.\n Ciao`
+  // }
 }
 
 export default it

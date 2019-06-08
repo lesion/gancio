@@ -6,14 +6,18 @@ module.exports = {
         references: {
           model: 'events',
           key: 'id'
-        }
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
       },
       notificationId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'notifications',
           key: 'id'
-        }
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
       },
       status: {
         type: Sequelize.ENUM,

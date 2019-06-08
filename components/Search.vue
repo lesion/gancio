@@ -27,7 +27,6 @@ export default {
   data () {
     return {
       onlyMine: false,
-      withPast: true,
     }
   },
   name :'Search',
@@ -45,7 +44,7 @@ export default {
         this.showPastEvents(value)
       },
       get () {
-        return this.show_past_events
+        return this.filters.show_past_events
       }
     },
     filter: {

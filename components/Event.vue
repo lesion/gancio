@@ -74,7 +74,7 @@ export default {
 
   img {
     width: 100%;
-    max-height: 200px;
+    max-height: 250px;
     object-fit: cover;
     object-position: top;
   }
@@ -107,7 +107,7 @@ export default {
     }
 
     .date {
-      font-weight: 300;
+      font-weight: 400;
       font-size: 12px;
       font-size: 0.95rem;
       color: #ff917a;
@@ -126,7 +126,7 @@ export default {
       background: #1B1F21;
       display: inline-block;
       padding: 2px 10px;
-      color: rgba(255,255,255,0.7);
+      color: rgba(255,255,255,0.9);
       margin: 1px;
       text-align: center;
       flex-grow: 1;
