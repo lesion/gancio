@@ -34,16 +34,3 @@ yarn build
 yarn start
 
 ```
-
-##### nginx setup
-https://nuxtjs.org/faq/nginx-proxy
-
-For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
-
-
-## Hacking
-
-``` bash
-$ yarn dev
-
-```
