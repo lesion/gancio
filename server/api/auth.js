@@ -19,7 +19,7 @@ const Auth = {
         .status(403)
         .send({ message: 'Failed to authenticate token ' })
     }
-    
+
     req.user = await User.findOne({
       where: { id: { [Op.eq]: req.user.id }, is_active: true }
     })

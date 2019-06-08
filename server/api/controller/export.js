@@ -6,8 +6,6 @@ const ics = require('ics')
 const exportController = {
 
   async export(req, res) {
-    console.log('type ', req.params.type)
-    console.error(req)
     const type = req.params.type
     const tags = req.query.tags
     const places = req.query.places

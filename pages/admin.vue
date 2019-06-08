@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-card(:title='$t("common.admin")' width='80%' :visible='open' :before-close='close')
+  el-card
     nuxt-link.float-right(to='/')
       v-icon(name='times' color='red')
     h5 {{$t('common.admin')}}
@@ -224,11 +224,6 @@ export default {
       } catch (e) {
       }
     },
-    close (done) {
-      console.log('oppure qui !')
-      this.$router.replace('/')
-      // done()
-    }    
   }
 }
 </script>

@@ -58,7 +58,6 @@
 </template>
 <script>
 import { mapState, mapGetters } from 'vuex'
-import path from 'path'
 import Calendar from '@/components/Calendar'
 import List from '@/components/List'
 import Search from '@/components/Search'

@@ -15,8 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     is_admin: DataTypes.BOOLEAN,
     is_active: DataTypes.BOOLEAN
   }, {
-    defaultScope: {
-      attributes: { exclude: ['password', 'recover_code'] }
+    scopes: {
+      withoutPassword: {
+        attributes: { exclude: ['password', 'recover_code'] }
+      }
     }
   })
 

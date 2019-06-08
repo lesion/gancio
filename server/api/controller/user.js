@@ -206,7 +206,6 @@ const userController = {
 
   async update(req, res) {
     const user = await User.findByPk(req.body.id)
-    console.error(req.body.id)
     if (user) {
       if (!user.is_active && req.body.is_active) {
         await mail.send(user.email, 'confirm', { user, config: config.SHARED_CONF })

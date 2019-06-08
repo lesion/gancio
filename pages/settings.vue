@@ -27,11 +27,9 @@ export default {
   methods: {
     async change () {
       if (!this.password) return
-      // this.$auth.user.password = this.password
       const user_data = { id : this.$auth.user.id, password: this.password }
       try {
         const user = await this.$axios.$put('/user', user_data)
-        console.error(user)
       } catch (e) {
         console.log(e)
       }

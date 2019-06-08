@@ -59,7 +59,6 @@ export default {
   // key: to => to.fullPath,
   // Called to know which transition to apply
   // transition(to, from) {
-  //   console.log('dentro transition')
   //   if (!from) return 'slide-left'
   //   return +to.params.id < +from.params.id ? 'slide-right' : 'slide-left'
   // },
@@ -109,9 +108,6 @@ export default {
   },
   methods: {
     ...mapActions(['delEvent']),
-    keydown (e) {
-      console.error(e)
-    },
     comment_filter (value) {
       return value.replace(/<a.*href="([^">]+).*>(?:.(?!\<\/a\>))*.<\/a>/, (orig, url) => {
         // get extension

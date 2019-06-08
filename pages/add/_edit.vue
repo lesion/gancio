@@ -241,7 +241,6 @@ export default {
         end_datetime = moment(this.date.end)
           .set('hour', end_hour).set('minute', end_minute)
       } else {
-        console.log(this.date)
         start_datetime = moment(this.date).set('hour', start_hour).set('minute', start_minute)
         end_datetime = moment(this.date).set('hour', end_hour).set('minute', end_minute)
       }
