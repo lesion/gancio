@@ -10,7 +10,7 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
-        unique: { msg: 'err.register_error' },
+        unique: true,
         index: true,
         allowNull: false
       },

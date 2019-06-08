@@ -1,7 +1,9 @@
 <template lang="pug">
-  el-dialog(visible)
-    template(slot='title')
-      h5 <img src='/favicon.ico'/> {{$t('common.recover_password')}}
+  el-card
+    nuxt-link.float-right(to='/')
+      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
+
+    h5 <img src='/favicon.ico'/> {{$t('common.recover_password')}}
     div(v-if='valid')
       el-form
         el-form-item {{$t('common.new_password')}}

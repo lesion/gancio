@@ -8,6 +8,7 @@ const mail = {
   send(addresses, template, locals) {
     const email = new Email({
       views: { root: path.join(__dirname, '..', 'emails') },
+      htmlToText: false,
       juice: true,
       juiceResources: {
         preserveImportant: true,
@@ -25,7 +26,7 @@ const mail = {
       },
       transport: config.SECRET_CONF.smtp
     })
-    return email.send({
+    const msg = {
       template,
       message: {
         to: addresses,
@@ -37,7 +38,11 @@ const mail = {
         config: config.SHARED_CONF,
         datetime: datetime => moment(datetime).format('ddd, D MMMM HH:mm')
       }
-    })
+    }
+    return email.send(msg)
+      .catch(e => {
+        console.error(e)
+      })
   }
 }
 

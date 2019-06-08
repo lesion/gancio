@@ -1,9 +1,5 @@
 <template lang="pug">
-  el-card#eventDetail(
-    visible hide-header 
-    no-header :show-close='false' 
-    top='0vh !important'
-    :appendToBody='true')
+  el-card#eventDetail
 
     //- close button
     nuxt-link.float-right(to='/')

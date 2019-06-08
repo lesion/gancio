@@ -6,13 +6,32 @@
 
 
 ## Install
+You will need `npm` or `yarn` installed in your system.
+
+
 ``` bash
+# clone this repo
+git clone https://git.lattuga.net/cisti/gancio.git
+cd gancio
+
 # install dependencies
-$ yarn install
+yarn install
+
+# edit configuration
+cp config.example.js config.js
+
+# - migrate/create test sqlite db
+yarn migrate:dev
+
+# testing with sqlite db
+yarn dev
+
+# - migrate/create production db
+yarn migrate
 
 # build for production and launch server
-$ yarn build
-$ yarn start
+yarn build
+yarn start
 
 ```
 
@@ -28,7 +47,3 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 $ yarn dev
 
 ```
-
-#### Add a new icon
-
-plugin/vue-awesome.js

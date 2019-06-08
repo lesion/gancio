@@ -51,9 +51,8 @@ const SHARED_CONF = {
   locale: 'it',
   title: 'GANCIO',
   description: 'A calendar for radical communities',
-
-  baseurl: env === 'development' ? 'http://localhost:3000': 'https://gancio.example.com',
+  baseurl: '' || 'http://localhost:3000',
   env
 }
 
-module.exports = { SHARED_CONF, SECRET_CONF }
+module.exports = { SHARED_CONF, SECRET_CONF, ...SECRET_CONF.db }

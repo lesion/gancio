@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   const user = sequelize.define('user', {
     email: {
       type: DataTypes.STRING,
-      unique: { msg: 'err.register_error' },
+      unique: true,
       index: true,
       allowNull: false
     },
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     is_active: DataTypes.BOOLEAN
   }, {
     defaultScope: {
-      exclude: ['password', 'recover_code']
+      attributes: { exclude: ['password', 'recover_code'] }
     }
   })
 

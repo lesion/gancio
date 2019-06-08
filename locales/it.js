@@ -39,7 +39,9 @@ const it = {
     related: 'Memoria storica',
     add: 'Aggiungi',
     logout_ok: 'Uscita correttamente',
-    copy: 'Copia'
+    copy: 'Copia',
+    recover_password: 'Recupera password',
+    new_password: 'Nuova password'
   },
 
   login: {
@@ -77,7 +79,10 @@ const it = {
       carne e sangue, scrivici quindi due righe per farci capire che eventi vorresti pubblicare.`,
     error: 'Errore: ',
     admin_complete: 'Sei il primo utente e quindi sei amministratore!',
-    complete: 'Confermeremo la registrazione quanto prima.'
+    complete: 'Confermeremo la registrazione quanto prima.',
+    request: 'Richiesta di registrazione',
+    registration_email: `Ciao,
+    ci è arrivata una richiesta di registrazione su gancio, la confermeremo quanto prima.`
   },
 
   event: {
