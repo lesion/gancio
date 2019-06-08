@@ -1,0 +1,331 @@
+{
+  "done": [
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:47:35.777Z",
+      "id": "5",
+      "prio": 3,
+      "references": [],
+      "title": "server side auth"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:50:00.973Z",
+      "description": {
+        "content": "- export page ok\n- usare un'altra api per retrieve di eventi (perche' devo mostrarli tutti, non solo quelli del mese corrente)\n- non devo fare il load degli eventi nel nuxtServerInit (o dentro il layout normale oppure nelle pagine, tipo nella home)",
+        "mime": "text/markdown"
+      },
+      "details": {
+        "content": "- export page ok\n- usare un'altra api per retrieve di eventi (perche' devo mostrarli tutti, non solo quelli del mese corrente)\n- non devo fare il load degli eventi nel nuxtServerInit (o dentro il layout normale oppure nelle pagine, tipo nella home)\n",
+        "mime": "text/markdown"
+      },
+      "id": "7",
+      "prio": 1,
+      "references": [],
+      "title": "export page",
+      "type": "bug"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:55:59.993Z",
+      "id": "10",
+      "prio": 1,
+      "references": [],
+      "title": "gestione errori form aggiungi evento",
+      "type": "bug"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:56:46.263Z",
+      "id": "11",
+      "prio": 1,
+      "references": [],
+      "title": "get comments / media from mastodon"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:46:46.332Z",
+      "id": "3",
+      "prio": 0,
+      "references": [],
+      "title": "export lista"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-04-30T12:46:42.208Z",
+      "id": "16",
+      "references": [],
+      "title": "riesco a rimuovere bootstrap-vue e usare solo element ?"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-04-28T09:25:50.701Z",
+      "id": "13",
+      "references": [],
+      "title": "test altra visualizzazione"
+    }
+  ],
+  "in-progress": [
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-04-30T22:00:29.237Z",
+      "id": "17",
+      "references": [],
+      "title": "porcoddio la config arriva anche al client ovviamente, devo separare!"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-04-30T12:31:20.056Z",
+      "id": "15",
+      "references": [],
+      "title": "test deploy"
+    }
+  ],
+  "testing": [],
+  "todo": [
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:50:55.458Z",
+      "id": "8",
+      "prio": 1,
+      "references": [],
+      "title": "rivedere ux / messaggi utente",
+      "type": "bug"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:45:27.613Z",
+      "description": {
+        "content": "probabilmente devo far diventare il campo senza timezone",
+        "mime": "text/markdown"
+      },
+      "id": "2",
+      "prio": 0,
+      "references": [],
+      "title": "check date timezone",
+      "type": "bug"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:48:54.407Z",
+      "description": {
+        "content": "probabilmente lato client dovrei aggiungere una classe css al body per capire se js e' attivo o meno e poi lavorare di css",
+        "mime": "text/markdown"
+      },
+      "id": "6",
+      "prio": 0,
+      "references": [],
+      "title": "risolvere le modali quando il js e' disabilitato",
+      "type": "bug"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-06-01T21:00:22.155Z",
+      "id": "28",
+      "references": [],
+      "title": "activitypub stream"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-27T15:42:35.467Z",
+      "id": "21",
+      "references": [],
+      "title": "all'admin deve mostrare un badge se ci sono pending operation"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-27T15:16:22.839Z",
+      "id": "20",
+      "references": [],
+      "title": "check password reset"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-06-01T21:23:46.941Z",
+      "id": "30",
+      "references": [],
+      "title": "choose listening port"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-27T15:45:39.093Z",
+      "id": "23",
+      "references": [],
+      "title": "colori te prego!"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-27T20:42:22.581Z",
+      "id": "24",
+      "references": [],
+      "title": "copy to clipboard"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-29T13:08:20.887Z",
+      "id": "25",
+      "references": [],
+      "title": "creazione script di backup"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-06-01T21:00:07.431Z",
+      "id": "27",
+      "references": [],
+      "title": "eventi ricorrenti"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-27T15:45:18.012Z",
+      "id": "22",
+      "references": [],
+      "title": "filtri per luogo!"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-04-29T10:01:01.632Z",
+      "id": "14",
+      "references": [],
+      "title": "gestione errori quando non c'e' un evento"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-02T16:15:07.106Z",
+      "id": "19",
+      "references": [],
+      "title": "modifica eventi multigiorno"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-02T11:50:28.476Z",
+      "id": "18",
+      "references": [],
+      "title": "notifiche email / iscrizione / evento da confermare"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:44:56.705Z",
+      "id": "1",
+      "references": [],
+      "title": "popup sul calendario"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-04-27T19:44:33.769Z",
+      "id": "12",
+      "references": [],
+      "title": "rifare il calendario o solo il popup"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-06-01T21:15:42.190Z",
+      "id": "29",
+      "references": [],
+      "title": "settings di istanza (default filter, eg, eventi ricorrenti)"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:47:10.704Z",
+      "id": "4",
+      "prio": 0,
+      "references": [],
+      "title": "traduzione in inglese"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-29T13:10:04.463Z",
+      "id": "26",
+      "references": [],
+      "title": "v-calendar colori e eventi multidays..."
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "category": "feature",
+      "creation_time": "2019-04-23T19:51:05.917Z",
+      "id": "9",
+      "prio": -1,
+      "references": [],
+      "title": "documentare sorgenti",
+      "type": "bug"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-06-05T20:39:59.287Z",
+      "id": "31",
+      "references": [],
+      "title": "scroll h su mobile"
+    }
+  ]
+}
