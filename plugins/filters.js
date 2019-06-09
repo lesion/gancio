@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import moment from 'dayjs'
 import 'dayjs/locale/it'
-moment.locale('it')
+moment.locale(process.env.locale)
 
 function short_hour(datetime) {
   if (datetime.minute() === 0) {

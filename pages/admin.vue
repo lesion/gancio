@@ -1,10 +1,11 @@
 <template lang="pug">
   el-card
     nuxt-link.float-right(to='/')
-      v-icon(name='times' color='red')
+      el-button
+        v-icon(name='times' color='red')
     h5 {{$t('common.admin')}}
 
-    el-tabs(tabPosition='left' v-model='tab')
+    el-tabs(tabPosition='lef' v-model='tab')
 
       //- USERS
       el-tab-pane.pt-1
@@ -94,11 +95,11 @@
         //-     el-input(v-model="settings.description")
         //-   el-button(slot='append' @click='associate' :disabled='!mastodon_instance.length') {{$t('common.associate')}}
         
-        el-form(inline @submit.prevent.stop='associatemastodon_instance')
-          span {{$t('admin.mastodon_description')}}
-          el-input(v-model="settings.mastodon_instance")
-            span(slot='prepend') {{$t('admin.mastodon_instance')}}
-            el-button(slot='append' @click='associate' :disabled='!mastodon_instance.length') {{$t('common.associate')}}
+        el-form(inline @submit.native.prevent='associate_mastondon_instance' label-width='140px')
+          p {{$t('admin.mastodon_description')}}
+          el-form-item {{$t('admin.mastodon_instance')}}
+            el-input(v-model="mastodon_instance")
+              el-button(slot='append' native-type='submit' type='success' :disabled='!mastodon_instance.length') {{$t('common.associate')}}
 
 </template>
 <script>
@@ -125,9 +126,8 @@ export default {
       events: [],
       loading: false,
       settings: {
-        mastodon_instance: '',
       },
-      settings: {},
+      mastodon_instance: '',
       tab: "0",
       open: true
     }
@@ -146,7 +146,7 @@ export default {
       const events = await $axios.$get('/event/unconfirmed')
       const settings = await $axios.$get('/settings')
 
-      return { users, events, settings, mastodon_instance: settings && settings.mastodon_auth && settings.mastodon_auth.instance || ''}
+      return { users, events, settings}
     } catch ( e ) {
       console.error(e)
     }
@@ -185,28 +185,23 @@ export default {
       this.tag = { color: tag.color, tag: tag.tag }
     },
     async savePlace () {
-      // const place = await api.updatePlace(this.place)
+      const place = await this.$axios.$put('/place', this.place)
     },
     async toggle(user) {
       user.is_active = !user.is_active
+      this.$axios.$put('/user', user)
       // const newuser = await api.updateUser(user)
     },
     async toggleAdmin(user) {
       user.is_admin = !user.is_admin
+      this.$axios.$put('/user', user)
       // const newuser = await api.updateUser(user)
-    },
-    async updateColor () {
-      // try {
-      //   const newTag = await this.$axios.$put('/tag', this.tag)
-      // } catch (e) {
-      //   console.log(e)
-      // }
     },
     preview (id) {
       this.$router.push(`/event/${id}`)
     },
-    async associate () {
-      if (!this.mastodon_instance) return
+    async associate_mastondon_instance () {
+      if (!this.mastodon_instance) return false
 
       const url = await this.$axios.$post('/settings/getauthurl', {instance: this.mastodon_instance})
       setTimeout( () => window.location.href=url, 100);

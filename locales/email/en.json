@@ -5,5 +5,7 @@
   "register.request": "register.request",
   "email.registration": "email.registration",
   "email.register.subject": "email.register.subject",
-  "email.register": "email.register"
+  "email.register": "email.register",
+  "confirm_email": "confirm_email",
+  "email.confirm": "email.confirm"
 }

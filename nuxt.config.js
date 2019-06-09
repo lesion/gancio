@@ -38,7 +38,8 @@ module.exports = {
   env: {
     baseurl: config.baseurl,
     title: config.title,
-    description: config.description
+    description: config.description,
+    locale: config.locale
   },
   /*
    ** Plugins to load before mounting the App

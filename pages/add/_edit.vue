@@ -1,7 +1,8 @@
 <template lang="pug">
   el-card
     nuxt-link.float-right(to='/')
-      v-icon(name='times' color='red')
+      el-button
+        v-icon(name='times' color='red')
     h5 {{edit?$t('common.edit_event'):$t('common.add_event')}}
 
     el-form(v-loading='loading')

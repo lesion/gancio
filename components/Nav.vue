@@ -16,7 +16,7 @@
     el-popover(
       placement="bottom"
       trigger="click")
-      Search
+      Search(past-filter)
       el-menu-item(slot='reference')
         v-icon(color='lightblue' name='search')
 

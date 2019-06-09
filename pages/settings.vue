@@ -1,7 +1,8 @@
 <template lang="pug">
   el-card
     nuxt-link.float-right(to='/')
-      v-icon(name='times' color='red')
+      el-button
+        v-icon(name='times' color='red')
     h5 {{$t('common.settings')}}
 
     //- el-form
@@ -34,10 +35,6 @@ export default {
         console.log(e)
       }
     },
-    close (done) {
-      this.$router.back()
-      done()
-    }
   }
 }
 </script>

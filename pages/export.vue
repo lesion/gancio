@@ -2,7 +2,8 @@
   el-card
 
     nuxt-link.float-right(to='/')
-      v-icon(name='times' color='red')
+      el-button
+        v-icon(name='times' color='red')
     h5 {{$t('common.export')}}
 
 

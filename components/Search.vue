@@ -1,12 +1,13 @@
 <template lang="pug">
-  div.ml-2.mt-1
-    el-switch.mb-1(v-if='$auth.loggedIn'
-      active-text='solo miei'
-      inactive-text='tutti'
-      inactive-color='lightgreen'
-      v-model='onlyMine'
-    )
+  div.ml-2.mt-1.text-center
+    //- el-switch.mb-1(v-if='$auth.loggedIn'
+    //-   active-text='solo miei'
+    //-   inactive-text='tutti'
+    //-   inactive-color='lightgreen'
+    //-   v-model='onlyMine'
+    //- )
     el-switch.mt-1.mb-1.ml-2.d-block(
+      v-if='pastFilter'
       inactive-text='futuri'
       active-text='anche passati'
       inactive-color='lightgreen'
@@ -30,6 +31,9 @@ export default {
     }
   },
   name :'Search',
+  props: {
+    pastFilter: Boolean
+  },
   methods: mapActions(['setSearchPlaces', 'setSearchTags', 'showPastEvents']),
   computed: {
     ...mapState(['tags', 'places', 'filters', 'show_past_events']),

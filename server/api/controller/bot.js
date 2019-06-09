@@ -2,10 +2,10 @@ const fs = require('fs')
 const path = require('path')
 const moment = require('moment')
 const { event: Event, comment: Comment } = require('../models')
-const config = require('../../config').SHARED_CONF
+const config = require('../../config')
 const Mastodon = require('mastodon-api')
 const settingsController = require('./settings')
-moment.locale('it')
+moment.locale(process.env.locale)
 
 const botController = {
   bot: null,
