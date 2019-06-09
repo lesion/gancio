@@ -30,7 +30,7 @@ const userController = {
             email: user.email,
             scope: [user.is_admin ? 'admin' : 'user']
           },
-          config.SECRET_CONF.secret
+          config.secret
         )
 
         res.json({ token: accessToken })
@@ -164,7 +164,7 @@ const userController = {
     if (!user) return res.sendStatus(200)
 
     user.recover_code = crypto.randomBytes(16).toString('hex')
-    mail.send(user.email, 'recover', { user, config: config.SHARED_CONF })
+    mail.send(user.email, 'recover', { user, config })
 
     await user.save()
     res.sendStatus(200)
@@ -208,7 +208,7 @@ const userController = {
     const user = await User.findByPk(req.body.id)
     if (user) {
       if (!user.is_active && req.body.is_active) {
-        await mail.send(user.email, 'confirm', { user, config: config.SHARED_CONF })
+        await mail.send(user.email, 'confirm', { user, config })
       }
       await user.update(req.body)
       res.json(user)
@@ -229,7 +229,7 @@ const userController = {
 
       const user = await User.create(req.body)
       try {
-        mail.send([user.email, config.SECRET_CONF.admin], 'register', { user, config: config.SHARED_CONF })
+        mail.send([user.email, config.admin], 'register', { user, config })
       } catch (e) {
         return res.status(400).json(e)
       }
@@ -238,7 +238,7 @@ const userController = {
         email: user.email,
         scope: [user.is_admin ? 'admin' : 'user']
       }
-      const token = jwt.sign(payload, config.SECRET_CONF.secret)
+      const token = jwt.sign(payload, config.secret)
       res.json({ token, user })
     } catch (e) {
       res.status(404).json(e)

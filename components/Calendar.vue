@@ -25,8 +25,8 @@ export default {
       page: { month, year},
     }
   },
-  
   watch: {
+    // month selected
     page () {
       this.updateEvents(this.page)
     }

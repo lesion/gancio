@@ -22,7 +22,7 @@ api.use(bodyParser.urlencoded({ extended: false }))
 api.use(bodyParser.json())
 
 const jwt = expressJwt({
-  secret: config.SECRET_CONF.secret,
+  secret: config.secret,
   credentialsRequired: false
 })
 

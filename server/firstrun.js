@@ -10,8 +10,8 @@ if (!fs.existsSync(config_path)) {
   process.exit(1)
 }
 
-const { SECRET_CONF, SHARED_CONF } = require(config_path)
-if (!SECRET_CONF.secret) {
+const config = require(config_path)
+if (!config.secret) {
   console.error(`Please specify a random 'secret' in '${config_path}'!`)
   process.exit(1)
 }
@@ -19,9 +19,9 @@ if (!SECRET_CONF.secret) {
 const Sequelize = require('sequelize')
 let db
 try {
-  db = new Sequelize(SECRET_CONF.db)
+  db = new Sequelize(config.db)
 } catch (e) {
-  console.error(`DB Error: check '${SHARED_CONF.env}' configuration.\n (sequelize error -> ${e})`)
+  console.error(`DB Error: check '${config.env}' configuration.\n (sequelize error -> ${e})`)
   process.exit(1)
 }
 
@@ -29,13 +29,13 @@ try {
 module.exports = db.authenticate()
   .then(() => {
     require('./api/models')
-    if (SHARED_CONF.env === 'development') {
+    if (config.env === 'development') {
       console.error('DB Force sync')
       return db.sync({ force: true })
     }
   })
   .catch(e => {
     console.error(e)
-    console.error(`DB Error: check '${SHARED_CONF.env}' configuration\n (sequelize error -> ${e})`)
+    console.error(`DB Error: check '${config.env}' configuration\n (sequelize error -> ${e})`)
     process.exit(1)
   })

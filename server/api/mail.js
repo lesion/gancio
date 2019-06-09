@@ -3,7 +3,7 @@ const path = require('path')
 const moment = require('moment')
 const config = require('../config')
 
-moment.locale(config.SHARED_CONF.locale)
+moment.locale(config.locale)
 const mail = {
   send(addresses, template, locals) {
     const email = new Email({
@@ -17,25 +17,25 @@ const mail = {
         }
       },
       message: {
-        from: `${config.SHARED_CONF.title} <${config.SECRET_CONF.smtp.auth.user}>`
+        from: `${config.title} <${config.smtp.auth.user}>`
       },
       send: true,
       i18n: {
         directory: path.join(__dirname, '..', '..', 'locales', 'email'),
-        defaultLocale: config.SHARED_CONF.locale
+        defaultLocale: config.locale
       },
-      transport: config.SECRET_CONF.smtp
+      transport: config.smtp
     })
     const msg = {
       template,
       message: {
         to: addresses,
-        bcc: config.SECRET_CONF.admin
+        bcc: config.admin
       },
       locals: {
         ...locals,
-        locale: config.SHARED_CONF.locale,
-        config: config.SHARED_CONF,
+        locale: config.locale,
+        config: { title: config.title, baseurl: config.baseurl, description: config.description },
         datetime: datetime => moment(datetime).format('ddd, D MMMM HH:mm')
       }
     }

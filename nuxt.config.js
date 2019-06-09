@@ -2,7 +2,7 @@ const argv = require('yargs').argv
 const path = require('path')
 const config_path = path.resolve(argv.config || './config.js')
 
-const config = require(config_path).SHARED_CONF
+const config = require(config_path)
 
 module.exports = {
   mode: 'universal',
@@ -36,7 +36,9 @@ module.exports = {
     'element-ui/lib/theme-chalk/index.css'
   ],
   env: {
-    config
+    baseurl: config.baseurl,
+    title: config.title,
+    description: config.description
   },
   /*
    ** Plugins to load before mounting the App
@@ -83,9 +85,22 @@ module.exports = {
    ** Build configuration
    */
   build: {
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          element: {
+            test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
+            name: 'element-ui',
+            chunks: 'all'
+          }
+        }
+      }
+    },
     transpile: [/^element-ui/, /^vue-awesome/],
     splitChunks: {
       layouts: true
-    }
+    },
+    cache: true,
+    parallel: true
   }
 }

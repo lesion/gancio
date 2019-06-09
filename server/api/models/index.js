@@ -4,10 +4,10 @@ const path = require('path')
 const Sequelize = require('sequelize')
 const config_path = path.resolve(argv.config || './config.js')
 const basename = path.basename(__filename)
-const config = require(config_path).SECRET_CONF.db
+const config = require(config_path)
 const db = {}
 
-const sequelize = new Sequelize(config)
+const sequelize = new Sequelize(config.db)
 
 fs
   .readdirSync(__dirname)

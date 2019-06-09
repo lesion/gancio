@@ -107,7 +107,7 @@ export default {
         params.push(`places=${this.filters.places}`)
       }
 
-      return `<iframe src="/embed/list?${params.join('&')}"></iframe>`
+      return `<iframe src="${process.env.baseurl}/embed/list?${params.join('&')}"></iframe>`
     },
     link () {
       const tags = this.filters.tags.join(',')
@@ -123,7 +123,7 @@ export default {
         }
       }
 
-      return `/api/export/${this.type}${query}`
+      return `${process.env.baseurl}/api/export/${this.type}${query}`
     },    
     showLink () {
       return (['feed', 'ics'].indexOf(this.type)>-1)

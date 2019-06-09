@@ -1,8 +1,6 @@
 const Mastodon = require('mastodon-api')
 const { setting: Setting } = require('../models')
 
-const baseurl = process.env.baseurl
-
 const settingsController = {
 
   async setAdminSetting(key, value) {
@@ -20,7 +18,7 @@ const settingsController = {
 
   async getAuthURL(req, res) {
     const instance = req.body.instance
-    const callback = `${baseurl}/api/settings/oauth`
+    const callback = `${process.env.baseurl}/api/settings/oauth`
     const { client_id, client_secret } = await Mastodon.createOAuthApp(`https://${instance}/api/v1/apps`,
       'gancio', 'read write', callback)
     const url = await Mastodon.getAuthorizationUrl(client_id, client_secret,
@@ -33,7 +31,7 @@ const settingsController = {
   async code(req, res) {
     const code = req.query.code
     let client_id, client_secret, instance
-    const callback = `${baseurl}/api/settings/oauth`
+    const callback = `${process.env.baseurl}/api/settings/oauth`
 
     const settings = await settingsController.settings()
 

@@ -42,7 +42,7 @@ const exportController = {
 
   feed(res, events) {
     res.type('application/rss+xml; charset=UTF-8')
-    res.render('feed/rss.pug', { events, config: process.env.config, moment })
+    res.render('feed/rss.pug', { events, config: process.env, moment })
   },
 
   ics(res, events) {

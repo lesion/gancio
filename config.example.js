@@ -1,18 +1,19 @@
-/**
- * GANCIO CONFIGURATION
- */
-const env = process.env.NODE_ENV || 'development'
+const path = require('path')
 
 /**
- * Database configuration
+ * -[ GANCIO CONFIGURATION ]-
+ *
+ * -[ Database configuration ]-
  * `development` configuration is enabled running `yarn dev`
  * while `production` with `yarn start`
  * ref: http://docs.sequelizejs.com/class/lib/sequelize.js~Sequelize.html#instance-constructor-constructor
+ *
  */
+
 const DB_CONF = {
   development: {
-    storage: __dirname + '/db.sqlite',
-    dialect: 'sqlite',
+    storage: path.join(__dirname, 'db.sqlite'),
+    dialect: 'sqlite'
   },
   production: {
     username: '',
@@ -21,16 +22,32 @@ const DB_CONF = {
     host: 'localhost',
     dialect: 'postgres',
     logging: false
-  },
+  }
 }
 
-const SECRET_CONF = {
+const env = process.env.NODE_ENV || 'development'
+
+/**
+ * -[ Main configuration ]-
+ *
+ */
+const config = {
+  server: {
+    port: '3000',
+    host: '0',
+    // uncomment to use unix socket to serve gancio
+    // path: '/tmp/gancio_socket',
+  },
+  locale: 'it',
+  title: 'GANCIO',
+  description: 'A shared agenda for radical communities',
+  baseurl: '' || 'http://localhost:3000',
+
   // where events/users confirmation email are sent
-  admin: 'gancio@example.com',
+  admin: '',
 
-  db: DB_CONF[env],
-
-  // jwt salt secret (generate it randomly)
+  // jwt salt secret, generate it randomly with
+  // < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;
   secret: '',
 
   // smtp account to send email
@@ -42,17 +59,7 @@ const SECRET_CONF = {
       pass: process.env.SMTP_PASS || ''
     }
   },
+  db: DB_CONF[env]
 }
 
-/**
- * Main Gancio configuration
- */
-const SHARED_CONF = {
-  locale: 'it',
-  title: 'GANCIO',
-  description: 'A calendar for radical communities',
-  baseurl: '' || 'http://localhost:3000',
-  env
-}
-
-module.exports = { SHARED_CONF, SECRET_CONF, ...SECRET_CONF.db }
+module.exports = config

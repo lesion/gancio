@@ -1,7 +1,7 @@
-// const mail = require('./mail')
+const mail = require('./mail')
 const bot = require('./api/controller/bot')
 const settingsController = require('./api/controller/settings')
-// const config = require('./config.js')
+const config = require('./config.js')
 
 const { Event, Notification, EventNotification,
   User, Place, Tag } = require('./api/models')
@@ -12,10 +12,10 @@ async function sendNotification(notification, event, eventNotification) {
   switch (notification.type) {
     // case 'mail':
     // return mail.send(notification.email, 'event', { event, config, notification })
-  //  case 'admin_email':
+   case 'admin_email':
     //   const admins = await User.findAll({ where: { is_admin: true } })
     //  const admin_emails = admins.map(admin => admin.email)
-    //  return mail.send(admin_emails, 'event', { event, to_confirm: true, notification })
+     return mail.send(admin_emails, 'event', { event, to_confirm: true, notification })
     case 'mastodon':
       // instance publish
       if (settings.mastodon_auth.instance && settings.mastodon_auth.access_token) {
@@ -58,8 +58,4 @@ function startLoop(seconds) {
   interval = setInterval(notify, seconds * 1000)
 }
 
-function stopLoop() {
-  stopInterval(interval)
-}
-
-module.exports = { startLoop, stopLoop }
+startLoop(26000)
