@@ -3,7 +3,7 @@ p Dove: #{event.place.name} - #{event.place.address}
 p Quando: #{datetime(event.start_datetime)}
 br
 if event.image_path
-  <img style="width: 100%" src="#{config.apiurl}/media/#{event.image_path}" />
+  <img style="width: 100%; max-height: 89vh; margin: 0 auto;" src="#{config.apiurl}/media/#{event.image_path}" />
 p #{event.description}
 
 each tag in event.tags
@@ -15,4 +15,6 @@ if to_confirm
   p Puoi confermare questo evento <a href="#{config.baseurl}/admin/confirm/#{event.id}">qui</a>
 else
   p Puoi eliminare queste notifiche <a href="#{config.baseurl}/del_notification/#{notification.remove_code}">qui</a>
-<a href="#{config.baseurl}">#{config.title} - #{config.description}</a>
+
+hr
+a(href="#{config.baseurl}") #{config.title} - #{config.description}

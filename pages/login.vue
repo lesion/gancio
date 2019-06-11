@@ -35,7 +35,6 @@ export default {
   name: 'Login',
   data () {
     return {
-      open: true,
       password: '',
       email: '',
       loading: false
@@ -48,9 +47,6 @@ export default {
     }
   },
   methods: {
-    close () {
-      this.$router.replace('/')
-    },
     ...mapActions(['login']),
     async forgot () {
       if (!this.email) {

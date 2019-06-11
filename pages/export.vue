@@ -90,10 +90,6 @@ export default {
     imgPath (event) {
       return event.image_path && event.image_path
     },
-    close (done) {
-      this.$router.replace('/')
-      done()
-    }
   },
   computed: {
     ...mapState(['filters', 'events']),

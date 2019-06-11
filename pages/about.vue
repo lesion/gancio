@@ -33,18 +33,3 @@
       su underscore chicciola autistici.org
 
 </template>
-<script>
-export default {
-  data () {
-    return {
-      open: true,
-    }
-  },
-  methods: {
-    close (done) {
-      this.$router.replace('/')
-      done()
-    }
-  }
-}
-</script>
