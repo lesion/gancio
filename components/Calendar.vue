@@ -84,6 +84,9 @@ export default {
   align-self: center;
 }
 
+.vc-opacity-0 {
+  opacity: 0.2 !important;
+}
 /* .vc-highlight {
   color: red;
   height: 22px !important;
