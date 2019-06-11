@@ -122,21 +122,21 @@ const it = {
   },
 
   settings: {
-    change_password: 'Cambia password'
+    change_password: 'Cambia password',
+    password_updated: 'Password modificata'
   },
 
   err: {
     register_error: 'Errore nella registrazione'
   }
 
+
+
   // firstrun: {
   //   basic: `Inserisci titolo e descrizione della tua istanza di gancio.`,
   //   database: `Gancio ha bisogno di un database postgresql!`,
   //   smtp: `Inserisci un account SMTP relativo a questa istanza di gancio.`
   // },
-  // email: {
-  //   registration: `Abbiamo ricevuto la richiesta di registrazione. La confermeremo quanto prima.\n Ciao`
-  // }
 }
 
 export default it

@@ -1,7 +1,7 @@
-const path = require('path')
-
 /**
  * -[ GANCIO CONFIGURATION ]-
+ *
+ *  search and replace 'CHANGE ME'
  *
  * -[ Database configuration ]-
  * `development` configuration is enabled running `yarn dev`
@@ -9,6 +9,7 @@ const path = require('path')
  * ref: http://docs.sequelizejs.com/class/lib/sequelize.js~Sequelize.html#instance-constructor-constructor
  *
  */
+const path = require('path')
 
 const DB_CONF = {
   development: {
@@ -16,8 +17,8 @@ const DB_CONF = {
     dialect: 'sqlite'
   },
   production: {
-    username: '',
-    password: '',
+    username: 'CHANGE ME',
+    password: 'CHANGE ME',
     database: 'gancio',
     host: 'localhost',
     dialect: 'postgres',
@@ -26,7 +27,7 @@ const DB_CONF = {
 }
 
 const env = process.env.NODE_ENV || 'development'
-
+const isDev = env === 'development'
 /**
  * -[ Main configuration ]-
  *
@@ -34,30 +35,34 @@ const env = process.env.NODE_ENV || 'development'
 const config = {
   server: {
     port: '3000',
-    host: '0',
+    host: 'localhost', // use 0.0.0.0 to bind to all interface
+
     // uncomment to use unix socket to serve gancio
     // path: '/tmp/gancio_socket',
   },
+
   locale: 'it',
-  title: 'GANCIO',
-  description: 'A shared agenda for radical communities',
-  baseurl: '' || 'http://localhost:3000',
+  title: isDev ? 'GANCIO' : 'CHANGE ME',
+  description: isDev ? 'A shared agenda for radical communities' : 'CHANGE ME',
+  baseurl: isDev ? 'http://localhost:3000' : 'https://CHANGE_ME',
+
+  upload_path: isDev ? '/tmp/gancio_upload' : '/var/gancio/upload/',
 
   // where events/users confirmation email are sent
-  admin: '',
+  admin: 'CHANGE ME',
 
   // jwt salt secret, generate it randomly with
   // < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;
-  secret: '',
+  secret: isDev ? 'notreallyrandom' : 'CHANGE ME',
 
   // smtp account to send email
   smtp: {
-    host: process.env.SMTP_HOST || 'mail.example.com',
-    secure: true,
+    host: 'CHANGE ME', // mail.example.com
     auth: {
-      user: process.env.SMTP_USER || 'gancio@example.com',
-      pass: process.env.SMTP_PASS || ''
-    }
+      user: 'CHANGE ME',
+      pass: 'CHANGE ME'
+    },
+    secure: true
   },
   db: DB_CONF[env]
 }

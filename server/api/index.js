@@ -11,9 +11,7 @@ const exportController = require('./controller/export')
 const userController = require('./controller/user')
 const settingsController = require('./controller/settings')
 
-const storage = require('./storage')({
-  destination: 'uploads/'
-})
+const storage = require('./storage')
 
 const upload = multer({ storage })
 const api = express.Router()

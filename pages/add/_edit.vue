@@ -223,6 +223,8 @@ export default {
       const place = this.places.find( p => p.name === this.event.place.name )
       if (place && place.address) {
         this.event.place.address = place.address
+      } else {
+        this.event.place.address = ''
       }
       this.$refs.address.focus()
     },

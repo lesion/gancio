@@ -15,14 +15,14 @@
     //-   el-tag.ml-1(size='mini' v-for='place in filters.places' :key='place.id') {{place}}
     el-tabs.mt-2(v-model='type')
 
-      el-tab-pane.pt-1(label='email' name='email')
-        p(v-html='$t(`export.email_description`)')
-        el-form(@submit.native.prevent)
-          //- el-switch(v-model='notification.notify_on_add' :active-text="$t('notify_on_insert')")
-          //- br
-          //- el-switch.mt-2(v-model='notification.send_notification' :active-text="$t('send_notification')") 
-          el-input.mt-2(v-model='notification.email' :placeholder="$t('export.insert_your_address')" ref='email')
-          el-button.mt-2.float-right(native-type= 'submit' type='success' @click='add_notification') {{$t('common.send')}}
+      //- el-tab-pane.pt-1(label='email' name='email')
+      //-   p(v-html='$t(`export.email_description`)')
+      //-   el-form(@submit.native.prevent)
+      //-     //- el-switch(v-model='notification.notify_on_add' :active-text="$t('notify_on_insert')")
+      //-     //- br
+      //-     //- el-switch.mt-2(v-model='notification.send_notification' :active-text="$t('send_notification')") 
+      //-     el-input.mt-2(v-model='notification.email' :placeholder="$t('export.insert_your_address')" ref='email')
+      //-     el-button.mt-2.float-right(native-type= 'submit' type='success' @click='add_notification') {{$t('common.send')}}
 
       el-tab-pane.pt-1(label='feed rss' name='feed')
         span(v-html='$t(`export.feed_description`)')
@@ -104,8 +104,12 @@ export default {
         params.push(`title=${this.list.title}`)
       }
 
-      if (this.filters.places) {
+      if (this.filters.places.length) {
         params.push(`places=${this.filters.places}`)
+      }
+
+      if (this.filters.tags.length) {
+        params.push(`tags=${this.filters.tags}`)
       }
 
       return `<iframe src="${process.env.baseurl}/embed/list?${params.join('&')}"></iframe>`

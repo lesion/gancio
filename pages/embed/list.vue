@@ -5,13 +5,13 @@
 import { mapState } from 'vuex'
 import List from '../../components/List'
 import moment from 'dayjs'
+import get from 'lodash/get'
 
 export default {
   layout: 'iframe',
   components: { List },
-  computed: mapState(['config']),
   async asyncData ({ $axios, req, res }) {
-    const title = req && req.query && req.query.title || this.config.title
+    const title = get(req, 'query.title')
     const tags = req && req.query && req.query.tags
     const places = req && req.query && req.query.places
     const now = new Date()

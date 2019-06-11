@@ -16,7 +16,7 @@ rss(version='2.0')
                     | <h4>#{event.title}</h4>
                     | <strong>#{event.place.name} - #{event.place.address}</strong>
                     | #{moment(event.start_datetime).format("dddd, D MMMM HH:mm")}<br/>
-                    | <img src="#{config.apiurl}/../uploads/#{event.image_path}"/>
+                    | <img src="#{config.apiurl}/media/#{event.image_path}"/>
                     | <pre>!{event.description}</pre>
                     | ]]>
                 pubDate= new Date(event.createdAt).toUTCString()

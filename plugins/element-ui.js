@@ -1,16 +1,20 @@
 import Vue from 'vue'
 import { Button, Select, Tag, Option, Table, FormItem, Card, Row, Col, Upload, Checkbox,
   Form, Tabs, TabPane, Switch, Input, Loading, TimeSelect, Badge, ButtonGroup, Divider, Step, Steps,
-  TableColumn, ColorPicker, Pagination, Popover, Tooltip, Dialog,
-  Container, Footer , Timeline, TimelineItem, Menu, MenuItem } from 'element-ui'
-import localeEn from 'element-ui/lib/locale/lang/en'
-import localeIt from 'element-ui/lib/locale/lang/it'
+  TableColumn, ColorPicker, Pagination, Popover, Tooltip, Dialog, Image,
+  Container, Footer, Timeline, TimelineItem, Menu, MenuItem } from 'element-ui'
 import locale from 'element-ui/lib/locale'
-locale.use(localeIt)
+
+const locales = {
+  it: require('element-ui/lib/locale/lang/it'),
+  en: require('element-ui/lib/locale/lang/en')
+}
+locale.use(locales[process.env.locale])
 
 export default () => {
   Vue.use(Button)
   Vue.use(Divider)
+  Vue.use(Image)
   Vue.use(Step)
   Vue.use(Steps)
   Vue.use(Checkbox)

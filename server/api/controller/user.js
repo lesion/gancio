@@ -53,8 +53,8 @@ const userController = {
     // check if event is mine (or user is admin)
     if (event && (req.user.is_admin || req.user.id === event.userId)) {
       if (event.image_path) {
-        const old_path = path.resolve(__dirname, '..', '..', 'uploads', event.image_path)
-        const old_thumb_path = path.resolve(__dirname, '..', '..', 'uploads', 'thumb', event.image_path)
+        const old_path = path.join(config.upload_path, event.image_path)
+        const old_thumb_path = path.join(config.upload_path, 'thumb', event.image_path)
         try {
           await fs.unlink(old_path)
           await fs.unlink(old_thumb_path)
@@ -126,8 +126,8 @@ const userController = {
 
     if (req.file) {
       if (event.image_path) {
-        const old_path = path.resolve(__dirname, '..', '..', 'uploads', event.image_path)
-        const old_thumb_path = path.resolve(__dirname, '..', '..', 'uploads', 'thumb', event.image_path)
+        const old_path = path.resolve(config.upload_path, event.image_path)
+        const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.image_path)
         await fs.unlink(old_path, e => console.error(e))
         await fs.unlink(old_thumb_path, e => console.error(e))
       }

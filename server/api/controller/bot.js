@@ -48,7 +48,7 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
 
     let media
     if (event.image_path) {
-      const file = path.join(__dirname, '..', '..', '..', 'uploads', event.image_path)
+      const file = path.join(config.upload_path, event.image_path)
       if (fs.statSync(file)) {
         media = await bot.post('media', { file: fs.createReadStream(file) })
       }

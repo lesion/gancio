@@ -1,6 +1,5 @@
 <template lang="pug">
-  el-card#eventDetail
-
+  el-card#eventDetail(v-loading='!loaded')
     //- close button
     nuxt-link.float-right(to='/')
       el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
@@ -18,7 +17,7 @@
           el-button(icon='el-icon-arrow-right' round type='success') 
     
       //- image
-      img(:src='imgPath' v-if='event.image_path')
+      img(:src='imgPath' v-if='event.image_path' @load='image_loaded')
 
       .info
         div {{event|event_when}}
@@ -56,6 +55,11 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Event',
+  data () {
+    return {
+      loaded: false,
+    }
+  },
   // transition: null,
   // Watch for $route.query.page to call Component methods (asyncData, fetch, validate, layout, etc.)
   // watchQuery: ['id'],
@@ -84,7 +88,8 @@ export default {
   },
   async asyncData ( { $axios, params }) {
     const event = await $axios.$get(`/event/${params.id}`)
-    return { event, id: params.id}
+    const loaded = !event.image_path
+    return { event, id: params.id, loaded }
   },  
   computed: {
     ...mapGetters(['filteredEvents']),
@@ -112,6 +117,9 @@ export default {
     },
   },
   methods: {
+    image_loaded (e, b) {
+      this.loaded = true
+    },
     ...mapActions(['delEvent']),
     comment_filter (value) {
       return value.replace(/<a.*href="([^">]+).*>(?:.(?!\<\/a\>))*.<\/a>/, (orig, url) => {
