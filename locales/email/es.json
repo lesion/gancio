@@ -1,11 +1,8 @@
 {
-  "registration_email": "registration_email",
-  "recover_email": "recover_email",
-  "press here": "press here",
-  "register.request": "register.request",
   "email.registration": "email.registration",
   "email.register.subject": "email.register.subject",
   "email.register": "email.register",
-  "confirm_email": "confirm_email",
-  "email.confirm": "email.confirm"
+  "email.confirm": "email.confirm",
+  "email.recover": "email.recover",
+  "email.press_here": "email.press_here"
 }
