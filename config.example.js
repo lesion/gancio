@@ -67,4 +67,4 @@ const config = {
   db: DB_CONF[env]
 }
 
-module.exports = config
+module.exports = { ...config, ...config.db }
