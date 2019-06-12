@@ -1,8 +1,8 @@
 <template lang='pug'>
   .container
     #error
-      h1(v-if="error.statusCode === 404") Page not found
-      h1(v-else) An error occurred
+      h1(v-if="error.statusCode === 404") {{error.message}}
+      h1(v-else) An error occurred {{error}}
 </template>
 
 <script>

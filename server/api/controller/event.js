@@ -92,7 +92,11 @@ const eventController = {
       ],
     order: [ [Comment, 'id', 'DESC'], [Tag, 'weigth', 'DESC'] ]
     })
-    res.json(event)
+    if (event) {
+      res.json(event)
+    } else {
+      res.sendStatus(404)
+    }
   },
 
   async confirm(req, res) {

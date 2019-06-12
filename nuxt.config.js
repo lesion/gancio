@@ -102,6 +102,6 @@ module.exports = {
       layouts: true
     },
     cache: true,
-    parallel: true
+    // parallel: true
   }
 }

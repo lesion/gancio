@@ -1,95 +1,97 @@
 <template lang="pug">
-  el-card
+  el-card(v-loading='loading')
     nuxt-link.float-right(to='/')
       el-button
         v-icon(name='times' color='red')
     h5 {{edit?$t('common.edit_event'):$t('common.add_event')}}
 
-    el-form(v-loading='loading')
-      el-tabs.mb-2(v-model='activeTab')
+    el-form
+      no-ssr
+        el-tabs.mb-2(v-model='activeTab')
 
-        //- NOT LOGGED EVENT
-        el-tab-pane(v-if='!$auth.loggedIn')
-          span(slot='label') {{$t('event.anon')}} <v-icon name='user-secret'/>
-          p(v-html="$t('event.anon_description')")
-          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
+          //- NOT LOGGED EVENT
+          el-tab-pane(v-if='!$auth.loggedIn')
+            span(slot='label') {{$t('event.anon')}} <v-icon name='user-secret'/>
+            p(v-html="$t('event.anon_description')")
+            el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
 
-        //- WHERE
-        el-tab-pane
-          span(slot='label') <v-icon name='map-marker-alt'/> {{$t('common.where')}} 
-          p(v-html="$t('event.where_description')") 
+          //- WHERE
+          el-tab-pane
+            span(slot='label') <v-icon name='map-marker-alt'/> {{$t('common.where')}} 
+            p(v-html="$t('event.where_description')") 
 
-          el-select.mb-3(v-model='event.place.name'
-            @change='placeChoosed'
-            filterable allow-create
-            default-first-option
-          )
-            el-option(v-for='place in places' :label='place.name' :value='place.name' :key='place.id')
-              span {{place.name}}
-          div {{$t("common.address")}}
-          el-input.mb-3(ref='address' v-model='event.place.address'
-            :disabled='places_name.indexOf(event.place.name)>-1'
-            @keydown.native.enter='next')
-          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
+            el-select.mb-3(v-model='event.place.name'
+              @change='placeChoosed'
+              filterable allow-create
+              default-first-option
+            )
+              el-option(v-for='place in places' :label='place.name' :value='place.name' :key='place.id')
+                span {{place.name}}
+            div {{$t("common.address")}}
+            el-input.mb-3(ref='address' v-model='event.place.address'
+              :disabled='places_name.indexOf(event.place.name)>-1'
+              @keydown.native.enter='next')
+            el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
 
-        //- WHEN
-        el-tab-pane
-          span(slot='label') {{$t('common.when')}} <v-icon name='clock'/>
-          span {{event.multidate ? $t('event.dates_description') : $t('event.date_description')}}
-            el-switch.float-right(v-model='event.multidate' :active-text="$t('event.multidate_description')")
+          //- WHEN
+          el-tab-pane
+            span(slot='label') {{$t('common.when')}} <v-icon name='clock'/>
+            span {{event.multidate ? $t('event.dates_description') : $t('event.date_description')}}
+              el-switch.float-right(v-model='event.multidate' :active-text="$t('event.multidate_description')")
 
-          v-date-picker.mb-3(
-            :mode='event.multidate ? "range" : "single"'
-            :attributes='attributes'
-            v-model='date'
-            is-inline
-            is-expanded
-            :min-date='new Date()'
-          )
-          
-          el-row
-            el-col(:span='12')
-              div {{$t('event.time_start_description')}}
-              el-time-select.mb-3(ref='time_start'
-                v-model="time.start"
-                :picker-options="{ start: '00:00', step: '00:30', end: '24:00'}")
-              div {{$t('event.time_end_description')}}
-              el-time-select(v-model='time.end'
-                :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
-            el-col(:span='12')
-              List(:events='todayEvents' :title='$t("event.same_day")')
-          el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
+            v-date-picker.mb-3(
+              :mode='event.multidate ? "range" : "single"'
+              :attributes='attributes'
+              v-model='date'
+              :from-page.sync='page'
+              is-inline
+              is-expanded
+              :min-date='new Date()'
+            )
+            
+            el-row
+              el-col(:span='12')
+                div {{$t('event.time_start_description')}}
+                el-time-select.mb-3(ref='time_start'
+                  v-model="time.start"
+                  :picker-options="{ start: '00:00', step: '00:30', end: '24:00'}")
+                div {{$t('event.time_end_description')}}
+                el-time-select(v-model='time.end'
+                  :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
+              el-col(:span='12')
+                List(:events='todayEvents' :title='$t("event.same_day")')
+            el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
 
-        //- WHAT
-        el-tab-pane
-          span(slot='label') {{$t('common.what')}} <v-icon name='file-alt'/>
-          span {{$t('event.what_description')}}
-          el-input.mb-3(v-model='event.title' ref='title')
-          span {{$t('event.description_description')}}
-          el-input.mb-3(v-model='event.description' type='textarea' :rows='9')
-          span {{$t('event.tag_description')}}
-          br 
-          el-select(v-model='event.tags' multiple filterable allow-create
-            default-first-option placeholder='Tag')
-            el-option(v-for='tag in tags' :key='tag.tag'
-              :label='tag' :value='tag') 
+          //- WHAT
+          el-tab-pane
+            span(slot='label') {{$t('common.what')}} <v-icon name='file-alt'/>
+            span {{$t('event.what_description')}}
+            el-input.mb-3(v-model='event.title' ref='title')
+            span {{$t('event.description_description')}}
+            el-input.mb-3(v-model='event.description' type='textarea' :rows='9')
+            span {{$t('event.tag_description')}}
+            br 
+            el-select(v-model='event.tags' multiple filterable allow-create
+              default-first-option placeholder='Tag')
+              el-option(v-for='tag in tags' :key='tag.tag'
+                :label='tag' :value='tag') 
 
-          el-button.float-right(@click.native='next' :disabled='!couldProceed') {{$t('common.next')}}
+            el-button.float-right(@click.native='next' :disabled='!couldProceed') {{$t('common.next')}}
 
-        el-tab-pane
-          span(slot='label') {{$t('common.media')}} <v-icon name='image'/>
-          el-upload.text-center(
-            action=''
-            :limit="1"
-            :auto-upload='false'
-            drag
-            :on-change='uploadedFile'
-            :multiple='false'
-            :file-list="fileList"
-          )
-            i.el-icon-upload
-            div.el-upload__text {{$t('event.media_description')}}
-          el-button.float-right(@click='done' :disabled='!couldProceed') {{edit?$t('common.edit'):$t('common.send')}}
+          el-tab-pane
+            span(slot='label') {{$t('common.media')}} <v-icon name='image'/>
+            el-upload.text-center(
+              action=''
+              :limit="1"
+              :auto-upload='false'
+              drag
+              :on-change='uploadedFile'
+              :multiple='false'
+              :file-list="fileList"
+            )
+              i.el-icon-upload
+              div.el-upload__text {{$t('event.media_description')}}
+            el-button.float-right(@click='done' :disabled='!couldProceed') {{edit?$t('common.edit'):$t('common.send')}}
 
 </template>
 <script>
@@ -102,6 +104,8 @@ export default {
   name: 'Add',
   components: { List },
   data() {
+    const month = moment().month()+1
+    const year = moment().year()
     return {
       event: { 
         place: { name: '', address: '' },
@@ -109,8 +113,8 @@ export default {
         multidate: false,
         image: false
       },
+      page: { month, year},
       fileList: [],
-      open: true,
       id: null,
       activeTab: "0",
       date: null,
@@ -124,28 +128,57 @@ export default {
     'time.start' (value) {
       let [h, m] = value.split(':')
       this.time.end = (Number(h)+1) + ':' + m
+    },
+    // month selected
+    page () {
+      this.updateEvents(this.page)
     }
   },
-  async mounted () {
-    if (this.$route.params.edit) {
-      this.id = this.$route.params.edit
-      this.edit = true
-      const event = await this.$axios.$get('/event/'+ this.id)
-      this.event.place.name = event.place.name
-      this.event.place.address = event.place.address || ''
-      this.event.multidate = event.multidate
-      this.date = event.start_datetime
-      this.time.start = moment(event.start_datetime).format('HH:mm')
-      this.time.end = moment(event.end_datetime).format('HH:mm')
-      this.event.title = event.title
-      this.event.description = event.description.replace(/(<([^>]+)>)/ig, '')
-      this.event.id = event.id
-      if (event.tags) {
-        this.event.tags = event.tags.map(t => t.tag)
-      }
+  async fetch ({ store, $axios }) {
+    try {
+      const now = new Date()
+      const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
+      store.commit('setEvents', events)
+      const { tags, places } = await $axios.$get('/event/meta')
+      store.commit('update', { tags, places })
+    } catch(e) {
+      console.error('Error ', e)
     }
-    this.updateMeta()
-    this.loading = false
+  },
+  async asyncData ( { params, $axios, error }) {
+    if (params.edit) {
+      const data = { time: {}, event: { place: {} }}
+      data.id = params.edit
+      data.edit = true
+      let event
+      try {
+        event = await $axios.$get('/event/'+ data.id)
+        console.error(event)
+      } catch (e) {
+        error({ statusCode: 404, message: 'Event not found!'})
+        return {}
+      }
+      data.event.place.name = event.place.name
+      data.event.place.address = event.place.address || ''
+      data.event.multidate = event.multidate
+      if (event.multidate) {
+        data.date = { start: new Date(event.start_datetime), end: new Date(event.end_datetime) }
+      } else {
+        data.date = new Date(event.start_datetime)// moment(event.start_datetime)
+      }
+      data.time.start = moment(event.start_datetime).format('HH:mm')
+      data.time.end = moment(event.end_datetime).format('HH:mm')
+      data.event.title = event.title
+      data.event.description = event.description.replace(/(<([^>]+)>)/ig, '')
+      data.event.id = event.id
+      if (event.tags) {
+        data.event.tags = event.tags.map(t => t.tag)
+      }
+      data.loading = false
+      return data
+    }
+    console.error('prima del return')
+    return { loading: false }
   },
   computed: {
     ...mapState({
@@ -161,7 +194,11 @@ export default {
     },
     ...mapGetters(['filteredEvents']),
     attributes () {
-      return this.events.filter(e => !e.past).map(this.eventToAttribute)
+      const tmp_events = this.events
+        .filter(e => this.id ? e.id !== this.event.id : true)
+        .filter(e => !e.past)
+      
+      return tmp_events.map(this.eventToAttribute)
     },
     disableAddress () {
       return this.places_name.find(p => p.name === this.event.place.name)
@@ -187,7 +224,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['addEvent', 'updateEvent', 'updateMeta']),
+    ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
     eventToAttribute(event) {
       let e = {
         key: event.id,
@@ -201,12 +238,10 @@ export default {
         e.dates = {
           start: event.start_datetime, end: event.end_datetime
         }
-        e.highlight = { backgroundColor: color,
-          // borderColor: 'transparent',
-          borderWidth: '4px' }
+        e.highlight = { }
       } else {
         e.dates = event.start_datetime
-        e.dot = { backgroundColor: color, borderColor: color, borderWidth: '3px' }
+        e.dot = { }
       }
       return e
     },    
