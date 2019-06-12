@@ -37,40 +37,28 @@ export default {
       const element = document.getElementById(day.day)
       if (element) element.scrollIntoView();   //Even IE6 supports this
     },
-    eventToAttribute(event) {
-      let e = {
-        key: event.id,
-        customData: event,
-        order: event.start_datetime,
-      }
-      const day = moment(event.start_datetime).date()
-      // let color = event.past ? 'rgba(200,200,200,0.5)' : get(event, 'tags[0].color') || 'rgba(170,170,250,0.7)'
-
-      if (event.multidate) {
-        e.dates = {
-          start: event.start_datetime, end: event.end_datetime
-        }
-        e.highlight = { 
-          color: sample(['purple', 'yellow', 'orange', 'red', 'green', 'blue']),
-        }
-      } else {
-        e.dates = event.start_datetime
-        e.dot = { color: sample(['purple', 'red', 'orange', 'yellow', 'green', 'blue']) }
-      }
-      return e
-    }
   },
   computed: {
     ...mapGetters(['filteredEvents']),
-    ...mapState(['events']),
     attributes () {
       return [
         { key: 'today', dates: new Date(),
-          highlight: {
-            backgroundColor: '#aaffaa'
-          },
-        }, 
-        ...this.filteredEvents.map(this.eventToAttribute)
+          highlight: { color: 'red' },
+        },
+        {
+          key: 'event',
+          dates: this.filteredEvents
+            .filter(e => !e.multidate)
+            .map(e => e.start_datetime ),
+          dot: { }
+        },
+        {
+          key: 'multidays',
+          dates: this.filteredEvents
+            .filter(e => e.multidate)
+            .map( e => ({ start: e.start_datetime, end: e.end_datetime })),
+          highlight: { color: 'green' }
+        }
       ]
     }
   }

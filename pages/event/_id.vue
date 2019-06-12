@@ -2,7 +2,8 @@
   el-card#eventDetail(v-loading='!loaded')
     //- close button
     nuxt-link.float-right(to='/')
-      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
+      el-button(type='danger' plain circle)
+        v-icon(name='times')
 
     div(v-if='!event')
       h5 {{$t('event.not_found')}}
@@ -12,9 +13,11 @@
       h5.text-center {{event.title}}
       div.nextprev
         nuxt-link(v-if='prev' :to='`/event/${prev.id}`')
-          el-button(icon='el-icon-arrow-left' round type='success')
+          el-button( round type='success')
+            v-icon(name='chevron-left')
         nuxt-link.float-right(v-if='next' :to='`/event/${next.id}`')
-          el-button(icon='el-icon-arrow-right' round type='success') 
+          el-button(round type='success')
+            v-icon(name='chevron-right')
     
       //- image
       img(:src='imgPath' v-if='event.image_path' @load='image_loaded')
@@ -32,13 +35,13 @@
       //- show hide, confirm, delete, edit buttons when allowed
       div(v-if='mine')
         hr
-        el-button(v-if='event.is_visible' size='mini' plain type='warning' @click.prevents='toggle' icon='el-icon-view') {{$t('common.hide')}}
-        el-button(v-else plain type='success' size='mini' @click.prevents='toggle' icon='el-icon-view') {{$t('common.confirm')}}
-        el-button(plain type='danger' size='mini' @click.prevent='remove' icon='el-icon-remove') {{$t('common.remove')}}
-        el-button(plain type='primary' size='mini' @click='$router.replace(`/add/${event.id}`)' icon='el-icon-edit') {{$t('common.edit')}}
+        el-button(v-if='event.is_visible' size='mini' plain type='warning' @click.prevents='toggle') {{$t('common.hide')}}
+        el-button(v-else plain type='success' size='mini' @click.prevents='toggle') {{$t('common.confirm')}}
+        el-button(plain type='danger' size='mini' @click.prevent='remove') {{$t('common.remove')}}
+        el-button(plain type='primary' size='mini' @click='$router.replace(`/add/${event.id}`)') {{$t('common.edit')}}  
 
       //- comments
-      .card-body(v-if='event.activitypub_id')
+      .card-body(v-if='event.activitypub_id && settings')
         strong {{$t('common.related')}} - 
         a(:href='`https://mastodon.cisti.org/web/statuses/${event.activitypub_id}`') {{$t('common.add')}}
       .card-header(v-for='comment in event.comments' :key='comment.id')
@@ -93,6 +96,7 @@ export default {
   },  
   computed: {
     ...mapGetters(['filteredEvents']),
+    ...mapState(['settings']),
     next () {
       let found = false
       return this.filteredEvents.find(e => {

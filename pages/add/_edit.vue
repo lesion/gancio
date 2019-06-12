@@ -17,8 +17,8 @@
 
           //- WHERE
           el-tab-pane
-            span(slot='label') <v-icon name='map-marker-alt'/> {{$t('common.where')}} 
-            p(v-html="$t('event.where_description')") 
+            span(slot='label') <v-icon name='map-marker-alt'/> {{$t('common.where')}}
+            p(v-html="$t('event.where_description')")
 
             el-select.mb-3(v-model='event.place.name'
               @change='placeChoosed'
@@ -48,7 +48,7 @@
               is-expanded
               :min-date='new Date()'
             )
-            
+
             el-row
               el-col(:span='12')
                 div {{$t('event.time_start_description')}}
@@ -70,11 +70,11 @@
             span {{$t('event.description_description')}}
             el-input.mb-3(v-model='event.description' type='textarea' :rows='9')
             span {{$t('event.tag_description')}}
-            br 
+            br
             el-select(v-model='event.tags' multiple filterable allow-create
               default-first-option placeholder='Tag')
               el-option(v-for='tag in tags' :key='tag.tag'
-                :label='tag' :value='tag') 
+                :label='tag' :value='tag')
 
             el-button.float-right(@click.native='next' :disabled='!couldProceed') {{$t('common.next')}}
 
@@ -107,7 +107,7 @@ export default {
     const month = moment().month()+1
     const year = moment().year()
     return {
-      event: { 
+      event: {
         place: { name: '', address: '' },
         title: '', description: '', tags: [],
         multidate: false,
@@ -164,7 +164,7 @@ export default {
       if (event.multidate) {
         data.date = { start: new Date(event.start_datetime), end: new Date(event.end_datetime) }
       } else {
-        data.date = new Date(event.start_datetime)// moment(event.start_datetime)
+        data.date = new Date(event.start_datetime)
       }
       data.time.start = moment(event.start_datetime).format('HH:mm')
       data.time.end = moment(event.end_datetime).format('HH:mm')
@@ -177,7 +177,6 @@ export default {
       data.loading = false
       return data
     }
-    console.error('prima del return')
     return { loading: false }
   },
   computed: {
@@ -190,15 +189,34 @@ export default {
     }),
     todayEvents () {
       const date = moment(this.date)
-      return this.events.filter(e => date.isSame(moment(e.start_datetime), 'day'))
+      return this.events.filter(e =>
+        !e.multidate ?
+          date.isSame(moment(e.start_datetime), 'day') :
+          moment(e.start_datetime).isSame(date, 'day') ||
+            moment(e.start_datetime).isBefore(date) && moment(e.end_datetime).isAfter(date)
+      )
     },
     ...mapGetters(['filteredEvents']),
     attributes () {
-      const tmp_events = this.events
-        .filter(e => this.id ? e.id !== this.event.id : true)
-        .filter(e => !e.past)
-      
-      return tmp_events.map(this.eventToAttribute)
+      return [
+        { key: 'today', dates: new Date(),
+          highlight: { color: 'red' },
+        },
+        {
+          key: 'event',
+          dates: this.filteredEvents
+            .filter(e => !e.multidate)
+            .map(e => e.start_datetime ),
+          dot: { }
+        },
+        {
+          key: 'multidays',
+          dates: this.filteredEvents
+            .filter(e => e.multidate)
+            .map( e => ({ start: e.start_datetime, end: e.end_datetime })),
+          highlight: { color: 'green' }
+        }
+      ]
     },
     disableAddress () {
       return this.places_name.find(p => p.name === this.event.place.name)
@@ -209,42 +227,22 @@ export default {
         case 0+t:
           return true
         case 1+t:
-          return this.event.place.name.length>0 && 
+          return this.event.place.name.length>0 &&
             this.event.place.address.length>0
         case 2+t:
           if (this.date && this.time.start) return true
         case 3+t:
           return this.event.title.length>0
         case 4+t:
-          return this.event.place.name.length>0 && 
-            this.event.place.address.length>0 && 
+          return this.event.place.name.length>0 &&
+            this.event.place.address.length>0 &&
             (this.date && this.time.start) &&
-             this.event.title.length>0   
+             this.event.title.length>0
       }
     }
   },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
-    eventToAttribute(event) {
-      let e = {
-        key: event.id,
-        customData: event,
-        order: event.start_datetime,
-      }
-      const day = moment(event.start_datetime).date()
-      let color = event.tags && event.tags.length && event.tags[0].color ? event.tags[0].color : 'rgba(170,170,250,0.7)'
-      if (event.past) color = 'rgba(200,200,200,0.5)'
-      if (event.multidate) {
-        e.dates = {
-          start: event.start_datetime, end: event.end_datetime
-        }
-        e.highlight = { }
-      } else {
-        e.dates = event.start_datetime
-        e.dot = { }
-      }
-      return e
-    },    
     next () {
       this.activeTab = String(Number(this.activeTab)+1)
       if (this.activeTab === "2") {
