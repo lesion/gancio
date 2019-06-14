@@ -187,13 +187,25 @@ export default {
       events: state => state.events
     }),
     todayEvents () {
-      const date = moment(this.date)
-      return this.events.filter(e =>
-        !e.multidate ?
-          date.isSame(moment(e.start_datetime), 'day') :
-          moment(e.start_datetime).isSame(date, 'day') ||
-            moment(e.start_datetime).isBefore(date) && moment(e.end_datetime).isAfter(date)
-      )
+      if (this.event.multidate) {
+        if (!this.date || !this.date.start) return
+        const date_start = moment(this.date.start)
+        const date_end = moment(this.date.end)
+        return this.events.filter(e =>
+          !e.multidate ?
+          date_start.isSame(e.start_datetime, 'day') || 
+            date_start.isBefore(e.start_datime) && date_end.isAfter(e.start_datetime) :
+          date_start.isSame(e.start_datetime, 'day') || date_start.isSame(e.end_datetime) ||
+            date_start.isAfter(e.start_datetime) && date_start.isBefore(e.end_datetime))
+      } else {
+        const date = moment(this.date)
+        return this.events.filter(e =>
+          !e.multidate ?
+            date.isSame(moment(e.start_datetime), 'day') :
+            moment(e.start_datetime).isSame(date, 'day') ||
+              moment(e.start_datetime).isBefore(date) && moment(e.end_datetime).isAfter(date)
+        )
+      }
     },
     ...mapGetters(['filteredEvents']),
     attributes () {
