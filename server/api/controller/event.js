@@ -82,15 +82,18 @@ const eventController = {
     res.json(place)
   },
 
+  // TODO retrieve next/prev event also
+  // select id, start_datetime, title from events where start_datetime > (select start_datetime from events where id=89) order by start_datetime limit 20;
+  // weigth is not updated
   async get(req, res) {
     const id = req.params.event_id
-    const event = await Event.findByPk(id, { include:
-      [
+    const event = await Event.findByPk(id, {
+      include: [
         Tag,
         Comment,
         { model: Place, attributes: ['name', 'address'] }
       ],
-    order: [ [Comment, 'id', 'DESC'], [Tag, 'weigth', 'DESC'] ]
+      order: [ [Comment, 'id', 'DESC'], [Tag, 'weigth', 'DESC'] ]
     })
     if (event) {
       res.json(event)
@@ -184,8 +187,6 @@ const eventController = {
         [Tag, 'weigth', 'DESC']
       ],
       include: [
-        // { model: User, required: false },
-        // { type: Comment, required: false, attributes: ['']
         { model: Tag, required: false, attributes: ['tag', 'weigth', 'color'] },
         { model: Place, required: false, attributes: ['id', 'name', 'address'] }
       ]

@@ -2,7 +2,7 @@
   el-card#eventDetail(v-loading='!loaded')
     //- close button
     nuxt-link.float-right(to='/')
-      el-button(type='danger' plain circle)
+      el-button(type='danger' plain)
         v-icon(name='times')
 
     div(v-if='!event')
@@ -13,7 +13,7 @@
       h5.text-center {{event.title}}
       div.nextprev
         nuxt-link(v-if='prev' :to='`/event/${prev.id}`')
-          el-button( round type='success')
+          el-button(round type='success')
             v-icon(name='chevron-left')
         nuxt-link.float-right(v-if='next' :to='`/event/${next.id}`')
           el-button(round type='success')
@@ -88,6 +88,15 @@ export default {
         { property: 'og:image', content: this.imgPath }
       ]
     }
+  },
+  async fetch ({ $axios, store }) {
+    try {
+      const now = new Date()
+      const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
+      return store.commit('setEvents', events)
+    } catch(e) {
+      console.error(e)
+    }    
   },
   async asyncData ( { $axios, params }) {
     const event = await $axios.$get(`/event/${params.id}`)

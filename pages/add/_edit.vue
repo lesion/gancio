@@ -4,7 +4,6 @@
       el-button
         v-icon(name='times' color='red')
     h5 {{edit?$t('common.edit_event'):$t('common.add_event')}}
-
     el-form
       no-ssr
         el-tabs.mb-2(v-model='activeTab')
