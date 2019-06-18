@@ -42,7 +42,9 @@ const it = {
     copy: 'Copia',
     recover_password: 'Recupera password',
     new_password: 'Nuova password',
-    new_user: 'Nuovo utente'
+    new_user: 'Nuovo utente',
+    ok: 'Ok',
+    cancel: 'Annulla'
   },
 
   login: {
@@ -114,7 +116,11 @@ const it = {
     mastodon_instance: 'Istanza',
     mastodon_description: 'Puoi associare un account mastodon a questa istanza di gancio, ogni evento verrà pubblicato lì.',
     place_description: `Nel caso in cui un luogo sia errato o cambi indirizzo, puoi modificarlo. <br/>Considera che tutti gli eventi associati a questo luogo cambieranno indirizzo (anche quelli passati!)`,
-    event_confirm_description: 'Puoi confermare qui gli eventi inseriti da utenti anonimi'
+    event_confirm_description: 'Puoi confermare qui gli eventi inseriti da utenti anonimi',
+    delete_user: 'Elimina',
+    remove_admin: 'Rimuovi admin',
+    delete_user_confirm: 'Sicura di rimuovere questo utente?',
+    user_remove_ok: 'Utente eliminato'
   },
 
   auth: {

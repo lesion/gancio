@@ -40,6 +40,12 @@ api.post('/user', jwt, isAuth, isAdmin, userController.create)
 // update user (disable/)
 api.put('/user', jwt, isAuth, isAdmin, userController.update)
 
+//delete user
+api.delete('/user/:id', jwt, isAuth, isAdmin, userController.remove)
+
+// 
+// api.delete('/user', userController.remove)
+
 // get all users
 api.get('/users', jwt, isAuth, isAdmin, userController.getAll)
 

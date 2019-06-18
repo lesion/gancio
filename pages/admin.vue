@@ -36,7 +36,11 @@
                 @click='toggle(data.row)') {{data.row.is_active?$t('common.deactivate'):$t('common.activate')}}
               el-button(size='mini'
                 :type='data.row.is_admin?"danger":"warning"'
-                @click='toggleAdmin(data.row)') {{data.row.is_admin?$t('common.remove_admin'):$t('common.admin')}}
+                @click='toggleAdmin(data.row)') {{data.row.is_admin?$t('admin.remove_admin'):$t('common.admin')}}
+              el-button(size='mini'
+                type='danger'
+                @click='delete_user(data.row)') {{$t('admin.delete_user')}}
+                
         el-pagination(:page-size='perPage' :currentPage.sync='userPage' :total='users.length')
 
       //- PLACES
@@ -110,13 +114,18 @@
         el-form(inline @submit.native.prevent='associate_mastondon_instance' label-width='140px')
           p {{$t('admin.mastodon_description')}}
           el-form-item {{$t('admin.mastodon_instance')}}
-            el-input(v-model="mastodon_instance")
-              el-button(slot='append' native-type='submit' type='success' :disabled='!mastodon_instance.length') {{$t('common.associate')}}
+            el-input(v-model="settings.mastodon_instance")
+              el-button(slot='append' native-type='submit' type='success' :disabled='!settings.mastodon_instance') {{$t('common.associate')}}
+            
+          p {{$t('admin.allow_registration_description')}}
+          el-form-item {{$t('admin.allow_registration')}}
+            el-switch(v-model='settings.allow_registration')
+
 
 </template>
 <script>
 import { mapState } from 'vuex'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 
 export default {
   name: 'Admin',
@@ -223,6 +232,23 @@ export default {
 
       const url = await this.$axios.$post('/settings/getauthurl', {instance: this.settings.mastodon_instance})
       setTimeout( () => window.location.href=url, 100);
+    },
+    async delete_user (user) {
+      console.error('dentro delete user', user)
+      MessageBox.confirm(this.$t('admin.delete_user_confirm'),
+        this.$t('common.confirm'), {
+          confirmButtonText: this.$t('common.ok'),
+          cancelButtonText: this.$t('common.cancel'),
+          type: 'error'
+        })
+        .then( () => this.$axios.delete(`/user/${user.id}`) )
+        .then( () => {
+          Message({
+            type: 'success',
+            message: this.$t('admin.user_remove_ok')
+          })
+          this.users = this.users.filter(u => u.id!==user.id)
+        })
     },
     async create_user () {
       try {

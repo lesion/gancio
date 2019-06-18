@@ -254,6 +254,16 @@ const userController = {
     } catch (e) {
       res.status(404).json(e)
     }
+  },
+
+  async remove(req, res) {
+    try {
+      const user = await User.findByPk(req.params.id)
+      user.destroy()
+      res.sendStatus(200)
+    } catch (e) {
+      res.status(404).json(e)
+    }
   }
 }
 
