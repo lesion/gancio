@@ -1,6 +1,6 @@
 {
   "name": "gancio",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "My well-made Nuxt.js project",
   "author": "lesion",
   "scripts": {
@@ -11,6 +11,15 @@
     "precommit": "npm run lint",
     "migrate:dev": "sequelize db:migrate",
     "migrate": "NODE_ENV=production sequelize db:migrate"
+  },
+  "license": "AGPL-3.0",
+  "bugs": {
+    "email": "lesion@autistici.org",
+    "url": "https://git.lattuga.net/cisti/gancio/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.lattuga.net/cisti/gancio.git"
   },
   "bin": {
     "gancio": "server/index.js"
@@ -56,7 +65,7 @@
     "@nuxtjs/eslint-config": "^0.0.1",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.15.1",
-    "eslint-config-prettier": "^4.3.0",
+    "eslint-config-prettier": "^5.0.0",
     "eslint-config-standard": ">=12.0.0",
     "eslint-loader": "^2.1.2",
     "eslint-plugin-import": ">=2.17.3",

@@ -39,13 +39,6 @@ const Auth = {
     if (req.user.is_admin && req.user.is_active) return next()
     return res.status(403).send({ message: 'Admin needed' })
   },
-  async adminOrFirstRun(req, res, next) {
-    if (req.user && req.user.is_admin && req.user.is_active) return next()
-    const settings = await Settings.settings()
-    if (!settings.firstRun) {
-      return next()
-    }
-  }
 
 }
 

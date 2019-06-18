@@ -217,6 +217,7 @@ const userController = {
     }
   },
 
+
   async register(req, res) {
     const n_users = await User.count()
     try {
@@ -240,6 +241,16 @@ const userController = {
       }
       const token = jwt.sign(payload, config.secret)
       res.json({ token, user })
+    } catch (e) {
+      res.status(404).json(e)
+    }
+  },
+
+  async create(req, res) {
+    try {
+      req.body.is_active = true
+      const user = await User.create(req.body)
+      res.json(user)
     } catch (e) {
       res.status(404).json(e)
     }

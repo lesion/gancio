@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Button, Select, Tag, Option, Table, FormItem, Card, Row, Col, Upload, Checkbox,
   Form, Tabs, TabPane, Switch, Input, Loading, TimeSelect, Badge, ButtonGroup, Divider, Step, Steps,
-  TableColumn, ColorPicker, Pagination, Popover, Tooltip, Dialog, Image,
+  TableColumn, ColorPicker, Pagination, Popover, Tooltip, Dialog, Image, Backtop, Collapse, CollapseItem,
   Container, Footer, Timeline, TimelineItem, Menu, MenuItem } from 'element-ui'
 import locale from 'element-ui/lib/locale'
 
@@ -13,6 +13,9 @@ locale.use(locales[process.env.locale])
 
 export default () => {
   Vue.use(Button)
+  Vue.use(Collapse)
+  Vue.use(CollapseItem)
+  Vue.use(Backtop)
   Vue.use(Divider)
   Vue.use(Image)
   Vue.use(Step)

@@ -5,13 +5,25 @@
         v-icon(name='times' color='red')
     h5 {{$t('common.admin')}}
 
-    el-tabs(tabPosition='lef' v-model='tab')
+    el-tabs(v-model='tab')
 
       //- USERS
       el-tab-pane.pt-1
         template(slot='label')
           v-icon(name='users')
           span.ml-1 {{$t('common.users')}}
+        el-collapse
+          el-collapse-item
+            template(slot='title')
+              p {{$t('common.new_user')}}
+            el-form(inline)
+              el-form-item(:label="$t('common.email')")
+                el-input(v-model='new_user.email')
+              el-form-item(:label="$t('common.password')")
+                el-input(v-model='new_user.password' type='password')
+              el-form-item(:label="$t('common.admin')")
+                el-switch(v-model='new_user.admin')
+              el-button.float-right(@click='create_user' type='success' plain) {{$t('common.send')}}
         el-table(:data='paginatedUsers' small)
           el-table-column(label='Email')
             template(slot-scope='data')
@@ -126,8 +138,14 @@ export default {
       events: [],
       loading: false,
       settings: {
+        allow_registration: true,
+        mastodon_instance: ''
       },
-      mastodon_instance: '',
+      new_user: {
+        email: '',
+        password: '',
+        admin: false,
+      },
       tab: "0",
       open: true
     }
@@ -201,10 +219,26 @@ export default {
       this.$router.push(`/event/${id}`)
     },
     async associate_mastondon_instance () {
-      if (!this.mastodon_instance) return false
+      if (!this.settings.mastodon_instance) return false
 
-      const url = await this.$axios.$post('/settings/getauthurl', {instance: this.mastodon_instance})
+      const url = await this.$axios.$post('/settings/getauthurl', {instance: this.settings.mastodon_instance})
       setTimeout( () => window.location.href=url, 100);
+    },
+    async create_user () {
+      try {
+        this.loading = true
+        const user = await this.$axios.$post('/user', this.new_user)
+        this.new_user = { email: '', password: '', is_admin: false }
+        Message({ 
+          type: 'success',
+          message: this.$t('user.create_ok')
+        })
+      } catch (e) {
+        Message({
+          type: 'error',
+          message: this.$t('user.error_create') + e
+        })
+      }
     },
     async confirm (id) {
       try {

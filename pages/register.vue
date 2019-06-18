@@ -5,7 +5,7 @@
       v-icon(name='times' color='red')
     h5 {{$t('common.register')}}
 
-    el-form(@submit.native.prevent='register' method='POST' action='/api/user')
+    el-form(@submit.native.prevent='register' method='POST' action='/api/user/register')
       p(v-html="$t('register.description')")
       el-input.mb-2(ref='email' v-model='user.email' type='email' required
         :placeholder='$t("common.email")' autocomplete='email' name='email')
@@ -44,7 +44,7 @@ export default {
     ...mapActions(['login']),
     async register () {
       try {
-        const { user } = await this.$axios.$post('/user', this.user)
+        const { user } = await this.$axios.$post('/user/register', this.user)
         Message({
           message: this.$t(`register.${user.is_admin ? 'admin_' : ''}complete`),
           type: 'success'

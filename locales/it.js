@@ -41,7 +41,8 @@ const it = {
     logout_ok: 'Uscita correttamente',
     copy: 'Copia',
     recover_password: 'Recupera password',
-    new_password: 'Nuova password'
+    new_password: 'Nuova password',
+    new_user: 'Nuovo utente'
   },
 
   login: {
@@ -106,7 +107,7 @@ const it = {
     added_anon: 'Evento aggiunto, verrà confermato quanto prima.',
     where_description: `Dov'è il gancio? Se il posto non è presente, scrivilo e <b>premi invio</b>. `,
     confirmed: 'Evento confermato',
-    not_found: 'Evento non trovato'
+    not_found: 'Evento non trovato',
   },
 
   admin: {

@@ -1,4 +1,4 @@
-const mail = require('./mail')
+const mail = require('./api/mail')
 const bot = require('./api/controller/bot')
 const settingsController = require('./api/controller/settings')
 const config = require('./config.js')
@@ -54,7 +54,6 @@ async function notify() {
 
 let interval
 function startLoop(seconds) {
-  console.error('starting notifier loop')
   interval = setInterval(notify, seconds * 1000)
 }
 
