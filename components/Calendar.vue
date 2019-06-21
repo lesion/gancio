@@ -2,7 +2,7 @@
   #calendar
     v-calendar(
       title-position='left'
-      locale='it'
+      :locale='$i18n.locale'
       is-dark
       :attributes='attributes'
       :from-page.sync='page'
@@ -41,25 +41,19 @@ export default {
   computed: {
     ...mapGetters(['filteredEvents']),
     attributes () {
-      return [
-        { key: 'today', dates: new Date(),
-          highlight: { color: 'red' },
-        },
-        {
-          key: 'event',
-          dates: this.filteredEvents
-            .filter(e => !e.multidate)
-            .map(e => e.start_datetime ),
-          dot: { }
-        },
-        {
-          key: 'multidays',
-          dates: this.filteredEvents
-            .filter(e => e.multidate)
-            .map( e => ({ start: e.start_datetime, end: e.end_datetime })),
-          highlight: { color: 'green' }
-        }
-      ]
+      let attributes = []
+      attributes.push ({ key: 'today', dates: new Date(), highlight: { color: 'yellow' }})
+
+      attributes = attributes.concat(this.filteredEvents
+        .filter(e => !e.multidate)
+        .map(e => ({ key: e.id, dot: {}, dates: new Date(e.start_datetime*1000)})))
+
+      attributes = attributes.concat(this.filteredEvents
+        .filter(e => e.multidate)
+        .map( e => ({ key: e.id, highlight: {}, dates: { 
+          start: new Date(e.start_datetime*1000), end: new Date(e.end_datetime*1000) }})))
+          
+      return attributes
     }
   }
 }

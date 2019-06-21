@@ -1,20 +1,12 @@
-const argv = require('yargs').argv
-const path = require('path')
-const config_path = path.resolve(argv.config || './config.js')
-
-const config = require(config_path)
-
 module.exports = {
   mode: 'universal',
   /*
    ** Headers of the page
    */
   head: {
-    title: config.title,
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: config.description }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
@@ -35,20 +27,15 @@ module.exports = {
     'bootstrap/dist/css/bootstrap.css',
     'element-ui/lib/theme-chalk/index.css'
   ],
-  env: {
-    baseurl: config.baseurl,
-    title: config.title,
-    description: config.description,
-    locale: config.locale
-  },
+
   /*
    ** Plugins to load before mounting the App
    */
   plugins: [
     '@/plugins/element-ui', // UI library -> https://element.eleme.io/#/en-US/
     '@/plugins/filters', // text filters, datetime, etc.
-    '@/plugins/i18n', // localization plugin
     '@/plugins/vue-awesome', // icon
+    '@/plugins/axios', // icon
     { src: '@/plugins/v-calendar', ssr: false } // calendar, TO-REDO
   ],
 
@@ -58,17 +45,28 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    ['nuxt-i18n', {
+      locales: [
+        { code: 'en', iso: 'en-US', file: './locales/en.js' },
+        { code: 'it', iso: 'it-IT', file: './locales/it.js' },
+      ],
+      defaultLocale: 'it',
+      vueI18n: {
+        fallbackLocale: 'it',
+        messages: {
+          it: require('./locales/it'),
+          en: require('./locales/en'),
+        }
+      }      
+    }]
   ],
   /*
    ** Axios module configuration
+   * See https://github.com/nuxt-community/axios-module#options
    */
   axios: {
-    baseURL: config.baseurl + '/api',
-    browserBaseURL: config.baseurl + '/api',
     prefix: '/api'
-    // credentials: true
-    // See https://github.com/nuxt-community/axios-module#options
   },
   auth: {
     strategies: {
@@ -102,6 +100,5 @@ module.exports = {
       layouts: true
     },
     cache: true,
-    // parallel: true
   }
 }

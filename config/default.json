@@ -1,0 +1,19 @@
+{
+  "title": "Gancio",
+  "description": "A shared agenda for local communities",
+  "baseurl": "http://localhost:3000",
+  "server": {
+    "host": "localhost",
+    "port": 3000
+  },
+  "db": {
+    "dialect": "sqlite",
+    "storage": "./db.sqlite"
+  },
+  "upload_path": "./",
+  "admin": {
+    "email": "les",
+    "password": "les"
+  },
+  "secret": "za34yz70mmwlervesgxor"
+}

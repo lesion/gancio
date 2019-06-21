@@ -44,7 +44,9 @@ const it = {
     new_password: 'Nuova password',
     new_user: 'Nuovo utente',
     ok: 'Ok',
-    cancel: 'Annulla'
+    cancel: 'Annulla',
+    enable: 'Abilita',
+    disable: 'Disabilita'
   },
 
   login: {
@@ -120,7 +122,9 @@ const it = {
     delete_user: 'Elimina',
     remove_admin: 'Rimuovi admin',
     delete_user_confirm: 'Sicura di rimuovere questo utente?',
-    user_remove_ok: 'Utente eliminato'
+    user_remove_ok: 'Utente eliminato',
+    user_create_ok: 'Utente creato',
+    allow_registration_description : 'Puoi decidere se abilitare la registrazione',
   },
 
   auth: {
@@ -130,7 +134,10 @@ const it = {
 
   settings: {
     change_password: 'Cambia password',
-    password_updated: 'Password modificata'
+    password_updated: 'Password modificata',
+    danger_section: 'Sezione pericolosa',
+    remove_account: 'Premendo il seguente tasto il tuo utente verrà eliminato. Gli eventi da te pubblicati invece no.',
+    remove_account_confirm: 'Stai per eliminare definitivamente il tuo account',
   },
 
   err: {
@@ -138,12 +145,6 @@ const it = {
   }
 
 
-
-  // firstrun: {
-  //   basic: `Inserisci titolo e descrizione della tua istanza di gancio.`,
-  //   database: `Gancio ha bisogno di un database postgresql!`,
-  //   smtp: `Inserisci un account SMTP relativo a questa istanza di gancio.`
-  // },
 }
 
-export default it
+module.exports = it

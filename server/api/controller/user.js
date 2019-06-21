@@ -4,10 +4,11 @@ const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
 const jsonwebtoken = require('jsonwebtoken')
+const config = require('config')
 const mail = require('../mail')
 const { user: User, event: Event, tag: Tag, place: Place } = require('../models')
 const eventController = require('./event')
-const config = require('../../config')
+const settingsController = require('./settings')
 
 const userController = {
   async login(req, res) {
@@ -219,6 +220,7 @@ const userController = {
 
 
   async register(req, res) {
+    if (!settingsController.settings.allow_registration) return res.sendStatus(404)
     const n_users = await User.count()
     try {
       // the first registered user will be an active admin

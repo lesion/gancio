@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       index: true
     },
-    value: DataTypes.JSON
+    value: DataTypes.JSON,
+    is_secret: DataTypes.BOOLEAN
   }, {})
 
   return setting

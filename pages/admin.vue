@@ -80,51 +80,27 @@
 
         el-pagination(:page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
 
-      //- TAGS
-      //- el-tab-pane.pt-1
-      //-   template(slot='label')
-      //-     v-icon(name='tags')
-      //-     span  {{$t('common.tags')}}
-      //-   p {{$t('admin.tag_description')}}
-      //-     el-tag(v-if='tag.tag' :color='tag.color' size='mini') {{tag.tag}}
-      //-   el-form(:inline='true' label-width='120px')
-      //-     el-form-item(:label="$t('common.color')")
-      //-       el-color-picker(v-model='tag.color' @change='updateColor')
-      //-   el-table(:data='paginatedTags' striped small hover
-      //-     highlight-current-row @current-change="tagSelected")
-      //-     el-table-column(:label="$t('common.tag')")
-      //-       template(slot-scope='data')
-      //-         el-tag(:color='data.row.color' size='mini') {{data.row.tag}}
-      //-   el-pagination(:page-size='perPage' :currentPage.sync='tagPage' :total='tags.length')
-
       //- SETTINGS
       el-tab-pane.pt-1
         template(slot='label')
           v-icon(name='cog')
           span  {{$t('common.settings')}}
 
-        //- el-form(inline @submit.prevent.stop='save_settings' label-width='140px')
-        //-   p {{$t('settings.name_description')}}
-        //-   el-form-item(:label="$t('settings.name')")
-        //-     el-input(v-model="settings.title")
-        //-   el-form-item(:label="$t('settings.description')")
-        //-     el-input(v-model="settings.description")
-        //-   el-button(slot='append' @click='associate' :disabled='!mastodon_instance.length') {{$t('common.associate')}}
-        
         el-form(inline @submit.native.prevent='associate_mastondon_instance' label-width='140px')
           p {{$t('admin.mastodon_description')}}
-          el-form-item {{$t('admin.mastodon_instance')}}
-            el-input(v-model="settings.mastodon_instance")
-              el-button(slot='append' native-type='submit' type='success' :disabled='!settings.mastodon_instance') {{$t('common.associate')}}
-            
+          el-form-item(:label='$t("admin.mastodon_instance")')
+            el-input(v-model="mastodon_instance")
+          el-form-item
+            el-button(native-type='submit' type='success' :disabled='!mastodon_instance') {{$t('common.associate')}}
+          hr
           p {{$t('admin.allow_registration_description')}}
-          el-form-item {{$t('admin.allow_registration')}}
-            el-switch(v-model='settings.allow_registration')
+          el-form-item(:label="allow_registration?$t('common.disable'):$t('common.enable')")
+            el-switch(v-model='allow_registration')
 
 
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { Message, MessageBox } from 'element-ui'
 
 export default {
@@ -146,10 +122,6 @@ export default {
       tag: {name: '', color: ''},
       events: [],
       loading: false,
-      settings: {
-        allow_registration: true,
-        mastodon_instance: ''
-      },
       new_user: {
         email: '',
         password: '',
@@ -169,17 +141,24 @@ export default {
   },
   async asyncData ({ $axios, params, store }) {
     try {
+      console.error(store)
       const users = await $axios.$get('/users')
       const events = await $axios.$get('/event/unconfirmed')
-      const settings = await $axios.$get('/settings')
-
-      return { users, events, settings}
+      return { users, events, mastodon_instance: store.state.settings.mastodon_instance }
     } catch ( e ) {
       console.error(e)
     }
   },
   computed: {
-    ...mapState(['tags', 'places']),
+    ...mapState(['tags', 'places', 'settings']),
+    allow_registration: {
+      get () {
+        return this.settings.allow_registration
+      },
+      set (value) {
+        this.setSetting({ key: 'allow_registration', value })
+      }
+    },
     paginatedEvents () {
       return this.events.slice((this.eventPage-1) * this.perPage,
         this.eventPage * this.perPage)
@@ -198,6 +177,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['setSetting']),
     placeSelected (items) {
       if (items.length === 0 ) {
         this.place.name = this.place.address = ''
@@ -217,24 +197,21 @@ export default {
     async toggle(user) {
       user.is_active = !user.is_active
       this.$axios.$put('/user', user)
-      // const newuser = await api.updateUser(user)
     },
     async toggleAdmin(user) {
       user.is_admin = !user.is_admin
       this.$axios.$put('/user', user)
-      // const newuser = await api.updateUser(user)
     },
     preview (id) {
       this.$router.push(`/event/${id}`)
     },
     async associate_mastondon_instance () {
-      if (!this.settings.mastodon_instance) return false
+      if (!this.mastodon_instance) return false
 
-      const url = await this.$axios.$post('/settings/getauthurl', {instance: this.settings.mastodon_instance})
+      const url = await this.$axios.$post('/settings/getauthurl', { instance: this.mastodon_instance })
       setTimeout( () => window.location.href=url, 100);
     },
     async delete_user (user) {
-      console.error('dentro delete user', user)
       MessageBox.confirm(this.$t('admin.delete_user_confirm'),
         this.$t('common.confirm'), {
           confirmButtonText: this.$t('common.ok'),
@@ -257,7 +234,7 @@ export default {
         this.new_user = { email: '', password: '', is_admin: false }
         Message({ 
           type: 'success',
-          message: this.$t('user.create_ok')
+          message: this.$t('admin.user_create_ok')
         })
       } catch (e) {
         Message({

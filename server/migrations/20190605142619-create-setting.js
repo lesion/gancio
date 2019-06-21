@@ -11,6 +11,7 @@ module.exports = {
       value: {
         type: Sequelize.JSON
       },
+      is_secret: Sequelize.BOOLEAN,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

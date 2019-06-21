@@ -6,10 +6,13 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     multidate: DataTypes.BOOLEAN,
     start_datetime: {
-      type: DataTypes.DATE,
+      type: DataTypes.INTEGER,
       index: true
     },
-    end_datetime: DataTypes.DATE,
+    end_datetime: {
+      type: DataTypes.INTEGER,
+      index: true
+    },
     image_path: DataTypes.STRING,
     is_visible: DataTypes.BOOLEAN,
     activitypub_id: {

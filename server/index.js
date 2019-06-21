@@ -7,10 +7,11 @@ const { Nuxt, Builder } = require('nuxt')
 const firstRun = require('./firstrun')
 // Import and Set Nuxt.js options
 const nuxt_config = require('../nuxt.config.js')
-const config = require('./config')
+const config = require('config')
 
 const app = express()
 async function start() {
+  nuxt_config.server = config.server
   // Init Nuxt.js
   const nuxt = new Nuxt(nuxt_config)
 
@@ -31,7 +32,7 @@ async function start() {
   app.use(nuxt.render)
 
   // Listen the server
-  const server = app.listen(config.server)
+  const server = app.listen(nuxt_config.server)
 
   // close connections/port/unix socket
   function shutdown() {
@@ -54,4 +55,4 @@ async function start() {
   })
 }
 
-firstRun.then(start)
+start()

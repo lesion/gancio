@@ -1,6 +1,5 @@
 const { Op } = require('sequelize')
 const { user: User } = require('./models')
-const Settings = require('./controller/settings')
 
 const Auth = {
   async fillUser(req, res, next) {
@@ -26,7 +25,7 @@ const Auth = {
     if (!req.user) {
       return res
         .status(403)
-        .send({ message: 'Failed to authenticate token ' + err })
+        .send({ message: 'Failed to authenticate token ' })
     }
     next()
   },

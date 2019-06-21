@@ -22,10 +22,12 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       start_datetime: {
-        type: Sequelize.DATE
+        type: Sequelize.INTEGER,
+        index: true
       },
       end_datetime: {
-        type: Sequelize.DATE
+        type: Sequelize.INTEGER,
+        index: true
       },
       image_path: {
         type: Sequelize.STRING

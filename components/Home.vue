@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import Event from '@/components/Event'
 import Calendar from '@/components/Calendar'
 
@@ -31,7 +31,10 @@ export default {
     return { }
   },
   components: { Calendar, Event },
-  computed: mapGetters(['filteredEvents']),
+  computed: {
+    ...mapGetters(['filteredEvents']),
+    ...mapState(['events', 'settings'])
+  }
 }
 </script>
 <style lang="less">

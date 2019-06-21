@@ -5,7 +5,6 @@
     nuxt-link.float-right(to='/')
       v-icon(name='times' color='red')
     h5 {{$t('common.login')}}
-
     el-form(v-loading='loading' method='POST' action='/api/auth/login')
       p(v-html="$t('login.description')")
 
@@ -20,14 +19,14 @@
       el-button.mr-1(plain type="success" native-type='submit'
         :disabled='disabled' @click='submit') {{$t('common.login')}}
 
-      nuxt-link(to='/register')
+      nuxt-link(to='/register' v-if='settings.allow_registration')
         el-button.mt-1(plain type="primary") {{$t('login.not_registered')}}
 
       a.float-right(href='#' @click='forgot') {{$t('login.forgot_password')}}
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { Message } from 'element-ui'
 import get from 'lodash/get'
 
@@ -41,6 +40,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['settings']),
     disabled () {
       if (process.server) return false
       return !this.email || !this.password

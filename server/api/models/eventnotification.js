@@ -5,12 +5,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM,
       values: ['new', 'sent', 'error'],
       defaultValue: 'new',
+      errorMessage: DataTypes.TEXT,
       index: true
     }
   }, {})
 
-  eventNotification.associate = function (models) {
-    // associations can be defined here
-  }
   return eventNotification
 }

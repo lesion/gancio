@@ -1,7 +1,7 @@
 const Email = require('email-templates')
 const path = require('path')
 const moment = require('moment')
-const config = require('../config')
+const config = require('config')
 
 moment.locale(config.locale)
 const mail = {

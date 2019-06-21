@@ -42,6 +42,7 @@
               :mode='event.multidate ? "range" : "single"'
               :attributes='attributes'
               v-model='date'
+              :locale='$i18n.locale'
               :from-page.sync='page'
               is-inline
               is-expanded
@@ -161,12 +162,12 @@ export default {
       data.event.place.address = event.place.address || ''
       data.event.multidate = event.multidate
       if (event.multidate) {
-        data.date = { start: new Date(event.start_datetime), end: new Date(event.end_datetime) }
+        data.date = { start: new Date(event.start_datetime*1000), end: new Date(event.end_datetime*1000) }
       } else {
-        data.date = new Date(event.start_datetime)
+        data.date = new Date(event.start_datetime*1000)
       }
-      data.time.start = moment(event.start_datetime).format('HH:mm')
-      data.time.end = moment(event.end_datetime).format('HH:mm')
+      data.time.start = moment(event.start_datetime*1000).format('HH:mm')
+      data.time.end = moment(event.end_datetime*1000).format('HH:mm')
       data.event.title = event.title
       data.event.description = event.description.replace(/(<([^>]+)>)/ig, '')
       data.event.id = event.id
@@ -193,41 +194,33 @@ export default {
         const date_end = moment(this.date.end)
         return this.events.filter(e =>
           !e.multidate ?
-          date_start.isSame(e.start_datetime, 'day') || 
-            date_start.isBefore(e.start_datime) && date_end.isAfter(e.start_datetime) :
-          date_start.isSame(e.start_datetime, 'day') || date_start.isSame(e.end_datetime) ||
-            date_start.isAfter(e.start_datetime) && date_start.isBefore(e.end_datetime))
+          date_start.isSame(e.start_datetime*1000, 'day') || 
+            date_start.isBefore(e.start_datime*1000) && date_end.isAfter(e.start_datetime*1000) :
+          date_start.isSame(e.start_datetime*1000, 'day') || date_start.isSame(e.end_datetime*1000) ||
+            date_start.isAfter(e.start_datetime*1000) && date_start.isBefore(e.end_datetime*1000))
       } else {
         const date = moment(this.date)
         return this.events.filter(e =>
           !e.multidate ?
-            date.isSame(moment(e.start_datetime), 'day') :
-            moment(e.start_datetime).isSame(date, 'day') ||
-              moment(e.start_datetime).isBefore(date) && moment(e.end_datetime).isAfter(date)
+            date.isSame(moment(e.start_datetime*1000), 'day') :
+            moment(e.start_datetime*1000).isSame(date, 'day') ||
+              moment(e.start_datetime*1000).isBefore(date) && moment(e.end_datetime*1000).isAfter(date)
         )
       }
     },
     ...mapGetters(['filteredEvents']),
     attributes () {
-      return [
-        { key: 'today', dates: new Date(),
-          highlight: { color: 'red' },
-        },
-        {
-          key: 'event',
-          dates: this.filteredEvents
-            .filter(e => !e.multidate)
-            .map(e => e.start_datetime ),
-          dot: { }
-        },
-        {
-          key: 'multidays',
-          dates: this.filteredEvents
-            .filter(e => e.multidate)
-            .map( e => ({ start: e.start_datetime, end: e.end_datetime })),
-          highlight: { color: 'green' }
-        }
-      ]
+      let attributes = []
+      attributes.push ({ key: 'today', dates: new Date(), highlight: { color: 'yellow' }})
+
+      attributes = attributes.concat(this.filteredEvents
+        .filter(e => !e.multidate)
+        .map(e => ({ key: e.id, dot: {}, dates: new Date(e.start_datetime*1000)})))
+
+      attributes = attributes.concat(this.filteredEvents
+        .filter(e => e.multidate)
+        .map( e => ({ key: e.id, highlight: {}, dates: { 
+          start: new Date(e.start_datetime*1000), end: new Date(e.end_datetime*1000) }})))
     },
     disableAddress () {
       return this.places_name.find(p => p.name === this.event.place.name)
@@ -279,7 +272,7 @@ export default {
       let start_datetime, end_datetime
       const [ start_hour, start_minute ] = this.time.start.split(':')
       if (!this.time.end) {
-        this.time.end = this.time.start
+        this.time.end = (Number(start_hour)+2) + ':' + start_minute
       }
       const [ end_hour, end_minute ] = this.time.end.split(':')
       if (this.event.multidate) {
@@ -301,8 +294,8 @@ export default {
       formData.append('place_address', this.event.place.address)
       formData.append('description', this.event.description)
       formData.append('multidate', this.event.multidate)
-      formData.append('start_datetime', start_datetime)
-      formData.append('end_datetime', end_datetime)
+      formData.append('start_datetime', start_datetime.unix())
+      formData.append('end_datetime', end_datetime.unix())
       if (this.edit) {
         formData.append('id', this.event.id)
       }

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { Message } from 'element-ui'
 import get from 'lodash/get'
 
@@ -34,7 +34,11 @@ export default {
       user: { }
     }
   },
+  validate ({store}) {
+    return store.state.settings.allow_registration
+  },
   computed: {
+    ...mapState(['settings']),
     disabled () {
       if (process.server) return false
       return !this.user.password || !this.user.email || !this.user.description

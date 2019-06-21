@@ -2,15 +2,13 @@ const fs = require('fs')
 const path = require('path')
 const moment = require('moment')
 const { event: Event, comment: Comment } = require('../models')
-const config = require('../../config')
+const config = require('config')
 const Mastodon = require('mastodon-api')
 const settingsController = require('./settings')
-moment.locale(process.env.locale)
 
 const botController = {
   bot: null,
   async initialize() {
-    const settings = await settingsController.settings()
     if (!settings.mastodon_auth || !settings.mastodon_auth.access_token) return
     const mastodon_auth = settings.mastodon_auth
     botController.bot = new Mastodon({

@@ -108,7 +108,7 @@ export default {
         params.push(`tags=${this.filters.tags}`)
       }
 
-      return `<iframe src="${process.env.baseurl}/embed/list?${params.join('&')}"></iframe>`
+      return `<iframe src="${this.$axios.defaults.baseURL}/embed/list?${params.join('&')}"></iframe>`
     },
     link () {
       const tags = this.filters.tags.join(',')
@@ -124,8 +124,8 @@ export default {
         }
       }
 
-      return `${process.env.baseurl}/api/export/${this.type}${query}`
-    },    
+      return `${this.$axios.defaults.baseURL}/api/export/${this.type}${query}`
+    },
     showLink () {
       return (['feed', 'ics'].indexOf(this.type)>-1)
     },

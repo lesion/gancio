@@ -3,7 +3,7 @@ const multer = require('multer')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const expressJwt = require('express-jwt')
-const config = require('../config')
+const config = require('config')
 
 const { fillUser, isAuth, isAdmin } = require('./auth')
 const eventController = require('./controller/event')
@@ -18,10 +18,20 @@ const api = express.Router()
 api.use(cookieParser())
 api.use(bodyParser.urlencoded({ extended: false }))
 api.use(bodyParser.json())
+api.use(settingsController.init)
 
 const jwt = expressJwt({
   secret: config.secret,
-  credentialsRequired: false
+  credentialsRequired: false,
+  getToken: function fromHeaderOrQuerystring (req) {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+        return req.headers.authorization.split(' ')[1];
+    } else if (req.cookies && req.cookies['auth._token.local']) {
+      const [ prefix, token ] = req.cookies['auth._token.local'].split(' ')
+      if (prefix === 'Bearer') return token
+    }
+    return null
+  }
 })
 
 // AUTH
@@ -74,8 +84,8 @@ api.get('/event/unconfirmed', jwt, isAuth, isAdmin, eventController.getUnconfirm
 api.post('/event/notification', eventController.addNotification)
 api.delete('/event/notification/:code', eventController.delNotification)
 
-api.get('/settings', jwt, fillUser, isAdmin, settingsController.getAdminSettings)
-api.post('/settings', jwt, fillUser, isAdmin, settingsController.setAdminSetting)
+api.get('/settings', settingsController.getAllRequest)
+api.post('/settings', jwt, fillUser, isAdmin, settingsController.setRequest)
 
 // get event
 api.get('/event/:event_id', eventController.get)

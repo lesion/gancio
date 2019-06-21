@@ -46,7 +46,7 @@ export const getters = {
 
     let lastDay = null
     events = map(events, e => {
-      const currentDay = moment(e.start_datetime).date()
+      const currentDay = moment(e.start_datetime*1000).date()
       e.newDay = (!lastDay || lastDay !== currentDay) && currentDay
       lastDay = currentDay
       return e
@@ -60,8 +60,8 @@ export const mutations = {
   setEvents(state, events) {
     // set a `past` flag
     state.events = events.map((e) => {
-      const end_datetime = e.end_datetime || moment(e.start_datetime).add('3', 'hour')
-      const past = (moment().diff(end_datetime, 'minutes') > 0)
+      const end_datetime = e.end_datetime || e.start_datetime+3600*2
+      const past = (moment().unix() - end_datetime) > 0
       e.past = !!past
       return e
     })
@@ -96,12 +96,22 @@ export const mutations = {
   setSettings(state, settings) {
     state.settings = settings
   },
+  setSetting(state, setting) {
+    state.settings[setting.key] = setting.value
+  },
   setConfig(state, config) {
     state.config = config
   }
 }
 
 export const actions = {
+  // this method is called server side only for each request
+  // we use it to get configuration from db
+  async nuxtServerInit ({ commit }, { app } ) {
+     const settings = await app.$axios.$get('/settings')
+     console.error('dentro NUXST SERVER INIT', settings)
+     return commit('setSettings', settings)
+  },
   async updateEvents({ commit }, page) {
     const events = await this.$axios.$get(`/event/${page.month - 1}/${page.year}`)
     commit('setEvents', events)
@@ -134,8 +144,9 @@ export const actions = {
   showPastEvents({ commit }, show) {
     commit('showPastEvents', show)
   },
-  setSettings({ commit }, settings) {
-    commit('setSettings', settings)
+  async setSetting({ commit }, setting) {
+    await this.$axios.$post('/settings', setting )
+    commit('setSetting', setting)
   },
   setConfig({ commit }, config) {
     commit('setConfig', config)

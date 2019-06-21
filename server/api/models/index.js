@@ -2,9 +2,8 @@ const argv = require('yargs').argv
 const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
-const config_path = path.resolve(argv.config || './config.js')
 const basename = path.basename(__filename)
-const config = require(config_path)
+const config = require('config')
 const db = {}
 
 const sequelize = new Sequelize(config.db)

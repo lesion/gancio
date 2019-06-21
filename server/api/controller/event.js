@@ -169,17 +169,19 @@ const eventController = {
   async getAll(req, res) {
     // this is due how v-calendar shows dates
     const start = moment().year(req.params.year).month(req.params.month)
-      .startOf('month').startOf('isoWeek')
-    let end = moment().year(req.params.year).month(req.params.month).endOf('month')
+      .startOf('month').startOf('isoWeek').unix()
+    let end = moment().utc().year(req.params.year).month(req.params.month).endOf('month')
     const shownDays = end.diff(start, 'days')
     if (shownDays <= 34) end = end.add(1, 'week')
-    end = end.endOf('isoWeek')
+    end = end.endOf('isoWeek').unix()
     const events = await Event.findAll({
       where: {
         is_visible: true,
         [Op.and]: [
-          { start_datetime: { [Op.gte]: start } },
-          { start_datetime: { [Op.lte]: end } }
+          Sequelize.literal(`start_datetime >= ${start}`),
+          Sequelize.literal(`start_datetime <= ${end}`)
+          //   { start_datetime: { [Op.gte]: start } },
+        //   { start_datetime: { [Op.lte]: end } }
         ]
       },
       order: [
