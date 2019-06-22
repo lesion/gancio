@@ -1,6 +1,6 @@
 {
   "name": "gancio",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
@@ -29,6 +29,7 @@
     "nuxt.config.js",
     "locales/",
     "dist/",
+    "store/",
     "config/"
   ],
   "dependencies": {
