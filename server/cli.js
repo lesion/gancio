@@ -66,6 +66,7 @@ async function setupQuestionnaire() {
     name: 'db.storage',
     message: 'sqlite db path',
     default: '/var/gancio/db.sqlite',
+    filter: p => path.resolve(p),
     when: answers => answers.db.dialect === 'sqlite',
     validate: db_path => db_path.length>0 && fs.existsSync(path.dirname(db_path))
   })
@@ -102,7 +103,8 @@ async function setupQuestionnaire() {
     name: 'upload_path',
     message: 'Where gancio has to store media?',
     default: '/var/gancio/',
-    validate: (p) => {
+    filter: p => path.resolve(p),
+    validate: p => {
       const exists =  fs.existsSync(p)
       if (!exists) consola.warn(`"${p}" does not exists, please create it`)
       return exists

@@ -180,8 +180,6 @@ const eventController = {
         [Op.and]: [
           Sequelize.literal(`start_datetime >= ${start}`),
           Sequelize.literal(`start_datetime <= ${end}`)
-          //   { start_datetime: { [Op.gte]: start } },
-        //   { start_datetime: { [Op.lte]: end } }
         ]
       },
       order: [
