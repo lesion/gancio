@@ -9,7 +9,7 @@
       el-menu-item(v-if='!$auth.loggedIn' :title="$t('common.login')")
         v-icon(color='lightgreen' name='user')
 
-    nuxt-link(to='/add')
+    nuxt-link(v-if='could_add' to='/add')
       el-menu-item(:title="$t('common.add_event')")
         v-icon(color='lightgreen' name='plus')
 
@@ -17,8 +17,9 @@
       placement="bottom"
       trigger="click")
       Search(past-filter)
-      el-menu-item(slot='reference')
+      el-menu-item(slot='reference' :title="$t('common.search')" icon='el-share-button')
         v-icon(color='lightblue' name='search')
+        el-badge(v-if='filters.tags.length+filters.places.length>0' is-dot type='warning')
 
     nuxt-link(to='/settings')
       el-menu-item(v-if='$auth.loggedIn' :title="$t('common.settings')")
@@ -38,14 +39,22 @@
 </template>
 <script>
 import { Message } from 'element-ui'
+import { mapState } from 'vuex'
 import Search from '@/components/Search'
 
 export default {
   name: 'Nav',
   components: { Search },
+  computed: {
+    could_add () {
+      return (this.$auth.loggedIn || this.settings.allow_anon_event)
+    },
+    ...mapState(['filters', 'settings']),
+  },
   methods: {
     logout () {
       Message({
+        showClose: true,
         message: this.$t('common.logout_ok'),
         type: 'success'
       })

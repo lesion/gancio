@@ -1,7 +1,7 @@
 'use strict'
 module.exports = (sequelize, DataTypes) => {
   const comment = sequelize.define('comment', {
-    activitypub_id: DataTypes.BIGINT,
+    activitypub_id: DataTypes.STRING(18),
     data: DataTypes.JSON
   }, {})
   comment.associate = function (models) {

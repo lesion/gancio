@@ -1,8 +1,7 @@
 <template lang="pug">
   el-card
     nuxt-link.float-right(to='/')
-      el-button
-        v-icon(name='times' color='red')
+      v-icon(name='times' color='red')
     h5 {{$t('common.admin')}}
 
     el-tabs(v-model='tab')
@@ -40,8 +39,8 @@
               el-button(size='mini'
                 type='danger'
                 @click='delete_user(data.row)') {{$t('admin.delete_user')}}
-                
-        el-pagination(:page-size='perPage' :currentPage.sync='userPage' :total='users.length')
+          no-ssr
+            el-pagination(:page-size='perPage' :currentPage.sync='userPage' :total='users.length')
 
       //- PLACES
       el-tab-pane.pt-1
@@ -60,7 +59,8 @@
             template(slot-scope='data') {{data.row.name}}
           el-table-column(:label="$t('common.address')")
             template(slot-scope='data') {{data.row.address}}
-        el-pagination(:page-size='perPage' :currentPage.sync='placePage' :total='places.length')
+        no-ssr
+          el-pagination(:page-size='perPage' :currentPage.sync='placePage' :total='places.length')
 
       //- EVENTS
       el-tab-pane.pt-1
@@ -77,8 +77,8 @@
             template(slot-scope='data')
               el-button(type='primary' @click='confirm(data.row.id)' size='mini') {{$t('common.confirm')}}
               el-button(type='success' @click='preview(data.row.id)' size='mini') {{$t('common.preview')}}
-
-        el-pagination(:page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
+        no-ssr
+          el-pagination(:page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
 
       //- SETTINGS
       el-tab-pane.pt-1
@@ -96,6 +96,9 @@
           p {{$t('admin.allow_registration_description')}}
           el-form-item(:label="allow_registration?$t('common.disable'):$t('common.enable')")
             el-switch(v-model='allow_registration')
+          p {{$t('admin.allow_anon_event')}}
+          el-form-item(:label="allow_anon_event?$t('common.disable'):$t('common.enable')")
+            el-switch(v-model='allow_anon_event')
 
 
 </template>
@@ -141,7 +144,6 @@ export default {
   },
   async asyncData ({ $axios, params, store }) {
     try {
-      console.error(store)
       const users = await $axios.$get('/users')
       const events = await $axios.$get('/event/unconfirmed')
       return { users, events, mastodon_instance: store.state.settings.mastodon_instance }
@@ -152,12 +154,12 @@ export default {
   computed: {
     ...mapState(['tags', 'places', 'settings']),
     allow_registration: {
-      get () {
-        return this.settings.allow_registration
-      },
-      set (value) {
-        this.setSetting({ key: 'allow_registration', value })
-      }
+      get () { return this.settings.allow_registration },
+      set (value) { this.setSetting({ key: 'allow_registration', value }) }
+    },
+    allow_anon_event: {
+      get () { return this.settings.allow_anon_event },
+      set (value) { this.setSetting({ key: 'allow_anon_event', value })}
     },
     paginatedEvents () {
       return this.events.slice((this.eventPage-1) * this.perPage,
@@ -221,6 +223,7 @@ export default {
         .then( () => this.$axios.delete(`/user/${user.id}`) )
         .then( () => {
           Message({
+            showClose: true,
             type: 'success',
             message: this.$t('admin.user_remove_ok')
           })
@@ -232,12 +235,15 @@ export default {
         this.loading = true
         const user = await this.$axios.$post('/user', this.new_user)
         this.new_user = { email: '', password: '', is_admin: false }
-        Message({ 
+        Message({
+          showClose: true,
           type: 'success',
           message: this.$t('admin.user_create_ok')
         })
+        this.users.push(user)
       } catch (e) {
         Message({
+          showClose: true,
           type: 'error',
           message: this.$t('user.error_create') + e
         })
@@ -250,6 +256,7 @@ export default {
         this.loading = false
         Message({
           message: this.$t('event.confirmed'),
+          showClose: true,
           type: 'success'
         })
         this.events = this.events.filter(e => e.id !== id)

@@ -34,10 +34,17 @@ module.exports = {
       is_active: true
     })
 
+    // set default settings
+    consola.info('Set default settings')
     const settings = require('./api/controller/settings')
-    settings.set('enable_registration', true)
-    settings.set('allow_anon_event', true)
-    settings.set('allow_mastodon_association', true)
+    await settings.set('allow_registration', true)
+    await settings.set('allow_anon_event', true)
 
+    // add default notification
+    consola.info('Add default notification')
+    // send confirmed event to mastodon
+    await db.notification.create({ type: 'mastodon', filters: { is_visible: true } })
+    // await notification.create({ type: 'mastodon', filters: { is_visible: true } })
+    
   }
 }

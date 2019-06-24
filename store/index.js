@@ -3,11 +3,14 @@ import intersection from 'lodash/intersection'
 import map from 'lodash/map'
 
 export const state = () => ({
-  config: {},
+  // config: {},
+  locale: '',
   events: [],
   tags: [],
   places: [],
-  settings: {},
+  settings: {
+
+  },
   filters: {
     tags: [],
     places: [],
@@ -99,18 +102,21 @@ export const mutations = {
   setSetting(state, setting) {
     state.settings[setting.key] = setting.value
   },
-  setConfig(state, config) {
-    state.config = config
+  setLocale(state, locale) {
+    state.locale = locale
   }
 }
 
 export const actions = {
   // this method is called server side only for each request
   // we use it to get configuration from db
-  async nuxtServerInit ({ commit }, { app } ) {
-     const settings = await app.$axios.$get('/settings')
-     console.error('dentro NUXST SERVER INIT', settings)
-     return commit('setSettings', settings)
+  async nuxtServerInit ({ commit }, { app, req } ) {
+    const settings = await app.$axios.$get('/settings')
+    commit('setSettings', settings)
+    console.error('NUXT SETTINGS', settings)
+
+    const lang = req.acceptsLanguages('en', 'it')
+    commit('setLocale', lang || 'it')
   },
   async updateEvents({ commit }, page) {
     const events = await this.$axios.$get(`/event/${page.month - 1}/${page.year}`)
@@ -148,7 +154,4 @@ export const actions = {
     await this.$axios.$post('/settings', setting )
     commit('setSetting', setting)
   },
-  setConfig({ commit }, config) {
-    commit('setConfig', config)
-  }
 }

@@ -7,8 +7,8 @@ const jsonwebtoken = require('jsonwebtoken')
 const config = require('config')
 const mail = require('../mail')
 const { user: User, event: Event, tag: Tag, place: Place } = require('../models')
-const eventController = require('./event')
 const settingsController = require('./settings')
+const notifier = require('../../notifier')
 
 const userController = {
   async login(req, res) {
@@ -76,7 +76,7 @@ const userController = {
 
     const eventDetails = {
       title: body.title,
-      description: body.description.replace(/(<([^>]+)>)/ig, ''),
+      description: body.description ? body.description.replace(/(<([^>]+)>)/ig, '') : '',
       multidate: body.multidate,
       start_datetime: body.start_datetime,
       end_datetime: body.end_datetime,
@@ -108,14 +108,19 @@ const userController = {
       const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
       await event.addTags(tags)
     }
-    if (req.user) await req.user.addEvent(event)
-    event = await Event.findByPk(event.id, { include: [User, Tag, Place] })
+    if (req.user) {
+      await req.user.addEvent(event)
+      await event.setUser(req.user)
+    }
 
-    // insert notifications
-    const notifications = await eventController.getNotifications(event)
-    await event.setNotifications(notifications)
+    // event = await Event.findByPk(event.id, { include: [Tag, Place] })
 
-    return res.json(event)
+    // send response to client
+    res.json(event)
+
+    // send notification (mastodon/email/confirmation)
+    notifier.notifyEvent(event.id)
+
   },
 
   async updateEvent(req, res) {
@@ -155,8 +160,8 @@ const userController = {
       const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
       await event.addTags(tags)
     }
-    const newEvent = await Event.findByPk(event.id, { include: [User, Tag, Place] })
-    return res.json(newEvent)
+    const newEvent = await Event.findByPk(event.id, { include: [Tag, Place] })
+    res.json(newEvent)
   },
 
   async forgotPassword(req, res) {

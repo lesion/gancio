@@ -18,7 +18,7 @@ const api = express.Router()
 api.use(cookieParser())
 api.use(bodyParser.urlencoded({ extended: false }))
 api.use(bodyParser.json())
-api.use(settingsController.init)
+// api.use(settingsController.init)
 
 const jwt = expressJwt({
   secret: config.secret,

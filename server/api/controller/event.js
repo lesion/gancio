@@ -95,7 +95,9 @@ const eventController = {
       ],
       order: [ [Comment, 'id', 'DESC'], [Tag, 'weigth', 'DESC'] ]
     })
+
     if (event) {
+      event.activitypub_id = event.activitypub_id ? String(event.activitypub_id) : null
       res.json(event)
     } else {
       res.sendStatus(404)

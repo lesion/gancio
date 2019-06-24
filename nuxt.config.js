@@ -35,8 +35,9 @@ module.exports = {
     '@/plugins/element-ui', // UI library -> https://element.eleme.io/#/en-US/
     '@/plugins/filters', // text filters, datetime, etc.
     '@/plugins/vue-awesome', // icon
-    '@/plugins/axios', // icon
-    { src: '@/plugins/v-calendar', ssr: false } // calendar, TO-REDO
+    '@/plugins/axios', // axios baseurl configuration
+    { src: '@/plugins/v-calendar', ssr: false }, // calendar, TO-REDO
+    '@/plugins/i18n.js'
   ],
 
   /*
@@ -46,20 +47,6 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    ['nuxt-i18n', {
-      locales: [
-        { code: 'en', iso: 'en-US', file: './locales/en.js' },
-        { code: 'it', iso: 'it-IT', file: './locales/it.js' },
-      ],
-      defaultLocale: 'it',
-      vueI18n: {
-        fallbackLocale: 'it',
-        messages: {
-          it: require('./locales/it'),
-          en: require('./locales/en'),
-        }
-      }      
-    }]
   ],
   /*
    ** Axios module configuration

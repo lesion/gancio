@@ -1,8 +1,7 @@
 <template lang="pug">
   el-card
     nuxt-link.float-right(to='/')
-      el-button
-        v-icon(name='times' color='red')
+      v-icon(name='times' color='red')
     h5 {{$t('common.settings')}}
 
     el-form(action='/api/user' method='PUT' @submit.native.prevent='change_password')
@@ -35,7 +34,7 @@ export default {
       const user_data = { id : this.$auth.user.id, password: this.password }
       try {
         const user = await this.$axios.$put('/user', user_data)
-        Message({ message: this.$t('settings.password_updated'), type: 'success' })
+        Message({ message: this.$t('settings.password_updated'), showClose: true, type: 'success' })
         this.$router.replace('/')
       } catch (e) {
         console.log(e)

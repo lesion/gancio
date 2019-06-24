@@ -42,7 +42,7 @@ export default {
     ...mapGetters(['filteredEvents']),
     attributes () {
       let attributes = []
-      attributes.push ({ key: 'today', dates: new Date(), highlight: { color: 'yellow' }})
+      attributes.push ({ key: 'today', dates: new Date(), highlight: { color: 'green' }})
 
       attributes = attributes.concat(this.filteredEvents
         .filter(e => !e.multidate)

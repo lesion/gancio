@@ -1,11 +1,9 @@
 <template lang='pug'>
-
   el-card
-
     nuxt-link.float-right(to='/')
       v-icon(name='times' color='red')
     h5 {{$t('common.login')}}
-    el-form(v-loading='loading' method='POST' action='/api/auth/login')
+    el-form(v-loading='loading')
       p(v-html="$t('login.description')")
 
       el-input.mb-2(v-model='email' type='email' name='email'
@@ -16,7 +14,7 @@
         type='password' :placeholder='$t("common.password")')
         v-icon(name='lock' slot='prepend')
 
-      el-button.mr-1(plain type="success" native-type='submit'
+      el-button.mr-1(plain type="success"
         :disabled='disabled' @click='submit') {{$t('common.login')}}
 
       nuxt-link(to='/register' v-if='settings.allow_registration')
@@ -50,7 +48,7 @@ export default {
     ...mapActions(['login']),
     async forgot () {
       if (!this.email) {
-        Message({ message: this.$t('login.insert_email'), type: 'error' })
+        Message({ message: this.$t('login.insert_email'), showClose:true, type: 'error' })
         this.$refs.email.focus()
         return
       }
@@ -60,15 +58,16 @@ export default {
       Message({ message: this.$t('login.check_email'), type: 'success' })
     },
     async submit (e) {
+      console.error('dentro submit', e)
       e.preventDefault()
       try {
         this.loading = true
         await this.$auth.loginWith('local', { data: { email: this.email, password: this.password } })
         this.loading = false
-        Message({ message: this.$t('login.ok'), type: 'success' })
+        Message({ message: this.$t('login.ok'), showClose: true, type: 'success' })
       } catch (e) {
         e = get(e, 'response.data.message', e)
-        Message({ message: this.$t('login.error') + this.$t(e), type: 'error' })
+        Message({ message: this.$t('login.error') + this.$t(e), showClose: true, type: 'error' })
         this.loading = false
         return
       }

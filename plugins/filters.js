@@ -2,8 +2,8 @@ import Vue from 'vue'
 import moment from 'dayjs'
 import 'dayjs/locale/it'
 
-export default ({ app }) => {
-  moment.locale(app.i18n.locale)
+export default ({ app, store }) => {
+  moment.locale(store.state.locale)
   Vue.filter('linkify', value => value.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>'))
   Vue.filter('datetime', value => moment(value).format('ddd, D MMMM HH:mm'))
   Vue.filter('short_datetime', value => moment(value).format('D/MM HH:mm'))

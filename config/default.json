@@ -8,12 +8,13 @@
   },
   "db": {
     "dialect": "sqlite",
-    "storage": "./db.sqlite"
+    "storage": "./db.sqlite",
+    "logging": false
   },
   "upload_path": "./",
   "admin": {
-    "email": "les",
-    "password": "les"
+    "email": "",
+    "password": ""
   },
-  "secret": "za34yz70mmwlervesgxor"
+  "secret": "notsosecret"
 }

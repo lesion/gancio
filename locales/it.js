@@ -112,6 +112,7 @@ const it = {
     where_description: `Dov'è il gancio? Se il posto non è presente, scrivilo e <b>premi invio</b>. `,
     confirmed: 'Evento confermato',
     not_found: 'Evento non trovato',
+    remove_confirmation: `Sicura di voler eliminare questo evento?`
   },
 
   admin: {
@@ -124,7 +125,8 @@ const it = {
     delete_user_confirm: 'Sicura di rimuovere questo utente?',
     user_remove_ok: 'Utente eliminato',
     user_create_ok: 'Utente creato',
-    allow_registration_description : 'Puoi decidere se abilitare la registrazione',
+    allow_registration_description : 'Vuoi abilitare la registrazione?',
+    allow_anon_event: 'Si possono inserire eventi anonimi (previa conferma)?'
   },
 
   auth: {
@@ -142,9 +144,39 @@ const it = {
 
   err: {
     register_error: 'Errore nella registrazione'
-  }
+  },
 
+  about: `
+  <p>
+  Gancio e' un progetto dell'<a href='https://autistici.org/underscore'>underscore hacklab</a> e uno dei
+  servizi di <a href='https://cisti.org'>cisti.org</a>.</p>
+
+  <h5> Cos'è gancio?</h5>
+  <p>Uno strumento di condivisione di eventi per comunità radicali.
+  Dentro gancio puoi trovare e inserire eventi.
+  Gancio, come tutto <a href='https://cisti.org'>cisti.org</a> è uno strumento
+  antisessista, antirazzista, antifascista e anticapitalista, riflettici quando
+  pubblichi un evento.</p>
+  
+  <h5>Ok, ma cosa vuol dire gancio?</h5>
+  <p>
+  Se vieni a Torino e dici: "ehi, ci diamo un gancio alle 8?" nessuno si presenterà con i guantoni per fare a mazzate.
+  Darsi un gancio vuol dire beccarsi alle ore X in un posto Y.</p>
+  <code>
+  <ul>
+  <li> a che ora è il gancio in radio per andare al presidio?</li>
+  <li> non so ma domani non posso venire, ho gia' un gancio per caricare il bar.</li>
+  </ul>
+  </code>
+
+  <h5> Contatti</h5>
+  <p>
+  Hai scritto una nuova interfaccia per gancio? Vuoi aprire un nuovo nodo di gancio nella tua città?
+  C'è qualcosa che vorresti migliorare? Per contribuire i sorgenti sono liberi e disponibili 
+  <a href='https://git.lattuga.net/cisti/gancio'>qui</a>. Aiuti e suggerimenti sono sempre benvenuti, puoi scriverci
+  su underscore chicciola autistici.org</p>
+  `
 
 }
 
-module.exports = it
+export default it

@@ -1,14 +1,18 @@
 const mail = require('./api/mail')
 const bot = require('./api/controller/bot')
 const settingsController = require('./api/controller/settings')
-const eventController = require()
 const config = require('config')
+const eventController = require('./api/controller/event')
+const get = require('lodash/get')
 
-const { event: Event, notification: Notification,  eventNotification: EventNotification,
+const { event: Event, notification: Notification,  event_notification: EventNotification,
   user: User, place: Place, tag: Tag } = require('./api/models')
 
 const notifier = {
-  async sendNotification(notification, event, eventNotification) {
+  async sendNotification(notification, event) {
+    console.error('dentro sendNotification ', settingsController.settings, notification.type)
+    const access_token = get(settingsController.secretSettings, 'mastodon_auth.access_token')
+    const instance = get(settingsController.settings, 'mastodon_instance')    
     const promises = []
     switch (notification.type) {
       case 'mail':
@@ -19,26 +23,39 @@ const notifier = {
        return mail.send(admin_emails, 'event', { event, to_confirm: true, notification })
       case 'mastodon':
         // instance publish
-        if (settings.mastodon_auth.instance && settings.mastodon_auth.access_token) {
-          const b = bot.post(settings.mastodon_auth, event).then(b => {
+        if (instance && access_token) {
+          const b = bot.post(instance, access_token, event).then(b => {
+            console.error(b)
             event.activitypub_id = b.data.id
-            event.activitypub_ids.push(b.data.id)
             return event.save()
+          }).catch(e => {
+            console.error("ERRORE !! ", e)
           })
           promises.push(b)
         }
     }
     return Promise.all(promises)
   },
-  async notifyEvent(event) {
+  async notifyEvent(eventId) {
+    const event = await Event.findByPk(eventId, {
+      include: [ Tag, Place, User ]
+    })
+
     // insert notifications
     const notifications = await eventController.getNotifications(event)
-    await event.setNotifications(notifications)
+    const a = await event.setNotifications(notifications)
 
-    const promises = notifications.map(async e => {
+    const eventNotifications = await EventNotification.findAll({
+      where: {
+        notificationId: notifications.map(n=>n.id),
+        status: 'new'
+      }
+    })
+
+    const promises = eventNotifications.map(async e => {
       const notification = await Notification.findByPk(e.notificationId)
       try {
-        await sendNotification(notification, event, e)
+        await notifier.sendNotification(notification, event)
         e.status = 'sent'
       } catch (err) {
         console.error(err)
@@ -80,3 +97,4 @@ const notifier = {
 // startLoop(26000)
 
 module.exports = notifier
+// export default notifier

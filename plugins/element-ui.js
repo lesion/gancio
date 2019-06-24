@@ -10,8 +10,8 @@ const locales = {
   en: require('element-ui/lib/locale/lang/en')
 }
 
-export default ({ app }) => {
-  locale.use(locales[app.i18n.locale])
+export default ({ app, store }) => {
+  locale.use(locales[store.state.locale])
   Vue.use(Button)
   Vue.use(Collapse)
   Vue.use(CollapseItem)

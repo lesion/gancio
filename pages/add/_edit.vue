@@ -1,8 +1,7 @@
 <template lang="pug">
-  el-card(v-loading='loading')
+  el-card
     nuxt-link.float-right(to='/')
-      el-button
-        v-icon(name='times' color='red')
+      v-icon(name='times' color='red')
     h5 {{edit?$t('common.edit_event'):$t('common.add_event')}}
     el-form
       no-ssr
@@ -103,6 +102,9 @@ import { Message } from 'element-ui'
 export default {
   name: 'Add',
   components: { List },
+  validate ({store}) {
+    return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
+  },
   data() {
     const month = moment().month()+1
     const year = moment().year()
@@ -120,7 +122,6 @@ export default {
       date: null,
       time: { start: '20:00', end: null },
       edit: false,
-      loading: true,
     }
   },
   name: 'newEvent',
@@ -153,7 +154,6 @@ export default {
       let event
       try {
         event = await $axios.$get('/event/'+ data.id)
-        console.error(event)
       } catch (e) {
         error({ statusCode: 404, message: 'Event not found!'})
         return {}
@@ -174,10 +174,9 @@ export default {
       if (event.tags) {
         data.event.tags = event.tags.map(t => t.tag)
       }
-      data.loading = false
       return data
     }
-    return { loading: false }
+    return {}
   },
   computed: {
     ...mapState({
@@ -221,6 +220,7 @@ export default {
         .filter(e => e.multidate)
         .map( e => ({ key: e.id, highlight: {}, dates: { 
           start: new Date(e.start_datetime*1000), end: new Date(e.end_datetime*1000) }})))
+      return attributes
     },
     disableAddress () {
       return this.places_name.find(p => p.name === this.event.place.name)
@@ -301,7 +301,6 @@ export default {
       }
       if (this.event.tags)
         this.event.tags.forEach(tag => formData.append('tags[]', tag))
-      this.loading = true
       try {
         if (this.edit) {
           await this.updateEvent(formData)
@@ -310,10 +309,8 @@ export default {
         }
         this.updateMeta()
         this.$router.replace('/')
-        Message({ type: 'success', message: this.$auth.loggedIn ? this.$t('event.added') : this.$t('event.added_anon')})
-        this.loading = false
+        Message({ type: 'success', showClose: true, message: this.$auth.loggedIn ? this.$t('event.added') : this.$t('event.added_anon')})
       } catch (e) {
-        this.loading = false
         console.error(e)
       }
     }

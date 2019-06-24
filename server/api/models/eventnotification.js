@@ -1,6 +1,6 @@
 'use strict'
 module.exports = (sequelize, DataTypes) => {
-  const eventNotification = sequelize.define('eventNotification', {
+  const event_notification = sequelize.define('event_notification', {
     status: {
       type: DataTypes.ENUM,
       values: ['new', 'sent', 'error'],
@@ -10,5 +10,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {})
 
-  return eventNotification
+  return event_notification
 }

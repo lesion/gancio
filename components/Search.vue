@@ -13,12 +13,13 @@
       inactive-color='lightgreen'
       v-model='showPast'
     )
-
-    el-select.search(v-model='filter' multiple 
-      filterable collapse-tags default-first-option
-      :placeholder='$t("common.search")')
-      el-option(v-for='(keyword, id) in keywords' :key='keyword.value'
-        :label='keyword.label' :value='keyword.value')
+    no-ssr
+      el-select.search(v-model='filter'
+        multiple 
+        filterable collapse-tags default-first-option
+        :placeholder='$t("common.search")')
+        el-option(v-for='(keyword, id) in keywords' :key='keyword.value'
+          :label='keyword.label' :value='keyword.value')
 
 </template>
 

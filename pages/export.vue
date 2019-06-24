@@ -2,10 +2,8 @@
   el-card
 
     nuxt-link.float-right(to='/')
-      el-button
-        v-icon(name='times' color='red')
+      v-icon(name='times' color='red')
     h5 {{$t('common.export')}}
-
 
     p {{$t('export.intro')}}
     Search
@@ -71,28 +69,28 @@ export default {
   components: { List, Search },
   data () {
     return {
-      type: 'email',
+      type: 'feed',
       notification: { email: '' },
       list: { title: 'Gancio' },
     }
   },
-  // filters,
   methods: {
+    // TODO
     async add_notification () {
       if (!this.notification.email){
-        Message({message:'Inserisci una mail', type: 'error'})
+        Message({message:'Inserisci una mail', showClose: true, type: 'error'})
         // return this.$refs.email.focus()
       }
       // await api.addNotification({ ...this.notification, filters: this.filters})
       // this.$refs.modal.hide()
-      Message({message: this.$t('email_notification_activated'), type: 'success'})
+      Message({message: this.$t('email_notification_activated'), showClose: true, type: 'success'})
     },
     imgPath (event) {
       return event.image_path && event.image_path
     },
   },
   computed: {
-    ...mapState(['filters', 'events']),
+    ...mapState(['filters', 'events', 'settings']),
     ...mapGetters(['filteredEvents']),
     listScript () {
       const params = []
@@ -108,7 +106,7 @@ export default {
         params.push(`tags=${this.filters.tags}`)
       }
 
-      return `<iframe src="${this.$axios.defaults.baseURL}/embed/list?${params.join('&')}"></iframe>`
+      return `<iframe src="${this.settings.baseurl}/embed/list?${params.join('&')}"></iframe>`
     },
     link () {
       const tags = this.filters.tags.join(',')
@@ -124,7 +122,7 @@ export default {
         }
       }
 
-      return `${this.$axios.defaults.baseURL}/api/export/${this.type}${query}`
+      return `${this.settings.baseurl}/api/export/${this.type}${query}`
     },
     showLink () {
       return (['feed', 'ics'].indexOf(this.type)>-1)

@@ -2,8 +2,7 @@
   el-card#eventDetail(v-loading='!loaded')
     //- close button
     nuxt-link.float-right(to='/')
-      el-button(type='danger' plain)
-        v-icon(name='times')
+      v-icon(name='times' color='red')
 
     div(v-if='!event')
       h5 {{$t('event.not_found')}}
@@ -13,10 +12,10 @@
       h5.text-center {{event.title}}
       div.nextprev
         nuxt-link(v-if='prev' :to='`/event/${prev.id}`')
-          el-button(round type='success')
+          el-button( type='success' size='mini')
             v-icon(name='chevron-left')
         nuxt-link.float-right(v-if='next' :to='`/event/${next.id}`')
-          el-button(round type='success')
+          el-button(type='success' size='mini')
             v-icon(name='chevron-right')
     
       //- image
@@ -43,18 +42,20 @@
       //- comments
       .card-body(v-if='event.activitypub_id && settings')
         strong {{$t('common.related')}} - 
-        a(:href='`https://mastodon.cisti.org/web/statuses/${event.activitypub_id}`') {{$t('common.add')}}
+        a(:href='`https://${settings.mastodon_instance}/web/statuses/${event.activitypub_id}`') {{$t('common.add')}}
       .card-header(v-for='comment in event.comments' :key='comment.id')
         img.avatar(:src='comment.data.last_status.account.avatar') 
         strong  {{comment.author}} 
-        a.float-right(:href='comment.data.last_status.url')
+        //- a.float-right(:href='comment.data.last_status.url')
+        a.float-right(:href='`https://${settings.mastodon_instance}/web/statuses/${comment.data.last_status.id}`')
           small  {{comment.data.last_status.created_at|datetime}}
-        div.mt-1(v-html='comment_filter(comment.text)')
-        img(v-for='img in comment.data.last_status.media_attachments' :src='img.preview_url')
+        div.mt-1(v-html='comment_filter(comment.data.last_status.content)')
+        img(v-for='img in comment.data.last_status.media_attachments' :src='img.url')
 
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
+import { MessageBox } from 'element-ui'
 
 export default {
   name: 'Event',
@@ -147,9 +148,13 @@ export default {
     },
     async remove () {
       try {
+        await MessageBox.confirm(this.$t('event.remove_confirmation'), this.$t('common.confirm'), {
+          confirmButtonText: this.$t('common.ok'),
+          cancelButtonText: this.$t('common.cancel'),
+          type: 'error'})
         await this.$axios.delete(`/user/event/${this.id}`)
         this.delEvent(Number(this.id))
-        this.$router.back()
+        this.$router.replace("/")
       } catch (e) {
         console.error(e)
       }
@@ -184,7 +189,8 @@ export default {
   }
 
   h5 {
-    font-size: 1.4em;
+    font-size: 2em;
+    font-weight: 600;
     min-height: 40px;
   }
 

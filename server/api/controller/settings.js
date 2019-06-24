@@ -1,20 +1,23 @@
 const Mastodon = require('mastodon-api')
 const { setting: Setting } = require('../models')
 const config = require('config')
-
 const settingsController = {
-  settings: null,
-  secretSettings: null,
+  settings: { initialized: false },
+  secretSettings: {},
 
   // initialize instance settings from db
-  async init (req, res, next) {
-    if (!settingsController.settings) {
+  async initialize () {
+    if (!settingsController.settings.initialized) {
       const settings = await Setting.findAll()
-      settingsController.settings = {}
-      settingsController.secretSettings = {}
-      settings.forEach( s => settingsController[s.is_secret?'secretSettings':'settings'][s.key] = s.value)
+      settingsController.settings.initialized = true
+      settings.forEach( s => {
+        if (s.is_secret) {
+          settingsController.secretSettings[s.key] = s.value
+        } else {
+          settingsController.settings[s.key] = s.value
+        }
+      })
     }
-    next()
   },
 
   async set(key, value, is_secret=false) {
@@ -26,8 +29,6 @@ const settingsController = {
         if (!created) return settings.update({ value, is_secret })
       })
       settingsController[is_secret?'secretSettings':'settings'][key]=value
-      console.error('settings ', settingsController.settings)
-      console.error('settings controller ', settingsController.secretSettings)
       return true
     } catch(e) {
       console.error(e)
@@ -43,12 +44,16 @@ const settingsController = {
   },
 
   getAllRequest(req, res) {
-    res.json(settingsController.settings)
+    // get public settings and public configuration
+    const settings = {
+      ...settingsController.settings,
+      baseurl: config.baseurl
+    }
+    res.json(settings)
   },
 
   async getAuthURL(req, res) {
     const instance  = req.body.instance
-    console.error('DENTRO GET AUTH URL ', instance)
     const callback = `${config.baseurl}/api/settings/oauth`
     const { client_id, client_secret } = await Mastodon.createOAuthApp(`https://${instance}/api/v1/apps`,
       'gancio', 'read write', callback)
@@ -72,13 +77,14 @@ const settingsController = {
         `https://${instance}`, callback)
       const mastodon_auth = { client_id, client_secret, access_token }
       await settingsController.set('mastodon_auth', mastodon_auth, true)
-
+      const botController = require('./bot')      
+      botController.initialize()
       res.redirect('/admin')
     } catch (e) {
       res.json(e)
     }
   },
-
 }
 
+setTimeout(settingsController.initialize, 200)
 module.exports = settingsController

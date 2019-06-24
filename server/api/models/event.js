@@ -16,9 +16,9 @@ module.exports = (sequelize, DataTypes) => {
     image_path: DataTypes.STRING,
     is_visible: DataTypes.BOOLEAN,
     activitypub_id: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.STRING(18),
       index: true
-    }
+    },
   }, {})
   event.associate = function (models) {
     event.belongsTo(models.place)

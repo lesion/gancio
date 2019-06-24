@@ -1,10 +1,13 @@
 #!/usr/bin/env node
+process.env.NODE_ENV = "production"
+const path = require('path')
+process.chdir(path.resolve(__dirname, '..'))
+
 const arg = require('arg')
 const inquirer = require('inquirer')
 const package = require('../package.json')
 const consola = require('consola')
 const firstrun = require('./firstrun')
-const path = require('path')
 const fs = require('fs')
 const sequelize = require('sequelize')
 
@@ -138,8 +141,8 @@ async function cli(args) {
     consola.info(`Cool! You're going to setup gancio on this machine.`)
     const config = await setupQuestionnaire()
     await firstrun.setup(config, options.config)
-    consola.info(`This is your configuration, run "gancio --install" or edit ${options.config} to modify it: `)
-    consola.info(JSON.stringify(config, null, 2))
+    consola.info(`You can edit '${options.config}' to modify your configuration. `)
+    consola.info(`- Run "gancio --config ${options.config}"`)
     process.exit(0)
   }
   

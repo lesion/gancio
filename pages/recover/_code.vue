@@ -37,11 +37,13 @@ export default {
       try {
         const res = await this.$axios.$post('/user/recover_password', { recover_code: this.code, password: this.new_password })
         Message({
+          showClose: true,
           type: 'success',
           message: this.$t('Password changed!')
         })        
       } catch(e) {
         Message({
+          showClose: true,
           type: 'warning',
           message: e
         })

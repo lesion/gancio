@@ -50,6 +50,7 @@ export default {
       try {
         const { user } = await this.$axios.$post('/user/register', this.user)
         Message({
+          showClose: true,
           message: this.$t(`register.${user.is_admin ? 'admin_' : ''}complete`),
           type: 'success'
         })
@@ -57,6 +58,7 @@ export default {
       } catch (e) {
         const error = get(e, 'e.response.data.errors[0].message', String(e))
         Message({
+          showClose: true,
           message: this.$t('register.error') + this.$t(error),
           type: 'error'
         })
