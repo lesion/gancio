@@ -215,6 +215,7 @@ This is your first run? You could create it using --install flag`)
 
     process.exit(-1)
   } else {
+    process.env.config_path = options.config
     require('./index')
   }
 

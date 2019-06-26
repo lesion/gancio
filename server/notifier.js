@@ -10,7 +10,6 @@ const { event: Event, notification: Notification,  event_notification: EventNoti
 
 const notifier = {
   async sendNotification(notification, event) {
-    console.error('dentro sendNotification ', settingsController.settings, notification.type)
     const access_token = get(settingsController.secretSettings, 'mastodon_auth.access_token')
     const instance = get(settingsController.settings, 'mastodon_instance')    
     const promises = []

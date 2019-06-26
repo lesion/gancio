@@ -1,8 +1,7 @@
-const argv = require('yargs').argv
 const path = require('path')
 const fs = require('fs')
 
-const config_path = path.resolve(argv.config || '/etc/gancio_config.json')
+const config_path = process.env.config_path
 
 let config = {}
 if (fs.existsSync(config_path)) {
