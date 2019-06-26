@@ -18,15 +18,18 @@ module.exports = {
     consola.info(`Save configuration into ${config_path}`)
     fs.writeFileSync(config_path, JSON.stringify(config, null, 2))
 
-    // sync db (TODO, check if there's something in db and ask to backup)
+    // sync db
     const db = require('./api/models')
     try {
-      consola.info(`Create tables..`)
-      await db.sequelize.sync({force: true})
-    } catch(e) {
+      await db.user.findAll()
+      consola.warning(`!WARNING! Non empty db!`)
+      return -1
+    } catch(e) {}
+
+    await db.sequelize.sync({force: true}).catch(e => {
       consola.error('Error creating tables', e)
       return -1
-    }
+    })
 
     // create admin user
     consola.info('Create admin user')
