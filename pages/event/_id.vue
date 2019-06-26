@@ -44,13 +44,13 @@
         strong {{$t('common.related')}} - 
         a(:href='`https://${settings.mastodon_instance}/web/statuses/${event.activitypub_id}`') {{$t('common.add')}}
       .card-header(v-for='comment in event.comments' :key='comment.id')
-        img.avatar(:src='comment.data.last_status.account.avatar') 
-        strong  {{comment.author}} 
-        //- a.float-right(:href='comment.data.last_status.url')
-        a.float-right(:href='`https://${settings.mastodon_instance}/web/statuses/${comment.data.last_status.id}`')
-          small  {{comment.data.last_status.created_at|datetime}}
-        div.mt-1(v-html='comment_filter(comment.data.last_status.content)')
-        img(v-for='img in comment.data.last_status.media_attachments' :src='img.url')
+        img.avatar(:src='comment.data.account.avatar') 
+        strong {{comment.data.account.display_name}} {{comment.data.account.username}} 
+        //- a.float-right(:href='comment.data.url')
+        a.float-right(:href='`https://${settings.mastodon_instance}/web/statuses/${comment.data.id}`')
+          small  {{comment.data.created_at|datetime}}
+        div.mt-1(v-html='comment_filter(comment.data.content)')
+        img(v-for='img in comment.data.media_attachments' :src='img.url')
 
 </template>
 <script>
@@ -193,7 +193,7 @@ export default {
   }
 
   img {
-    width: 100%;
+    max-width: 100%;
     max-height: 89vh;
     object-fit: contain;
   }

@@ -57,12 +57,20 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
   // TOFIX: enable message deletion
   async message(msg) {
     const type = msg.event
-    const replyid = msg.data.in_reply_to_id
-    if (!replyid) return
-    let event = await Event.findOne({ where: { activitypub_id: replyid } })
+
+    if (type === 'delete') {
+      const activitypub_id = msg.data
+      const event = await Comment.findOne({ where: { activitypub_id } })
+      if (event) await event.destroy()
+      return
+    }
+
+    const activitypub_id = msg.data.in_reply_to_id
+    if (!activitypub_id) return
+    let event = await Event.findOne({ where: { activitypub_id } })
     if (!event) {
       // check for comment..
-      const comment = await Comment.findOne( { include: [Event], where: { activitypub_id: replyid }})
+      const comment = await Comment.findOne( { include: [Event], where: { activitypub_id }})
       if (!comment) return
       event = comment.event
     }
@@ -76,6 +84,6 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
     console.log('error ', err)
   }
 }
-// botController.initialize()
+
 setTimeout(botController.initialize, 5000)
 module.exports = botController
