@@ -19,7 +19,7 @@
             v-icon(name='chevron-right')
     
       //- image
-      img(:src='imgPath' v-if='event.image_path')
+      img.main(:src='imgPath' v-if='event.image_path')
 
       .info
         div {{event|event_when}}
@@ -40,17 +40,18 @@
         el-button(plain type='primary' size='mini' @click='$router.replace(`/add/${event.id}`)') {{$t('common.edit')}}  
 
       //- comments
-      .card-body(v-if='event.activitypub_id && settings')
+      #comments.card-body(v-if='event.activitypub_id && settings')
         strong {{$t('common.related')}} - 
         a(:href='`https://${settings.mastodon_instance}/web/statuses/${event.activitypub_id}`') {{$t('common.add')}}
-      .card-header(v-for='comment in event.comments' :key='comment.id')
-        img.avatar(:src='comment.data.account.avatar') 
-        strong {{comment.data.account.display_name}} {{comment.data.account.username}} 
-        //- a.float-right(:href='comment.data.url')
-        a.float-right(:href='`https://${settings.mastodon_instance}/web/statuses/${comment.data.id}`')
-          small  {{comment.data.created_at|datetime}}
-        div.mt-1(v-html='comment_filter(comment.data.content)')
-        img(v-for='img in comment.data.media_attachments' :src='img.url')
+
+        .card-header(v-for='comment in event.comments' :key='comment.id')
+          img.avatar(:src='comment.data.account.avatar') 
+          strong {{comment.data.account.display_name}} {{comment.data.account.username}} 
+          //- a.float-right(:href='comment.data.url')
+          a.float-right(:href='`https://${settings.mastodon_instance}/web/statuses/${comment.data.id}`')
+            small  {{comment.data.created_at|datetime}}
+          div.mt-1(v-html='comment_filter(comment.data.content)')
+          img(v-for='img in comment.data.media_attachments' :src='img.url')
 
 </template>
 <script>
@@ -193,9 +194,17 @@ export default {
   }
 
   img {
-    max-width: 100%;
     max-height: 89vh;
     object-fit: contain;
+    &.main {
+      width: 100%;
+    }
+  }
+
+  #comments {
+    img {
+      max-width: 100%;
+    }
   }
 
   .avatar {

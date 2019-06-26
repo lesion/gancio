@@ -189,7 +189,7 @@ const eventController = {
         [Tag, 'weigth', 'DESC']
       ],
       include: [
-        { model: Tag, required: false, attributes: ['tag', 'weigth', 'color'] },
+        { model: Tag, required: false, attributes: ['tag', 'weigth'] },
         { model: Place, required: false, attributes: ['id', 'name', 'address'] }
       ]
     })

@@ -26,7 +26,7 @@ module.exports = {
       return -1
     } catch(e) {}
 
-    await db.sequelize.sync({force: true}).catch(e => {
+    await db.sequelize.sync().catch(e => {
       consola.error('Error creating tables', e)
       return -1
     })
