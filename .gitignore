@@ -1,6 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
-### Gancio production configuration
-/config.js
+
+### Gancio dev configuration
+config/development.json
 
 ### Node template
 # Logs
