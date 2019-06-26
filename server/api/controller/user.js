@@ -70,7 +70,7 @@ const userController = {
     }
   },
 
-  // ADD EVENT
+  // ADD EVENT // there's probably a better way to do this with sequelize! TOFIX
   async addEvent(req, res) {
     const body = req.body
 

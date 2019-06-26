@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-card#eventDetail(v-loading='!loaded')
+  el-card#eventDetail
     //- close button
     nuxt-link.float-right(to='/')
       v-icon(name='times' color='red')
@@ -19,7 +19,7 @@
             v-icon(name='chevron-right')
     
       //- image
-      img(:src='imgPath' v-if='event.image_path' @load='image_loaded')
+      img(:src='imgPath' v-if='event.image_path')
 
       .info
         div {{event|event_when}}
@@ -59,11 +59,6 @@ import { MessageBox } from 'element-ui'
 
 export default {
   name: 'Event',
-  data () {
-    return {
-      loaded: false,
-    }
-  },
   // transition: null,
   // Watch for $route.query.page to call Component methods (asyncData, fetch, validate, layout, etc.)
   // watchQuery: ['id'],
@@ -101,8 +96,7 @@ export default {
   },
   async asyncData ( { $axios, params }) {
     const event = await $axios.$get(`/event/${params.id}`)
-    const loaded = !event.image_path
-    return { event, id: params.id, loaded }
+    return { event, id: params.id }
   },  
   computed: {
     ...mapGetters(['filteredEvents']),
@@ -131,9 +125,6 @@ export default {
     },
   },
   methods: {
-    image_loaded (e, b) {
-      this.loaded = true
-    },
     ...mapActions(['delEvent']),
     comment_filter (value) {
       return value.replace(/<a.*href="([^">]+).*>(?:.(?!\<\/a\>))*.<\/a>/, (orig, url) => {

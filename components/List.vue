@@ -4,7 +4,6 @@ div#list
   el-timeline
     el-timeline-item(
       v-for='event in events'
-      v-if='!event.past'
       :key='event.id'
       :timestamp='event|event_when'
       placement='top' icon='el-icon-arrow-down' size='large'

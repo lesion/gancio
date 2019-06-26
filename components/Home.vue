@@ -9,7 +9,7 @@
       Calendar
     .row.m-0
 
-      .p-0.col-sm-6.col-lg-4.col-xl-3(v-for='event in filteredEvents' v-if='!event.past')
+      .p-0.col-sm-6.col-lg-4.col-xl-3(v-for='event in filteredEvents')
         a(:id='event.newDay' v-if='event.newDay')
           .d-block.d-sm-none
             el-divider {{event.start_datetime|day}}

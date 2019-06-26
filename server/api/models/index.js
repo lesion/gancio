@@ -1,12 +1,16 @@
-const argv = require('yargs').argv
 const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
 const basename = path.basename(__filename)
 const config = require('config')
+const consola = require('consola')
 const db = {}
 
 const sequelize = new Sequelize(config.db)
+sequelize.authenticate().catch( e => {
+  consola.error('Error connecting to DB: ', e)
+  process.exit(-1)
+})
 
 fs
   .readdirSync(__dirname)

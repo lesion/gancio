@@ -22,9 +22,8 @@ export const state = () => ({
 
 export const getters = {
 
-  // filter current + future events only
-  // plus, filter matches search tag/place
-  filteredEvents: (state) => {
+  // filter matches search tag/place
+  filteredEvents: state => {
     let events = state.events
 
     // TOFIX: use lodash
@@ -43,26 +42,46 @@ export const getters = {
       })
     }
 
-    // if (!state.filters.show_past_events) {
-    //   events = events.filter(e => !e.past)
-    // }
+    if (!state.filters.show_past_events) {
+      events = events.filter(e => !e.past)
+    }
 
-    let lastDay = null
-    events = map(events, e => {
-      const currentDay = moment(e.start_datetime*1000).date()
-      e.newDay = (!lastDay || lastDay !== currentDay) && currentDay
-      lastDay = currentDay
-      return e
-    })
+    return events
+  },
+  // filter matches search tag/place
+  filteredEventsWithPast: state => {
+    let events = state.events
+
+    // TOFIX: use lodash
+    if (state.filters.tags.length || state.filters.places.length) {
+      events = events.filter((e) => {
+        if (state.filters.tags.length) {
+          const m = intersection(e.tags.map(t => t.tag), state.filters.tags)
+          if (m.length > 0) return true
+        }
+        if (state.filters.places.length) {
+          if (state.filters.places.find(p => p === e.place.id)) {
+            return true
+          }
+        }
+        return 0
+      })
+    }
 
     return events
   }
+
+
 }
 
 export const mutations = {
   setEvents(state, events) {
-    // set a `past` flag
+    // set`past` and `newDay` flags to event
+    let lastDay = null
     state.events = events.map((e) => {
+      const currentDay = moment(e.start_datetime*1000).date()
+      e.newDay = (!lastDay || lastDay !== currentDay) && currentDay
+      lastDay = currentDay      
       const end_datetime = e.end_datetime || e.start_datetime+3600*2
       const past = (moment().unix() - end_datetime) > 0
       e.past = !!past
