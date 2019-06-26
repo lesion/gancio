@@ -48,6 +48,10 @@ function parseArguments(rawArgs) {
   };
 }
 
+function notEmpty (value) {
+  return value.length>0
+}
+
 async function setupQuestionnaire() {
 
   const questions = []
@@ -55,7 +59,20 @@ async function setupQuestionnaire() {
     message: 'Specify a baseurl for this gancio installation! (eg. http://gancio.cisti.org)',
     name: 'baseurl',
     default: 'http://localhost:3000',
-    validate: baseurl => baseurl.length>0
+    validate: notEmpty
+  })
+
+  questions.push({
+    name: 'server.host',
+    message: 'address to listen to',
+    default: 'localhost',
+    validate: notEmpty
+  })
+
+  questions.push({
+    name: 'server.port',
+    message: 'port to listen to',
+    default: 13120,
   })
 
   questions.push({
@@ -75,22 +92,38 @@ async function setupQuestionnaire() {
   })
 
   questions.push({
-    name: 'db.user',
-    message: 'Postgres user',
+    name: 'db.host',
+    message: 'Postgres host',
+    default: 'localhost',
+    when: answers => answers.db.dialect === 'postgres',
+    validate: notEmpty
+  })
+
+  questions.push({
+    name: 'db.database',
+    message: 'DB name',
     default: 'gancio',
     when: answers => answers.db.dialect === 'postgres',
-    validate: user => user.length>0
+    validate: notEmpty
+  })
+    
+  questions.push({
+    name: 'db.username',
+    message: 'DB user',
+    default: 'gancio',
+    when: answers => answers.db.dialect === 'postgres',
+    validate: notEmpty
   })
   
   questions.push({
-    name: 'db.pass',
+    name: 'db.password',
     type: 'password',
-    message: 'Postgres password',
+    message: 'DB password',
     default: 'gancio',
     when: answers => answers.db.dialect === 'postgres',
     validate: async (password, options) => {
       try {
-        const db = new sequelize({host: 'localhost', dialect: 'postgres', database: 'gancio', username: options.db.user, password })
+        const db = new sequelize({ ...options.db, dialect: 'postgres' , password, logging: false })
         return db.authenticate().then( () => {
           consola.info(`DB connected`)
           return true
@@ -117,14 +150,34 @@ async function setupQuestionnaire() {
   questions.push({
     name: 'admin.email',
     message: `Admin email (a first user with this username will be created)`,
-    validate: email => email.length>0
+    validate: notEmpty
   })
   
   questions.push({
     name: 'admin.password',
     message: 'Admin password',
     type: 'password',
-    validate: password => password.length>0
+    validate: notEmpty
+  })
+
+  questions.push({
+    name: 'smtp.host',
+    message: 'SMTP Host',
+    validate: notEmpty,
+  })
+
+  questions.push({
+    name: 'smtp.auth.user',
+    message: 'SMTP User',
+    validate: notEmpty,
+    default: options => options.admin.email
+  })
+
+  questions.push({
+    name: 'smtp.auth.pass',
+    message: 'SMTP Password',
+    type: 'password',
+    validate: notEmpty,
   })
 
   const answers = await inquirer.prompt(questions)

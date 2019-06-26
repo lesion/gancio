@@ -9,26 +9,25 @@ const exportController = {
     const type = req.params.type
     const tags = req.query.tags
     const places = req.query.places
-    const whereTag = {}
-    const wherePlace = {}
-    const yesterday = moment().subtract('1', 'day')
+    const where = {}
+    const yesterday = moment().subtract('1', 'day').unix()
     if (tags) {
-      whereTag.tag = tags.split(',')
+      where.tag = tags.split(',')
     }
     if (places) {
-      wherePlace.id = places.split(',')
+      where.placeId = places.split(',')
     }
     const events = await Event.findAll({
       order: ['start_datetime'],
       where: {
         is_visible: true,
         start_datetime: { [Op.gte]: yesterday },
-        placeId: places.split(',')
+        ...where
       },
       attributes: {
         exclude: ['createdAt', 'updatedAt']
       },
-      include: [{ model: Place, attributes: ['name', 'id', 'address', 'weigth'] }]
+      include: [{ model: Place, attributes: ['name', 'id', 'address'] }]
     })
     switch (type) {
       case 'feed':

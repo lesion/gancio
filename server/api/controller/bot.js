@@ -17,7 +17,7 @@ const botController = {
       access_token,
       api_url: `https://${instance}/api/v1`
     })
-    const listener = botController.bot.stream('/streaming/direct')
+    const listener = botController.bot.stream('/streaming/public')
     listener.on('message', botController.message)
     listener.on('error', botController.error)
   //   const botUsers = await User.findAll({ where: { mastodon_auth: { [Op.ne]: null } } })
@@ -51,12 +51,13 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
         media = await bot.post('media', { file: fs.createReadStream(file) })
       }
     }
-    return botController.bot.post('/statuses', { status, visibility: 'direct', media_ids: media ? [media.data.id] : [] })
+    return botController.bot.post('/statuses', { status, media_ids: media ? [media.data.id] : [] })
   },
 
   // TOFIX: enable message deletion
   async message(msg) {
-    const replyid = msg.data.in_reply_to_id || msg.data.last_status.in_reply_to_id
+    const type = msg.event
+    const replyid = msg.data.in_reply_to_id
     if (!replyid) return
     let event = await Event.findOne({ where: { activitypub_id: replyid } })
     if (!event) {
@@ -65,8 +66,8 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
       if (!comment) return
       event = comment.event
     }
-    const comment = await Comment.create({
-      activitypub_id: msg.data.last_status.id,
+    await Comment.create({
+      activitypub_id: msg.data.id,
       data: msg.data,
       eventId: event.id
     })

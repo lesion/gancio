@@ -12,6 +12,14 @@
     "logging": false
   },
   "upload_path": "./",
+  "smtp": {
+    "auth": {
+      "user": "",
+      "pass": ""
+    },
+    "secure": true,
+    "host": ""
+  },
   "admin": {
     "email": "",
     "password": ""

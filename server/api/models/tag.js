@@ -3,16 +3,16 @@ module.exports = (sequelize, DataTypes) => {
   const tag = sequelize.define('tag', {
     tag: {
       type: DataTypes.STRING,
+      allowNull: false,
       index: true,
       primaryKey: true
     },
-    weigth: DataTypes.INTEGER,
+    weigth: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false },
     color: DataTypes.STRING
   }, {})
 
   tag.associate = function (models) {
     tag.belongsToMany(models.event, { through: 'event_tags' })
-    // associations can be defined here
   }
 
   return tag

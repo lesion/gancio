@@ -43,9 +43,9 @@ export const getters = {
       })
     }
 
-    if (!state.filters.show_past_events) {
-      events = events.filter(e => !e.past)
-    }
+    // if (!state.filters.show_past_events) {
+    //   events = events.filter(e => !e.past)
+    // }
 
     let lastDay = null
     events = map(events, e => {

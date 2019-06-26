@@ -3,9 +3,10 @@ const path = require('path')
 const moment = require('moment')
 const config = require('config')
 
-moment.locale(config.locale)
+moment.locale('it')
 const mail = {
   send(addresses, template, locals) {
+    console.error('invio email via ', config.smtp)
     const email = new Email({
       views: { root: path.join(__dirname, '..', 'emails') },
       htmlToText: false,
@@ -22,7 +23,7 @@ const mail = {
       send: true,
       i18n: {
         directory: path.join(__dirname, '..', '..', 'locales', 'email'),
-        defaultLocale: config.locale
+        defaultLocale: 'it'
       },
       transport: config.smtp
     })
@@ -30,11 +31,11 @@ const mail = {
       template,
       message: {
         to: addresses,
-        bcc: config.admin
+        bcc: config.admin_email
       },
       locals: {
         ...locals,
-        locale: config.locale,
+        locale: 'it',
         config: { title: config.title, baseurl: config.baseurl, description: config.description },
         datetime: datetime => moment(datetime).format('ddd, D MMMM HH:mm')
       }

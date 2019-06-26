@@ -18,9 +18,7 @@ const notifier = {
       case 'mail':
       return mail.send(notification.email, 'event', { event, config, notification })
      case 'admin_email':
-        const admins = await User.findAll({ where: { is_admin: true } })
-       const admin_emails = admins.map(admin => admin.email)
-       return mail.send(admin_emails, 'event', { event, to_confirm: true, notification })
+       return mail.send([config.smtp.auth.user, config.admin_email], 'event', { event, to_confirm: !event.is_visible, config, notification })
       case 'mastodon':
         // instance publish
         if (instance && access_token) {

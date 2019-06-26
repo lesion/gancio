@@ -27,7 +27,7 @@
 
       //- description and tags
       div(v-if='event.description || event.tags')
-        pre(v-html='event.description')
+        pre(v-html='$options.filters.linkify(event.description)')
         el-tag.mr-1(v-for='tag in event.tags'
           size='mini' :key='tag.tag') {{tag.tag}}
 

@@ -12,6 +12,9 @@ module.exports = {
     consola.info('Generate random salt')
     config.secret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 
+    const admin = { email: config.admin.email, password: config.admin.password }
+    delete config.admin
+    config.admin_email = admin.email
     consola.info(`Save configuration into ${config_path}`)
     fs.writeFileSync(config_path, JSON.stringify(config, null, 2))
 
@@ -28,12 +31,12 @@ module.exports = {
     // create admin user
     consola.info('Create admin user')
     await db.user.create({
-      email: config.admin.email,
-      password: config.admin.password,
+      ...admin,
       is_admin: true,
       is_active: true
     })
 
+    
     // set default settings
     consola.info('Set default settings')
     const settings = require('./api/controller/settings')
@@ -42,9 +45,11 @@ module.exports = {
 
     // add default notification
     consola.info('Add default notification')
+
     // send confirmed event to mastodon
     await db.notification.create({ type: 'mastodon', filters: { is_visible: true } })
-    // await notification.create({ type: 'mastodon', filters: { is_visible: true } })
-    
+
+    // send every event to admin
+    await db.notification.create({ type: 'admin_email' })
   }
 }

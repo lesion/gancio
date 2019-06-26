@@ -23,7 +23,7 @@ const eventController = {
     const places = await Place.findAll({
       order: [[Sequelize.literal('weigth'), 'DESC']],
       attributes: {
-        include: [[Sequelize.fn('count', Sequelize.col('events.placeId')) , 'weigth']], // <---- Here you will get the total count of user
+        include: [[Sequelize.fn('count', Sequelize.col('events.placeId')) , 'weigth']],
         exclude: ['weigth', 'createdAt', 'updatedAt']
       },
       include: [{ model: Event, attributes: [] }],
@@ -32,10 +32,9 @@ const eventController = {
 
     const tags = await Tag.findAll({
       order: [['weigth', 'DESC']],
-      includeIgnoreAttributes: false,
       attributes: {
         exclude: ['createdAt', 'updatedAt']
-      }
+      },
     })
 
     res.json({ tags, places })
@@ -84,20 +83,20 @@ const eventController = {
 
   // TODO retrieve next/prev event also
   // select id, start_datetime, title from events where start_datetime > (select start_datetime from events where id=89) order by start_datetime limit 20;
-  // weigth is not updated
   async get(req, res) {
     const id = req.params.event_id
-    const event = await Event.findByPk(id, {
+    let event = await Event.findByPk(id, {
+      plain: true,
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
       include: [
-        Tag,
-        Comment,
-        { model: Place, attributes: ['name', 'address'] }
+        { model: Tag, attributes: ['tag', 'weigth'], through: { attributes: [] } },
+        { model: Place, attributes: ['name', 'address'] },
+        Comment
       ],
-      order: [ [Comment, 'id', 'DESC'], [Tag, 'weigth', 'DESC'] ]
+      order: [ [Comment, 'id', 'DESC'] ]
     })
 
     if (event) {
-      event.activitypub_id = event.activitypub_id ? String(event.activitypub_id) : null
       res.json(event)
     } else {
       res.sendStatus(404)
@@ -171,17 +170,18 @@ const eventController = {
   async getAll(req, res) {
     // this is due how v-calendar shows dates
     const start = moment().year(req.params.year).month(req.params.month)
-      .startOf('month').startOf('isoWeek').unix()
+      .startOf('month').startOf('isoWeek')
     let end = moment().utc().year(req.params.year).month(req.params.month).endOf('month')
     const shownDays = end.diff(start, 'days')
-    if (shownDays <= 34) end = end.add(1, 'week')
-    end = end.endOf('isoWeek').unix()
+    console.error(shownDays)
+    if (shownDays <= 35) end = end.add(1, 'week')
+    end = end.endOf('isoWeek')
     const events = await Event.findAll({
       where: {
         is_visible: true,
         [Op.and]: [
-          Sequelize.literal(`start_datetime >= ${start}`),
-          Sequelize.literal(`start_datetime <= ${end}`)
+          Sequelize.literal(`start_datetime >= ${start.unix()}`),
+          Sequelize.literal(`start_datetime <= ${end.unix()}`)
         ]
       },
       order: [

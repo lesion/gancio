@@ -77,7 +77,7 @@ const settingsController = {
         `https://${instance}`, callback)
       const mastodon_auth = { client_id, client_secret, access_token }
       await settingsController.set('mastodon_auth', mastodon_auth, true)
-      const botController = require('./bot')      
+      const botController = require('./bot')
       botController.initialize()
       res.redirect('/admin')
     } catch (e) {

@@ -15,7 +15,7 @@ export default ({ app, store }) => {
     const start = moment(event.start_datetime*1000)
     const end = moment(event.end_datetime*1000)
     if (event.multidate) {
-      return `${start.format('ddd, D MMMM (HH:mm)')} - ${end.format('ddd, D MMMM (HH:mm)')}`
+      return `${start.format('ddd, D MMMM (HH:mm)')} - ${end.format('ddd, D MMMM')}`
     } else if (event.end_datetime && event.end_datetime !== event.start_datetime)
         return `${start.format('ddd, D MMMM (HH:mm-')}${end.format('HH:mm)')}`
       else

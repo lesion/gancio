@@ -1,3 +1,5 @@
+const conf = require('config')
+
 module.exports = {
   mode: 'universal',
   /*
@@ -14,6 +16,8 @@ module.exports = {
   serverMiddleware: [
     { path: '/api', handler: '@/server/api/index.js' }
   ],
+
+  server: conf.server,
 
   /*
    ** Customize the progress-bar color

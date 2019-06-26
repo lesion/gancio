@@ -30,7 +30,6 @@ const jwt = expressJwt({
       const [ prefix, token ] = req.cookies['auth._token.local'].split(' ')
       if (prefix === 'Bearer') return token
     }
-    return null
   }
 })
 

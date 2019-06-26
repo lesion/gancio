@@ -30,15 +30,18 @@
                 span(slot='reference') {{data.row.email}}
           el-table-column(:label="$t('common.actions')")
             template(slot-scope='data')
-              el-button.mr-1(size='mini'
-                :type='data.row.is_active?"warning":"success"'
-                @click='toggle(data.row)') {{data.row.is_active?$t('common.deactivate'):$t('common.activate')}}
-              el-button(size='mini'
-                :type='data.row.is_admin?"danger":"warning"'
-                @click='toggleAdmin(data.row)') {{data.row.is_admin?$t('admin.remove_admin'):$t('common.admin')}}
-              el-button(size='mini'
-                type='danger'
-                @click='delete_user(data.row)') {{$t('admin.delete_user')}}
+              div(v-if='data.row.id!==$auth.user.id')
+                el-button.mr-1(size='mini'
+                  :type='data.row.is_active?"warning":"success"'
+                  @click='toggle(data.row)') {{data.row.is_active?$t('common.deactivate'):$t('common.activate')}}
+                el-button(size='mini'
+                  :type='data.row.is_admin?"danger":"warning"'
+                  @click='toggleAdmin(data.row)') {{data.row.is_admin?$t('admin.remove_admin'):$t('common.admin')}}
+                el-button(size='mini'
+                  type='danger'
+                  @click='delete_user(data.row)') {{$t('admin.delete_user')}}
+              div(v-else)
+                span {{$t('common.me')}}
           no-ssr
             el-pagination(:page-size='perPage' :currentPage.sync='userPage' :total='users.length')
 
@@ -201,8 +204,14 @@ export default {
       this.$axios.$put('/user', user)
     },
     async toggleAdmin(user) {
+      console.error(this.$auth.user)
+      if (user.id === this.$auth.user.id) return
       user.is_admin = !user.is_admin
-      this.$axios.$put('/user', user)
+      try {
+        this.$axios.$put('/user', user)
+      } catch(e) {
+        console.error(e)
+      }
     },
     preview (id) {
       this.$router.push(`/event/${id}`)

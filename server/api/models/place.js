@@ -1,13 +1,15 @@
 'use strict'
 module.exports = (sequelize, DataTypes) => {
   const place = sequelize.define('place', {
-    name: DataTypes.STRING,
-    address: DataTypes.STRING,
-    weigth: DataTypes.INTEGER
+    name: {
+      type: DataTypes.STRING,
+      unique: true, index: true,
+      allowNull: false
+    },
+    address: DataTypes.STRING
   }, {})
 
   place.associate = function (models) {
-    // associations can be defined here
     place.hasMany(models.event)
   }
 

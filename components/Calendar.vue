@@ -14,7 +14,7 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import moment from 'dayjs'
-import { intersection, sample, get } from 'lodash'
+import { intersection, sample, take, get } from 'lodash'
 
 export default {
   name: 'Calendar',
@@ -40,17 +40,34 @@ export default {
   },
   computed: {
     ...mapGetters(['filteredEvents']),
+    ...mapState(['tags']),
     attributes () {
+      const colors = ['indigo', 'orange', 'yellow', 'green', 'teal', 'blue', 'red', 'purple', 'pink', 'grey']
+      const tags = take(this.tags, 10).map(t=>t.tag)
+      // const tags = [this.tags[0].tag, this.tags[1].tag, this.tags[2].tag, this.tags[3].tag, this.tags[4].tag, this.tags[5].tag ]
       let attributes = []
       attributes.push ({ key: 'today', dates: new Date(), highlight: { color: 'green' }})
 
+      function getColor(event) {
+        const color = { class: event.past ? 'past-event vc-rounded-full' : 'vc-rounded-full', color: 'blue' }
+        const tag = get(event, 'tags[0].tag')
+        if (!tag) return color
+        const idx = tags.indexOf(tag)
+        if (idx<0) return color
+        color.color = colors[idx]
+        return color
+      }
+
       attributes = attributes.concat(this.filteredEvents
         .filter(e => !e.multidate)
-        .map(e => ({ key: e.id, dot: {}, dates: new Date(e.start_datetime*1000)})))
+        .map(e => ({
+          key: e.id, 
+          dot: getColor(e),
+          dates: new Date(e.start_datetime*1000)})))
 
       attributes = attributes.concat(this.filteredEvents
         .filter(e => e.multidate)
-        .map( e => ({ key: e.id, highlight: {}, dates: { 
+        .map( e => ({ key: e.id, highlight: getColor(e), dates: { 
           start: new Date(e.start_datetime*1000), end: new Date(e.end_datetime*1000) }})))
           
       return attributes
@@ -76,4 +93,7 @@ export default {
   border-radius: 15px;
 } */
 
+.past-event {
+  opacity: 0.2;
+}
 </style>

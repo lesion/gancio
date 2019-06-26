@@ -72,7 +72,7 @@
             br
             el-select(v-model='event.tags' multiple filterable allow-create
               default-first-option placeholder='Tag')
-              el-option(v-for='tag in tags' :key='tag.tag'
+              el-option(v-for='tag in tags' :key='tag'
                 :label='tag' :value='tag')
 
             el-button.float-right(@click.native='next' :disabled='!couldProceed') {{$t('common.next')}}

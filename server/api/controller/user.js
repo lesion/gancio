@@ -98,22 +98,23 @@ const userController = {
         defaults: { address: body.place_address } })
         .spread((place, created) => place)
       await event.setPlace(place)
+      event.place = place
     } catch (e) {
       console.error(e)
     }
-
     // create/assign tags
     if (body.tags) {
       await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
       const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
+      await Promise.all(tags.map(t => t.update({weigth: Number(t.weigth)+1})))
       await event.addTags(tags)
+      event.tags = tags
     }
+
     if (req.user) {
       await req.user.addEvent(event)
       await event.setUser(req.user)
     }
-
-    // event = await Event.findByPk(event.id, { include: [Tag, Place] })
 
     // send response to client
     res.json(event)

@@ -46,7 +46,8 @@ const it = {
     ok: 'Ok',
     cancel: 'Annulla',
     enable: 'Abilita',
-    disable: 'Disabilita'
+    disable: 'Disabilita',
+    me: 'Sei te'
   },
 
   login: {

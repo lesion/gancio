@@ -4,11 +4,12 @@
     a(href='#totop')
       el-button.top.d-block.d-sm-none(icon='el-icon-top' circle type='primary' plain)
     a.totop(name='totop')
+    //- el-backtop(target='#home')
     no-ssr
       Calendar
     .row.m-0
 
-      .p-0.col-sm-6.col-lg-4.col-xl-3(v-for='event in filteredEvents')
+      .p-0.col-sm-6.col-lg-4.col-xl-3(v-for='event in filteredEvents' v-if='!event.past')
         a(:id='event.newDay' v-if='event.newDay')
           .d-block.d-sm-none
             el-divider {{event.start_datetime|day}}
