@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 process.env.NODE_ENV = "production"
 const path = require('path')
+const cwd = process.cwd()
+
+// needed by nuxt
 process.chdir(path.resolve(__dirname, '..'))
 
 const arg = require('arg')
@@ -42,7 +45,7 @@ function parseArguments(rawArgs) {
   });
 
   return {
-    config: path.resolve(args['--config'] || '/etc/gancio_config.json') ,
+    config: path.resolve(cwd, args['--config'] || '/etc/gancio_config.json') ,
     install: args['--install'] || false,
     upgrade: args['--upgrade'] || false
   };
@@ -86,7 +89,7 @@ async function setupQuestionnaire() {
     name: 'db.storage',
     message: 'sqlite db path',
     default: '/var/gancio/db.sqlite',
-    filter: p => path.resolve(p),
+    filter: p => path.resolve(cwd, p),
     when: answers => answers.db.dialect === 'sqlite',
     validate: db_path => db_path.length>0 && fs.existsSync(path.dirname(db_path))
   })
@@ -125,7 +128,7 @@ async function setupQuestionnaire() {
       try {
         const db = new sequelize({ ...options.db, dialect: 'postgres' , password, logging: false })
         return db.authenticate().then( () => {
-          consola.info(`DB connected`)
+          // consola.info(`DB connected`)
           return true
         })
       } catch(e) {
@@ -139,7 +142,7 @@ async function setupQuestionnaire() {
     name: 'upload_path',
     message: 'Where gancio has to store media?',
     default: '/var/gancio/',
-    filter: p => path.resolve(p),
+    filter: p => path.resolve(cwd, p),
     validate: p => {
       const exists =  fs.existsSync(p)
       if (!exists) consola.warn(`"${p}" does not exists, please create it`)
