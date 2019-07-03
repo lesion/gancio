@@ -12,34 +12,39 @@ module.exports = {
     consola.info('Generate random salt')
     config.secret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 
+    // do not save admin's password in config file
     const admin = { email: config.admin.email, password: config.admin.password }
     delete config.admin
+
     config.admin_email = admin.email
-    consola.info(`Save configuration into ${config_path}`)
+    config.db.logging = false
+    consola.info(`Save configuration to ${config_path}`)
     fs.writeFileSync(config_path, JSON.stringify(config, null, 2))
 
     // sync db
     const db = require('./api/models')
+
     try {
       await db.user.findAll()
-      consola.warning(`!WARNING! Non empty db!`)
+      consola.warn(`⚠️ Non empty db! Please move your current db elsewhere than retry.
+If you want to `)
       return -1
-    } catch(e) {}
+    } catch(e) { console.error(e) }
 
+    consola.info(`Create tables schema`)
     await db.sequelize.sync().catch(e => {
       consola.error('Error creating tables', e)
       return -1
     })
 
     // create admin user
-    consola.info('Create admin user')
+    consola.info('Create admin user', admin)
     await db.user.create({
       ...admin,
       is_admin: true,
       is_active: true
     })
 
-    
     // set default settings
     consola.info('Set default settings')
     const settings = require('./api/controller/settings')
@@ -54,5 +59,8 @@ module.exports = {
 
     // send every event to admin
     await db.notification.create({ type: 'admin_email' })
+
+    // close db connection
+    await db.sequelize.close()
   }
 }

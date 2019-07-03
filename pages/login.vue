@@ -58,7 +58,6 @@ export default {
       Message({ message: this.$t('login.check_email'), type: 'success' })
     },
     async submit (e) {
-      console.error('dentro submit', e)
       e.preventDefault()
       try {
         this.loading = true

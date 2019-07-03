@@ -4,7 +4,7 @@ const express = require('express')
 const consola = require('consola')
 const morgan = require('morgan')
 const { Nuxt, Builder } = require('nuxt')
-const firstRun = require('./firstrun')
+
 // Import and Set Nuxt.js options
 const nuxt_config = require('../nuxt.config.js')
 const config = require('config')

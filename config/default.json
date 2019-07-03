@@ -8,8 +8,7 @@
   },
   "db": {
     "dialect": "sqlite",
-    "storage": "./db.sqlite",
-    "logging": false
+    "storage": "./db.sqlite"
   },
   "upload_path": "./",
   "smtp": {

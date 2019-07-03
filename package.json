@@ -29,6 +29,7 @@
     "nuxt.config.js",
     "locales/",
     "dist/",
+    "views/",
     "store/",
     "config/",
     ".nuxt"

@@ -59,13 +59,13 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
     const type = msg.event
 
     if (type === 'delete') {
-      const activitypub_id = msg.data
+      const activitypub_id = String(msg.data)
       const event = await Comment.findOne({ where: { activitypub_id } })
       if (event) await event.destroy()
       return
     }
 
-    const activitypub_id = msg.data.in_reply_to_id
+    const activitypub_id = String(msg.data.in_reply_to_id)
     if (!activitypub_id) return
     let event = await Event.findOne({ where: { activitypub_id } })
     if (!event) {

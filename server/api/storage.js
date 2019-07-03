@@ -6,7 +6,11 @@ const sharp = require('sharp')
 const consola = require('consola')
 const config = require('config')
 
-mkdirp.sync(config.upload_path + '/thumb')
+try {
+  mkdirp.sync(config.upload_path + '/thumb')
+} catch (e) {
+  consola.error(e)
+}
 
 const DiskStorage = {
   _handleFile(req, file, cb) {
