@@ -161,7 +161,7 @@ async function start (options) {
   // is first run?
   if (firstrun.check(options.config)) {
     consola.error(`Configuration file "${options.config}" not found! 
-This is your first run? You could create it using --install flag`)
+This is your first run? Run 'gancio setup'`)
     process.exit(-1)
   }
   require('./index')
