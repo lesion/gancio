@@ -26,9 +26,10 @@ async function start() {
   }
 
 
-  // Give nuxt middleware to express
   app.use(morgan('dev'))
   app.use('/media/', express.static(config.upload_path))
+  app.use('/api', require('./api/index'))
+  // Give nuxt middleware to express
   app.use(nuxt.render)
 
   // Listen the server

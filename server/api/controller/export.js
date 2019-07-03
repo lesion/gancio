@@ -1,4 +1,4 @@
-const { event: Event, place: Place } = require('../models')
+const { event: Event, place: Place, tag: Tag } = require('../models')
 const { Op } = require('sequelize')
 const moment = require('moment')
 const ics = require('ics')
@@ -9,11 +9,15 @@ const exportController = {
     const type = req.params.type
     const tags = req.query.tags
     const places = req.query.places
+
     const where = {}
     const yesterday = moment().subtract('1', 'day').unix()
+    let where_tags = {}
+
     if (tags) {
-      where.tag = tags.split(',')
+      where_tags = { where: { tag: tags.split(',') } }
     }
+
     if (places) {
       where.placeId = places.split(',')
     }
@@ -27,7 +31,7 @@ const exportController = {
       attributes: {
         exclude: ['createdAt', 'updatedAt']
       },
-      include: [{ model: Place, attributes: ['name', 'id', 'address'] }]
+      include: [ { model: Tag, ...where_tags }, { model: Place, attributes: ['name', 'id', 'address'] }]
     })
     switch (type) {
       case 'feed':

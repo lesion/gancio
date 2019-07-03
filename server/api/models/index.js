@@ -8,7 +8,7 @@ const db = {}
 
 const sequelize = new Sequelize(config.db)
 sequelize.authenticate().catch( e => {
-  consola.error('Error connecting to DB: ', e)
+  consola.error('Error connecting to DB: ', String(e))
   process.exit(-1)
 })
 

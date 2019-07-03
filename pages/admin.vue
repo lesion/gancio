@@ -42,8 +42,8 @@
                   @click='delete_user(data.row)') {{$t('admin.delete_user')}}
               div(v-else)
                 span {{$t('common.me')}}
-          no-ssr
-            el-pagination(:page-size='perPage' :currentPage.sync='userPage' :total='users.length')
+        no-ssr
+          el-pagination(:page-size='perPage' :currentPage.sync='userPage' :total='users.length')
 
       //- PLACES
       el-tab-pane.pt-1

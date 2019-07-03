@@ -13,9 +13,9 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   dev: (process.env.NODE_ENV !== 'production'),
-  serverMiddleware: [
-    { path: '/api', handler: '@/server/api/index.js' }
-  ],
+  // serverMiddleware: [
+  //   { path: '/api', handler: '@/server/api/index.js' }
+  // ],
 
   server: conf.server,
 

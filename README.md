@@ -1,8 +1,9 @@
 ## gancio
-### event manager for radical communities
+### shared agenda for local communities
 
 > :warning: Gancio is under heavy development,
 > if something is not working as expected, it's expected :D
+
 
 
 ## Install
@@ -34,3 +35,5 @@ yarn build
 yarn start
 
 ```
+
+Made with :heart: by [underscore hacklab](https://autistici.org/underscore)

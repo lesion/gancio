@@ -2,6 +2,7 @@ const Email = require('email-templates')
 const path = require('path')
 const moment = require('moment')
 const config = require('config')
+const settings = require('./controller/settings')
 
 moment.locale('it')
 const mail = {
@@ -23,7 +24,10 @@ const mail = {
       send: true,
       i18n: {
         directory: path.join(__dirname, '..', '..', 'locales', 'email'),
-        defaultLocale: 'it'
+        syncFiles: false,
+        updateFiles: false,
+        defaultLocale: settings.locale,
+        objectNotation: true
       },
       transport: config.smtp
     })
