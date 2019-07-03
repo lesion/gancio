@@ -104,7 +104,7 @@ const eventController = {
   },
 
   async confirm(req, res) {
-    const id = req.params.event_id
+    const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
 
     try {
@@ -119,7 +119,7 @@ const eventController = {
   },
 
   async unconfirm(req, res) {
-    const id = req.params.event_id
+    const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
 
     try {
