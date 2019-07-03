@@ -95,9 +95,13 @@ export default {
       console.error(e)
     }    
   },
-  async asyncData ( { $axios, params }) {
-    const event = await $axios.$get(`/event/${params.id}`)
-    return { event, id: params.id }
+  async asyncData ( { $axios, params, error }) {
+    try {
+      const event = await $axios.$get(`/event/${params.id}`)
+      return { event, id: params.id }
+    } catch(e) {
+      error({ statusCode: 404, message: 'Event not found'})
+    }
   },  
   computed: {
     ...mapGetters(['filteredEvents']),

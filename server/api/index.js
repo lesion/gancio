@@ -87,7 +87,7 @@ api.get('/settings', settingsController.getAllRequest)
 api.post('/settings', jwt, fillUser, isAdmin, settingsController.setRequest)
 
 // get event
-api.get('/event/:event_id', eventController.get)
+api.get('/event/:event_id', jwt, fillUser, eventController.get)
 
 // confirm event
 api.get('/event/confirm/:event_id', jwt, isAuth, isAdmin, eventController.confirm)

@@ -84,7 +84,7 @@ const eventController = {
   // TODO retrieve next/prev event also
   // select id, start_datetime, title from events where start_datetime > (select start_datetime from events where id=89) order by start_datetime limit 20;
   async get(req, res) {
-    const is_admin = req.user.is_admin
+    const is_admin = req.user && req.user.is_admin
     const id = req.params.event_id
     let event = await Event.findByPk(id, {
       plain: true,
