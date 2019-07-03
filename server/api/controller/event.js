@@ -173,7 +173,6 @@ const eventController = {
       .startOf('month').startOf('isoWeek')
     let end = moment().utc().year(req.params.year).month(req.params.month).endOf('month')
     const shownDays = end.diff(start, 'days')
-    console.error(shownDays)
     if (shownDays <= 35) end = end.add(1, 'week')
     end = end.endOf('isoWeek')
     const events = await Event.findAll({

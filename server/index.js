@@ -15,8 +15,6 @@ async function start() {
   // Init Nuxt.js
   const nuxt = new Nuxt(nuxt_config)
 
-  // const { host, port } = nuxt.options.server
-
   // Build only in dev mode
   if (nuxt_config.dev) {
     const builder = new Builder(nuxt)
@@ -25,10 +23,11 @@ async function start() {
     await nuxt.ready()
   }
 
-
+  app.use('/favicon.ico', express.static('/dist/favicon.ico'))
   app.use(morgan('dev'))
   app.use('/media/', express.static(config.upload_path))
   app.use('/api', require('./api/index'))
+
   // Give nuxt middleware to express
   app.use(nuxt.render)
 

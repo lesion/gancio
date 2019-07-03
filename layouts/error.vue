@@ -2,7 +2,7 @@
   .container
     #error
       h1(v-if="error.statusCode === 404") {{error.message}}
-      h1(v-else) An error occurred {{error}}
+      h1(v-else) An error occurred: {{error.message}}
 </template>
 
 <script>
