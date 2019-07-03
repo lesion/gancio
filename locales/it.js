@@ -47,7 +47,8 @@ const it = {
     cancel: 'Annulla',
     enable: 'Abilita',
     disable: 'Disabilita',
-    me: 'Sei te'
+    me: 'Sei te',
+    password_updated: 'Password modificata!'
   },
 
   login: {
@@ -58,6 +59,10 @@ const it = {
     error: 'Errore: ',
     insert_email: 'Inserisci la mail',
     ok: 'Tutto rego'
+  },
+
+  recover: {
+    not_valid_code: 'Mmmmm qualcosa è andato storto...'
   },
 
   export: {

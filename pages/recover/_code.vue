@@ -39,8 +39,9 @@ export default {
         Message({
           showClose: true,
           type: 'success',
-          message: this.$t('Password changed!')
+          message: this.$t('common.password_updated')
         })        
+        this.$router.replace('/login')
       } catch(e) {
         Message({
           showClose: true,

@@ -27,7 +27,7 @@ const mail = {
         syncFiles: false,
         updateFiles: false,
         defaultLocale: settings.locale,
-        objectNotation: true
+        locales: ['en', 'it']
       },
       transport: config.smtp
     })
