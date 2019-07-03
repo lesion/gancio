@@ -17,7 +17,7 @@ const botController = {
       access_token,
       api_url: `https://${instance}/api/v1`
     })
-    const listener = botController.bot.stream('/streaming/public')
+    const listener = botController.bot.stream('/streaming/user')
     listener.on('message', botController.message)
     listener.on('error', botController.error)
   //   const botUsers = await User.findAll({ where: { mastodon_auth: { [Op.ne]: null } } })
@@ -41,14 +41,14 @@ const botController = {
   //   botController.bots.push({ email: user.email, bot })
   },
   async post(instance, access_token, event) {
-    const status = `${event.title} @${event.place.name} ${moment(event.start_datetime).format('ddd, D MMMM HH:mm')} - 
+    const status = `${event.title} @${event.place.name} ${moment(event.start_datetime*1000).format('ddd, D MMMM HH:mm')} - 
 ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : event.description} - ${event.tags.map(t => '#' + t.tag).join(' ')} ${config.baseurl}/event/${event.id}`
 
     let media
     if (event.image_path) {
       const file = path.join(config.upload_path, event.image_path)
       if (fs.statSync(file)) {
-        media = await bot.post('media', { file: fs.createReadStream(file) })
+        media = await botController.bot.post('media', { file: fs.createReadStream(file) })
       }
     }
     return botController.bot.post('/statuses', { status, media_ids: media ? [media.data.id] : [] })
@@ -65,7 +65,8 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
       return
     }
 
-    const activitypub_id = String(msg.data.in_reply_to_id)
+    const activitypub_id = String(msg.data.status.in_reply_to_id)
+    console.error('il toot di reply ', activitypub_id)
     if (!activitypub_id) return
     let event = await Event.findOne({ where: { activitypub_id } })
     if (!event) {
@@ -75,8 +76,8 @@ ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : ev
       event = comment.event
     }
     await Comment.create({
-      activitypub_id: msg.data.id,
-      data: msg.data,
+      activitypub_id: String(msg.data.status.id),
+      data: msg.data.status,
       eventId: event.id
     })
   },
