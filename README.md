@@ -7,8 +7,8 @@ Please be patient and open an [issue](/cisti/gancio/issues)!
 
 ### Current live instances:
 
-https://gancio.cisti.org
-https://lapunta.org
+- https://gancio.cisti.org
+- https://lapunta.org
 
 ## Installation
 
