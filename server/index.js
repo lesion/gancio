@@ -23,7 +23,7 @@ async function start() {
     await nuxt.ready()
   }
 
-  app.use('/favicon.ico', express.static('/dist/favicon.ico'))
+  app.use('/favicon.ico', express.static(path.resolve(__dirname, '../dist/favicon.ico')))
   app.use(morgan('dev'))
   app.use('/media/', express.static(config.upload_path))
   app.use('/api', require('./api/index'))
