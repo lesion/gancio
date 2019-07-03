@@ -105,6 +105,7 @@ const eventController = {
   },
 
   async confirm(req, res) {
+    console.error('confirm event')
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
     if (!event) return res.sendStatus(404)

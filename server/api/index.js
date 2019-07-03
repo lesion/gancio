@@ -86,12 +86,13 @@ api.delete('/event/notification/:code', eventController.delNotification)
 api.get('/settings', settingsController.getAllRequest)
 api.post('/settings', jwt, fillUser, isAdmin, settingsController.setRequest)
 
-// get event
-api.get('/event/:event_id', jwt, fillUser, eventController.get)
-
 // confirm event
 api.get('/event/confirm/:event_id', jwt, isAuth, isAdmin, eventController.confirm)
 api.get('/event/unconfirm/:event_id', jwt, isAuth, isAdmin, eventController.unconfirm)
+
+// get event
+api.get('/event/:event_id', jwt, fillUser, eventController.get)
+
 
 // export events (rss/ics)
 api.get('/export/:type', exportController.export)
