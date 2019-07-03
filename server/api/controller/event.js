@@ -84,6 +84,7 @@ const eventController = {
   // TODO retrieve next/prev event also
   // select id, start_datetime, title from events where start_datetime > (select start_datetime from events where id=89) order by start_datetime limit 20;
   async get(req, res) {
+    const is_admin = req.user.is_admin
     const id = req.params.event_id
     let event = await Event.findByPk(id, {
       plain: true,
@@ -96,7 +97,7 @@ const eventController = {
       order: [ [Comment, 'id', 'DESC'] ]
     })
 
-    if (event) {
+    if (event && (event.is_visible || is_admin)) {
       res.json(event)
     } else {
       res.sendStatus(404)
@@ -106,9 +107,11 @@ const eventController = {
   async confirm(req, res) {
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
+    if (!event) return res.sendStatus(404)
 
     try {
-      await event.update({ is_visible: true })
+      event.is_visible = true
+      await event.save()
       // insert notification
       const notifications = await eventController.getNotifications(event)
       await event.setNotifications(notifications)
@@ -121,9 +124,11 @@ const eventController = {
   async unconfirm(req, res) {
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
+    if (!event) return sendStatus(404)
 
     try {
-      await event.update({ is_visible: false })
+      event.is_visible = false
+      await event.save()
       res.sendStatus(200)
     } catch (e) {
       res.sendStatus(404)
