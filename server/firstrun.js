@@ -29,7 +29,7 @@ module.exports = {
       consola.warn(`⚠️ Non empty db! Please move your current db elsewhere than retry.
 If you want to `)
       return -1
-    } catch(e) { console.error(e) }
+    } catch(e) { }
 
     consola.info(`Create tables schema`)
     await db.sequelize.sync().catch(e => {
