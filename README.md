@@ -5,7 +5,10 @@
 > Gancio is under heavy development, if something is not working as expected, it's expected :D
 Please be patient and open an [issue](/cisti/gancio/issues)!
 
+### Current live instances:
 
+https://gancio.cisti.org
+https://lapunta.org
 
 ## Installation
 
