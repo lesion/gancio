@@ -2,15 +2,11 @@
   el-card
 
     nuxt-link.float-right(to='/')
-      v-icon(name='times' color='red')
+      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
     h5 {{$t('common.export')}}
 
     p {{$t('export.intro')}}
     Search
-    //- li(v-if='filters.tags.length') {{$t('common.tags')}}:
-    //-   el-tag.ml-1(size='mini' v-for='tag in filters.tags' :key='tag.tag') {{tag}}
-    //- li(v-if='filters.places.length') {{$t('common.places')}}:
-    //-   el-tag.ml-1(size='mini' v-for='place in filters.places' :key='place.id') {{place}}
     el-tabs.mt-2(v-model='type')
 
       //- el-tab-pane.pt-1(label='email' name='email')
@@ -25,12 +21,14 @@
       el-tab-pane.pt-1(label='feed rss' name='feed')
         span(v-html='$t(`export.feed_description`)')
         el-input(v-model='link')
-          el-button(slot='append' plain type="primary" icon='el-icon-document' ) {{$t("common.copy")}}
+          el-button(slot='append' plain 
+          v-clipboard:copy='link'
+          type="primary" icon='el-icon-document' ) {{$t("common.copy")}}
 
       el-tab-pane.pt-1(label='ics/ical' name='ics')
         p(v-html='$t(`export.ical_description`)')
         el-input(v-model='link')
-          el-button(slot='append' plain type="primary" icon='el-icon-document') {{$t("common.copy")}}
+          el-button(slot='append' v-clipboard:copy='link' plain type="primary" icon='el-icon-document') {{$t("common.copy")}}
 
       el-tab-pane.pt-1(label='list' name='list')
         p(v-html='$t(`export.list_description`)')
@@ -44,7 +42,7 @@
               :events='filteredEvents'
             )
         el-input.mb-1(type='textarea' v-model='listScript' readonly )
-        el-button.float-right(plain type="primary" icon='el-icon-document') {{$t('common.copy')}}
+        el-button.float-right(plain v-clipboard:copy='listScript' type='primary' icon='el-icon-document') {{$t('common.copy')}}
 
 
       //- el-tab-pane.pt-1(label='calendar' name='calendar')
@@ -106,7 +104,7 @@ export default {
         params.push(`tags=${this.filters.tags}`)
       }
 
-      return `<iframe src="${this.settings.baseurl}/embed/list?${params.join('&')}"></iframe>`
+      return `<iframe style='border: 0px; width: 100%;' src="${this.settings.baseurl}/embed/list?${params.join('&')}"></iframe>`
     },
     link () {
       const tags = this.filters.tags.join(',')

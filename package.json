@@ -66,6 +66,7 @@
     "sqlite3": "^4.0.8",
     "v-calendar": "^1.0.0-beta.14",
     "vue-awesome": "^3.5.3",
+    "vue-clipboard2": "^0.3.0",
     "yargs": "^13.2.4"
   },
   "devDependencies": {

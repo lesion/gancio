@@ -1,9 +1,10 @@
 <template lang="pug">
   el-card
     nuxt-link.float-right(to='/')
-      v-icon(name='times' color='red')
+      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
+
     h5 {{edit?$t('common.edit_event'):$t('common.add_event')}}
-    el-form
+    el-form(v-loading='loading')
       no-ssr
         el-tabs.mb-2(v-model='activeTab')
 
@@ -122,6 +123,7 @@ export default {
       date: null,
       time: { start: '20:00', end: null },
       edit: false,
+      loading: false
     }
   },
   name: 'newEvent',
@@ -269,6 +271,7 @@ export default {
       this.event.image = file
     },
     async done () {
+      this.loading = true
       let start_datetime, end_datetime
       const [ start_hour, start_minute ] = this.time.start.split(':')
       if (!this.time.end) {
@@ -309,8 +312,11 @@ export default {
         }
         this.updateMeta()
         this.$router.replace('/')
+        this.loading = false
         Message({ type: 'success', showClose: true, message: this.$auth.loggedIn ? this.$t('event.added') : this.$t('event.added_anon')})
       } catch (e) {
+        this.loading = false
+        Message({ type: 'danger', showClose: true, message: e })
         console.error(e)
       }
     }

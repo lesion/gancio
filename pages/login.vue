@@ -1,7 +1,7 @@
 <template lang='pug'>
   el-card
     nuxt-link.float-right(to='/')
-      v-icon(name='times' color='red')
+      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
     h5 {{$t('common.login')}}
     el-form(v-loading='loading')
       p(v-html="$t('login.description')")

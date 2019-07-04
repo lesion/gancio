@@ -9,13 +9,13 @@ rss(version='2.0')
             lastBuildDate= new Date(posts[0].publishedAt).toUTCString()
         each event in events
             item
-                title= event.title
+                title [#{moment(event.start_datetime*1000).format("D-MM-YY")}] #{event.title} @#{event.place.name}
                 link #{config.baseurl}/event/#{event.id}
                 description
                     | <![CDATA[
                     | <h4>#{event.title}</h4>
                     | <strong>#{event.place.name} - #{event.place.address}</strong>
-                    | #{moment(event.start_datetime).format("dddd, D MMMM HH:mm")}<br/>
+                    | #{moment(event.start_datetime*1000).format("dddd, D MMMM HH:mm")}<br/>
                     | <img src="#{config.apiurl}/media/#{event.image_path}"/>
                     | <pre>!{event.description}</pre>
                     | ]]>

@@ -28,6 +28,9 @@ import 'vue-awesome/icons/times'
 
 import Icon from 'vue-awesome/components/Icon'
 
+import VueClipboard from 'vue-clipboard2'
+
 export default () => {
   Vue.component('v-icon', Icon)
+  Vue.use(VueClipboard)
 }

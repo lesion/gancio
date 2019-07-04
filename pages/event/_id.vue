@@ -2,7 +2,7 @@
   el-card#eventDetail
     //- close button
     nuxt-link.float-right(to='/')
-      v-icon(name='times' color='red')
+      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
 
     div(v-if='!event')
       h5 {{$t('event.not_found')}}
