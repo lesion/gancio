@@ -56,6 +56,7 @@ If you want to `)
 
     // send confirmed event to mastodon
     await db.notification.create({ type: 'mastodon', filters: { is_visible: true } })
+    await db.notification.create({ type: 'email', filters: { is_visible: true } })
 
     // send every event to admin
     await db.notification.create({ type: 'admin_email' })

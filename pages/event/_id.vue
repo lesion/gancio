@@ -45,8 +45,8 @@
         a(:href='`https://${settings.mastodon_instance}/web/statuses/${event.activitypub_id}`') {{$t('common.add')}}
 
         .card-header(v-for='comment in event.comments' :key='comment.id')
-          img.avatar(:src='comment.data.account.avatar') 
-          strong {{comment.data.account.display_name}} {{comment.data.account.username}} 
+          img.avatar(:src='comment.data.account.avatar')  
+          strong  {{comment.data.account.display_name}} @{{comment.data.account.username}} 
           //- a.float-right(:href='comment.data.url')
           a.float-right(:href='`https://${settings.mastodon_instance}/web/statuses/${comment.data.id}`')
             small  {{comment.data.created_at|datetime}}
@@ -208,6 +208,9 @@ export default {
   #comments {
     img {
       max-width: 100%;
+    }
+    .invisible {
+      visibility: visible !important;
     }
   }
 
