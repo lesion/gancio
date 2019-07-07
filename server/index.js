@@ -37,7 +37,10 @@ async function start() {
   // close connections/port/unix socket
   function shutdown() {
     consola.info(`Closing connections..`)
-    server.close()
+    server.close(() => {
+      // TODO, close db connection?
+      process.exit()
+    })
   }
   process.on('SIGTERM', shutdown)
   process.on('SIGINT', shutdown)
