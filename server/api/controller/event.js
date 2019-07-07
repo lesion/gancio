@@ -4,6 +4,7 @@ const { Op } = require('sequelize')
 const lodash = require('lodash')
 const { event: Event, comment: Comment, tag: Tag, place: Place, notification: Notification } = require('../models')
 const Sequelize = require('sequelize')
+const notifier = require('../../notifier')
 
 const eventController = {
 
@@ -113,10 +114,11 @@ const eventController = {
     try {
       event.is_visible = true
       await event.save()
-      // insert notification
-      const notifications = await eventController.getNotifications(event)
-      await event.setNotifications(notifications)
+
       res.sendStatus(200)
+      
+      // send notification
+      notifier.notifyEvent(event.id)
     } catch (e) {
       res.sendStatus(404)
     }
