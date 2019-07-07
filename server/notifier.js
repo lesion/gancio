@@ -10,8 +10,6 @@ const { event: Event, notification: Notification,  event_notification: EventNoti
 
 const notifier = {
   async sendNotification(notification, event) {
-    const access_token = get(settingsController.secretSettings, 'mastodon_auth.access_token')
-    const instance = get(settingsController.settings, 'mastodon_instance')    
     const promises = []
     switch (notification.type) {
       case 'mail':
@@ -19,11 +17,11 @@ const notifier = {
      case 'admin_email':
        return mail.send([config.smtp.auth.user, config.admin_email], 'event', { event, to_confirm: !event.is_visible, config, notification })
       case 'mastodon':
+        console.error('mando le cose')
         // instance publish
-        if (instance && access_token) {
-          const b = bot.post(instance, access_token, event).then(b => {
-            console.error(b)
-            event.activitypub_id = b.data.id
+        if (bot.bot) {
+          const b = bot.post(event).then(b => {
+            event.activitypub_id = String(b.data.id)
             return event.save()
           }).catch(e => {
             console.error("ERRORE !! ", e)
@@ -55,7 +53,7 @@ const notifier = {
         await notifier.sendNotification(notification, event)
         e.status = 'sent'
       } catch (err) {
-        console.error(err)
+        // console.error(err)
         e.status = 'error'
         // e.error = err
       }

@@ -28,6 +28,20 @@ import Calendar from '@/components/Calendar'
 
 export default {
   name: 'Home',
+  head () {
+    console.error(this.settings)
+    return {
+      title: this.settings.title,
+      meta: [
+        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+        { hid: 'description', name: 'description', content: this.settings.description },
+        { hid: 'og-description', name: 'og:description', content: this.settings.description },
+        { hid: 'og-title', property: 'og:title', content: this.settings.title },   
+        { hid: 'og-url', property: 'og:url', content: this.settings.baseurl },   
+        // { property: 'og:image', content: this.settings.baseurl }
+      ]
+    }
+  },
   data () {
     return { }
   },

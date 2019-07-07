@@ -37,6 +37,7 @@
             span(slot='label') {{$t('common.when')}} <v-icon name='clock'/>
             span {{event.multidate ? $t('event.dates_description') : $t('event.date_description')}}
               el-switch.float-right(v-model='event.multidate' :active-text="$t('event.multidate_description')")
+              //- el-switch.float-right(v-model='event.recurrent' :active-text="$t('event.recurrent_description')")
 
             v-date-picker.mb-3(
               :mode='event.multidate ? "range" : "single"'

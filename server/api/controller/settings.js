@@ -47,7 +47,9 @@ const settingsController = {
     // get public settings and public configuration
     const settings = {
       ...settingsController.settings,
-      baseurl: config.baseurl
+      baseurl: config.baseurl,
+      title: config.title,
+      description: config.description
     }
     res.json(settings)
   },
