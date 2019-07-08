@@ -3,5 +3,6 @@
   "email.register": "Abbiamo ricevuto la richiesta di registrazione. La confermeremo quanto prima.\n Ciao",
   "email.confirm": "Il tuo account su gancio è stato attivato e quindi puoi cominciare a pubblicare eventi",
   "email.recover": "Ciao, hai richiesto un recupero della password su gancio.",
-  "email.press_here": "Premi qui"
+  "email.press_here": "Premi qui",
+  "email.confirm.subject": "Registrazione confermata"
 }

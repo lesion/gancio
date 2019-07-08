@@ -132,7 +132,6 @@ export const actions = {
   async nuxtServerInit ({ commit }, { app, req } ) {
     const settings = await app.$axios.$get('/settings')
     commit('setSettings', settings)
-    console.error('SETTINGS', settings)
 
     const lang = req.acceptsLanguages('en', 'it')
     commit('setLocale', lang || 'it')

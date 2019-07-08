@@ -2,6 +2,8 @@
 
 ### Gancio dev configuration
 config/development.json
+gancio_config.json
+config.json
 
 ### Node template
 # Logs
