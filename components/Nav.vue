@@ -16,7 +16,7 @@
     el-popover(
       placement="bottom"
       trigger="click")
-      Search(past-filter)
+      Search(past-filter recurrent-filter)
       el-menu-item(slot='reference' :title="$t('common.search')" icon='el-share-button')
         v-icon(color='lightblue' name='search')
         el-badge(v-if='filters.tags.length+filters.places.length>0' is-dot type='warning')

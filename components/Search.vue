@@ -8,11 +8,18 @@
     //- )
     el-switch.mt-1.mb-1.ml-2.d-block(
       v-if='pastFilter'
-      inactive-text='futuri'
+      inactive-text=''
+      active-text='anche appuntamenti fissi'
+      inactive-color='lightgreen'
+      v-model='showRecurrent'
+    )
+    el-switch.mt-1.mb-1.ml-2.d-block(
+      v-if='recurrentFilter'
+      inactive-text='solo futuri'
       active-text='anche passati'
       inactive-color='lightgreen'
       v-model='showPast'
-    )
+    )    
     no-ssr
       el-select.search(v-model='filter'
         multiple 
@@ -33,24 +40,25 @@ export default {
   },
   name :'Search',
   props: {
-    pastFilter: Boolean
+    pastFilter: Boolean,
+    recurrentFilter: Boolean
   },
-  methods: mapActions(['setSearchPlaces', 'setSearchTags', 'showPastEvents']),
+  methods: mapActions(['setSearchPlaces', 'setSearchTags', 'showPastEvents', 'showRecurrentEvents']),
   computed: {
-    ...mapState(['tags', 'places', 'filters', 'show_past_events']),
+    ...mapState(['tags', 'places', 'filters']),
     // TOFIX: optimize
     keywords () {
       const tags = this.tags.map( t => ({ value: 't' + t.tag, label: t.tag, weigth: t.weigth }))
       const places = this.places.map( p => ({ value: 'p' + p.id, label: p.name, weigth: p.weigth }))
       return tags.concat(places).sort((a, b) => b.weigth-a.weigth)
     },
-    showPast : {
-      set (value) {
-        this.showPastEvents(value)
-      },
-      get () {
-        return this.filters.show_past_events
-      }
+    showPast: {
+      set (value) { this.showPastEvents(value) },
+      get () { return this.filters.show_past_events }
+    },
+    showRecurrent: {
+      set (value) { this.showRecurrentEvents(value) },
+      get () { return this.filters.show_recurrent_events }
     },
     filter: {
       set (filters) {
