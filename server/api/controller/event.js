@@ -177,13 +177,22 @@ const eventController = {
 
   async getAll(req, res) {
     // this is due how v-calendar shows dates
-    const start = moment().year(req.params.year).month(req.params.month)
-      .startOf('month').startOf('isoWeek')
-    let end = moment().utc().year(req.params.year).month(req.params.month).endOf('month')
+    const start = moment()
+      .year(req.params.year)
+      .month(req.params.month)
+      .startOf('month')
+      .startOf('isoWeek')
+
+    let end = moment()
+      .year(req.params.year)
+      .month(req.params.month)
+      .endOf('month')
+
     const shownDays = end.diff(start, 'days')
     if (shownDays <= 35) end = end.add(1, 'week')
     end = end.endOf('isoWeek')
-    const events = await Event.findAll({
+
+    let events = await Event.findAll({
       where: {
         is_visible: true,
         [Op.and]: [
@@ -200,7 +209,50 @@ const eventController = {
         { model: Place, required: false, attributes: ['id', 'name', 'address'] }
       ]
     })
-    res.json(events)
+
+    events = events.map(e => {
+      e.start_datetime = e.start_datetime*1000
+      e.end_datetime = e.end_datetime*1000
+      e.tags = e.tags.map(t => t.tag)
+      return e
+    })
+
+    // build singular events from a recurrent pattern from today due to
+    // specified parameters
+    function createEventsFromRecurrent(e, dueTo=null, maxEvents=20) {
+      const events = []
+      const cursor = moment()
+      const start_date = moment(e.start_datetime)
+      const frequency = e.recurrent.frequency
+      const days = e.recurrent.days
+      const ordinal = e.recurrent.ordinal
+
+      // EACH WEEK
+      if (frequency === '1w') {
+        while(true) {
+          const found = days.indexOf(cursor.day())
+          if (found) break
+          cursor.add(1, 'day')
+        }
+        
+        e.start_datetime = cursor.set('hour', e.start_datetime.hour()).set('minute', e.start_datetime.minutes())
+        while (true) {
+          if ((dueTo && cursor.isAfter(dueTo)) || events.length>maxEvents) break
+          e.start_datetime = cursor.unix()
+          events.push(e)
+          cursors.add(1, 'week')
+        }
+      }
+
+      // EACH TWO WEEKS
+
+      return events
+    }
+
+    const normalEvents = events.filter(e => !e.recurrent)
+    const recurrentEvents = events.filter(e => e.recurrent).map(createEventsFromRecurrent)
+
+    res.json(normalEvents.concat(recurrentEvents))
   }
 
 }
