@@ -1,6 +1,6 @@
 {
   "name": "gancio",
-  "version": "0.9.28",
+  "version": "0.9.29",
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
@@ -61,7 +61,8 @@
     "nuxt": "^2.8.1",
     "nuxt-i18n": "^5.12.4",
     "pg": "^7.11.0",
-    "sequelize": "^5.8.7",
+    "sass-loader": "^7.1.0",
+    "sequelize": "^5.9.4",
     "sequelize-cli": "^5.4.0",
     "sharp": "^0.22.0",
     "sqlite3": "^4.0.8",
