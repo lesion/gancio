@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-menu.d-flex.nav(mode='horizontal' router background-color="#222C32")
+  el-menu.d-flex.nav(mode='horizontal' background-color="#222C32")
 
     nuxt-link(to='/about')
       el-menu-item(:title="$t('common.info')")
@@ -33,8 +33,9 @@
       el-menu-item(:title="$t('common.share')")
         v-icon(name='share' color='yellow')
 
-    el-menu-item(v-if='$auth.loggedIn' @click='logout' :title="$t('common.logout')")
-      v-icon(color='red' name='sign-out-alt')
+    nuxt-link(to='#')
+      el-menu-item(v-if='$auth.loggedIn' @click='logout' :title="$t('common.logout')")
+        v-icon(color='red' name='sign-out-alt')
 
 </template>
 <script>

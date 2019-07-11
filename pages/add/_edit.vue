@@ -25,7 +25,6 @@
               default-first-option
             )
               el-option(v-for='place in places' :label='place.name' :value='place.name' :key='place.id')
-                span {{place.name}}
             div {{$t("common.address")}}
             el-input.mb-3(ref='address' v-model='event.place.address'
               :disabled='places_name.indexOf(event.place.name)>-1'

@@ -3,7 +3,9 @@ p Dove: #{event.place.name} - #{event.place.address}
 p Quando: #{datetime(event.start_datetime*1000)}
 br
 if event.image_path
-  <img style="width: 100%; max-height: 89vh; margin: 0 auto;" src="#{config.baseurl}/media/#{event.image_path}" />
+  <center>
+    <img style="height: 89vh; margin: 0 auto;" src="#{config.baseurl}/media/#{event.image_path}" />
+  </center>
 p #{event.description}
 
 each tag in event.tags

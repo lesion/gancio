@@ -60,6 +60,7 @@ export default {
 <style lang='less'>
   #list {
     max-width: 500px;
+    margin: 0 auto;
 
     .el-timeline {
       padding-left: 5px;
