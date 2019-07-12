@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Classic
-permalink: /seutp/classic
+permalink: /setup/classic
 parent: Setup
 ---
 
