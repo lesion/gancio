@@ -1,6 +1,6 @@
 h3 #{event.title}
 p Dove: #{event.place.name} - #{event.place.address}
-p Quando: #{datetime(event.start_datetime*1000)}
+p Quando: #{datetime(event.start_datetime)}
 br
 if event.image_path
   <center>

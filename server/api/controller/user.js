@@ -82,7 +82,8 @@ const userController = {
       start_datetime: body.start_datetime,
       end_datetime: body.end_datetime,
 
-      // publish this event if authenticated
+      recurrent: body.recurrent,
+      // publish this event only if authenticated
       is_visible: !!req.user
     }
 

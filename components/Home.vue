@@ -13,6 +13,7 @@
         a(:id='event.newDay' v-if='event.newDay')
           .d-block.d-sm-none
             el-divider {{event.start_datetime|day}}
+        //- p(style='color: white;') {{event}}
         Event(
           :id='event.start_datetime'
           :key='event.id'

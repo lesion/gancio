@@ -194,53 +194,55 @@ const eventController = {
 
     let events = await Event.findAll({
       where: {
+        // return only confirmed events
         is_visible: true,
-        [Op.and]: [
-          Sequelize.literal(`start_datetime >= ${start.unix()}`),
-          Sequelize.literal(`start_datetime <= ${end.unix()}`)
+        [Op.or]: [
+          // return all recurrent events
+          {recurrent: { [Op.ne]: null }},
+
+          // and events in specified range
+          { start_datetime: { [Op.between]: [start.unix(), end.unix()] }}
         ]
       },
-      order: [
-        ['start_datetime', 'ASC'],
-        [Tag, 'weigth', 'DESC']
-      ],
+      attributes: { exclude: ['createdAt', 'updatedAt', 'placeId' ] },
+      order: [[Tag, 'weigth', 'DESC']],
       include: [
-        { model: Tag, required: false, attributes: ['tag', 'weigth'] },
+        { model: Tag, required: false },
         { model: Place, required: false, attributes: ['id', 'name', 'address'] }
       ]
     })
 
-    events = events.map(e => {
+    events = events.map(e => e.get()).map(e => {
       e.start_datetime = e.start_datetime*1000
       e.end_datetime = e.end_datetime*1000
       e.tags = e.tags.map(t => t.tag)
       return e
     })
 
-    // build singular events from a recurrent pattern from today due to
-    // specified parameters
-    function createEventsFromRecurrent(e, dueTo=null, maxEvents=20) {
+    // build singular events from a recurrent pattern
+    function createEventsFromRecurrent(e, dueTo=null, maxEvents=8) {
       const events = []
-      const cursor = moment()
+      const recurrent = JSON.parse(e.recurrent)
+      if (!recurrent.frequency) return false
+      const cursor = moment(start)
       const start_date = moment(e.start_datetime)
-      const frequency = e.recurrent.frequency
-      const days = e.recurrent.days
-      const ordinal = e.recurrent.ordinal
+      const frequency = recurrent.frequency
+      const days = [start_date.day()]
+      const ordinal = recurrent.ordinal
 
       // EACH WEEK
       if (frequency === '1w') {
         while(true) {
           const found = days.indexOf(cursor.day())
-          if (found) break
+          if (found!==-1) break
           cursor.add(1, 'day')
         }
-        
-        e.start_datetime = cursor.set('hour', e.start_datetime.hour()).set('minute', e.start_datetime.minutes())
+        cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
         while (true) {
           if ((dueTo && cursor.isAfter(dueTo)) || events.length>maxEvents) break
-          e.start_datetime = cursor.unix()
-          events.push(e)
-          cursors.add(1, 'week')
+          e.start_datetime = cursor.unix()*1000
+          events.push( Object.assign({}, e) )
+          cursor.add(1, 'week')
         }
       }
 
@@ -249,10 +251,15 @@ const eventController = {
       return events
     }
 
-    const normalEvents = events.filter(e => !e.recurrent)
-    const recurrentEvents = events.filter(e => e.recurrent).map(createEventsFromRecurrent)
+    let allEvents = events.filter(e => !e.recurrent)
+    events.filter(e => e.recurrent).forEach(e => {
+      const events = createEventsFromRecurrent(e, end)
+      if (events)
+        allEvents = allEvents.concat(events)
+    })
 
-    res.json(normalEvents.concat(recurrentEvents))
+    // allEvents.sort((a,b) => a.start_datetime-b.start_datetime)
+    res.json(allEvents.sort((a,b) => a.start_datetime-b.start_datetime))
   }
 
 }

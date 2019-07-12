@@ -9,7 +9,13 @@ export const state = () => ({
   events: [],
   tags: [],
   places: [],
-  settings: {},
+  settings: {
+    allow_registration: true,
+    allow_anon_event: true,
+    allow_recurrent_event: true,
+    recurrent_event_visible: false,
+    allow_comments: false,
+  },
   filters: {
     tags: [],
     places: [],
@@ -83,7 +89,7 @@ export const mutations = {
     // set`past` and `newDay` flags to event
     let lastDay = null
     state.events = events.map((e) => {
-      const currentDay = moment(e.start_datetime*1000).date()
+      const currentDay = moment(e.start_datetime).date()
       e.newDay = (!lastDay || lastDay !== currentDay) && currentDay
       lastDay = currentDay      
       const end_datetime = e.end_datetime || e.start_datetime+3600*2

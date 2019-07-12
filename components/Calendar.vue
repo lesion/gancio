@@ -43,7 +43,7 @@ export default {
     ...mapState(['tags', 'filters']),
     attributes () {
       const colors = ['indigo', 'orange', 'yellow', 'green', 'teal', 'blue', 'red', 'purple', 'pink', 'grey']
-      const tags = take(this.tags, 10).map(t=>t.tag)
+      const tags = take(this.tags, 10)//.map(t=>t.tag)
       // const tags = [this.tags[0].tag, this.tags[1].tag, this.tags[2].tag, this.tags[3].tag, this.tags[4].tag, this.tags[5].tag ]
       let attributes = []
       attributes.push ({ key: 'today', dates: new Date(), highlight: { color: 'green' }})
@@ -51,7 +51,7 @@ export default {
       const that = this
       function getColor(event) {
         const color = { class: event.past && !that.filters.show_past_events ? 'past-event vc-rounded-full' : 'vc-rounded-full', color: 'blue' }
-        const tag = get(event, 'tags[0].tag')
+        const tag = get(event, 'tags[0]')
         if (!tag) return color
         const idx = tags.indexOf(tag)
         if (idx<0) return color
@@ -64,12 +64,12 @@ export default {
         .map(e => ({
           key: e.id, 
           dot: getColor(e),
-          dates: new Date(e.start_datetime*1000)})))
+          dates: new Date(e.start_datetime)})))
 
       attributes = attributes.concat(this.filteredEventsWithPast
         .filter(e => e.multidate)
         .map( e => ({ key: e.id, highlight: getColor(e), dates: { 
-          start: new Date(e.start_datetime*1000), end: new Date(e.end_datetime*1000) }})))
+          start: new Date(e.start_datetime), end: new Date(e.end_datetime) }})))
           
       return attributes
     }

@@ -102,6 +102,9 @@
           el-form-item(:label="$t('admin.allow_recurrent_event')")
             el-switch(v-model='allow_recurrent_event')
 
+          el-form-item(v-show='allow_recurrent_event' :label="$t('admin.recurrent_event_visible')")
+            el-switch(v-model='recurrent_event_visible')
+
         el-divider {{$t('admin.federation')}}
         el-form(inline @submit.native.prevent='associate_mastondon_instance' label-width='240px')
           p {{$t('admin.mastodon_description')}}
@@ -172,6 +175,18 @@ export default {
       get () { return this.settings.allow_anon_event },
       set (value) { this.setSetting({ key: 'allow_anon_event', value })}
     },
+    allow_recurrent_event: {
+      get () { return this.settings.allow_recurrent_event },
+      set (value) { this.setSetting({ key: 'allow_recurrent_event', value })}
+    },
+    recurrent_event_visible: {
+      get () { return this.settings.recurrent_event_visible },
+      set (value) { this.setSetting({ key: 'recurrent_event_visible', value })}
+    },
+    allow_comments: {
+      get () { return this.settings.allow_comments },
+      set (value) { this.setSetting({ key: 'allow_comments', value })}
+    },    
     paginatedEvents () {
       return this.events.slice((this.eventPage-1) * this.perPage,
         this.eventPage * this.perPage)

@@ -185,16 +185,26 @@ export default {
         error({ statusCode: 404, message: 'Event not found!'})
         return {}
       }
+
       data.event.place.name = event.place.name
       data.event.place.address = event.place.address || ''
       data.event.multidate = event.multidate
       if (event.multidate) {
-        data.date = { start: new Date(event.start_datetime*1000), end: new Date(event.end_datetime*1000) }
+        data.date = { start: new Date(event.start_datetime), end: new Date(event.end_datetime) }
+        data.event.type = 'multidate'
       } else {
-        data.date = new Date(event.start_datetime*1000)
+        data.event.type = 'normal'
+        data.date = new Date(event.start_datetime)
       }
-      data.time.start = moment(event.start_datetime*1000).format('HH:mm')
-      data.time.end = moment(event.end_datetime*1000).format('HH:mm')
+      
+      if (event.recurrent) {
+        data.event.type = 'recurrent'
+        const recurrent = JSON.parse(event.recurrent)
+        data.event.rec_frequency = recurrent.frequency
+      }
+
+      data.time.start = moment(event.start_datetime).format('HH:mm')
+      data.time.end = moment(event.end_datetime).format('HH:mm')
       data.event.title = event.title
       data.event.description = event.description.replace(/(<([^>]+)>)/ig, '')
       data.event.id = event.id
@@ -239,17 +249,17 @@ export default {
         const date_end = moment(this.date.end)
         return this.events.filter(e =>
           !e.multidate ?
-          date_start.isSame(e.start_datetime*1000, 'day') || 
-            date_start.isBefore(e.start_datime*1000) && date_end.isAfter(e.start_datetime*1000) :
-          date_start.isSame(e.start_datetime*1000, 'day') || date_start.isSame(e.end_datetime*1000) ||
-            date_start.isAfter(e.start_datetime*1000) && date_start.isBefore(e.end_datetime*1000))
+          date_start.isSame(e.start_datetime, 'day') || 
+            date_start.isBefore(e.start_datime) && date_end.isAfter(e.start_datetime) :
+          date_start.isSame(e.start_datetime, 'day') || date_start.isSame(e.end_datetime) ||
+            date_start.isAfter(e.start_datetime) && date_start.isBefore(e.end_datetime))
       } else {
         const date = moment(this.date)
         return this.events.filter(e =>
           !e.multidate ?
-            date.isSame(moment(e.start_datetime*1000), 'day') :
-            moment(e.start_datetime*1000).isSame(date, 'day') ||
-              moment(e.start_datetime*1000).isBefore(date) && moment(e.end_datetime*1000).isAfter(date)
+            date.isSame(moment(e.start_datetime), 'day') :
+            moment(e.start_datetime).isSame(date, 'day') ||
+              moment(e.start_datetime).isBefore(date) && moment(e.end_datetime).isAfter(date)
         )
       }
     },
@@ -260,12 +270,12 @@ export default {
 
       attributes = attributes.concat(this.filteredEvents
         .filter(e => !e.multidate)
-        .map(e => ({ key: e.id, dot: {}, dates: new Date(e.start_datetime*1000)})))
+        .map(e => ({ key: e.id, dot: {}, dates: new Date(e.start_datetime)})))
 
       attributes = attributes.concat(this.filteredEvents
         .filter(e => e.multidate)
         .map( e => ({ key: e.id, highlight: {}, dates: { 
-          start: new Date(e.start_datetime*1000), end: new Date(e.end_datetime*1000) }})))
+          start: new Date(e.start_datetime), end: new Date(e.end_datetime) }})))
       
       if (this.event.type==='recurrent' && this.event.rec_frequency && Array.isArray(this.date)) {
         const recurrent = {}
@@ -286,6 +296,13 @@ export default {
           recurrent.start = new Date(this.date[0])
         }
         if (this.event.rec_frequency === '2m') {
+          // recurrent.weeks = 1 
+          // recurrent.ordinalWeekdays = { 1: this.date.map(d => moment(d).day()+1) }
+          recurrent.days = this.date.map(d => moment(d).date())
+          recurrent.monthlyInterval = 2
+          recurrent.start = new Date(this.date[0])
+        }        
+        if (this.event.rec_frequency === '1d') {
         }
         attributes.push({name: 'recurrent', dates: recurrent, dot: { color: 'red'}})
       }
@@ -372,10 +389,11 @@ export default {
 
       if (this.event.type === 'recurrent') {
         const recurrent = {
-          frequency: this.rec_frequency,
-          days: this.rec_when,
-          ordinal: this.rec_ordinal,
+          frequency: this.event.rec_frequency,
+          days: this.event.rec_when,
+          ordinal: this.event.rec_ordinal,
         }
+        console.error('sono qui dentro type recurrent bella storia,', recurrent)
         formData.append('recurrent', JSON.stringify(recurrent))
       }
 

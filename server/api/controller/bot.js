@@ -22,7 +22,7 @@ const botController = {
     listener.on('error', botController.error)
   },
   async post(event) {
-    const status = `${event.title} @${event.place.name} ${moment(event.start_datetime*1000).format('ddd, D MMMM HH:mm')} - 
+    const status = `${event.title} @${event.place.name} ${moment(event.start_datetime).format('ddd, D MMMM HH:mm')} - 
 ${event.description.length > 200 ? event.description.substr(0, 200) + '...' : event.description} - ${event.tags.map(t => '#' + t.tag).join(' ')} ${config.baseurl}/event/${event.id}`
 
     let media
