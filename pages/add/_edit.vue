@@ -286,6 +286,9 @@ export default {
       } else {
         start_datetime = moment(this.date).set('hour', start_hour).set('minute', start_minute)
         end_datetime = moment(this.date).set('hour', end_hour).set('minute', end_minute)
+        if (end_hour<start_hour) {
+          end_datetime = end_datetime.add(1, 'day')
+        }
       }
       const formData = new FormData()
 

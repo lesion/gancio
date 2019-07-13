@@ -76,6 +76,7 @@ const userController = {
 
     const eventDetails = {
       title: body.title,
+      // remove html tag
       description: body.description ? body.description.replace(/(<([^>]+)>)/ig, '') : '',
       multidate: body.multidate,
       start_datetime: body.start_datetime,
