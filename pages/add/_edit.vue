@@ -59,7 +59,7 @@
                 el-radio-button(label="recurrent") <v-icon name='calendar-alt'/> {{$t('event.recurrent')}}
               br
               span {{$t(`event.${event.type}_description`)}}
-              el-select.ml-2(v-if='event.type==="recurrent"' v-model='event.rec_frequency' placeholder='Frequenza')
+              el-select.ml-2(v-if='event.type==="recurrent"' v-model='event.recurrent.frequency' placeholder='Frequenza')
                 el-option(label='Tutti i giorni' value='1d' key='1d')
                 el-option(label='Ogni settimana' value='1w' key='1w')
                 el-option(label='Ogni due settimane' value='2w' key='2w')
@@ -78,9 +78,10 @@
             )
 
             div.text-center.mb-2(v-if='event.type === "recurrent"')
-              span(v-if='event.rec_frequency !== "1m" && event.rec_frequency !== "2m"') {{whenPatterns}}
-              el-radio-group(v-else v-model='event.rec_detail')
-                el-radio-button(v-for='whenPattern in whenPatterns' :label='whenPattern.label' :key='whenPatterns.key')
+              span {{event.recurrent.type}}
+              span(v-if='event.recurrent.frequency !== "1m" && event.recurrent.frequency !== "2m"') {{whenPatterns}}
+              el-radio-group(v-else v-model='event.recurrent.type')
+                el-radio-button(v-for='whenPattern in whenPatterns' :label='whenPattern.key' :key='whenPatterns.key')
                   span {{whenPattern.label}}
 
             el-form.text-center(inline)
@@ -133,12 +134,8 @@ export default {
         type: 'normal',
         place: { name: '', address: '' },
         title: '', description: '', tags: [],
-        multidate: false,
         image: false,
-        recurrent: false,
-        rec_frequency: '1w',
-        rec_when: null,
-        rec_ordinal: false,
+        recurrent: { frequency: '1w', days: [], type: 'weekday' },
       },
       page: { month, year},
       fileList: [],
@@ -188,21 +185,17 @@ export default {
 
       data.event.place.name = event.place.name
       data.event.place.address = event.place.address || ''
-      data.event.multidate = event.multidate
       if (event.multidate) {
         data.date = { start: new Date(event.start_datetime), end: new Date(event.end_datetime) }
         data.event.type = 'multidate'
+      } else if (event.recurrent ) {
+        data.event.type = 'recurrent'
+        data.event.recurrent = JSON.parse(event.recurrent)
       } else {
         data.event.type = 'normal'
         data.date = new Date(event.start_datetime)
       }
       
-      if (event.recurrent) {
-        data.event.type = 'recurrent'
-        const recurrent = JSON.parse(event.recurrent)
-        data.event.rec_frequency = recurrent.frequency
-      }
-
       data.time.start = moment(event.start_datetime).format('HH:mm')
       data.time.end = moment(event.end_datetime).format('HH:mm')
       data.event.title = event.title
@@ -227,23 +220,23 @@ export default {
       const dates = this.date
       if (!dates || !dates.length) return
 
-      const freq = this.event.rec_frequency
+      const freq = this.event.recurrent.frequency
       const weekDays = uniq(map(dates, date => moment(date).format('dddd')))
       if (freq === '1w' || freq === '2w') {
         return this.$t(`event.recurrent_${freq}_days`, {days: weekDays.join(', ')})
-      }
-      if (freq === '1m' || freq === '2m') {
+      } else if (freq === '1m' || freq === '2m') {
         const days = uniq(map(dates, date => moment(date).date()))
         const n = Math.floor((days[0]-1)/7)+1
         return [
-          { label:  this.$tc(`event.recurrent_${freq}_days`, days.length, {days}) },
-          { label:  this.$tc(`event.recurrent_${freq}_ordinal`, days.length, {n: this.$t(`ordinal.${n}`), days: weekDays.join(', ')}) }
+          { label:  this.$tc(`event.recurrent_${freq}_days`, days.length, {days}), key: 'ordinal' },
+          { label:  this.$tc(`event.recurrent_${freq}_ordinal`, days.length, {n: this.$t(`ordinal.${n}`), days: weekDays.join(', ')}), key: 'weekday' }
         ]
+      } else if (freq === '1d') {
+        return this.$t('event.recurrent_each_day')
       }
-
     },
     todayEvents () {
-      if (this.event.multidate) {
+      if (this.event.type === 'multidate') {
         if (!this.date || !this.date.start) return
         const date_start = moment(this.date.start)
         const date_end = moment(this.date.end)
@@ -277,32 +270,28 @@ export default {
         .map( e => ({ key: e.id, highlight: {}, dates: { 
           start: new Date(e.start_datetime), end: new Date(e.end_datetime) }})))
       
-      if (this.event.type==='recurrent' && this.event.rec_frequency && Array.isArray(this.date)) {
+      if (this.event.type === 'recurrent' && this.event.recurrent.frequency && Array.isArray(this.date)) {
         const recurrent = {}
-        if (this.event.rec_frequency === '1w') {
-          recurrent.weekdays = this.date.map(d => moment(d).day()+1)
-          recurrent.weeklyInterval = 1
-        }
-        if (this.event.rec_frequency === '2w') {
-          recurrent.weekdays = this.date.map(d => moment(d).day()+1)
-          recurrent.weeklyInterval = 2
+        const frequency = this.event.recurrent.frequency
+        if (frequency === '1w' || frequency === '2w') {
+          recurrent.weekdays = uniq(map(this.date, d => moment(d).day()+1 ))
+          recurrent.weeklyInterval = frequency[0]*1
           recurrent.start = new Date(this.date[0])
         }
-        if (this.event.rec_frequency === '1m') {
-          // recurrent.weeks = 1 
-          // recurrent.ordinalWeekdays = { 1: this.date.map(d => moment(d).day()+1) }
-          recurrent.days = this.date.map(d => moment(d).date())
-          recurrent.monthlyInterval = 1
+        if (frequency === '1m' || frequency === '2m') {
+          if (!this.date || !this.date.length) return attributes
+          if (this.event.recurrent.type === 'weekday') {
+            const days = uniq(map(this.date, d => moment(d).date()))
+            const n = Math.floor((days[0]-1)/7)+1
+            recurrent.ordinalWeekdays = { [n]: this.date.map(d => moment(d).day()+1) }
+          } else if (this.event.recurrent.type === 'ordinal') {
+            recurrent.days = uniq(map(this.date, d => moment(d).date()))
+          }
+          recurrent.monthlyInterval = frequency[0]*1
           recurrent.start = new Date(this.date[0])
         }
-        if (this.event.rec_frequency === '2m') {
-          // recurrent.weeks = 1 
-          // recurrent.ordinalWeekdays = { 1: this.date.map(d => moment(d).day()+1) }
-          recurrent.days = this.date.map(d => moment(d).date())
-          recurrent.monthlyInterval = 2
-          recurrent.start = new Date(this.date[0])
-        }        
-        if (this.event.rec_frequency === '1d') {
+        if (this.event.recurrent.frequency === '1d') {
+          recurrent.dailyInterval = 1
         }
         attributes.push({name: 'recurrent', dates: recurrent, dot: { color: 'red'}})
       }
@@ -333,6 +322,14 @@ export default {
   },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
+    recurrentDays () {
+      if (this.event.type !== 'recurrent' || !this.date || !this.date.length) return
+      const type = this.event.recurrent.type
+      if (type === 'ordinal')
+        return map(this.date, d => moment(d).date() )
+      else if (type === 'weekday') 
+        return map(this.date, moment(d).day()+1 )
+    },    
     next () {
       this.activeTab = String(Number(this.activeTab)+1)
       if (this.activeTab === "2") {
@@ -362,17 +359,27 @@ export default {
         this.time.end = (Number(start_hour)+2) + ':' + start_minute
       }
       const [ end_hour, end_minute ] = this.time.end.split(':')
-      if (this.event.multidate) {
+      if (this.event.type === 'multidate') {
         start_datetime = moment(this.date.start)
           .set('hour', start_hour).set('minute', start_minute)
         end_datetime = moment(this.date.end)
           .set('hour', end_hour).set('minute', end_minute)
-      } else {
+      } else if (this.event.type === 'normal') {
         start_datetime = moment(this.date).set('hour', start_hour).set('minute', start_minute)
         end_datetime = moment(this.date).set('hour', end_hour).set('minute', end_minute)
         if (end_hour<start_hour) {
           end_datetime = end_datetime.add(1, 'day')
         }
+      } else if (this.event.type === 'recurrent') {
+        start_datetime = moment().set('hour', start_hour).set('minute', start_minute)
+        end_datetime = moment().set('hour', end_hour).set('minute', end_minute)
+        const recurrent = {
+          frequency: this.event.recurrent.frequency,
+          days: this.event.recurrent.type === 'ordinal' ? map(this.date, d => moment(d).date() ) : map(this.date, d => moment(d).day()+1 ),
+          type: this.event.recurrent.type,
+        }
+        formData.append('recurrent', JSON.stringify(recurrent))
+
       }
       const formData = new FormData()
 
@@ -383,19 +390,9 @@ export default {
       formData.append('place_name', this.event.place.name)
       formData.append('place_address', this.event.place.address)
       formData.append('description', this.event.description)
-      formData.append('multidate', this.event.multidate)
+      formData.append('multidate', this.event.type === 'multidate')
       formData.append('start_datetime', start_datetime.unix())
       formData.append('end_datetime', end_datetime.unix())
-
-      if (this.event.type === 'recurrent') {
-        const recurrent = {
-          frequency: this.event.rec_frequency,
-          days: this.event.rec_when,
-          ordinal: this.event.rec_ordinal,
-        }
-        console.error('sono qui dentro type recurrent bella storia,', recurrent)
-        formData.append('recurrent', JSON.stringify(recurrent))
-      }
 
       if (this.edit) {
         formData.append('id', this.event.id)

@@ -146,6 +146,9 @@ export const actions = {
     const settings = await app.$axios.$get('/settings')
     commit('setSettings', settings)
 
+    // apply settings
+    commit('showRecurrentEvents', settings.recurrent_event_visible)
+
     const lang = req.acceptsLanguages('en', 'it')
     commit('setLocale', lang || 'it')
   },

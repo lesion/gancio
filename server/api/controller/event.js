@@ -228,7 +228,7 @@ const eventController = {
       const start_date = moment(e.start_datetime)
       const frequency = recurrent.frequency
       const days = [start_date.day()]
-      const ordinal = recurrent.ordinal
+      const type = recurrent.type
 
       // EACH WEEK
       if (frequency === '1w') {
@@ -247,6 +247,20 @@ const eventController = {
       }
 
       // EACH TWO WEEKS
+      if (frequency === '2w') {
+        while(true) {
+          const found = days.indexOf(cursor.day())
+          if (found!==-1) break
+          cursor.add(1, 'day')
+        }
+        cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
+        while (true) {
+          if ((dueTo && cursor.isAfter(dueTo)) || events.length>maxEvents) break
+          e.start_datetime = cursor.unix()*1000
+          events.push( Object.assign({}, e) )
+          cursor.add(1, 'week')
+        }
+      }
 
       return events
     }
