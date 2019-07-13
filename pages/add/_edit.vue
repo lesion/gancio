@@ -59,7 +59,11 @@
                 el-radio-button(label="recurrent") <v-icon name='calendar-alt'/> {{$t('event.recurrent')}}
               br
               span {{$t(`event.${event.type}_description`)}}
+<<<<<<< HEAD
               el-select.ml-2(v-if='event.type==="recurrent"' v-model='event.recurrent.frequency' placeholder='Frequenza')
+=======
+              el-select.ml-2(v-if='event.type==="recurrent"' v-model='event.rec_frequency' placeholder='Frequenza')
+>>>>>>> doc
                 el-option(label='Tutti i giorni' value='1d' key='1d')
                 el-option(label='Ogni settimana' value='1w' key='1w')
                 el-option(label='Ogni due settimane' value='2w' key='2w')
@@ -78,10 +82,16 @@
             )
 
             div.text-center.mb-2(v-if='event.type === "recurrent"')
+<<<<<<< HEAD
               span {{event.recurrent.type}}
               span(v-if='event.recurrent.frequency !== "1m" && event.recurrent.frequency !== "2m"') {{whenPatterns}}
               el-radio-group(v-else v-model='event.recurrent.type')
                 el-radio-button(v-for='whenPattern in whenPatterns' :label='whenPattern.key' :key='whenPatterns.key')
+=======
+              span(v-if='event.rec_frequency !== "1m" && event.rec_frequency !== "2m"') {{whenPatterns}}
+              el-radio-group(v-else v-model='event.rec_detail')
+                el-radio-button(v-for='whenPattern in whenPatterns' :label='whenPattern.label' :key='whenPatterns.key')
+>>>>>>> doc
                   span {{whenPattern.label}}
 
             el-form.text-center(inline)
@@ -134,8 +144,17 @@ export default {
         type: 'normal',
         place: { name: '', address: '' },
         title: '', description: '', tags: [],
+<<<<<<< HEAD
         image: false,
         recurrent: { frequency: '1w', days: [], type: 'weekday' },
+=======
+        multidate: false,
+        image: false,
+        recurrent: false,
+        rec_frequency: '1w',
+        rec_when: null,
+        rec_ordinal: false,
+>>>>>>> doc
       },
       page: { month, year},
       fileList: [],
@@ -220,6 +239,7 @@ export default {
       const dates = this.date
       if (!dates || !dates.length) return
 
+<<<<<<< HEAD
       const freq = this.event.recurrent.frequency
       const weekDays = uniq(map(dates, date => moment(date).format('dddd')))
       if (freq === '1w' || freq === '2w') {
@@ -234,6 +254,22 @@ export default {
       } else if (freq === '1d') {
         return this.$t('event.recurrent_each_day')
       }
+=======
+      const freq = this.event.rec_frequency
+      const weekDays = uniq(map(dates, date => moment(date).format('dddd')))
+      if (freq === '1w' || freq === '2w') {
+        return this.$t(`event.recurrent_${freq}_days`, {days: weekDays.join(', ')})
+      }
+      if (freq === '1m' || freq === '2m') {
+        const days = uniq(map(dates, date => moment(date).date()))
+        const n = Math.floor((days[0]-1)/7)+1
+        return [
+          { label:  this.$tc(`event.recurrent_${freq}_days`, days.length, {days}) },
+          { label:  this.$tc(`event.recurrent_${freq}_ordinal`, days.length, {n: this.$t(`ordinal.${n}`), days: weekDays.join(', ')}) }
+        ]
+      }
+
+>>>>>>> doc
     },
     todayEvents () {
       if (this.event.type === 'multidate') {
@@ -268,6 +304,7 @@ export default {
       attributes = attributes.concat(this.filteredEvents
         .filter(e => e.multidate)
         .map( e => ({ key: e.id, highlight: {}, dates: { 
+<<<<<<< HEAD
           start: new Date(e.start_datetime), end: new Date(e.end_datetime) }})))
       
       if (this.event.type === 'recurrent' && this.event.recurrent.frequency && Array.isArray(this.date)) {
@@ -292,6 +329,29 @@ export default {
         }
         if (this.event.recurrent.frequency === '1d') {
           recurrent.dailyInterval = 1
+=======
+          start: new Date(e.start_datetime*1000), end: new Date(e.end_datetime*1000) }})))
+      
+      if (this.event.type==='recurrent' && this.event.rec_frequency && Array.isArray(this.date)) {
+        const recurrent = {}
+        if (this.event.rec_frequency === '1w') {
+          recurrent.weekdays = this.date.map(d => moment(d).day()+1)
+          recurrent.weeklyInterval = 1
+        }
+        if (this.event.rec_frequency === '2w') {
+          recurrent.weekdays = this.date.map(d => moment(d).day()+1)
+          recurrent.weeklyInterval = 2
+          recurrent.start = new Date(this.date[0])
+        }
+        if (this.event.rec_frequency === '1m') {
+          // recurrent.weeks = 1 
+          // recurrent.ordinalWeekdays = { 1: this.date.map(d => moment(d).day()+1) }
+          recurrent.days = this.date.map(d => moment(d).date())
+          recurrent.monthlyInterval = 1
+          recurrent.start = new Date(this.date[0])
+        }
+        if (this.event.rec_frequency === '2m') {
+>>>>>>> doc
         }
         attributes.push({name: 'recurrent', dates: recurrent, dot: { color: 'red'}})
       }
@@ -394,6 +454,18 @@ export default {
       formData.append('start_datetime', start_datetime.unix())
       formData.append('end_datetime', end_datetime.unix())
 
+<<<<<<< HEAD
+=======
+      if (this.event.type === 'recurrent') {
+        const recurrent = {
+          frequency: this.rec_frequency,
+          days: this.rec_when,
+          ordinal: this.rec_ordinal,
+        }
+        formData.append('recurrent', JSON.stringify(recurrent))
+      }
+
+>>>>>>> doc
       if (this.edit) {
         formData.append('id', this.event.id)
       }
