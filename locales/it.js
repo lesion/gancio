@@ -145,7 +145,8 @@ const it = {
     allow_registration_description : 'Vuoi abilitare la registrazione?',
     allow_anon_event: 'Si possono inserire eventi anonimi (previa conferma)?',
     allow_comments: 'Abilita commenti',
-    allow_recurrent_event: 'Abilita eventi ricorrenti'
+    allow_recurrent_event: 'Abilita eventi fissi',
+    recurrent_event_visible: 'Appuntamenti fissi visibili di default'
   },
 
   auth: {

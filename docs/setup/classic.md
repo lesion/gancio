@@ -17,18 +17,28 @@ apt-get install -y nodejs
 ```bash
 npm install --global gancio
 ```
-
-3. Setup
-```bash
-gancio setup
+3. Create database (optional)
+```sql
+apt install postgresql
+sudo -u postgres psql
+postgres=# create database gancio;
+postgres=# create user gancio with encrypted password 'gancio';
+postgres=# grant all privileges on database gancio to gancio;
 ```
 
-4. Start
+4. Create a new user
 ```bash
+adduser gancio
+su gancio
+```
+
+5. Setup & test
+```bash
+gancio --help
+gancio setup
 gancio start
 ```
-5. Enjoy :tada:  
+
+6. Enjoy :tada:  
 Point your web browser to [http://localhost:3000](http://localhost:3000)
-
-
 

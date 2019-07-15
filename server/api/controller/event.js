@@ -220,47 +220,53 @@ const eventController = {
     })
 
     // build singular events from a recurrent pattern
-    function createEventsFromRecurrent(e, dueTo=null, maxEvents=8) {
+    function createEventsFromRecurrent(e, dueTo=null) {
       const events = []
       const recurrent = JSON.parse(e.recurrent)
       if (!recurrent.frequency) return false
       const cursor = moment(start)
       const start_date = moment(e.start_datetime)
+      const duration = moment(e.end_datetime).diff(start_date, 's')
       const frequency = recurrent.frequency
-      const days = [start_date.day()]
+      const days = recurrent.days
       const type = recurrent.type
 
-      // EACH WEEK
-      if (frequency === '1w') {
+      // default frequency is '1d' => each day
+      const toAdd = { n: 1, unit: 'day'}
+      
+      // each week or 2 (search for the first specified day)
+      if (frequency === '1w' || frequency === '2w') {
         while(true) {
           const found = days.indexOf(cursor.day())
           if (found!==-1) break
           cursor.add(1, 'day')
         }
-        cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
-        while (true) {
-          if ((dueTo && cursor.isAfter(dueTo)) || events.length>maxEvents) break
-          e.start_datetime = cursor.unix()*1000
-          events.push( Object.assign({}, e) )
-          cursor.add(1, 'week')
+        if (frequency === '2w') {
+          const nWeeks = cursor.diff(start_datetime, 'w')%2
+          if (nWeeks) cursor.add(1, 'week')
         }
+        toAdd.n = Number(frequency[0])
+        toAdd.unit = 'week';
+        cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
       }
 
-      // EACH TWO WEEKS
-      if (frequency === '2w') {
-        while(true) {
-          const found = days.indexOf(cursor.day())
-          if (found!==-1) break
-          cursor.add(1, 'day')
-        }
-        cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
-        while (true) {
-          if ((dueTo && cursor.isAfter(dueTo)) || events.length>maxEvents) break
-          e.start_datetime = cursor.unix()*1000
-          events.push( Object.assign({}, e) )
-          cursor.add(1, 'week')
-        }
+      // each month or 2
+      // if (frequency === '1m' || frequency === '2m') {
+      //   // find first match
+      //   if (type) {
+          
+      //   }
+      // }
+
+      // add event at specified frequency 
+      while (true) {
+        if (dueTo && cursor.isAfter(dueTo)) break
+        e.start_datetime = cursor.unix()*1000
+        e.end_datetime = e.start_datetime+(duration*1000)// cursor.clone().hour(end_datetime.hour()).minute(end_datetime.minute()).unix()*1000
+        events.push( Object.assign({}, e) )
+        cursor.add(toAdd.n, toAdd.unit)
       }
+
 
       return events
     }
