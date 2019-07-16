@@ -25,6 +25,9 @@ import 'vue-awesome/icons/chevron-right'
 import 'vue-awesome/icons/chevron-left'
 import 'vue-awesome/icons/search'
 import 'vue-awesome/icons/times'
+import 'vue-awesome/icons/calendar-day'
+import 'vue-awesome/icons/calendar-week'
+import 'vue-awesome/icons/calendar-alt'
 
 import Icon from 'vue-awesome/components/Icon'
 

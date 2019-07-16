@@ -73,7 +73,9 @@ export default {
     }
   },
   methods: {
-    // TODO
+    copy (msg) {
+     this.$copyText(msg).then(e => console.error('ok ', e)).catch(e => console.error('err ',e)) 
+    },
     async add_notification () {
       if (!this.notification.email){
         Message({message:'Inserisci una mail', showClose: true, type: 'error'})

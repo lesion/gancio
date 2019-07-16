@@ -89,20 +89,28 @@
           v-icon(name='cog')
           span  {{$t('common.settings')}}
 
-        el-form(inline @submit.native.prevent='associate_mastondon_instance' label-width='140px')
+        el-form(inline label-width="400px")
+
+          //- allow open registration
+          el-form-item(:label="$t('admin.allow_registration_description')")
+            el-switch(name='reg' v-model='allow_registration')
+
+          //- allow anon event
+          el-form-item(:label="$t('admin.allow_anon_event')")
+            el-switch(v-model='allow_anon_event')
+
+          el-form-item(:label="$t('admin.allow_recurrent_event')")
+            el-switch(v-model='allow_recurrent_event')
+
+        el-divider {{$t('admin.federation')}}
+        el-form(inline @submit.native.prevent='associate_mastondon_instance' label-width='240px')
           p {{$t('admin.mastodon_description')}}
           el-form-item(:label='$t("admin.mastodon_instance")')
             el-input(v-model="mastodon_instance")
           el-form-item
             el-button(native-type='submit' type='success' :disabled='!mastodon_instance') {{$t('common.associate')}}
-          hr
-          p {{$t('admin.allow_registration_description')}}
-          el-form-item(:label="allow_registration?$t('common.disable'):$t('common.enable')")
-            el-switch(v-model='allow_registration')
-          p {{$t('admin.allow_anon_event')}}
-          el-form-item(:label="allow_anon_event?$t('common.disable'):$t('common.enable')")
-            el-switch(v-model='allow_anon_event')
-
+          el-form-item(:label="$t('admin.allow_comments')")
+            el-switch(v-model='allow_comments')
 
 </template>
 <script>

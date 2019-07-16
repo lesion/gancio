@@ -103,10 +103,7 @@ const it = {
       tratta di un evento adatto a questo spazio, delegando questa scelta. Inoltre non sarà possibile modificarlo.<br/><br/> 
       Puoi invece fare il <a href='/login'>login</a> o <a href='/registrarti'>registrarti</a>,
       altrimenti vai avanti e riceverai una risposta il prima possibile. `,
-    multidate_description: 'tanti giorni',
-    date_description: `Quand'è il gancio?`,
-    dates_description: 'Che giorni?',
-    same_day: 'stesso giorno',
+    same_day: 'Stesso giorno',
     what_description: 'Nome evento',
     description_description: 'Descrizione, dajene di copia/incolla',
     tag_description: 'Tag...',
@@ -118,7 +115,21 @@ const it = {
     where_description: `Dov'è il gancio? Se il posto non è presente, scrivilo e <b>premi invio</b>. `,
     confirmed: 'Evento confermato',
     not_found: 'Evento non trovato',
-    remove_confirmation: `Sicura di voler eliminare questo evento?`
+    remove_confirmation: `Sicura di voler eliminare questo evento?`,
+    recurrent: `Ricorrente`,
+    recurrent_description: 'Scegli la frequenza e seleziona i giorni',
+    multidate_description: 'Un festival o una tre giorni?  Scegli quando comincia e quando finisce.',
+    multidate: 'Più giorni',
+    normal: 'Normale',
+    normal_description: 'Scegli il giorno.',
+    recurrent_1w_days: 'Ogni {days}',
+    recurrent_2w_days: 'Un {days} ogni due',
+    recurrent_1m_days: '|Il giorno {days} di ogni mese|I giorni {days} di ogni mese',
+    recurrent_2m_days: '|Il giorno {days} ogni due mesi|I giorni {days} ogni due mesi',
+    recurrent_1m_ordinal: 'Il {n} {days} di ogni mese',
+    recurrent_2m_ordinal: 'Il {n} {days} un mese sì e uno no',
+    due: 'alle',
+    from: 'Dalle'
   },
 
   admin: {
@@ -132,7 +143,9 @@ const it = {
     user_remove_ok: 'Utente eliminato',
     user_create_ok: 'Utente creato',
     allow_registration_description : 'Vuoi abilitare la registrazione?',
-    allow_anon_event: 'Si possono inserire eventi anonimi (previa conferma)?'
+    allow_anon_event: 'Si possono inserire eventi anonimi (previa conferma)?',
+    allow_comments: 'Abilita commenti',
+    allow_recurrent_event: 'Abilita eventi ricorrenti'
   },
 
   auth: {
@@ -150,6 +163,15 @@ const it = {
 
   err: {
     register_error: 'Errore nella registrazione'
+  },
+
+  ordinal: {
+    1: 'primo',
+    2: 'secondo',
+    3: 'terzo',
+    4: 'quarto',
+    5: 'quinto',
+    [-1]: 'ultimo',
   },
 
   about: `
