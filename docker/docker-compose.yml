@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db:/var/lib/postgres
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - POSTGRES_USER=gancio
+      - POSTGRES_DB=gancio
+      - POSTGRES_PASSWORD=gancio
+    restart: always
+    ports:
+        - 5432:5432
+  gancio:
+    build: .
+    image: node:latest
+    container_name: gancio
+    command: gancio start /gancio/config.json
+    volumes:
+      - ./db.sqlite:/gancio/db.sqlite
+      - ./config.json:/gancio/config.json
+      - ./uploads:/gancio/uploads
+    depends_on: 
+        - db
+    ports:
+      - 13120:13120
+volumes:
+    db:
+    gancio:
