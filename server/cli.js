@@ -188,7 +188,7 @@ require('yargs')
 .option('config', { 
   alias: 'c',
   describe: 'Configuration file',
-  default: './gancio_config.json',
+  default: '/gancio/config.json',
 })
 .coerce('config', config_path => {
   const absolute_config_path = path.resolve(cwd, config_path)

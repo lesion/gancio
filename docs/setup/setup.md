@@ -4,9 +4,13 @@ title: Setup
 permalink: /setup
 has_children: true
 nav_order: 2
+has_toc: false
 ---
 
 # Setup
 
-You would setup **Gancio** for different scenario
-{: .fs-6 }
+
+- ## [Setup with docker](/setup/docker)
+- ## [Classic setup](/setup/classic)
+- ## [Nginx as a proxy](/setup/nginx)
+- ## [Hacking & contribute](/dev)
