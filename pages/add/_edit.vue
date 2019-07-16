@@ -14,6 +14,23 @@
             p(v-html="$t('event.anon_description')")
             el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
 
+          //- WHAT
+          el-tab-pane
+            span(slot='label') {{$t('common.what')}} <v-icon name='file-alt'/>
+            span {{$t('event.what_description')}}
+            el-input.mb-3(v-model='event.title' ref='title')
+            span {{$t('event.description_description')}}
+            el-input.mb-3(v-model='event.description' type='textarea' :rows='9')
+            span {{$t('event.tag_description')}}
+            br
+            el-select(v-model='event.tags' multiple filterable allow-create
+              default-first-option placeholder='Tag')
+              el-option(v-for='tag in tags' :key='tag'
+                :label='tag' :value='tag')
+
+            el-button.float-right(@click.native='next' :disabled='!couldProceed') {{$t('common.next')}}
+
+
           //- WHERE
           el-tab-pane
             span(slot='label') <v-icon name='map-marker-alt'/> {{$t('common.where')}}
@@ -34,49 +51,49 @@
           //- WHEN
           el-tab-pane
             span(slot='label') {{$t('common.when')}} <v-icon name='clock'/>
-            span {{event.multidate ? $t('event.dates_description') : $t('event.date_description')}}
-              el-switch.float-right(v-model='event.multidate' :active-text="$t('event.multidate_description')")
-              //- el-switch.float-right(v-model='event.recurrent' :active-text="$t('event.recurrent_description')")
 
-            v-date-picker.mb-3(
-              :mode='event.multidate ? "range" : "single"'
+            .text-center
+              el-radio-group(v-model="event.type")
+                el-radio-button(label="normal") <v-icon name='calendar-day'/> {{$t('event.normal')}}
+                el-radio-button(label="multidate") <v-icon name='calendar-week'/> {{$t('event.multidate')}}
+                el-radio-button(label="recurrent") <v-icon name='calendar-alt'/> {{$t('event.recurrent')}}
+              br
+              span {{$t(`event.${event.type}_description`)}}
+              el-select.ml-2(v-if='event.type==="recurrent"' v-model='event.rec_frequency' placeholder='Frequenza')
+                el-option(label='Tutti i giorni' value='1d' key='1d')
+                el-option(label='Ogni settimana' value='1w' key='1w')
+                el-option(label='Ogni due settimane' value='2w' key='2w')
+                el-option(label='Ogni mese' value='1m' key='1m')
+                el-option(label='Ogni due mesi' value='2m' key='2m')
+
+            v-date-picker.mb-2.mt-3(
+              :mode='event.type === "multidate" ? "range" : event.type === "recurrent" ? "multiple" : "single"'
               :attributes='attributes'
               v-model='date'
               :locale='$i18n.locale'
               :from-page.sync='page'
               is-inline
               is-expanded
-              :min-date='new Date()'
+              :min-date='event.type !== "recurrent" && new Date()'
             )
 
-            el-row
-              el-col(:span='12')
-                div {{$t('event.time_start_description')}}
-                el-time-select.mb-3(ref='time_start'
+            div.text-center.mb-2(v-if='event.type === "recurrent"')
+              span(v-if='event.rec_frequency !== "1m" && event.rec_frequency !== "2m"') {{whenPatterns}}
+              el-radio-group(v-else v-model='event.rec_detail')
+                el-radio-button(v-for='whenPattern in whenPatterns' :label='whenPattern.label' :key='whenPatterns.key')
+                  span {{whenPattern.label}}
+
+            el-form.text-center(inline)
+              el-form-item(:label="$t('event.from')")
+                el-time-select.mr-2(ref='time_start'
                   v-model="time.start"
                   :picker-options="{ start: '00:00', step: '00:30', end: '24:00'}")
-                div {{$t('event.time_end_description')}}
+              el-form-item(:label="$t('event.due')")
                 el-time-select(v-model='time.end'
                   :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
-              el-col(:span='12')
-                List(:events='todayEvents' :title='$t("event.same_day")')
-            el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
-
-          //- WHAT
-          el-tab-pane
-            span(slot='label') {{$t('common.what')}} <v-icon name='file-alt'/>
-            span {{$t('event.what_description')}}
-            el-input.mb-3(v-model='event.title' ref='title')
-            span {{$t('event.description_description')}}
-            el-input.mb-3(v-model='event.description' type='textarea' :rows='9')
-            span {{$t('event.tag_description')}}
-            br
-            el-select(v-model='event.tags' multiple filterable allow-create
-              default-first-option placeholder='Tag')
-              el-option(v-for='tag in tags' :key='tag'
-                :label='tag' :value='tag')
-
-            el-button.float-right(@click.native='next' :disabled='!couldProceed') {{$t('common.next')}}
+            
+            List(v-if='event.type==="normal"' :events='todayEvents' :title='$t("event.same_day")')
+            el-button.float-right(@click='next' type='succes' :disabled='!couldProceed') {{$t('common.next')}}
 
           el-tab-pane
             span(slot='label') {{$t('common.media')}} <v-icon name='image'/>
@@ -96,6 +113,8 @@
 </template>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import uniq from 'lodash/uniq'
+import map from 'lodash/map'
 import moment from 'dayjs'
 import List from '@/components/List'
 import { Message } from 'element-ui'
@@ -111,10 +130,15 @@ export default {
     const year = moment().year()
     return {
       event: {
+        type: 'normal',
         place: { name: '', address: '' },
         title: '', description: '', tags: [],
         multidate: false,
-        image: false
+        image: false,
+        recurrent: false,
+        rec_frequency: '1w',
+        rec_when: null,
+        rec_ordinal: false,
       },
       page: { month, year},
       fileList: [],
@@ -129,6 +153,7 @@ export default {
   name: 'newEvent',
   watch: {
     'time.start' (value) {
+      if (!value) return
       let [h, m] = value.split(':')
       this.time.end = (Number(h)+1) + ':' + m
     },
@@ -186,8 +211,27 @@ export default {
       places_name: state => state.places.map(p => p.name ).sort((a, b) => b.weigth-a.weigth),
       places: state => state.places,
       user: state => state.user,
-      events: state => state.events
+      events: state => state.events,
     }),
+    whenPatterns () {
+      const dates = this.date
+      if (!dates || !dates.length) return
+
+      const freq = this.event.rec_frequency
+      const weekDays = uniq(map(dates, date => moment(date).format('dddd')))
+      if (freq === '1w' || freq === '2w') {
+        return this.$t(`event.recurrent_${freq}_days`, {days: weekDays.join(', ')})
+      }
+      if (freq === '1m' || freq === '2m') {
+        const days = uniq(map(dates, date => moment(date).date()))
+        const n = Math.floor((days[0]-1)/7)+1
+        return [
+          { label:  this.$tc(`event.recurrent_${freq}_days`, days.length, {days}) },
+          { label:  this.$tc(`event.recurrent_${freq}_ordinal`, days.length, {n: this.$t(`ordinal.${n}`), days: weekDays.join(', ')}) }
+        ]
+      }
+
+    },
     todayEvents () {
       if (this.event.multidate) {
         if (!this.date || !this.date.start) return
@@ -222,6 +266,29 @@ export default {
         .filter(e => e.multidate)
         .map( e => ({ key: e.id, highlight: {}, dates: { 
           start: new Date(e.start_datetime*1000), end: new Date(e.end_datetime*1000) }})))
+      
+      if (this.event.type==='recurrent' && this.event.rec_frequency && Array.isArray(this.date)) {
+        const recurrent = {}
+        if (this.event.rec_frequency === '1w') {
+          recurrent.weekdays = this.date.map(d => moment(d).day()+1)
+          recurrent.weeklyInterval = 1
+        }
+        if (this.event.rec_frequency === '2w') {
+          recurrent.weekdays = this.date.map(d => moment(d).day()+1)
+          recurrent.weeklyInterval = 2
+          recurrent.start = new Date(this.date[0])
+        }
+        if (this.event.rec_frequency === '1m') {
+          // recurrent.weeks = 1 
+          // recurrent.ordinalWeekdays = { 1: this.date.map(d => moment(d).day()+1) }
+          recurrent.days = this.date.map(d => moment(d).date())
+          recurrent.monthlyInterval = 1
+          recurrent.start = new Date(this.date[0])
+        }
+        if (this.event.rec_frequency === '2m') {
+        }
+        attributes.push({name: 'recurrent', dates: recurrent, dot: { color: 'red'}})
+      }
       return attributes
     },
     disableAddress () {
@@ -233,12 +300,12 @@ export default {
         case 0+t:
           return true
         case 1+t:
+          return this.event.title.length>0
+        case 2+t:
           return this.event.place.name.length>0 &&
             this.event.place.address.length>0
-        case 2+t:
-          if (this.date && this.time.start) return true
         case 3+t:
-          return this.event.title.length>0
+          if (this.date && this.time.start) return true
         case 4+t:
           return this.event.place.name.length>0 &&
             this.event.place.address.length>0 &&
@@ -302,6 +369,16 @@ export default {
       formData.append('multidate', this.event.multidate)
       formData.append('start_datetime', start_datetime.unix())
       formData.append('end_datetime', end_datetime.unix())
+
+      if (this.event.type === 'recurrent') {
+        const recurrent = {
+          frequency: this.rec_frequency,
+          days: this.rec_when,
+          ordinal: this.rec_ordinal,
+        }
+        formData.append('recurrent', JSON.stringify(recurrent))
+      }
+
       if (this.edit) {
         formData.append('id', this.event.id)
       }

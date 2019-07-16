@@ -1,6 +1,10 @@
-'use strict'
 module.exports = (sequelize, DataTypes) => {
   const event = sequelize.define('event', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     title: DataTypes.STRING,
     slug: DataTypes.STRING,
     description: DataTypes.TEXT,
@@ -19,6 +23,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(18),
       index: true
     },
+    recurrent: DataTypes.JSON,
+    // parent: DataTypes.INTEGER
   }, {})
 
   event.associate = function (models) {

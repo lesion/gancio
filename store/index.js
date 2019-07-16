@@ -1,16 +1,15 @@
 import moment from 'dayjs'
 import intersection from 'lodash/intersection'
 import map from 'lodash/map'
+import filter from 'lodash/filter'
+import find from 'lodash/find'
 
 export const state = () => ({
-  // config: {},
   locale: '',
   events: [],
   tags: [],
   places: [],
-  settings: {
-
-  },
+  settings: {},
   filters: {
     tags: [],
     places: [],
@@ -23,55 +22,60 @@ export const state = () => ({
 export const getters = {
 
   // filter matches search tag/place
-  filteredEvents: state => {
-    let events = state.events
+  filteredEvents:  state => {
 
-    // TOFIX: use lodash
-    if (state.filters.tags.length || state.filters.places.length) {
-      events = events.filter((e) => {
-        if (state.filters.tags.length) {
-          const m = intersection(e.tags.map(t => t.tag), state.filters.tags)
-          if (m.length > 0) return true
-        }
-        if (state.filters.places.length) {
-          if (state.filters.places.find(p => p === e.place.id)) {
-            return true
-          }
-        }
-        return 0
-      })
-    }
+    const search_for_tags = !!state.filters.tags.length
+    const search_for_places = !!state.filters.places.length
 
-    if (!state.filters.show_past_events) {
-      events = events.filter(e => !e.past)
-    }
+    return state.events.filter(e => {
 
-    return events
+      // filter past events
+      if (!state.filters.show_past_events && e.past) return false
+
+      // filter recurrent events
+      if (!state.filters.show_recurrent_events && e.recurrent) return false
+
+      if (search_for_places) {
+        if (find(state.filters.places, p => p === e.place.id)) return true
+      }
+
+      if (search_for_tags) {
+        const common_tags = intersection(map(e.tags, t => t.tag), state.filters.tags);
+        if (common_tags.length > 0) return true
+      }
+
+      if (!search_for_places && !search_for_tags) return true
+      
+      return false
+    })
   },
-  // filter matches search tag/place
-  filteredEventsWithPast: state => {
-    let events = state.events
 
-    // TOFIX: use lodash
-    if (state.filters.tags.length || state.filters.places.length) {
-      events = events.filter((e) => {
-        if (state.filters.tags.length) {
-          const m = intersection(e.tags.map(t => t.tag), state.filters.tags)
-          if (m.length > 0) return true
-        }
-        if (state.filters.places.length) {
-          if (state.filters.places.find(p => p === e.place.id)) {
-            return true
-          }
-        }
-        return 0
-      })
-    }
+  // filter matches search tag/place including past events
+  filteredEventsWithPast:  state => {
 
-    return events
+    const search_for_tags = !!state.filters.tags.length
+    const search_for_places = !!state.filters.places.length
+
+    return state.events.filter(e => {
+      const match = false
+
+      // filter recurrent events
+      if (!state.filters.show_recurrent_events && e.recurrent) return false
+
+      if (!match && search_for_places) {
+        if (find(state.filters.places, p => p === e.place.id)) return true
+      }
+
+      if (search_for_tags) {
+        const common_tags = intersection(map(e.tags, t => t.tag), state.filters.tags);
+        if (common_tags.length > 0) return true
+      }
+
+      if (!search_for_places && !search_for_tags) return true
+      
+      return false
+    })
   }
-
-
 }
 
 export const mutations = {
@@ -115,6 +119,9 @@ export const mutations = {
   showPastEvents(state, show) {
     state.filters.show_past_events = show
   },
+  showRecurrentEvents(state, show) {
+    state.filters.show_recurrent_events = show
+  },
   setSettings(state, settings) {
     state.settings = settings
   },
@@ -128,7 +135,7 @@ export const mutations = {
 
 export const actions = {
   // this method is called server side only for each request
-  // we use it to get configuration from db
+  // we use it to get configuration from db, setting locale, etc...
   async nuxtServerInit ({ commit }, { app, req } ) {
     const settings = await app.$axios.$get('/settings')
     commit('setSettings', settings)
@@ -167,6 +174,9 @@ export const actions = {
   },
   showPastEvents({ commit }, show) {
     commit('showPastEvents', show)
+  },
+  showRecurrentEvents({ commit }, show ) {
+    commit('showRecurrentEvents', show)
   },
   async setSetting({ commit }, setting) {
     await this.$axios.$post('/settings', setting )
