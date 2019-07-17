@@ -1,6 +1,6 @@
 {
   "name": "gancio",
-  "version": "0.9.31",
+  "version": "0.10.0",
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
@@ -8,6 +8,7 @@
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node server/cli.js",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "doc": "cd docs && bundle exec jekyll b",
     "precommit": "npm run lint",
     "migrate:dev": "sequelize db:migrate",
     "migrate": "NODE_ENV=production sequelize db:migrate"

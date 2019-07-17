@@ -17,14 +17,6 @@ apt-get install -y nodejs postgresql
 ```bash
 npm install --global gancio
 ```
-3. Create database (optional)
-```sql
-apt install postgresql
-sudo -u postgres psql
-postgres=# create database gancio;
-postgres=# create user gancio with encrypted password 'gancio';
-postgres=# grant all privileges on database gancio to gancio;
-```
 
 1. Create a database (optional as you can use sqlite, but recommended)
 ```bash
@@ -48,8 +40,6 @@ gancio setup
 
 1. Start
 ```bash
-gancio --help
-gancio setup
 gancio start
 ```
 1. Point your web browser to [http://localhost:13120](http://localhost:13120) or where you selected during setup.
