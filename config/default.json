@@ -1,10 +1,10 @@
 {
   "title": "Gancio",
   "description": "A shared agenda for local communities",
-  "baseurl": "http://localhost:3000",
+  "baseurl": "http://localhost:13120",
   "server": {
     "host": "localhost",
-    "port": 3000
+    "port": 13120
   },
   "db": {
     "dialect": "sqlite",

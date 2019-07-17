@@ -102,6 +102,8 @@
               :limit="1"
               :auto-upload='false'
               drag
+              accept='image/*'
+              :on-remove='cleanFile'
               :on-change='uploadedFile'
               :multiple='false'
               :file-list="fileList"
@@ -347,7 +349,16 @@ export default {
       }
       this.$refs.address.focus()
     },
+    cleanFile () {
+      this.event.image = null
+    },
     uploadedFile(file, fileList) {
+      if (file.size / 1024/ 1024 > 4) {
+        Message({ type: 'warning', showClose: true, message: this.$tc('event.image_too_big') })
+        this.fileList = []
+        return false
+      }
+      this.fileList = [{name: file.name, url: file.url}]
       this.event.image = file
     },
     async done () {
@@ -414,8 +425,15 @@ export default {
         this.loading = false
         Message({ type: 'success', showClose: true, message: this.$auth.loggedIn ? this.$t('event.added') : this.$t('event.added_anon')})
       } catch (e) {
+        switch(e.request.status) {
+          case 413:
+            Message({ type: 'error', showClose: true, message: this.$t('event.image_too_big') })
+            break;
+          default:
+            console.error(e)
+            Message({ type: 'error', showClose: true, message: e })
+        }
         this.loading = false
-        Message({ type: 'danger', showClose: true, message: e })
         console.error(e)
       }
     }
