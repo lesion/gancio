@@ -8,6 +8,7 @@
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node server/cli.js",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "doc": "cd docs && bundle exec jekyll b",
     "precommit": "npm run lint",
     "migrate:dev": "sequelize db:migrate",
     "migrate": "NODE_ENV=production sequelize db:migrate"
