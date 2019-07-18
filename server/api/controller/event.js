@@ -224,7 +224,8 @@ const eventController = {
       const events = []
       const recurrent = JSON.parse(e.recurrent)
       if (!recurrent.frequency) return false
-      const cursor = moment(start)
+
+      let cursor = moment(start).startOf('isoWeek')
       const start_date = moment(e.start_datetime)
       const duration = moment(e.end_datetime).diff(start_date, 's')
       const frequency = recurrent.frequency
@@ -236,14 +237,10 @@ const eventController = {
       
       // each week or 2 (search for the first specified day)
       if (frequency === '1w' || frequency === '2w') {
-        while(true) {
-          const found = days.indexOf(cursor.day())
-          if (found!==-1) break
-          cursor.add(1, 'day')
-        }
+        cursor.add(days[0]-1, 'day')
         if (frequency === '2w') {
-          const nWeeks = cursor.diff(start_datetime, 'w')%2
-          if (nWeeks) cursor.add(1, 'week')
+          const nWeeks = cursor.diff(e.start_datetime, 'w')%2
+          if (!nWeeks) cursor.add(1, 'week')
         }
         toAdd.n = Number(frequency[0])
         toAdd.unit = 'week';
@@ -260,11 +257,16 @@ const eventController = {
 
       // add event at specified frequency 
       while (true) {
-        if (dueTo && cursor.isAfter(dueTo)) break
-        e.start_datetime = cursor.unix()*1000
-        e.end_datetime = e.start_datetime+(duration*1000)// cursor.clone().hour(end_datetime.hour()).minute(end_datetime.minute()).unix()*1000
-        events.push( Object.assign({}, e) )
-        cursor.add(toAdd.n, toAdd.unit)
+        let first_event_of_week = cursor.clone()
+        days.forEach(d => {
+          cursor.day(d-1)
+          if (cursor.isAfter(dueTo)) return
+          e.start_datetime = cursor.unix()*1000
+          e.end_datetime = e.start_datetime+(duration*1000)// cursor.clone().hour(end_datetime.hour()).minute(end_datetime.minute()).unix()*1000
+          events.push( Object.assign({}, e) )
+        })        
+        if (cursor.isAfter(dueTo)) break
+        cursor = first_event_of_week.add(toAdd.n, toAdd.unit)
       }
 
 
