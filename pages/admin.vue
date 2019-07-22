@@ -11,18 +11,21 @@
         template(slot='label')
           v-icon(name='users')
           span.ml-1 {{$t('common.users')}}
+
+        //- ADD NEW USER
         el-collapse
           el-collapse-item
             template(slot='title')
-              p {{$t('common.new_user')}}
+              h4  <v-icon name='plus'/> {{$t('common.new_user')}}
             el-form(inline)
               el-form-item(:label="$t('common.email')")
                 el-input(v-model='new_user.email')
-              el-form-item(:label="$t('common.password')")
-                el-input(v-model='new_user.password' type='password')
+              //- el-form-item(:label="$t('common.password')")
+              //-   el-input(v-model='new_user.password' type='password')
               el-form-item(:label="$t('common.admin')")
-                el-switch(v-model='new_user.admin')
+                el-switch(v-model='new_user.is_admin')
               el-button.float-right(@click='create_user' type='success' plain) {{$t('common.send')}}
+
         el-table(:data='paginatedUsers' small)
           el-table-column(label='Email')
             template(slot-scope='data')
@@ -141,7 +144,6 @@ export default {
       loading: false,
       new_user: {
         email: '',
-        password: '',
         admin: false,
       },
       tab: "0",
@@ -266,7 +268,7 @@ export default {
       try {
         this.loading = true
         const user = await this.$axios.$post('/user', this.new_user)
-        this.new_user = { email: '', password: '', is_admin: false }
+        this.new_user = { email: '', is_admin: false }
         Message({
           showClose: true,
           type: 'success',

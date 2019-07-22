@@ -33,7 +33,7 @@ const userController = {
           },
           config.secret
         )
-
+        res.cookie('auth._token.local', 'Bearer ' + accessToken)
         res.json({ token: accessToken })
       }
     }
@@ -259,7 +259,9 @@ const userController = {
   async create(req, res) {
     try {
       req.body.is_active = true
+      req.body.recover_code = crypto.randomBytes(16).toString('hex')
       const user = await User.create(req.body)
+      mail.send(user.email, 'user_confirm', { user, config })
       res.json(user)
     } catch (e) {
       res.status(404).json(e)

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
-import it from '@/locales/it.js'
-import en from '@/locales/en.js'
+import it from '../locales/it.js'
+import en from '../locales/en.js'
 
 Vue.use(VueI18n)
 

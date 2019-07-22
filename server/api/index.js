@@ -12,13 +12,12 @@ const userController = require('./controller/user')
 const settingsController = require('./controller/settings')
 
 const storage = require('./storage')
-
 const upload = multer({ storage })
+
 const api = express.Router()
 api.use(cookieParser())
 api.use(bodyParser.urlencoded({ extended: false }))
 api.use(bodyParser.json())
-// api.use(settingsController.init)
 
 const jwt = expressJwt({
   secret: config.secret,

@@ -60,11 +60,11 @@
               br
               span {{$t(`event.${event.type}_description`)}}
               el-select.ml-2(v-if='event.type==="recurrent"' v-model='event.recurrent.frequency' placeholder='Frequenza')
-                el-option(label='Tutti i giorni' value='1d' key='1d')
+                //- el-option(label='Tutti i giorni' value='1d' key='1d')
                 el-option(label='Ogni settimana' value='1w' key='1w')
                 el-option(label='Ogni due settimane' value='2w' key='2w')
                 el-option(label='Ogni mese' value='1m' key='1m')
-                el-option(label='Ogni due mesi' value='2m' key='2m')
+                //- el-option(label='Ogni due mesi' value='2m' key='2m')
 
             v-date-picker.mb-2.mt-3(
               :mode='event.type === "multidate" ? "range" : event.type === "recurrent" ? "multiple" : "single"'
@@ -118,6 +118,7 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import uniq from 'lodash/uniq'
 import map from 'lodash/map'
 import moment from 'dayjs'
+
 import List from '@/components/List'
 import { Message } from 'element-ui'
 
@@ -170,8 +171,9 @@ export default {
     } catch(e) {
       console.error('Error ', e)
     }
+    moment.locale(store.state.locale)
   },
-  async asyncData ( { params, $axios, error }) {
+  async asyncData ( { params, $axios, error, store }) {
     if (params.edit) {
       const data = { time: {}, event: { place: {} }}
       data.id = params.edit

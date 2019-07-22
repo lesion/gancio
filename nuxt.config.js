@@ -32,6 +32,7 @@ module.exports = {
     'element-ui/lib/theme-chalk/index.css'
   ],
 
+  
   /*
    ** Plugins to load before mounting the App
    */
@@ -59,6 +60,9 @@ module.exports = {
   axios: {
     prefix: '/api'
   },
+  router: {
+    middleware: 'i18n'
+  },
   auth: {
     strategies: {
       local: {
@@ -66,7 +70,9 @@ module.exports = {
           login: { url: '/auth/login', method: 'post', propertyName: 'token' },
           logout: false,
           user: { url: '/auth/user', method: 'get', propertyName: false }
-        }
+        },
+        tokenRequired: false,
+        tokenType: 'Bearer'
       }
     }
   },

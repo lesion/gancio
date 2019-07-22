@@ -127,7 +127,7 @@ const it = {
     recurrent_1m_days: '|Il giorno {days} di ogni mese|I giorni {days} di ogni mese',
     recurrent_2m_days: '|Il giorno {days} ogni due mesi|I giorni {days} ogni due mesi',
     recurrent_1m_ordinal: 'Il {n} {days} di ogni mese',
-    recurrent_2m_ordinal: 'Il {n} {days} un mese sì e uno no',
+    recurrent_2m_ordinal: '|Il {n} {days} un mese sì e uno no|Il {n} {days} un mese sì e uno no',
     due: 'alle',
     from: 'Dalle',
     image_too_big: 'Immagine troppo grande! Massimo 4M'

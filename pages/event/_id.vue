@@ -8,21 +8,21 @@
       h5 {{$t('event.not_found')}}
 
     div(v-else)
-      //- title, where, when
+      //- title
       h5.text-center {{event.title}}
       div.nextprev
-        nuxt-link(v-if='prev' :to='`/event/${prev.id}`')
+        nuxt-link(v-if='prev' :to='`/event/${prev}`')
           el-button( type='success' size='mini')
             v-icon(name='chevron-left')
-        nuxt-link.float-right(v-if='next' :to='`/event/${next.id}`')
+        nuxt-link.float-right(v-if='next' :to='`/event/${next}`')
           el-button(type='success' size='mini')
             v-icon(name='chevron-right')
-    
+
       //- image
       img.main(:src='imgPath' v-if='event.image_path')
 
       .info
-        div {{event|event_when}}
+        div {{event|when}}
         div {{event.place.name}} - {{event.place.address}}
 
       //- description and tags
@@ -61,7 +61,8 @@ import { MessageBox } from 'element-ui'
 export default {
   name: 'Event',
   // transition: null,
-  // Watch for $route.query.page to call Component methods (asyncData, fetch, validate, layout, etc.)
+  // Watch for $route.query.page to call 
+  // Component methods (asyncData, fetch, validate, layout, etc.)
   // watchQuery: ['id'],
   // Key for <NuxtChild> (transitions)
   // key: to => to.fullPath,
@@ -77,10 +78,12 @@ export default {
       title: this.event.title,
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description', name: 'description', content: this.event.description.slice(0, 1000) },
-        { hid: 'og-description', name: 'og:description', content: this.event.description.slice(0, 100) },
-        { hid: 'og-title', property: 'og:title', content: this.event.title },   
-        { hid: 'og-url', property: 'og:url', content: `event/${this.event.id}` },   
+        { hid: 'description', name: 'description', 
+            content: this.event.description.slice(0, 1000) },
+        { hid: 'og-description', name: 'og:description', 
+            content: this.event.description.slice(0, 100) },
+        { hid: 'og-title', property: 'og:title', content: this.event.title },
+        { hid: 'og-url', property: 'og:url', content: `event/${this.event.id}` },
         { property: 'og:type', content: 'event'},
         { property: 'og:image', content: this.imgPath }
       ]
@@ -97,8 +100,10 @@ export default {
   },
   async asyncData ( { $axios, params, error }) {
     try {
-      const event = await $axios.$get(`/event/${params.id}`)
-      return { event, id: params.id }
+      const [ id, start_datetime ] = params.id.split('_')
+      const event = await $axios.$get(`/event/${id}`)
+      event.start_datetime = start_datetime*1000
+      return { event, id }
     } catch(e) {
       error({ statusCode: 404, message: 'Event not found'})
     }
@@ -108,18 +113,27 @@ export default {
     ...mapState(['settings']),
     next () {
       let found = false
-      return this.filteredEvents.find(e => {
+      const event = this.filteredEvents.find(e => {
         if (found) return e
-        if (e.id === this.event.id) found = true
+        if (e.start_datetime === this.event.start_datetime && e.id === this.event.id) found = true
       })
+      if (!event) return false
+      if (event.recurrent) {
+        return `${event.id}_${event.start_datetime/1000}`
+      }
+      return event.id
     },   
     prev () {
-      let prev = false
+      let event = false
       this.filteredEvents.find(e => {
-        if (e.id === this.event.id) return true
-        prev = e
+        if (e.start_datetime === this.event.start_datetime && e.id === this.event.id) return true
+        event = e
       })
-      return prev
+      if (!event) return false
+      if (event.recurrent) {
+        return `${event.id}_${event.start_datetime/1000}`
+      }
+      return event.id      
     },
     imgPath () {
       return this.event.image_path && '/media/' + this.event.image_path

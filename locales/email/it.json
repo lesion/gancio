@@ -4,5 +4,6 @@
   "email.confirm": "Il tuo account su gancio è stato attivato e quindi puoi cominciare a pubblicare eventi",
   "email.recover": "Ciao, hai richiesto un recupero della password su gancio.",
   "email.press_here": "Premi qui",
-  "email.confirm.subject": "Registrazione confermata"
+  "email.confirm.subject": "Registrazione confermata",
+  "email.user_confirm": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}<a/> è stato creato. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confermalo</a>."
 }

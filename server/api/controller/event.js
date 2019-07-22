@@ -89,7 +89,13 @@ const eventController = {
     const id = req.params.event_id
     let event = await Event.findByPk(id, {
       plain: true,
-      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      attributes: { 
+        exclude: ['createdAt', 'updatedAt', 'start_datetime', 'end_datetime'],
+        include: [
+          [Sequelize.literal('start_datetime*1000'), 'start_datetime'],
+          [Sequelize.literal('end_datetime*1000'), 'end_datetime']
+        ]
+      },
       include: [
         { model: Tag, attributes: ['tag', 'weigth'], through: { attributes: [] } },
         { model: Place, attributes: ['name', 'address'] },
@@ -106,7 +112,6 @@ const eventController = {
   },
 
   async confirm(req, res) {
-    console.error('confirm event')
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
     if (!event) return res.sendStatus(404)
@@ -181,7 +186,8 @@ const eventController = {
       .year(req.params.year)
       .month(req.params.month)
       .startOf('month')
-      .startOf('isoWeek')
+      .startOf('week')
+    console.error('start ', start)
 
     let end = moment()
       .year(req.params.year)
@@ -190,7 +196,7 @@ const eventController = {
 
     const shownDays = end.diff(start, 'days')
     if (shownDays <= 35) end = end.add(1, 'week')
-    end = end.endOf('isoWeek')
+    end = end.endOf('week')
 
     let events = await Event.findAll({
       where: {
@@ -225,7 +231,7 @@ const eventController = {
       const recurrent = JSON.parse(e.recurrent)
       if (!recurrent.frequency) return false
 
-      let cursor = moment(start).startOf('isoWeek')
+      let cursor = moment(start).startOf('week')
       const start_date = moment(e.start_datetime)
       const duration = moment(e.end_datetime).diff(start_date, 's')
       const frequency = recurrent.frequency
@@ -234,7 +240,8 @@ const eventController = {
 
       // default frequency is '1d' => each day
       const toAdd = { n: 1, unit: 'day'}
-      
+      cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
+
       // each week or 2 (search for the first specified day)
       if (frequency === '1w' || frequency === '2w') {
         cursor.add(days[0]-1, 'day')
@@ -244,23 +251,31 @@ const eventController = {
         }
         toAdd.n = Number(frequency[0])
         toAdd.unit = 'week';
-        cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
+        // cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
       }
 
       // each month or 2
-      // if (frequency === '1m' || frequency === '2m') {
-      //   // find first match
-      //   if (type) {
-          
-      //   }
-      // }
+      if (frequency === '1m' || frequency === '2m') {
+        // find first match
+        toAdd.n = 1
+        toAdd.unit = 'month'
+        if (type === 'weekday') {
+
+        } else if (type === 'ordinal') {
+
+        }
+      }
 
       // add event at specified frequency 
       while (true) {
         let first_event_of_week = cursor.clone()
         days.forEach(d => {
-          cursor.day(d-1)
-          if (cursor.isAfter(dueTo)) return
+          if (type === 'ordinal') {
+            cursor.date(d)
+          } else {
+            cursor.day(d-1)
+          }
+          if (cursor.isAfter(dueTo) || cursor.isBefore(start)) return
           e.start_datetime = cursor.unix()*1000
           e.end_datetime = e.start_datetime+(duration*1000)// cursor.clone().hour(end_datetime.hour()).minute(end_datetime.minute()).unix()*1000
           events.push( Object.assign({}, e) )

@@ -1,7 +1,5 @@
 import moment from 'dayjs'
 import intersection from 'lodash/intersection'
-import map from 'lodash/map'
-import filter from 'lodash/filter'
 import find from 'lodash/find'
 
 export const state = () => ({
@@ -147,10 +145,8 @@ export const actions = {
     commit('setSettings', settings)
 
     // apply settings
-    commit('showRecurrentEvents', settings.recurrent_event_visible)
+    commit('showRecurrentEvents', settings.allow_recurrent_event && settings.recurrent_event_visible)
 
-    const lang = req.acceptsLanguages('en', 'it')
-    commit('setLocale', lang || 'it')
   },
   async updateEvents({ commit }, page) {
     const events = await this.$axios.$get(`/event/${page.month - 1}/${page.year}`)

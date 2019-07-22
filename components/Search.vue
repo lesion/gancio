@@ -7,14 +7,14 @@
     //-   v-model='onlyMine'
     //- )
     el-switch.mt-1.mb-1.ml-2.d-block(
-      v-if='pastFilter'
+      v-if='recurrentFilter && settings.allow_recurrent_event'
       inactive-text=''
       active-text='anche appuntamenti fissi'
       inactive-color='lightgreen'
       v-model='showRecurrent'
     )
     el-switch.mt-1.mb-1.ml-2.d-block(
-      v-if='recurrentFilter'
+      v-if='pastFilter'
       inactive-text='solo futuri'
       active-text='anche passati'
       inactive-color='lightgreen'
@@ -45,7 +45,7 @@ export default {
   },
   methods: mapActions(['setSearchPlaces', 'setSearchTags', 'showPastEvents', 'showRecurrentEvents']),
   computed: {
-    ...mapState(['tags', 'places', 'filters']),
+    ...mapState(['tags', 'places', 'filters', 'settings']),
     // TOFIX: optimize
     keywords () {
       const tags = this.tags.map( t => ({ value: 't' + t.tag, label: t.tag, weigth: t.weigth }))

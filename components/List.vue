@@ -5,14 +5,14 @@ div#list
     el-timeline-item(
       v-for='event in events'
       :key='event.id'
-      :timestamp='event|event_when'
+      :timestamp='event|when'
       placement='top' icon='el-icon-arrow-down' size='large'
     )
 
       div.float-right
         small @{{event.place.name}}
 
-      a(:href='"/event/" + event.id' target='_blank') {{event.title}}
+      a(:href='"/event/" + link(event)' target='_blank') {{event.title}}
       hr
 </template>
 <script>
@@ -22,6 +22,14 @@ export default {
   name: 'List',
   data () {
     return { }
+  },
+  methods: {
+    link (event) {
+      if (event.recurrent) {
+        return `${event.id}_${event.start_datetime/1000}`
+      }
+      return event.id
+    }
   },
   props: {
     title: {

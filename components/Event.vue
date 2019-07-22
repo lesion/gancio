@@ -1,5 +1,5 @@
 <template lang="pug">
-    nuxt-link.event(:to='`event/${event.id}`' :class='{ withImg: event.image_path }')
+    nuxt-link.event(:to='`event/${event.id}${event.recurrent && "_" + event.start_datetime/1000}`' :class='{ withImg: event.image_path }')
       //- image
       img(v-if='showImage && event.image_path' :src='`/media/thumb/${event.image_path}`')
 
@@ -11,7 +11,7 @@
 
           //- date / place
           .date 
-            div <v-icon name='clock'/> {{event|event_when}}
+            div <v-icon name='clock'/> {{event|when('home')}}
             div <v-icon name='map-marker-alt' /> {{event.place.name}}
 
           //- p(v-if='showDescription') {{event.description}}
