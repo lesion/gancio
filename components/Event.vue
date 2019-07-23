@@ -1,5 +1,5 @@
 <template lang="pug">
-    nuxt-link.event(:to='`event/${event.id}${event.recurrent && "_" + event.start_datetime/1000}`' :class='{ withImg: event.image_path }')
+    nuxt-link.event(:to='`event/${link}`' :class='{ withImg: event.image_path }')
       //- image
       img(v-if='showImage && event.image_path' :src='`/media/thumb/${event.image_path}`')
 
@@ -49,6 +49,12 @@ export default {
   computed: {
     date () { 
       return new Date(this.event.start_datetime).getDate()
+    },
+    link () {
+      if (this.event.recurrent) {
+        return `${this.event.id}_${this.event.start_datetime/1000}`
+      }
+      return this.event.id
     }
   }
 }
