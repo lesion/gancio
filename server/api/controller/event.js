@@ -90,11 +90,7 @@ const eventController = {
     let event = await Event.findByPk(id, {
       plain: true,
       attributes: { 
-        exclude: ['createdAt', 'updatedAt', 'start_datetime', 'end_datetime'],
-        include: [
-          [Sequelize.literal('start_datetime*1000'), 'start_datetime'],
-          [Sequelize.literal('end_datetime*1000'), 'end_datetime']
-        ]
+        exclude: ['createdAt', 'updatedAt']
       },
       include: [
         { model: Tag, attributes: ['tag', 'weigth'], through: { attributes: [] } },
@@ -103,6 +99,9 @@ const eventController = {
       ],
       order: [ [Comment, 'id', 'DESC'] ]
     })
+
+    event.start_datetime = event.start_datetime*1000
+    event.end_datetime = event.end_datetime*1000
 
     if (event && (event.is_visible || is_admin)) {
       res.json(event)

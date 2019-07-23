@@ -50,6 +50,9 @@ If you want to `)
     const settings = require('./api/controller/settings')
     await settings.set('allow_registration', true)
     await settings.set('allow_anon_event', true)
+    await settings.set('allow_recurrent_event', true)
+    await settings.set('recurrent_event_visible', true)
+    await settings.set('allow_comments', true)
 
     // add default notification
     consola.info('Add default notification')
