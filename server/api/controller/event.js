@@ -187,7 +187,6 @@ const eventController = {
       .month(req.params.month)
       .startOf('month')
       .startOf('week')
-    console.error('start ', start)
 
     let end = moment()
       .year(req.params.year)

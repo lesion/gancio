@@ -229,7 +229,6 @@ export default {
       this.$axios.$put('/user', user)
     },
     async toggleAdmin(user) {
-      console.error(this.$auth.user)
       if (user.id === this.$auth.user.id) return
       user.is_admin = !user.is_admin
       try {

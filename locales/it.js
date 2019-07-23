@@ -147,7 +147,8 @@ const it = {
     allow_anon_event: 'Si possono inserire eventi anonimi (previa conferma)?',
     allow_comments: 'Abilita commenti',
     allow_recurrent_event: 'Abilita eventi fissi',
-    recurrent_event_visible: 'Appuntamenti fissi visibili di default'
+    recurrent_event_visible: 'Appuntamenti fissi visibili di default',
+    federation: 'Federazione / ActivityPub'
   },
 
   auth: {

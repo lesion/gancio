@@ -432,7 +432,6 @@ export default {
             Message({ type: 'error', showClose: true, message: this.$t('event.image_too_big') })
             break;
           default:
-            console.error(e)
             Message({ type: 'error', showClose: true, message: e })
         }
         this.loading = false
