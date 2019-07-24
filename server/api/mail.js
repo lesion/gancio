@@ -7,7 +7,6 @@ const settings = require('./controller/settings')
 moment.locale('it')
 const mail = {
   send(addresses, template, locals) {
-    console.error('invio email via ', config.smtp)
     const email = new Email({
       views: { root: path.join(__dirname, '..', 'emails') },
       htmlToText: false,
