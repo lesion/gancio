@@ -30,9 +30,9 @@
   "files": [
     "server/",
     "nuxt.config.js",
-    "locales/",
-    "dist/",
+    "static/",
     "views/",
+    "locales/email/",
     "store/",
     "config/",
     ".nuxt/"
