@@ -1,6 +1,13 @@
 const Mastodon = require('mastodon-api')
 const { setting: Setting } = require('../models')
 const config = require('config')
+const path = require('path')
+const fs = require('fs')
+
+let user_locale_path = false
+if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {
+  user_locale_path = path.resolve(config.user_locale)
+}
 
 const settingsController = {
   settings: { initialized: false },
@@ -38,11 +45,13 @@ const settingsController = {
   },
 
   async getUserLocale(req, res) {
-    // console.error(res)
+    console.error(user_locale_path)
     // load user locale specified in configuration
-    // res.json({ about: 'dentro user locale' })
-    // res.sendStatus(200)
-    return false
+    if (user_locale_path) {
+      res.json(require(user_locale_path))
+    } else {
+      res.json({})
+    }
   },
 
   async setRequest(req, res) {

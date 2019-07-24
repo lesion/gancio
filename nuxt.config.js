@@ -13,9 +13,9 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   dev: (process.env.NODE_ENV !== 'production'),
-  // serverMiddleware: [
-  //   { path: '/api', handler: '@/server/api/index.js' }
-  // ],
+  serverMiddleware: [
+    { path: '/api', handler: '~/server/api/index.js' }
+  ],
 
   server: conf.server,
 
@@ -81,21 +81,21 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    optimization: {
-      splitChunks: {
-        cacheGroups: {
-          element: {
-            test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
-            name: 'element-ui',
-            chunks: 'all'
-          }
-        }
-      }
-    },
+    // optimization: {
+    //   splitChunks: {
+    //     cacheGroups: {
+    //       element: {
+    //         test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
+    //         name: 'element-ui',
+    //         chunks: 'all'
+    //       }
+    //     }
+    //   }
+    // },
     transpile: [/^element-ui/, /^vue-awesome/],
-    splitChunks: {
-      layouts: true
-    },
+    // splitChunks: {
+    //   layouts: true
+    // },
     cache: true,
   }
 }

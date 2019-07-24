@@ -100,8 +100,8 @@ const eventController = {
       order: [ [Comment, 'id', 'DESC'] ]
     })
 
-    event.start_datetime = event.start_datetime*1000
-    event.end_datetime = event.end_datetime*1000
+    // event.start_datetime = event.start_datetime*1000
+    // event.end_datetime = event.end_datetime*1000
 
     if (event && (event.is_visible || is_admin)) {
       res.json(event)

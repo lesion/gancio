@@ -102,7 +102,9 @@ export default {
     try {
       const [ id, start_datetime ] = params.id.split('_')
       const event = await $axios.$get(`/event/${id}`)
-      event.start_datetime = start_datetime*1000
+      event.start_datetime = start_datetime ? start_datetime*1000 : event.start_datetime*1000
+      event.end_datetime = event.end_datetime*1000
+      // event.start_datetime = start_datetime ? start_datetime*1000 : event.start
       return { event, id }
     } catch(e) {
       error({ statusCode: 404, message: 'Event not found'})

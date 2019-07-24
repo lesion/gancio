@@ -14,7 +14,7 @@ const settingsController = require('./controller/settings')
 const storage = require('./storage')
 const upload = multer({ storage })
 
-const api = express.Router()
+const api = express()
 api.use(cookieParser())
 api.use(bodyParser.urlencoded({ extended: false }))
 api.use(bodyParser.json())
