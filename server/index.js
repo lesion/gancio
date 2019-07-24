@@ -23,7 +23,9 @@ async function start() {
     await nuxt.ready()
   }
 
-  app.use('/favicon.ico', express.static(path.resolve(__dirname, '../dist/favicon.ico')))
+  // configurable favicon && logo
+  app.use('/favicon.ico', express.static(path.resolve(config.favicon)))
+
   app.use(morgan('dev'))
   app.use('/media/', express.static(config.upload_path))
   app.use('/api', require('./api/index'))
@@ -31,7 +33,7 @@ async function start() {
   // Give nuxt middleware to express
   app.use(nuxt.render)
 
-  // Listen the server
+  // Listen
   const server = app.listen(nuxt_config.server)
 
   // close connections/port/unix socket

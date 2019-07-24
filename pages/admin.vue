@@ -108,6 +108,18 @@
           el-form-item(v-show='allow_recurrent_event' :label="$t('admin.recurrent_event_visible')")
             el-switch(v-model='recurrent_event_visible')
 
+        el-divider {{$t('admin.personalization')}}
+        span {{$t('common.info')}}
+        el-input(type='textarea' v-model='about')
+
+        el-upload(action=''
+          :limit="1"
+          :auto-upload='false'
+          drag
+          accept='image/*'
+          :multiple='false')
+        
+
         el-divider {{$t('admin.federation')}}
         el-form(inline @submit.native.prevent='associate_mastondon_instance' label-width='240px')
           p {{$t('admin.mastodon_description')}}
@@ -147,7 +159,8 @@ export default {
         admin: false,
       },
       tab: "0",
-      open: true
+      open: true,
+      about: ''
     }
   },
   async mounted () {

@@ -1,6 +1,7 @@
 {
   "title": "Gancio",
   "description": "A shared agenda for local communities",
+  "favicon" : "../dist/favicon.ico",
   "baseurl": "http://localhost:13120",
   "server": {
     "host": "localhost",

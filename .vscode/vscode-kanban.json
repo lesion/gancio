@@ -8,28 +8,6 @@
       "id": "23",
       "references": [],
       "title": "colori te prego!"
-    }
-  ],
-  "in-progress": [],
-  "testing": [],
-  "todo": [
-    {
-      "assignedTo": {
-        "name": "lesion"
-      },
-      "creation_time": "2019-06-01T21:00:22.155Z",
-      "id": "28",
-      "references": [],
-      "title": "activitypub stream"
-    },
-    {
-      "assignedTo": {
-        "name": "lesion"
-      },
-      "creation_time": "2019-05-27T15:42:35.467Z",
-      "id": "21",
-      "references": [],
-      "title": "all'admin deve mostrare un badge se ci sono pending operation"
     },
     {
       "assignedTo": {
@@ -39,15 +17,6 @@
       "id": "24",
       "references": [],
       "title": "copy to clipboard"
-    },
-    {
-      "assignedTo": {
-        "name": "lesion"
-      },
-      "creation_time": "2019-05-29T13:08:20.887Z",
-      "id": "25",
-      "references": [],
-      "title": "creazione script di backup"
     },
     {
       "assignedTo": {
@@ -93,6 +62,37 @@
       "id": "29",
       "references": [],
       "title": "settings di istanza (default filter, eg, eventi ricorrenti)"
+    }
+  ],
+  "in-progress": [],
+  "testing": [],
+  "todo": [
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-06-01T21:00:22.155Z",
+      "id": "28",
+      "references": [],
+      "title": "activitypub stream"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-27T15:42:35.467Z",
+      "id": "21",
+      "references": [],
+      "title": "all'admin deve mostrare un badge se ci sono pending operation"
+    },
+    {
+      "assignedTo": {
+        "name": "lesion"
+      },
+      "creation_time": "2019-05-29T13:08:20.887Z",
+      "id": "25",
+      "references": [],
+      "title": "creazione script di backup"
     },
     {
       "assignedTo": {

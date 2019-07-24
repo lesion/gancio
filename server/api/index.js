@@ -85,6 +85,8 @@ api.delete('/event/notification/:code', eventController.delNotification)
 api.get('/settings', settingsController.getAllRequest)
 api.post('/settings', jwt, fillUser, isAdmin, settingsController.setRequest)
 
+api.get('/settings/user_locale', settingsController.getUserLocale)
+
 // confirm event
 api.get('/event/confirm/:event_id', jwt, isAuth, isAdmin, eventController.confirm)
 api.get('/event/unconfirm/:event_id', jwt, isAuth, isAdmin, eventController.unconfirm)
