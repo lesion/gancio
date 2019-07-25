@@ -13,7 +13,7 @@ nav_order: 5
 {:toc}
 
 ## Basics
-
+## Add user
 ## Enable registration
 ## Confirm registration
 ## Confirm event

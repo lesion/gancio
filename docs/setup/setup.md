@@ -10,7 +10,7 @@ has_toc: false
 # Setup
 
 
-- ## [Setup with docker](/setup/docker)
-- ## [Classic setup](/setup/classic)
-- ## [Nginx as a proxy](/setup/nginx)
-- ## [Hacking & contribute](/dev)
+- [Setup with docker](docker)
+- [Classic setup](classic)
+- [Nginx as a proxy](nginx)
+- [Hacking & contribute](../dev)
