@@ -11,42 +11,7 @@
         template(slot='label')
           v-icon(name='users')
           span.ml-1 {{$t('common.users')}}
-
-        //- ADD NEW USER
-        el-collapse
-          el-collapse-item
-            template(slot='title')
-              h4  <v-icon name='plus'/> {{$t('common.new_user')}}
-            el-form(inline)
-              el-form-item(:label="$t('common.email')")
-                el-input(v-model='new_user.email')
-              //- el-form-item(:label="$t('common.password')")
-              //-   el-input(v-model='new_user.password' type='password')
-              el-form-item(:label="$t('common.admin')")
-                el-switch(v-model='new_user.is_admin')
-              el-button.float-right(@click='create_user' type='success' plain) {{$t('common.send')}}
-
-        el-table(:data='paginatedUsers' small)
-          el-table-column(label='Email')
-            template(slot-scope='data')
-              el-popover(trigger='hover' :content='data.row.description' width='400')
-                span(slot='reference') {{data.row.email}}
-          el-table-column(:label="$t('common.actions')")
-            template(slot-scope='data')
-              div(v-if='data.row.id!==$auth.user.id')
-                el-button.mr-1(size='mini'
-                  :type='data.row.is_active?"warning":"success"'
-                  @click='toggle(data.row)') {{data.row.is_active?$t('common.deactivate'):$t('common.activate')}}
-                el-button(size='mini'
-                  :type='data.row.is_admin?"danger":"warning"'
-                  @click='toggleAdmin(data.row)') {{data.row.is_admin?$t('admin.remove_admin'):$t('common.admin')}}
-                el-button(size='mini'
-                  type='danger'
-                  @click='delete_user(data.row)') {{$t('admin.delete_user')}}
-              div(v-else)
-                span {{$t('common.me')}}
-        no-ssr
-          el-pagination(:page-size='perPage' :currentPage.sync='userPage' :total='users.length')
+        Users(:users='users')
 
       //- PLACES
       el-tab-pane.pt-1
@@ -108,18 +73,6 @@
           el-form-item(v-show='allow_recurrent_event' :label="$t('admin.recurrent_event_visible')")
             el-switch(v-model='recurrent_event_visible')
 
-        el-divider {{$t('admin.personalization')}}
-        span {{$t('common.info')}}
-        el-input(type='textarea' v-model='about')
-
-        el-upload(action=''
-          :limit="1"
-          :auto-upload='false'
-          drag
-          accept='image/*'
-          :multiple='false')
-        
-
         el-divider {{$t('admin.federation')}}
         el-form(inline @submit.native.prevent='associate_mastondon_instance' label-width='240px')
           p {{$t('admin.mastodon_description')}}
@@ -134,18 +87,18 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { Message, MessageBox } from 'element-ui'
+import Users from '../components/admin/Users'
 
 export default {
   name: 'Admin',
+  components: { Users },
   middleware: ['auth'],
   data () {
     return {
       perPage: 10,
-      users: [],
       userFields: ['email', 'action'],
       placeFields: ['name', 'address'],
       placePage: 1,
-      userPage: 1,
       eventPage: 1,
       tagPage: 1,
       tagFields: ['tag', 'color'],
@@ -154,13 +107,8 @@ export default {
       tag: {name: '', color: ''},
       events: [],
       loading: false,
-      new_user: {
-        email: '',
-        admin: false,
-      },
       tab: "0",
       open: true,
-      about: ''
     }
   },
   async mounted () {
@@ -210,10 +158,7 @@ export default {
       return this.tags.slice((this.tagPage-1) * this.perPage,
         this.tagPage * this.perPage)
     },
-    paginatedUsers () {
-      return this.users.slice((this.userPage-1) * this.perPage,
-        this.userPage * this.perPage)
-    },
+
     paginatedPlaces () {
       return this.places.slice((this.placePage-1) * this.perPage,
         this.placePage * this.perPage)
@@ -237,19 +182,6 @@ export default {
     async savePlace () {
       const place = await this.$axios.$put('/place', this.place)
     },
-    async toggle(user) {
-      user.is_active = !user.is_active
-      this.$axios.$put('/user', user)
-    },
-    async toggleAdmin(user) {
-      if (user.id === this.$auth.user.id) return
-      user.is_admin = !user.is_admin
-      try {
-        this.$axios.$put('/user', user)
-      } catch(e) {
-        console.error(e)
-      }
-    },
     preview (id) {
       this.$router.push(`/event/${id}`)
     },
@@ -258,42 +190,6 @@ export default {
 
       const url = await this.$axios.$post('/settings/getauthurl', { instance: this.mastodon_instance })
       setTimeout( () => window.location.href=url, 100);
-    },
-    async delete_user (user) {
-      MessageBox.confirm(this.$t('admin.delete_user_confirm'),
-        this.$t('common.confirm'), {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'error'
-        })
-        .then( () => this.$axios.delete(`/user/${user.id}`) )
-        .then( () => {
-          Message({
-            showClose: true,
-            type: 'success',
-            message: this.$t('admin.user_remove_ok')
-          })
-          this.users = this.users.filter(u => u.id!==user.id)
-        })
-    },
-    async create_user () {
-      try {
-        this.loading = true
-        const user = await this.$axios.$post('/user', this.new_user)
-        this.new_user = { email: '', is_admin: false }
-        Message({
-          showClose: true,
-          type: 'success',
-          message: this.$t('admin.user_create_ok')
-        })
-        this.users.push(user)
-      } catch (e) {
-        Message({
-          showClose: true,
-          type: 'error',
-          message: this.$t('user.error_create') + e
-        })
-      }
     },
     async confirm (id) {
       try {

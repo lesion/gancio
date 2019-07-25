@@ -45,7 +45,6 @@ const settingsController = {
   },
 
   async getUserLocale(req, res) {
-    console.error(user_locale_path)
     // load user locale specified in configuration
     if (user_locale_path) {
       res.json(require(user_locale_path))
