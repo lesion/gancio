@@ -75,6 +75,14 @@
     
       
         
+      
+    
+      
+        
+      
+    
+      
+        
           <li class="navigation-list-item">
             
             <a href="https://gancio.org/" class="navigation-list-link">Home</a>
@@ -111,11 +119,17 @@
                   
                 
                   
+                
+                  
                     <li class="navigation-list-item ">
                       
                       <a href="https://gancio.org/setup/nginx" class="navigation-list-link">Nginx</a>
                       
                     </li>
+                  
+                
+                  
+                
                   
                 
                   
@@ -172,7 +186,7 @@
         
           <li class="navigation-list-item">
             
-            <a href="https://gancio.org/dev" class="navigation-list-link">Develop</a>
+            <a href="https://gancio.org/dev" class="navigation-list-link">Hacking</a>
             
           </li>
         
@@ -183,6 +197,16 @@
           <li class="navigation-list-item">
             
             <a href="https://gancio.org/contribute" class="navigation-list-link">Contribute</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="https://gancio.org/instances" class="navigation-list-link">Instances</a>
             
           </li>
         
@@ -203,7 +227,8 @@
           <div class="search js-search">
             <div class="search-input-wrap">
               <input type="text" class="js-search-input search-input" tabindex="0" placeholder="Search Gancio" aria-label="Search Gancio" autocomplete="off">
-              <svg width="14" height="14" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" class="search-icon"><title>Search</title><g fill-rule="nonzero"><path d="M17.332 20.735c-5.537 0-10-4.6-10-10.247 0-5.646 4.463-10.247 10-10.247 5.536 0 10 4.601 10 10.247s-4.464 10.247-10 10.247zm0-4c3.3 0 6-2.783 6-6.247 0-3.463-2.7-6.247-6-6.247s-6 2.784-6 6.247c0 3.464 2.7 6.247 6 6.247z"/><path d="M11.672 13.791L.192 25.271 3.02 28.1 14.5 16.62z"/></g></svg>
+              <svg width="14" height="14" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" class="search-icon"><title>Search</title>
+<g fill-rule="nonzero"><path d="M17.332 20.735c-5.537 0-10-4.6-10-10.247 0-5.646 4.463-10.247 10-10.247 5.536 0 10 4.601 10 10.247s-4.464 10.247-10 10.247zm0-4c3.3 0 6-2.783 6-6.247 0-3.463-2.7-6.247-6-6.247s-6 2.784-6 6.247c0 3.464 2.7 6.247 6 6.247z"></path><path d="M11.672 13.791L.192 25.271 3.02 28.1 14.5 16.62z"></path></g></svg>
             </div>
             <div class="js-search-results search-results-wrap"></div>
           </div>
@@ -241,6 +266,7 @@ This shoud be a <code class="highlighter-rouge">.json</code> or a <code class="h
   <li><a href="#smtp" id="markdown-toc-smtp">SMTP</a></li>
   <li><a href="#admin" id="markdown-toc-admin">Admin</a></li>
   <li><a href="#favicon" id="markdown-toc-favicon">Favicon</a></li>
+  <li><a href="#user-locale" id="markdown-toc-user-locale">User locale</a></li>
   <li><a href="#secret" id="markdown-toc-secret">Secret</a></li>
   <li><a href="#default-settings" id="markdown-toc-default-settings">Default settings</a></li>
 </ol>
@@ -254,7 +280,7 @@ This shoud be a <code class="highlighter-rouge">.json</code> or a <code class="h
 
 <p><code class="highlighter-rouge">"title": "Gancio"</code></p>
 
-<p><img src="assets/title.png" alt="title" /></p>
+<p><img src="assets/title.png" alt="title"></p>
 
 <ul>
   <li>
@@ -263,7 +289,7 @@ This shoud be a <code class="highlighter-rouge">.json</code> or a <code class="h
   </li>
   <li>
     <h3 id="baseurl">BaseURL</h3>
-    <p>URL where your site will be accessible (include http or https):<br />
+    <p>URL where your site will be accessible (include http or https):<br>
 <code class="highlighter-rouge">"baseurl": "https://gancio.cisti.org"</code></p>
   </li>
   <li>
@@ -281,7 +307,8 @@ This shoud be a <code class="highlighter-rouge">.json</code> or a <code class="h
 <ul>
   <li>
     <h3 id="database">Database</h3>
-    <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"db"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    <div class="language-json highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="s2">"db"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
   </span><span class="s2">"dialect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sqlite"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"storage"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/tmp/db.sqlite"</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -300,8 +327,33 @@ This shoud be a <code class="highlighter-rouge">.json</code> or a <code class="h
   </li>
   <li>
     <h3 id="favicon">Favicon</h3>
-    <p>You could specify another favicon
+    <p>You could specify another favicon. This is also used as logo (top-left
+corner): <br>
 <code class="highlighter-rouge">"favicon": "./favicon.ico"</code></p>
+  </li>
+  <li>
+    <h3 id="user-locale">User locale</h3>
+    <p>Probably you want to modify some text for your specific community, that’s
+why we thought the <code class="highlighter-rouge">user_locale</code> configuration: you can specify your version of
+each string of <strong>gancio</strong> making a directory with your locales inside.
+For example, let’s say you want to modify the text inside the <code class="highlighter-rouge">/about</code>
+page:<br>
+<code class="highlighter-rouge">mkdir /opt/gancio/user_locale</code>
+put something like this in <code class="highlighter-rouge">/opt/gancio/user_locale/en.js</code> to override the about in
+english:</p>
+    <div class="language-js highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+    <span class="na">about</span><span class="p">:</span> <span class="dl">'</span><span class="s1">A new about</span><span class="dl">'</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+    <p>and then point the <code class="highlighter-rouge">user_locale</code> configuration to that directory:</p>
+    <div class="language-json highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="s2">"user_locale"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/opt/gancio/user_locale"</span><span class="w">
+</span></code></pre></div>    </div>
+    <p>Watch <a href="https://git.lattuga.net/cisti/gancio/src/master/locales">here</a> for a
+list of strings you can override.<br>
+<small><img class="emoji" title=":warning:" alt=":warning:" src="https://github.githubassets.com/images/icons/emoji/unicode/26a0.png" height="20" width="20"> Note that a restart is needed when you change
+user_locale’s content.</small></p>
   </li>
   <li>
     <h3 id="secret">Secret</h3>

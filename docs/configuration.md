@@ -54,8 +54,32 @@ Where to save images
 - ### SMTP
 - ### Admin
 - ### Favicon
-You could specify another favicon
+You could specify another favicon. This is also used as logo (top-left
+corner):   
 `"favicon": "./favicon.ico"`
+
+- ### User locale
+Probably you want to modify some text for your specific community, that's
+why we thought the `user_locale` configuration: you can specify your version of
+each string of **gancio** making a directory with your locales inside.
+For example, let's say you want to modify the text inside the `/about`
+page:  
+`mkdir /opt/gancio/user_locale`
+put something like this in `/opt/gancio/user_locale/en.js` to override the about in
+english:  
+```js
+export default {
+      about: 'A new about'
+}
+```  
+and then point the `user_locale` configuration to that directory:  
+```json
+"user_locale": "/opt/gancio/user_locale"
+```  
+Watch [here](https://git.lattuga.net/cisti/gancio/src/master/locales) for a
+list of strings you can override.  
+<small>:warning: Note that a restart is needed when you change
+user_locale's content.</small>
 
 - ### Secret
 

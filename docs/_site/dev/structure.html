@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
   
-    <title>Classic - Gancio</title>
+    <title>Project Structure - Gancio</title>
 
     
   
@@ -25,17 +25,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Classic | Gancio</title>
+<title>Project Structure | Gancio</title>
 <meta name="generator" content="Jekyll v3.8.6" />
-<meta property="og:title" content="Classic" />
+<meta property="og:title" content="Project Structure" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="A shared agenda for local communities" />
 <meta property="og:description" content="A shared agenda for local communities" />
-<link rel="canonical" href="https://gancio.org/setup/classic" />
-<meta property="og:url" content="https://gancio.org/setup/classic" />
+<link rel="canonical" href="https://gancio.org/dev/structure" />
+<meta property="og:url" content="https://gancio.org/dev/structure" />
 <meta property="og:site_name" content="Gancio" />
 <script type="application/ld+json">
-{"@type":"WebPage","url":"https://gancio.org/setup/classic","headline":"Classic","description":"A shared agenda for local communities","@context":"https://schema.org"}</script>
+{"@type":"WebPage","url":"https://gancio.org/dev/structure","headline":"Project Structure","description":"A shared agenda for local communities","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 </head>
@@ -93,7 +93,7 @@
     
       
         
-          <li class="navigation-list-item active">
+          <li class="navigation-list-item">
             
             <a href="https://gancio.org/setup" class="navigation-list-link">Setup</a>
             
@@ -103,9 +103,9 @@
                   
                 
                   
-                    <li class="navigation-list-item  active">
+                    <li class="navigation-list-item ">
                       
-                      <a href="https://gancio.org/setup/classic" class="navigation-list-link active">Classic</a>
+                      <a href="https://gancio.org/setup/classic" class="navigation-list-link">Classic</a>
                       
                     </li>
                   
@@ -184,7 +184,7 @@
     
       
         
-          <li class="navigation-list-item">
+          <li class="navigation-list-item active">
             
             <a href="https://gancio.org/dev" class="navigation-list-link">Hacking</a>
             
@@ -247,62 +247,39 @@
             <nav class="breadcrumb-nav">
               <ol class="breadcrumb-nav-list">
                 
-                  <li class="breadcrumb-nav-list-item"><a href="https://gancio.org/setup">Setup</a></li>
+                  <li class="breadcrumb-nav-list-item"><a href="https://gancio.org/dev">Hacking</a></li>
                 
-                <li class="breadcrumb-nav-list-item"><span>Classic</span></li>
+                <li class="breadcrumb-nav-list-item"><span>Project Structure</span></li>
               </ol>
             </nav>
           
         
         <div id="main-content" class="page-content" role="main">
-          <h2 id="classic-setup">Classic setup</h2>
+          <h3 id="structure">Structure</h3>
 
-<ol>
-  <li>Install Node.js and postgreSQL
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sL</span> https://deb.nodesource.com/setup_12.x | bash -
-apt-get <span class="nb">install</span> <span class="nt">-y</span> nodejs postgresql
-</code></pre></div>    </div>
-    <p><small><a href="https://github.com/nodesource/distributions/blob/master/README.md">source</a></small></p>
-  </li>
-  <li>Install Gancio
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install</span> <span class="nt">--global</span> gancio
-</code></pre></div>    </div>
-  </li>
-  <li>Create a database (optional as you can use sqlite, but recommended)
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo</span> <span class="nt">-u</span> postgres psql
-<span class="nv">postgres</span><span class="o">=</span><span class="c"># create database gancio;</span>
-<span class="nv">postgres</span><span class="o">=</span><span class="c"># create user gancio with encrypted password 'gancio';</span>
-<span class="nv">postgres</span><span class="o">=</span><span class="c"># grant all privileges on database gancio to gancio;</span>
-</code></pre></div>    </div>
-  </li>
-  <li>Create a user to run gancio from
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>adduser gancio
-su gancio
-</code></pre></div>    </div>
-  </li>
-  <li>Test &amp; launch interactive setup
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gancio <span class="nt">--help</span>
-gancio setup <span class="nt">--config</span> config.json
-</code></pre></div>    </div>
-  </li>
-  <li>Start
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gancio <span class="nt">--help</span>
-gancio start <span class="nt">--config</span> config.json
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Point your web browser to <a href="http://localhost:13120">http://localhost:13120</a> or where you selected during setup.</p>
-  </li>
-  <li>
-    <p><a href="/setup/nginx">Setup nginx as a proxy</a></p>
-  </li>
-  <li>Deploy in production<br />
-If you don’t use the <a href="/setup/docker">docker way</a>, in production you should use something like <strong><a href="http://pm2.keymetrics.io/">pm2</a></strong>:</li>
-</ol>
+<h3 id="api--backend">API / backend</h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>npm <span class="nb">install</span> <span class="nt">--global</span> pm2
-pm2 gancio start <span class="nt">--config</span> config.json
-</code></pre></div></div>
+<p>Source code inside <code class="highlighter-rouge">server/api/</code>.
+<code class="highlighter-rouge">index.js</code> is basically a routing table pointing each PATH with specified
+HTTP VERB to a method of a controller.</p>
+
+<p>jwt is used to authenticate api request.</p>
+
+<p>Express is based on middleware, passing each request to a chain of methods.</p>
+
+<p>If you come from a PHP background, note that the main difference with
+Node.js is that the server process is always running and able to manage
+multiple requests and tasks together (asyncronically) while each php
+process is tied to a single request.</p>
+
+<p>Sequelize is used as ORM. Take a look in <code class="highlighter-rouge">/server/api/models</code>.</p>
+
+<h3 id="client--frontend">Client / frontend</h3>
+<p>Nuxt.js is used here!<br />
+Nuxt is basically Vue plus SSR (Server Side Rendering).
+Client routing in nuxt is automatic (if you don’t need something special),
+just put your page inside <code class="highlighter-rouge">pages</code> and that’s it!</p>
+
 
 
           
