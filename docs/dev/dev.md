@@ -3,6 +3,7 @@ layout: default
 title: Hacking
 permalink: /dev
 nav_order: 5
+has_children: true
 ---
 
 ### Development Stack
