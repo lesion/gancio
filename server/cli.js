@@ -164,6 +164,7 @@ async function start (options) {
 This is your first run? Run 'gancio setup'`)
     process.exit(-1)
   }
+  await upgrade(options)
   require('./index')
 }
 
@@ -177,8 +178,25 @@ async function setup (options) {
 }
 
 async function upgrade (options) {
-  consola.warn('Not implemented yet but should be an easy task! PR welcome!')
-  process.exit(-1)
+  const Umzug = require('umzug')
+  const Sequelize = require('sequelize')
+  const config = require('config')
+  const db = new Sequelize(config.db)
+  const umzug = new Umzug({
+    storage: 'sequelize',
+    storageOptions: { sequelize: db },
+    migrations: {
+      wrap: fun => {
+        return () => fun(db.queryInterface, Sequelize)
+     },
+     path: path.resolve(__dirname, 'migrations')
+    }
+  })
+  const migrations = await umzug.up()
+  if (migrations.length) {
+    consola.info('Migrations executed: ', migrations.map(m => m.file))
+  }
+  db.close()
 }
 
 consola.info(`${package.name} - v${package.version} - ${package.description}`)
@@ -188,7 +206,7 @@ require('yargs')
 .option('config', { 
   alias: 'c',
   describe: 'Configuration file',
-  default: '/gancio/config.json',
+  default: '/opt/gancio/config.json',
 })
 .coerce('config', config_path => {
   const absolute_config_path = path.resolve(cwd, config_path)
