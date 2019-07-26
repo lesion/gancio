@@ -1,4 +1,4 @@
-const it = {
+export default {
   common: {
     add_event: 'Nuovo evento',
     next: 'Continua',
@@ -210,4 +210,3 @@ const it = {
 
 }
 
-export default it

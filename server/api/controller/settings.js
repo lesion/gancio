@@ -1,21 +1,21 @@
 const Mastodon = require('mastodon-api')
 const { setting: Setting } = require('../models')
 const config = require('config')
+const consola = require('consola')
 const path = require('path')
 const fs = require('fs')
 
-let user_locale_path = false
-if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {
-  user_locale_path = path.resolve(config.user_locale)
-}
-
 const settingsController = {
   settings: { initialized: false },
+  user_locale: {},
   secretSettings: {},
 
-  // initialize instance settings from db
   async initialize () {
     if (!settingsController.settings.initialized) {
+
+      // initialize instance settings from db
+      // note that this is done only once when the server starts
+      // and not for each request (it's a kind of cache)!
       const settings = await Setting.findAll()
       settingsController.settings.initialized = true
       settings.forEach( s => {
@@ -25,6 +25,18 @@ const settingsController = {
           settingsController.settings[s.key] = s.value
         }
       })
+
+      // initialize user_locale
+      if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {
+        const user_locale = fs.readdirSync(path.resolve(config.user_locale))
+        user_locale.forEach( async f => {
+          consola.info(`Loading user locale ${f}`)
+          const locale = path.basename(f, '.js')
+          settingsController.user_locale[locale] =
+            (await import(path.resolve(config.user_locale, f))).default
+        })
+      }
+
     }
   },
 
@@ -46,11 +58,7 @@ const settingsController = {
 
   async getUserLocale(req, res) {
     // load user locale specified in configuration
-    if (user_locale_path) {
-      res.json(require(user_locale_path))
-    } else {
-      res.json({})
-    }
+    res.json(settingsController.user_locale)
   },
 
   async setRequest(req, res) {

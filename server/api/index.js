@@ -94,7 +94,6 @@ api.get('/event/unconfirm/:event_id', jwt, isAuth, isAdmin, eventController.unco
 // get event
 api.get('/event/:event_id', jwt, fillUser, eventController.get)
 
-
 // export events (rss/ics)
 api.get('/export/:type', exportController.export)
 
