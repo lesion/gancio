@@ -1,11 +1,11 @@
 ---
 layout: default
 title: Classic
-permalink: /setup/classic
-parent: Setup
+permalink: /install/classic
+parent: Install
 ---
 
-## Classic setup
+## Install
 
 1. Install Node.js and postgreSQL
 ```bash

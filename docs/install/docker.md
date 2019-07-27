@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Docker
-permalink: /setup/docker
-parent: Setup
+permalink: /install/docker
+parent: Install
 ---
 
 ## Install with docker

@@ -1,12 +1,17 @@
 ---
 layout: default
 title: Nginx
-permalink: /setup/nginx
-parent: Setup
+permalink: /install/nginx
+parent: Install
 ---
 
+
+
 ##  Nginx proxy configuration
-This is the default nginx configuration for gancio, please modify at least the **server_name** and **ssl_certificate**'s path
+This is the default nginx configuration for gancio, please modify at least the **server_name** and **ssl_certificate**'s path.  
+Note that this does not include a cache configuration and that gancio does
+not use a cache control at all, if you can help with this task you're
+welcome.
 
 ```nginx
 server {
