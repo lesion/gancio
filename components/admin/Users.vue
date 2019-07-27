@@ -33,10 +33,10 @@ div
             @click='delete_user(data.row)') {{$t('admin.delete_user')}}
         div(v-else)
           span {{$t('common.me')}}
-          
+
   no-ssr
     el-pagination(:page-size='perPage' :currentPage.sync='userPage' :total='users_.length')
-    
+
 </template>
 <script>
 import { Message, MessageBox } from 'element-ui'
@@ -109,7 +109,7 @@ export default {
           message: this.$t('user.error_create') + e
         })
       }
-    },    
+    },
   }
 }
 </script>

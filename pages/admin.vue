@@ -18,20 +18,7 @@
         template(slot='label')
           v-icon(name='map-marker-alt')
           span.ml-1 {{$t('common.places')}}
-        p(v-html="$t('admin.place_description')")
-        el-form.mb-2(:inline='true' label-width='120px')
-          el-form-item(:label="$t('common.name')")
-            el-input.mr-1(:placeholder='$t("common.name")' v-model='place.name')
-          el-form-item(:label="$t('common.address')")
-            el-input.mr-1(:placeholder='$t("common.address")' v-model='place.address')
-          el-button(variant='primary' @click='savePlace') {{$t('common.save')}}
-        el-table(:data='paginatedPlaces' small @current-change="val => place=val")
-          el-table-column(:label="$t('common.name')")
-            template(slot-scope='data') {{data.row.name}}
-          el-table-column(:label="$t('common.address')")
-            template(slot-scope='data') {{data.row.address}}
-        no-ssr
-          el-pagination(:page-size='perPage' :currentPage.sync='placePage' :total='places.length')
+        Places
 
       //- EVENTS
       el-tab-pane.pt-1
@@ -88,22 +75,19 @@
 import { mapState, mapActions } from 'vuex'
 import { Message, MessageBox } from 'element-ui'
 import Users from '../components/admin/Users'
+import Places from '../components/admin/Places'
 
 export default {
   name: 'Admin',
-  components: { Users },
+  components: { Users, Places },
   middleware: ['auth'],
   data () {
     return {
       perPage: 10,
-      userFields: ['email', 'action'],
-      placeFields: ['name', 'address'],
-      placePage: 1,
       eventPage: 1,
       tagPage: 1,
       tagFields: ['tag', 'color'],
       description: '',
-      place: {name: '', address: '' },
       tag: {name: '', color: ''},
       events: [],
       loading: false,
@@ -129,7 +113,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['tags', 'places', 'settings']),
+    ...mapState(['tags', 'settings']),
     allow_registration: {
       get () { return this.settings.allow_registration },
       set (value) { this.setSetting({ key: 'allow_registration', value }) }
@@ -158,29 +142,11 @@ export default {
       return this.tags.slice((this.tagPage-1) * this.perPage,
         this.tagPage * this.perPage)
     },
-
-    paginatedPlaces () {
-      return this.places.slice((this.placePage-1) * this.perPage,
-        this.placePage * this.perPage)
-    },
   },
   methods: {
     ...mapActions(['setSetting']),
-    placeSelected (items) {
-      if (items.length === 0 ) {
-        this.place.name = this.place.address = ''
-        return
-      }
-      const item = items[0]
-      this.place.name = item.name
-      this.place.address = item.address
-      this.place.id = item.id
-    },
     tagSelected (tag) {
       this.tag = { color: tag.color, tag: tag.tag }
-    },
-    async savePlace () {
-      const place = await this.$axios.$put('/place', this.place)
     },
     preview (id) {
       this.$router.push(`/event/${id}`)
