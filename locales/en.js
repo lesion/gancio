@@ -66,12 +66,11 @@ export default {
   },
 
   export: {
-    intro: `Contrariamente alle piattaforme del capitalismo, che fanno di tutto per tenere
-      i dati e gli utenti al loro interno, crediamo che le informazioni, come le persone,
-      debbano essere libere. Per questo puoi rimanere aggiornata sugli eventi che vuoi, come meglio credi, senza necessariamente passare da questo sito.`,
-    email_description: `Puoi ricevere via mail gli eventi che ti interessano.`,
-    insert_your_address: 'Indirizzo email',
-    feed_description: `Per seguire gli aggiornamenti da computer o smartphone senza la necessità di aprire periodicamente il sito, il metodo consigliato è quello dei Feed RSS.</p>
+    intro: ``,
+    email_description: ``,
+    insert_your_address: 'Insert your email address.',
+    feed_description: `
+      Per seguire gli aggiornamenti da computer o smartphone senza la necessità di aprire periodicamente il sito, il metodo consigliato è quello dei Feed RSS.</p>
 
       <p>Con i feed rss utilizzi un'apposita applicazione per ricevere aggiornamenti dai siti che più ti interessano.  È un buon metodo per seguire anche molti siti in modo molto rapido, senza necessità di creare un account o altre complicazioni.</p>
     
@@ -97,19 +96,17 @@ export default {
   },
 
   event: {
-    anon: 'Anonimo',
+    anon: 'Anon',
     anon_description: `Puoi inserire un evento senza registrarti o fare il login, 
       ma in questo caso dovrai aspettare che qualcuno lo legga confermando che si
       tratta di un evento adatto a questo spazio, delegando questa scelta. Inoltre non sarà possibile modificarlo.<br/><br/> 
       Puoi invece fare il <a href='/login'>login</a> o <a href='/registrarti'>registrarti</a>,
       altrimenti vai avanti e riceverai una risposta il prima possibile. `,
-    same_day: 'Stesso giorno',
-    what_description: 'Nome evento',
-    description_description: 'Descrizione, dajene di copia/incolla',
+    same_day: 'Same day',
+    what_description: 'Event\' name',
+    description_description: 'Description',
     tag_description: 'Tag...',
     media_description: 'Puoi aggiungere un volantino',
-    time_start_description: 'Comincia alle',
-    time_end_description: 'Se vuoi puoi specificare un orario di fine.',
     added: 'Evento aggiunto',
     added_anon: 'Evento aggiunto, verrà confermato quanto prima.',
     where_description: `Dov'è il gancio? Se il posto non è presente, scrivilo e <b>premi invio</b>. `,
@@ -207,6 +204,5 @@ export default {
   <a href='https://git.lattuga.net/cisti/gancio'>qui</a>. Aiuti e suggerimenti sono sempre benvenuti, puoi scriverci
   su underscore chicciola autistici.org</p>
   `
-
 }
 

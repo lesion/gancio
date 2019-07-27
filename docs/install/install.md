@@ -1,16 +1,16 @@
 ---
 layout: default
-title: Setup
-permalink: /setup
+title: Install
+permalink: /install
 has_children: true
 nav_order: 2
 has_toc: false
 ---
 
-# Setup
+# Install
 
 
-- [Setup with docker](docker)
-- [Classic setup](classic)
+- [Classic install](classic)
+- [Using docker](docker)
 - [Nginx as a proxy](nginx)
 - [Hacking & contribute](../dev)

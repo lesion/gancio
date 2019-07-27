@@ -1,6 +1,6 @@
 <template lang="pug">
 div#list
-  el-divider {{title}}
+  el-divider(v-if='title') {{title}}
   el-timeline
     el-timeline-item(
       v-for='event in events'
@@ -26,7 +26,7 @@ export default {
   methods: {
     link (event) {
       if (event.recurrent) {
-        return `${event.id}_${event.start_datetime/1000}`
+        return `${event.id}_${event.start_datetime}`
       }
       return event.id
     }

@@ -86,12 +86,12 @@ export const mutations = {
   setEvents(state, events) {
     // set`past` and `newDay` flags to event
     let lastDay = null
-    state.events = events.map((e) => {
-      const currentDay = moment(e.start_datetime).date()
+    state.events = events.map(e => {
+      const currentDay = moment.unix(e.start_datetime).date()
       e.newDay = (!lastDay || lastDay !== currentDay) && currentDay
       lastDay = currentDay
-      const end_datetime = e.end_datetime || e.start_datetime+3600000*2
-      const past = ((moment().unix()*1000) - end_datetime) > 0
+      const end_datetime = e.end_datetime || e.start_datetime+3600*2
+      const past = ((moment().unix()) - end_datetime) > 0
       e.past = !!past
       return e
     })
