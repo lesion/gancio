@@ -1,17 +1,23 @@
 <template lang='pug'>
   div
     p(v-html="$t('admin.place_description')")
-    el-form.mb-2(:inline='true' label-width='120px')
+    el-form.mb-2(inline label-width='120px')
       el-form-item(:label="$t('common.name')")
         el-input.mr-1(:placeholder='$t("common.name")' v-model='place.name')
       el-form-item(:label="$t('common.address')")
         el-input.mr-1(:placeholder='$t("common.address")' v-model='place.address')
       el-button(variant='primary' @click='savePlace') {{$t('common.save')}}
-    el-table(:data='paginatedPlaces' small @current-change="val => place=val")
+    el-table(:data='paginatedPlaces' small)
       el-table-column(:label="$t('common.name')")
         template(slot-scope='data') {{data.row.name}}
       el-table-column(:label="$t('common.address')")
         template(slot-scope='data') {{data.row.address}}
+      el-table-column(:label="$t('common.actions')")
+        template(slot-scope='data')
+          el-button(size='mini'
+            type='success'
+            @click='place = data.row') {{$t('common.edit')}}          
+        
     no-ssr
       el-pagination(:page-size='perPage' :currentPage.sync='placePage' :total='places.length')
 </template>
