@@ -126,6 +126,9 @@ export default {
     recurrent_2m_days: '|Il giorno {days} ogni due mesi|I giorni {days} ogni due mesi',
     recurrent_1m_ordinal: 'Il {n} {days} di ogni mese',
     recurrent_2m_ordinal: '|Il {n} {days} un mese sì e uno no|Il {n} {days} un mese sì e uno no',
+    each_week: 'Ogni settimana',
+    each_2w: 'Ogni due settimane',
+    each_month: 'Ogni mese',
     due: 'alle',
     from: 'Dalle',
     image_too_big: 'Immagine troppo grande! Massimo 4M'

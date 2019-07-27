@@ -60,11 +60,9 @@
               br
               span {{$t(`event.${event.type}_description`)}}
               el-select.ml-2(v-if='event.type==="recurrent"' v-model='event.recurrent.frequency' placeholder='Frequenza')
-                //- el-option(label='Tutti i giorni' value='1d' key='1d')
-                el-option(label='Ogni settimana' value='1w' key='1w')
-                el-option(label='Ogni due settimane' value='2w' key='2w')
-                el-option(label='Ogni mese' value='1m' key='1m')
-                //- el-option(label='Ogni due mesi' value='2m' key='2m')
+                el-option(:label="$t('event.each_week')" value='1w' key='1w')
+                el-option(:label="$t('event.each_2w')" value='2w' key='2w')
+                el-option(:label="$t('event.each_month')" value='1m' key='1m')
 
             v-date-picker.mb-2.mt-3(
               :mode='event.type === "multidate" ? "range" : event.type === "recurrent" ? "multiple" : "single"'
@@ -95,6 +93,7 @@
             List(v-if='event.type==="normal"' :events='todayEvents' :title='$t("event.same_day")')
             el-button.float-right(@click='next' type='succes' :disabled='!couldProceed') {{$t('common.next')}}
 
+          //- MEDIA / FLYER / POSTER
           el-tab-pane
             span(slot='label') {{$t('common.media')}} <v-icon name='image'/>
             el-upload.text-center(
