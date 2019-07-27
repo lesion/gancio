@@ -100,9 +100,6 @@ const eventController = {
       order: [ [Comment, 'id', 'DESC'] ]
     })
 
-    // event.start_datetime = event.start_datetime*1000
-    // event.end_datetime = event.end_datetime*1000
-
     if (event && (event.is_visible || is_admin)) {
       res.json(event)
     } else {
@@ -217,8 +214,6 @@ const eventController = {
     })
 
     events = events.map(e => e.get()).map(e => {
-      e.start_datetime = e.start_datetime*1000
-      e.end_datetime = e.end_datetime*1000
       e.tags = e.tags.map(t => t.tag)
       return e
     })
@@ -230,8 +225,8 @@ const eventController = {
       if (!recurrent.frequency) return false
 
       let cursor = moment(start).startOf('week')
-      const start_date = moment(e.start_datetime)
-      const duration = moment(e.end_datetime).diff(start_date, 's')
+      const start_date = moment.unix(e.start_datetime)
+      const duration = moment.unix(e.end_datetime).diff(start_date, 's')
       const frequency = recurrent.frequency
       const days = recurrent.days
       const type = recurrent.type
@@ -274,8 +269,8 @@ const eventController = {
             cursor.day(d-1)
           }
           if (cursor.isAfter(dueTo) || cursor.isBefore(start)) return
-          e.start_datetime = cursor.unix()*1000
-          e.end_datetime = e.start_datetime+(duration*1000)// cursor.clone().hour(end_datetime.hour()).minute(end_datetime.minute()).unix()*1000
+          e.start_datetime = cursor.unix()
+          e.end_datetime = e.start_datetime+duration
           events.push( Object.assign({}, e) )
         })        
         if (cursor.isAfter(dueTo)) break

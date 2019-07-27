@@ -102,9 +102,8 @@ export default {
     try {
       const [ id, start_datetime ] = params.id.split('_')
       const event = await $axios.$get(`/event/${id}`)
-      event.start_datetime = start_datetime ? start_datetime*1000 : event.start_datetime*1000
-      event.end_datetime = event.end_datetime*1000
-      // event.start_datetime = start_datetime ? start_datetime*1000 : event.start
+      event.start_datetime = start_datetime ? start_datetime : event.start_datetime
+      event.end_datetime = event.end_datetime
       return { event, id }
     } catch(e) {
       error({ statusCode: 404, message: 'Event not found'})
@@ -121,7 +120,7 @@ export default {
       })
       if (!event) return false
       if (event.recurrent) {
-        return `${event.id}_${event.start_datetime/1000}`
+        return `${event.id}_${event.start_datetime}`
       }
       return event.id
     },   
@@ -133,7 +132,7 @@ export default {
       })
       if (!event) return false
       if (event.recurrent) {
-        return `${event.id}_${event.start_datetime/1000}`
+        return `${event.id}_${event.start_datetime}`
       }
       return event.id      
     },

@@ -52,7 +52,7 @@ export default {
     },
     link () {
       if (this.event.recurrent) {
-        return `${this.event.id}_${this.event.start_datetime/1000}`
+        return `${this.event.id}_${this.event.start_datetime}`
       }
       return this.event.id
     }

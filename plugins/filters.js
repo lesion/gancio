@@ -21,8 +21,8 @@ export default ({ app, store }) => {
     moment.locale(store.state.locale)
 
     //{start,end}_datetime are unix timestamp
-    const start = moment(event.start_datetime)
-    const end = moment(event.end_datetime)
+    const start = moment.unix(event.start_datetime)
+    const end = moment.unix(event.end_datetime)
 
     const normal = `${start.format('dddd, D MMMM (HH:mm-')}${end.format('HH:mm)')}`
 

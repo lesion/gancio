@@ -93,9 +93,9 @@ module.exports = {
     //   }
     // },
     transpile: [/^element-ui/, /^vue-awesome/],
-    // splitChunks: {
-    //   layouts: true
-    // },
+    splitChunks: {
+      layouts: true
+    },
     cache: true,
   }
 }

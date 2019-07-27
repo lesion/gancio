@@ -10,10 +10,15 @@ import get from 'lodash/get'
 export default {
   layout: 'iframe',
   components: { List },
-  async asyncData ({ $axios, req, res }) {
-    const title = get(req, 'query.title')
-    const tags = req && req.query && req.query.tags
-    const places = req && req.query && req.query.places
+  data () {
+    return {
+      title : ''
+    }
+  },
+  async asyncData ({ query, $axios }) {
+    const title = query.title
+    const tags = query.tags
+    const places = query.places
     const now = new Date()
 
     let params = []
