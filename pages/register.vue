@@ -2,14 +2,19 @@
   el-card
 
     nuxt-link.float-right(to='/')
-      v-icon(name='times' color='red')
+      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
     h5 {{$t('common.register')}}
 
     el-form(@submit.native.prevent='register' method='POST' action='/api/user/register')
       p(v-html="$t('register.description')")
+
+      el-input.mb-2(v-model='user.username' type='text' name='username'
+        :placeholder='$t("common.username")')
+        v-icon(name='user' slot='prepend')
+
       el-input.mb-2(ref='email' v-model='user.email' type='email' required
         :placeholder='$t("common.email")' autocomplete='email' name='email')
-        span(slot='prepend') @
+        v-icon(name='envelope' slot='prepend')
 
       el-input.mb-2(v-model='user.password' type="password" placeholder="Password" name='password' required)
         v-icon(name='lock' slot='prepend')
@@ -32,6 +37,11 @@ export default {
     return {
       error: {},
       user: { }
+    }
+  },
+  head () {
+    return {
+      title: this.settings.title + ' - ' + this.$t('common.register')
     }
   },
   validate ({store}) {

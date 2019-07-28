@@ -102,7 +102,7 @@ api.get('/event/:month/:year', eventController.getAll)
 // api.get('/event/:month/:year', eventController.getAfter)
 
 // mastodon oauth auth
-api.post('/settings/getauthurl', jwt, isAuth, isAdmin, settingsController.getAuthURL)
-api.get('/settings/oauth', jwt, isAuth, isAdmin, settingsController.code)
+//api.post('/settings/getauthurl', jwt, isAuth, isAdmin, settingsController.getAuthURL)
+//api.get('/settings/oauth', jwt, isAuth, isAdmin, settingsController.code)
 
 module.exports = api

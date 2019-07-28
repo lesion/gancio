@@ -3,6 +3,7 @@ const path = require('path')
 const express = require('express')
 const consola = require('consola')
 const morgan = require('morgan')
+const cors = require('cors')
 const { Nuxt, Builder } = require('nuxt')
 
 // Import and Set Nuxt.js options
@@ -24,11 +25,14 @@ async function start() {
   }
 
   // configurable favicon && logo
-  app.use('/favicon.ico', express.static(path.resolve(config.favicon)))
+  app.use('/favicon.ico', express.static(path.resolve(config.favicon || 'assets/favicon.ico')))
 
   app.use(morgan('dev'))
   app.use('/media/', express.static(config.upload_path))
   app.use('/api', require('./api/index'))
+
+  app.use('/.well-known/webfinger', cors(), require('./federation/webfinger'))
+  app.use('/federation', cors(), require('./federation'))
 
   // Give nuxt middleware to express
   app.use(nuxt.render)

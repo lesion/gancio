@@ -1,4 +1,6 @@
 import Vue from 'vue'
+// https://fontawesome.com/icons?d=gallery
+//
 import 'vue-awesome/icons/lock'
 import 'vue-awesome/icons/user'
 import 'vue-awesome/icons/plus'
@@ -25,6 +27,7 @@ import 'vue-awesome/icons/chevron-right'
 import 'vue-awesome/icons/chevron-left'
 import 'vue-awesome/icons/search'
 import 'vue-awesome/icons/times'
+import 'vue-awesome/icons/envelope'
 import 'vue-awesome/icons/calendar-day'
 import 'vue-awesome/icons/calendar-week'
 import 'vue-awesome/icons/calendar-alt'

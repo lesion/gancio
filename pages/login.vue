@@ -2,13 +2,14 @@
   el-card
     nuxt-link.float-right(to='/')
       el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
+
     h5 {{$t('common.login')}}
     el-form(v-loading='loading')
       p(v-html="$t('login.description')")
 
       el-input.mb-2(v-model='email' type='email' name='email'
         :placeholder='$t("common.email")' autocomplete='email' ref='email')
-        v-icon(name='user' slot='prepend')
+        v-icon(name='envelope' slot='prepend')
 
       el-input.mb-1(v-model='password'  @keyup.enter.native="submit" name='password'
         type='password' :placeholder='$t("common.password")')
