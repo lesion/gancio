@@ -8,7 +8,7 @@ const settingsController = require('./settings')
 const get = require('lodash/get')
 
 const botController = {
-  bot: null,
+  bots: null,
   async initialize() {
     const access_token = get(settingsController.secretSettings, 'mastodon_auth.access_token')
     const instance = get(settingsController.settings, 'mastodon_instance')

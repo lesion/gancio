@@ -1,5 +1,5 @@
 const mail = require('./api/mail')
-const bot = require('./api/controller/bot')
+const bot = require('./api/controller/fediverse')
 const settingsController = require('./api/controller/settings')
 const config = require('config')
 const eventController = require('./api/controller/event')
@@ -10,6 +10,7 @@ const { event: Event, notification: Notification,  event_notification: EventNoti
 
 const notifier = {
   async sendNotification(notification, event) {
+    return
     const promises = []
     switch (notification.type) {
       case 'mail':

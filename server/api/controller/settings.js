@@ -79,38 +79,38 @@ const settingsController = {
     res.json(settings)
   },
 
-  async getAuthURL(req, res) {
-    const instance  = req.body.instance
-    const callback = `${config.baseurl}/api/settings/oauth`
-    const { client_id, client_secret } = await Mastodon.createOAuthApp(`https://${instance}/api/v1/apps`,
-      'gancio', 'read write', callback)
-    const url = await Mastodon.getAuthorizationUrl(client_id, client_secret,
-      `https://${instance}`, 'read write', callback)
+  // async getAuthURL(req, res) {
+  //   const instance  = req.body.instance
+  //   const callback = `${config.baseurl}/api/settings/oauth`
+  //   const { client_id, client_secret } = await Mastodon.createOAuthApp(`https://${instance}/api/v1/apps`,
+  //     'gancio', 'read write', callback)
+  //   const url = await Mastodon.getAuthorizationUrl(client_id, client_secret,
+  //     `https://${instance}`, 'read write', callback)
     
-    await settingsController.set('mastodon_instance', instance )
-    await settingsController.set('mastodon_auth', { client_id, client_secret }, true)
-    res.json(url)
-  },
+  //   await settingsController.set('mastodon_instance', instance )
+  //   await settingsController.set('mastodon_auth', { client_id, client_secret }, true)
+  //   res.json(url)
+  // },
 
-  async code(req, res) {
-    const code = req.query.code
-    const callback = `${config.baseurl}/api/settings/oauth`
-    const client_id = settingsController.secretSettings.mastodon_auth.client_id
-    const client_secret = settingsController.secretSettings.mastodon_auth.client_secret
-    const instance = settingsController.settings.mastodon_instance
+  // async code(req, res) {
+  //   const code = req.query.code
+  //   const callback = `${config.baseurl}/api/settings/oauth`
+  //   const client_id = settingsController.secretSettings.mastodon_auth.client_id
+  //   const client_secret = settingsController.secretSettings.mastodon_auth.client_secret
+  //   const instance = settingsController.settings.mastodon_instance
 
-    try {
-      const access_token = await Mastodon.getAccessToken(client_id, client_secret, code,
-        `https://${instance}`, callback)
-      const mastodon_auth = { client_id, client_secret, access_token }
-      await settingsController.set('mastodon_auth', mastodon_auth, true)
-      const botController = require('./bot')
-      botController.initialize()
-      res.redirect('/admin')
-    } catch (e) {
-      res.json(e)
-    }
-  },
+  //   try {
+  //     const access_token = await Mastodon.getAccessToken(client_id, client_secret, code,
+  //       `https://${instance}`, callback)
+  //     const mastodon_auth = { client_id, client_secret, access_token }
+  //     await settingsController.set('mastodon_auth', mastodon_auth, true)
+  //     const botController = require('./fediverse')
+  //     botController.initialize()
+  //     res.redirect('/admin')
+  //   } catch (e) {
+  //     res.json(e)
+  //   }
+  // },
 }
 
 setTimeout(settingsController.initialize, 200)
