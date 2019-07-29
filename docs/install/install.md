@@ -10,7 +10,7 @@ has_toc: false
 # Install
 
 
-- [Classic install](install/classic)
-- [Using docker](install/docker)
-- [Nginx as a proxy](install/nginx)
+- [Classic install](/install/classic)
+- [Using docker](/install/docker)
+- [Nginx as a proxy](/install/nginx)
 - [Hacking & contribute](../dev)

@@ -174,7 +174,7 @@ async function setup (options) {
   await firstrun.setup(config, options.config)
   consola.info(`You can edit '${options.config}' to modify your configuration. `)
   consola.info(`Run "gancio --config ${options.config}"`)
-  process.exit(0)  
+  process.exit(0)
 }
 
 async function upgrade (options) {

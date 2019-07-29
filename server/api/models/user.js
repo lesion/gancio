@@ -25,7 +25,11 @@ module.exports = (sequelize, DataTypes) => {
     recover_code: DataTypes.STRING,
     is_admin: DataTypes.BOOLEAN,
     is_active: DataTypes.BOOLEAN,
-    rsa: DataTypes.JSONB
+    rsa: DataTypes.JSON,
+    followers: {
+      type: DataTypes.JSON,
+      defaultValue: []
+    }
   }, {
     scopes: {
       withoutPassword: {

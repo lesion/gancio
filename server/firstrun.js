@@ -26,8 +26,7 @@ module.exports = {
 
     try {
       await db.user.findAll()
-      consola.warn(`⚠️ Non empty db! Please move your current db elsewhere than retry.
-If you want to `)
+      consola.warn(`⚠️ Non empty db! Please move your current db elsewhere than retry.`)
       return -1
     } catch(e) { }
 
@@ -40,7 +39,10 @@ If you want to `)
     // create admin user
     consola.info('Create admin user', admin)
     await db.user.create({
-      ...admin,
+      email: admin.email,
+      password: admin.password,
+      username: admin.email,
+      display_name: config.title,
       is_admin: true,
       is_active: true
     })

@@ -15,7 +15,12 @@ A shared agenda for local communities.
 [Get started now](install){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [Demo](https://demo.gancio.org){: .btn .btn-green .fs-5 .mb-4 .mb-md-0 }
 [Source](https://git.lattuga.net/cisti/gancio){: .btn .fs-5 }
 
-![screenshoot](assets/home1.png)
+
+[![diocane](assets/thumbs/home1.png)](assets/home1.png){: data-fancybox="gallery" data-caption="<h2 style='color: white'>Home of first instance of gancio</h2>" } 
+[![diocane](assets/thumbs/mobile1.png)](assets/mobile1.png){: data-fancybox="gallery" data-caption="<h2 style='color: white'>Home of first instance of gancio</h2>" } 
+[![diocane](assets/thumbs/mobile2.png)](assets/mobile2.png){: data-fancybox="gallery" data-caption="<h2 style='color: white'>Home of first instance of gancio</h2>" } 
+[![diocane](assets/thumbs/admin_users.png)](assets/admin_users.png){: data-fancybox="gallery" data-caption="<h2 style='color: white'>Home of first instance of gancio</h2>" } 
+[![diocane](assets/thumbs/login.png)](assets/login.png){: data-fancybox="gallery" data-caption="<h2 style='color: white'>Home of first instance of gancio</h2>" } 
 
 
 ### About the project

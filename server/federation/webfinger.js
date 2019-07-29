@@ -4,6 +4,7 @@ const { user: User } = require('../api/models')
 const config = require('config')
 
 router.get('/', async (req, res) => {
+  console.error('ma sono dentro webfinger ?!?!')
   const resource = req.query.resource
   if (!resource || !resource.includes('acct:')) {
     return res.status(400).send('Bad request. Please make sure "acct:USER@DOMAIN" is what you are sending as the "resource" query parameter.')
