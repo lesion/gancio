@@ -32,6 +32,7 @@ async function start() {
   app.use('/api', require('./api/index'))
 
   app.use('/.well-known/webfinger', cors(), require('./federation/webfinger'))
+  app.use('/.well-known/x-nodeinfo2', cors(), require('./federation/nodeinfo'))
   app.use('/federation', cors(), require('./federation'))
 
   // Give nuxt middleware to express
