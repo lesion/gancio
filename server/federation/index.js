@@ -6,10 +6,10 @@ const get = require('lodash/get')
 const crypto = require('crypto')
 const request = require('request')
 
-function signAndSend(message, usre, domain, req, res, targetDomain) {
+function signAndSend(message, usre, domain, req, res, targetOrigin) {
   // get the URI of the actor object and append 'inbox' to it
   let inbox = message.object.actor+'/inbox'
-  let inboxFragment = inbox.replace('https://'+targetDomain,'')
+  let inboxFragment = inbox.replace(targetOrigin,'')
   // get the private key
   const privkey = user.rsa.privateKey
   const signer = crypto.createSign('sha256')
@@ -19,12 +19,12 @@ function signAndSend(message, usre, domain, req, res, targetDomain) {
   signer.end()
   const signature = signer.sign(privkey)
   const signature_b64 = signature.toString('base64')
-  let header = `keyId="https://${domain}/u/${name}",headers="(request-target) host date",signature="${signature_b64}"`
+  let header = `keyId="${config.baseurl}/federation/u/${name}",headers="(request-target) host date",signature="${signature_b64}"`
   console.error('vado di request accept !')
   request({
     url: inbox,
     headers: {
-      'Host': targetDomain,
+      'Host': new URL(targetOrigin).host,
       'Date': d.toUTCString(),
       'Signature': header
     },
@@ -42,7 +42,7 @@ function signAndSend(message, usre, domain, req, res, targetDomain) {
   return res.status(200);
 }
 
-function sendAcceptMessage (body, user, req, res, targetDomain) {
+function sendAcceptMessage (body, user, req, res, targetOrigin) {
   const guid = crypto.randomBytes(16).toString('hex')
   let message = {
     '@context': 'https://www.w3.org/ns/activitystreams',
@@ -51,13 +51,13 @@ function sendAcceptMessage (body, user, req, res, targetDomain) {
     'actor': `${config.baseurl}/federation/u/${user.username}`,
     'object': body,
   }
-  signAndSend(message, user, domain, req, res, targetDomain)
+  signAndSend(message, user, domain, req, res, targetOrigin)
 }
 
 router.post('/inbox', async (req, res) => {
   const b = req.body
   console.error('> INBOX ', b)
-  const targetDomain = new URL(b.actor).host
+  const targetOrigin = new URL(b.actor).origin
   const domain = new URL(config.baseurl).host
   switch(b.type) {
     case 'Follow':
@@ -69,7 +69,7 @@ router.post('/inbox', async (req, res) => {
         console.error('No user found!')
         return
       }
-      sendAcceptMessage(b, user, domain, req, res, targetDomain)
+      sendAcceptMessage(b, user, domain, req, res, targetOrigin)
       console.error('FOLLOWERS ', user.followers)
       if (user.followers.indexOf(b.actor) === -1) {
         console.error('ok this is a new follower: ', b.actor)
@@ -94,6 +94,7 @@ router.get('/u/:name', async (req, res) => {
     id: `${config.baseurl}/federation/u/${name}`,
     type: 'Person',
     preferredUsername: name,
+    nodeInfo2Url: `${config.baseurl}/.well-known/x-nodeinfo2`,
     inbox: `${config.baseurl}/federation/inbox`,
     followers: `${config.baseurl}/federation/u/${name}/followers`,
     publicKey: {

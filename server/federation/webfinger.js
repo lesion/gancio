@@ -9,12 +9,12 @@ router.get('/', async (req, res) => {
   if (!resource || !resource.includes('acct:')) {
     return res.status(400).send('Bad request. Please make sure "acct:USER@DOMAIN" is what you are sending as the "resource" query parameter.')
   }
-  const name = resource.replace('acct:', '')
-  const domain = 'localhoasf'
+  const name = resource.match(/acct:(.*)@/)[1]
+  const domain = new URL(config.baseurl).host
   const user = await User.findOne({where: { username: name } })
   if (!user) return res.status(404).send(`No record found for ${name}`)
   const ret = {
-    subject: `acct:${name}:${domain}`,
+    subject: `acct:${name}@${host}`,
     links: [
       {
         rel: 'self',
