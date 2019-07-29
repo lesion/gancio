@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { user: User } = require('../api/models')
-const settingsController = require('../api/controllers/settings')
+const settingsController = require('../api/controller/settings')
 const config = require('config')
 const version = require('../../package.json').version
 
@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
       version
     },
     protocols: ['activitypub'],
-    openRegistrations: settingsControllers.settings.allow_registration,
+    openRegistrations: settingsController.settings.allow_registration,
     usage:{
       users: {
         total: 10

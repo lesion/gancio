@@ -3,6 +3,7 @@ const path = require('path')
 const express = require('express')
 const consola = require('consola')
 const morgan = require('morgan')
+const bodyParser = require('body-parser')
 const cors = require('cors')
 const { Nuxt, Builder } = require('nuxt')
 
@@ -29,11 +30,14 @@ async function start() {
 
   app.use(morgan('dev'))
   app.use('/media/', express.static(config.upload_path))
+
+  // gancio standard api
   app.use('/api', require('./api/index'))
 
+  // federation api / activitypub / webfinger / nodeinfo
   app.use('/.well-known/webfinger', cors(), require('./federation/webfinger'))
   app.use('/.well-known/x-nodeinfo2', cors(), require('./federation/nodeinfo'))
-  app.use('/federation', cors(), require('./federation'))
+  app.use('/federation', cors(), bodyParser.join({type: 'applicatoin/activity+json'}), require('./federation'))
 
   // Give nuxt middleware to express
   app.use(nuxt.render)

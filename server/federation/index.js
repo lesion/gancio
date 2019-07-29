@@ -6,10 +6,11 @@ const get = require('lodash/get')
 const crypto = require('crypto')
 const request = require('request')
 
-function signAndSend(message, usre, domain, req, res, targetOrigin) {
+function signAndSend(message, user, domain, req, res, targetOrigin) {
   // get the URI of the actor object and append 'inbox' to it
   let inbox = message.object.actor+'/inbox'
   let inboxFragment = inbox.replace(targetOrigin,'')
+  const targetDomain = new URL(targetOrigin).host
   // get the private key
   const privkey = user.rsa.privateKey
   const signer = crypto.createSign('sha256')
@@ -19,12 +20,11 @@ function signAndSend(message, usre, domain, req, res, targetOrigin) {
   signer.end()
   const signature = signer.sign(privkey)
   const signature_b64 = signature.toString('base64')
-  let header = `keyId="${config.baseurl}/federation/u/${name}",headers="(request-target) host date",signature="${signature_b64}"`
-  console.error('vado di request accept !')
+  let header = `keyId="${config.baseurl}/federation/u/${user.username}",headers="(request-target) host date",signature="${signature_b64}"`
   request({
     url: inbox,
     headers: {
-      'Host': new URL(targetOrigin).host,
+      'Host': targetDomain,
       'Date': d.toUTCString(),
       'Signature': header
     },
@@ -42,7 +42,7 @@ function signAndSend(message, usre, domain, req, res, targetOrigin) {
   return res.status(200);
 }
 
-function sendAcceptMessage (body, user, req, res, targetOrigin) {
+function sendAcceptMessage (body, user, domain, req, res, targetOrigin) {
   const guid = crypto.randomBytes(16).toString('hex')
   let message = {
     '@context': 'https://www.w3.org/ns/activitystreams',
@@ -73,8 +73,7 @@ router.post('/inbox', async (req, res) => {
       console.error('FOLLOWERS ', user.followers)
       if (user.followers.indexOf(b.actor) === -1) {
         console.error('ok this is a new follower: ', b.actor)
-        user.followers.push(b.actor)
-        await user.save()
+        await user.update({ followers: [...user.followers, b.actor] })
       }
 
       break

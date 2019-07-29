@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
   const user = await User.findOne({where: { username: name } })
   if (!user) return res.status(404).send(`No record found for ${name}`)
   const ret = {
-    subject: `acct:${name}@${host}`,
+    subject: `acct:${name}@${domain}`,
     links: [
       {
         rel: 'self',
