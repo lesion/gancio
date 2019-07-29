@@ -8,7 +8,6 @@ router.get('/u/:name', async (req, res) => {
   if (!name) return res.status(400).send('Bad request.')
   const user = await User.findOne({where: { username: name }})
   if (!user) return res.status(404).send(`No record found for ${name}`)
-  const domain = 'local'
   const ret = {
     '@context': [
       'https://www.w3.org/ns/activitystreams',
@@ -22,7 +21,7 @@ router.get('/u/:name', async (req, res) => {
     'publicKey': {
       'id': `${config.baseurl}/federation/u/${name}#main-key`,
       'owner': `${config.baseurl}/federation/u/${name}`,
-      'publicKeyPem': user.pubkey
+      'publicKeyPem': user.rsa.publicKey
     }
   }
   res.json(ret)

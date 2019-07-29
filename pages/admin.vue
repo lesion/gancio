@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-card
+  el-card#admin
     nuxt-link.float-right(to='/')
       v-icon(name='times' color='red')
     h5 {{$t('common.admin')}}

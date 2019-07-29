@@ -1,5 +1,9 @@
 'use strict'
 const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
+const util = require('util')
+
+const generateKeyPair = util.promisify(crypto.generateKeyPair)
 
 module.exports = (sequelize, DataTypes) => {
   const user = sequelize.define('user', {
@@ -20,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     recover_code: DataTypes.STRING,
     is_admin: DataTypes.BOOLEAN,
-    is_active: DataTypes.BOOLEAN
+    is_active: DataTypes.BOOLEAN,
+    rsa: DataTypes.JSONB
   }, {
     scopes: {
       withoutPassword: {
@@ -46,6 +51,23 @@ module.exports = (sequelize, DataTypes) => {
       const hash = await bcrypt.hash(user.password, salt)
       user.password = hash
     }
+  })
+
+  user.beforeCreate(async (user, options) => {
+    // generate rsa keys
+    console.error('generate rsa key')
+    const rsa = await generateKeyPair('rsa', {
+      modulusLength: 4096,
+      publicKeyEncoding: {
+        type: 'spki',
+        format: 'pem'
+      },
+      privateKeyEncoding: {
+        type: 'pkcs8',
+        format: 'pem'
+      }
+    })
+    user.rsa = rsa
   })
 
   return user

@@ -48,7 +48,8 @@ export default {
     enable: 'Abilita',
     disable: 'Disabilita',
     me: 'Sei te',
-    password_updated: 'Password modificata!'
+    password_updated: 'Password modificata!',
+    username: 'Nickname'
   },
 
   login: {
