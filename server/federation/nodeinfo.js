@@ -23,6 +23,8 @@ router.get('/', async (req, res) => {
     },
     localPost: 3,
     localComments: 0
+  }
+  res.json(ret)
 })
 
 module.exports = router
