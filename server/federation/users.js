@@ -46,9 +46,22 @@ module.exports = {
         orderedItems: user.followers,
       }
     }
-    res.json(ret)    
+    res.json(ret)
   },
   outbox (req, res) {
+    const name = req.params.name
+    if (!name) return res.status(400).send('Bad request.')
     console.error('Inside outbox, should return all events from this user')
+    const res = {
+      '@context': 'https://www.w3.org/ns/activitystreams',
+      id: `${config.baseurl}/federation/u/${name}/outbox`,
+      type: 'OrderedCollection',
+      totalItems: 1,
+      first: {
+        id: `${config.baseurl}/federation/u/${name}/outbox`,
+        type: 'OrderedCollectionPage',
+        orderedItems: [{content: 'ciao'}]
+      }
+    }
   }
 }
