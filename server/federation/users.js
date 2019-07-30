@@ -71,7 +71,13 @@ module.exports = {
         // summary: `${user.username} outbox`,
         totalItems: user.events.length,
         // orderedItems: user.events.map(e => e.toAP(user.username))
-        first: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
+        first: {
+          id: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
+          type: 'OrderedCollectionPage',
+          totalItem: user.events.length,
+          partOf: `${config.baseurl}/federation/u/${name}/outbox`,
+          orderedItems: user.events.map(e => e.toAP(user.username))    
+        }
         // last: `${config.baseurl}/federation/u/${name}/outbox?page=true`
       }
       return res.json(ret)
