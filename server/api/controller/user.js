@@ -9,6 +9,7 @@ const mail = require('../mail')
 const { user: User, event: Event, tag: Tag, place: Place } = require('../models')
 const settingsController = require('./settings')
 const notifier = require('../../notifier')
+const federation = require('../../federation/helpers')
 
 const userController = {
   async login(req, res) {
@@ -120,6 +121,8 @@ const userController = {
 
     // send response to client
     res.json(event)
+
+    federation.sendEvent(event, user)
 
     // send notification (mastodon/email/confirmation)
     notifier.notifyEvent(event.id)

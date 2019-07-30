@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     event.hasMany(models.comment)
   }
 
-  event.prototype.toAP = function (username) {
+  event.prototype.toAP = function (username, follower) {
     return {
       id: `${config.baseurl}/federation/m/c_${this.id}`,
       type: 'Create',
@@ -48,6 +48,7 @@ module.exports = (sequelize, DataTypes) => {
         published: this.createdAt,
         attributedTo: `${config.baseurl}/federation/u/${username}`,
         to: 'https://www.w3.org/ns/activitystreams#Public',
+        cc: [follower],
         content: this.title
       }
     }

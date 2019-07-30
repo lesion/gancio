@@ -4,32 +4,29 @@ const crypto = require('crypto')
 const config = require('config')
 
 const Helpers = {
-  async sendToFollowers (message, user) {
-    const followers = user.followers
-    console.error('send to ', followers)
-    for(let follower of followers) {
-      console.error('send message to ', follower)
-    }
-  },
-  async signAndSend(message, user, domain, req, res, targetOrigin) {
+  async signAndSend(message, user, to) {//, domain, req, res, targetOrigin) {
+
     // get the URI of the actor object and append 'inbox' to it
-    let inbox = message.object.actor+'/inbox'
-    let inboxFragment = inbox.replace(targetOrigin,'')
-    const targetDomain = new URL(targetOrigin).host
+    const toInbox = to + '/inbox'
+    const toOrigin = new URL(to).hostname
+    const toPath = toInbox.replace(toOrigin, '')
     // get the private key
     const privkey = user.rsa.privateKey
     const signer = crypto.createSign('sha256')
-    let d = new Date()
-    let stringToSign = `(request-target): post ${inboxFragment}\nhost: ${targetDomain}\ndate: ${d.toUTCString()}`
+    const d = new Date()
+    const stringToSign = `(request-target): post ${toPath}\nhost: ${toOrigin}\ndate: ${d.toUTCString()}`
+    console.error('stringToSign ', stringToSign)
+
     signer.update(stringToSign)
     signer.end()
     const signature = signer.sign(privkey)
     const signature_b64 = signature.toString('base64')
-    let header = `keyId="${config.baseurl}/federation/u/${user.username}",headers="(request-target) host date",signature="${signature_b64}"`
+    const header = `keyId="${config.baseurl}/federation/u/${user.username}",headers="(request-target) host date",signature="${signature_b64}"`
+    console.error('header ', header)
     request({
       url: inbox,
       headers: {
-        'Host': targetDomain,
+        'Host': toOrigin,
         'Date': d.toUTCString(),
         'Signature': header
       },
@@ -55,7 +52,17 @@ const Helpers = {
       'actor': `${config.baseurl}/federation/u/${user.username}`,
       'object': body,
     }
-    Helpers.signAndSend(message, user, domain, req, res, targetOrigin)
+    // Helpers.signAndSend(message, user, domain, req, res, targetOrigin)
+  },
+  async sendEvent(event, user) {
+    console.error('devo inviare un evento ai followers')
+    const followers = user.followers
+    console.error('send to ', followers)
+    for(let follower of followers) {
+      console.error('send message to ', follower)
+      const body = event.toAP(user.username, follower)
+      Helpers.signAndSend(body, user, follower)
+    }    
   }
 }
 
