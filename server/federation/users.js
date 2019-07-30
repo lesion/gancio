@@ -61,7 +61,8 @@ module.exports = {
         id: `${config.baseurl}/federation/u/${name}/outbox`,
         type: 'OrderedCollection',
         totalItems: 1,
-        first: `${config.baseurl}/federation/u/${name}/outbox?page=true`
+        first: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
+        last: `${config.baseurl}/federation/u/${name}/outbox?page=true`
       }
       return res.json(ret)
     }
