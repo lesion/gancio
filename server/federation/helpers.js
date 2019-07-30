@@ -8,13 +8,13 @@ const Helpers = {
 
     // get the URI of the actor object and append 'inbox' to it
     const toInbox = to + '/inbox'
-    const toOrigin = new URL(to).hostname
-    const toPath = toInbox.replace(toOrigin, '')
+    const toOrigin = new URL(to)
+    const toPath = toInbox.replace(toOrigin.origin, '')
     // get the private key
     const privkey = user.rsa.privateKey
     const signer = crypto.createSign('sha256')
     const d = new Date()
-    const stringToSign = `(request-target): post ${toPath}\nhost: ${toOrigin}\ndate: ${d.toUTCString()}`
+    const stringToSign = `(request-target): post ${toPath}\nhost: ${toOrigin.hostname}\ndate: ${d.toUTCString()}`
     console.error('stringToSign ', stringToSign)
 
     signer.update(stringToSign)
@@ -24,9 +24,9 @@ const Helpers = {
     const header = `keyId="${config.baseurl}/federation/u/${user.username}",headers="(request-target) host date",signature="${signature_b64}"`
     console.error('header ', header)
     request({
-      url: inbox,
+      url: toInbox,
       headers: {
-        'Host': toOrigin,
+        'Host': toOrigin.hostname,
         'Date': d.toUTCString(),
         'Signature': header
       },

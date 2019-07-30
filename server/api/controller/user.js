@@ -125,7 +125,7 @@ const userController = {
     federation.sendEvent(event, req.user)
 
     // send notification (mastodon/email/confirmation)
-    notifier.notifyEvent(event.id)
+    // notifier.notifyEvent(event.id)
 
   },
 
