@@ -1,5 +1,6 @@
 const { user: User } = require('../api/models')
 const config = require('config')
+const get = require('lodash/get')
 
 module.exports = {
   async get (req, res) {
