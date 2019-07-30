@@ -60,7 +60,16 @@ module.exports = {
       first: {
         id: `${config.baseurl}/federation/u/${name}/outbox`,
         type: 'OrderedCollectionPage',
-        orderedItems: [{content: 'ciao'}]
+        orderedItems: [{
+          id: `${config.baseurl}/federation/m/12341234`,
+          type: 'Note',
+          url: `${config.baseurl}/federation/m/12341234`,
+          published: new Date(),
+          attributedTo: `${config.baseurl}/federation/u/${name}`,
+          sensitive: false,
+          to: ['https://www.w3.org/ns/activitystreams#Public'],
+          content: 'prova'
+        }]
       }
     }
     return res.json(ret)

@@ -13,12 +13,12 @@ module.exports = {
       console.error('No user found!')
       return
     }
-    Helpers.sendAcceptMessage(body, user, domain, req, res, targetOrigin)
     console.error('FOLLOWERS ', user.followers)
     if (user.followers.indexOf(body.actor) === -1) {
       console.error('ok this is a new follower: ', body.actor)
       await user.update({ followers: [...user.followers, body.actor] })
     }
+    return Helpers.sendAcceptMessage(body, user, domain, req, res, targetOrigin)
 
   },
   // unfollow request from fediverse
