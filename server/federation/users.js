@@ -65,7 +65,7 @@ module.exports = {
       }
       return res.json(ret)
     }
-    const ret = { 
+    const ret = {
       '@context': 'https://www.w3.org/ns/activitystreams',
       id: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
       type: 'OrderedCollectionPage',
@@ -80,5 +80,7 @@ module.exports = {
         to: ['https://www.w3.org/ns/activitystreams#Public'],
         content: 'prova'
       }]
+    }
+    res.json(ret)
   }
 }
