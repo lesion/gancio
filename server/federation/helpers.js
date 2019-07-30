@@ -4,6 +4,13 @@ const crypto = require('crypto')
 const config = require('config')
 
 const Helpers = {
+  async sendToFollowers (message, user) {
+    const followers = user.followers
+    console.error('send to ', followers)
+    for(let follower of followers) {
+      console.error('send message to ', follower)
+    }
+  },
   async signAndSend(message, user, domain, req, res, targetOrigin) {
     // get the URI of the actor object and append 'inbox' to it
     let inbox = message.object.actor+'/inbox'
@@ -34,7 +41,7 @@ const Helpers = {
         console.log('Error:', error, response.body)
       }
       else {
-        console.log('Response:', response.body)
+        console.log('Response:', response.body, response.statusCode, response.status, response.statusMessage)
       }
     })
     return res.status(200)

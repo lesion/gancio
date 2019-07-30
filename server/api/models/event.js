@@ -1,3 +1,5 @@
+const config = require('config')
+
 module.exports = (sequelize, DataTypes) => {
   const event = sequelize.define('event', {
     id: {
@@ -33,6 +35,22 @@ module.exports = (sequelize, DataTypes) => {
     event.belongsToMany(models.tag, { through: 'event_tags' })
     event.belongsToMany(models.notification, { through: 'event_notification' })
     event.hasMany(models.comment)
+  }
+
+  event.prototype.toAP = function (username) {
+    return {
+      id: `${config.baseurl}/federation/m/c_${this.id}`,
+      type: 'Create',
+      actor: `${config.baseurl}/federation/u/${username}`,
+      object: {
+        id: `${config.baseurl}/federation/m/${this.id}`,
+        type: 'Note',
+        published: this.createdAt,
+        attributedTo: `${config.baseurl}/federation/u/${username}`,
+        to: 'https://www.w3.org/ns/activitystreams#Public',
+        content: this.title
+      }
+    }
   }
 
   return event

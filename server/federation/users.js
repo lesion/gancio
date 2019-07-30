@@ -1,4 +1,4 @@
-const { user: User } = require('../api/models')
+const { user: User, event: Event } = require('../api/models')
 const config = require('config')
 const get = require('lodash/get')
 
@@ -48,21 +48,31 @@ module.exports = {
     }
     res.json(ret)
   },
-  outbox (req, res) {
+  async outbox (req, res) {
     const name = req.params.name
     const page = req.query.page
 
     if (!name) return res.status(400).send('Bad request.')
+    const user = await User.findOne({
+      include: [ Event ],
+      where: { username: name }
+    })
+
+
+    if (!user) return res.status(404).send(`No record found for ${name}`)    
 
     console.error('Inside outbox, should return all events from this user')
+    // https://www.w3.org/TR/activitypub/#outbox
     if (!page) {
       const ret = {
         '@context': 'https://www.w3.org/ns/activitystreams',
         id: `${config.baseurl}/federation/u/${name}/outbox`,
         type: 'OrderedCollection',
-        totalItems: 1,
-        first: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
-        last: `${config.baseurl}/federation/u/${name}/outbox?page=true`
+        summary: `${user.username} outbox`,
+        totalItems: user.events.length,
+        orderedItems: user.events.map(e => e.toAP(user.username))
+        // first: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
+        // last: `${config.baseurl}/federation/u/${name}/outbox?page=true`
       }
       return res.json(ret)
     }
@@ -71,16 +81,7 @@ module.exports = {
       id: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
       type: 'OrderedCollectionPage',
       partOf: `${config.baseurl}/federation/u/${name}/outbox`,
-      orderedItems: [{
-        id: `${config.baseurl}/federation/m/12341234`,
-        type: 'Note',
-        url: `${config.baseurl}/federation/m/12341234`,
-        published: new Date(),
-        attributedTo: `${config.baseurl}/federation/u/${name}`,
-        sensitive: false,
-        to: ['https://www.w3.org/ns/activitystreams#Public'],
-        content: 'prova'
-      }]
+      orderedItems: user.events.map(e => e.toAP(user.username))
     }
     res.json(ret)
   }
