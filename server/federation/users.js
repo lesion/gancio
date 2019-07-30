@@ -68,10 +68,10 @@ module.exports = {
         '@context': 'https://www.w3.org/ns/activitystreams',
         id: `${config.baseurl}/federation/u/${name}/outbox`,
         type: 'OrderedCollection',
-        summary: `${user.username} outbox`,
+        // summary: `${user.username} outbox`,
         totalItems: user.events.length,
-        orderedItems: user.events.map(e => e.toAP(user.username))
-        // first: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
+        // orderedItems: user.events.map(e => e.toAP(user.username))
+        first: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
         // last: `${config.baseurl}/federation/u/${name}/outbox?page=true`
       }
       return res.json(ret)
