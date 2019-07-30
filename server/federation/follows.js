@@ -5,7 +5,7 @@ const { user: User } = require('../api/models')
 module.exports = {
   // follow request from fediverse
   async follow (req, res, body, targetOrigin, domain) {
-    if (typeof b.object !== 'string') return
+    if (typeof body.object !== 'string') return
     const username = body.object.replace(`${config.baseurl}/federation/u/`, '')
     console.error('someone wants to follow ' + username)
     const user = await User.findOne({ where: { username }})
