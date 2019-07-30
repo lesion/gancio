@@ -52,7 +52,7 @@ module.exports = {
     const name = req.params.name
     if (!name) return res.status(400).send('Bad request.')
     console.error('Inside outbox, should return all events from this user')
-    const res = {
+    const ret = {
       '@context': 'https://www.w3.org/ns/activitystreams',
       id: `${config.baseurl}/federation/u/${name}/outbox`,
       type: 'OrderedCollection',
@@ -63,5 +63,6 @@ module.exports = {
         orderedItems: [{content: 'ciao'}]
       }
     }
+    return res.json(ret)
   }
 }
