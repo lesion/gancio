@@ -50,28 +50,35 @@ module.exports = {
   },
   outbox (req, res) {
     const name = req.params.name
+    const page = req.query.page
+
     if (!name) return res.status(400).send('Bad request.')
+
     console.error('Inside outbox, should return all events from this user')
-    const ret = {
-      '@context': 'https://www.w3.org/ns/activitystreams',
-      id: `${config.baseurl}/federation/u/${name}/outbox`,
-      type: 'OrderedCollection',
-      totalItems: 1,
-      first: {
+    if (!page) {
+      const ret = {
+        '@context': 'https://www.w3.org/ns/activitystreams',
         id: `${config.baseurl}/federation/u/${name}/outbox`,
-        type: 'OrderedCollectionPage',
-        orderedItems: [{
-          id: `${config.baseurl}/federation/m/12341234`,
-          type: 'Note',
-          url: `${config.baseurl}/federation/m/12341234`,
-          published: new Date(),
-          attributedTo: `${config.baseurl}/federation/u/${name}`,
-          sensitive: false,
-          to: ['https://www.w3.org/ns/activitystreams#Public'],
-          content: 'prova'
-        }]
+        type: 'OrderedCollection',
+        totalItems: 1,
+        first: `${config.baseurl}/federation/u/${name}/outbox?page=true`
       }
+      return res.json(ret)
     }
-    return res.json(ret)
+    const ret = { 
+      '@context': 'https://www.w3.org/ns/activitystreams',
+      id: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
+      type: 'OrderedCollectionPage',
+      partOf: `${config.baseurl}/federation/u/${name}/outbox`,
+      orderedItems: [{
+        id: `${config.baseurl}/federation/m/12341234`,
+        type: 'Note',
+        url: `${config.baseurl}/federation/m/12341234`,
+        published: new Date(),
+        attributedTo: `${config.baseurl}/federation/u/${name}`,
+        sensitive: false,
+        to: ['https://www.w3.org/ns/activitystreams#Public'],
+        content: 'prova'
+      }]
   }
 }
