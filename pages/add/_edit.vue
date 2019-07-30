@@ -127,6 +127,11 @@ export default {
   validate ({store}) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
+  head () {
+    return {
+      title: `${this.settings.title} - ${this.$t('common.add_event')}`
+    }
+  },
   data() {
     const month = moment().month()+1
     const year = moment().year()
@@ -197,7 +202,7 @@ export default {
         data.event.type = 'normal'
         data.date = new Date(event.start_datetime)
       }
-      
+
       data.time.start = moment(event.start_datetime).format('HH:mm')
       data.time.end = moment(event.end_datetime).format('HH:mm')
       data.event.title = event.title
@@ -217,6 +222,7 @@ export default {
       places: state => state.places,
       user: state => state.user,
       events: state => state.events,
+      settings: state => state.settings
     }),
     whenPatterns () {
       const dates = this.date

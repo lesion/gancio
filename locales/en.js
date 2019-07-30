@@ -87,12 +87,8 @@ export default {
     description: `I movimenti hanno bisogno di organizzarsi e autofinanziarsi. <br/>Questo è un dono per voi, usatelo solo per eventi non commerciali e ovviamente antifascisti, antisessisti, antirazzisti. 
       <br/>Prima di poter pubblicare <strong>dobbiamo approvare l'account</strong>, considera che <strong>dietro questo sito ci sono delle persone</strong> di
       carne e sangue, scrivici quindi due righe per farci capire che eventi vorresti pubblicare.`,
-    error: 'Errore: ',
-    admin_complete: 'Sei il primo utente e quindi sei amministratore!',
-    complete: 'Confermeremo la registrazione quanto prima.',
-    request: 'Richiesta di registrazione',
-    registration_email: `Ciao,
-    ci è arrivata una richiesta di registrazione su gancio, la confermeremo quanto prima.`
+    error: 'Error: ',
+    complete: 'Registration has to be confirmed.'
   },
 
   event: {
@@ -103,79 +99,79 @@ export default {
       Puoi invece fare il <a href='/login'>login</a> o <a href='/registrarti'>registrarti</a>,
       altrimenti vai avanti e riceverai una risposta il prima possibile. `,
     same_day: 'Same day',
-    what_description: 'Event\' name',
+    what_description: 'Event\'s name',
     description_description: 'Description',
-    tag_description: 'Tag...',
-    media_description: 'Puoi aggiungere un volantino',
-    added: 'Evento aggiunto',
-    added_anon: 'Evento aggiunto, verrà confermato quanto prima.',
-    where_description: `Dov'è il gancio? Se il posto non è presente, scrivilo e <b>premi invio</b>. `,
-    confirmed: 'Evento confermato',
-    not_found: 'Evento non trovato',
-    remove_confirmation: `Sicura di voler eliminare questo evento?`,
-    recurrent: `Ricorrente`,
-    recurrent_description: 'Scegli la frequenza e seleziona i giorni',
-    multidate_description: 'Un festival o una tre giorni?  Scegli quando comincia e quando finisce.',
-    multidate: 'Più giorni',
-    normal: 'Normale',
-    normal_description: 'Scegli il giorno.',
-    recurrent_1w_days: 'Ogni {days}',
-    recurrent_2w_days: 'Un {days} ogni due',
-    recurrent_1m_days: '|Il giorno {days} di ogni mese|I giorni {days} di ogni mese',
-    recurrent_2m_days: '|Il giorno {days} ogni due mesi|I giorni {days} ogni due mesi',
-    recurrent_1m_ordinal: 'Il {n} {days} di ogni mese',
-    recurrent_2m_ordinal: '|Il {n} {days} un mese sì e uno no|Il {n} {days} un mese sì e uno no',
-    due: 'alle',
-    from: 'Dalle',
-    image_too_big: 'Immagine troppo grande! Massimo 4M'
+    tag_description: 'Tag',
+    media_description: 'You could add an event\'s flyer (optional)',
+    added: 'Event added',
+    added_anon: 'Event added but has to be confirmed.',
+    where_description: `Where's the event? If not present, write it and <b>press enter</b>. `,
+    confirmed: 'Event confirmed',
+    not_found: 'Event not found',
+    remove_confirmation: `Are you sure to remove this event?`,
+    recurrent: `Recurrent`,
+    recurrent_description: 'Choose the frequency and select the days',
+    multidate_description: 'It\'s a festival? Choose when it starts and when it ends?',
+    multidate: 'More days',
+    normal: 'Normal',
+    normal_description: 'Choose the day.',
+    recurrent_1w_days: 'Each {days}',
+    recurrent_2w_days: 'A {days} each two',
+    recurrent_1m_days: '|The {days} of each month|{days} of each month',
+    recurrent_2m_days: '|The {days} a month each two|The {days} a month each two',
+    recurrent_1m_ordinal: 'The {n} {days} of each month',
+    recurrent_2m_ordinal: '|The {n} {days} a month each two|The {n} {days} a month each two',
+    due: 'due',
+    from: 'From',
+    image_too_big: 'Image too big! Max 4M'
   },
 
   admin: {
-    mastodon_instance: 'Istanza',
-    mastodon_description: 'Puoi associare un account mastodon a questa istanza di gancio, ogni evento verrà pubblicato lì.',
     place_description: `Nel caso in cui un luogo sia errato o cambi indirizzo, puoi modificarlo. <br/>Considera che tutti gli eventi associati a questo luogo cambieranno indirizzo (anche quelli passati!)`,
     event_confirm_description: 'Puoi confermare qui gli eventi inseriti da utenti anonimi',
-    delete_user: 'Elimina',
-    remove_admin: 'Rimuovi admin',
-    delete_user_confirm: 'Sicura di rimuovere questo utente?',
-    user_remove_ok: 'Utente eliminato',
-    user_create_ok: 'Utente creato',
-    allow_registration_description : 'Vuoi abilitare la registrazione?',
-    allow_anon_event: 'Si possono inserire eventi anonimi (previa conferma)?',
-    allow_comments: 'Abilita commenti',
-    allow_recurrent_event: 'Abilita eventi fissi',
-    recurrent_event_visible: 'Appuntamenti fissi visibili di default',
-    federation: 'Federazione / ActivityPub'
+    delete_user: 'Remove',
+    remove_admin: 'Remove admin',
+    delete_user_confirm: 'Are you sure to remove this user?',
+    user_remove_ok: 'User removed',
+    user_create_ok: 'User created',
+    allow_registration_description : 'Allow open registrations?',
+    allow_anon_event: 'Allow anon events (has to be confirmed)?',
+    allow_recurrent_event: 'Enable recurrent events',
+    recurrent_event_visible: 'Show recurrent events by default',
+    federation: 'Federation / ActivityPub',
+    enable_federation: 'Enable federation'
   },
 
   auth: {
-    not_confirmed: 'Non abbiamo ancora confermato questa mail...',
-    fail: 'Autenticazione fallita. Sicura la password è giusta? E la mail?'
+    not_confirmed: 'Not confirmed yet',
+    fail: 'Auth failed!. Are you sure password is correct?'
   },
 
   settings: {
-    change_password: 'Cambia password',
-    password_updated: 'Password modificata',
-    danger_section: 'Sezione pericolosa',
+    change_password: 'Modify your password',
+    password_updated: 'Password updated',
+    danger_section: 'Dangerous section',
     remove_account: 'Premendo il seguente tasto il tuo utente verrà eliminato. Gli eventi da te pubblicati invece no.',
     remove_account_confirm: 'Stai per eliminare definitivamente il tuo account',
   },
 
   err: {
-    register_error: 'Errore nella registrazione'
+    register_error: 'Error during registration'
   },
 
   ordinal: {
-    1: 'primo',
-    2: 'secondo',
-    3: 'terzo',
-    4: 'quarto',
-    5: 'quinto',
-    [-1]: 'ultimo',
+    1: 'first',
+    2: 'second',
+    3: 'third',
+    4: 'fourth',
+    5: 'fifth',
+    [-1]: 'last',
   },
 
   about: `
   <p>
+  <a href='https://gancio.org'>Gancio</a> is a shared agenda for local communities.
+
   Gancio e' un progetto dell'<a href='https://autistici.org/underscore'>underscore hacklab</a> e uno dei
   servizi di <a href='https://cisti.org'>cisti.org</a>.</p>
 

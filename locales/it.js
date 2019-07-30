@@ -90,11 +90,7 @@ export default {
       <br/>Prima di poter pubblicare <strong>dobbiamo approvare l'account</strong>, considera che <strong>dietro questo sito ci sono delle persone</strong> di
       carne e sangue, scrivici quindi due righe per farci capire che eventi vorresti pubblicare.`,
     error: 'Errore: ',
-    admin_complete: 'Sei il primo utente e quindi sei amministratore!',
-    complete: 'Confermeremo la registrazione quanto prima.',
-    request: 'Richiesta di registrazione',
-    registration_email: `Ciao,
-    ci è arrivata una richiesta di registrazione su gancio, la confermeremo quanto prima.`
+    complete: 'Confermeremo la registrazione quanto prima.'
   },
 
   event: {
@@ -150,7 +146,8 @@ export default {
     allow_comments: 'Abilita commenti',
     allow_recurrent_event: 'Abilita eventi fissi',
     recurrent_event_visible: 'Appuntamenti fissi visibili di default',
-    federation: 'Federazione / ActivityPub'
+    federation: 'Federazione / ActivityPub',
+    enable_federation: 'Abilita la federazione!'
   },
 
   auth: {
