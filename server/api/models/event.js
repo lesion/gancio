@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
         published: this.createdAt,
         attributedTo: `${config.baseurl}/federation/u/${username}`,
         to: 'https://www.w3.org/ns/activitystreams#Public',
-        cc: [follower],
+        cc: follower ? follower: [],
         content: this.title
       }
     }

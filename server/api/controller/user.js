@@ -122,7 +122,7 @@ const userController = {
     // send response to client
     res.json(event)
 
-    federation.sendEvent(event, user)
+    federation.sendEvent(event, req.user)
 
     // send notification (mastodon/email/confirmation)
     notifier.notifyEvent(event.id)
