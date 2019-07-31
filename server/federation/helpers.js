@@ -1,6 +1,5 @@
 const fetch = require('fetch')
 const request = require('request')
-const crypto = require('crypto')
 const config = require('config')
 
 const Helpers = {
@@ -41,18 +40,6 @@ const Helpers = {
         console.log('Response:', response.body, response.statusCode, response.status, response.statusMessage)
       }
     })
-    return res.status(200)
-  },
-  async sendAcceptMessage (body, user, domain, req, res, targetOrigin) {
-    const guid = crypto.randomBytes(16).toString('hex')
-    let message = {
-      '@context': 'https://www.w3.org/ns/activitystreams',
-      'id': `${config.baseurl}/federation/${guid}`,
-      'type': 'Accept',
-      'actor': `${config.baseurl}/federation/u/${user.username}`,
-      'object': body,
-    }
-    // Helpers.signAndSend(message, user, domain, req, res, targetOrigin)
   },
   async sendEvent(event, user) {
     console.error('devo inviare un evento ai followers')

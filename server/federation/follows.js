@@ -1,6 +1,7 @@
 const config = require('config')
 const Helpers = require('./helpers')
 const { user: User } = require('../api/models')
+const crypto = require('crypto')
 
 module.exports = {
   // follow request from fediverse
@@ -18,7 +19,15 @@ module.exports = {
       console.error('ok this is a new follower: ', body.actor)
       await user.update({ followers: [...user.followers, body.actor] })
     }
-    return Helpers.sendAcceptMessage(body, user, domain, req, res, targetOrigin)
+    const guid = crypto.randomBytes(16).toString('hex')
+    let message = {
+      '@context': 'https://www.w3.org/ns/activitystreams',
+      'id': `${config.baseurl}/federation/${guid}`,
+      'type': 'Accept',
+      'actor': `${config.baseurl}/federation/u/${user.username}`,
+      'object': body,
+    }    
+    return Helpers.signAndSend(message, user, body.actor)
 
   },
   // unfollow request from fediverse
