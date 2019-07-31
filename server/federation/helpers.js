@@ -49,6 +49,7 @@ const Helpers = {
     for(let follower of followers) {
       console.error('send message to ', follower)
       const body = event.toAP(user.username, follower)
+      body['@context'] = 'https://www.w3.org/ns/activitystreams'
       Helpers.signAndSend(body, user, follower)
     }    
   }
