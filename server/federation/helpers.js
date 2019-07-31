@@ -1,5 +1,6 @@
 const fetch = require('fetch')
 const request = require('request')
+const crypto = require('crypto')
 const config = require('config')
 
 const Helpers = {
