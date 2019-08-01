@@ -1,17 +1,29 @@
 const express = require('express')
 const router = express.Router()
 const config = require('config')
-const bodyParser = require('body-parser')
 const cors = require('cors')
 const Follows = require('./follows')
 const Users = require('./users')
+const { event: Event, user: User } = require('../api/models')
+const Comments = require('./comments')
 
 /**
  * Federation is calling!
  * ref: https://www.w3.org/TR/activitypub/#Overview
  */
 router.use(cors())
-router.use(bodyParser.json({type: 'application/activity+json'}))
+router.use(express.json({type: ['application/json', 'application/activity+json', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"']}))
+
+
+router.get('/m/:event_id', async (req, res) => {
+  const event_id = req.params.event_id
+  if (req.accepts('html')) return res.redirect(301, `/event/${event_id}`)
+
+  console.error('Not asked for html!')
+  const event = await Event.findByPk(req.params.event_id, { include: [ User ] })
+  if (!event) return res.status(404).send('Not found')
+  return res.json(event.toAP(event.user.username))
+})
 
 // get any message coming from federation
 // Federation is calling!
@@ -26,16 +38,40 @@ router.post('/u/:name/inbox', async (req, res) => {
       Follows.follow(req, res, b, targetOrigin, domain)
       break
     case 'Undo':
-      Follows.unfollow(req, res, b, targetOrigin, domain)
+      // unfollow || unlike
+      if (b.object.type === 'Follow') {
+        Follows.unfollow(req, res, b, targetOrigin, domain)
+      } else if (b.object.type === 'Like') {
+        console.error('Unlike!')
+      } else if (b.object.type === 'Announce') {
+        console.error('Unboost')
+      }
       break
     case 'Announce':
       console.error('This is a boost ?')
       break
     case 'Note':
-      console.error('this is a note ! I should not receive this')
+      console.error('This is a note ! I probably should not receive this')
+      break
+    case 'Like':
+      console.error('This is a like!')
+      
+      break
+    case 'Delete':
+      console.error('Delete a comment ?!?!')
+      break
+    case 'Announce':
+      console.error('Boost!')
       break
     case 'Create':
-      console.error('Create what? This is probably a reply', b.object.type)
+      // this is a reply
+      if (b.object.type === 'Note' && b.object.inReplyTo) {
+        console.error('this is a reply to an event')
+        Comments.create(b)
+      } else {
+        console.error('Create what? ', b.object.type)
+      }
+      
       break
   }
 })

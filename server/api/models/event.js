@@ -21,12 +21,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     image_path: DataTypes.STRING,
     is_visible: DataTypes.BOOLEAN,
-    activitypub_id: {
-      type: DataTypes.STRING(18),
-      index: true
-    },
     recurrent: DataTypes.JSON,
     // parent: DataTypes.INTEGER
+    likes: { type: DataTypes.JSON, defaultValue: [] },
+    boost: { type: DataTypes.JSON, defaultValue: [] }
   }, {})
 
   event.associate = function (models) {

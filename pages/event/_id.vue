@@ -40,16 +40,13 @@
         el-button(plain type='primary' size='mini' @click='$router.replace(`/add/${event.id}`)') {{$t('common.edit')}}  
 
       //- comments
-      #comments.card-body(v-if='event.activitypub_id && settings')
+      #comments.card-body(v-if='event.comments.length')
         strong {{$t('common.related')}} - 
-        a(:href='`https://${settings.mastodon_instance}/web/statuses/${event.activitypub_id}`') {{$t('common.add')}}
+        //a(:href='') {{$t('common.add')}}
 
         .card-header(v-for='comment in event.comments' :key='comment.id')
-          img.avatar(:src='comment.data.account.avatar')  
-          strong  {{comment.data.account.display_name}} @{{comment.data.account.username}} 
-          //- a.float-right(:href='comment.data.url')
-          a.float-right(:href='`https://${settings.mastodon_instance}/web/statuses/${comment.data.id}`')
-            small  {{comment.data.created_at|datetime}}
+          a.float-right(:href='comment.data.url')
+            small  {{comment.data.published|datetime}}
           div.mt-1(v-html='comment_filter(comment.data.content)')
           img(v-for='img in comment.data.media_attachments' :src='img.url')
 

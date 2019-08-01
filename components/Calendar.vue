@@ -64,12 +64,12 @@ export default {
         .map(e => ({
           key: e.id, 
           dot: getColor(e),
-          dates: new Date(e.start_datetime)})))
+          dates: new Date(e.start_datetime*1000)})))
 
       attributes = attributes.concat(this.filteredEventsWithPast
         .filter(e => e.multidate)
         .map( e => ({ key: e.id, highlight: getColor(e), dates: { 
-          start: new Date(e.start_datetime), end: new Date(e.end_datetime) }})))
+          start: new Date(e.start_datetime*1000), end: new Date(e.end_datetime*1000) }})))
           
       return attributes
     }

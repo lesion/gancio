@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
   }
   const name = resource.match(/acct:(.*)@/)[1]
   const domain = new URL(config.baseurl).host
-  const user = await User.findOne({where: { username: name } })
+  const user = await User.findOne({where: { username: name  } })
   if (!user) return res.status(404).send(`No record found for ${name}`)
   const ret = {
     subject: `acct:${name}@${domain}`,
@@ -23,6 +23,7 @@ router.get('/', async (req, res) => {
       }
     ]
   }
+  res.set('Content-Type', 'application/jrd+json; charset=utf-8')
   res.json(ret)
 })
 module.exports = router

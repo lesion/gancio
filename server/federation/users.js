@@ -16,7 +16,6 @@ module.exports = {
       id: `${config.baseurl}/federation/u/${name}`,
       type: 'Person',
       preferredUsername: name,
-      nodeInfo2Url: `${config.baseurl}/.well-known/x-nodeinfo2`,
       inbox: `${config.baseurl}/federation/u/${name}/inbox`,
       outbox: `${config.baseurl}/federation/u/${name}/outbox`,
       followers: `${config.baseurl}/federation/u/${name}/followers`,
@@ -26,6 +25,7 @@ module.exports = {
         publicKeyPem: get(user, 'rsa.publicKey', '')
       }
     }
+    res.type('application/activity+json; charset=utf-8')
     res.json(ret)
   },
   async followers (req, res) {
@@ -80,6 +80,7 @@ module.exports = {
         }
         // last: `${config.baseurl}/federation/u/${name}/outbox?page=true`
       }
+      res.type('application/activity+json; charset=utf-8')
       return res.json(ret)
     }
     const ret = {
@@ -89,6 +90,7 @@ module.exports = {
       partOf: `${config.baseurl}/federation/u/${name}/outbox`,
       orderedItems: user.events.map(e => e.toAP(user.username))
     }
+    res.type('application/activity+json; charset=utf-8')
     res.json(ret)
   }
 }

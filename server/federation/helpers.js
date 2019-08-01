@@ -23,12 +23,15 @@ const Helpers = {
     const signature_b64 = signature.toString('base64')
     const header = `keyId="${config.baseurl}/federation/u/${user.username}",headers="(request-target) host date",signature="${signature_b64}"`
     console.error('header ', header)
+    console.error('requestTo ', toInbox)
+    console.error('host ', toOrigin.hostname)
     request({
       url: toInbox,
       headers: {
         'Host': toOrigin.hostname,
         'Date': d.toUTCString(),
-        'Signature': header
+        'Signature': header,
+        'Content-Type': 'application/activity+json; charset=utf-8'
       },
       method: 'POST',
       json: true,
