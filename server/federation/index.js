@@ -29,11 +29,7 @@ router.get('/m/:event_id', async (req, res) => {
 
 // get any message coming from federation
 // Federation is calling!
-router.post('/u/:name/inbox', async (req, res) => {
-
-  if (!Helpers.verifySignature(req, res)) {
-    res.send('Request signature could not be verified', 401)
-  }
+router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
 
   const b = req.body
   console.error('> INBOX ', b.type, b)
@@ -55,28 +51,24 @@ router.post('/u/:name/inbox', async (req, res) => {
       }
       break
     case 'Announce':
-      console.error('This is a boost ?')
       Ego.boost(req, res)
       break
     case 'Note':
       console.error('This is a note ! I probably should not receive this')
       break
     case 'Like':
-      console.error('This is a like!')
       Ego.like(req, res)
       break
     case 'Delete':
-      console.error('Delete a comment ?!?!')
+      console.error('Delete ?!?!')
       break
     case 'Create':
       // this is a reply
       if (b.object.type === 'Note' && b.object.inReplyTo) {
-        console.error('this is a reply to an event')
         Comments.create(b)
       } else {
         console.error('Create what? ', b.object.type)
       }
-      
       break
   }
 })

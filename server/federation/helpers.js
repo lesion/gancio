@@ -1,7 +1,10 @@
-const fetch = require('fetch')
+const fetch = require('node-fetch')
 const request = require('request')
 const crypto = require('crypto')
 const config = require('config')
+const httpSignature = require('http-signature')
+
+const actorCache = []
 
 const Helpers = {
   async signAndSend(message, user, to) {//, domain, req, res, targetOrigin) {
@@ -57,24 +60,38 @@ const Helpers = {
     }    
   },
 
-  // TODO: cache
-  // user: les@mastodon.cisti.org
   async getFederatedUser(address) {
     address = address.trim()
-    let [ user, host ] = address.split('@')
-    const url = `https://${host}/.well-known/webfinger?resource=acct:${user}@${host}`
-    console.error('get federated user at => ', address, url)
+    const [ username, host ] = address.split('@')
+    const url = `https://${host}/.well-known/webfinger?resource=acct:${username}@${host}`
+    return Helpers.getActor(url)
+  },
+  
+  // TODO: cache
+  async getActor(url, force=false) {
+    // try with cache first if not forced
+    if (!force && actorCache[url]) return actorCache[url]
     const user = await fetch(url, { headers: {'Accept': 'application/jrd+json, application/json'} })
+      .then(res => res.json())
+    actorCache[url] = user
     return user
   },
 
-  async verifySignature(req, res) {
-    console.error(req.headers['signature'])
-    // https://blog.joinmastodon.org/2018/07/how-to-make-friends-and-verify-requests/
-    const signature_header = req.headers['signature'].split(',')
-      .map(pair => pair.split('='))
-    console.error(signature_header)
-    return true
+  // ref: https://blog.joinmastodon.org/2018/07/how-to-make-friends-and-verify-requests/
+  async verifySignature(req, res, next) {
+    let user = Helpers.getActor(req.body.actor)
+
+    // little hack -> https://github.com/joyent/node-http-signature/pull/83
+    req.headers.authorization = 'Signature ' + req.headers.signature
+    const parsed = httpSignature.parseRequest(req)
+    if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) return next()
+    
+    // signature not valid, try without cache
+    user = Helpers.getActor(req.body.actor, true)
+    if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) return next()
+
+    // still not valid
+    res.send('Request signature could not be verified', 401)
   }
 }
 
