@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    queryInterface.addColumn('event', 'likes', {
+    return queryInterface.addColumn('event', 'likes', {
       type: Sequelize.JSON,
       defaultValue: []
     })
