@@ -1,9 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const { user: User } = require('../api/models')
+const cors = require('cors')
 const settingsController = require('../api/controller/settings')
 const config = require('config')
 const version = require('../../package.json').version
+
+router.use(cors())
 
 router.get('/', async (req, res) => {
   const ret = {

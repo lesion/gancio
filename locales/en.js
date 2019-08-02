@@ -48,7 +48,9 @@ export default {
     enable: 'Enable',
     disable: 'Disable',
     me: 'You',
-    password_updated: 'Password updated!'
+    password_updated: 'Password updated!',
+    username: 'Username',
+    comments: 'Comments'
   },
 
   login: {
@@ -123,7 +125,8 @@ export default {
     recurrent_2m_ordinal: '|The {n} {days} a month each two|The {n} {days} a month each two',
     due: 'due',
     from: 'From',
-    image_too_big: 'Image too big! Max 4M'
+    image_too_big: 'Image too big! Max 4M',
+    interact_with_me_at: 'Interact with me on fediverse at'
   },
 
   admin: {

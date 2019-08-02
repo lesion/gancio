@@ -39,10 +39,11 @@
         el-button(plain type='danger' size='mini' @click.prevent='remove') {{$t('common.remove')}}
         el-button(plain type='primary' size='mini' @click='$router.replace(`/add/${event.id}`)') {{$t('common.edit')}}  
 
-      //- comments
-      #comments.card-body(v-if='event.comments.length')
-        strong {{$t('common.related')}} - 
-        //a(:href='') {{$t('common.add')}}
+      small {{event.likes.length}} - {{event.boost.length}}
+      //- comments from fediverse
+      #comments.card-body(v-if='settings.enable_federation')
+        strong {{$t('common.comments')}} -
+        <small>{{$t('event.interact_with_me_at')}} <u>{{event.user.username}}@{{settings.baseurl|url2host}}</u></small>
 
         .card-header(v-for='comment in event.comments' :key='comment.id')
           a.float-right(:href='comment.data.url')

@@ -2,7 +2,7 @@ const crypto = require('crypto')
 const moment = require('moment')
 const { Op } = require('sequelize')
 const lodash = require('lodash')
-const { event: Event, comment: Comment, tag: Tag, place: Place, notification: Notification } = require('../models')
+const { event: Event, comment: Comment, tag: Tag, place: Place, user: User, notification: Notification } = require('../models')
 const Sequelize = require('sequelize')
 const notifier = require('../../notifier')
 
@@ -94,6 +94,7 @@ const eventController = {
       },
       include: [
         { model: Tag, attributes: ['tag', 'weigth'], through: { attributes: [] } },
+        { model: User, attributes: ['username'] },
         { model: Place, attributes: ['name', 'address'] },
         Comment
       ],

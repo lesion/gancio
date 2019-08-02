@@ -8,13 +8,12 @@ module.exports = {
   async follow (req, res, body, targetOrigin, domain) {
     if (typeof body.object !== 'string') return
     const username = body.object.replace(`${config.baseurl}/federation/u/`, '')
-    console.error('someone wants to follow ' + username)
     const user = await User.findOne({ where: { username }})
     if (!user) {
-      console.error('No user found!')
+      res.sendStatus(404)
       return
     }
-    console.error('FOLLOWERS ', user.followers)
+    // check for duplicate
     if (user.followers.indexOf(body.actor) === -1) {
       console.error('ok this is a new follower: ', body.actor)
       await user.update({ followers: [...user.followers, body.actor] })
@@ -27,8 +26,8 @@ module.exports = {
       'actor': `${config.baseurl}/federation/u/${user.username}`,
       'object': body,
     }    
-    return Helpers.signAndSend(message, user, body.actor)
-
+    Helpers.signAndSend(message, user, body.actor)
+    res.sendStatus(200)
   },
   // unfollow request from fediverse
   unfollow () {

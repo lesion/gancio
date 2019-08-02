@@ -101,8 +101,15 @@ api.get('/export/:type', exportController.export)
 api.get('/event/:month/:year', eventController.getAll)
 // api.get('/event/:month/:year', eventController.getAfter)
 
-// mastodon oauth auth
-//api.post('/settings/getauthurl', jwt, isAuth, isAdmin, settingsController.getAuthURL)
-//api.get('/settings/oauth', jwt, isAuth, isAdmin, settingsController.code)
+// Handle 404
+api.use(function(req, res) {
+  res.send('404: Page not Found', 404)
+})
+
+// Handle 500
+api.use(function(error, req, res, next) {
+  res.send('500: Internal Server Error', 500)
+})
+
 
 module.exports = api

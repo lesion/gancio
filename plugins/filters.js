@@ -7,8 +7,8 @@ export default ({ app, store }) => {
   // replace links with anchors
   // TODO: remove fb tracking id
   Vue.filter('linkify', value => value.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>'))
-
-  // Vue.filter('datetime', value => moment(value).locale(store.state.locale).format('ddd, D MMMM HH:mm'))
+  Vue.filter('url2host', url => url.match(/^https?:\/\/(.[^/:]+)/i)[1])
+  Vue.filter('datetime', value => moment(value).locale(store.state.locale).format('ddd, D MMMM HH:mm'))
   // Vue.filter('short_datetime', value => moment(value).locale(store.state.locale).format('D/MM HH:mm'))
   // Vue.filter('hour', value => moment(value).locale(store.state.locale).format('HH:mm'))
 

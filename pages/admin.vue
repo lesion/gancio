@@ -60,15 +60,14 @@
           el-form-item(v-show='allow_recurrent_event' :label="$t('admin.recurrent_event_visible')")
             el-switch(v-model='recurrent_event_visible')
 
+
         el-divider {{$t('admin.federation')}}
-        el-form(inline @submit.native.prevent='associate_mastondon_instance' label-width='240px')
-          p {{$t('admin.mastodon_description')}}
-          el-form-item(:label='$t("admin.mastodon_instance")')
-            el-input(v-model="mastodon_instance")
-          el-form-item
-            el-button(native-type='submit' type='success' :disabled='!mastodon_instance') {{$t('common.associate')}}
-          el-form-item(:label="$t('admin.allow_comments')")
-            el-switch(v-model='allow_comments')
+        el-form(inline label-width='400px')
+          el-form-item(:label="$t('admin.enable_federation')")
+            el-switch(v-model='enable_federation')
+
+            //- el-form-item(:label="$t('admin.allow_boost_like')")
+            //-   el-switch(v-model='allow_comments')
 
 </template>
 <script>
@@ -130,10 +129,10 @@ export default {
       get () { return this.settings.recurrent_event_visible },
       set (value) { this.setSetting({ key: 'recurrent_event_visible', value })}
     },
-    allow_comments: {
-      get () { return this.settings.allow_comments },
-      set (value) { this.setSetting({ key: 'allow_comments', value })}
-    },    
+    enable_federation: {
+      get () { return this.settings.enable_federation },
+      set (value) { this.setSetting({ key: 'enable_federation', value })}
+    },
     paginatedEvents () {
       return this.events.slice((this.eventPage-1) * this.perPage,
         this.eventPage * this.perPage)
@@ -150,12 +149,6 @@ export default {
     },
     preview (id) {
       this.$router.push(`/event/${id}`)
-    },
-    async associate_mastondon_instance () {
-      if (!this.mastodon_instance) return false
-
-      const url = await this.$axios.$post('/settings/getauthurl', { instance: this.mastodon_instance })
-      setTimeout( () => window.location.href=url, 100);
     },
     async confirm (id) {
       try {

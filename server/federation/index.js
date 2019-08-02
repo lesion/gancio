@@ -6,6 +6,8 @@ const Follows = require('./follows')
 const Users = require('./users')
 const { event: Event, user: User } = require('../api/models')
 const Comments = require('./comments')
+const Helpers = require('./helpers')
+const Ego = require('./ego')
 
 /**
  * Federation is calling!
@@ -28,6 +30,11 @@ router.get('/m/:event_id', async (req, res) => {
 // get any message coming from federation
 // Federation is calling!
 router.post('/u/:name/inbox', async (req, res) => {
+
+  if (!Helpers.verifySignature(req, res)) {
+    res.send('Request signature could not be verified', 401)
+  }
+
   const b = req.body
   console.error('> INBOX ', b.type, b)
   const targetOrigin = new URL(b.actor).origin
@@ -49,19 +56,17 @@ router.post('/u/:name/inbox', async (req, res) => {
       break
     case 'Announce':
       console.error('This is a boost ?')
+      Ego.boost(req, res)
       break
     case 'Note':
       console.error('This is a note ! I probably should not receive this')
       break
     case 'Like':
       console.error('This is a like!')
-      
+      Ego.like(req, res)
       break
     case 'Delete':
       console.error('Delete a comment ?!?!')
-      break
-    case 'Announce':
-      console.error('Boost!')
       break
     case 'Create':
       // this is a reply

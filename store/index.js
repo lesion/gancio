@@ -12,7 +12,7 @@ export const state = () => ({
     allow_anon_event: true,
     allow_recurrent_event: true,
     recurrent_event_visible: false,
-    allow_comments: false,
+    enable_federation: false,
   },
   filters: {
     tags: [],

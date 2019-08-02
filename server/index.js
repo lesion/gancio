@@ -3,8 +3,11 @@ const path = require('path')
 const express = require('express')
 const consola = require('consola')
 const morgan = require('morgan')
-const cors = require('cors')
 const { Nuxt, Builder } = require('nuxt')
+
+const api = require('./api')
+const federation = require('./federation')
+const webfinger = require('./federation/webfinger')
 
 // Import and Set Nuxt.js options
 const nuxt_config = require('../nuxt.config.js')
@@ -31,12 +34,11 @@ async function start() {
   app.use('/media/', express.static(config.upload_path))
 
   // gancio standard api
-  app.use('/api', require('./api/index'))
+  app.use('/api', api)
 
   // federation api / activitypub / webfinger / nodeinfo
-  app.use('/.well-known/webfinger', cors(), require('./federation/webfinger'))
-  app.use('/.well-known/x-nodeinfo2', cors(), require('./federation/nodeinfo'))
-  app.use('/federation', require('./federation'))
+  app.use('/.well-known', webfinger)
+  app.use('/federation', federation)
 
   // Give nuxt middleware to express
   app.use(nuxt.render)

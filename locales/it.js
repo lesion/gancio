@@ -49,7 +49,8 @@ export default {
     disable: 'Disabilita',
     me: 'Sei te',
     password_updated: 'Password modificata!',
-    username: 'Nickname'
+    username: 'Nickname',
+    comments: 'Commenti'
   },
 
   login: {
@@ -128,7 +129,8 @@ export default {
     each_month: 'Ogni mese',
     due: 'alle',
     from: 'Dalle',
-    image_too_big: 'Immagine troppo grande! Massimo 4M'
+    image_too_big: 'Immagine troppo grande! Massimo 4M',
+    interact_with_me_at: 'Seguimi nel fediverso su'
   },
 
   admin: {
