@@ -14,11 +14,12 @@ module.exports = {
       return console.error('event not found!')
     }
 
-     await Comment.create({
+     return await Comment.create({
        activitypub_id: body.object.id,
        data: body.object,
        eventId: event.id
      })
+
 
   }
 }
