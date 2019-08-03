@@ -160,11 +160,10 @@ async function setupQuestionnaire() {
 async function start (options) {
   // is first run?
   if (firstrun.check(options.config)) {
-    consola.error(`Configuration file "${options.config}" not found! 
-This is your first run? Run 'gancio setup'`)
+    consola.error(`Configuration file "${options.config}" not found! Use "--config <CONFIG_FILE.json>" to specify another path.
+If this is your first run use 'gancio setup --config <CONFIG_FILE.json>' `)
     process.exit(-1)
   }
-  await upgrade(options)
   require('./index')
 }
 
@@ -173,30 +172,8 @@ async function setup (options) {
   const config = await setupQuestionnaire()
   await firstrun.setup(config, options.config)
   consola.info(`You can edit '${options.config}' to modify your configuration. `)
-  consola.info(`Run "gancio --config ${options.config}"`)
+  consola.info(`Start the server with "gancio --config ${options.config}"`)
   process.exit(0)
-}
-
-async function upgrade (options) {
-  const Umzug = require('umzug')
-  const Sequelize = require('sequelize')
-  const config = require('config')
-  const db = new Sequelize(config.db)
-  const umzug = new Umzug({
-    storage: 'sequelize',
-    storageOptions: { sequelize: db },
-    migrations: {
-      wrap: fun => {
-        return () => fun(db.queryInterface, Sequelize)
-     },
-     path: path.resolve(__dirname, 'migrations')
-    }
-  })
-  const migrations = await umzug.up()
-  if (migrations.length) {
-    consola.info('Migrations executed: ', migrations.map(m => m.file))
-  }
-  db.close()
 }
 
 consola.info(`${package.name} - v${package.version} - ${package.description}`)
@@ -215,8 +192,7 @@ require('yargs')
 })
 .command(['start', 'run', '$0'], 'Start gancio', {}, start)
 .command('setup', 'Setup a new instance', {}, setup)
-.command('upgrade', 'Upgrade gancio to a new release (interactive)', {}, upgrade)
 .help('h')
 .alias('h', 'help')
-.epilog('Made with ❤ by underscore hacklab - https://autistici.org/underscore')
+.epilog('Made with ❤ by underscore hacklab - https://gancio.org')
 .argv

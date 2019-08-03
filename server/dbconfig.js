@@ -1,3 +1,3 @@
 const config = require('config')
 
-modules.exports = config.db
+module.exports = config.db
