@@ -54,7 +54,7 @@ module.exports = {
     await settings.set('allow_anon_event', true)
     await settings.set('allow_recurrent_event', true)
     await settings.set('recurrent_event_visible', true)
-    await settings.set('enable_federation', true)
+    await settings.set('enable_federation', false)
 
     // add default notification
     consola.info('Add default notification')
