@@ -209,8 +209,13 @@ async function setup (options) {
   consola.info(`You're going to setup gancio on this machine.`)
   const config = await setupQuestionnaire(options.docker)
   await firstrun.setup(config, options.config)
-  consola.info(`You can edit '${options.config}' to modify your configuration. `)
-  consola.info(`Start the server with "gancio --config ${options.config}"`)
+  if (options.docker) {
+    consola.info(`You can edit ./config.json to modify your configuration.`)
+    consola.info(`Start the server with "docker-compose up"`)
+  } else {
+    consola.info(`You can edit '${options.config}' to modify your configuration. `)
+    consola.info(`Start the server with "gancio --config ${options.config}"`)
+  }
   process.exit(0)
 }
 
