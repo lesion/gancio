@@ -18,7 +18,7 @@ services:
     build: .
     image: node:latest
     container_name: gancio
-    command: gancio start /gancio/config.json
+    command: gancio start --docker
     volumes:
       - ./db.sqlite:/gancio/db.sqlite
       - ./config.json:/gancio/config.json

@@ -8,6 +8,7 @@ const inquirer = require('inquirer')
 const package = require('../package.json')
 const firstrun = require('./firstrun')
 const path = require('path')
+const mkdirp = require('mkdirp')
 
 const cwd = process.cwd()
 
@@ -18,7 +19,7 @@ function notEmpty (value) {
   return value.length>0
 }
 
-async function setupQuestionnaire() {
+async function setupQuestionnaire(is_docker) {
 
   const questions = []
   questions.push({
@@ -38,7 +39,7 @@ async function setupQuestionnaire() {
   questions.push({
     name: 'server.host',
     message: 'address to listen to',
-    default: 'localhost',
+    default: is_docker ? '0.0.0.0' : 'localhost',
     validate: notEmpty
   })
 
@@ -58,7 +59,7 @@ async function setupQuestionnaire() {
   questions.push({
     name: 'db.storage',
     message: 'sqlite db path',
-    default: './db.sqlite',
+    default: is_docker ? '/opt/gancio/db.sqlite' : './db.sqlite',
     filter: p => path.resolve(cwd, p),
     when: answers => answers.db.dialect === 'sqlite',
     validate: db_path => db_path.length>0 && fs.existsSync(path.dirname(db_path))
@@ -67,7 +68,7 @@ async function setupQuestionnaire() {
   questions.push({
     name: 'db.host',
     message: 'Postgres host',
-    default: 'localhost',
+    default: is_docker ? 'db' : 'localhost',
     when: answers => answers.db.dialect === 'postgres',
     validate: notEmpty
   })
@@ -111,12 +112,20 @@ async function setupQuestionnaire() {
   questions.push({
     name: 'upload_path',
     message: 'Where gancio has to store media?',
-    default: './uploads',
+    default: '/opt/gancio/uploads',
     filter: p => path.resolve(cwd, p),
-    validate: p => {
-      const exists =  fs.existsSync(p)
-      if (!exists) consola.warn(`"${p}" does not exists, please create it`)
-      return exists
+    validate: async p => {
+      let exists =  fs.existsSync(p)
+      if (!exists) {
+        consola.warn(`"${p}" does not exists, trying to create it`)
+        try {
+          mkdirp.sync(p)
+        } catch(e) {
+          console.error(String(e))
+          return false
+        }
+      }
+      return true
     }
   })
 
@@ -183,6 +192,10 @@ async function upgrade (options) {
 async function start (options) {
   // is first run?
   if (firstrun.check(options.config)) {
+    if (options.docker) {
+      consola.error('Something goes wrong, did you run "docker-compose run --rm gancio gancio setup"')
+      process.exit(-1)
+    }
     consola.error(`Configuration file "${options.config}" not found! Use "--config <CONFIG_FILE.json>" to specify another path.
 If this is your first run use 'gancio setup --config <CONFIG_FILE.json>' `)
     process.exit(-1)
@@ -192,8 +205,9 @@ If this is your first run use 'gancio setup --config <CONFIG_FILE.json>' `)
 }
 
 async function setup (options) {
+  consola.info('DOCKER ', options.docker)
   consola.info(`You're going to setup gancio on this machine.`)
-  const config = await setupQuestionnaire()
+  const config = await setupQuestionnaire(options.docker)
   await firstrun.setup(config, options.config)
   consola.info(`You can edit '${options.config}' to modify your configuration. `)
   consola.info(`Start the server with "gancio --config ${options.config}"`)
@@ -204,7 +218,13 @@ consola.info(`${package.name} - v${package.version} - ${package.description}`)
 
 require('yargs')
 .usage('Usage $0 <command> [options]')
-.option('config', { 
+.option('docker', {
+  alias: 'd',
+  describe: 'Inside docker',
+  default: false,
+  type: 'boolean'
+})
+.option('config', {
   alias: 'c',
   describe: 'Configuration file',
   default: '/opt/gancio/config.json',
