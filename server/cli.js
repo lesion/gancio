@@ -158,7 +158,6 @@ async function setupQuestionnaire() {
 }
 
 async function upgrade (options) {
-  console.error('Upgrade!')
   const Umzug = require('umzug')
   const Sequelize = require('sequelize')
   const config = require('config')
