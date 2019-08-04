@@ -19,19 +19,20 @@ cd /opt/gancio
 
 1. Download docker-compose.yml and Dockerfile
 ```bash
-wget https://git.lattuga.net/cisti/gancio/raw/docker/docker/Dockerfile
-wget https://git.lattuga.net/cisti/gancio/raw/docker/docker/docker-compose.yml
+wget https://git.lattuga.net/cisti/gancio/raw/master/docker/Dockerfile
+wget https://git.lattuga.net/cisti/gancio/raw/master/docker/docker-compose.yml
 ```
 
-1. Create an empty configuration file
+1. Create an empty configuration file (db.sqlite only needed for sqlite
+   setup)
 ```
-touch config.json
+touch config.json db.sqlite
 ```
-<small>After first setup, you can modify this file and restart the container on your needs.</small>
+<small>After first setup, you can edit `config.json` file and restart the container on your needs.</small>
 
 1. Build docker image and launch interactive setup in one step
 ```
-docker-compose run --rm gancio gancio setup
+docker-compose run --rm gancio gancio setup --docker
 ```
 
 1. Run your container
