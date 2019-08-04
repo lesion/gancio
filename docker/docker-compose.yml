@@ -5,7 +5,6 @@ services:
     image: postgres
     container_name: postgres
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - db:/var/lib/postgres
       - /etc/localtime:/etc/localtime:ro
     environment:
