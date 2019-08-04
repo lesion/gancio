@@ -157,6 +157,30 @@ async function setupQuestionnaire() {
   return answers
 }
 
+async function upgrade (options) {
+  console.error('Upgrade!')
+  const Umzug = require('umzug')
+  const Sequelize = require('sequelize')
+  const config = require('config')
+  const db = new Sequelize(config.db)
+  const umzug = new Umzug({
+    storage: 'sequelize',
+    storageOptions: { sequelize: db },
+    migrations: {
+      wrap: fun => {
+        return () => fun(db.queryInterface, Sequelize).catch(() => false)
+     },
+     path: path.resolve(__dirname, 'migrations')
+    }
+  })
+  const migrations = await umzug.up()
+  if (migrations.length) {
+    consola.info('Migrations executed: ', migrations.map(m => m.file))
+  }
+  db.close()
+}
+
+
 async function start (options) {
   // is first run?
   if (firstrun.check(options.config)) {
@@ -164,6 +188,7 @@ async function start (options) {
 If this is your first run use 'gancio setup --config <CONFIG_FILE.json>' `)
     process.exit(-1)
   }
+  await upgrade(options)
   require('./index')
 }
 
