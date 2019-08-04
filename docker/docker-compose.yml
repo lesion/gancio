@@ -20,9 +20,9 @@ services:
     container_name: gancio
     command: gancio start --docker
     volumes:
-      - ./db.sqlite:/gancio/db.sqlite
-      - ./config.json:/gancio/config.json
-      - ./uploads:/gancio/uploads
+      - ./db.sqlite:/opt/gancio/db.sqlite
+      - ./config.json:/opt/gancio/config.json
+      - ./uploads:/opt/gancio/uploads
     depends_on: 
         - db
     ports:
