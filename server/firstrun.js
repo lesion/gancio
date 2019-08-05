@@ -26,14 +26,14 @@ module.exports = {
 
     try {
       await db.user.findAll()
-      consola.warn(`⚠️ Non empty db! Please move your current db elsewhere than retry.`)
-      return -1
+      consola.warn(`⚠️  Non empty db! Please move your current db elsewhere than retry.`)
+      return false
     } catch(e) { }
 
     consola.info(`Create tables schema`)
     await db.sequelize.sync().catch(e => {
       consola.error('Error creating tables', e)
-      return -1
+      return false
     })
 
     // create admin user

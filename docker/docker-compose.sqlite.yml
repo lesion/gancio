@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  gancio:
+    build: .
+    image: node:latest
+    container_name: gancio
+    command: gancio start --docker --db=sqlite
+    volumes:
+      - ./db.sqlite:/opt/gancio/db.sqlite
+      - ./config.json:/opt/gancio/config.json
+      - ./uploads:/opt/gancio/uploads
+    ports:
+      - 13120:13120
+volumes:
+    db:
+    gancio:

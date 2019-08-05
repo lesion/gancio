@@ -105,7 +105,7 @@
                   
                     <li class="navigation-list-item ">
                       
-                      <a href="https://gancio.org/install/classic" class="navigation-list-link">Classic</a>
+                      <a href="https://gancio.org/install/debian" class="navigation-list-link">Debian</a>
                       
                     </li>
                   
@@ -300,24 +300,29 @@
           
         
         <div id="main-content" class="page-content" role="main">
-          <h3 id="structure">Structure</h3>
+          <h3 class="no_toc" id="project-structure">Project structure</h3>
+<ol id="markdown-toc">
+  <li><a href="#api--backend" id="markdown-toc-api--backend">API / backend</a></li>
+  <li><a href="#client--frontend" id="markdown-toc-client--frontend">Client / frontend</a></li>
+  <li><a href="#federation--activitypub" id="markdown-toc-federation--activitypub">Federation / ActivityPub</a></li>
+</ol>
 
 <h3 id="api--backend">API / backend</h3>
 
-<p>Source code inside <code class="highlighter-rouge">server/api/</code>.
+<p>Source code inside <code class="highlighter-rouge">server/api/</code>.<br />
 <code class="highlighter-rouge">index.js</code> is basically a routing table pointing each PATH with specified
 HTTP VERB to a method of a controller.</p>
 
 <p>jwt is used to authenticate api request.</p>
 
-<p>Express is based on middleware, passing each request to a chain of methods.</p>
+<p><a href="https://expressjs.com/">Express.js</a> is based on middleware, passing each request to a chain of methods.</p>
 
 <p>If you come from a PHP background, note that the main difference with
-Node.js is that the server process is always running and able to manage
+<a href="https://en.wikipedia.org/wiki/Node.js">Node.js</a> is that the server process is always running and able to manage
 multiple requests and tasks together (asyncronically) while each php
 process is tied to a single request.</p>
 
-<p>Sequelize is used as ORM. Take a look in <code class="highlighter-rouge">/server/api/models</code>.</p>
+<p><a href="https://sequelize.org/">Sequelize</a> is used as ORM. Take a look in <a href="https://git.lattuga.net/cisti/gancio/src/master/server/api/models"><code class="highlighter-rouge">/server/api/models</code></a>.</p>
 
 <h3 id="client--frontend">Client / frontend</h3>
 <p>Nuxt.js is used here!<br />
@@ -325,6 +330,8 @@ Nuxt is basically Vue plus SSR (Server Side Rendering).
 Client routing in nuxt is automatic (if you don’t need something special),
 just put your page inside <code class="highlighter-rouge">pages</code> and that’s it!</p>
 
+<h3 id="federation--activitypub">Federation / ActivityPub</h3>
+<p>Code inside <a href="https://git.lattuga.net/cisti/gancio/src/master/server/federation"><code class="highlighter-rouge">server/federation</code></a>.</p>
 
 
           

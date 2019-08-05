@@ -7,10 +7,13 @@ nav_order: 2
 has_toc: false
 ---
 
-# Install
+# Install (production)
 
+- [Install on Debian](/install/debian)
+- [Install using docker](/install/docker)
 
-- [Classic install](/install/classic)
-- [Using docker](/install/docker)
+### Post installation
 - [Nginx as a proxy](/install/nginx)
-- [Hacking & contribute](../dev)
+
+
+If you wanna hack or run the current develop release take a look at [Hacking & contribute](../dev)

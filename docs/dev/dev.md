@@ -11,10 +11,10 @@ has_children: true
 **Gancio** is built with following technologies:
 
 - [Nuxt.js](https://nuxtjs.org/)
-- Vue.js
+- [Vue.js](https://vuejs.org/)
 - Express
 - Node.js
-- Sequelize
+- [Sequelize](https://sequelize.org/)
 - Element.ui
 
 ### Testing on your own machine

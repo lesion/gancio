@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
-  <title>Classic - Gancio</title>
+  <title>Debian - Gancio</title>
 
   
 
@@ -25,17 +25,17 @@
   <script src="https://gancio.org/assets/js/jquery.fancybox.min.js"></script>
 
   <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Classic | Gancio</title>
+<title>Debian | Gancio</title>
 <meta name="generator" content="Jekyll v3.8.6" />
-<meta property="og:title" content="Classic" />
+<meta property="og:title" content="Debian" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="A shared agenda for local communities" />
 <meta property="og:description" content="A shared agenda for local communities" />
-<link rel="canonical" href="https://gancio.org/install/classic" />
-<meta property="og:url" content="https://gancio.org/install/classic" />
+<link rel="canonical" href="https://gancio.org/install/debian" />
+<meta property="og:url" content="https://gancio.org/install/debian" />
 <meta property="og:site_name" content="Gancio" />
 <script type="application/ld+json">
-{"@type":"WebPage","url":"https://gancio.org/install/classic","headline":"Classic","description":"A shared agenda for local communities","@context":"https://schema.org"}</script>
+{"@type":"WebPage","url":"https://gancio.org/install/debian","headline":"Debian","description":"A shared agenda for local communities","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 </head>
@@ -105,7 +105,7 @@
                   
                     <li class="navigation-list-item  active">
                       
-                      <a href="https://gancio.org/install/classic" class="navigation-list-link active">Classic</a>
+                      <a href="https://gancio.org/install/debian" class="navigation-list-link active">Debian</a>
                       
                     </li>
                   
@@ -294,27 +294,32 @@
                 
                   <li class="breadcrumb-nav-list-item"><a href="https://gancio.org/install">Install</a></li>
                 
-                <li class="breadcrumb-nav-list-item"><span>Classic</span></li>
+                <li class="breadcrumb-nav-list-item"><span>Debian</span></li>
               </ol>
             </nav>
           
         
         <div id="main-content" class="page-content" role="main">
-          <h2 id="install">Install</h2>
+          <h2 id="debian-installation">Debian installation</h2>
 
 <ol>
-  <li>Install Node.js and postgreSQL
+  <li>Install Node.js &amp; yarn (<strong>from root</strong>)
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sL</span> https://deb.nodesource.com/setup_12.x | bash -
-apt-get <span class="nb">install</span> <span class="nt">-y</span> nodejs postgresql
+apt-get <span class="nb">install</span> <span class="nt">-y</span> nodejs
+curl <span class="nt">-sL</span> https://dl.yarnpkg.com/debian/pubkey.gpg |  apt-key add -
+<span class="nb">echo</span> <span class="s2">"deb https://dl.yarnpkg.com/debian/ stable main"</span> <span class="o">&gt;</span> /etc/apt/sources.list.d/yarn.list
+apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">install </span>yarn
 </code></pre></div>    </div>
     <p><small><a href="https://github.com/nodesource/distributions/blob/master/README.md">source</a></small></p>
   </li>
   <li>Install Gancio
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install</span> <span class="nt">--global</span> gancio
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add gancio <span class="nt">--prod</span>
 </code></pre></div>    </div>
   </li>
-  <li>Create a database (optional as you can use sqlite, but recommended)
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo</span> <span class="nt">-u</span> postgres psql
+  <li>Setup with postgreSQL (optional as you can choose sqlite)
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-get <span class="nb">install </span>postgresql
+<span class="c"># Create the database</span>
+su postgres <span class="nt">-c</span> psql
 <span class="nv">postgres</span><span class="o">=</span><span class="c"># create database gancio;</span>
 <span class="nv">postgres</span><span class="o">=</span><span class="c"># create user gancio with encrypted password 'gancio';</span>
 <span class="nv">postgres</span><span class="o">=</span><span class="c"># grant all privileges on database gancio to gancio;</span>
@@ -339,13 +344,13 @@ gancio start <span class="nt">--config</span> config.json
     <p>Point your web browser to <a href="http://localhost:13120">http://localhost:13120</a> or where you selected during setup.</p>
   </li>
   <li>
-    <p><a href="/setup/nginx">Setup nginx as a proxy</a></p>
+    <p><a href="/install/nginx">Setup nginx as a proxy</a></p>
   </li>
   <li>Deploy in production<br />
-If you don’t use the <a href="/setup/docker">docker way</a>, in production you should use something like <strong><a href="http://pm2.keymetrics.io/">pm2</a></strong>:</li>
+If you don’t use the <a href="/install/docker">docker way</a>, in production you should use something like <strong><a href="http://pm2.keymetrics.io/">pm2</a></strong>:</li>
 </ol>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>npm <span class="nb">install</span> <span class="nt">--global</span> pm2
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>yarn global add pm2
 pm2 gancio start <span class="nt">--config</span> config.json
 </code></pre></div></div>
 

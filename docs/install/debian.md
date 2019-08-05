@@ -1,25 +1,32 @@
 ---
 layout: default
-title: Classic
-permalink: /install/classic
+title: Debian
+permalink: /install/debian
 parent: Install
 ---
 
-## Install
+## Debian installation
 
-1. Install Node.js and postgreSQL
+1. Install Node.js & yarn (**from root**)
 ```bash
 curl -sL https://deb.nodesource.com/setup_12.x | bash -
-apt-get install -y nodejs postgresql
+apt-get install -y nodejs
+curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg |  apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
+apt-get update && apt-get install yarn
 ```
 <small>[source](https://github.com/nodesource/distributions/blob/master/README.md)</small>
+
 1. Install Gancio
 ```bash
-npm install --global gancio
+yarn add gancio --prod
 ```
-1. Create a database (optional as you can use sqlite, but recommended)
+
+1. Setup with postgreSQL (optional as you can choose sqlite)
 ```bash
-sudo -u postgres psql
+apt-get install postgresql
+# Create the database
+su postgres -c psql
 postgres=# create database gancio;
 postgres=# create user gancio with encrypted password 'gancio';
 postgres=# grant all privileges on database gancio to gancio;
@@ -44,12 +51,12 @@ gancio start --config config.json
 ```
 1. Point your web browser to [http://localhost:13120](http://localhost:13120) or where you selected during setup.
 
-1. [Setup nginx as a proxy](/setup/nginx)
+1. [Setup nginx as a proxy](/install/nginx)
 
 1. Deploy in production  
-If you don't use the [docker way](/setup/docker), in production you should use something like **[pm2](http://pm2.keymetrics.io/)**:
+If you don't use the [docker way](/install/docker), in production you should use something like **[pm2](http://pm2.keymetrics.io/)**:
 
 ```bash
-sudo npm install --global pm2
+sudo yarn global add pm2
 pm2 gancio start --config config.json
 ```
