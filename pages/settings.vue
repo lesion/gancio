@@ -23,6 +23,13 @@ export default {
       password: '',
     }
   },
+  name: 'Settings',
+  computed: mapState(['settings']),
+  head () {
+    return {
+      title: `${this.settings.title} - ${this.$t('common.settings')}`
+    }
+  },
   async asyncData ({ $axios, params }) {
     const user = await $axios.$get('/auth/user')
     user.mastodon_auth = ''

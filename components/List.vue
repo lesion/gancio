@@ -4,7 +4,7 @@ div#list
   el-timeline
     el-timeline-item(
       v-for='event in events'
-      :key='event.start_datetime'
+      :key='`${event.id}_${event.start_datetime}`'
       :timestamp='event|when'
       placement='top' icon='el-icon-arrow-down' size='large'
     )

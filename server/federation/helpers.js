@@ -7,7 +7,7 @@ const httpSignature = require('http-signature')
 const actorCache = []
 
 const Helpers = {
-  async signAndSend(message, user, to) {//, domain, req, res, targetOrigin) {
+  async signAndSend(message, user, to) {
 
     // get the URI of the actor object and append 'inbox' to it
     const toInbox = to + '/inbox'

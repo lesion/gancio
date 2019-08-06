@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
         attributedTo: `${config.baseurl}/federation/u/${username}`,
         to: 'https://www.w3.org/ns/activitystreams#Public',
         cc: follower ? follower: [],
-        content: this.title
+        content: `<b>${this.title}</b> @${this.place.name}  <br/>${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description} - ${this.tags.map(t => '#' + t.tag).join(' ')} <br/>${config.baseurl}/event/${this.id}`
       }
     }
   }

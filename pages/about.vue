@@ -8,3 +8,14 @@
     div(v-html='$t("about")')
 
 </template>
+<script>
+import { mapState } from 'vuex'
+export default {
+  computed: mapState(['settings']),
+  head () {
+    return {
+      title: `${this.settings.title} - ${this.$t('common.info')}`
+    }
+  }
+}
+</script>

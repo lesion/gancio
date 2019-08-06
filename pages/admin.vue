@@ -94,6 +94,9 @@ export default {
       open: true,
     }
   },
+  head () {
+    return { title: `${this.settings.title} - ${this.$t('common.admin')}` }
+  },
   async mounted () {
     const code = this.$route.query.code
 
