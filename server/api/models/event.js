@@ -1,4 +1,5 @@
 const config = require('config')
+const moment = require('moment')
 
 module.exports = (sequelize, DataTypes) => {
   const event = sequelize.define('event', {
@@ -47,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
         attributedTo: `${config.baseurl}/federation/u/${username}`,
         to: 'https://www.w3.org/ns/activitystreams#Public',
         cc: follower ? follower: [],
-        content: `<b>${this.title}</b> @${this.place.name}  <br/>${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description} - ${this.tags.map(t => '#' + t.tag).join(' ')} <br/>${config.baseurl}/event/${this.id}`
+      content: `<b><a href='${config.baseurl}/event/${this.id}'>${this.title}</a></b> @${this.place.name}  ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/>${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description} - ${this.tags.map(t => '#' + t.tag).join(' ')} <br/>`
       }
     }
   }
