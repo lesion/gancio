@@ -5,18 +5,17 @@ rss(version='2.0')
         link #{config.baseurl}
         description #{config.description}
         language #{config.locale}
-        //- if events.length
-            lastBuildDate= new Date(posts[0].publishedAt).toUTCString()
         each event in events
             item
-                title [#{moment(event.start_datetime).format("D-MM-YY")}] #{event.title} @#{event.place.name}
+                title [#{moment.unix(event.start_datetime).format("YY-MM-DD")}] #{event.title} @#{event.place.name}
                 link #{config.baseurl}/event/#{event.id}
                 description
                     | <![CDATA[
                     | <h4>#{event.title}</h4>
                     | <strong>#{event.place.name} - #{event.place.address}</strong>
-                    | #{moment(event.start_datetime).format("dddd, D MMMM HH:mm")}<br/>
-                    | <img src="#{config.apiurl}/media/#{event.image_path}"/>
+                    | <small>(#{moment.unix(event.start_datetime).format("dddd, D MMMM HH:mm")})</small><br/>
+                    if (event.image_path)
+                        | <img src="#{config.apiurl}/media/#{event.image_path}"/>
                     | <pre>!{event.description}</pre>
                     | ]]>
                 pubDate= new Date(event.createdAt).toUTCString()

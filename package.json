@@ -10,6 +10,7 @@
     "start": "cross-env sequelize db:migrate && NODE_ENV=production node server/cli.js",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "doc": "cd docs && bundle exec jekyll b",
+    "doc:dev": "cd docs && bundle exec jekyll s --drafts",
     "migrate:dev": "sequelize db:migrate",
     "migrate": "NODE_ENV=production sequelize db:migrate"
   },
