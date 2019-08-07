@@ -39,9 +39,10 @@
         el-button(plain type='danger' size='mini' @click.prevent='remove') {{$t('common.remove')}}
         el-button(plain type='primary' size='mini' @click='$router.replace(`/add/${event.id}`)') {{$t('common.edit')}}  
 
-      small {{event.likes.length}} - {{event.boost.length}}
       //- comments from fediverse
       #comments.card-body(v-if='settings.enable_federation')
+        small.float-right 🔖 {{event.likes.length}}  
+        small.float-right.mr-3 ✊ {{event.boost.length}}<br/>
         strong {{$t('common.comments')}} -
         <small>{{$t('event.interact_with_me_at')}} <u>{{event.user.username}}@{{settings.baseurl|url2host}}</u></small>
 
@@ -73,7 +74,7 @@ export default {
   head () {
     if (!this.event) return {}
     return {
-      title: this.event.title,
+      title: `${this.settings.title} - ${this.event.title}`,
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         { hid: 'description', name: 'description', 
@@ -100,9 +101,9 @@ export default {
     try {
       const [ id, start_datetime ] = params.id.split('_')
       const event = await $axios.$get(`/event/${id}`)
-      event.start_datetime = start_datetime ? start_datetime : event.start_datetime
+      event.start_datetime = start_datetime ? Number(start_datetime) : event.start_datetime
       event.end_datetime = event.end_datetime
-      return { event, id }
+      return { event, id: Number(id) }
     } catch(e) {
       error({ statusCode: 404, message: 'Event not found'})
     }
@@ -114,7 +115,7 @@ export default {
       let found = false
       const event = this.filteredEvents.find(e => {
         if (found) return e
-        if (e.start_datetime === this.event.start_datetime && e.id === this.event.id) found = true
+        found = (e.start_datetime === this.event.start_datetime && e.id === this.event.id)
       })
       if (!event) return false
       if (event.recurrent) {

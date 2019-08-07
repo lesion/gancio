@@ -9,6 +9,7 @@
     Search
     el-tabs.mt-2(v-model='type')
 
+      //- TOFIX
       //- el-tab-pane.pt-1(label='email' name='email')
       //-   p(v-html='$t(`export.email_description`)')
       //-   el-form(@submit.native.prevent)
@@ -45,6 +46,7 @@
         el-button.float-right(plain v-clipboard:copy='listScript' type='primary' icon='el-icon-document') {{$t('common.copy')}}
 
 
+      //- TOFIX
       //- el-tab-pane.pt-1(label='calendar' name='calendar')
       //-   p(v-html='$t(`export.calendar_description`)')
       //-   //- no-ssr
@@ -65,6 +67,11 @@ import { Message } from 'element-ui'
 export default {
   name: 'Export',
   components: { List, Search },
+  head () {
+    return {
+      title: `${this.settings.title} - ${this.$t('common.export')}`
+    }
+  },
   data () {
     return {
       type: 'feed',
