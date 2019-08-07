@@ -6,7 +6,7 @@ nav_order: 6
 ---
 # Contribute
 {: .no_toc }
-If you want to contribute, take a look at the [issues](https://git.lattuga.net/cisti/gancio/issues)
+If you want to contribute, take a look at the [issues](https://framagit.net/les/gancio/issues)
 
 1. TOC
 {:toc}

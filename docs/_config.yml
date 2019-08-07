@@ -34,7 +34,7 @@ search_enabled: true
 
 aux_links:
   "Source":
-     - https://git.lattuga.net/cisti/gancio
+     - https://framagit.org/les/gancio
 
 
 #Exclude from processing.
