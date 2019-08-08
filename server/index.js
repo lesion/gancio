@@ -1,19 +1,18 @@
-#!/bin/env node
-const path = require('path')
-const express = require('express')
-const consola = require('consola')
-const morgan = require('morgan')
+//#!/bin/env node
+//const path = require('path')
+//const express = require('express')
+//const consola = require('consola')
+//const morgan = require('morgan')
 const { Nuxt, Builder } = require('nuxt')
 
-const api = require('./api')
-const federation = require('./federation')
-const webfinger = require('./federation/webfinger')
+//const api = require('./api')
+//const federation = require('./federation')
+//const webfinger = require('./federation/webfinger')
 
 // Import and Set Nuxt.js options
 const nuxt_config = require('../nuxt.config.js')
 const config = require('config')
 
-const app = express()
 async function start() {
   nuxt_config.server = config.server
   // Init Nuxt.js
@@ -26,30 +25,31 @@ async function start() {
   } else {
     await nuxt.ready()
   }
+  nuxt.listen()
 
   // configurable favicon && logo
-  app.use('/favicon.ico', express.static(path.resolve(config.favicon || 'assets/favicon.ico')))
+  //app.use('/favicon.ico', express.static(path.resolve(config.favicon || 'assets/favicon.ico')))
 
-  app.use(morgan('dev'))
-  app.use('/media/', express.static(config.upload_path))
+  //app.use(morgan('dev'))
+  //app.use('/media/', express.static(config.upload_path))
 
   // gancio standard api
-  app.use('/api', api)
+  //app.use('/api', api)
 
   // federation api / activitypub / webfinger / nodeinfo
-  app.use('/.well-known', webfinger)
-  app.use('/federation', federation)
+  //app.use('/.well-known', webfinger)
+  //app.use('/federation', federation)
 
   // Give nuxt middleware to express
-  app.use(nuxt.render)
+  //app.use(nuxt.render)
 
   // Listen
-  const server = app.listen(nuxt_config.server)
+  //const server = app.listen(nuxt_config.server)
 
   // close connections/port/unix socket
   function shutdown() {
     consola.info(`Closing connections..`)
-    server.close(() => {
+    nuxt.close(() => {
       // TODO, close db connection?
       process.exit()
     })
@@ -57,17 +57,6 @@ async function start() {
   process.on('SIGTERM', shutdown)
   process.on('SIGINT', shutdown)
 
-  server.on('error', e => {
-    consola.error(e)
-  })
-
-  server.on('listening', () => {
-    const address = server.address()
-    consola.ready({
-      message: `Server listening on ${(typeof address) === 'object' ? `${address.address}:${address.port}` : address}`,
-      badge: true
-    })
-  })
 }
 
 start()

@@ -1,5 +1,5 @@
+// DO NOT TOUCH THIS FILE
 const fs = require('fs')
-
 const config_path = process.env.config_path
 
 let config = {}
