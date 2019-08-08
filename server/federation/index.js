@@ -32,9 +32,6 @@ router.get('/m/:event_id', async (req, res) => {
 router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
 
   const b = req.body
-  console.error('> INBOX ', b.type, b)
-  const targetOrigin = new URL(b.actor).origin
-  const domain = new URL(config.baseurl).host
 
   switch(b.type) {
     case 'Follow':
@@ -43,7 +40,7 @@ router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
     case 'Undo':
       // unfollow || unlike
       if (b.object.type === 'Follow') {
-        Follows.unfollow(req, res, b, targetOrigin, domain)
+        Follows.unfollow(req, res)
       } else if (b.object.type === 'Like') {
         Ego.unbookmark(req, res)
       } else if (b.object.type === 'Announce') {
