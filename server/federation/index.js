@@ -38,14 +38,14 @@ router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
 
   switch(b.type) {
     case 'Follow':
-      Follows.follow(req, res, b, targetOrigin, domain)
+      Follows.follow(req, res)
       break
     case 'Undo':
       // unfollow || unlike
       if (b.object.type === 'Follow') {
         Follows.unfollow(req, res, b, targetOrigin, domain)
       } else if (b.object.type === 'Like') {
-        console.error('Unlike!')
+        Ego.unbookmark(req, res)
       } else if (b.object.type === 'Announce') {
         console.error('Unboost')
       }
@@ -57,7 +57,7 @@ router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
       console.error('This is a note ! I probably should not receive this')
       break
     case 'Like':
-      Ego.like(req, res)
+      Ego.bookmark(req, res)
       break
     case 'Delete':
       console.error('Delete ?!?!')

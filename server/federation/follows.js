@@ -2,21 +2,23 @@ const config = require('config')
 const Helpers = require('./helpers')
 const { user: User } = require('../api/models')
 const crypto = require('crypto')
+const debug = require('debug')('follows')
 
 module.exports = {
   // follow request from fediverse
-  async follow (req, res, body, targetOrigin, domain) {
+  async follow (req, res) {
+    const body = req.body
     if (typeof body.object !== 'string') return
     const username = body.object.replace(`${config.baseurl}/federation/u/`, '')
     const user = await User.findOne({ where: { username }})
-    if (!user) {
-      res.sendStatus(404)
-      return
-    }
+    if (!user) return res.sendStatus(404)
+
     // check for duplicate
     if (user.followers.indexOf(body.actor) === -1) {
-      console.error('ok this is a new follower: ', body.actor)
+      debug('%s followed by %s (%d)', username, body.actor, user.followers.length)
       await user.update({ followers: [...user.followers, body.actor] })
+    } else {
+      debug('duplicate %s followed by %s', username, body.actor)
     }
     const guid = crypto.randomBytes(16).toString('hex')
     let message = {
@@ -29,6 +31,7 @@ module.exports = {
     Helpers.signAndSend(message, user, body.actor)
     res.sendStatus(200)
   },
+
   // unfollow request from fediverse
   unfollow () {
     console.error('inside unfollow')

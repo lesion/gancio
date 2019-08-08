@@ -5,7 +5,7 @@
   "author": "lesion",
   "scripts": {
     "dev:nuxt": "cross-env NODE_ENV=development nuxt dev",
-    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+    "dev": "cross-env DEBUG=fediverse:* NODE_ENV=development nodemon server/index.js --watch server",
     "build": "nuxt build",
     "start": "cross-env sequelize db:migrate && NODE_ENV=production node server/cli.js",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",

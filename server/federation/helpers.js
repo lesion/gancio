@@ -3,6 +3,7 @@ const request = require('request')
 const crypto = require('crypto')
 const config = require('config')
 const httpSignature = require('http-signature')
+const debug = require('debug')('fediverse:helpers')
 
 const actorCache = []
 
@@ -68,8 +69,10 @@ const Helpers = {
   async getActor(url, force=false) {
     // try with cache first if not forced
     if (!force && actorCache[url]) return actorCache[url]
+    debug('getActor %s', url)
     const user = await fetch(url, { headers: {'Accept': 'application/jrd+json, application/json'} })
       .then(res => res.json())
+      .catch(debug)
     actorCache[url] = user
     return user
   },
