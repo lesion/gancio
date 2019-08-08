@@ -63,7 +63,7 @@ router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
       // this is a reply
       if (b.object.type === 'Note' && b.object.inReplyTo) {
         await Comments.create(b)
-        res.sendStatus(201)
+        res.status(201).send()
       } else {
         console.error('Create what? ', b.object.type)
       }

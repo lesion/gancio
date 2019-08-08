@@ -70,10 +70,12 @@ const Helpers = {
     // try with cache first if not forced
     if (!force && actorCache[url]) return actorCache[url]
     const user = await fetch(url, { headers: {'Accept': 'application/jrd+json, application/json'} })
-      .then(res => res.json())
-      .catch(e => {
-        debug(e)
-        return false
+      .then(res => {
+        if (!res.ok) {
+          debug('[ERR] Actor %s => %s', url, res.statusText)
+          return false
+        }
+        return res.json()
       })
     actorCache[url] = user
     return user
@@ -82,7 +84,7 @@ const Helpers = {
   // ref: https://blog.joinmastodon.org/2018/07/how-to-make-friends-and-verify-requests/
   async verifySignature(req, res, next) {
     let user = await Helpers.getActor(req.body.actor)
-    if (!user) res.send('Actor not found', 401)
+    if (!user) return res.send('Actor not found', 401)
 
     // little hack -> https://github.com/joyent/node-http-signature/pull/83
     req.headers.authorization = 'Signature ' + req.headers.signature
@@ -95,6 +97,7 @@ const Helpers = {
     
     // signature not valid, try without cache
     user = await Helpers.getActor(req.body.actor, true)
+    if (!user) return res.send('Actor not found', 401)
     if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) return next()
 
     // still not valid

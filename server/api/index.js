@@ -99,7 +99,6 @@ api.get('/export/:type', exportController.export)
 
 // get events in this range
 api.get('/event/:month/:year', eventController.getAll)
-// api.get('/event/:month/:year', eventController.getAfter)
 
 // Handle 404
 api.use(function(req, res) {

@@ -11,7 +11,7 @@ module.exports = {
     if (typeof body.object !== 'string') return
     const username = body.object.replace(`${config.baseurl}/federation/u/`, '')
     const user = await User.findOne({ where: { username }})
-    if (!user) return res.sendStatus(404)
+    if (!user) return res.status(404).send('User not found')
 
     // check for duplicate
     if (user.followers.indexOf(body.actor) === -1) {
