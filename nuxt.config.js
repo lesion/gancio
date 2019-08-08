@@ -52,6 +52,7 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
+    ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }]
   ],
   /*
    ** Axios module configuration
