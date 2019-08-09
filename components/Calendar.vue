@@ -41,10 +41,11 @@ export default {
   computed: {
     ...mapGetters(['filteredEventsWithPast']),
     ...mapState(['tags', 'filters']),
+
+    // TODO: should be better
     attributes () {
-      const colors = ['indigo', 'orange', 'yellow', 'green', 'teal', 'blue', 'red', 'purple', 'pink', 'grey']
-      const tags = take(this.tags, 10)//.map(t=>t.tag)
-      // const tags = [this.tags[0].tag, this.tags[1].tag, this.tags[2].tag, this.tags[3].tag, this.tags[4].tag, this.tags[5].tag ]
+      const colors = ['green', 'orange', 'yellow', 'teal', 'indigo', 'blue', 'red', 'purple', 'pink', 'grey']
+      const tags = take(this.tags, 10).map(t=>t.tag)
       let attributes = []
       attributes.push ({ key: 'today', dates: new Date(), highlight: { color: 'green' }})
 
@@ -61,10 +62,13 @@ export default {
 
       attributes = attributes.concat(this.filteredEventsWithPast
         .filter(e => !e.multidate)
-        .map(e => ({
-          key: e.id, 
-          dot: getColor(e),
-          dates: new Date(e.start_datetime*1000)})))
+        .map(e => {
+          const color = getColor(e)
+          return {
+            key: e.id, 
+            dot: color,
+            dates: new Date(e.start_datetime*1000)
+          }}))
 
       attributes = attributes.concat(this.filteredEventsWithPast
         .filter(e => e.multidate)

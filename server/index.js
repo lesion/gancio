@@ -1,20 +1,13 @@
 //#!/bin/env node
-//const path = require('path')
-//const express = require('express')
-//const consola = require('consola')
-//const morgan = require('morgan')
 const { Nuxt, Builder } = require('nuxt')
-
-//const api = require('./api')
-//const federation = require('./federation')
-//const webfinger = require('./federation/webfinger')
 
 // Import and Set Nuxt.js options
 const nuxt_config = require('../nuxt.config.js')
 const config = require('config')
 
-async function start() {
+async function main() {
   nuxt_config.server = config.server
+
   // Init Nuxt.js
   const nuxt = new Nuxt(nuxt_config)
 
@@ -27,36 +20,14 @@ async function start() {
   }
   nuxt.listen()
 
-  // configurable favicon && logo
-  //app.use('/favicon.ico', express.static(path.resolve(config.favicon || 'assets/favicon.ico')))
-
-  //app.use(morgan('dev'))
-  //app.use('/media/', express.static(config.upload_path))
-
-  // gancio standard api
-  //app.use('/api', api)
-
-  // federation api / activitypub / webfinger / nodeinfo
-  //app.use('/.well-known', webfinger)
-  //app.use('/federation', federation)
-
-  // Give nuxt middleware to express
-  //app.use(nuxt.render)
-
-  // Listen
-  //const server = app.listen(nuxt_config.server)
-
   // close connections/port/unix socket
   function shutdown() {
-    consola.info(`Closing connections..`)
     nuxt.close(() => {
-      // TODO, close db connection?
       process.exit()
     })
   }
   process.on('SIGTERM', shutdown)
   process.on('SIGINT', shutdown)
-
 }
 
-start()
+main()
