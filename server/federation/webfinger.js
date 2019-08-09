@@ -96,12 +96,12 @@ router.get('/nodeinfo', async (req, res) => {
 
 // Handle 404
 router.use(function(req, res) {
-  res.send('404: Page not Found', 404)
+  res.status(404).send('404: Page not Found')
 })
 
 // Handle 500
 router.use(function(error, req, res, next) {
-  res.send('500: Internal Server Error', 500)
+  res.status(500).send('500: Internal Server Error')
 })
 
 module.exports = router
