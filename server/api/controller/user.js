@@ -58,8 +58,10 @@ const userController = {
         const old_path = path.join(config.upload_path, event.image_path)
         const old_thumb_path = path.join(config.upload_path, 'thumb', event.image_path)
         try {
-          await fs.unlink(old_path)
-          await fs.unlink(old_thumb_path)
+          console.error('media files not removed')
+          // TOFIX
+          // await fs.unlink(old_path)
+          // await fs.unlink(old_thumb_path)
         } catch (e) {
           console.error(e)
         }
@@ -125,7 +127,7 @@ const userController = {
     if (req.user)
       federation.sendEvent(event, req.user)
 
-    res.json(200)
+    // res.sendStatus(200)
 
     // send notification (mastodon/email/confirmation)
     // notifier.notifyEvent(event.id)

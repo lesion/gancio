@@ -38,7 +38,7 @@ router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
       Follows.follow(req, res)
       break
     case 'Undo':
-      // unfollow || unlike
+      // unfollow || unlike || unboost
       if (b.object.type === 'Follow') {
         Follows.unfollow(req, res)
       } else if (b.object.type === 'Like') {

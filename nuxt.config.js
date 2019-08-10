@@ -13,9 +13,6 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   dev: (process.env.NODE_ENV !== 'production'),
-  //serverMiddleware: [
-    //{ path: '/api', handler: '~/server/api/index.js' }
-  //],
 
   server: conf.server,
 
@@ -41,7 +38,7 @@ module.exports = {
     '@/plugins/filters', // text filters, datetime, etc.
     '@/plugins/vue-awesome', // icon
     '@/plugins/axios', // axios baseurl configuration
-    { src: '@/plugins/v-calendar', ssr: false }, // calendar, TO-REDO
+    { src: '@/plugins/v-calendar', ssr: false }, // calendar, fix ssr
     '@/plugins/i18n.js'
   ],
 
@@ -82,17 +79,17 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    // optimization: {
-    //   splitChunks: {
-    //     cacheGroups: {
-    //       element: {
-    //         test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
-    //         name: 'element-ui',
-    //         chunks: 'all'
-    //       }
-    //     }
-    //   }
-    // },
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          element: {
+            test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
+            name: 'element-ui',
+            chunks: 'all'
+          }
+        }
+      }
+    },
     transpile: [/^element-ui/, /^vue-awesome/],
     splitChunks: {
       layouts: true
