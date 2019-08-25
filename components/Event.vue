@@ -1,5 +1,6 @@
 <template lang="pug">
     nuxt-link.event(:to='`event/${link}`' :class='{ withImg: event.image_path }')
+
       //- image
       img(v-if='showImage && event.image_path' :src='`/media/thumb/${event.image_path}`')
 
@@ -14,14 +15,9 @@
             div <v-icon name='clock'/> {{event|when('home')}}
             div <v-icon name='map-marker-alt' /> {{event.place.name}}
 
-          //- p(v-if='showDescription') {{event.description}}
-
-            //- div(v-if='event.comments && event.comments.length')
-            //-   v-icon(name='comments' color='dark') 
-            //-   span  {{event.comments.length}} {{$t('common.comments')}}
-
         ul.tags(v-if='showTags && event.tags')
           li(v-for='tag in event.tags' :key='tag') {{tag}}
+          li(v-if='event.comments.length') <u>{{$tc('common.comments', event.comments.length)}}</u>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
@@ -37,14 +33,6 @@ export default {
       type: Boolean,
       default: true
     },
-    showDescription: {
-      type: Boolean,
-      default: true
-    },
-    selected: {
-      type: Boolean,
-      default: false
-    }
   },
   computed: {
     date () { 
