@@ -94,6 +94,14 @@ router.get('/nodeinfo', async (req, res) => {
 })
 
 
+router.use('/host-meta', (req, res) => {
+  res.type('application/xml')
+  res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
+  <Link rel="lrdd" type="application/xrd+xml" template="${config.baseurl}/.well-known/webfinger?resource={uri}"/>
+</XRD>`)
+})
+
 // Handle 404
 router.use(function(req, res) {
   res.status(404).send('404: Page not Found')

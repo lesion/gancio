@@ -1,4 +1,3 @@
-//#!/bin/env node
 const { Nuxt, Builder } = require('nuxt')
 
 // Import and Set Nuxt.js options
@@ -22,7 +21,9 @@ async function main() {
 
   // close connections/port/unix socket
   function shutdown() {
-    nuxt.close(() => {
+    nuxt.close(async () => {
+      const db = require('./api/models')
+      await db.sequelize.close()
       process.exit()
     })
   }

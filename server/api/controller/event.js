@@ -5,6 +5,7 @@ const lodash = require('lodash')
 const { event: Event, comment: Comment, tag: Tag, place: Place, user: User, notification: Notification } = require('../models')
 const Sequelize = require('sequelize')
 const notifier = require('../../notifier')
+const federation = require('../../federation/helpers')
 
 const eventController = {
 
@@ -120,7 +121,8 @@ const eventController = {
       res.sendStatus(200)
       
       // send notification
-      notifier.notifyEvent(event.id)
+      //notifier.notifyEvent(event.id)
+      //federation.sendEvent(event, req.user)
     } catch (e) {
       res.sendStatus(404)
     }

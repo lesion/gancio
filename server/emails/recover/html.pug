@@ -6,7 +6,7 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
         title #{config.title}
     body
-        p= t('email.recover')
+        p= t('email.recover', {config})
 
         hr
         <a href="#{config.baseurl}/recover/#{user.recover_code}">#{t('email.press_here')}</a>

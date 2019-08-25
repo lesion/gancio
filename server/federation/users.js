@@ -58,7 +58,6 @@ module.exports = {
       where: { username: name }
     })
 
-
     if (!user) return res.status(404).send(`No record found for ${name}`)    
 
     console.error('Inside outbox, should return all events from this user')
@@ -68,9 +67,7 @@ module.exports = {
         '@context': 'https://www.w3.org/ns/activitystreams',
         id: `${config.baseurl}/federation/u/${name}/outbox`,
         type: 'OrderedCollection',
-        // summary: `${user.username} outbox`,
         totalItems: user.events.length,
-        // orderedItems: user.events.map(e => e.toAP(user.username))
         first: {
           id: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
           type: 'OrderedCollectionPage',
@@ -78,7 +75,6 @@ module.exports = {
           partOf: `${config.baseurl}/federation/u/${name}/outbox`,
           orderedItems: user.events.map(e => e.toAP(user.username))    
         }
-        // last: `${config.baseurl}/federation/u/${name}/outbox?page=true`
       }
       res.type('application/activity+json; charset=utf-8')
       return res.json(ret)

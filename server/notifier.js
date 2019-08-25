@@ -1,5 +1,5 @@
 const mail = require('./api/mail')
-const bot = require('./api/controller/fediverse')
+// const bot = require('./api/controller/fediverse')
 const settingsController = require('./api/controller/settings')
 const config = require('config')
 const eventController = require('./api/controller/event')
@@ -17,17 +17,17 @@ const notifier = {
       return mail.send(notification.email, 'event', { event, config, notification })
      case 'admin_email':
        return mail.send([config.smtp.auth.user, config.admin_email], 'event', { event, to_confirm: !event.is_visible, config, notification })
-      case 'mastodon':
-        // instance publish
-        if (bot.bot) {
-          const b = bot.post(event).then(b => {
-            event.activitypub_id = String(b.data.id)
-            return event.save()
-          }).catch(e => {
-            console.error("ERROR !! ", e)
-          })
-          promises.push(b)
-        }
+      // case 'mastodon':
+      //   // instance publish
+      //   if (bot.bot) {
+      //     const b = bot.post(event).then(b => {
+      //       event.activitypub_id = String(b.data.id)
+      //       return event.save()
+      //     }).catch(e => {
+      //       console.error("ERROR !! ", e)
+      //     })
+      //     promises.push(b)
+      //   }
     }
     return Promise.all(promises)
   },

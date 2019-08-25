@@ -14,7 +14,7 @@ const settingsController = require('./controller/settings')
 const storage = require('./storage')
 const upload = multer({ storage })
 
-const api = express()
+const api = express.Router()
 api.use(cookieParser())
 api.use(bodyParser.urlencoded({ extended: false }))
 api.use(bodyParser.json())
@@ -99,16 +99,6 @@ api.get('/export/:type', exportController.export)
 
 // get events in this range
 api.get('/event/:month/:year', eventController.getAll)
-
-// Handle 404
-api.use(function(req, res) {
-  res.status(404).send('404: Page not Found')
-})
-
-// Handle 500
-api.use(function(error, req, res, next) {
-  res.status(500).send('500: Internal Server Error')
-})
 
 
 module.exports = api

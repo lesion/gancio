@@ -21,7 +21,6 @@ router.get('/m/:event_id', async (req, res) => {
   const event_id = req.params.event_id
   if (req.accepts('html')) return res.redirect(301, `/event/${event_id}`)
 
-  console.error('Not asked for html!')
   const event = await Event.findByPk(req.params.event_id, { include: [ User ] })
   if (!event) return res.status(404).send('Not found')
   return res.json(event.toAP(event.user.username))

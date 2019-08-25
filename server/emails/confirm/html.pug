@@ -6,7 +6,7 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
         title #{config.title}
     body
-        p= t('email.confirm')
+        p= t('email.confirm', { config })
 
         hr
         <a href="#{config.baseurl}"> #{config.title} - #{config.description}</a>

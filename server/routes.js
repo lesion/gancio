@@ -4,6 +4,7 @@ const express = require('express')
 const api = require('./api')
 const federation = require('./federation')
 const webfinger = require('./federation/webfinger')
+const debug = require('debug')('routes')
 
 const router = express.Router()
 router.use('/favicon.ico', express.static(path.resolve(config.favicon || 'assets/favicon.ico')))
@@ -13,5 +14,19 @@ router.use('/api', api)
 // federation api / activitypub / webfinger / nodeinfo
 router.use('/.well-known', webfinger)
 router.use('/federation', federation)
+
+// ignore unimplemented ping url from fediverse
+router.use('/poco', (req, res) => res.status(404).send('404: Page not found'))
+
+// Handle 404
+// router.use((req, res) => res.status(404).send('404: Page not found'))
+
+// Handle 500
+router.use((error, req, res, next) => {
+  debug('Error 500: %s', error)
+  res.status(500).send('500: Internal Server Error')
+})
+
+
 
 module.exports = router
