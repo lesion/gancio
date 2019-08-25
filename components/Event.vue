@@ -17,7 +17,7 @@
 
         ul.tags(v-if='showTags && event.tags')
           li(v-for='tag in event.tags' :key='tag') {{tag}}
-          li(v-if='event.comments') <u>{{$tc('common.comments', event.comments.length)}}</u>
+          li(v-if='event.comments && event.comments.length') <u>{{$tc('common.comments', event.comments.length)}}</u>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
