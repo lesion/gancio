@@ -50,7 +50,7 @@ export default {
     me: 'Sei te',
     password_updated: 'Password modificata!',
     username: 'Nickname',
-    comments: '|un commento|{n} commenti'
+    comments: 'nessun commento|un commento|{n} commenti'
   },
 
   login: {
