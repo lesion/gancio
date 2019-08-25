@@ -37,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   event.prototype.toAP = function (username, follower) {
+    const tags = this.tags && '-' + this.tags.map(t => '#' + t.tag).join(' ')
+    const content = `<b><a href='${config.baseurl}/event/${this.id}'>${this.title}</a></b> @${this.place.name}  
+      ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/>
+      ${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description} ${tags} <br/>`
     return {
       id: `${config.baseurl}/federation/m/c_${this.id}`,
       type: 'Create',
@@ -48,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         attributedTo: `${config.baseurl}/federation/u/${username}`,
         to: 'https://www.w3.org/ns/activitystreams#Public',
         cc: follower ? follower: [],
-      content: `<b><a href='${config.baseurl}/event/${this.id}'>${this.title}</a></b> @${this.place.name}  ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/>${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description} - ${this.tags.map(t => '#' + t.tag).join(' ')} <br/>`
+        content
       }
     }
   }

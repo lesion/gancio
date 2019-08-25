@@ -211,6 +211,7 @@ const eventController = {
       attributes: { exclude: ['createdAt', 'updatedAt', 'placeId' ] },
       order: [[Tag, 'weigth', 'DESC']],
       include: [
+        { model: Comment, required: false, attributes: ['id'] },
         { model: Tag, required: false },
         { model: Place, required: false, attributes: ['id', 'name', 'address'] }
       ]
