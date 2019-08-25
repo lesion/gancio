@@ -43,7 +43,7 @@
       #comments.card-body(v-if='settings.enable_federation')
         small.float-right 🔖 {{event.likes.length}}  
         small.float-right.mr-3 ✊ {{event.boost.length}}<br/>
-        strong {{$t('common.comments')}} -
+        strong {{$tc('common.comments', event.comments.length)}} -
         <small>{{$t('event.interact_with_me_at')}} <u>{{event.user.username}}@{{settings.baseurl|url2host}}</u></small>
 
         .card-header(v-for='comment in event.comments' :key='comment.id')
