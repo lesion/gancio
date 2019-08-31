@@ -76,7 +76,7 @@ and then point the `user_locale` configuration to that directory:
 ```json
 "user_locale": "/opt/gancio/user_locale"
 ```  
-Watch [here](https://git.lattuga.net/cisti/gancio/src/master/locales) for a
+Watch [here](https://framagit.org/les/gancio/tree/master/locales) for a
 list of strings you can override.  
 <small>:warning: Note that a restart is needed when you change
 user_locale's content.</small>

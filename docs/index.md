@@ -13,7 +13,7 @@ A shared agenda for local communities.
 {: .fs-6 }
 
 [Get started now](install){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [Demo](https://demo.gancio.org){: .btn .btn-green .fs-5 .mb-4 .mb-md-0 }
-[Source](https://git.lattuga.net/cisti/gancio){: .btn .fs-5 }
+[Source](https://framagit.org/les/gancio){: .btn .fs-5 }
 
 [![assets/thumbs/home1.png](assets/thumbs/home1.png)](assets/home1.png){: data-fancybox="group" data-caption="Home of the first gancio instance"}
 [![assets/thumbs/mobile1.png](assets/thumbs/mobile1.png)](assets/mobile1.png){: data-fancybox="group" data-caption="Home mobile"}

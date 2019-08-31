@@ -7,7 +7,7 @@ parent: Install
 
 ## Install with docker
 **You do not need to clone the full repo as we distribute gancio via npm.**  
-A [Dockerfile](https://git.lattuga.net/cisti/gancio/raw/docker/docker/Dockerfile) and a docker-compose.yml are the only files needed.
+A [Dockerfile](https://framagit.org/les/gancio/raw/docker/docker/Dockerfile) and a docker-compose.yml are the only files needed.
 
 1. Create a directory where everything related to gancio is stored (db, images, config)
 ```bash
@@ -19,8 +19,8 @@ cd /opt/gancio
 ### Using postgreSQL
 1. Download docker-compose.yml and Dockerfile
 ```bash
-wget https://git.lattuga.net/cisti/gancio/raw/master/docker/Dockerfile
-wget https://git.lattuga.net/cisti/gancio/raw/master/docker/docker-compose.postgresql.yml -O docker.compose.yml
+wget https://framagit.org/les/gancio/raw/master/docker/Dockerfile
+wget https://framagit.org/les/gancio/raw/master/docker/docker-compose.postgresql.yml -O docker.compose.yml
 ```
 
 1. Create an empty configiguration (**this is needed**)
@@ -31,8 +31,8 @@ touch config.json
 ### Using sqlite
 1. Download docker-compose.yml and Dockerfile
 ```bash
-wget https://git.lattuga.net/cisti/gancio/raw/master/docker/Dockerfile
-wget https://git.lattuga.net/cisti/gancio/raw/master/docker/docker-compose.sqlite.yml -O docker-compose.yml
+wget https://framagit.org/les/gancio/raw/master/docker/Dockerfile
+wget https://framagit.org/les/gancio/raw/master/docker/docker-compose.sqlite.yml -O docker-compose.yml
 ```
 
 1. Create an empty db and config (**this is needed**)

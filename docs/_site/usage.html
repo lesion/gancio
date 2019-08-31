@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
-  <title>Debian - Gancio</title>
+  <title>Usage - Gancio</title>
 
   
 
@@ -25,17 +25,19 @@
   <script src="http://localhost:4000/assets/js/jquery.fancybox.min.js"></script>
 
   <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Debian | Gancio</title>
+<title>Usage | Gancio</title>
 <meta name="generator" content="Jekyll v3.8.6" />
-<meta property="og:title" content="Debian" />
+<meta property="og:title" content="Usage" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="A shared agenda for local communities" />
-<meta property="og:description" content="A shared agenda for local communities" />
-<link rel="canonical" href="http://localhost:4000/install/debian" />
-<meta property="og:url" content="http://localhost:4000/install/debian" />
+<meta name="description" content="Usage" />
+<meta property="og:description" content="Usage" />
+<link rel="canonical" href="http://localhost:4000/usage" />
+<meta property="og:url" content="http://localhost:4000/usage" />
 <meta property="og:site_name" content="Gancio" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-08-07T19:18:37+02:00" />
 <script type="application/ld+json">
-{"@type":"WebPage","headline":"Debian","url":"http://localhost:4000/install/debian","description":"A shared agenda for local communities","@context":"https://schema.org"}</script>
+{"dateModified":"2019-08-07T19:18:37+02:00","datePublished":"2019-08-07T19:18:37+02:00","@type":"BlogPosting","headline":"Usage","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/usage"},"url":"http://localhost:4000/usage","description":"Usage","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 </head>
@@ -93,7 +95,7 @@
     
       
         
-          <li class="navigation-list-item active">
+          <li class="navigation-list-item">
             
             <a href="http://localhost:4000/install" class="navigation-list-link">Install</a>
             
@@ -103,9 +105,9 @@
                   
                 
                   
-                    <li class="navigation-list-item  active">
+                    <li class="navigation-list-item ">
                       
-                      <a href="http://localhost:4000/install/debian" class="navigation-list-link active">Debian</a>
+                      <a href="http://localhost:4000/install/debian" class="navigation-list-link">Debian</a>
                       
                     </li>
                   
@@ -247,70 +249,14 @@
       <div class="main-content">
         
           
-            <nav class="breadcrumb-nav">
-              <ol class="breadcrumb-nav-list">
-                
-                  <li class="breadcrumb-nav-list-item"><a href="http://localhost:4000/install">Install</a></li>
-                
-                <li class="breadcrumb-nav-list-item"><span>Debian</span></li>
-              </ol>
-            </nav>
-          
         
         <div id="main-content" class="page-content" role="main">
-          <h2 id="debian-installation">Debian installation</h2>
+          <h1 id="usage">Usage</h1>
 
-<ol>
-  <li>Install Node.js &amp; yarn (<strong>from root</strong>)
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sL</span> https://deb.nodesource.com/setup_12.x | bash -
-apt-get <span class="nb">install</span> <span class="nt">-y</span> nodejs
-curl <span class="nt">-sL</span> https://dl.yarnpkg.com/debian/pubkey.gpg |  apt-key add -
-<span class="nb">echo</span> <span class="s2">"deb https://dl.yarnpkg.com/debian/ stable main"</span> <span class="o">&gt;</span> /etc/apt/sources.list.d/yarn.list
-apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">install </span>yarn
-</code></pre></div>    </div>
-    <p><small><a href="https://github.com/nodesource/distributions/blob/master/README.md">source</a></small></p>
-  </li>
-  <li>Install Gancio
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add gancio <span class="nt">--prod</span>
-</code></pre></div>    </div>
-  </li>
-  <li>Setup with postgreSQL (optional as you can choose sqlite)
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-get <span class="nb">install </span>postgresql
-<span class="c"># Create the database</span>
-su postgres <span class="nt">-c</span> psql
-<span class="nv">postgres</span><span class="o">=</span><span class="c"># create database gancio;</span>
-<span class="nv">postgres</span><span class="o">=</span><span class="c"># create user gancio with encrypted password 'gancio';</span>
-<span class="nv">postgres</span><span class="o">=</span><span class="c"># grant all privileges on database gancio to gancio;</span>
-</code></pre></div>    </div>
-  </li>
-  <li>Create a user to run gancio from
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>adduser gancio
-su gancio
-</code></pre></div>    </div>
-  </li>
-  <li>Test &amp; launch interactive setup
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gancio <span class="nt">--help</span>
-gancio setup <span class="nt">--config</span> config.json
-</code></pre></div>    </div>
-  </li>
-  <li>Start
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gancio <span class="nt">--help</span>
-gancio start <span class="nt">--config</span> config.json
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Point your web browser to <a href="http://localhost:13120">http://localhost:13120</a> or where you selected during setup.</p>
-  </li>
-  <li>
-    <p><a href="/install/nginx">Setup nginx as a proxy</a></p>
-  </li>
-  <li>Deploy in production<br />
-If you don’t use the <a href="/install/docker">docker way</a>, in production you should use something like <strong><a href="http://pm2.keymetrics.io/">pm2</a></strong>:</li>
-</ol>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>yarn global add pm2
-pm2 gancio start <span class="nt">--config</span> config.json
-</code></pre></div></div>
+<h2 id="add-event">Add event</h2>
+<h3 id="normal">Normal</h3>
+<h3 id="multidate">Multidate</h3>
+<h3 id="recurrent">Recurrent</h3>
 
 
           

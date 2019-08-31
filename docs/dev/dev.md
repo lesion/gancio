@@ -21,7 +21,7 @@ has_children: true
 
 2. Download source
 ```bash
-git clone https://git.lattuga.net/cisti/gancio
+git clone https://framagit.org/les/gancio
 ```
 
 3. Install dependencies

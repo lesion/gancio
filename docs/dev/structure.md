@@ -26,7 +26,7 @@ If you come from a PHP background, note that the main difference with
 multiple requests and tasks together (asyncronically) while each php
 process is tied to a single request.
 
-[Sequelize](https://sequelize.org/) is used as ORM. Take a look in [`/server/api/models`](https://git.lattuga.net/cisti/gancio/src/master/server/api/models).
+[Sequelize](https://sequelize.org/) is used as ORM. Take a look in [`/server/api/models`](https://framagit.org/les/gancio/tree/master/server/api/models).
 
 
 ### Client / frontend
@@ -37,4 +37,4 @@ just put your page inside `pages` and that's it!
 
 
 ### Federation / ActivityPub
-Code inside [`server/federation`](https://git.lattuga.net/cisti/gancio/src/master/server/federation).
+Code inside [`server/federation`](https://framagit.org/les/gancio/tree/master/server/federation).
