@@ -3,77 +3,77 @@
     "id": "0",
     "title": "",
     "content": "404 Page not found :( The requested page could not be found.",
-    "url": "http://localhost:4000/404.html",
+    "url": "https://gancio.org/404.html",
     "relUrl": "/404.html"
   },
   "1": {
     "id": "1",
     "title": "Configuration",
     "content": "Configuration Main gancio configuration is done with a configuration file. This shoud be a .json or a .js file and could be specified using the --config flag. eg. gancio start --config ./config.json eg. pm2 start gancio start -- --config ~/config.json Title Description BaseURL Server Database Upload path SMTP Admin Favicon User locale Secret Default settings Title The title will be in rss feed, in html head and in emails: &quot;title&quot;: &quot;Gancio&quot; Description &quot;description&quot;: &quot;a shared agenda for local communities&quot; BaseURL URL where your site will be accessible (include http or https): &quot;baseurl&quot;: &quot;https://gancio.cisti.org&quot; Server This probably support unix socket too :D &quot;server&quot;: { &quot;host&quot;: &quot;localhost&quot;, &quot;port&quot;: 13120 } Database &quot;db&quot;: { &quot;dialect&quot;: &quot;sqlite&quot;, &quot;storage&quot;: &quot;/tmp/db.sqlite&quot; } Upload path Where to save images &quot;upload_path&quot;: &quot;./uploads&quot; SMTP Admin Favicon You could specify another favicon. This is also used as logo (top-left corner): &quot;favicon&quot;: &quot;./favicon.ico&quot; User locale Probably you want to modify some text for your specific community, that’s why we thought the user_locale configuration: you can specify your version of each string of gancio making a directory with your locales inside. For example, let’s say you want to modify the text inside the /about page: mkdir /opt/gancio/user_locale put something like this in /opt/gancio/user_locale/en.js to override the about in english: export default { about: &#39;A new about&#39; } and then point the user_locale configuration to that directory: &quot;user_locale&quot;: &quot;/opt/gancio/user_locale&quot; Watch here for a list of strings you can override. :warning: Note that a restart is needed when you change user_locale’s content. Secret Default settings { &quot;title&quot;: &quot;Gancio&quot;, &quot;description&quot;: &quot;A shared agenda for local communities&quot;, &quot;baseurl&quot;: &quot;http://localhost:13120&quot;, &quot;server&quot;: { &quot;host&quot;: &quot;0.0.0.0&quot;, &quot;port&quot;: 13120 }, &quot;db&quot;: { &quot;dialect&quot;: &quot;sqlite&quot;, &quot;storage&quot;: &quot;/tmp/db.sqlite&quot; }, &quot;upload_path&quot;: &quot;./&quot;, &quot;favicon&quot;: &quot;../dist/favicon.ico&quot;, &quot;smtp&quot;: { &quot;auth&quot;: { &quot;user&quot;: &quot;&quot;, &quot;pass&quot;: &quot;&quot; }, &quot;secure&quot;: true, &quot;host&quot;: &quot;&quot; }, &quot;admin&quot;: &quot;&quot;, &quot;secret&quot;: &quot;notsosecret&quot; }",
-    "url": "http://localhost:4000/config",
+    "url": "https://gancio.org/config",
     "relUrl": "/config"
   },
   "2": {
     "id": "2",
     "title": "Debian",
     "content": "Debian installation Install Node.js &amp; yarn (from root) curl -sL https://deb.nodesource.com/setup_12.x | bash - apt-get install -y nodejs curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - echo &quot;deb https://dl.yarnpkg.com/debian/ stable main&quot; &gt; /etc/apt/sources.list.d/yarn.list apt-get update &amp;&amp; apt-get install yarn source Install Gancio yarn add gancio --prod Setup with postgreSQL (optional as you can choose sqlite) apt-get install postgresql # Create the database su postgres -c psql postgres=# create database gancio; postgres=# create user gancio with encrypted password &#39;gancio&#39;; postgres=# grant all privileges on database gancio to gancio; Create a user to run gancio from adduser gancio su gancio Test &amp; launch interactive setup gancio --help gancio setup --config config.json Start gancio --help gancio start --config config.json Point your web browser to http://localhost:13120 or where you selected during setup. Setup nginx as a proxy Deploy in production If you don’t use the docker way, in production you should use something like pm2: sudo yarn global add pm2 pm2 gancio start --config config.json",
-    "url": "http://localhost:4000/install/debian",
+    "url": "https://gancio.org/install/debian",
     "relUrl": "/install/debian"
   },
   "3": {
     "id": "3",
     "title": "Hacking",
     "content": "Development Stack Gancio is built with following technologies: Nuxt.js Vue.js Express Node.js Sequelize Element.ui Testing on your own machine Download source git clone https://framagit.org/les/gancio Install dependencies yarn Hacking yarn dev",
-    "url": "http://localhost:4000/dev",
+    "url": "https://gancio.org/dev",
     "relUrl": "/dev"
   },
   "4": {
     "id": "4",
     "title": "Docker",
     "content": "Install with docker You do not need to clone the full repo as we distribute gancio via npm. A Dockerfile and a docker-compose.yml are the only files needed. Create a directory where everything related to gancio is stored (db, images, config) mkdir /opt/gancio cd /opt/gancio :information_source: you can choose a different directory. Using postgreSQL Download docker-compose.yml and Dockerfile wget https://framagit.org/les/gancio/raw/master/docker/Dockerfile wget https://framagit.org/les/gancio/raw/master/docker/docker-compose.postgresql.yml -O docker.compose.yml Create an empty configiguration (this is needed) touch config.json Using sqlite Download docker-compose.yml and Dockerfile wget https://framagit.org/les/gancio/raw/master/docker/Dockerfile wget https://framagit.org/les/gancio/raw/master/docker/docker-compose.sqlite.yml -O docker-compose.yml Create an empty db and config (this is needed) touch config.json db.sqlite Finish Build docker image and launch interactive setup in one step docker-compose run --rm gancio gancio setup --docker Run your container docker-compose up -d Setup nginx as a proxy Point your web browser to http://localhost:13120 or where you specified during setup and enjoy :tada: You can edit config.json file and restart the container on your needs, see Configuration for more details.",
-    "url": "http://localhost:4000/install/docker",
+    "url": "https://gancio.org/install/docker",
     "relUrl": "/install/docker"
   },
   "5": {
     "id": "5",
     "title": "Home",
     "content": "Gancio A shared agenda for local communities. Get started now Demo Source About the project Gancio is made with :heart: by hacklab underscore License Gancio is distributed by an AGPL-3.0 Licence.",
-    "url": "http://localhost:4000/",
+    "url": "https://gancio.org/",
     "relUrl": "/"
   },
   "6": {
     "id": "6",
     "title": "Install",
     "content": "Install (production) Install on Debian Install using docker Post installation Nginx as a proxy If you wanna hack or run the current develop release take a look at Hacking &amp; contribute",
-    "url": "http://localhost:4000/install",
+    "url": "https://gancio.org/install",
     "relUrl": "/install"
   },
   "7": {
     "id": "7",
     "title": "Instances",
     "content": "Instances gancio.cisti.org (Torino, Italy) lapunta.org (Firenze, Italy)",
-    "url": "http://localhost:4000/instances",
+    "url": "https://gancio.org/instances",
     "relUrl": "/instances"
   },
   "8": {
     "id": "8",
     "title": "Migration",
     "content": "Migration If you need to modify the db’s structure while hacking, it’s super easy, just change server/api/models/. If you then decide that your changes are good for production, a sequelize migration is needed: Create a migration: ./node_modules/.bin/sequelize migration:generate --name your_migration",
-    "url": "http://localhost:4000/dev/migration",
+    "url": "https://gancio.org/dev/migration",
     "relUrl": "/dev/migration"
   },
   "9": {
     "id": "9",
     "title": "Nginx",
     "content": "Nginx proxy configuration This is the default nginx configuration for gancio, please modify at least the server_name and ssl_certificate’s path. Note that this does not include a cache configuration and that gancio does not use a cache control at all, if you can help with this task you’re welcome. server { listen 80; listen [::]:80; server_name gancio.cisti.org; root /var/www/letsencrypt; location /.well-known/acme-challenge/ { allow all; } location / { return 301 https://$host$request_uri; } } server { listen 443 ssl http2; listen [::]:443 ssl http2; server_name gancio.cisti.org; ssl_protocols TLSv1.2; ssl_ciphers HIGH:!MEDIUM:!LOW:!aNULL:!NULL:!SHA; ssl_prefer_server_ciphers on; ssl_session_cache shared:SSL:10m; # Uncomment these lines once you acquire a certificate: # ssl_certificate /etc/letsencrypt/live/gancio.cisti.org/fullchain.pem; # ssl_certificate_key /etc/letsencrypt/live/gancio.cisti.org/privkey.pem; keepalive_timeout 70; sendfile on; client_max_body_size 80m; gzip on; gzip_disable &quot;msie6&quot;; gzip_vary on; gzip_proxied any; gzip_comp_level 6; gzip_buffers 16 8k; gzip_http_version 1.1; gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript; add_header Strict-Transport-Security &quot;max-age=31536000&quot;; location / { try_files $uri @proxy; } location @proxy { proxy_set_header Host $host; proxy_set_header X-Forwarded-Proto https; proxy_set_header Proxy &quot;&quot;; proxy_pass_header Server; proxy_pass http://127.0.0.1:13120; proxy_buffering on; proxy_redirect off; proxy_http_version 1.1; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection $connection_upgrade; tcp_nodelay on; } }",
-    "url": "http://localhost:4000/install/nginx",
+    "url": "https://gancio.org/install/nginx",
     "relUrl": "/install/nginx"
   },
   "10": {
     "id": "10",
     "title": "Project Structure",
     "content": "Project structure API / backend Client / frontend Federation / ActivityPub API / backend Source code inside server/api/. index.js is basically a routing table pointing each PATH with specified HTTP VERB to a method of a controller. jwt is used to authenticate api request. Express.js is based on middleware, passing each request to a chain of methods. If you come from a PHP background, note that the main difference with Node.js is that the server process is always running and able to manage multiple requests and tasks together (asyncronically) while each php process is tied to a single request. Sequelize is used as ORM. Take a look in /server/api/models. Client / frontend Nuxt.js is used here! Nuxt is basically Vue plus SSR (Server Side Rendering). Client routing in nuxt is automatic (if you don’t need something special), just put your page inside pages and that’s it! Federation / ActivityPub Code inside server/federation.",
-    "url": "http://localhost:4000/dev/structure",
+    "url": "https://gancio.org/dev/structure",
     "relUrl": "/dev/structure"
   }
   
