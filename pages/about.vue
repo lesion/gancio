@@ -6,6 +6,8 @@
     h3 {{$t('common.info')}}
 
     div(v-html='$t("about")')
+    hr
+    small Made with <a href='https://gancio.org'>Gancio {{settings.version}}</a>
 
 </template>
 <script>

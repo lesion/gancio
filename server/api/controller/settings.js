@@ -3,6 +3,7 @@ const config = require('config')
 const consola = require('consola')
 const path = require('path')
 const fs = require('fs')
+const package = require('../../../package.json')
 
 const settingsController = {
   settings: { initialized: false },
@@ -73,7 +74,8 @@ const settingsController = {
       ...settingsController.settings,
       baseurl: config.baseurl,
       title: config.title,
-      description: config.description
+      description: config.description,
+      version: package.version
     }
     res.json(settings)
   },
