@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   const user = sequelize.define('user', {
     username: {
       type: DataTypes.STRING,
-      unique: { msg: 'error.username_taken' },
+      unique: { msg: 'error.nick_taken' },
       index: true,
       allowNull: false
     },
