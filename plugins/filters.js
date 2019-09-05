@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import moment from 'dayjs'
 import 'dayjs/locale/it'
+import 'dayjs/locale/es'
 
 export default ({ app, store }) => {
 
