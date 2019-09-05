@@ -66,10 +66,10 @@ export default {
         })
         this.$router.replace("/")
       } catch (e) {
-        const error = get(e, 'e.response.data.errors[0].message', String(e))
+        const error = get(e, 'response.data.errors[0].message', String(e))
         Message({
           showClose: true,
-          message: this.$t('register.error') + this.$t(error),
+          message: this.$t(error),
           type: 'error'
         })
       }

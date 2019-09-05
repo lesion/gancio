@@ -165,8 +165,9 @@ export default {
     remove_account_confirm: 'Stai per eliminare definitivamente il tuo account',
   },
 
-  err: {
-    register_error: 'Errore nella registrazione'
+  error: {
+    nick_taken: 'Questo nick è già presente',
+    email_taken: 'Questa email è già registrata'
   },
 
   ordinal: {

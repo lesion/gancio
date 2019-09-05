@@ -9,14 +9,14 @@ module.exports = (sequelize, DataTypes) => {
   const user = sequelize.define('user', {
     username: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: { msg: 'error.username_taken' },
       index: true,
       allowNull: false
     },
     display_name: DataTypes.STRING,
     email: {
       type: DataTypes.STRING,
-      unique: true,
+      unique:  { msg: 'error.email_taken' },
       index: true,
       allowNull: false
     },
