@@ -1,8 +1,17 @@
 {
-  "email.registration": "email.registration",
-  "email.register.subject": "email.register.subject",
-  "email.register": "email.register",
-  "email.confirm": "email.confirm",
-  "email.recover": "email.recover",
-  "email.press_here": "email.press_here"
+  "register":{ 
+    "subject": "Richiesta registrazione ricevuta",
+    "content": "Abbiamo ricevuto la richiesta di registrazione. La confermeremo quanto prima.\n Ciao"
+  },
+  "confirm": {
+    "subject": "Puoi iniziare a pubblicare eventi",
+    "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}<a/> è stato creato. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confermalo</a>."
+  },
+  "recover": {
+    "subject": "Recupero password",
+    "content": "Ciao, hai richiesto un recupero della password su {{config.title}}."
+  },
+  "common": {
+    "press_here": "Premi qui"
+  }
 }

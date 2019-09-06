@@ -20,7 +20,7 @@
       inactive-color='lightgreen'
       v-model='showPast'
     )    
-    no-ssr
+    client-only
       el-select.search(v-model='filter'
         multiple 
         filterable collapse-tags default-first-option

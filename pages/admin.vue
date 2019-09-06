@@ -1,7 +1,8 @@
 <template lang="pug">
   el-card#admin
     nuxt-link.float-right(to='/')
-      v-icon(name='times' color='red')
+      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
+
     h5 {{$t('common.admin')}}
 
     el-tabs(v-model='tab')
@@ -35,7 +36,7 @@
             template(slot-scope='data')
               el-button(type='primary' @click='confirm(data.row.id)' size='mini') {{$t('common.confirm')}}
               el-button(type='success' @click='preview(data.row.id)' size='mini') {{$t('common.preview')}}
-        no-ssr
+        client-only
           el-pagination(:page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
 
       //- SETTINGS

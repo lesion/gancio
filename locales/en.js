@@ -160,8 +160,9 @@ Adding this link to your feed reader will keep you up to date.`,
     remove_account_confirm: 'You are about to permanently delete your account',
   },
 
-  err: {
-    register_error: 'Error during registration'
+  error: {
+    nick_taken: 'This nickname is already used',
+    email_taken: 'This email is already used'    
   },
 
   ordinal: {

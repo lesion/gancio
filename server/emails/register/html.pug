@@ -1,6 +1,4 @@
-p= t('email.register')
+extends ../layout.pug
 
-hr
-small #{config.title} / #{config.description}
-br
-<a href='#{config.baseurl}'> #{config.baseurl}</a>
+block content
+  p !{t('register.content', { user, config })}

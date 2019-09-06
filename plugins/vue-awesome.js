@@ -31,6 +31,7 @@ import 'vue-awesome/icons/envelope'
 import 'vue-awesome/icons/calendar-day'
 import 'vue-awesome/icons/calendar-week'
 import 'vue-awesome/icons/calendar-alt'
+import 'vue-awesome/icons/circle-notch'
 
 import Icon from 'vue-awesome/components/Icon'
 

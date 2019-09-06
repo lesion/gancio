@@ -50,7 +50,8 @@ export default {
     me: 'Sei te',
     password_updated: 'Password modificata!',
     username: 'Nickname',
-    comments: 'nessun commento|un commento|{n} commenti'
+    comments: 'nessun commento|un commento|{n} commenti',
+    activate_user: 'Confermato'
   },
 
   login: {
@@ -165,8 +166,15 @@ export default {
     remove_account_confirm: 'Stai per eliminare definitivamente il tuo account',
   },
 
-  err: {
-    register_error: 'Errore nella registrazione'
+  error: {
+    nick_taken: 'Questo nick è già presente',
+    email_taken: 'Questa email è già registrata'
+  },
+
+  confirm: {
+    title: 'Conferma utente',
+    not_valid: 'Mmmmm qualcosa è andato storto.',
+    valid: 'Il tuo account è stato confermato, ora puoi <a href="/login">entrare</a>',
   },
 
   ordinal: {

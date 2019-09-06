@@ -8,7 +8,6 @@ const config = require('config')
 const mail = require('../mail')
 const { user: User, event: Event, tag: Tag, place: Place } = require('../models')
 const settingsController = require('./settings')
-const notifier = require('../../notifier')
 const federation = require('../../federation/helpers')
 
 const userController = {
@@ -38,10 +37,6 @@ const userController = {
         res.json({ token: accessToken })
       }
     }
-  },
-
-  async logout(req, res) {
-
   },
 
   async setToken(req, res) {
@@ -153,7 +148,6 @@ const userController = {
 
     body.description = body.description
       .replace(/(<([^>]+)>)/ig, '') // remove all tags from description
-      // .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>') // add links
 
     await event.update(body)
     let place
@@ -192,7 +186,12 @@ const userController = {
     if (!recover_code) return res.sendStatus(400)
     const user = await User.findOne({ where: { recover_code: { [Op.eq]: recover_code } } })
     if (!user) return res.sendStatus(400)
-    res.json(user)
+    try {
+      await user.update({ recover_code: ''})
+      res.sendStatus(200)
+    } catch (e) {
+      res.sendStatus(400)
+    }
   },
 
   async updatePasswordWithRecoverCode(req, res) {
@@ -201,6 +200,7 @@ const userController = {
     if (!recover_code || !password) return res.sendStatus(400)
     const user = await User.findOne({ where: { recover_code: { [Op.eq]: recover_code } } })
     if (!user) return res.sendStatus(400)
+    user.recover_code = ''
     user.password = password
     try {
       await user.save()
@@ -224,8 +224,8 @@ const userController = {
   async update(req, res) {
     const user = await User.findByPk(req.body.id)
     if (user) {
-      if (!user.is_active && req.body.is_active) {
-        await mail.send(user.email, 'confirm', { user, config })
+      if (!user.is_active && req.body.is_active && user.recover_code) {
+        mail.send(user.email, 'confirm', { user, config })
       }
       await user.update(req.body)
       res.json(user)
@@ -246,9 +246,11 @@ const userController = {
         req.body.is_active = false
       }
 
+      req.body.recover_code = crypto.randomBytes(16).toString('hex')
       const user = await User.create(req.body)
       try {
-        mail.send([user.email, config.admin], 'register', { user, config })
+        mail.send(user.email, 'register', { user, config })
+        mail.send(config.admin, 'admin_register', { user, config })
       } catch (e) {
         return res.status(400).json(e)
       }

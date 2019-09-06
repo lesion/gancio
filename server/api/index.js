@@ -34,7 +34,6 @@ const jwt = expressJwt({
 
 // AUTH
 api.post('/auth/login', userController.login)
-api.post('/auth/logout', userController.logout)
 api.get('/auth/user', jwt, fillUser, userController.current)
 
 api.post('/user/recover', userController.forgotPassword)

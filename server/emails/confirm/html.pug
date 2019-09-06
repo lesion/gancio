@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        meta(http-equiv="X-UA-Compatible", content="ie=edge")
-        title #{config.title}
-    body
-        p= t('email.confirm', { config })
-
-        hr
-        <a href="#{config.baseurl}"> #{config.title} - #{config.description}</a>
+extends ../layout.pug
+block content
+  p !{t('confirm.content', { config, user })}

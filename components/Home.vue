@@ -5,7 +5,7 @@
       el-button.top.d-block.d-sm-none(icon='el-icon-top' circle type='primary' plain)
     a.totop(name='totop')
     //- el-backtop(target='#home')
-    no-ssr
+    client-only
       Calendar
     .row.m-0
 
