@@ -5,7 +5,7 @@
 
     h5 {{edit?$t('common.edit_event'):$t('common.add_event')}}
     el-form(v-loading='loading')
-      no-ssr
+      client-only
         el-tabs.mb-2(v-model='activeTab')
 
           //- NOT LOGGED EVENT

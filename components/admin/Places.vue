@@ -18,7 +18,7 @@
             type='success'
             @click='place = data.row') {{$t('common.edit')}}          
         
-    no-ssr
+    client-only
       el-pagination(:page-size='perPage' :currentPage.sync='placePage' :total='places.length')
 </template>
 <script>

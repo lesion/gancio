@@ -20,9 +20,6 @@
     "secure": true,
     "host": ""
   },
-  "admin": {
-    "email": "",
-    "password": ""
-  },
+  "admin": "info@gancio.org",
   "secret": "notsosecret"
 }

@@ -59,7 +59,6 @@ module.exports = (sequelize, DataTypes) => {
 
   user.beforeCreate(async (user, options) => {
     // generate rsa keys
-    console.error('generate rsa key')
     const rsa = await generateKeyPair('rsa', {
       modulusLength: 4096,
       publicKeyEncoding: {

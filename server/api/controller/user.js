@@ -8,7 +8,6 @@ const config = require('config')
 const mail = require('../mail')
 const { user: User, event: Event, tag: Tag, place: Place } = require('../models')
 const settingsController = require('./settings')
-const notifier = require('../../notifier')
 const federation = require('../../federation/helpers')
 
 const userController = {
@@ -38,10 +37,6 @@ const userController = {
         res.json({ token: accessToken })
       }
     }
-  },
-
-  async logout(req, res) {
-
   },
 
   async setToken(req, res) {
@@ -153,7 +148,6 @@ const userController = {
 
     body.description = body.description
       .replace(/(<([^>]+)>)/ig, '') // remove all tags from description
-      // .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>') // add links
 
     await event.update(body)
     let place

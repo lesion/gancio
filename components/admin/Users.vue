@@ -39,7 +39,7 @@ div
         div(v-else)
           span {{$t('common.me')}}
 
-  no-ssr
+  client-only
     el-pagination(:page-size='perPage' :currentPage.sync='userPage' :total='users_.length')
 
 </template>
@@ -111,7 +111,7 @@ export default {
         Message({
           showClose: true,
           type: 'error',
-          message: this.$t('user.error_create') + e
+          message: this.$t(e)
         })
       }
     },

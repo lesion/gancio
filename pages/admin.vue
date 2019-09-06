@@ -35,7 +35,7 @@
             template(slot-scope='data')
               el-button(type='primary' @click='confirm(data.row.id)' size='mini') {{$t('common.confirm')}}
               el-button(type='success' @click='preview(data.row.id)' size='mini') {{$t('common.preview')}}
-        no-ssr
+        client-only
           el-pagination(:page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
 
       //- SETTINGS
