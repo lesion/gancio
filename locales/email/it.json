@@ -1,10 +1,18 @@
 {
-  "email.register.subject": "Richiesta registrazione ricevuta",
-  "email.register": "Abbiamo ricevuto la richiesta di registrazione. La confermeremo quanto prima.\n Ciao",
-  "email.confirm": "Il tuo account su {{config.title}} è stato attivato e quindi puoi cominciare a pubblicare eventi",
-  "email.recover.subject": "Recupero password",
-  "email.recover": "Ciao, hai richiesto un recupero della password su {{config.title}}.",
-  "email.press_here": "Premi qui",
-  "email.confirm.subject": "Registrazione confermata",
-  "email.user_confirm": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}<a/> è stato creato. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confermalo</a>."
+  "register":{ 
+    "subject": "Richiesta registrazione ricevuta",
+    "content": "Abbiamo ricevuto la richiesta di registrazione. La confermeremo quanto prima.\n Ciao"
+  },
+  "confirm": {
+    "subject": "Puoi iniziare a pubblicare eventi",
+    "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}<a/> è stato creato. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confermalo</a>."
+  },
+  "recover": {
+    "subject": "Recupero password",
+    "content": "Ciao, hai richiesto un recupero della password su {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Premi qui</a> per confermare"
+  },
+  "admin_register":{
+    "subject": "Nuova registrazione",
+    "content": "{{user.username}} si è registrato/a a {{config.title}} scrivendo:<br/><pre>{{user.description}}</pre><br/> Puoi confermarlo <a href='{{config.baseurl}}/admin'>qui</a>."
+  }
 }

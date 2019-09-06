@@ -1,7 +1,8 @@
 <template lang="pug">
   el-card#admin
     nuxt-link.float-right(to='/')
-      v-icon(name='times' color='red')
+      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
+
     h5 {{$t('common.admin')}}
 
     el-tabs(v-model='tab')

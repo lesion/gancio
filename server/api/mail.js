@@ -3,10 +3,12 @@ const path = require('path')
 const moment = require('moment')
 const config = require('config')
 const settings = require('./controller/settings')
+const debug = require('debug')('email')
 
 moment.locale('it')
 const mail = {
   send(addresses, template, locals) {
+    debug(`Send ${template} email to ${addresses}`)
     const email = new Email({
       views: { root: path.join(__dirname, '..', 'emails') },
       htmlToText: false,
@@ -18,15 +20,17 @@ const mail = {
         }
       },
       message: {
-        from: `${config.title} <${config.smtp.auth.user}>`
+        from: `${config.title} <${config.admin}>`
       },
       send: true,
       i18n: {
         directory: path.join(__dirname, '..', '..', 'locales', 'email'),
+        objectNotation: true,
         syncFiles: false,
         updateFiles: false,
         defaultLocale: settings.locale,
-        locales: ['en', 'it']
+        locale: settings.locale,
+        locales: ['it', 'es'],
       },
       transport: config.smtp
     })
@@ -45,7 +49,7 @@ const mail = {
     }
     return email.send(msg)
       .catch(e => {
-        console.error(e)
+        debug('Error sending email =>', e)
       })
   }
 }

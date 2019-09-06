@@ -36,11 +36,13 @@ module.exports = (sequelize, DataTypes) => {
     event.hasMany(models.comment)
   }
 
+  // 
   event.prototype.toAP = function (username, follower) {
     const tags = this.tags && '-' + this.tags.map(t => '#' + t.tag).join(' ')
     const content = `<b><a href='${config.baseurl}/event/${this.id}'>${this.title}</a></b> @${this.place.name}  
       ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/>
       ${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description} ${tags} <br/>`
+
     return {
       id: `${config.baseurl}/federation/m/c_${this.id}`,
       type: 'Create',

@@ -90,7 +90,7 @@
                 el-time-select(v-model='time.end'
                   :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
             
-            List(v-if='event.type==="normal"' :events='todayEvents' :title='$t("event.same_day")')
+            List(v-if='event.type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
             el-button.float-right(@click='next' type='succes' :disabled='!couldProceed') {{$t('common.next')}}
 
           //- MEDIA / FLYER / POSTER
@@ -193,14 +193,14 @@ export default {
       data.event.place.name = event.place.name
       data.event.place.address = event.place.address || ''
       if (event.multidate) {
-        data.date = { start: new Date(event.start_datetime*1000), end: new Date(event.end_datetime*1000) }
+        data.date = { start: moment.unix(event.start_datetime), end: moment.unix(event.end_datetime) }
         data.event.type = 'multidate'
       } else if (event.recurrent ) {
         data.event.type = 'recurrent'
         data.event.recurrent = JSON.parse(event.recurrent)
       } else {
         data.event.type = 'normal'
-        data.date = new Date(event.start_datetime*1000)
+        data.date = moment.unix(event.start_datetime)
       }
 
       data.time.start = moment.unix(event.start_datetime).format('HH:mm')
@@ -251,19 +251,19 @@ export default {
         const date_end = moment(this.date.end)
         return this.events.filter(e =>
           !e.multidate ?
-            date_start.isSame(e.start_datetime, 'day') || 
-            date_start.isBefore(e.start_datime) && date_end.isAfter(e.start_datetime) :
-          date_start.isSame(e.start_datetime, 'day') || date_start.isSame(e.end_datetime) ||
-            date_start.isAfter(e.start_datetime) && date_start.isBefore(e.end_datetime))
+            date_start.isSame(moment.unix(e.start_datetime), 'day') || 
+            date_start.isBefore(moment.unix(e.start_datime)) && date_end.isAfter(moment.unix(e.start_datetime)) :
+          date_start.isSame(moment.unix(e.start_datetime), 'day') || date_start.isSame(moment.unix(e.end_datetime)) ||
+            date_start.isAfter(moment.unix(e.start_datetime)) && date_start.isBefore(moment.unix(e.end_datetime)))
       } else if (this.event.type === 'recurrent' ) {
 
       } else {
         const date = moment(this.date)
         return this.events.filter(e =>
           !e.multidate ?
-            !e.recurrent && date.isSame(moment(e.start_datetime), 'day') :
-            moment(e.start_datetime).isSame(date, 'day') ||
-              moment(e.start_datetime).isBefore(date) && moment(e.end_datetime).isAfter(date)
+            !e.recurrent && date.isSame(moment.unix(e.start_datetime), 'day') :
+            moment.unix(e.start_datetime).isSame(date, 'day') ||
+              moment.unix(e.start_datetime).isBefore(date) && moment.unix(e.end_datetime).isAfter(date)
         )
       }
     },
@@ -273,13 +273,13 @@ export default {
       attributes.push ({ key: 'today', dates: new Date(), highlight: { color: 'yellow' }})
 
       attributes = attributes.concat(this.filteredEvents
-        .filter(e => !e.multidate)
-        .map(e => ({ key: e.id, dot: {}, dates: new Date(e.start_datetime)})))
+        .filter(e => !e.multidate && !e.recurrent)
+        .map(e => ({ key: e.id, dot: {}, dates: moment.unix(e.start_datetime).toDate()})))
 
       attributes = attributes.concat(this.filteredEvents
-        .filter(e => e.multidate)
+        .filter(e => e.multidate && !e.recurrent)
         .map( e => ({ key: e.id, highlight: {}, dates: { 
-          start: new Date(e.start_datetime), end: new Date(e.end_datetime) }})))
+          start: moment.unix(e.start_datetime).toDate(), end: moment.unix(e.end_datetime).toDate() }})))
       
       if (this.event.type === 'recurrent' && this.event.recurrent.frequency) {
         const recurrent = {}

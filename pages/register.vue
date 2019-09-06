@@ -5,7 +5,7 @@
       el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
     h5 {{$t('common.register')}}
 
-    el-form(@submit.native.prevent='register' method='POST' action='/api/user/register')
+    el-form(@submit.native.prevent='register' method='POST' action='')
       p(v-html="$t('register.description')")
 
       el-input.mb-2(v-model='user.username' type='text' name='username'
@@ -23,7 +23,7 @@
           v-icon(name='envelope-open-text')
 
       el-button(plain type="success" native-type='submit'
-        :disabled='disabled') {{$t('common.send')}} <v-icon name='chevron-right'/>
+        :disabled='disabled') {{$t('common.send')}} <v-icon :name='loading?"circle-notch":"chevron-right"' :spin='loading'/>
 </template>
 
 <script>
@@ -35,8 +35,8 @@ export default {
   name: 'Register',
   data () {
     return {
-      error: {},
-      user: { }
+      loading: false,
+      user: {}
     }
   },
   head () {
@@ -57,6 +57,7 @@ export default {
   methods: {
     ...mapActions(['login']),
     async register () {
+      this.loading = true
       try {
         const { user } = await this.$axios.$post('/user/register', this.user)
         Message({
@@ -73,6 +74,7 @@ export default {
           type: 'error'
         })
       }
+      this.loading = false
     }
   }
 }
