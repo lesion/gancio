@@ -1,13 +1,27 @@
 <template lang="pug">
   el-card
     nuxt-link.float-right(to='/')
-      v-icon(name='times' color='red')
+      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
     h5 {{$t('common.settings')}}
+    hr
 
-    el-form(action='/api/user' method='PUT' @submit.native.prevent='change_password')
-      el-form-item {{$t('settings.change_password')}}
+    el-form(action='/api/user' method='PUT' @submit.native.prevent='change_password' inline label-width='200px')
+
+      el-form-item(:label="$t('settings.change_password')")
         el-input(v-model='password' type='password')
-      el-button(type='success' native-type='submit') {{$t('common.send')}}
+          el-button(slot='append' type='success' native-type='submit') {{$t('common.send')}}
+
+      //- allow federation
+      div(v-if='settings.enable_federation')
+        el-form-item(:label="$t('admin.enable_federation')")
+          el-switch(name='reg' v-model='enable_federation')
+        
+        el-form-item(v-if='enable_federation' :label="$t('common.username')")
+          el-input(type='text' name='username' v-model='user.username' :suffix='"antani"' :readonly='user.username.length>0')
+            template(slot='suffix') @{{baseurl}}
+            //- el-button(slot='append') {{$t('common.save')}}
+
+
     
     el-divider {{$t('settings.danger_section')}}
     p {{$t('settings.remove_account')}}
@@ -20,11 +34,11 @@ import { Message, MessageBox } from 'element-ui'
 export default {
   data () {
     return {
+      enable_federation: false,
       password: '',
     }
   },
   name: 'Settings',
-  computed: mapState(['settings']),
   head () {
     return {
       title: `${this.settings.title} - ${this.$t('common.settings')}`
@@ -34,6 +48,12 @@ export default {
     const user = await $axios.$get('/auth/user')
     user.mastodon_auth = ''
     return { user }
+  },
+  computed: {
+    ...mapState(['settings']),
+    baseurl () {
+      return new URL(this.settings.baseurl).host
+    }
   },
   methods: {
     async change_password () {
@@ -54,6 +74,8 @@ export default {
         type: 'error'
       }).then( () => {
         this.$axios.$delete('/user')
+        this.$auth.logout()
+        this.$router.replace('/')
       })
     }
   }
