@@ -4,32 +4,29 @@ const crypto = require('crypto')
 const config = require('config')
 const httpSignature = require('http-signature')
 const debug = require('debug')('fediverse:helpers')
+const { user: User } = require('../api/models')
+const url = require('url')
 
 const actorCache = []
 
 const Helpers = {
   async signAndSend(message, user, to) {
-
     // get the URI of the actor object and append 'inbox' to it
     const toInbox = to + '/inbox'
-    const toOrigin = new URL(to)
-    const toPath = toInbox.replace(toOrigin.origin, '')
+    const toOrigin = url.parse(to)
+    const toPath = toOrigin.path + '/inbox'
     // get the private key
     const privkey = user.rsa.privateKey
     const signer = crypto.createSign('sha256')
     const d = new Date()
     const stringToSign = `(request-target): post ${toPath}\nhost: ${toOrigin.hostname}\ndate: ${d.toUTCString()}`
-    console.error('stringToSign ', stringToSign)
 
     signer.update(stringToSign)
     signer.end()
     const signature = signer.sign(privkey)
     const signature_b64 = signature.toString('base64')
     const header = `keyId="${config.baseurl}/federation/u/${user.username}",headers="(request-target) host date",signature="${signature_b64}"`
-    console.error('header ', header)
-    console.error('requestTo ', toInbox)
-    console.error('host ', toOrigin.hostname)
-    const response = await fetch(toInbox, {
+    return await fetch(toInbox, {
       headers: {
         'Host': toOrigin.hostname,
         'Date': d.toUTCString(),
@@ -40,16 +37,29 @@ const Helpers = {
       method: 'POST',
       body: JSON.stringify(message) })
 
-      console.log('Response:', response.body, response.statusCode, response.status, response.statusMessage)
   },
+
   async sendEvent(event, user) {
-    const followers = user.followers
-    for(let follower of followers) {
+    // TODO: has to use sharedInbox!
+    // event is sent by user that published it and by the admin instance
+    const instanceAdmin = await User.findOne({where: { email: config.admin }})
+    if(!instanceAdmin) return
+
+    for(let follower of instanceAdmin.followers) {
+      debug('Notify %s with event %s', follower, event.title)
+      const body = event.toAP(instanceAdmin.username, follower)
+      body['@context'] = 'https://www.w3.org/ns/activitystreams'
+      Helpers.signAndSend(body, user, follower)
+    }
+    
+    // in case the event is published by the Admin itself do not republish
+    if (instanceAdmin.id === user.id) return
+    for(let follower of user.followers) {
       debug('Notify %s with event %s', follower, event.title)
       const body = event.toAP(user.username, follower)
       body['@context'] = 'https://www.w3.org/ns/activitystreams'
       Helpers.signAndSend(body, user, follower)
-    }    
+    }
   },
 
   async getFederatedUser(address) {
@@ -77,6 +87,7 @@ const Helpers = {
 
   // ref: https://blog.joinmastodon.org/2018/07/how-to-make-friends-and-verify-requests/
   async verifySignature(req, res, next) {
+    debug('Inside verify signature', req.body.actor)
     let user = await Helpers.getActor(req.body.actor)
     if (!user) return res.status(401).send('Actor not found')
 
@@ -95,6 +106,7 @@ const Helpers = {
     if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) return next()
 
     // still not valid
+    debug('Invalid signature from user %s', req.body.actor)
     res.send('Request signature could not be verified', 401)
   }
 }

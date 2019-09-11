@@ -37,17 +37,36 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   // 
-  event.prototype.toAP = function (username, follower) {
-    const tags = this.tags && '-' + this.tags.map(t => '#' + t.tag).join(' ')
-    const content = `<b><a href='${config.baseurl}/event/${this.id}'>${this.title}</a></b> @${this.place.name}  
-      ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/>
-      ${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description} ${tags} <br/>`
+  event.prototype.toAP = function (username=config.admin, follower) {
+    const tags = this.tags && this.tags.map(t => '#' + t.tag).join(' ')
+    const content = `<b><a href='${config.baseurl}/event/${this.id}'>${this.title}</a></b><br/>
+    📍${this.place.name}<br/>
+    ⏰ ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/><br/>
+      ${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description}<br/>
+      ${tags} <br/>`
+
+    let attachment = []
+    if (this.image_path) {
+      attachment.push({
+        type: 'Document',
+        mediaType: 'image/jpeg',
+        url: `${config.baseurl}/media/${this.image_path}`,
+        name: null,
+        blurHash: null
+      })
+    }
 
     return {
       id: `${config.baseurl}/federation/m/c_${this.id}`,
       type: 'Create',
       actor: `${config.baseurl}/federation/u/${username}`,
+      url: `${config.baseurl}/federation/m/${this.id}`,
       object: {
+        attachment,
+        tag: this.tags.map(tag => ({
+          type: 'Hashtag',
+          name: '#' + tag.tag
+        })),
         id: `${config.baseurl}/federation/m/${this.id}`,
         type: 'Note',
         published: this.createdAt,

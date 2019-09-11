@@ -27,13 +27,23 @@ module.exports = {
       'type': 'Accept',
       'actor': `${config.baseurl}/federation/u/${user.username}`,
       'object': body,
-    }    
+    }
     Helpers.signAndSend(message, user, body.actor)
     res.sendStatus(200)
   },
 
   // unfollow request from fediverse
-  unfollow () {
-    console.error('inside unfollow')
+  async unfollow (req, res) {
+    debug("Unfollow UNFOLLOW!")
+    const body = req.body
+    const username = body.object.object.replace(`${config.baseurl}/federation/u/`, '')
+    const user = await User.findOne({ where: { username }})
+    if (!user) return res.status(404).send('User not found')
+
+    if (body.actor !== body.object.actor) return res.status(400).send('Bad things')
+    user.followers = user.followers.filter(follower => follower !== username)
+    debug('%s unfollowed by %s (%d)', username, body.actor, user.followers.length)
+    await user.save()
+    res.sendStatus(200)
   }
 }
