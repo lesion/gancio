@@ -14,7 +14,7 @@ export default ({ app, store }) => {
   // Vue.filter('hour', value => moment(value).locale(store.state.locale).format('HH:mm'))
 
   // shown in mobile homepage
-  Vue.filter('day', value => moment.unix(value).locale(store.state.locale).format('dddd, D MMMM'))
+  Vue.filter('day', value => moment.unix(value).locale(store.state.locale).format('dddd, D MMM'))
   // Vue.filter('month', value => moment(value).locale(store.state.locale).format('MMM'))
 
   // format event start/end datetime based on page

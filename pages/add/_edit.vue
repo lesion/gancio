@@ -273,39 +273,14 @@ export default {
       attributes.push ({ key: 'today', dates: new Date(), highlight: { color: 'yellow' }})
 
       attributes = attributes.concat(this.filteredEvents
-        .filter(e => !e.multidate && !e.recurrent)
-        .map(e => ({ key: e.id, dot: {}, dates: moment.unix(e.start_datetime).toDate()})))
+        .filter(e => !e.multidate && (!e.recurrent || this.event.type === 'recurrent'))
+        .map(e => ({ key: e.id, dot: { color: this.event.type === 'recurrent' ? 'orange' : 'green' }, dates: moment.unix(e.start_datetime).toDate()})))
 
       attributes = attributes.concat(this.filteredEvents
         .filter(e => e.multidate && !e.recurrent)
         .map( e => ({ key: e.id, highlight: {}, dates: { 
           start: moment.unix(e.start_datetime).toDate(), end: moment.unix(e.end_datetime).toDate() }})))
-      
-      if (this.event.type === 'recurrent' && this.event.recurrent.frequency) {
-        const recurrent = {}
-        const frequency = this.event.recurrent.frequency
-        if (Array.isArray(this.date) && (frequency === '1w' || frequency === '2w')) {
-          recurrent.weekdays = uniq(map(this.date, d => moment(d).day()+1 ))
-          recurrent.weeklyInterval = frequency[0]*1
-          recurrent.start = new Date(this.date[0])
-        } else if (Array.isArray(this.date) && (frequency === '1m' || frequency === '2m')) {
-          if (!this.date || !this.date.length) return attributes
-          if (this.event.recurrent.type === 'weekday') {
-            const days = uniq(map(this.date, d => moment(d).date()))
-            const n = Math.floor((days[0]-1)/7)+1
-            recurrent.ordinalWeekdays = { [n]: this.date.map(d => moment(d).day()+1) }
-          } else if (this.event.recurrent.type === 'ordinal') {
-            recurrent.days = uniq(map(this.date, d => moment(d).date()))
-          }
-          recurrent.monthlyInterval = frequency[0]*1
-          recurrent.start = new Date(this.date[0])
-        } else if (this.event.recurrent.frequency === '1d') {
-          recurrent.dailyInterval = 1
-        } else {
-          return attributes
-        }
-        attributes.push({name: 'recurrent', dates: recurrent, dot: { color: 'red'}})
-      }
+
       return attributes
     },
     disableAddress () {

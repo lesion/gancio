@@ -91,7 +91,7 @@ const userController = {
 
     let event = await Event.create(eventDetails)
 
-    // create place if needs to
+    // create place if needed
     let place
     try {
       place = await Place.findOrCreate({ where: { name: body.place_name },
