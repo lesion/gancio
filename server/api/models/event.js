@@ -37,13 +37,13 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   //
-  event.prototype.toAP = function (username = config.admin, follower) {
+  event.prototype.toAP = function (username, follower = []) {
     const tags = this.tags && this.tags.map(t => '#' + t.tag).join(' ')
-    const content = `<b><a href='${config.baseurl}/event/${this.id}'>${this.title}</a></b><br/>
+    const content = `<a href='${config.baseurl}/event/${this.id}'>${this.title}<br/>
     📍${this.place.name}<br/>
     ⏰ ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/><br/>
       ${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description}<br/>
-      ${tags} <br/>`
+      ${tags} <br/></a>`
 
     const attachment = []
     if (this.image_path) {

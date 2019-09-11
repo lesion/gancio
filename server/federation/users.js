@@ -28,7 +28,7 @@ module.exports = {
       }],
       icon: {
         type: 'Image',
-        mediaType: 'image/jpeg',
+        mediaType: 'image/x-icon',
         url: config.baseurl + '/favicon.ico'
       },
       publicKey: {

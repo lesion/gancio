@@ -2,7 +2,7 @@ const config = require('config')
 const Helpers = require('./helpers')
 const { user: User } = require('../api/models')
 const crypto = require('crypto')
-const debug = require('debug')('fedivers:follows')
+const debug = require('debug')('federation:follows')
 
 module.exports = {
   // follow request from fediverse

@@ -3,7 +3,7 @@ const fetch = require('node-fetch')
 const crypto = require('crypto')
 const config = require('config')
 const httpSignature = require('http-signature')
-const debug = require('debug')('fediverse:helpers')
+const debug = require('debug')('federation:helpers')
 const { user: User } = require('../api/models')
 const url = require('url')
 
@@ -26,7 +26,7 @@ const Helpers = {
     const signature = signer.sign(privkey)
     const signature_b64 = signature.toString('base64')
     const header = `keyId="${config.baseurl}/federation/u/${user.username}",headers="(request-target) host date",signature="${signature_b64}"`
-    return await fetch(toInbox, {
+    const ret = await fetch(toInbox, {
       headers: {
         'Host': toOrigin.hostname,
         'Date': d.toUTCString(),
@@ -36,6 +36,7 @@ const Helpers = {
       },
       method: 'POST',
       body: JSON.stringify(message) })
+    debug('sign %s => %s', ret.status, await ret.text())
   },
 
   async sendEvent (event, user) {
@@ -48,35 +49,40 @@ const Helpers = {
     }
 
     for (const follower of instanceAdmin.followers) {
-      debug('Notify %s with event %s', follower, event.title)
-      const body = {
-        id: `${config.baseurl}/federation/m/c_${event.id}`,
-        type: 'Create',
-        actor: `${config.baseurl}/federation/u/${instanceAdmin.username}`,
-        url: `${config.baseurl}/federation/m/${event.id}`,
-        object: event.toAP(instanceAdmin.username, follower)
-      }
-      body['@context'] = 'https://www.w3.org/ns/activitystreams'
-      Helpers.signAndSend(body, user, follower)
-    }
-
-    // in case the event is published by the Admin itself do not republish
-    if (instanceAdmin.id === user.id) {
-      debug('')
-      return
-    }
-
-    if (!user.settings.enable_federation || !user.username) { return }
-    for (const follower of user.followers) {
-      debug('Notify %s with event %s', follower, event.title)
+      debug('Notify %s with event %s (from admin user %s)', follower, event.title, instanceAdmin.username)
       const body = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
         type: 'Create',
         to: ['https://www.w3.org/ns/activitystreams#Public'],
-        cc: [`${config.baseurl}/federation/u/${user.username}/followers`],
+        cc: [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, follower],        
+        actor: `${config.baseurl}/federation/u/${instanceAdmin.username}`,
+        object: event.toAP(instanceAdmin.username, [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, follower])
+      }
+      body['@context'] = 'https://www.w3.org/ns/activitystreams'
+      Helpers.signAndSend(body, instanceAdmin, follower)
+    }
+
+    // in case the event is published by the Admin itself do not republish
+    if (instanceAdmin.id === user.id) {
+      debug('Event published by instance Admin')
+      return
+    }
+
+    if (!user.settings.enable_federation || !user.username) {
+      debug('Federation disabled for user %d (%s)', user.id, user.username)
+      return
+    }
+
+    for (const follower of user.followers) {
+      debug('Notify %s with event %s (from user %s)', follower, event.title, user.username)
+      const body = {
+        id: `${config.baseurl}/federation/m/${event.id}#create`,
+        type: 'Create',
+        to: ['https://www.w3.org/ns/activitystreams#Public'],
+        cc: [`${config.baseurl}/federation/u/${user.username}/followers`, follower],
         published: event.createdAt,
         actor: `${config.baseurl}/federation/u/${user.username}`,
-        object: event.toAP(user.username, follower)
+        object: event.toAP(user.username, [`${config.baseurl}/federation/u/${user.username}/followers`, follower])
       }
       body['@context'] = 'https://www.w3.org/ns/activitystreams'
       Helpers.signAndSend(body, user, follower)
