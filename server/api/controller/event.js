@@ -6,6 +6,7 @@ const { event: Event, comment: Comment, tag: Tag, place: Place, user: User, noti
 const Sequelize = require('sequelize')
 const notifier = require('../../notifier')
 const federation = require('../../federation/helpers')
+const debug = require('debug')('controller:event')
 
 const eventController = {
 
@@ -225,7 +226,7 @@ const eventController = {
     // build singular events from a recurrent pattern
     function createEventsFromRecurrent (e, dueTo = null) {
       const events = []
-      const recurrent = JSON.parse(e.recurrent)
+      const recurrent = e.recurrent
       if (!recurrent.frequency) { return false }
 
       let cursor = moment(start).startOf('week')
@@ -284,8 +285,8 @@ const eventController = {
       return events
     }
 
-    let allEvents = events.filter(e => !e.recurrent)
-    events.filter(e => e.recurrent).forEach(e => {
+    let allEvents = events.filter(e => !e.recurrent || e.recurrent.length === 0)
+    events.filter(e => e.recurrent && e.recurrent.length).forEach(e => {
       const events = createEventsFromRecurrent(e, end)
       if (events) { allEvents = allEvents.concat(events) }
     })
