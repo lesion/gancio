@@ -5,6 +5,7 @@ const cors = require('cors')
 const settingsController = require('../api/controller/settings')
 const config = require('config')
 const version = require('../../package.json').version
+const url = require('url')
 
 router.use(cors())
 
@@ -14,7 +15,7 @@ router.get('/webfinger', async (req, res) => {
     return res.status(400).send('Bad request. Please make sure "acct:USER@DOMAIN" is what you are sending as the "resource" query parameter.')
   }
   const name = resource.match(/acct:(.*)@/)[1]
-  const domain = new URL(config.baseurl).host
+  const domain = url.parse(config.baseurl).host
   const user = await User.findOne({where: { username: name  } })
   if (!user) return res.status(404).send(`No record found for ${name}`)
   const ret = {

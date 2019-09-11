@@ -72,6 +72,7 @@
     "sequelize-cli": "^5.5.1",
     "sharp": "^0.23.0",
     "sqlite3": "^4.1.0",
+    "url": "^0.11.0",
     "v-calendar": "^1.0.0-beta.14",
     "vue-awesome": "^3.5.3",
     "vue-clipboard2": "^0.3.1",

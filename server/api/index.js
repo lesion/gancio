@@ -44,8 +44,8 @@ api.post('/user/recover_password', userController.updatePasswordWithRecoverCode)
 api.post('/user/register', userController.register)
 api.post('/user', jwt, isAuth, isAdmin, userController.create)
 
-// update user (disable/)
-api.put('/user', jwt, isAuth, isAdmin, userController.update)
+// update user
+api.put('/user', jwt, isAuth, userController.update)
 
 //delete user
 api.delete('/user/:id', jwt, isAuth, isAdmin, userController.remove)

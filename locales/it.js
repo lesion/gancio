@@ -49,9 +49,10 @@ export default {
     disable: 'Disabilita',
     me: 'Sei te',
     password_updated: 'Password modificata!',
-    username: 'Nickname',
+    username: 'Nomignolo',
     comments: 'nessun commento|un commento|{n} commenti',
-    activate_user: 'Confermato'
+    activate_user: 'Confermato',
+    displayname: 'Nome mostrato'
   },
 
   login: {

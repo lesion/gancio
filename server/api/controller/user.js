@@ -13,7 +13,12 @@ const federation = require('../../federation/helpers')
 const userController = {
   async login(req, res) {
     // find the user
-    const user = await User.findOne({ where: { email: { [Op.eq]: req.body && req.body.email } } })
+    const user = await User.findOne({ where: {
+      [Op.or]: [ 
+        { email: req.body.email },
+        { username: req.body.email }
+      ]
+    } })
     if (!user) {
       res.status(403).json({ success: false, message: 'auth.fail' })
     } else if (user) {
@@ -37,12 +42,6 @@ const userController = {
         res.json({ token: accessToken })
       }
     }
-  },
-
-  async setToken(req, res) {
-    req.user.mastodon_auth = req.body
-    await req.user.save()
-    res.json(req.user)
   },
 
   async delEvent(req, res) {
@@ -222,16 +221,27 @@ const userController = {
   },
 
   async update(req, res) {
-    const user = await User.findByPk(req.body.id)
-    if (user) {
-      if (!user.is_active && req.body.is_active && user.recover_code) {
-        mail.send(user.email, 'confirm', { user, config })
-      }
-      await user.update(req.body)
-      res.json(user)
-    } else {
-      res.sendStatus(400)
+    // user to modify
+    user = await User.findByPk(req.body.id)
+
+    if (!user) return res.status(404).json({ success: false, message: 'User not found!' })
+
+    if (req.body.id !== req.user.id && !req.user.is_admin) {
+      return res.status(400).json({ succes: false, message: 'Not allowed' })
     }
+
+    // ensure username to not change if not empty
+    req.body.username = user.username ? user.username : req.body.username 
+
+    if (!req.body.password)
+      delete req.body.password
+
+    await user.update(req.body)
+
+    if (!user.is_active && req.body.is_active && user.recover_code) {
+      mail.send(user.email, 'confirm', { user, config })
+    }
+    res.json(user)
   },
 
 
