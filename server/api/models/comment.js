@@ -1,10 +1,10 @@
 'use strict'
-  module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   const comment = sequelize.define('comment', {
     activitypub_id: {
       type: DataTypes.STRING(18),
       index: true,
-      unique: true,
+      unique: true
     },
     data: DataTypes.JSON
   }, {})
@@ -12,4 +12,4 @@
     comment.belongsTo(models.event)
   }
   return comment
-};
+}

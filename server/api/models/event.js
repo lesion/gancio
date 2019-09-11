@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
+      autoIncrement: true
     },
     title: DataTypes.STRING,
     slug: DataTypes.STRING,
@@ -36,8 +36,8 @@ module.exports = (sequelize, DataTypes) => {
     event.hasMany(models.comment)
   }
 
-  // 
-  event.prototype.toAP = function (username=config.admin, follower) {
+  //
+  event.prototype.toAP = function (username = config.admin, follower) {
     const tags = this.tags && this.tags.map(t => '#' + t.tag).join(' ')
     const content = `<b><a href='${config.baseurl}/event/${this.id}'>${this.title}</a></b><br/>
     📍${this.place.name}<br/>
@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       ${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description}<br/>
       ${tags} <br/>`
 
-    let attachment = []
+    const attachment = []
     if (this.image_path) {
       attachment.push({
         type: 'Document',
@@ -62,19 +62,22 @@ module.exports = (sequelize, DataTypes) => {
       // actor: `${config.baseurl}/federation/u/${username}`,
       // url: `${config.baseurl}/federation/m/${this.id}`,
       // object: {
-        attachment,
-        tag: this.tags.map(tag => ({
-          type: 'Hashtag',
-          name: '#' + tag.tag
-        })),
-        id: `${config.baseurl}/federation/m/${this.id}`,
-        type: 'Note',
-        published: this.createdAt,
-        attributedTo: `${config.baseurl}/federation/u/${username}`,
-        to: 'https://www.w3.org/ns/activitystreams#Public',
-        cc: follower ? follower: [],
-        content
-      }
+      type: 'Note',
+      id: `${config.baseurl}/federation/m/${this.id}`,
+      url: `${config.baseurl}/federation/m/${this.id}`,
+      attachment,
+      tag: this.tags.map(tag => ({
+        type: 'Hashtag',
+        name: '#' + tag.tag
+      })),
+      published: this.createdAt,
+      attributedTo: `${config.baseurl}/federation/u/${username}`,
+      to: ['https://www.w3.org/ns/activitystreams#Public'],
+      cc: follower || [],
+      content,
+      summary: null,
+      sensitive: false,
+      // }
     }
   }
 

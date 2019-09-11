@@ -19,10 +19,10 @@
       active-text='anche passati'
       inactive-color='lightgreen'
       v-model='showPast'
-    )    
+    )
     client-only
       el-select.search(v-model='filter'
-        multiple 
+        multiple
         filterable collapse-tags default-first-option
         :placeholder='$t("common.search")')
         el-option(v-for='(keyword, id) in keywords' :key='keyword.value'
@@ -31,26 +31,26 @@
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
-  data () {
-    return {
-      onlyMine: false,
-    }
-  },
-  name :'Search',
+  name: 'Search',
   props: {
     pastFilter: Boolean,
     recurrentFilter: Boolean
+  },
+  data () {
+    return {
+      onlyMine: false
+    }
   },
   methods: mapActions(['setSearchPlaces', 'setSearchTags', 'showPastEvents', 'showRecurrentEvents']),
   computed: {
     ...mapState(['tags', 'places', 'filters', 'settings']),
     // TOFIX: optimize
     keywords () {
-      const tags = this.tags.map( t => ({ value: 't' + t.tag, label: t.tag, weigth: t.weigth }))
-      const places = this.places.map( p => ({ value: 'p' + p.id, label: p.name, weigth: p.weigth }))
-      return tags.concat(places).sort((a, b) => b.weigth-a.weigth)
+      const tags = this.tags.map(t => ({ value: 't' + t.tag, label: t.tag, weigth: t.weigth }))
+      const places = this.places.map(p => ({ value: 'p' + p.id, label: p.name, weigth: p.weigth }))
+      return tags.concat(places).sort((a, b) => b.weigth - a.weigth)
     },
     showPast: {
       set (value) { this.showPastEvents(value) },
@@ -70,7 +70,7 @@ export default {
       get () {
         return this.filters.tags.map(t => 't' + t).concat(this.filters.places.map(p => 'p' + p))
       }
-    },
+    }
   }
 }
 </script>

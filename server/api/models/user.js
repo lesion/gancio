@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     settings: DataTypes.JSON,
     email: {
       type: DataTypes.STRING,
-      unique:  { msg: 'error.email_taken' },
+      unique: { msg: 'error.email_taken' },
       index: true,
       allowNull: false
     },
@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   user.prototype.comparePassword = async function (pwd) {
-    if (!this.password) return false
+    if (!this.password) { return false }
     const ret = await bcrypt.compare(pwd, this.password)
     return ret
   }
@@ -78,4 +78,4 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   return user
-};
+}

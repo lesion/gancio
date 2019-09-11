@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.addColumn('users', 'settings', {
       type: Sequelize.JSON,
       defaultValue: {}
-    })    
+    })
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.
@@ -24,4 +24,4 @@ module.exports = {
       return queryInterface.dropTable('users');
     */
   }
-};
+}

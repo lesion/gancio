@@ -143,7 +143,7 @@ export default {
     delete_user_confirm: '¿Estás seguro/a de borrar este usuario?',
     user_remove_ok: 'Usuario eliminado',
     user_create_ok: 'Usuario creado',
-    allow_registration_description : '¿Querés habilitar el registro?',
+    allow_registration_description: '¿Querés habilitar el registro?',
     allow_anon_event: '¿Se pueden ingresar eventos anónimos (sujeto a confirmación)?',
     allow_comments: 'Habilitar comentarios',
     allow_recurrent_event: 'Habilitar eventos fijos',
@@ -162,7 +162,7 @@ export default {
     password_updated: 'Contraseña modificada',
     danger_section: 'Sección peligrosa',
     remove_account: 'Al presionar el siguiente botón, su usuario será eliminado. No serán eliminados los eventos que publicaste.',
-    remove_account_confirm: 'Estás por borrar definitivamente tu cuenta',
+    remove_account_confirm: 'Estás por borrar definitivamente tu cuenta'
   },
 
   error: {
@@ -176,7 +176,7 @@ export default {
     3: 'tercero',
     4: 'cuarto',
     5: 'quinto',
-    [-1]: 'último',
+    [-1]: 'último'
   },
 
   about: `

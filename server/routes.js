@@ -7,6 +7,11 @@ const webfinger = require('./federation/webfinger')
 const debug = require('debug')('routes')
 
 const router = express.Router()
+router.use((req, res, next) => {
+  debug(req.path)
+  next()
+})
+
 router.use('/favicon.ico', express.static(path.resolve(config.favicon || 'assets/favicon.ico')))
 router.use('/media/', express.static(config.upload_path))
 router.use('/api', api)
@@ -26,7 +31,5 @@ router.use((error, req, res, next) => {
   debug('Error 500: %s', error)
   res.status(500).send('500: Internal Server Error')
 })
-
-
 
 module.exports = router

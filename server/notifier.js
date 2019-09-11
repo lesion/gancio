@@ -5,18 +5,18 @@ const config = require('config')
 const eventController = require('./api/controller/event')
 const get = require('lodash/get')
 
-const { event: Event, notification: Notification,  event_notification: EventNotification,
+const { event: Event, notification: Notification, event_notification: EventNotification,
   user: User, place: Place, tag: Tag } = require('./api/models')
 
 const notifier = {
-  async sendNotification(notification, event) {
+  async sendNotification (notification, event) {
     return
     const promises = []
     switch (notification.type) {
       case 'mail':
-      return mail.send(notification.email, 'event', { event, config, notification })
-     case 'admin_email':
-       return mail.send([config.smtp.auth.user, config.admin_email], 'event', { event, to_confirm: !event.is_visible, config, notification })
+        return mail.send(notification.email, 'event', { event, config, notification })
+      case 'admin_email':
+        return mail.send([config.smtp.auth.user, config.admin_email], 'event', { event, to_confirm: !event.is_visible, config, notification })
       // case 'mastodon':
       //   // instance publish
       //   if (bot.bot) {
@@ -31,7 +31,7 @@ const notifier = {
     }
     return Promise.all(promises)
   },
-  async notifyEvent(eventId) {
+  async notifyEvent (eventId) {
     const event = await Event.findByPk(eventId, {
       include: [ Tag, Place, User ]
     })
@@ -42,7 +42,7 @@ const notifier = {
 
     const eventNotifications = await EventNotification.findAll({
       where: {
-        notificationId: notifications.map(n=>n.id),
+        notificationId: notifications.map(n => n.id),
         status: 'new'
       }
     })
@@ -57,15 +57,15 @@ const notifier = {
       }
       return e.save()
     })
-  
+
     return Promise.all(promises)
   },
-  async  notify() {
+  async  notify () {
     // get all event notification in queue
     const eventNotifications = await EventNotification.findAll({ where: { status: 'new' } })
     const promises = eventNotifications.map(async e => {
       const event = await Event.findByPk(e.eventId, { include: [User, Place, Tag] })
-      if (!event.place) return
+      if (!event.place) { return }
       const notification = await Notification.findByPk(e.notificationId)
       try {
         await sendNotification(notification, event, e)

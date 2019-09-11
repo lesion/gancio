@@ -1,5 +1,5 @@
 <template>
-  <nuxt/>
+  <nuxt />
 </template>
 <style lang="less">
 @import '../assets/style.less';

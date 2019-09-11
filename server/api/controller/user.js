@@ -11,10 +11,10 @@ const settingsController = require('./settings')
 const federation = require('../../federation/helpers')
 
 const userController = {
-  async login(req, res) {
+  async login (req, res) {
     // find the user
     const user = await User.findOne({ where: {
-      [Op.or]: [ 
+      [Op.or]: [
         { email: req.body.email },
         { username: req.body.email }
       ]
@@ -44,7 +44,7 @@ const userController = {
     }
   },
 
-  async delEvent(req, res) {
+  async delEvent (req, res) {
     const event = await Event.findByPk(req.params.id)
     // check if event is mine (or user is admin)
     if (event && (req.user.is_admin || req.user.id === event.userId)) {
@@ -68,7 +68,7 @@ const userController = {
   },
 
   // ADD EVENT
-  async addEvent(req, res) {
+  async addEvent (req, res) {
     const body = req.body
 
     const eventDetails = {
@@ -88,7 +88,7 @@ const userController = {
       eventDetails.image_path = req.file.filename
     }
 
-    let event = await Event.create(eventDetails)
+    const event = await Event.create(eventDetails)
 
     // create place if needed
     let place
@@ -105,7 +105,7 @@ const userController = {
     if (body.tags) {
       await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
       const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
-      await Promise.all(tags.map(t => t.update({weigth: Number(t.weigth)+1})))
+      await Promise.all(tags.map(t => t.update({ weigth: Number(t.weigth) + 1 })))
       await event.addTags(tags)
       event.tags = tags
     }
@@ -118,17 +118,15 @@ const userController = {
     // send response to client
     res.json(event)
 
-    if (req.user)
-      federation.sendEvent(event, req.user)
+    if (req.user) { federation.sendEvent(event, req.user) }
 
     // res.sendStatus(200)
 
     // send notification (mastodon/email/confirmation)
     // notifier.notifyEvent(event.id)
-
   },
 
-  async updateEvent(req, res) {
+  async updateEvent (req, res) {
     const body = req.body
     const event = await Event.findByPk(body.id)
     if (!req.user.is_admin && event.userId !== req.user.id) {
@@ -168,10 +166,10 @@ const userController = {
     res.json(newEvent)
   },
 
-  async forgotPassword(req, res) {
+  async forgotPassword (req, res) {
     const email = req.body.email
     const user = await User.findOne({ where: { email: { [Op.eq]: email } } })
-    if (!user) return res.sendStatus(200)
+    if (!user) { return res.sendStatus(200) }
 
     user.recover_code = crypto.randomBytes(16).toString('hex')
     mail.send(user.email, 'recover', { user, config })
@@ -180,25 +178,25 @@ const userController = {
     res.sendStatus(200)
   },
 
-  async checkRecoverCode(req, res) {
+  async checkRecoverCode (req, res) {
     const recover_code = req.body.recover_code
-    if (!recover_code) return res.sendStatus(400)
+    if (!recover_code) { return res.sendStatus(400) }
     const user = await User.findOne({ where: { recover_code: { [Op.eq]: recover_code } } })
-    if (!user) return res.sendStatus(400)
+    if (!user) { return res.sendStatus(400) }
     try {
-      await user.update({ recover_code: ''})
+      await user.update({ recover_code: '' })
       res.sendStatus(200)
     } catch (e) {
       res.sendStatus(400)
     }
   },
 
-  async updatePasswordWithRecoverCode(req, res) {
+  async updatePasswordWithRecoverCode (req, res) {
     const recover_code = req.body.recover_code
     const password = req.body.password
-    if (!recover_code || !password) return res.sendStatus(400)
+    if (!recover_code || !password) { return res.sendStatus(400) }
     const user = await User.findOne({ where: { recover_code: { [Op.eq]: recover_code } } })
-    if (!user) return res.sendStatus(400)
+    if (!user) { return res.sendStatus(400) }
     user.recover_code = ''
     user.password = password
     try {
@@ -209,32 +207,31 @@ const userController = {
     }
   },
 
-  current(req, res) {
+  current (req, res) {
     if (req.user) { res.json(req.user) } else { res.sendStatus(404) }
   },
 
-  async getAll(req, res) {
+  async getAll (req, res) {
     const users = await User.findAll({
       order: [['createdAt', 'DESC']]
     })
     res.json(users)
   },
 
-  async update(req, res) {
+  async update (req, res) {
     // user to modify
     user = await User.findByPk(req.body.id)
 
-    if (!user) return res.status(404).json({ success: false, message: 'User not found!' })
+    if (!user) { return res.status(404).json({ success: false, message: 'User not found!' }) }
 
     if (req.body.id !== req.user.id && !req.user.is_admin) {
       return res.status(400).json({ succes: false, message: 'Not allowed' })
     }
 
     // ensure username to not change if not empty
-    req.body.username = user.username ? user.username : req.body.username 
+    req.body.username = user.username ? user.username : req.body.username
 
-    if (!req.body.password)
-      delete req.body.password
+    if (!req.body.password) { delete req.body.password }
 
     await user.update(req.body)
 
@@ -244,9 +241,8 @@ const userController = {
     res.json(user)
   },
 
-
-  async register(req, res) {
-    if (!settingsController.settings.allow_registration) return res.sendStatus(404)
+  async register (req, res) {
+    if (!settingsController.settings.allow_registration) { return res.sendStatus(404) }
     const n_users = await User.count()
     try {
       // the first registered user will be an active admin
@@ -276,7 +272,7 @@ const userController = {
     }
   },
 
-  async create(req, res) {
+  async create (req, res) {
     try {
       req.body.is_active = true
       req.body.recover_code = crypto.randomBytes(16).toString('hex')
@@ -288,7 +284,7 @@ const userController = {
     }
   },
 
-  async remove(req, res) {
+  async remove (req, res) {
     try {
       const user = await User.findByPk(req.params.id)
       user.destroy()

@@ -2,8 +2,8 @@ const { Op } = require('sequelize')
 const { user: User } = require('./models')
 
 const Auth = {
-  async fillUser(req, res, next) {
-    if (!req.user) return next()
+  async fillUser (req, res, next) {
+    if (!req.user) { return next() }
     req.user = await User.findOne({
       where: { id: { [Op.eq]: req.user.id }, is_active: true }
     }).catch(e => {
@@ -12,7 +12,7 @@ const Auth = {
     })
     next()
   },
-  async isAuth(req, res, next) {
+  async isAuth (req, res, next) {
     if (!req.user) {
       return res
         .status(403)
@@ -29,15 +29,15 @@ const Auth = {
     }
     next()
   },
-  isAdmin(req, res, next) {
+  isAdmin (req, res, next) {
     if (!req.user) {
       return res
         .status(403)
         .send({ message: 'Failed to authenticate token ' })
     }
-    if (req.user.is_admin && req.user.is_active) return next()
+    if (req.user.is_admin && req.user.is_active) { return next() }
     return res.status(403).send({ message: 'Admin needed' })
-  },
+  }
 
 }
 

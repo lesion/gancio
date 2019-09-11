@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
     },
     protocols: ['activitypub'],
     openRegistrations: settingsController.settings.allow_registration,
-    usage:{
+    usage: {
       users: {
         total: 10
       }

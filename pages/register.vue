@@ -44,13 +44,13 @@ export default {
       title: this.settings.title + ' - ' + this.$t('common.register')
     }
   },
-  validate ({store}) {
+  validate ({ store }) {
     return store.state.settings.allow_registration
   },
   computed: {
     ...mapState(['settings']),
     disabled () {
-      if (process.server) return false
+      if (process.server) { return false }
       return !this.user.password || !this.user.email || !this.user.description
     }
   },
@@ -65,7 +65,7 @@ export default {
           message: this.$t(`register.${user.is_admin ? 'admin_' : ''}complete`),
           type: 'success'
         })
-        this.$router.replace("/")
+        this.$router.replace('/')
       } catch (e) {
         const error = get(e, 'response.data.errors[0].message', String(e))
         Message({

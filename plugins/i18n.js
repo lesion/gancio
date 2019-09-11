@@ -10,8 +10,8 @@ export default async ({ app, store }) => {
   // This way we can use it in middleware and pages asyncData/fetch
 
   const user_locale = await app.$axios.$get('/settings/user_locale')
-  for(let lang in user_locale) {
-    if (locales[lang]) merge(locales[lang], user_locale[lang])
+  for (const lang in user_locale) {
+    if (locales[lang]) { merge(locales[lang], user_locale[lang]) }
   }
 
   app.i18n = new VueI18n({

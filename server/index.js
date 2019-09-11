@@ -4,7 +4,7 @@ const { Nuxt, Builder } = require('nuxt')
 const nuxt_config = require('../nuxt.config.js')
 const config = require('config')
 
-async function main() {
+async function main () {
   nuxt_config.server = config.server
 
   // Init Nuxt.js
@@ -20,7 +20,7 @@ async function main() {
   nuxt.listen()
 
   // close connections/port/unix socket
-  function shutdown() {
+  function shutdown () {
     nuxt.close(async () => {
       const db = require('./api/models')
       await db.sequelize.close()

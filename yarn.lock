@@ -4162,6 +4162,11 @@ express-jwt@^5.3.1:
     jsonwebtoken "^8.1.0"
     lodash.set "^4.0.0"
 
+express-middleware-log@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/express-middleware-log/-/express-middleware-log-1.2.0.tgz#62682021ba3b1cbfd6b081e7364ebb1fd6d5a0fb"
+  integrity sha512-1G9cHlGJs4+nFphSqVduJfCzeaqHeOdpTRBAjceRRcLWeHzj9sXDYP99tNjaeHsHn3N3vlNI+vIn/lb9eYXmuw==
+
 express-unless@^0.3.0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/express-unless/-/express-unless-0.3.1.tgz#2557c146e75beb903e2d247f9b5ba01452696e20"

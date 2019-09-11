@@ -61,7 +61,6 @@
           el-form-item(v-show='allow_recurrent_event' :label="$t('admin.recurrent_event_visible')")
             el-switch(v-model='recurrent_event_visible')
 
-
         el-divider {{$t('admin.federation')}}
         el-form(inline label-width='400px')
           el-form-item(:label="$t('admin.enable_federation')")
@@ -88,31 +87,31 @@ export default {
       tagPage: 1,
       tagFields: ['tag', 'color'],
       description: '',
-      tag: {name: '', color: ''},
+      tag: { name: '', color: '' },
       events: [],
       loading: false,
-      tab: "0",
-      open: true,
+      tab: '0',
+      open: true
     }
   },
   head () {
     return { title: `${this.settings.title} - ${this.$t('common.admin')}` }
-  },
-  async mounted () {
-    const code = this.$route.query.code
-
-    if (code) {
-      this.tab = "4"
-      const instance = await this.$axios.$post('/user/code', {code, is_admin: true})
-    }
   },
   async asyncData ({ $axios, params, store }) {
     try {
       const users = await $axios.$get('/users')
       const events = await $axios.$get('/event/unconfirmed')
       return { users, events, mastodon_instance: store.state.settings.mastodon_instance }
-    } catch ( e ) {
+    } catch (e) {
       console.error(e)
+    }
+  },
+  async mounted () {
+    const code = this.$route.query.code
+
+    if (code) {
+      this.tab = '4'
+      const instance = await this.$axios.$post('/user/code', { code, is_admin: true })
     }
   },
   computed: {
@@ -123,28 +122,28 @@ export default {
     },
     allow_anon_event: {
       get () { return this.settings.allow_anon_event },
-      set (value) { this.setSetting({ key: 'allow_anon_event', value })}
+      set (value) { this.setSetting({ key: 'allow_anon_event', value }) }
     },
     allow_recurrent_event: {
       get () { return this.settings.allow_recurrent_event },
-      set (value) { this.setSetting({ key: 'allow_recurrent_event', value })}
+      set (value) { this.setSetting({ key: 'allow_recurrent_event', value }) }
     },
     recurrent_event_visible: {
       get () { return this.settings.recurrent_event_visible },
-      set (value) { this.setSetting({ key: 'recurrent_event_visible', value })}
+      set (value) { this.setSetting({ key: 'recurrent_event_visible', value }) }
     },
     enable_federation: {
       get () { return this.settings.enable_federation },
-      set (value) { this.setSetting({ key: 'enable_federation', value })}
+      set (value) { this.setSetting({ key: 'enable_federation', value }) }
     },
     paginatedEvents () {
-      return this.events.slice((this.eventPage-1) * this.perPage,
+      return this.events.slice((this.eventPage - 1) * this.perPage,
         this.eventPage * this.perPage)
     },
     paginatedTags () {
-      return this.tags.slice((this.tagPage-1) * this.perPage,
+      return this.tags.slice((this.tagPage - 1) * this.perPage,
         this.tagPage * this.perPage)
-    },
+    }
   },
   methods: {
     ...mapActions(['setSetting']),
@@ -167,7 +166,7 @@ export default {
         this.events = this.events.filter(e => e.id !== id)
       } catch (e) {
       }
-    },
+    }
   }
 }
 </script>

@@ -28,7 +28,7 @@ module.exports = {
       await db.user.findAll()
       consola.warn(`⚠️  Non empty db! Please move your current db elsewhere than retry.`)
       return false
-    } catch(e) { }
+    } catch (e) { }
 
     consola.info(`Create tables schema`)
     await db.sequelize.sync().catch(e => {

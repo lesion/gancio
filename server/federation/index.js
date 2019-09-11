@@ -8,31 +8,30 @@ const { event: Event, user: User, tag: Tag, place: Place } = require('../api/mod
 const Comments = require('./comments')
 const Helpers = require('./helpers')
 const Ego = require('./ego')
+const debug = require('debug')('federation')
 
 /**
  * Federation is calling!
  * ref: https://www.w3.org/TR/activitypub/#Overview
  */
 router.use(cors())
-router.use(express.json({type: ['application/json', 'application/activity+json', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"']}))
-
+router.use(express.json({ type: ['application/json', 'application/activity+json', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'] }))
 
 router.get('/m/:event_id', async (req, res) => {
   const event_id = req.params.event_id
   // if (req.accepts('html')) return res.redirect(301, `/event/${event_id}`)
 
   const event = await Event.findByPk(req.params.event_id, { include: [ User, Tag, Place ] })
-  if (!event) return res.status(404).send('Not found')
+  if (!event) { return res.status(404).send('Not found') }
   return res.json(event.toAP(event.user.username))
 })
 
 // get any message coming from federation
 // Federation is calling!
 router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
-  
   const b = req.body
-
-  switch(b.type) {
+  debug(b.type)
+  switch (b.type) {
     case 'Follow':
       Follows.follow(req, res)
       break

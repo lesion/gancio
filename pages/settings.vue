@@ -14,19 +14,19 @@
       div(v-if='settings.enable_federation')
         el-form-item(:label="$t('admin.enable_federation')")
           el-switch(v-model='user.settings.enable_federation')
-        
+
         div(v-if='user.settings.enable_federation')
           el-form-item(:label="$t('common.username')")
             el-input(v-if='user.username.length==0' type='text' name='username' v-model='user.username')
               template(slot='suffix') @{{baseurl}}
             span(v-else) {{user.username}}@{{baseurl}}
               //- el-button(slot='append') {{$t('common.save')}}
-          
+
           el-form-item(:label="$t('common.displayname')")
             el-input(type='text' v-model='user.display_name')
 
       el-button(type='success' native-type='submit') {{$t('common.save')}}
-    
+
     el-divider {{$t('settings.danger_section')}}
     p {{$t('settings.remove_account')}}
     el-button(type='danger' @click='remove_account') {{$t('common.remove')}}
@@ -34,16 +34,16 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { Message, MessageBox } from 'element-ui'
-import url from'url'
+import url from 'url'
 
 export default {
+  name: 'Settings',
   data () {
     return {
       password: '',
       user: { }
     }
   },
-  name: 'Settings',
   head () {
     return {
       title: `${this.settings.title} - ${this.$t('common.settings')}`
@@ -61,8 +61,8 @@ export default {
   },
   methods: {
     async change_password () {
-      if (!this.password) return
-      const user_data = { id : this.$auth.user.id, password: this.password }
+      if (!this.password) { return }
+      const user_data = { id: this.$auth.user.id, password: this.password }
       try {
         const user = await this.$axios.$put('/user', user_data)
         Message({ message: this.$t('settings.password_updated'), showClose: true, type: 'success' })
@@ -73,9 +73,9 @@ export default {
     },
     async update_settings () {
       try {
-        const user = await this.$axios.$put('/user', { ...this.user, password: this.password } )
+        const user = await this.$axios.$put('/user', { ...this.user, password: this.password })
         this.user = user
-      } catch(e) {
+      } catch (e) {
         Message({ message: e, showClose: true, type: 'warning' })
       }
     },
@@ -84,7 +84,7 @@ export default {
         confirmButtonText: this.$t('common.ok'),
         cancelButtonText: this.$t('common.cancel'),
         type: 'error'
-      }).then( () => {
+      }).then(() => {
         this.$axios.$delete('/user')
         this.$auth.logout()
         this.$router.replace('/')
@@ -93,4 +93,3 @@ export default {
   }
 }
 </script>
-

@@ -5,13 +5,13 @@ const debug = require('debug')('fediverse:comment')
 module.exports = {
   async create (req, res) {
     const body = req.body
-    //search for related event
+    // search for related event
     const inReplyTo = body.object.inReplyTo
     const match = inReplyTo.match('.*\/federation\/m\/(.*)')
     console.error('inReplyTo', inReplyTo)
     console.error('match', match)
-    if (!match || match.length<2) {
-      debug("Comment not found %s", inReplyTo)
+    if (!match || match.length < 2) {
+      debug('Comment not found %s', inReplyTo)
       return res.status(404).send('Event not found!')
     }
     let event = await Event.findByPk(Number(match[1]))
@@ -20,7 +20,7 @@ module.exports = {
     if (!event) {
       // in reply to another comment...
       const comment = await Comment.findOne({ where: { activitypub_id: inReplyTo }, include: [Event] })
-      if (!comment) return res.status(404).send('Not found')
+      if (!comment) { return res.status(404).send('Not found') }
       event = comment.event
     }
     debug('comment from %s to "%s"', req.body.actor, event.title)
@@ -35,7 +35,7 @@ module.exports = {
   },
 
   async remove (req, res) {
-    const comment = await Comment.findOne({where: { activitypub_id: req.body.object.id }})
+    const comment = await Comment.findOne({ where: { activitypub_id: req.body.object.id } })
     if (!comment) {
       debug('Comment %s not found', req.body.object.id)
       return res.status(404).send('Not found')

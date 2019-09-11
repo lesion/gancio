@@ -20,17 +20,6 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'List',
-  data () {
-    return { }
-  },
-  methods: {
-    link (event) {
-      if (event.recurrent) {
-        return `${event.id}_${event.start_datetime}`
-      }
-      return event.id
-    }
-  },
   props: {
     title: {
       type: String,
@@ -52,17 +41,28 @@ export default {
     },
     showTags: {
       type: Boolean,
-      default: true,
+      default: true
     },
     showImage: {
       type: Boolean,
-      default: true,
+      default: true
     },
     showDescription: {
       type: Boolean,
       default: true
     }
   },
+  data () {
+    return { }
+  },
+  methods: {
+    link (event) {
+      if (event.recurrent) {
+        return `${event.id}_${event.start_datetime}`
+      }
+      return event.id
+    }
+  }
 }
 </script>
 <style lang='less'>

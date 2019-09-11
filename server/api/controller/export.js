@@ -5,7 +5,7 @@ const ics = require('ics')
 
 const exportController = {
 
-  async export(req, res) {
+  async export (req, res) {
     const type = req.params.type
     const tags = req.query.tags
     const places = req.query.places
@@ -40,12 +40,12 @@ const exportController = {
     }
   },
 
-  feed(res, events) {
+  feed (res, events) {
     res.type('application/rss+xml; charset=UTF-8')
     res.render('feed/rss.pug', { events, config: process.env, moment })
   },
 
-  ics(res, events) {
+  ics (res, events) {
     const eventsMap = events.map(e => {
       const tmpStart = moment.unix(e.start_datetime)
       const tmpEnd = moment.unix(e.end_datetime)

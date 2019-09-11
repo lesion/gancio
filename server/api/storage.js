@@ -13,7 +13,7 @@ try {
 }
 
 const DiskStorage = {
-  _handleFile(req, file, cb) {
+  _handleFile (req, file, cb) {
     const filename = crypto.randomBytes(16).toString('hex') + '.jpg'
     const finalPath = path.resolve(config.upload_path, filename)
     const thumbPath = path.resolve(config.upload_path, 'thumb', filename)
@@ -36,7 +36,7 @@ const DiskStorage = {
       })
     })
   },
-  _removeFile(req, file, cb) {
+  _removeFile (req, file, cb) {
     delete file.destination
     delete file.filename
     delete file.path

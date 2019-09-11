@@ -16,43 +16,42 @@
         template(slot-scope='data')
           el-button(size='mini'
             type='success'
-            @click='place = data.row') {{$t('common.edit')}}          
-        
+            @click='place = data.row') {{$t('common.edit')}}
+
     client-only
       el-pagination(:page-size='perPage' :currentPage.sync='placePage' :total='places.length')
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
 export default {
-	data () {
-		return {
+  data () {
+    return {
       perPage: 10,
       placePage: 0,
-      place: { name: '', address: '', id: null}
+      place: { name: '', address: '', id: null }
     }
   },
   computed: {
     ...mapState(['places']),
     paginatedPlaces () {
-      return this.places.slice((this.placePage-1) * this.perPage,
+      return this.places.slice((this.placePage - 1) * this.perPage,
         this.placePage * this.perPage)
-    },
+    }
   },
   methods: {
-		placeSelected (items) {
-			if (items.length === 0 ) {
-				this.place.name = this.place.address = ''
-				return
-			}
-			const item = items[0]
-			this.place.name = item.name
-			this.place.address = item.address
-			this.place.id = item.id
-		},
+    placeSelected (items) {
+      if (items.length === 0) {
+        this.place.name = this.place.address = ''
+        return
+      }
+      const item = items[0]
+      this.place.name = item.name
+      this.place.address = item.address
+      this.place.id = item.id
+    },
     async savePlace () {
       const place = await this.$axios.$put('/place', this.place)
-    },
+    }
   }
 }
 </script>
-

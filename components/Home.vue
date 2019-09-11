@@ -36,16 +36,16 @@ export default {
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         { hid: 'description', name: 'description', content: this.settings.description },
         { hid: 'og-description', name: 'og:description', content: this.settings.description },
-        { hid: 'og-title', property: 'og:title', content: this.settings.title },   
-        { hid: 'og-url', property: 'og:url', content: this.settings.baseurl },   
+        { hid: 'og-title', property: 'og:title', content: this.settings.title },
+        { hid: 'og-url', property: 'og:url', content: this.settings.baseurl },
         { property: 'og:image', content: this.settings.baseurl + '/favicon.ico' }
       ]
     }
   },
+  components: { Calendar, Event },
   data () {
     return { }
   },
-  components: { Calendar, Event },
   computed: {
     ...mapGetters(['filteredEvents']),
     ...mapState(['events', 'settings'])

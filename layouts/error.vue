@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  props: ['error'],
+  props: ['error']
 }
 </script>
 <style lang="less">

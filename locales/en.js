@@ -139,7 +139,7 @@ Adding this link to your feed reader will keep you up to date.`,
     delete_user_confirm: 'Are you sure to remove this user?',
     user_remove_ok: 'User removed',
     user_create_ok: 'User created',
-    allow_registration_description : 'Allow open registrations?',
+    allow_registration_description: 'Allow open registrations?',
     allow_anon_event: 'Allow anon events (has to be confirmed)?',
     allow_recurrent_event: 'Enable recurrent events',
     recurrent_event_visible: 'Show recurrent events by default',
@@ -157,12 +157,12 @@ Adding this link to your feed reader will keep you up to date.`,
     password_updated: 'Password updated',
     danger_section: 'Dangerous section',
     remove_account: 'By pressing the following button your user will be deleted. The events you published instead no.',
-    remove_account_confirm: 'You are about to permanently delete your account',
+    remove_account_confirm: 'You are about to permanently delete your account'
   },
 
   error: {
     nick_taken: 'This nickname is already used',
-    email_taken: 'This email is already used'    
+    email_taken: 'This email is already used'
   },
 
   ordinal: {
@@ -171,7 +171,7 @@ Adding this link to your feed reader will keep you up to date.`,
     3: 'third',
     4: 'fourth',
     5: 'fifth',
-    [-1]: 'last',
+    [-1]: 'last'
   },
 
   about: `

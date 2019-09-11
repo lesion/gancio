@@ -19,10 +19,10 @@ import { intersection, sample, take, get } from 'lodash'
 export default {
   name: 'Calendar',
   data () {
-    const month = moment().month()+1
+    const month = moment().month() + 1
     const year = moment().year()
     return {
-      page: { month, year},
+      page: { month, year }
     }
   },
   watch: {
@@ -35,8 +35,8 @@ export default {
     ...mapActions(['updateEvents']),
     click (day) {
       const element = document.getElementById(day.day)
-      if (element) element.scrollIntoView();   //Even IE6 supports this
-    },
+      if (element) { element.scrollIntoView() } // Even IE6 supports this
+    }
   },
   computed: {
     ...mapGetters(['filteredEventsWithPast']),
@@ -45,17 +45,17 @@ export default {
     // TODO: should be better
     attributes () {
       const colors = ['green', 'orange', 'yellow', 'teal', 'indigo', 'blue', 'red', 'purple', 'pink', 'grey']
-      const tags = take(this.tags, 10).map(t=>t.tag)
+      const tags = take(this.tags, 10).map(t => t.tag)
       let attributes = []
-      attributes.push ({ key: 'today', dates: new Date(), highlight: { color: 'green' }})
+      attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'green' } })
 
       const that = this
-      function getColor(event) {
+      function getColor (event) {
         const color = { class: event.past && !that.filters.show_past_events ? 'past-event vc-rounded-full' : 'vc-rounded-full', color: 'blue' }
         const tag = get(event, 'tags[0]')
-        if (!tag) return color
+        if (!tag) { return color }
         const idx = tags.indexOf(tag)
-        if (idx<0) return color
+        if (idx < 0) { return color }
         color.color = colors[idx]
         return color
       }
@@ -65,16 +65,19 @@ export default {
         .map(e => {
           const color = getColor(e)
           return {
-            key: e.id, 
+            key: e.id,
             dot: color,
-            dates: new Date(e.start_datetime*1000)
-          }}))
+            dates: new Date(e.start_datetime * 1000)
+          }
+        }))
 
       attributes = attributes.concat(this.filteredEventsWithPast
         .filter(e => e.multidate)
-        .map( e => ({ key: e.id, highlight: getColor(e), dates: { 
-          start: new Date(e.start_datetime*1000), end: new Date(e.end_datetime*1000) }})))
-          
+        .map(e => ({ key: e.id,
+          highlight: getColor(e),
+          dates: {
+            start: new Date(e.start_datetime * 1000), end: new Date(e.end_datetime * 1000) } })))
+
       return attributes
     }
   }

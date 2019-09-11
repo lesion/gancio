@@ -15,4 +15,4 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   return tag
-};
+}
