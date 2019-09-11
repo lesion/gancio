@@ -43,20 +43,40 @@ const Helpers = {
     // TODO: has to use sharedInbox!
     // event is sent by user that published it and by the admin instance
     const instanceAdmin = await User.findOne({where: { email: config.admin }})
-    if(!instanceAdmin) return
+    if(!instanceAdmin || !instanceAdmin.username) {
+      debug('Instance admin not found (there is no user with email => %s)', config.admin)
+      return
+    }
 
     for(let follower of instanceAdmin.followers) {
       debug('Notify %s with event %s', follower, event.title)
-      const body = event.toAP(instanceAdmin.username, follower)
+      const body = {
+        id: `${config.baseurl}/federation/m/c_${event.id}`,
+        type: 'Create',
+        actor: `${config.baseurl}/federation/u/${instanceAdmin.username}`,
+        url: `${config.baseurl}/federation/m/${event.id}`,
+        object: event.toAP(instanceAdmin.username, follower)
+      }
       body['@context'] = 'https://www.w3.org/ns/activitystreams'
       Helpers.signAndSend(body, user, follower)
     }
     
     // in case the event is published by the Admin itself do not republish
-    if (instanceAdmin.id === user.id) return
+    if (instanceAdmin.id === user.id) {
+      debug('')
+      return
+    }
+
+    if (!user.settings.enable_federation || !user.username) return
     for(let follower of user.followers) {
       debug('Notify %s with event %s', follower, event.title)
-      const body = event.toAP(user.username, follower)
+      const body = {
+        id: `${config.baseurl}/federation/m/c_${event.id}`,
+        type: 'Create',
+        actor: `${config.baseurl}/federation/u/${user.username}`,
+        url: `${config.baseurl}/federation/m/${event.id}`,        
+        object: event.toAP(user.username, follower)
+      }
       body['@context'] = 'https://www.w3.org/ns/activitystreams'
       Helpers.signAndSend(body, user, follower)
     }
@@ -87,7 +107,6 @@ const Helpers = {
 
   // ref: https://blog.joinmastodon.org/2018/07/how-to-make-friends-and-verify-requests/
   async verifySignature(req, res, next) {
-    debug('Inside verify signature', req.body.actor)
     let user = await Helpers.getActor(req.body.actor)
     if (!user) return res.status(401).send('Actor not found')
 

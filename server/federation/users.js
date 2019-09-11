@@ -1,6 +1,7 @@
-const { user: User, event: Event } = require('../api/models')
+const { user: User, event: Event, place: Place, tag: Tag } = require('../api/models')
 const config = require('config')
 const get = require('lodash/get')
+const debug = require('debug')('fediverse:user')
 
 module.exports = {
   async get (req, res) {
@@ -55,13 +56,12 @@ module.exports = {
 
     if (!name) return res.status(400).send('Bad request.')
     const user = await User.findOne({
-      include: [ Event ],
+      include: [ { model: Event, include: [ Place, Tag ] } ],
       where: { username: name }
     })
 
     if (!user) return res.status(404).send(`No record found for ${name}`)    
-
-    console.error('Inside outbox, should return all events from this user')
+    debug('Inside outbox, should return all events from this user')
     // https://www.w3.org/TR/activitypub/#outbox
     if (!page) {
       const ret = {

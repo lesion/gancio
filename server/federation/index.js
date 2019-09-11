@@ -29,7 +29,7 @@ router.get('/m/:event_id', async (req, res) => {
 // get any message coming from federation
 // Federation is calling!
 router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
-
+  
   const b = req.body
 
   switch(b.type) {
@@ -56,7 +56,7 @@ router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
       Ego.bookmark(req, res)
       break
     case 'Delete':
-      console.error('Delete ?!?!')
+      await Comments.remove(req, res)
       break
     case 'Create':
       // this is a reply

@@ -57,11 +57,11 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     return {
-      id: `${config.baseurl}/federation/m/c_${this.id}`,
-      type: 'Create',
-      actor: `${config.baseurl}/federation/u/${username}`,
-      url: `${config.baseurl}/federation/m/${this.id}`,
-      object: {
+      // id: `${config.baseurl}/federation/m/c_${this.id}`,
+      // type: 'Create',
+      // actor: `${config.baseurl}/federation/u/${username}`,
+      // url: `${config.baseurl}/federation/m/${this.id}`,
+      // object: {
         attachment,
         tag: this.tags.map(tag => ({
           type: 'Hashtag',

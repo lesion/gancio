@@ -2,7 +2,7 @@ const config = require('config')
 const Helpers = require('./helpers')
 const { user: User } = require('../api/models')
 const crypto = require('crypto')
-const debug = require('debug')('follows')
+const debug = require('debug')('fedivers:follows')
 
 module.exports = {
   // follow request from fediverse
@@ -15,8 +15,8 @@ module.exports = {
 
     // check for duplicate
     if (user.followers.indexOf(body.actor) === -1) {
-      debug('%s followed by %s (%d)', username, body.actor, user.followers.length)
       await user.update({ followers: [...user.followers, body.actor] })
+      debug('%s followed by %s (%d)', username, body.actor, user.followers.length)
     } else {
       debug('duplicate %s followed by %s', username, body.actor)
     }
@@ -34,16 +34,18 @@ module.exports = {
 
   // unfollow request from fediverse
   async unfollow (req, res) {
-    debug("Unfollow UNFOLLOW!")
     const body = req.body
     const username = body.object.object.replace(`${config.baseurl}/federation/u/`, '')
     const user = await User.findOne({ where: { username }})
     if (!user) return res.status(404).send('User not found')
 
-    if (body.actor !== body.object.actor) return res.status(400).send('Bad things')
-    user.followers = user.followers.filter(follower => follower !== username)
+    if (body.actor !== body.object.actor) {
+      debug('Unfollow an user created by a different actor !?!?')
+      return res.status(400).send('Bad things')
+    }
+    const followers = user.followers.filter(follower => follower !== body.actor)
+    await user.update({ followers })
     debug('%s unfollowed by %s (%d)', username, body.actor, user.followers.length)
-    await user.save()
     res.sendStatus(200)
   }
 }
