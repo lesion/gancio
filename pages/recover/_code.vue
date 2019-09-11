@@ -11,8 +11,7 @@
         el-button(plain type="success" icon='el-icon-send', @click='change_password') {{$t('common.send')}}
 
     div(v-else) {{$t('recover.not_valid_code')}}
-      
-    
+
 </template>
 <script>
 import { Message } from 'element-ui'
@@ -22,13 +21,12 @@ export default {
   data () {
     return { new_password: '' }
   },
-  async asyncData({ params, $axios }) {
+  async asyncData ({ params, $axios }) {
     const code = params.code
     try {
       const valid = await $axios.$post('/user/check_recover_code', { recover_code: code })
       return { valid, code }
-    }
-    catch (e) {
+    } catch (e) {
       return { valid: false }
     }
   },
@@ -40,9 +38,9 @@ export default {
           showClose: true,
           type: 'success',
           message: this.$t('common.password_updated')
-        })        
+        })
         this.$router.replace('/login')
-      } catch(e) {
+      } catch (e) {
         Message({
           showClose: true,
           type: 'warning',
@@ -53,5 +51,3 @@ export default {
   }
 }
 </script>
-
-

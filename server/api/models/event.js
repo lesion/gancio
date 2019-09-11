@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
+      autoIncrement: true
     },
     title: DataTypes.STRING,
     slug: DataTypes.STRING,
@@ -36,26 +36,48 @@ module.exports = (sequelize, DataTypes) => {
     event.hasMany(models.comment)
   }
 
-  // 
-  event.prototype.toAP = function (username, follower) {
-    const tags = this.tags && '-' + this.tags.map(t => '#' + t.tag).join(' ')
-    const content = `<b><a href='${config.baseurl}/event/${this.id}'>${this.title}</a></b> @${this.place.name}  
-      ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/>
-      ${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description} ${tags} <br/>`
+  //
+  event.prototype.toAP = function (username, follower = []) {
+    const tags = this.tags && this.tags.map(t => '#' + t.tag).join(' ')
+    const content = `<a href='${config.baseurl}/event/${this.id}'>${this.title}<br/>
+    📍${this.place.name}<br/>
+    ⏰ ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/><br/>
+      ${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description}<br/>
+      ${tags} <br/></a>`
+
+    const attachment = []
+    if (this.image_path) {
+      attachment.push({
+        type: 'Document',
+        mediaType: 'image/jpeg',
+        url: `${config.baseurl}/media/${this.image_path}`,
+        name: null,
+        blurHash: null
+      })
+    }
 
     return {
-      id: `${config.baseurl}/federation/m/c_${this.id}`,
-      type: 'Create',
-      actor: `${config.baseurl}/federation/u/${username}`,
-      object: {
-        id: `${config.baseurl}/federation/m/${this.id}`,
-        type: 'Note',
-        published: this.createdAt,
-        attributedTo: `${config.baseurl}/federation/u/${username}`,
-        to: 'https://www.w3.org/ns/activitystreams#Public',
-        cc: follower ? follower: [],
-        content
-      }
+      // id: `${config.baseurl}/federation/m/c_${this.id}`,
+      // type: 'Create',
+      // actor: `${config.baseurl}/federation/u/${username}`,
+      // url: `${config.baseurl}/federation/m/${this.id}`,
+      // object: {
+      type: 'Note',
+      id: `${config.baseurl}/federation/m/${this.id}`,
+      url: `${config.baseurl}/federation/m/${this.id}`,
+      attachment,
+      tag: this.tags.map(tag => ({
+        type: 'Hashtag',
+        name: '#' + tag.tag
+      })),
+      published: this.createdAt,
+      attributedTo: `${config.baseurl}/federation/u/${username}`,
+      to: ['https://www.w3.org/ns/activitystreams#Public'],
+      cc: follower || [],
+      content,
+      summary: null,
+      sensitive: false,
+      // }
     }
   }
 

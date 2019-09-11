@@ -6,7 +6,7 @@
     h5 <img src='/favicon.ico'/> {{$t('confirm.title')}}
     p(v-if='valid' v-html='$t("confirm.valid")')
     p(v-else) {{$t('confirm.not_valid')}}
-    
+
 </template>
 <script>
 import { Message } from 'element-ui'
@@ -16,7 +16,7 @@ export default {
   data () {
     return { valid: true }
   },
-  async asyncData({ params, $axios }) {
+  async asyncData ({ params, $axios }) {
     const recover_code = params.code
     try {
       const valid = await $axios.$post('/user/check_recover_code', { recover_code })
@@ -27,5 +27,3 @@ export default {
   }
 }
 </script>
-
-

@@ -14,6 +14,8 @@ const settingsController = require('./controller/settings')
 const storage = require('./storage')
 const upload = multer({ storage })
 
+const debug = require('debug')('api')
+
 const api = express.Router()
 api.use(cookieParser())
 api.use(bodyParser.urlencoded({ extended: false }))
@@ -24,10 +26,10 @@ const jwt = expressJwt({
   credentialsRequired: false,
   getToken: function fromHeaderOrQuerystring (req) {
     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-        return req.headers.authorization.split(' ')[1];
+      return req.headers.authorization.split(' ')[1]
     } else if (req.cookies && req.cookies['auth._token.local']) {
       const [ prefix, token ] = req.cookies['auth._token.local'].split(' ')
-      if (prefix === 'Bearer') return token
+      if (prefix === 'Bearer') { return token }
     }
   }
 })
@@ -44,13 +46,13 @@ api.post('/user/recover_password', userController.updatePasswordWithRecoverCode)
 api.post('/user/register', userController.register)
 api.post('/user', jwt, isAuth, isAdmin, userController.create)
 
-// update user (disable/)
-api.put('/user', jwt, isAuth, isAdmin, userController.update)
+// update user
+api.put('/user', jwt, isAuth, userController.update)
 
-//delete user
+// delete user
 api.delete('/user/:id', jwt, isAuth, isAdmin, userController.remove)
 
-// 
+//
 // api.delete('/user', userController.remove)
 
 // get all users
@@ -64,7 +66,7 @@ api.put('/place', jwt, isAuth, isAdmin, eventController.updatePlace)
 
 // add event
 api.post('/user/event', jwt, fillUser, upload.single('image'), userController.addEvent)
-  
+
 // update event
 api.put('/user/event', jwt, isAuth, upload.single('image'), userController.updateEvent)
 
@@ -99,5 +101,17 @@ api.get('/export/:type', exportController.export)
 // get events in this range
 api.get('/event/:month/:year', eventController.getAll)
 
+
+// Handle 404
+api.use((req, res) => {
+  debug('404 Page not found: %s', req.path)
+  res.status(404).send('404: Page not Found')
+})
+
+// Handle 500
+api.use((error, req, res, next) => {
+  debug(error)
+  res.status(500).send('500: Internal Server Error')
+})
 
 module.exports = api

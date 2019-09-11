@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -23,4 +23,4 @@ module.exports = {
       return queryInterface.dropTable('users');
     */
   }
-};
+}

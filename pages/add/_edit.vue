@@ -30,7 +30,6 @@
 
             el-button.float-right(@click.native='next' :disabled='!couldProceed') {{$t('common.next')}}
 
-
           //- WHERE
           el-tab-pane
             span(slot='label') <v-icon name='map-marker-alt'/> {{$t('common.where')}}
@@ -89,7 +88,7 @@
               el-form-item(:label="$t('event.due')")
                 el-time-select(v-model='time.end'
                   :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
-            
+
             List(v-if='event.type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
             el-button.float-right(@click='next' type='succes' :disabled='!couldProceed') {{$t('common.next')}}
 
@@ -123,8 +122,9 @@ import { Message } from 'element-ui'
 
 export default {
   name: 'Add',
+  name: 'newEvent',
   components: { List },
-  validate ({store}) {
+  validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
   head () {
@@ -132,61 +132,50 @@ export default {
       title: `${this.settings.title} - ${this.$t('common.add_event')}`
     }
   },
-  data() {
-    const month = moment().month()+1
+  data () {
+    const month = moment().month() + 1
     const year = moment().year()
     return {
       event: {
         type: 'normal',
         place: { name: '', address: '' },
-        title: '', description: '', tags: [],
+        title: '',
+        description: '',
+        tags: [],
         image: false,
-        recurrent: { frequency: '1w', days: [], type: 'weekday' },
+        recurrent: { frequency: '1w', days: [], type: 'weekday' }
       },
-      page: { month, year},
+      page: { month, year },
       fileList: [],
       id: null,
-      activeTab: "0",
+      activeTab: '0',
       date: null,
       time: { start: '20:00', end: null },
       edit: false,
       loading: false
     }
   },
-  name: 'newEvent',
   watch: {
     'time.start' (value) {
-      if (!value) return
-      let [h, m] = value.split(':')
-      this.time.end = (Number(h)+1) + ':' + m
+      if (!value) { return }
+      const [h, m] = value.split(':')
+      this.time.end = (Number(h) + 1) + ':' + m
     },
     // month selected
     page () {
       this.updateEvents(this.page)
     }
   },
-  async fetch ({ store, $axios }) {
-    try {
-      const now = new Date()
-      const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
-      store.commit('setEvents', events)
-      const { tags, places } = await $axios.$get('/event/meta')
-      store.commit('update', { tags, places })
-    } catch(e) {
-      console.error('Error ', e)
-    }
-    moment.locale(store.state.locale)
-  },
-  async asyncData ( { params, $axios, error, store }) {
+  async asyncData ({ params, $axios, error, store }) {
     if (params.edit) {
-      const data = { time: {}, event: { place: {} }}
+      const data = { time: {}, event: { place: {} } }
       data.id = params.edit
       data.edit = true
       let event
       try {
-        event = await $axios.$get('/event/'+ data.id)
+        event = await $axios.$get('/event/' + data.id)
       } catch (e) {
-        error({ statusCode: 404, message: 'Event not found!'})
+        error({ statusCode: 404, message: 'Event not found!' })
         return {}
       }
 
@@ -195,7 +184,7 @@ export default {
       if (event.multidate) {
         data.date = { start: moment.unix(event.start_datetime), end: moment.unix(event.end_datetime) }
         data.event.type = 'multidate'
-      } else if (event.recurrent ) {
+      } else if (event.recurrent) {
         data.event.type = 'recurrent'
         data.event.recurrent = JSON.parse(event.recurrent)
       } else {
@@ -216,10 +205,22 @@ export default {
     }
     return {}
   },
+  async fetch ({ store, $axios }) {
+    try {
+      const now = new Date()
+      const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
+      store.commit('setEvents', events)
+      const { tags, places } = await $axios.$get('/event/meta')
+      store.commit('update', { tags, places })
+    } catch (e) {
+      console.error('Error ', e)
+    }
+    moment.locale(store.state.locale)
+  },
   computed: {
     ...mapState({
-      tags: state => state.tags.map(t => t.tag ),
-      places_name: state => state.places.map(p => p.name ).sort((a, b) => b.weigth-a.weigth),
+      tags: state => state.tags.map(t => t.tag),
+      places_name: state => state.places.map(p => p.name).sort((a, b) => b.weigth - a.weigth),
       places: state => state.places,
       user: state => state.user,
       events: state => state.events,
@@ -227,18 +228,18 @@ export default {
     }),
     whenPatterns () {
       const dates = this.date
-      if (!dates || !dates.length) return
+      if (!dates || !dates.length) { return }
 
       const freq = this.event.recurrent.frequency
       const weekDays = uniq(map(dates, date => moment(date).format('dddd')))
       if (freq === '1w' || freq === '2w') {
-        return this.$t(`event.recurrent_${freq}_days`, {days: weekDays.join(', ')})
+        return this.$t(`event.recurrent_${freq}_days`, { days: weekDays.join(', ') })
       } else if (freq === '1m' || freq === '2m') {
         const days = uniq(map(dates, date => moment(date).date()))
-        const n = Math.floor((days[0]-1)/7)+1
+        const n = Math.floor((days[0] - 1) / 7) + 1
         return [
-          { label:  this.$tc(`event.recurrent_${freq}_days`, days.length, {days}), key: 'ordinal' },
-          { label:  this.$tc(`event.recurrent_${freq}_ordinal`, days.length, {n: this.$t(`ordinal.${n}`), days: weekDays.join(', ')}), key: 'weekday' }
+          { label: this.$tc(`event.recurrent_${freq}_days`, days.length, { days }), key: 'ordinal' },
+          { label: this.$tc(`event.recurrent_${freq}_ordinal`, days.length, { n: this.$t(`ordinal.${n}`), days: weekDays.join(', ') }), key: 'weekday' }
         ]
       } else if (freq === '1d') {
         return this.$t('event.recurrent_each_day')
@@ -246,23 +247,23 @@ export default {
     },
     todayEvents () {
       if (this.event.type === 'multidate') {
-        if (!this.date || !this.date.start) return
+        if (!this.date || !this.date.start) { return }
         const date_start = moment(this.date.start)
         const date_end = moment(this.date.end)
         return this.events.filter(e =>
-          !e.multidate ?
-            date_start.isSame(moment.unix(e.start_datetime), 'day') || 
-            date_start.isBefore(moment.unix(e.start_datime)) && date_end.isAfter(moment.unix(e.start_datetime)) :
-          date_start.isSame(moment.unix(e.start_datetime), 'day') || date_start.isSame(moment.unix(e.end_datetime)) ||
+          !e.multidate
+            ? date_start.isSame(moment.unix(e.start_datetime), 'day') ||
+            date_start.isBefore(moment.unix(e.start_datime)) && date_end.isAfter(moment.unix(e.start_datetime))
+            : date_start.isSame(moment.unix(e.start_datetime), 'day') || date_start.isSame(moment.unix(e.end_datetime)) ||
             date_start.isAfter(moment.unix(e.start_datetime)) && date_start.isBefore(moment.unix(e.end_datetime)))
-      } else if (this.event.type === 'recurrent' ) {
+      } else if (this.event.type === 'recurrent') {
 
       } else {
         const date = moment(this.date)
         return this.events.filter(e =>
-          !e.multidate ?
-            !e.recurrent && date.isSame(moment.unix(e.start_datetime), 'day') :
-            moment.unix(e.start_datetime).isSame(date, 'day') ||
+          !e.multidate
+            ? !e.recurrent && date.isSame(moment.unix(e.start_datetime), 'day')
+            : moment.unix(e.start_datetime).isSame(date, 'day') ||
               moment.unix(e.start_datetime).isBefore(date) && moment.unix(e.end_datetime).isAfter(date)
         )
       }
@@ -270,42 +271,19 @@ export default {
     ...mapGetters(['filteredEvents']),
     attributes () {
       let attributes = []
-      attributes.push ({ key: 'today', dates: new Date(), highlight: { color: 'yellow' }})
+      attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'yellow' } })
 
       attributes = attributes.concat(this.filteredEvents
-        .filter(e => !e.multidate && !e.recurrent)
-        .map(e => ({ key: e.id, dot: {}, dates: moment.unix(e.start_datetime).toDate()})))
+        .filter(e => !e.multidate && (!e.recurrent || this.event.type === 'recurrent'))
+        .map(e => ({ key: e.id, dot: { color: this.event.type === 'recurrent' ? 'orange' : 'green' }, dates: moment.unix(e.start_datetime).toDate() })))
 
       attributes = attributes.concat(this.filteredEvents
         .filter(e => e.multidate && !e.recurrent)
-        .map( e => ({ key: e.id, highlight: {}, dates: { 
-          start: moment.unix(e.start_datetime).toDate(), end: moment.unix(e.end_datetime).toDate() }})))
-      
-      if (this.event.type === 'recurrent' && this.event.recurrent.frequency) {
-        const recurrent = {}
-        const frequency = this.event.recurrent.frequency
-        if (Array.isArray(this.date) && (frequency === '1w' || frequency === '2w')) {
-          recurrent.weekdays = uniq(map(this.date, d => moment(d).day()+1 ))
-          recurrent.weeklyInterval = frequency[0]*1
-          recurrent.start = new Date(this.date[0])
-        } else if (Array.isArray(this.date) && (frequency === '1m' || frequency === '2m')) {
-          if (!this.date || !this.date.length) return attributes
-          if (this.event.recurrent.type === 'weekday') {
-            const days = uniq(map(this.date, d => moment(d).date()))
-            const n = Math.floor((days[0]-1)/7)+1
-            recurrent.ordinalWeekdays = { [n]: this.date.map(d => moment(d).day()+1) }
-          } else if (this.event.recurrent.type === 'ordinal') {
-            recurrent.days = uniq(map(this.date, d => moment(d).date()))
-          }
-          recurrent.monthlyInterval = frequency[0]*1
-          recurrent.start = new Date(this.date[0])
-        } else if (this.event.recurrent.frequency === '1d') {
-          recurrent.dailyInterval = 1
-        } else {
-          return attributes
-        }
-        attributes.push({name: 'recurrent', dates: recurrent, dot: { color: 'red'}})
-      }
+        .map(e => ({ key: e.id,
+          highlight: {},
+          dates: {
+            start: moment.unix(e.start_datetime).toDate(), end: moment.unix(e.end_datetime).toDate() } })))
+
       return attributes
     },
     disableAddress () {
@@ -313,45 +291,42 @@ export default {
     },
     couldProceed () {
       const t = this.$auth.loggedIn ? -1 : 0
-      switch(Number(this.activeTab)) {
-        case 0+t:
+      switch (Number(this.activeTab)) {
+        case 0 + t:
           return true
-        case 1+t:
-          return this.event.title.length>0
-        case 2+t:
-          return this.event.place.name.length>0 &&
-            this.event.place.address.length>0
-        case 3+t:
-          if (this.date && this.time.start) return true
-        case 4+t:
-          return this.event.place.name.length>0 &&
-            this.event.place.address.length>0 &&
+        case 1 + t:
+          return this.event.title.length > 0
+        case 2 + t:
+          return this.event.place.name.length > 0 &&
+            this.event.place.address.length > 0
+        case 3 + t:
+          if (this.date && this.time.start) { return true }
+        case 4 + t:
+          return this.event.place.name.length > 0 &&
+            this.event.place.address.length > 0 &&
             (this.date && this.time.start) &&
-             this.event.title.length>0
+             this.event.title.length > 0
       }
     }
   },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
     recurrentDays () {
-      if (this.event.type !== 'recurrent' || !this.date || !this.date.length) return
+      if (this.event.type !== 'recurrent' || !this.date || !this.date.length) { return }
       const type = this.event.recurrent.type
-      if (type === 'ordinal')
-        return map(this.date, d => moment(d).date())
-      else if (type === 'weekday') 
-        return map(this.date, moment(d).day()+1)
+      if (type === 'ordinal') { return map(this.date, d => moment(d).date()) } else if (type === 'weekday') { return map(this.date, moment(d).day() + 1) }
     },
     next () {
-      this.activeTab = String(Number(this.activeTab)+1)
-      if (this.activeTab === "2") {
+      this.activeTab = String(Number(this.activeTab) + 1)
+      if (this.activeTab === '2') {
         this.$refs.title.focus()
       }
     },
     prev () {
-      this.activeTab = String(Number(this.activeTab-1))
+      this.activeTab = String(Number(this.activeTab - 1))
     },
     placeChoosed () {
-      const place = this.places.find( p => p.name === this.event.place.name )
+      const place = this.places.find(p => p.name === this.event.place.name)
       if (place && place.address) {
         this.event.place.address = place.address
       } else {
@@ -362,13 +337,13 @@ export default {
     cleanFile () {
       this.event.image = null
     },
-    uploadedFile(file, fileList) {
-      if (file.size / 1024/ 1024 > 4) {
+    uploadedFile (file, fileList) {
+      if (file.size / 1024 / 1024 > 4) {
         Message({ type: 'warning', showClose: true, message: this.$tc('event.image_too_big') })
         this.fileList = []
         return false
       }
-      this.fileList = [{name: file.name, url: file.url}]
+      this.fileList = [{ name: file.name, url: file.url }]
       this.event.image = file
     },
     async done () {
@@ -376,7 +351,7 @@ export default {
       let start_datetime, end_datetime
       const [ start_hour, start_minute ] = this.time.start.split(':')
       if (!this.time.end) {
-        this.time.end = (Number(start_hour)+2) + ':' + start_minute
+        this.time.end = (Number(start_hour) + 2) + ':' + start_minute
       }
       const [ end_hour, end_minute ] = this.time.end.split(':')
 
@@ -390,7 +365,7 @@ export default {
       } else if (this.event.type === 'normal') {
         start_datetime = moment(this.date).set('hour', start_hour).set('minute', start_minute)
         end_datetime = moment(this.date).set('hour', end_hour).set('minute', end_minute)
-        if (end_hour<start_hour) {
+        if (end_hour < start_hour) {
           end_datetime = end_datetime.add(1, 'day')
         }
       } else if (this.event.type === 'recurrent') {
@@ -398,12 +373,12 @@ export default {
         end_datetime = moment().set('hour', end_hour).set('minute', end_minute)
         const recurrent = {
           frequency: this.event.recurrent.frequency,
-          days: this.event.recurrent.type === 'ordinal' ? map(this.date, d => moment(d).date() ) : map(this.date, d => moment(d).day()+1 ),
-          type: this.event.recurrent.type,
+          days: this.event.recurrent.type === 'ordinal' ? map(this.date, d => moment(d).date()) : map(this.date, d => moment(d).day() + 1),
+          type: this.event.recurrent.type
         }
-        if (end_hour<start_hour) {
+        if (end_hour < start_hour) {
           end_datetime = end_datetime.add(1, 'day')
-        }        
+        }
         formData.append('recurrent', JSON.stringify(recurrent))
       }
 
@@ -421,8 +396,7 @@ export default {
       if (this.edit) {
         formData.append('id', this.event.id)
       }
-      if (this.event.tags)
-        this.event.tags.forEach(tag => formData.append('tags[]', tag))
+      if (this.event.tags) { this.event.tags.forEach(tag => formData.append('tags[]', tag)) }
       try {
         if (this.edit) {
           await this.updateEvent(formData)
@@ -432,12 +406,12 @@ export default {
         this.updateMeta()
         this.$router.replace('/')
         this.loading = false
-        Message({ type: 'success', showClose: true, message: this.$auth.loggedIn ? this.$t('event.added') : this.$t('event.added_anon')})
+        Message({ type: 'success', showClose: true, message: this.$auth.loggedIn ? this.$t('event.added') : this.$t('event.added_anon') })
       } catch (e) {
-        switch(e.request.status) {
+        switch (e.request.status) {
           case 413:
             Message({ type: 'error', showClose: true, message: this.$t('event.image_too_big') })
-            break;
+            break
           default:
             Message({ type: 'error', showClose: true, message: e })
         }

@@ -8,7 +8,7 @@ module.exports = {
   head: {
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
@@ -29,7 +29,6 @@ module.exports = {
     'element-ui/lib/theme-chalk/index.css'
   ],
 
-  
   /*
    ** Plugins to load before mounting the App
    */
@@ -46,10 +45,10 @@ module.exports = {
    ** Nuxt.js modules
    */
   modules: [
+    ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }],
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/auth',
-    ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }]
+    '@nuxtjs/auth'
   ],
   /*
    ** Axios module configuration
@@ -94,6 +93,6 @@ module.exports = {
     splitChunks: {
       layouts: true
     },
-    cache: true,
+    cache: true
   }
 }

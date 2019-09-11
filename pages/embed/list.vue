@@ -12,7 +12,7 @@ export default {
   components: { List },
   data () {
     return {
-      title : ''
+      title: ''
     }
   },
   async asyncData ({ query, $axios }) {
@@ -22,13 +22,13 @@ export default {
     const now = new Date()
 
     let params = []
-    if (places) params.push(`places=${places}`)
-    if (tags) params.push(`tags=${tags}`)
+    if (places) { params.push(`places=${places}`) }
+    if (tags) { params.push(`tags=${tags}`) }
 
     params = params.length ? `?${params.join('&')}` : ''
     const events = await $axios.$get(`/export/json${params}`)
 
     return { events, title }
-  },
+  }
 }
 </script>

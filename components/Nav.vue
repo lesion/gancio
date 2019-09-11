@@ -50,7 +50,7 @@ export default {
     could_add () {
       return (this.$auth.loggedIn || this.settings.allow_anon_event)
     },
-    ...mapState(['filters', 'settings']),
+    ...mapState(['filters', 'settings'])
   },
   methods: {
     logout () {

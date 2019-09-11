@@ -18,12 +18,11 @@ export default {
       store.commit('setEvents', events)
       const { tags, places } = await $axios.$get('/event/meta')
       store.commit('update', { tags, places })
-    } catch(e) {
+    } catch (e) {
       console.error(e)
     }
   },
   computed: mapState(['events']),
-  components: { Nav, Home },
+  components: { Nav, Home }
 }
 </script>
-

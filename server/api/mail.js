@@ -7,7 +7,7 @@ const debug = require('debug')('email')
 
 moment.locale('it')
 const mail = {
-  send(addresses, template, locals) {
+  send (addresses, template, locals) {
     debug(`Send ${template} email to ${addresses}`)
     const email = new Email({
       views: { root: path.join(__dirname, '..', 'emails') },
@@ -30,7 +30,7 @@ const mail = {
         updateFiles: false,
         defaultLocale: settings.locale,
         locale: settings.locale,
-        locales: ['it', 'es'],
+        locales: ['it', 'es']
       },
       transport: config.smtp
     })

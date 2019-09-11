@@ -15,14 +15,14 @@
       //-   el-form(@submit.native.prevent)
       //-     //- el-switch(v-model='notification.notify_on_add' :active-text="$t('notify_on_insert')")
       //-     //- br
-      //-     //- el-switch.mt-2(v-model='notification.send_notification' :active-text="$t('send_notification')") 
+      //-     //- el-switch.mt-2(v-model='notification.send_notification' :active-text="$t('send_notification')")
       //-     el-input.mt-2(v-model='notification.email' :placeholder="$t('export.insert_your_address')" ref='email')
       //-     el-button.mt-2.float-right(native-type= 'submit' type='success' @click='add_notification') {{$t('common.send')}}
 
       el-tab-pane.pt-1(label='feed rss' name='feed')
         span(v-html='$t(`export.feed_description`)')
         el-input(v-model='link')
-          el-button(slot='append' plain 
+          el-button(slot='append' plain
           v-clipboard:copy='link'
           type="primary" icon='el-icon-document' ) {{$t("common.copy")}}
 
@@ -45,7 +45,6 @@
         el-input.mb-1(type='textarea' v-model='listScript' readonly )
         el-button.float-right(plain v-clipboard:copy='listScript' type='primary' icon='el-icon-document') {{$t('common.copy')}}
 
-
       //- TOFIX
       //- el-tab-pane.pt-1(label='calendar' name='calendar')
       //-   p(v-html='$t(`export.calendar_description`)')
@@ -61,7 +60,7 @@ import Calendar from '@/components/Calendar'
 import List from '@/components/List'
 import Search from '@/components/Search'
 
-import {intersection} from 'lodash'
+import { intersection } from 'lodash'
 import { Message } from 'element-ui'
 
 export default {
@@ -76,25 +75,25 @@ export default {
     return {
       type: 'feed',
       notification: { email: '' },
-      list: { title: 'Gancio' },
+      list: { title: 'Gancio' }
     }
   },
   methods: {
     copy (msg) {
-     this.$copyText(msg).then(e => console.error('ok ', e)).catch(e => console.error('err ',e)) 
+      this.$copyText(msg).then(e => console.error('ok ', e)).catch(e => console.error('err ', e))
     },
     async add_notification () {
-      if (!this.notification.email){
-        Message({message:'Inserisci una mail', showClose: true, type: 'error'})
+      if (!this.notification.email) {
+        Message({ message: 'Inserisci una mail', showClose: true, type: 'error' })
         // return this.$refs.email.focus()
       }
       // await api.addNotification({ ...this.notification, filters: this.filters})
       // this.$refs.modal.hide()
-      Message({message: this.$t('email_notification_activated'), showClose: true, type: 'success'})
+      Message({ message: this.$t('email_notification_activated'), showClose: true, type: 'success' })
     },
     imgPath (event) {
       return event.image_path && event.image_path
-    },
+    }
   },
   computed: {
     ...mapState(['filters', 'events', 'settings']),
@@ -119,9 +118,9 @@ export default {
       const tags = this.filters.tags.join(',')
       const places = this.filters.places.join(',')
       let query = ''
-      if (tags || places) { 
+      if (tags || places) {
         query = '?'
-        if (tags) { 
+        if (tags) {
           query += 'tags=' + tags
           if (places) { query += '&places=' + places }
         } else {
@@ -132,8 +131,8 @@ export default {
       return `${this.settings.baseurl}/api/export/${this.type}${query}`
     },
     showLink () {
-      return (['feed', 'ics'].indexOf(this.type)>-1)
-    },
+      return (['feed', 'ics'].includes(this.type))
+    }
   }
 }
 </script>
@@ -143,5 +142,3 @@ export default {
   overflow-y: auto;
 }
 </style>
-
-

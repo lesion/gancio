@@ -3,33 +3,30 @@ const fetch = require('node-fetch')
 const crypto = require('crypto')
 const config = require('config')
 const httpSignature = require('http-signature')
-const debug = require('debug')('fediverse:helpers')
+const debug = require('debug')('federation:helpers')
+const { user: User } = require('../api/models')
+const url = require('url')
 
 const actorCache = []
 
 const Helpers = {
-  async signAndSend(message, user, to) {
-
+  async signAndSend (message, user, to) {
     // get the URI of the actor object and append 'inbox' to it
     const toInbox = to + '/inbox'
-    const toOrigin = new URL(to)
-    const toPath = toInbox.replace(toOrigin.origin, '')
+    const toOrigin = url.parse(to)
+    const toPath = toOrigin.path + '/inbox'
     // get the private key
     const privkey = user.rsa.privateKey
     const signer = crypto.createSign('sha256')
     const d = new Date()
     const stringToSign = `(request-target): post ${toPath}\nhost: ${toOrigin.hostname}\ndate: ${d.toUTCString()}`
-    console.error('stringToSign ', stringToSign)
 
     signer.update(stringToSign)
     signer.end()
     const signature = signer.sign(privkey)
     const signature_b64 = signature.toString('base64')
     const header = `keyId="${config.baseurl}/federation/u/${user.username}",headers="(request-target) host date",signature="${signature_b64}"`
-    console.error('header ', header)
-    console.error('requestTo ', toInbox)
-    console.error('host ', toOrigin.hostname)
-    const response = await fetch(toInbox, {
+    const ret = await fetch(toInbox, {
       headers: {
         'Host': toOrigin.hostname,
         'Date': d.toUTCString(),
@@ -39,31 +36,71 @@ const Helpers = {
       },
       method: 'POST',
       body: JSON.stringify(message) })
-
-      console.log('Response:', response.body, response.statusCode, response.status, response.statusMessage)
+    debug('sign %s => %s', ret.status, await ret.text())
   },
-  async sendEvent(event, user) {
-    const followers = user.followers
-    for(let follower of followers) {
-      debug('Notify %s with event %s', follower, event.title)
-      const body = event.toAP(user.username, follower)
+
+  async sendEvent (event, user) {
+    // TODO: has to use sharedInbox!
+    // event is sent by user that published it and by the admin instance
+    const instanceAdmin = await User.findOne({ where: { email: config.admin } })
+    if (!instanceAdmin || !instanceAdmin.username) {
+      debug('Instance admin not found (there is no user with email => %s)', config.admin)
+      return
+    }
+
+    for (const follower of instanceAdmin.followers) {
+      debug('Notify %s with event %s (from admin user %s)', follower, event.title, instanceAdmin.username)
+      const body = {
+        id: `${config.baseurl}/federation/m/${event.id}#create`,
+        type: 'Create',
+        to: ['https://www.w3.org/ns/activitystreams#Public'],
+        cc: [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, follower],        
+        actor: `${config.baseurl}/federation/u/${instanceAdmin.username}`,
+        object: event.toAP(instanceAdmin.username, [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, follower])
+      }
+      body['@context'] = 'https://www.w3.org/ns/activitystreams'
+      Helpers.signAndSend(body, instanceAdmin, follower)
+    }
+
+    // in case the event is published by the Admin itself do not republish
+    if (instanceAdmin.id === user.id) {
+      debug('Event published by instance Admin')
+      return
+    }
+
+    if (!user.settings.enable_federation || !user.username) {
+      debug('Federation disabled for user %d (%s)', user.id, user.username)
+      return
+    }
+
+    for (const follower of user.followers) {
+      debug('Notify %s with event %s (from user %s)', follower, event.title, user.username)
+      const body = {
+        id: `${config.baseurl}/federation/m/${event.id}#create`,
+        type: 'Create',
+        to: ['https://www.w3.org/ns/activitystreams#Public'],
+        cc: [`${config.baseurl}/federation/u/${user.username}/followers`, follower],
+        published: event.createdAt,
+        actor: `${config.baseurl}/federation/u/${user.username}`,
+        object: event.toAP(user.username, [`${config.baseurl}/federation/u/${user.username}/followers`, follower])
+      }
       body['@context'] = 'https://www.w3.org/ns/activitystreams'
       Helpers.signAndSend(body, user, follower)
-    }    
+    }
   },
 
-  async getFederatedUser(address) {
+  async getFederatedUser (address) {
     address = address.trim()
     const [ username, host ] = address.split('@')
     const url = `https://${host}/.well-known/webfinger?resource=acct:${username}@${host}`
     return Helpers.getActor(url)
   },
-  
+
   // TODO: cache
-  async getActor(url, force=false) {
+  async getActor (url, force = false) {
     // try with cache first
-    if (!force && actorCache[url]) return actorCache[url]
-    const user = await fetch(url, { headers: {'Accept': 'application/jrd+json, application/json'} })
+    if (!force && actorCache[url]) { return actorCache[url] }
+    const user = await fetch(url, { headers: { 'Accept': 'application/jrd+json, application/json' } })
       .then(res => {
         if (!res.ok) {
           debug('[ERR] Actor %s => %s', url, res.statusText)
@@ -76,25 +113,26 @@ const Helpers = {
   },
 
   // ref: https://blog.joinmastodon.org/2018/07/how-to-make-friends-and-verify-requests/
-  async verifySignature(req, res, next) {
+  async verifySignature (req, res, next) {
     let user = await Helpers.getActor(req.body.actor)
-    if (!user) return res.status(401).send('Actor not found')
+    if (!user) { return res.status(401).send('Actor not found') }
 
     // little hack -> https://github.com/joyent/node-http-signature/pull/83
     req.headers.authorization = 'Signature ' + req.headers.signature
 
-    // another little hack :/ 
+    // another little hack :/
     // https://github.com/joyent/node-http-signature/issues/87
     req.url = '/federation' + req.url
     const parsed = httpSignature.parseRequest(req)
-    if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) return next()
-    
+    if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) { return next() }
+
     // signature not valid, try without cache
     user = await Helpers.getActor(req.body.actor, true)
-    if (!user) return res.status(401).send('Actor not found')
-    if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) return next()
+    if (!user) { return res.status(401).send('Actor not found') }
+    if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) { return next() }
 
     // still not valid
+    debug('Invalid signature from user %s', req.body.actor)
     res.send('Request signature could not be verified', 401)
   }
 }

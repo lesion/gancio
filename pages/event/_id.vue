@@ -37,11 +37,11 @@
         el-button(v-if='event.is_visible' size='mini' plain type='warning' @click.prevents='toggle') {{$t('common.hide')}}
         el-button(v-else plain type='success' size='mini' @click.prevents='toggle') {{$t('common.confirm')}}
         el-button(plain type='danger' size='mini' @click.prevent='remove') {{$t('common.remove')}}
-        el-button(plain type='primary' size='mini' @click='$router.replace(`/add/${event.id}`)') {{$t('common.edit')}}  
+        el-button(plain type='primary' size='mini' @click='$router.replace(`/add/${event.id}`)') {{$t('common.edit')}}
 
       //- comments from fediverse
       #comments.card-body(v-if='settings.enable_federation')
-        small.float-right 🔖 {{event.likes.length}}  
+        small.float-right 🔖 {{event.likes.length}}
         small.float-right.mr-3 ✊ {{event.boost.length}}<br/>
         strong {{$tc('common.comments', event.comments.length)}} -
         <small>{{$t('event.interact_with_me_at')}} <u>{{event.user && event.user.username}}@{{settings.baseurl|url2host}}</u></small>
@@ -60,7 +60,7 @@ import { MessageBox } from 'element-ui'
 export default {
   name: 'Event',
   // transition: null,
-  // Watch for $route.query.page to call 
+  // Watch for $route.query.page to call
   // Component methods (asyncData, fetch, validate, layout, etc.)
   // watchQuery: ['id'],
   // Key for <NuxtChild> (transitions)
@@ -72,20 +72,33 @@ export default {
   // },
 
   head () {
-    if (!this.event) return {}
+    if (!this.event) { return {} }
     return {
       title: `${this.settings.title} - ${this.event.title}`,
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description', name: 'description', 
-            content: this.event.description.slice(0, 1000) },
-        { hid: 'og-description', name: 'og:description', 
-            content: this.event.description.slice(0, 100) },
+        { hid: 'description',
+          name: 'description',
+          content: this.event.description.slice(0, 1000) },
+        { hid: 'og-description',
+          name: 'og:description',
+          content: this.event.description.slice(0, 100) },
         { hid: 'og-title', property: 'og:title', content: this.event.title },
         { hid: 'og-url', property: 'og:url', content: `event/${this.event.id}` },
-        { property: 'og:type', content: 'event'},
+        { property: 'og:type', content: 'event' },
         { property: 'og:image', content: this.imgPath }
       ]
+    }
+  },
+  async asyncData ({ $axios, params, error }) {
+    try {
+      const [ id, start_datetime ] = params.id.split('_')
+      const event = await $axios.$get(`/event/${id}`)
+      event.start_datetime = start_datetime ? Number(start_datetime) : event.start_datetime
+      event.end_datetime = event.end_datetime
+      return { event, id: Number(id) }
+    } catch (e) {
+      error({ statusCode: 404, message: 'Event not found' })
     }
   },
   async fetch ({ $axios, store }) {
@@ -93,55 +106,44 @@ export default {
       const now = new Date()
       const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
       return store.commit('setEvents', events)
-    } catch(e) {
+    } catch (e) {
       console.error(e)
-    }    
-  },
-  async asyncData ( { $axios, params, error }) {
-    try {
-      const [ id, start_datetime ] = params.id.split('_')
-      const event = await $axios.$get(`/event/${id}`)
-      event.start_datetime = start_datetime ? Number(start_datetime) : event.start_datetime
-      event.end_datetime = event.end_datetime
-      return { event, id: Number(id) }
-    } catch(e) {
-      error({ statusCode: 404, message: 'Event not found'})
     }
-  },  
+  },
   computed: {
     ...mapGetters(['filteredEvents']),
     ...mapState(['settings']),
     next () {
       let found = false
       const event = this.filteredEvents.find(e => {
-        if (found) return e
+        if (found) { return e }
         found = (e.start_datetime === this.event.start_datetime && e.id === this.event.id)
       })
-      if (!event) return false
+      if (!event) { return false }
       if (event.recurrent) {
         return `${event.id}_${event.start_datetime}`
       }
       return event.id
-    },   
+    },
     prev () {
       let event = false
       this.filteredEvents.find(e => {
-        if (e.start_datetime === this.event.start_datetime && e.id === this.event.id) return true
+        if (e.start_datetime === this.event.start_datetime && e.id === this.event.id) { return true }
         event = e
       })
-      if (!event) return false
+      if (!event) { return false }
       if (event.recurrent) {
         return `${event.id}_${event.start_datetime}`
       }
-      return event.id      
+      return event.id
     },
     imgPath () {
       return this.event.image_path && '/media/' + this.event.image_path
-    },    
-    mine () {
-      if (!this.$auth.user) return false
-      return this.event.userId === this.$auth.user.id || this.$auth.user.is_admin
     },
+    mine () {
+      if (!this.$auth.user) { return false }
+      return this.event.userId === this.$auth.user.id || this.$auth.user.is_admin
+    }
   },
   methods: {
     ...mapActions(['delEvent']),
@@ -149,7 +151,7 @@ export default {
       return value.replace(/<a.*href="([^">]+).*>(?:.(?!\<\/a\>))*.<\/a>/, (orig, url) => {
         // get extension
         const ext = url.slice(-4)
-        if (['.mp3', '.ogg'].indexOf(ext)>-1) {
+        if (['.mp3', '.ogg'].includes(ext)) {
           return `<audio controls><source src='${url}'></audio>`
         } else {
           return orig
@@ -161,10 +163,10 @@ export default {
         await MessageBox.confirm(this.$t('event.remove_confirmation'), this.$t('common.confirm'), {
           confirmButtonText: this.$t('common.ok'),
           cancelButtonText: this.$t('common.cancel'),
-          type: 'error'})
+          type: 'error' })
         await this.$axios.delete(`/user/event/${this.id}`)
         this.delEvent(Number(this.id))
-        this.$router.replace("/")
+        this.$router.replace('/')
       } catch (e) {
         console.error(e)
       }
@@ -247,4 +249,3 @@ export default {
 }
 
 </style>
-

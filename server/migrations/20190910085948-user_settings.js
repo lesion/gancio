@@ -2,8 +2,9 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addColumn('users', 'display_name', {
-      type: Sequelize.STRING
+    return queryInterface.addColumn('users', 'settings', {
+      type: Sequelize.JSON,
+      defaultValue: {}
     })
     /*
       Add altering commands here.

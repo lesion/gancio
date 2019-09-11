@@ -2,6 +2,7 @@
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto')
 const util = require('util')
+const debug = require('debug')('model:user')
 
 const generateKeyPair = util.promisify(crypto.generateKeyPair)
 
@@ -14,9 +15,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     display_name: DataTypes.STRING,
+    settings: DataTypes.JSON,
     email: {
       type: DataTypes.STRING,
-      unique:  { msg: 'error.email_taken' },
+      unique: { msg: 'error.email_taken' },
       index: true,
       allowNull: false
     },
@@ -44,13 +46,14 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   user.prototype.comparePassword = async function (pwd) {
-    if (!this.password) return false
+    if (!this.password) { return false }
     const ret = await bcrypt.compare(pwd, this.password)
     return ret
   }
 
   user.beforeSave(async (user, options) => {
     if (user.changed('password')) {
+      debug('Password for %s modified', user.username)
       const salt = await bcrypt.genSalt(10)
       const hash = await bcrypt.hash(user.password, salt)
       user.password = hash
@@ -58,6 +61,7 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   user.beforeCreate(async (user, options) => {
+    debug('Create a new user => %s', user.username)
     // generate rsa keys
     const rsa = await generateKeyPair('rsa', {
       modulusLength: 4096,
@@ -74,4 +78,4 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   return user
-};
+}

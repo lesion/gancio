@@ -11,7 +11,7 @@
           h2 {{event.title}}
 
           //- date / place
-          .date 
+          .date
             div <v-icon name='clock'/> {{event|when('home')}}
             div <v-icon name='map-marker-alt' /> {{event.place.name}}
 
@@ -32,10 +32,10 @@ export default {
     showImage: {
       type: Boolean,
       default: true
-    },
+    }
   },
   computed: {
-    date () { 
+    date () {
       return new Date(this.event.start_datetime).getDate()
     },
     link () {
@@ -104,7 +104,7 @@ export default {
       font-weight: 400;
       font-size: 1rem;
       color: white;
-    }    
+    }
   }
 
   .tags {

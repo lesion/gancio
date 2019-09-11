@@ -41,7 +41,7 @@ export default {
   computed: {
     ...mapState(['settings']),
     disabled () {
-      if (process.server) return false
+      if (process.server) { return false }
       return !this.email || !this.password
     }
   },
@@ -49,7 +49,7 @@ export default {
     ...mapActions(['login']),
     async forgot () {
       if (!this.email) {
-        Message({ message: this.$t('login.insert_email'), showClose:true, type: 'error' })
+        Message({ message: this.$t('login.insert_email'), showClose: true, type: 'error' })
         this.$refs.email.focus()
         return
       }

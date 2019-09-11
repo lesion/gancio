@@ -49,9 +49,10 @@ export default {
     disable: 'Disabilita',
     me: 'Sei te',
     password_updated: 'Password modificata!',
-    username: 'Nickname',
+    username: 'Nomignolo',
     comments: 'nessun commento|un commento|{n} commenti',
-    activate_user: 'Confermato'
+    activate_user: 'Confermato',
+    displayname: 'Nome mostrato'
   },
 
   login: {
@@ -144,7 +145,7 @@ export default {
     delete_user_confirm: 'Sicura di rimuovere questo utente?',
     user_remove_ok: 'Utente eliminato',
     user_create_ok: 'Utente creato',
-    allow_registration_description : 'Vuoi abilitare la registrazione?',
+    allow_registration_description: 'Vuoi abilitare la registrazione?',
     allow_anon_event: 'Si possono inserire eventi anonimi (previa conferma)?',
     allow_comments: 'Abilita commenti',
     allow_recurrent_event: 'Abilita eventi fissi',
@@ -163,7 +164,7 @@ export default {
     password_updated: 'Password modificata',
     danger_section: 'Sezione pericolosa',
     remove_account: 'Premendo il seguente tasto il tuo utente verrà eliminato. Gli eventi da te pubblicati invece no.',
-    remove_account_confirm: 'Stai per eliminare definitivamente il tuo account',
+    remove_account_confirm: 'Stai per eliminare definitivamente il tuo account'
   },
 
   error: {
@@ -174,7 +175,7 @@ export default {
   confirm: {
     title: 'Conferma utente',
     not_valid: 'Mmmmm qualcosa è andato storto.',
-    valid: 'Il tuo account è stato confermato, ora puoi <a href="/login">entrare</a>',
+    valid: 'Il tuo account è stato confermato, ora puoi <a href="/login">entrare</a>'
   },
 
   ordinal: {
@@ -183,7 +184,7 @@ export default {
     3: 'terzo',
     4: 'quarto',
     5: 'quinto',
-    [-1]: 'ultimo',
+    [-1]: 'ultimo'
   },
 
   about: `

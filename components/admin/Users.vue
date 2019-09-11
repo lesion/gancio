@@ -55,16 +55,16 @@ export default {
       userPage: 1,
       new_user: {
         email: '',
-        is_admin: false,
+        is_admin: false
       },
       users_: this.users
     }
   },
   computed: {
     paginatedUsers () {
-      return this.users_.slice((this.userPage-1) * this.perPage,
+      return this.users_.slice((this.userPage - 1) * this.perPage,
         this.userPage * this.perPage)
-    },
+    }
   },
   methods: {
     async delete_user (user) {
@@ -74,25 +74,25 @@ export default {
           cancelButtonText: this.$t('common.cancel'),
           type: 'error'
         })
-        .then( () => this.$axios.delete(`/user/${user.id}`) )
-        .then( () => {
+        .then(() => this.$axios.delete(`/user/${user.id}`))
+        .then(() => {
           Message({
             showClose: true,
             type: 'success',
             message: this.$t('admin.user_remove_ok')
           })
-          this.users_ = this.users_.filter(u => u.id!==user.id)
+          this.users_ = this.users_.filter(u => u.id !== user.id)
         })
     },
-    async toggle(user) {
+    async toggle (user) {
       user.is_active = !user.is_active
       this.$axios.$put('/user', user)
     },
-    async toggleAdmin(user) {
+    async toggleAdmin (user) {
       try {
         user.is_admin = !user.is_admin
         await this.$axios.$put('/user', user)
-      } catch(e) {
+      } catch (e) {
         console.error(e)
       }
     },
@@ -114,7 +114,7 @@ export default {
           message: this.$t(e)
         })
       }
-    },
+    }
   }
 }
 </script>
