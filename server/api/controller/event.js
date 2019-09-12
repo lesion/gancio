@@ -10,6 +10,7 @@ const debug = require('debug')('controller:event')
 
 const eventController = {
 
+  // NOT USED ANYWHERE, comments are added from fediverse
   async addComment (req, res) {
     // comment could be added to an event or to another comment
     let event = await Event.findOne({ where: { activitypub_id: { [Op.eq]: req.body.id } } })
@@ -202,7 +203,7 @@ const eventController = {
         // return only confirmed events
         is_visible: true,
         [Op.or]: [
-          // return all recurrent events
+          // return all recurrent events regardless start_datetime
           { recurrent: { [Op.ne]: null } },
 
           // and events in specified range
@@ -226,7 +227,7 @@ const eventController = {
     // build singular events from a recurrent pattern
     function createEventsFromRecurrent (e, dueTo = null) {
       const events = []
-      const recurrent = e.recurrent
+      const recurrent = JSON.parse(e.recurrent)
       if (!recurrent.frequency) { return false }
 
       let cursor = moment(start).startOf('week')

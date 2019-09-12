@@ -57,11 +57,6 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     return {
-      // id: `${config.baseurl}/federation/m/c_${this.id}`,
-      // type: 'Create',
-      // actor: `${config.baseurl}/federation/u/${username}`,
-      // url: `${config.baseurl}/federation/m/${this.id}`,
-      // object: {
       type: 'Note',
       id: `${config.baseurl}/federation/m/${this.id}`,
       url: `${config.baseurl}/federation/m/${this.id}`,

@@ -50,12 +50,11 @@
           //- WHEN
           el-tab-pane
             span(slot='label') {{$t('common.when')}} <v-icon name='clock'/>
-
             .text-center
               el-radio-group(v-model="event.type")
                 el-radio-button(label="normal") <v-icon name='calendar-day'/> {{$t('event.normal')}}
                 el-radio-button(label="multidate") <v-icon name='calendar-week'/> {{$t('event.multidate')}}
-                el-radio-button(label="recurrent") <v-icon name='calendar-alt'/> {{$t('event.recurrent')}}
+                el-radio-button(v-if='settings.allow_recurrent_event' label="recurrent") <v-icon name='calendar-alt'/> {{$t('event.recurrent')}}
               br
               span {{$t(`event.${event.type}_description`)}}
               el-select.ml-2(v-if='event.type==="recurrent"' v-model='event.recurrent.frequency' placeholder='Frequenza')
