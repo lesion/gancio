@@ -160,6 +160,7 @@ export default {
   },
 
   settings: {
+    update_confirm: 'Sicura di voler salvare le modifiche?',
     change_password: 'Cambia password',
     password_updated: 'Password modificata',
     danger_section: 'Sezione pericolosa',
