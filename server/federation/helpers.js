@@ -4,7 +4,7 @@ const crypto = require('crypto')
 const config = require('config')
 const httpSignature = require('http-signature')
 const debug = require('debug')('federation:helpers')
-const { user: User } = require('../api/models')
+const { user: User, fed_users: FedUsers } = require('../api/models')
 const url = require('url')
 
 const actorCache = []
@@ -40,13 +40,15 @@ const Helpers = {
   },
 
   async sendEvent (event, user) {
-    // TODO: has to use sharedInbox!
     // event is sent by user that published it and by the admin instance
-    const instanceAdmin = await User.findOne({ where: { email: config.admin } })
+    // collect followers from admin and user
+    const instanceAdmin = await User.findOne({ where: { email: config.admin, include: FedUsers } })
     if (!instanceAdmin || !instanceAdmin.username) {
       debug('Instance admin not found (there is no user with email => %s)', config.admin)
       return
     }
+    console.error(instanceAdmin)
+    return
 
     for (const follower of instanceAdmin.followers) {
       debug('Notify %s with event %s (from admin user %s)', follower, event.title, instanceAdmin.username)
@@ -89,18 +91,23 @@ const Helpers = {
     }
   },
 
-  async getFederatedUser (address) {
-    address = address.trim()
-    const [ username, host ] = address.split('@')
-    const url = `https://${host}/.well-known/webfinger?resource=acct:${username}@${host}`
-    return Helpers.getActor(url)
-  },
+  // DO NOT USE THIS! (why is this needed btw?)
+  // async getFederatedUser (address) {
+  //   address = address.trim()
+  //   const [ username, host ] = address.split('@')
+  //   const url = `https://${host}/.well-known/webfinger?resource=acct:${username}@${host}`
+  //   return Helpers.getActor(url)
+  // },
 
   // TODO: cache
   async getActor (url, force = false) {
+    let fedi_user
+    
     // try with cache first
-    if (!force && actorCache[url]) { return actorCache[url] }
-    const user = await fetch(url, { headers: { 'Accept': 'application/jrd+json, application/json' } })
+    if (!force) fedi_user = await FedUsers.findByPk(url)
+
+    if (fedi_user) return fedi_user.object
+    fedi_user = await fetch(url, { headers: { 'Accept': 'application/jrd+json, application/json' } })
       .then(res => {
         if (!res.ok) {
           debug('[ERR] Actor %s => %s', url, res.statusText)
@@ -108,32 +115,37 @@ const Helpers = {
         }
         return res.json()
       })
-    actorCache[url] = user
-    return user
+    if (fedi_user) {
+      await FedUsers.create({ap_id: url, object: fedi_user})
+    }
+    return fedi_user
   },
 
   // ref: https://blog.joinmastodon.org/2018/07/how-to-make-friends-and-verify-requests/
   async verifySignature (req, res, next) {
     let user = await Helpers.getActor(req.body.actor)
     if (!user) { return res.status(401).send('Actor not found') }
-
+    
     // little hack -> https://github.com/joyent/node-http-signature/pull/83
     req.headers.authorization = 'Signature ' + req.headers.signature
+    
+    req.fedi_user = user
 
     // another little hack :/
     // https://github.com/joyent/node-http-signature/issues/87
     req.url = '/federation' + req.url
     const parsed = httpSignature.parseRequest(req)
     if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) { return next() }
-
+    
     // signature not valid, try without cache
     user = await Helpers.getActor(req.body.actor, true)
     if (!user) { return res.status(401).send('Actor not found') }
     if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) { return next() }
-
+    
     // still not valid
     debug('Invalid signature from user %s', req.body.actor)
     res.send('Request signature could not be verified', 401)
+
   }
 }
 
