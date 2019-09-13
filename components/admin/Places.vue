@@ -7,12 +7,13 @@
       el-form-item(:label="$t('common.address')")
         el-input.mr-1(:placeholder='$t("common.address")' v-model='place.address')
       el-button(variant='primary' @click='savePlace') {{$t('common.save')}}
+
     el-table(:data='paginatedPlaces' small)
-      el-table-column(:label="$t('common.name')")
+      el-table-column(:label="$t('common.name')" width='200')
         template(slot-scope='data') {{data.row.name}}
-      el-table-column(:label="$t('common.address')")
+      el-table-column(:label="$t('common.address')" width='400')
         template(slot-scope='data') {{data.row.address}}
-      el-table-column(:label="$t('common.actions')")
+      el-table-column(:label="$t('common.actions')" width='200')
         template(slot-scope='data')
           el-button(size='mini'
             type='success'

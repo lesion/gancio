@@ -16,14 +16,14 @@ div
 
   //- USERS LIST
   el-table(:data='paginatedUsers' small)
-    el-table-column(label='Username')
+    el-table-column(label='Username' width='150')
       template(slot-scope='data')
         span(slot='reference') {{data.row.username}}
-    el-table-column(label='Email')
+    el-table-column(label='Email' width='300')
       template(slot-scope='data')
         el-popover(trigger='hover' :content='data.row.description' width='400')
           span(slot='reference') {{data.row.email}}
-    el-table-column(:label="$t('common.actions')")
+    el-table-column(:label="$t('common.actions')" width='300')
       template(slot-scope='data')
         div(v-if='data.row.id!==$auth.user.id')
           el-button-group
