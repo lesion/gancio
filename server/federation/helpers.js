@@ -9,6 +9,19 @@ const url = require('url')
 const settings = require('../api/controller/settings')
 
 const Helpers = {
+
+  // ignore unimplemented ping url from fediverse
+  async spamFilter (req, res, next) {
+    const urlToIgnore = [
+      '/api/v1/instance',
+      '/api/meta',
+      '/api/statusnet/config.json',
+      '/poco',
+    ]
+    if (urlToIgnore.includes(req.path)) return res.status(404).send('Not Found')
+    next()
+  },
+
   async signAndSend (message, user, to) {
     // get the URI of the actor object and append 'inbox' to it
     const toUrl = url.parse(to)

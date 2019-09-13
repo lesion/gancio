@@ -4,6 +4,7 @@ const express = require('express')
 const api = require('./api')
 const federation = require('./federation')
 const webfinger = require('./federation/webfinger')
+const { spamFilter } = require('./federation/helpers')
 const debug = require('debug')('routes')
 
 const router = express.Router()
@@ -12,6 +13,9 @@ router.use((req, res, next) => {
   next()
 })
 
+// ignore unimplemented ping url from fediverse
+router.use(spamFilter)
+
 router.use('/favicon.ico', express.static(path.resolve(config.favicon || 'assets/favicon.ico')))
 router.use('/media/', express.static(config.upload_path))
 router.use('/api', api)
@@ -19,9 +23,6 @@ router.use('/api', api)
 // federation api / activitypub / webfinger / nodeinfo
 router.use('/.well-known', webfinger)
 router.use('/federation', federation)
-
-// ignore unimplemented ping url from fediverse
-router.use('/poco', (req, res) => res.status(404).send('404: Page not found'))
 
 // Handle 404
 // router.use((req, res) => res.status(404).send('404: Page not found'))
