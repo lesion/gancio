@@ -3,7 +3,7 @@
     nuxt-link.float-right(to='/')
       el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
     h5 {{$t('common.settings')}}
-    hr
+    el-divider {{$auth.user.email}}
 
     el-form(action='/api/user' method='PUT' @submit.native.prevent='update_settings' inline label-width='200px')
 
@@ -17,7 +17,7 @@
 
         div(v-if='user.settings.enable_federation')
           el-form-item(:label="$t('common.username')")
-            el-input(v-if='user.username.length==0' type='text' name='username' v-model='user.username')
+            el-input(v-if='username_editable' type='text' name='username' v-model='user.username')
               template(slot='suffix') @{{baseurl}}
             span(v-else) {{user.username}}@{{baseurl}}
               //- el-button(slot='append') {{$t('common.save')}}
@@ -40,6 +40,7 @@ export default {
   name: 'Settings',
   data () {
     return {
+      username_editable: false,
       password: '',
       user: { }
     }
@@ -51,7 +52,7 @@ export default {
   },
   async asyncData ({ $axios, params }) {
     const user = await $axios.$get('/auth/user')
-    return { user }
+    return { user, username_editable: user.username.length===0 }
   },
   computed: {
     ...mapState(['settings']),
@@ -72,12 +73,16 @@ export default {
       }
     },
     async update_settings () {
-      try {
-        const user = await this.$axios.$put('/user', { ...this.user, password: this.password })
-        this.user = user
-      } catch (e) {
+      MessageBox.confirm(this.$t('settings.update_confirm'),
+        this.$t('common.confirm'), {
+          confirmButtonText: this.$t('common.ok'),
+          cancelButtonText: this.$t('common.cancel'),
+          type: 'error'
+        }).then(async () => {
+          this.user = await this.$axios.$put('/user', { ...this.user, password: this.password })
+        }).catch( e => {
         Message({ message: e, showClose: true, type: 'warning' })
-      }
+      })
     },
     async remove_account () {
       MessageBox.confirm(this.$t('settings.remove_account_confirm'), this.$t('common.confirm'), {

@@ -81,5 +81,5 @@ const settingsController = {
   },
 }
 
-setTimeout(settingsController.initialize, 200)
+settingsController.initialize()
 module.exports = settingsController

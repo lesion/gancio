@@ -6,7 +6,7 @@ const { Op } = require('sequelize')
 const jsonwebtoken = require('jsonwebtoken')
 const config = require('config')
 const mail = require('../mail')
-const { user: User, event: Event, tag: Tag, place: Place } = require('../models')
+const { user: User, event: Event, tag: Tag, place: Place, fed_users: FedUsers } = require('../models')
 const settingsController = require('./settings')
 const federation = require('../../federation/helpers')
 
@@ -118,7 +118,8 @@ const userController = {
     // send response to client
     res.json(event)
 
-    if (req.user) { federation.sendEvent(event, req.user) }
+    const user = await User.findByPk(req.user.id, { include: { model: FedUsers, as: 'followers' }})
+    if (user) { federation.sendEvent(event, user) }
 
     // res.sendStatus(200)
 
@@ -207,8 +208,10 @@ const userController = {
     }
   },
 
-  current (req, res) {
-    if (req.user) { res.json(req.user) } else { res.sendStatus(404) }
+  async current (req, res) {
+    if (!req.user) return res.status(400).send('Not logged')
+    const user = await User.findByPk(req.user.id, { include: { model: FedUsers, as: 'followers' } })
+    res.json(user) 
   },
 
   async getAll (req, res) {

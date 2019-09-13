@@ -1,4 +1,4 @@
-const { user: User, event: Event, place: Place, tag: Tag } = require('../api/models')
+const { user: User, event: Event, place: Place, tag: Tag, fed_users: FedUsers } = require('../api/models')
 const config = require('config')
 const get = require('lodash/get')
 const debug = require('debug')('fediverse:user')
@@ -45,7 +45,7 @@ module.exports = {
     const page = req.query.page
     debug('Retrieve %s followers', name)
     if (!name) return res.status(400).send('Bad request.')
-    const user = await User.findOne({where: { username: name }})
+    const user = await User.findOne({where: { username: name }, include: { model: FedUsers, as: 'followers' }})
     if (!user) return res.status(404).send(`No record found for ${name}`)
 
     res.type('application/activity+json; charset=utf-8')

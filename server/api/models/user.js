@@ -28,10 +28,6 @@ module.exports = (sequelize, DataTypes) => {
     is_admin: DataTypes.BOOLEAN,
     is_active: DataTypes.BOOLEAN,
     rsa: DataTypes.JSON,
-    followers: {
-      type: DataTypes.JSON,
-      defaultValue: []
-    }
   }, {
     scopes: {
       withoutPassword: {
@@ -43,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
   user.associate = function (models) {
     // associations can be defined here
     user.hasMany(models.event)
+    user.belongsToMany(models.fed_users, { through: 'user_followers', as: 'followers' })
   }
 
   user.prototype.comparePassword = async function (pwd) {
