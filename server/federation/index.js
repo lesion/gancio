@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const config = require('config')
 const cors = require('cors')
 const Follows = require('./follows')
 const Users = require('./users')
@@ -14,12 +13,14 @@ const debug = require('debug')('federation')
  * Federation is calling!
  * ref: https://www.w3.org/TR/activitypub/#Overview
  */
+
+
 router.use(cors())
 router.use(express.json({ type: ['application/json', 'application/activity+json', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'] }))
 
 router.get('/m/:event_id', async (req, res) => {
   const event_id = req.params.event_id
-  // if (req.accepts('html')) return res.redirect(301, `/event/${event_id}`)
+  if (req.accepts('html')) return res.redirect(301, `/event/${event_id}`)
 
   const event = await Event.findByPk(req.params.event_id, { include: [ User, Tag, Place ] })
   if (!event) { return res.status(404).send('Not found') }
