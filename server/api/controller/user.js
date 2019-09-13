@@ -118,7 +118,8 @@ const userController = {
     // send response to client
     res.json(event)
 
-    if (req.user) { federation.sendEvent(event, req.user) }
+    const user = await User.findByPk(req.user.id, { include: { model: FedUsers, as: 'followers' }})
+    if (user) { federation.sendEvent(event, user) }
 
     // res.sendStatus(200)
 
@@ -209,7 +210,7 @@ const userController = {
 
   async current (req, res) {
     if (!req.user) return res.status(400).send('Not logged')
-    const user = await User.findByPk(req.user.id, { include: [ FedUsers ]})
+    const user = await User.findByPk(req.user.id, { include: { model: FedUsers, as: 'followers' } })
     res.json(user) 
   },
 

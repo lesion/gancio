@@ -10,7 +10,7 @@ module.exports = {
     const body = req.body
     if (typeof body.object !== 'string') { return }
     const username = body.object.replace(`${config.baseurl}/federation/u/`, '')
-    const user = await User.findOne({ where: { username }, include: [ FedUsers ] })
+    const user = await User.findOne({ where: { username }, include: {  model: FedUsers, as: 'followers' }})
     if (!user) { return res.status(404).send('User not found') }
 
     // check for duplicate

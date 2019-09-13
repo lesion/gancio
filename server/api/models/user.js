@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
   user.associate = function (models) {
     // associations can be defined here
     user.hasMany(models.event)
-    user.belongsToMany(models.fed_users, { through: 'user_followers' })
+    user.belongsToMany(models.fed_users, { through: 'user_followers', as: 'followers' })
   }
 
   user.prototype.comparePassword = async function (pwd) {

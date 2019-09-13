@@ -6,29 +6,27 @@ const httpSignature = require('http-signature')
 const debug = require('debug')('federation:helpers')
 const { user: User, fed_users: FedUsers } = require('../api/models')
 const url = require('url')
-
-const actorCache = []
+const settings = require('../api/controller/settings')
 
 const Helpers = {
   async signAndSend (message, user, to) {
     // get the URI of the actor object and append 'inbox' to it
-    const toInbox = to + '/inbox'
-    const toOrigin = url.parse(to)
-    const toPath = toOrigin.path + '/inbox'
+    const toUrl = url.parse(to)
+    // const toPath = toOrigin.path + '/inbox'
     // get the private key
     const privkey = user.rsa.privateKey
     const signer = crypto.createSign('sha256')
     const d = new Date()
-    const stringToSign = `(request-target): post ${toPath}\nhost: ${toOrigin.hostname}\ndate: ${d.toUTCString()}`
+    const stringToSign = `(request-target): post ${toUrl.path}\nhost: ${toUrl.hostname}\ndate: ${d.toUTCString()}`
 
     signer.update(stringToSign)
     signer.end()
     const signature = signer.sign(privkey)
     const signature_b64 = signature.toString('base64')
     const header = `keyId="${config.baseurl}/federation/u/${user.username}",headers="(request-target) host date",signature="${signature_b64}"`
-    const ret = await fetch(toInbox, {
+    const ret = await fetch(to, {
       headers: {
-        'Host': toOrigin.hostname,
+        'Host': toUrl.hostname,
         'Date': d.toUTCString(),
         'Signature': header,
         'Content-Type': 'application/activity+json; charset=utf-8',
@@ -40,55 +38,78 @@ const Helpers = {
   },
 
   async sendEvent (event, user) {
+    if (!settings.settings.enable_federation) {
+      console.error(settings.settings)
+      console.error(settings.secretSettings)
+      debug('federation disabled')
+      return
+    }
+
+    console.error('dentro sendEvent ', user)
+
     // event is sent by user that published it and by the admin instance
     // collect followers from admin and user
-    const instanceAdmin = await User.findOne({ where: { email: config.admin, include: FedUsers } })
+    const instanceAdmin = await User.findOne({ where: { email: config.admin }, include: { model: FedUsers, as: 'followers'  } })
     if (!instanceAdmin || !instanceAdmin.username) {
       debug('Instance admin not found (there is no user with email => %s)', config.admin)
       return
     }
-    console.error(instanceAdmin)
-    return
 
-    for (const follower of instanceAdmin.followers) {
-      debug('Notify %s with event %s (from admin user %s)', follower, event.title, instanceAdmin.username)
+    console.error(instanceAdmin.followers)
+    let recipients = {}
+    instanceAdmin.followers.forEach(follower => {
+      const sharedInbox = follower.user_followers.endpoints.sharedInbox
+      if (!recipients[sharedInbox]) recipients[sharedInbox] = []
+      recipients[sharedInbox].push(follower.id)
+    })
+
+    for(const sharedInbox in recipients) {
+      debug('Notify %s with event %s (from admin user %s) cc => %d', sharedInbox, event.title, instanceAdmin.username, recipients[sharedInbox].length)
       const body = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
         type: 'Create',
         to: ['https://www.w3.org/ns/activitystreams#Public'],
-        cc: [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, follower],        
+        cc: [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]],
         actor: `${config.baseurl}/federation/u/${instanceAdmin.username}`,
-        object: event.toAP(instanceAdmin.username, [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, follower])
+        object: event.toAP(instanceAdmin.username, [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]])
       }
       body['@context'] = 'https://www.w3.org/ns/activitystreams'
-      Helpers.signAndSend(body, instanceAdmin, follower)
+      Helpers.signAndSend(body, instanceAdmin, sharedInbox)
     }
 
-    // in case the event is published by the Admin itself do not republish
+    // in case the event is published by the Admin itself do not add user
     if (instanceAdmin.id === user.id) {
       debug('Event published by instance Admin')
       return
-    }
-
+    } 
     if (!user.settings.enable_federation || !user.username) {
       debug('Federation disabled for user %d (%s)', user.id, user.username)
       return
     }
 
-    for (const follower of user.followers) {
-      debug('Notify %s with event %s (from user %s)', follower, event.title, user.username)
+
+    recipients = {}
+    user.followers.forEach(follower => {
+      const sharedInbox = follower.object.endpoints.sharedInbox
+      if (!recipients[sharedInbox]) recipients[sharedInbox] = []
+      recipients[sharedInbox].push(follower.id)
+    })
+
+    debug(recipients)
+    for(const sharedInbox in recipients) {
+      debug('Notify %s with event %s (from admin user %s) cc => %d', sharedInbox, event.title, user.username, recipients[sharedInbox].length)
       const body = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
         type: 'Create',
         to: ['https://www.w3.org/ns/activitystreams#Public'],
-        cc: [`${config.baseurl}/federation/u/${user.username}/followers`, follower],
-        published: event.createdAt,
+        cc: [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]],
         actor: `${config.baseurl}/federation/u/${user.username}`,
-        object: event.toAP(user.username, [`${config.baseurl}/federation/u/${user.username}/followers`, follower])
+        object: event.toAP(user.username, [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]])
       }
       body['@context'] = 'https://www.w3.org/ns/activitystreams'
-      Helpers.signAndSend(body, user, follower)
+      Helpers.signAndSend(body, user, sharedInbox)
     }
+
   },
 
   // DO NOT USE THIS! (why is this needed btw?)

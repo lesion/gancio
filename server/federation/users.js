@@ -45,7 +45,7 @@ module.exports = {
     const page = req.query.page
     debug('Retrieve %s followers', name)
     if (!name) return res.status(400).send('Bad request.')
-    const user = await User.findOne({where: { username: name }, include: [FedUsers]})
+    const user = await User.findOne({where: { username: name }, include: { model: FedUsers, as: 'followers' }})
     if (!user) return res.status(404).send(`No record found for ${name}`)
 
     res.type('application/activity+json; charset=utf-8')
