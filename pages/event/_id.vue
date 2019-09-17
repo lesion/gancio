@@ -73,6 +73,10 @@ export default {
 
   head () {
     if (!this.event) { return {} }
+    const tags_feed = this.event.tags.map(tag => ({ rel: 'alternate', type: 'application/rss+xml',
+        title: `${this.settings.title} events tagged ${tag.tag}`, href: this.settings.baseurl + `/feed/rss?tags=${tag.tag}` }))
+    const place_feed = { rel: 'alternate', type: 'application/rss+xml',
+      title: `${this.settings.title} events  @${this.event.place.name}`, href: this.settings.baseurl + `/feed/rss?places=${this.event.placeId}` }
     return {
       title: `${this.settings.title} - ${this.event.title}`,
       meta: [
@@ -87,7 +91,12 @@ export default {
         { hid: 'og-url', property: 'og:url', content: `event/${this.event.id}` },
         { property: 'og:type', content: 'event' },
         { property: 'og:image', content: this.imgPath }
-      ]
+      ],
+      link: [
+        { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' },
+        ...tags_feed,
+        place_feed
+      ]      
     }
   },
   async asyncData ({ $axios, params, error }) {

@@ -19,7 +19,7 @@
       //-     el-input.mt-2(v-model='notification.email' :placeholder="$t('export.insert_your_address')" ref='email')
       //-     el-button.mt-2.float-right(native-type= 'submit' type='success' @click='add_notification') {{$t('common.send')}}
 
-      el-tab-pane.pt-1(label='feed rss' name='feed')
+      el-tab-pane.pt-1(label='feed rss' name='rss')
         span(v-html='$t(`export.feed_description`)')
         el-input(v-model='link')
           el-button(slot='append' plain
@@ -73,7 +73,7 @@ export default {
   },
   data () {
     return {
-      type: 'feed',
+      type: 'rss',
       notification: { email: '' },
       list: { title: 'Gancio' }
     }
@@ -128,10 +128,10 @@ export default {
         }
       }
 
-      return `${this.settings.baseurl}/api/export/${this.type}${query}`
+      return `${this.settings.baseurl}/feed/${this.type}${query}`
     },
     showLink () {
-      return (['feed', 'ics'].includes(this.type))
+      return (['rss', 'ics'].includes(this.type))
     }
   }
 }

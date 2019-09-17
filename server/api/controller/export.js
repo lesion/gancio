@@ -1,6 +1,7 @@
 const { event: Event, place: Place, tag: Tag } = require('../models')
 const { Op } = require('sequelize')
 const moment = require('moment')
+const config = require('config')
 const ics = require('ics')
 
 const exportController = {
@@ -21,6 +22,7 @@ const exportController = {
     if (places) {
       where.placeId = places.split(',')
     }
+
     const events = await Event.findAll({
       order: ['start_datetime'],
       where: {
@@ -30,7 +32,9 @@ const exportController = {
       },
       include: [ { model: Tag, ...where_tags }, { model: Place, attributes: ['name', 'id', 'address'] }]
     })
+    
     switch (type) {
+      case 'rss':
       case 'feed':
         return exportController.feed(res, events.slice(0, 20))
       case 'ics':
@@ -42,7 +46,7 @@ const exportController = {
 
   feed (res, events) {
     res.type('application/rss+xml; charset=UTF-8')
-    res.render('feed/rss.pug', { events, config: process.env, moment })
+    res.render('feed/rss.pug', { events, config, moment })
   },
 
   ics (res, events) {

@@ -17,11 +17,11 @@
   "license": "AGPL-3.0",
   "bugs": {
     "email": "lesion@autistici.org",
-    "url": "https://framagit.net/les/gancio/issues"
+    "url": "https://framagit.org/les/gancio/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://framagit.net/les/gancio.git"
+    "url": "https://framagit.org/les/gancio"
   },
   "bin": {
     "gancio": "server/cli.js"
