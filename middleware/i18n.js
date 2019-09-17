@@ -1,5 +1,6 @@
 import acceptLanguage from 'accept-language'
-export default function ({ req, app, store }) {
+
+export default async function ({ req, app, store }) {
   if (process.server) {
     const acceptedLanguages = req.headers['accept-language']
     const supportedLanguages = ['en', 'it', 'es']

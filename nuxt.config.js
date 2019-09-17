@@ -25,7 +25,7 @@ module.exports = {
    ** Global CSS
    */
   css: [
-    'bootstrap/dist/css/bootstrap.css',
+    'bootstrap/dist/css/bootstrap.min.css',
     'element-ui/lib/theme-chalk/index.css'
   ],
 
@@ -68,7 +68,7 @@ module.exports = {
           logout: false,
           user: { url: '/auth/user', method: 'get', propertyName: false }
         },
-        tokenRequired: false,
+        tokenRequired: true,
         tokenType: 'Bearer'
       }
     }

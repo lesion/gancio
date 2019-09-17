@@ -38,7 +38,6 @@ const userController = {
           },
           config.secret
         )
-        res.cookie('auth._token.local', 'Bearer ' + accessToken)
         res.json({ token: accessToken })
       }
     }

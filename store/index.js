@@ -4,6 +4,7 @@ import find from 'lodash/find'
 
 export const state = () => ({
   locale: '',
+  user_locale: {},
   events: [],
   tags: [],
   places: [],
@@ -137,9 +138,13 @@ export const mutations = {
 export const actions = {
   // this method is called server side only for each request
   // we use it to get configuration from db, setting locale, etc...
-  async nuxtServerInit ({ commit }, { app, req }) {
+  async nuxtServerInit ({ commit }, { app, store, req }) {
     const settings = await app.$axios.$get('/settings')
     commit('setSettings', settings)
+
+    // check if we could retrieve it directly?
+    const user_locale = await app.$axios.$get('/settings/user_locale')
+    if (user_locale[store.state.locale]) { store.commit('setUserLocale', user_locale[store.state.locale]) }
 
     // apply settings
     commit('showRecurrentEvents', settings.allow_recurrent_event && settings.recurrent_event_visible)
