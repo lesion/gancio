@@ -56,10 +56,11 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { MessageBox } from 'element-ui'
+import moment from 'dayjs'
 
 export default {
   name: 'Event',
-  // transition: null,
+  transition: null,
   // Watch for $route.query.page to call
   // Component methods (asyncData, fetch, validate, layout, etc.)
   // watchQuery: ['id'],
@@ -77,22 +78,32 @@ export default {
         title: `${this.settings.title} events tagged ${tag.tag}`, href: this.settings.baseurl + `/feed/rss?tags=${tag.tag}` }))
     const place_feed = { rel: 'alternate', type: 'application/rss+xml',
       title: `${this.settings.title} events  @${this.event.place.name}`, href: this.settings.baseurl + `/feed/rss?places=${this.event.placeId}` }
+    
     return {
       title: `${this.settings.title} - ${this.event.title}`,
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         { hid: 'description',
           name: 'description',
-          content: this.event.description.slice(0, 1000) },
+          content: this.event.description.replace("\n",'').slice(0, 1000) },
         { hid: 'og-description',
           name: 'og:description',
-          content: this.event.description.slice(0, 100) },
+          content: this.event.description.replace("\n",'').slice(0, 100) },
         { hid: 'og-title', property: 'og:title', content: this.event.title },
-        { hid: 'og-url', property: 'og:url', content: `event/${this.event.id}` },
+        { hid: 'og-url', property: 'og:url', content: `${this.settings.baseurl}/event/${this.event.id}` },
         { property: 'og:type', content: 'event' },
-        { property: 'og:image', content: this.imgPath }
+        { property: 'og:image', content: `${this.settings.baseurl}/${this.imgPath}` },
+        { property: 'og:site_name', content: this.settings.title },
+        { property: 'og:updated_time', content: moment.unix(this.event.start_datetime).format() },
+        { property: 'article:published_time', content: moment.unix(this.event.start_datetime).format() },
+        { property: 'article:section', content: 'event'},
+        { property: 'twitter:card', content: 'summary'},
+        { property: 'twitter:title', content: this.event.title },
+        { property: 'twitter:image', content: `${this.settings.baseurl}${this.imgPath}` },
+        { property: 'twitter:description', content: this.event.description.replace("\n",'').slice(0, 100) }
       ],
       link: [
+        { rel: 'image_src', href: `${this.settings.baseurl}/${this.imgPath}` },
         { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' },
         ...tags_feed,
         place_feed

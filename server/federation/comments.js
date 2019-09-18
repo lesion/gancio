@@ -8,8 +8,6 @@ module.exports = {
     // search for related event
     const inReplyTo = body.object.inReplyTo
     const match = inReplyTo.match('.*\/federation\/m\/(.*)')
-    console.error('inReplyTo', inReplyTo)
-    console.error('match', match)
     if (!match || match.length < 2) {
       debug('Comment not found %s', inReplyTo)
       return res.status(404).send('Event not found!')

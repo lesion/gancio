@@ -15,6 +15,8 @@ const Helpers = {
     const urlToIgnore = [
       '/api/v1/instance',
       '/api/meta',
+      '/api/statusnet/version.json',
+      '/api/gnusocial/version.json',
       '/api/statusnet/config.json',
       '/poco',
     ]
@@ -31,7 +33,7 @@ const Helpers = {
     const signer = crypto.createSign('sha256')
     const d = new Date()
     const stringToSign = `(request-target): post ${toUrl.path}\nhost: ${toUrl.hostname}\ndate: ${d.toUTCString()}`
-
+    debug('Sign and send', user.username, to)
     signer.update(stringToSign)
     signer.end()
     const signature = signer.sign(privkey)
@@ -52,13 +54,10 @@ const Helpers = {
 
   async sendEvent (event, user) {
     if (!settings.settings.enable_federation) {
-      console.error(settings.settings)
-      console.error(settings.secretSettings)
-      debug('federation disabled')
+      debug('event not send, federation disabled')
       return
     }
 
-    console.error('dentro sendEvent ', user)
 
     // event is sent by user that published it and by the admin instance
     // collect followers from admin and user
@@ -68,23 +67,24 @@ const Helpers = {
       return
     }
 
-    console.error(instanceAdmin.followers)
     let recipients = {}
     instanceAdmin.followers.forEach(follower => {
-      const sharedInbox = follower.user_followers.endpoints.sharedInbox
+      const sharedInbox = follower.object.endpoints.sharedInbox
       if (!recipients[sharedInbox]) recipients[sharedInbox] = []
-      recipients[sharedInbox].push(follower.id)
+      recipients[sharedInbox].push(follower.ap_id)
     })
 
     for(const sharedInbox in recipients) {
-      debug('Notify %s with event %s (from admin user %s) cc => %d', sharedInbox, event.title, instanceAdmin.username, recipients[sharedInbox].length)
+      debug('Notify %s with event %s (from admin %s) cc => %d', sharedInbox, event.title, instanceAdmin.username, recipients[sharedInbox].length)
       const body = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
         type: 'Create',
         to: ['https://www.w3.org/ns/activitystreams#Public'],
-        cc: [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]],
+        // cc: [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]],
+        cc: recipients[sharedInbox],
         actor: `${config.baseurl}/federation/u/${instanceAdmin.username}`,
-        object: event.toAP(instanceAdmin.username, [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]])
+        // object: event.toAP(instanceAdmin.username, [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]])
+        object: event.toAP(instanceAdmin.username, recipients[sharedInbox])
       }
       body['@context'] = 'https://www.w3.org/ns/activitystreams'
       Helpers.signAndSend(body, instanceAdmin, sharedInbox)
@@ -100,24 +100,27 @@ const Helpers = {
       return
     }
 
-
+    debug('Sending to user followers => ', user.username)
+    user = await User.findByPk( user.id, { include: { model: FedUsers, as: 'followers' }})
+    debug('Sending to user followers => ', user.followers.length)
     recipients = {}
     user.followers.forEach(follower => {
       const sharedInbox = follower.object.endpoints.sharedInbox
       if (!recipients[sharedInbox]) recipients[sharedInbox] = []
-      recipients[sharedInbox].push(follower.id)
+      recipients[sharedInbox].push(follower.ap_id)
     })
 
-    debug(recipients)
     for(const sharedInbox in recipients) {
-      debug('Notify %s with event %s (from admin user %s) cc => %d', sharedInbox, event.title, user.username, recipients[sharedInbox].length)
+      debug('Notify %s with event %s (from user %s) cc => %d', sharedInbox, event.title, user.username, recipients[sharedInbox].length)
       const body = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
         type: 'Create',
         to: ['https://www.w3.org/ns/activitystreams#Public'],
-        cc: [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]],
+        // cc: [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]],
+        cc: recipients[sharedInbox],
         actor: `${config.baseurl}/federation/u/${user.username}`,
-        object: event.toAP(user.username, [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]])
+        // object: event.toAP(user.username, [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]])
+        object: event.toAP(user.username, recipients[sharedInbox])
       }
       body['@context'] = 'https://www.w3.org/ns/activitystreams'
       Helpers.signAndSend(body, user, sharedInbox)

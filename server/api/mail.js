@@ -5,7 +5,9 @@ const config = require('config')
 const settings = require('./controller/settings')
 const debug = require('debug')('email')
 
+// TOFIX
 moment.locale('it')
+
 const mail = {
   send (addresses, template, locals) {
     debug(`Send ${template} email to ${addresses}`)
