@@ -57,9 +57,6 @@ module.exports = {
   axios: {
     prefix: '/api'
   },
-  router: {
-    middleware: 'i18n'
-  },
   auth: {
     strategies: {
       local: {
