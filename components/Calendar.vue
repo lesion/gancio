@@ -40,9 +40,9 @@ export default {
   },
   computed: {
     ...mapGetters(['filteredEventsWithPast']),
-    ...mapState(['tags', 'filters']),
+    ...mapState(['tags', 'filters', 'in_past']),
 
-    // TODO: should be better
+    // TODO: could be better
     attributes () {
       const colors = ['green', 'orange', 'yellow', 'teal', 'indigo', 'blue', 'red', 'purple', 'pink', 'grey']
       const tags = take(this.tags, 10).map(t => t.tag)
@@ -51,7 +51,7 @@ export default {
 
       const that = this
       function getColor (event) {
-        const color = { class: event.past && !that.filters.show_past_events ? 'past-event vc-rounded-full' : 'vc-rounded-full', color: 'blue' }
+        const color = { class: event.past && !that.filters.show_past_events && !that.in_past ? 'past-event vc-rounded-full' : 'vc-rounded-full', color: 'blue' }
         const tag = get(event, 'tags[0]')
         if (!tag) { return color }
         const idx = tags.indexOf(tag)

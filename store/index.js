@@ -15,6 +15,7 @@ export const state = () => ({
     recurrent_event_visible: false,
     enable_federation: false
   },
+  in_past: false,
   filters: {
     tags: [],
     places: [],
@@ -135,6 +136,9 @@ export const mutations = {
   },
   setUserLocale (state, user_locale) {
     state.user_locale = user_locale
+  },
+  setPast (state, in_past) {
+    state.in_past = in_past
   }
 }
 
@@ -151,6 +155,9 @@ export const actions = {
     commit('showRecurrentEvents', settings.allow_recurrent_event && settings.recurrent_event_visible)
   },
   async updateEvents ({ commit }, page) {
+    const month = moment().month()
+    const year = moment().year()
+    commit('setPast', page.year<year || page.year===year && page.month<=month )
     const events = await this.$axios.$get(`/event/${page.month - 1}/${page.year}`)
     commit('setEvents', events)
   },

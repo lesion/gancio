@@ -9,7 +9,7 @@
       Calendar
     .row.m-0
 
-      .p-0.col-sm-6.col-lg-4.col-xl-3(v-for='event in filteredEvents')
+      .p-0.col-sm-6.col-lg-4.col-xl-3(v-for='event in events')
         a(:id='event.newDay' v-if='event.newDay')
           .d-block.d-sm-none
             el-divider {{event.start_datetime|day}}
@@ -46,12 +46,12 @@ export default {
     }
   },
   components: { Calendar, Event },
-  data () {
-    return { }
-  },
   computed: {
-    ...mapGetters(['filteredEvents']),
-    ...mapState(['events', 'settings'])
+    events () {
+      return this.in_past ? this.filteredEventsWithPast : this.filteredEvents
+    },
+    ...mapGetters(['filteredEvents', 'filteredEventsWithPast']),
+    ...mapState(['events', 'settings', 'in_past'])
   }
 }
 </script>
