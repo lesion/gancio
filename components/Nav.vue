@@ -71,4 +71,7 @@ export default {
   border-bottom: none;
 }
 
+#logo {
+  height: 30px;
+}
 </style>
