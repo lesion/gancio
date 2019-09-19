@@ -17,7 +17,7 @@ router.use((req, res, next) => {
 // ignore unimplemented ping url from fediverse
 router.use(spamFilter)
 
-router.use('/favicon.ico', express.static(path.resolve(config.favicon || 'assets/favicon.ico')))
+router.use('/favicon.ico', express.static(path.resolve(config.favicon || './assets/favicon.ico')))
 router.use('/media/', express.static(config.upload_path))
 router.get('/feed/:type', exportController.export)
 router.use('/api', api)

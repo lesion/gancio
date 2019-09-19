@@ -51,7 +51,7 @@ export default {
       return this.in_past ? this.filteredEventsWithPast : this.filteredEvents
     },
     ...mapGetters(['filteredEvents', 'filteredEventsWithPast']),
-    ...mapState(['events', 'settings', 'in_past'])
+    ...mapState(['settings', 'in_past'])
   }
 }
 </script>

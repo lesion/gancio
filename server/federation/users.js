@@ -28,8 +28,8 @@ module.exports = {
       }],
       icon: {
         type: 'Image',
-        mediaType: 'image/x-icon',
-        url: config.baseurl + '/favicon.ico'
+        mediaType: 'image/png',
+        url: config.baseurl + '/gancio.png'
       },
       publicKey: {
         id: `${config.baseurl}/federation/u/${name}#main-key`,
