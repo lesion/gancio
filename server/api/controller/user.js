@@ -9,6 +9,8 @@ const mail = require('../mail')
 const { user: User, event: Event, tag: Tag, place: Place, fed_users: FedUsers } = require('../models')
 const settingsController = require('./settings')
 const federation = require('../../federation/helpers')
+const util = require('util')
+const generateKeyPair = util.promisify(crypto.generateKeyPair)
 
 const userController = {
   async login (req, res) {
