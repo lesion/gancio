@@ -104,7 +104,7 @@ module.exports = {
       '@context': 'https://www.w3.org/ns/activitystreams',
       id: `${config.baseurl}/federation/u/${name}/outbox?page=${page}`,
       type: 'OrderedCollectionPage',
-      totalItems: user.followers.length,
+      totalItems: user.events.length,
       partOf: `${config.baseurl}/federation/u/${name}/outbox` ,
       orderedItems: user.events.map(e => ({
         id: `${config.baseurl}/federation/m/${e.id}#create`,

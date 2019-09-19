@@ -11,8 +11,7 @@ const debug = require('debug')('webfinger')
 router.use(cors())
 
 router.get('/webfinger', async (req, res) => {
-  const resource = req.query.resource
-  if (!resource || !resource.includes('acct:')) {
+  if (!req.query || !req.query.resource || !req.query.resource.includes('acct:')) {
     debug('Bad webfinger request => %s', resource.query)
     return res.status(400).send('Bad request. Please make sure "acct:USER@DOMAIN" is what you are sending as the "resource" query parameter.')
   }

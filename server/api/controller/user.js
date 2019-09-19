@@ -235,6 +235,22 @@ const userController = {
 
     if (!req.body.password) { delete req.body.password }
 
+    // generate an rsa key in case not present
+    if (!req.rsa) {
+      const rsa = await generateKeyPair('rsa', {
+        modulusLength: 4096,
+        publicKeyEncoding: {
+          type: 'spki',
+          format: 'pem'
+        },
+        privateKeyEncoding: {
+          type: 'pkcs8',
+          format: 'pem'
+        }
+      })
+      req.body.rsa = rsa
+    }
+
     await user.update(req.body)
 
     if (!user.is_active && req.body.is_active && user.recover_code) {
