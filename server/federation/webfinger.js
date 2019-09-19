@@ -15,6 +15,8 @@ router.get('/webfinger', async (req, res) => {
     debug('Bad webfinger request => %s', resource.query)
     return res.status(400).send('Bad request. Please make sure "acct:USER@DOMAIN" is what you are sending as the "resource" query parameter.')
   }
+
+  const resource = req.query.resource
   const domain = url.parse(config.baseurl).host
   const [, name, req_domain] = resource.match(/acct:(.*)@(.*)/)
 
