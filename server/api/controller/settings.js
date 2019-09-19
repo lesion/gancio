@@ -26,14 +26,14 @@ const settingsController = {
         }
       })
 
-      // initialize user_locale
+      // // initialize user_locale
       if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {
         const user_locale = fs.readdirSync(path.resolve(config.user_locale))
         user_locale.forEach( async f => {
           consola.info(`Loading user locale ${f}`)
           const locale = path.basename(f, '.js')
           settingsController.user_locale[locale] =
-            (await import(path.resolve(config.user_locale, f))).default
+            (await require(path.resolve(config.user_locale, f))).default
         })
       }
 
