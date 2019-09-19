@@ -28,6 +28,7 @@
   },
   "files": [
     "server/",
+    "assets/",
     "nuxt.config.js",
     "static/",
     "views/",
