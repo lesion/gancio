@@ -4,6 +4,7 @@
 config/development.json
 gancio_config.json
 config.json
+db.sqlite
 
 ### Node template
 # Logs
