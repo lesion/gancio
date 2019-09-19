@@ -238,7 +238,7 @@ const userController = {
     if (!req.body.password) { delete req.body.password }
 
     // generate an rsa key in case not present
-    if (!req.rsa) {
+    if (!user.rsa) {
       const rsa = await generateKeyPair('rsa', {
         modulusLength: 4096,
         publicKeyEncoding: {
