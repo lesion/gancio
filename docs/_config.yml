@@ -34,7 +34,11 @@ search_enabled: true
 
 aux_links:
   "Source":
-     - https://framagit.org/les/gancio
+    - https://framagit.org/les/gancio
+  "Forum":
+    - https://framavox.org/g/hMXTDgtJ/gancio
+
+
 
 
 #Exclude from processing.

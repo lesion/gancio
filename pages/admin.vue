@@ -68,6 +68,8 @@
 
             //- el-form-item(:label="$t('admin.allow_boost_like')")
             //-   el-switch(v-model='allow_comments')
+      //- el-tab-pane.pt-1
+        
 
 </template>
 <script>
