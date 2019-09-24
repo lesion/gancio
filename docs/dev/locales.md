@@ -6,4 +6,4 @@ parent: Hacking
 ---
 
 ### Add a new locale
-watch this commit https://framagit.org/les/gancio/commit/cd95c7eb3b9e4bc4832a7b33d8d79b4fd3cbda2d
+watch [this commit](https://framagit.org/les/gancio/commit/cd95c7eb3b9e4bc4832a7b33d8d79b4fd3cbda2d)

@@ -41,6 +41,7 @@ This probably support unix socket too :D
 ```
 
 - ### Database
+DB configuration, look [here](https://sequelize.org/master/class/lib/sequelize.js~Sequelize.html#instance-constructor-constructor) for options.
 ```json
   "db": {
     "dialect": "sqlite",
@@ -53,6 +54,8 @@ Where to save images
 
 - ### SMTP
 - ### Admin
+Email of administrator. Email from gancio comes from this email.
+
 - ### Favicon
 You could specify another favicon. This is also used as logo (top-left
 corner):   
@@ -108,7 +111,7 @@ user_locale's content.</small>
     "secure": true,
     "host": ""
   },
-  "admin": "",
+  "admin_email": "",
   "secret": "notsosecret"
 }
 ```

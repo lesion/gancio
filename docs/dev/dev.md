@@ -33,3 +33,5 @@ yarn
 ```bash
 yarn dev
 ```
+
+Please use the [issue board](https://framagit.org/les/gancio/-/boards) and the [forum](https://framavox.org/g/hMXTDgtJ/gancio) to discuss any modification.

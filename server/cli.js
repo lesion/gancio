@@ -33,7 +33,10 @@ async function setupQuestionnaire(is_docker, db) {
     message: 'Specify a baseurl for this gancio installation! (eg. http://gancio.cisti.org)',
     name: 'baseurl',
     default: 'http://localhost:13120',
-    validate: notEmpty
+    validate: value => {
+      if (!value) return false
+      return /^https?:\/\//.test(value)
+    }
   })
 
   questions.push({
@@ -134,6 +137,9 @@ async function setupQuestionnaire(is_docker, db) {
   questions.push({
     name: 'admin.email',
     message: `Admin email (a first user with this username will be created)`,
+    default: options => {
+      return options.title.replace(' ', '').toLowerCase() + '@' + options.baseurl
+    },
     validate: notEmpty
   })
   

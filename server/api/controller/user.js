@@ -276,7 +276,7 @@ const userController = {
       const user = await User.create(req.body)
       try {
         mail.send(user.email, 'register', { user, config })
-        mail.send(config.admin, 'admin_register', { user, config })
+        mail.send(config.admin_email, 'admin_register', { user, config })
       } catch (e) {
         return res.status(400).json(e)
       }

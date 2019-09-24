@@ -38,25 +38,25 @@ adduser gancio
 su gancio
 ```
 
-1. Test & launch interactive setup
+1. Launch interactive setup
 ```bash
-gancio --help
 gancio setup --config config.json
 ```
 
 1. Start
 ```bash
-gancio --help
 gancio start --config config.json
 ```
 1. Point your web browser to [http://localhost:13120](http://localhost:13120) or where you selected during setup.
 
 1. [Setup nginx as a proxy](/install/nginx)
 
-1. Deploy in production  
-If you don't use the [docker way](/install/docker), in production you should use something like **[pm2](http://pm2.keymetrics.io/)**:
+1. To deploy gancio in production you should use something like **[pm2](http://pm2.keymetrics.io/)**:
 
 ```bash
 sudo yarn global add pm2
-pm2 gancio start --config config.json
+pm2 start gancio -- --config config.json
+
+# Run this command to run your application as a service:
+sudo env PATH=$PATH:/usr/local/bin pm2 startup -u gancio
 ```

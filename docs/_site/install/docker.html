@@ -275,61 +275,92 @@
           
         
         <div id="main-content" class="page-content" role="main">
-          <h2 id="install-with-docker">Install with docker</h2>
+          <h2 class="no_toc text-delta" id="table-of-contents">Table of contents</h2>
+
+<ol id="markdown-toc">
+  <li><a href="#initial-setup" id="markdown-toc-initial-setup">Initial setup</a></li>
+  <li><a href="#use-sqlite" id="markdown-toc-use-sqlite">Use sqlite</a></li>
+  <li><a href="#use-postgresql" id="markdown-toc-use-postgresql">Use postgreSQL</a></li>
+  <li><a href="#start-gancio" id="markdown-toc-start-gancio">Start gancio</a></li>
+</ol>
+
+<h2 id="initial-setup">Initial setup</h2>
 <p><strong>You do not need to clone the full repo as we distribute gancio via npm.</strong><br>
 A <a href="https://framagit.org/les/gancio/raw/docker/docker/Dockerfile">Dockerfile</a> and a docker-compose.yml are the only files needed.</p>
 
-<ol>
-  <li>Create a directory where everything related to gancio is stored (db, images, config)
+<ul>
+  <li>
+<strong>Create a directory where everything related to gancio is stored (db, images, config)</strong>
     <div class="language-bash highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> /opt/gancio
 <span class="nb">cd</span> /opt/gancio
 </code></pre></div>    </div>
-    <p><img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <small>you can choose a different directory.</small></p>
+    <p><small>note that you can choose a different directory.</small></p>
   </li>
-</ol>
+</ul>
 
-<h3 id="using-postgresql">Using postgreSQL</h3>
-<ol>
-  <li>Download docker-compose.yml and Dockerfile
-    <div class="language-bash highlighter-rouge">
+<h2 id="use-sqlite">Use sqlite</h2>
+<div class="code-example bg-grey-lt-100">
+  <ol>
+    <li>
+<strong>Download docker-compose.yml and Dockerfile</strong>
+      <div class="language-bash highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>wget https://framagit.org/les/gancio/raw/master/docker/Dockerfile
-wget https://framagit.org/les/gancio/raw/master/docker/docker-compose.postgresql.yml <span class="nt">-O</span> docker.compose.yml
-</code></pre></div>    </div>
-  </li>
-  <li>Create an empty configiguration (<strong>this is needed</strong>)
-    <div class="highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>touch config.json
-</code></pre></div>    </div>
-  </li>
-</ol>
-
-<h3 id="using-sqlite">Using sqlite</h3>
-<ol>
-  <li>Download docker-compose.yml and Dockerfile
-    <div class="language-bash highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>wget https://framagit.org/les/gancio/raw/master/docker/Dockerfile
-wget https://framagit.org/les/gancio/raw/master/docker/docker-compose.sqlite.yml <span class="nt">-O</span> docker-compose.yml
-</code></pre></div>    </div>
-  </li>
-  <li>Create an empty db and config (<strong>this is needed</strong>)
-    <div class="highlighter-rouge">
+wget https://framagit.org/les/gancio/raw/master/docker/docker-compose.sqlite.yml <span class="se">\</span>
+      <span class="nt">-O</span> docker-compose.yml
+</code></pre></div>      </div>
+    </li>
+    <li>Create an empty db and config (<strong>this is needed</strong>)
+      <div class="highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>touch config.json db.sqlite
-</code></pre></div>    </div>
-  </li>
-</ol>
+mkdir user_locale
+</code></pre></div>      </div>
+    </li>
+    <li>Build docker image and launch interactive setup in one step
+      <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>docker-compose run --rm gancio gancio setup --docker --db=sqlite
+</code></pre></div>      </div>
+    </li>
+  </ol>
+</div>
 
-<h3 id="finish">Finish</h3>
+<h2 id="use-postgresql">Use postgreSQL</h2>
+<div class="code-example bg-grey-lt-100">
+
+  <ol>
+    <li>
+<strong>Download docker-compose.yml and Dockerfile</strong>
+      <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>wget https://framagit.org/les/gancio/raw/master/docker/Dockerfile
+wget https://framagit.org/les/gancio/raw/master/docker/docker-compose.postgresql.yml <span class="se">\ </span>
+ <span class="nt">-O</span> docker.compose.yml
+</code></pre></div>      </div>
+    </li>
+    <li>Create an empty configuration (<strong>this is needed</strong>)
+      <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>touch config.json
+mkdir user_locale
+</code></pre></div>      </div>
+    </li>
+    <li>Build docker image and launch interactive setup in one step
+      <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>docker-compose run --rm gancio gancio setup --docker --db=postgresql
+</code></pre></div>      </div>
+    </li>
+  </ol>
+</div>
+
+<h2 id="start-gancio">Start gancio</h2>
 
 <ol>
-  <li>Build docker image and launch interactive setup in one step
-    <div class="highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>docker-compose run --rm gancio gancio setup --docker
-</code></pre></div>    </div>
-  </li>
   <li>Run your container
     <div class="language-bash highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>docker-compose up <span class="nt">-d</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Look at logs with
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>docker-compose logs
 </code></pre></div>    </div>
   </li>
   <li>

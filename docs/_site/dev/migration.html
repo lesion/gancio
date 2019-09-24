@@ -274,15 +274,8 @@
           
         
         <div id="main-content" class="page-content" role="main">
-          <h3 id="migration">Migration</h3>
-<p>If you need to modify the db’s structure while hacking, it’s super easy,
-just change <code class="highlighter-rouge">server/api/models/</code>.</p>
-
-<p>If you then decide that your changes are good for production, a
-sequelize migration is needed:</p>
-
-<h4 id="create-a-migration">Create a migration:</h4>
-<p><code class="highlighter-rouge">./node_modules/.bin/sequelize migration:generate --name your_migration</code></p>
+          <p>If you need to modify the db’s structure while hacking, just change <code class="highlighter-rouge">server/api/models/</code> and 
+remember to create a migration, to understand how things works <a href="https://sequelize.org/master/manual/migrations.html">check the sequelize documentation</a></p>
 
 
 

@@ -21,6 +21,18 @@ A shared agenda for local communities.
 [![assets/thumbs/admin_users.png](assets/thumbs/admin_users.png)](assets/admin_users.png){: data-fancybox="group" data-caption="Admin interface"}
 
 
+## Features
+- Very easy UI
+- User registration (you can follow them from fediverse personally or follow the whole instance with a special user)
+- Support anonymous event (admin confirmation needed)
+- Multidays events support (festival, conferences...)
+- Recurrent events support (each monday, each two monday, each monday and friday, each first of month, each first monday of month, etc..)
+- Filters events for tags or places
+- RSS and ICS export (with filters)
+- embeddable iframe ([example](https://gancio.cisti.org/embed/list?title=Upcoming events))
+- boost / bookmark / comment events from mastodon!
+- Lot of configurations available (user registration open/close, enable AP federation, enable recurrent events)
+
 ### About the project
 
 Gancio is made with :heart: by [hacklab underscore](https://autistici.org/underscore)

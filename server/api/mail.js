@@ -22,7 +22,7 @@ const mail = {
         }
       },
       message: {
-        from: `${config.title} <${config.admin}>`
+        from: `${config.title} <${config.admin_email}>`
       },
       send: true,
       i18n: {

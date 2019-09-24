@@ -61,9 +61,9 @@ const Helpers = {
 
     // event is sent by user that published it and by the admin instance
     // collect followers from admin and user
-    const instanceAdmin = await User.findOne({ where: { email: config.admin }, include: { model: FedUsers, as: 'followers'  } })
+    const instanceAdmin = await User.findOne({ where: { email: config.admin_email }, include: { model: FedUsers, as: 'followers'  } })
     if (!instanceAdmin || !instanceAdmin.username) {
-      debug('Instance admin not found (there is no user with email => %s)', config.admin)
+      debug('Instance admin not found (there is no user with email => %s)', config.admin_email)
       return
     }
 

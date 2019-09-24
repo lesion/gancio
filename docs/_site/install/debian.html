@@ -304,14 +304,12 @@ su postgres <span class="nt">-c</span> psql
 su gancio
 </code></pre></div>    </div>
   </li>
-  <li>Test &amp; launch interactive setup
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gancio <span class="nt">--help</span>
-gancio setup <span class="nt">--config</span> config.json
+  <li>Launch interactive setup
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gancio setup <span class="nt">--config</span> config.json
 </code></pre></div>    </div>
   </li>
   <li>Start
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gancio <span class="nt">--help</span>
-gancio start <span class="nt">--config</span> config.json
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gancio start <span class="nt">--config</span> config.json
 </code></pre></div>    </div>
   </li>
   <li>
@@ -320,12 +318,14 @@ gancio start <span class="nt">--config</span> config.json
   <li>
     <p><a href="/install/nginx">Setup nginx as a proxy</a></p>
   </li>
-  <li>Deploy in production<br />
-If you don’t use the <a href="/install/docker">docker way</a>, in production you should use something like <strong><a href="http://pm2.keymetrics.io/">pm2</a></strong>:</li>
+  <li>To deploy gancio in production you should use something like <strong><a href="http://pm2.keymetrics.io/">pm2</a></strong>:</li>
 </ol>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>yarn global add pm2
-pm2 gancio start <span class="nt">--config</span> config.json
+pm2 start gancio <span class="nt">--</span> <span class="nt">--config</span> config.json
+
+<span class="c"># Run this command to run your application as a service:</span>
+<span class="nb">sudo env </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/local/bin pm2 startup <span class="nt">-u</span> gancio
 </code></pre></div></div>
 
 
