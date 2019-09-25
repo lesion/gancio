@@ -60,7 +60,7 @@ mkdir user_locale
 1. Build docker image and launch interactive setup in one step
 ```
 docker-compose build
-docker-compose run --rm gancio gancio setup --docker --db=postgresql
+docker-compose run --rm gancio gancio setup --docker --db=postgres
 ```
 </div>
 
