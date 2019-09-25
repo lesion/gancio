@@ -16,9 +16,10 @@ const debug = require('debug')('federation')
  */
 
 router.use((req, res, next) => {
-  if(settingsController.settings.enable_federation) next()
+  if(settingsController.settings.enable_federation) return next()
   debug('Federation disabled!')
-  return res.status(401).send('Federation disabled')
+  res.status(401).send('Federation disabled')
+  next(false)
 })
 
 router.use(cors())

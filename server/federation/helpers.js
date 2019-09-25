@@ -79,8 +79,8 @@ const Helpers = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
         type: 'Create',
         to: ['https://www.w3.org/ns/activitystreams#Public'],
-        // cc: [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]],
-        cc: recipients[sharedInbox],
+        cc: [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]],
+        //cc: recipients[sharedInbox],
         actor: `${config.baseurl}/federation/u/${instanceAdmin.username}`,
         // object: event.toAP(instanceAdmin.username, [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]])
         object: event.toAP(instanceAdmin.username, recipients[sharedInbox])
@@ -115,8 +115,8 @@ const Helpers = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
         type: 'Create',
         to: ['https://www.w3.org/ns/activitystreams#Public'],
-        // cc: [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]],
-        cc: recipients[sharedInbox],
+        cc: [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]],
+        //cc: recipients[sharedInbox],
         actor: `${config.baseurl}/federation/u/${user.username}`,
         // object: event.toAP(user.username, [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]])
         object: event.toAP(user.username, recipients[sharedInbox])
