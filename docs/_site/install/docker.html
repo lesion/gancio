@@ -286,7 +286,7 @@
 
 <h2 id="initial-setup">Initial setup</h2>
 <p><strong>You do not need to clone the full repo as we distribute gancio via npm.</strong><br>
-A <a href="https://framagit.org/les/gancio/raw/docker/docker/Dockerfile">Dockerfile</a> and a docker-compose.yml are the only files needed.</p>
+A Dockerfile and a docker-compose.yml are the only files needed.</p>
 
 <ul>
   <li>
@@ -305,9 +305,8 @@ A <a href="https://framagit.org/les/gancio/raw/docker/docker/Dockerfile">Dockerf
     <li>
 <strong>Download docker-compose.yml and Dockerfile</strong>
       <div class="language-bash highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>wget https://framagit.org/les/gancio/raw/master/docker/Dockerfile
-wget https://framagit.org/les/gancio/raw/master/docker/docker-compose.sqlite.yml <span class="se">\</span>
-      <span class="nt">-O</span> docker-compose.yml
+<div class="highlight"><pre class="highlight"><code>wget https://gancio.org/docker/Dockerfile
+wget https://gancio.org/docker/sqlite/docker-compose.yml
 </code></pre></div>      </div>
     </li>
     <li>Create an empty db and config (<strong>this is needed</strong>)
@@ -318,7 +317,8 @@ mkdir user_locale
     </li>
     <li>Build docker image and launch interactive setup in one step
       <div class="highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>docker-compose run --rm gancio gancio setup --docker --db=sqlite
+<div class="highlight"><pre class="highlight"><code>docker-compose build
+docker-compose run --rm gancio gancio setup --docker --db=sqlite
 </code></pre></div>      </div>
     </li>
   </ol>
@@ -331,9 +331,8 @@ mkdir user_locale
     <li>
 <strong>Download docker-compose.yml and Dockerfile</strong>
       <div class="language-bash highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>wget https://framagit.org/les/gancio/raw/master/docker/Dockerfile
-wget https://framagit.org/les/gancio/raw/master/docker/docker-compose.postgresql.yml <span class="se">\ </span>
- <span class="nt">-O</span> docker.compose.yml
+<div class="highlight"><pre class="highlight"><code>wget https://gancio.org/docker/Dockerfile
+wget https://gancio.org/docker/sqlite/docker-compose.yml
 </code></pre></div>      </div>
     </li>
     <li>Create an empty configuration (<strong>this is needed</strong>)
@@ -344,7 +343,8 @@ mkdir user_locale
     </li>
     <li>Build docker image and launch interactive setup in one step
       <div class="highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>docker-compose run --rm gancio gancio setup --docker --db=postgresql
+<div class="highlight"><pre class="highlight"><code>docker-compose build
+docker-compose run --rm gancio gancio setup --docker --db=postgresql
 </code></pre></div>      </div>
     </li>
   </ol>

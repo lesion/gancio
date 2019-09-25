@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: postgres
+    volumes:
+      - db:/var/lib/postgres
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - POSTGRES_USER=gancio
+      - POSTGRES_DB=gancio
+      - POSTGRES_PASSWORD=gancio
+    restart: always
+    ports:
+        - 5432:5432
+  gancio:
+    build: .
+    image: node:latest
+    container_name: gancio
+    restart: always
+    command: gancio start --docker --db=postgresql
+    volumes:
+      - ./config.json:/opt/gancio/config.json
+      - ./uploads:/opt/gancio/uploads
+    depends_on:
+        - db
+    ports:
+      - "localhost:13120:13120"
