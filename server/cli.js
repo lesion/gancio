@@ -65,7 +65,7 @@ async function setupQuestionnaire(is_docker, db) {
     message: 'sqlite db path',
     default: is_docker ? '/opt/gancio/db.sqlite' : './db.sqlite',
     filter: p => path.resolve(cwd, p),
-    when: answers => (db && db==='sqlite') || (answers.db && answers.db.dialect === 'sqlite'),
+    when: answers => ((db && db==='sqlite') || (answers.db && answers.db.dialect === 'sqlite')) && !is_docker,
     validate: db_path => db_path.length>0 && fs.existsSync(path.dirname(db_path))
   })
 
@@ -73,7 +73,7 @@ async function setupQuestionnaire(is_docker, db) {
     name: 'db.host',
     message: 'Postgres host',
     default: is_docker ? 'db' : 'localhost',
-    when: answers => (db && db==='postgresql') || (answers.db && answers.db.dialect === 'postgres'),
+    when: answers => ((db && db==='postgresql') || (answers.db && answers.db.dialect === 'postgres')) && !is_docker,
     validate: notEmpty
   })
 

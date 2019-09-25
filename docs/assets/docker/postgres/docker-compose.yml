@@ -18,6 +18,7 @@ services:
     build: .
     image: node:latest
     container_name: gancio
+    restart: always
     command: gancio start --docker --db=postgresql
     volumes:
       - ./config.json:/opt/gancio/config.json
@@ -25,7 +26,4 @@ services:
     depends_on:
         - db
     ports:
-      - 13120:13120
-volumes:
-    db:
-    gancio:
+      - "localhost:13120:13120"

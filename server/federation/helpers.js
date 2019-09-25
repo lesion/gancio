@@ -6,7 +6,7 @@ const httpSignature = require('http-signature')
 const debug = require('debug')('federation:helpers')
 const { user: User, fed_users: FedUsers } = require('../api/models')
 const url = require('url')
-const settings = require('../api/controller/settings')
+const settingsController = require('../api/controller/settings')
 
 const Helpers = {
 
@@ -53,11 +53,10 @@ const Helpers = {
   },
 
   async sendEvent (event, user) {
-    if (!settings.settings.enable_federation) {
+    if (!settingsController.settings.enable_federation) {
       debug('event not send, federation disabled')
       return
     }
-
 
     // event is sent by user that published it and by the admin instance
     // collect followers from admin and user
@@ -128,15 +127,6 @@ const Helpers = {
 
   },
 
-  // DO NOT USE THIS! (why is this needed btw?)
-  // async getFederatedUser (address) {
-  //   address = address.trim()
-  //   const [ username, host ] = address.split('@')
-  //   const url = `https://${host}/.well-known/webfinger?resource=acct:${username}@${host}`
-  //   return Helpers.getActor(url)
-  // },
-
-  // TODO: cache
   async getActor (url, force = false) {
     let fedi_user
     

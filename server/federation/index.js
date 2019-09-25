@@ -4,6 +4,7 @@ const cors = require('cors')
 const Follows = require('./follows')
 const Users = require('./users')
 const { event: Event, user: User, tag: Tag, place: Place } = require('../api/models')
+const settingsController = require('../api/controller/settings')
 const Comments = require('./comments')
 const Helpers = require('./helpers')
 const Ego = require('./ego')
@@ -14,6 +15,11 @@ const debug = require('debug')('federation')
  * ref: https://www.w3.org/TR/activitypub/#Overview
  */
 
+router.use((req, res, next) => {
+  if(settingsController.settings.enable_federation) next()
+  debug('Federation disabled!')
+  return res.status(401).send('Federation disabled')
+})
 
 router.use(cors())
 router.use(express.json({ type: ['application/json', 'application/activity+json', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'] }))

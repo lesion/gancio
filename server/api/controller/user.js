@@ -11,6 +11,7 @@ const settingsController = require('./settings')
 const federation = require('../../federation/helpers')
 const util = require('util')
 const generateKeyPair = util.promisify(crypto.generateKeyPair)
+const debug = require('debug')('user:controller')
 
 const userController = {
   async login (req, res) {
@@ -236,22 +237,6 @@ const userController = {
     req.body.username = user.username ? user.username : req.body.username
 
     if (!req.body.password) { delete req.body.password }
-
-    // generate an rsa key in case not present
-    if (!user.rsa) {
-      const rsa = await generateKeyPair('rsa', {
-        modulusLength: 4096,
-        publicKeyEncoding: {
-          type: 'spki',
-          format: 'pem'
-        },
-        privateKeyEncoding: {
-          type: 'pkcs8',
-          format: 'pem'
-        }
-      })
-      req.body.rsa = rsa
-    }
 
     await user.update(req.body)
 

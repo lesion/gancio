@@ -3,15 +3,15 @@ version: '3'
 services:
   gancio:
     build: .
+    restart: always
     image: node:latest
     container_name: gancio
     command: gancio start --docker --db=sqlite
+    environment:
+      - DEBUG
     volumes:
       - ./db.sqlite:/opt/gancio/db.sqlite
       - ./config.json:/opt/gancio/config.json
       - ./uploads:/opt/gancio/uploads
     ports:
-      - 13120:13120
-volumes:
-    db:
-    gancio:
+      - "127.0.0.1:13120:13120"
