@@ -9,6 +9,7 @@ const package = require('../package.json')
 const firstrun = require('./firstrun')
 const path = require('path')
 const mkdirp = require('mkdirp')
+const url = require('url')
 
 const cwd = process.cwd()
 
@@ -39,106 +40,105 @@ async function setupQuestionnaire(is_docker, db) {
     }
   })
 
-  questions.push({
-    name: 'server.host',
-    message: 'address to listen to',
-    default: is_docker ? '0.0.0.0' : 'localhost',
-    validate: notEmpty
-  })
+  if (!is_docker) {
+    questions.push({
+      name: 'server.host',
+      message: 'address to listen to',
+      default: 'localhost',
+      validate: notEmpty
+    })
 
-  questions.push({
-    name: 'server.port',
-    message: 'port to listen to',
-    default: 13120,
-  })
+    questions.push({
+      name: 'server.port',
+      message: 'port to listen to',
+      default: 13120,
+    })
 
-  questions.push({
-    name: 'db.dialect',
-    message: 'DB dialect',
-    type: 'list',
-    when: answers => !db,
-    choices: ['sqlite', 'postgres']
-  })
+    questions.push({
+      name: 'db.dialect',
+      message: 'DB dialect',
+      type: 'list',
+      choices: ['sqlite', 'postgres']
+    })
 
-  questions.push({
-    name: 'db.storage',
-    message: 'sqlite db path',
-    default: is_docker ? '/opt/gancio/db.sqlite' : './db.sqlite',
-    filter: p => path.resolve(cwd, p),
-    when: answers => ((db && db==='sqlite') || (answers.db && answers.db.dialect === 'sqlite')) && !is_docker,
-    validate: db_path => db_path.length>0 && fs.existsSync(path.dirname(db_path))
-  })
+    questions.push({
+      name: 'db.storage',
+      message: 'sqlite db path',
+      default: './db.sqlite',
+      filter: p => path.resolve(cwd, p),
+      when: answers => answers.db.dialect === 'sqlite',
+      validate: db_path => db_path.length>0 && fs.existsSync(path.dirname(db_path))
+    })
 
-  questions.push({
-    name: 'db.host',
-    message: 'Postgres host',
-    default: is_docker ? 'db' : 'localhost',
-    when: answers => ((db && db==='postgresql') || (answers.db && answers.db.dialect === 'postgres')) && !is_docker,
-    validate: notEmpty
-  })
+    questions.push({
+      name: 'db.host',
+      message: 'Postgres host',
+      default: 'localhost',
+      when: answers => answers.db.dialect === 'postgres',
+      validate: notEmpty
+    })
 
-  questions.push({
-    name: 'db.database',
-    message: 'DB name',
-    default: 'gancio',
-    when: answers => (db && db==='postgresql') || (answers.db && answers.db.dialect === 'postgres'),
-    validate: notEmpty
-  })
+    questions.push({
+      name: 'db.database',
+      message: 'DB name',
+      default: 'gancio',
+      when: answers => answers.db.dialect === 'postgres',
+      validate: notEmpty
+    })
+      
+    questions.push({
+      name: 'db.username',
+      message: 'DB user',
+      default: 'gancio',
+      when: answers => answers.db.dialect === 'postgres',
+      validate: notEmpty
+    })
     
-  questions.push({
-    name: 'db.username',
-    message: 'DB user',
-    default: 'gancio',
-    when: answers => (db && db==='postgresql') || (answers.db && answers.db.dialect === 'postgres'),
-    validate: notEmpty
-  })
-  
-  questions.push({
-    name: 'db.password',
-    type: 'password',
-    message: 'DB password',
-    default: 'gancio',
-    when: answers => (db && db==='postgresql') || (answers.db && answers.db.dialect === 'postgres'),
-    validate: async (password, options) => {
-      try {
-        const db = new sequelize({ ...options.db, dialect: 'postgres' , password, logging: false })
-        return db.authenticate().then( () => {
-          db.close()
-          return true
-        })
-      } catch(e) {
-        consola.error(e)
-        return false
-      }
-    }
-  })
-
-  questions.push({
-    name: 'upload_path',
-    message: 'Where gancio has to store media?',
-    default: is_docker ? '/opt/gancio/uploads' : './uploads',
-    when: answers => !is_docker,
-    filter: p => path.resolve(cwd, p),
-    validate: async p => {
-      let exists =  fs.existsSync(p)
-      if (!exists) {
-        consola.warn(`"${p}" does not exists, trying to create it`)
+    questions.push({
+      name: 'db.password',
+      type: 'password',
+      message: 'DB password',
+      default: 'gancio',
+      when: answers => answers.db.dialect === 'postgres',
+      validate: async (password, options) => {
         try {
-          mkdirp.sync(p)
+          const db = new sequelize({ ...options.db, dialect: 'postgres' , password, logging: false })
+          return db.authenticate().then( () => {
+            db.close()
+            return true
+          })
         } catch(e) {
-          console.error(String(e))
+          consola.error(e)
           return false
         }
       }
-      return true
-    }
-  })
+    })
 
+    questions.push({
+      name: 'upload_path',
+      message: 'Where gancio has to store media?',
+      default: './uploads',
+      filter: p => path.resolve(cwd, p),
+      validate: async p => {
+        let exists =  fs.existsSync(p)
+        if (!exists) {
+          consola.warn(`"${p}" does not exists, trying to create it`)
+          try {
+            mkdirp.sync(p)
+          } catch(e) {
+            console.error(String(e))
+            return false
+          }
+        }
+        return true
+      }
+    })
+  }
   questions.push({
     name: 'admin.email',
     message: `Admin email (a first user with this username will be created)`,
     default: options => {
-      return options.title.replace(' ', '').toLowerCase() + '@' + options.baseurl
+      return options.title.replace(' ', '').toLowerCase() + '@' + url.parse(options.baseurl, true).hostname
     },
     validate: notEmpty
   })
@@ -160,7 +160,7 @@ async function setupQuestionnaire(is_docker, db) {
     name: 'smtp.auth.user',
     message: 'SMTP User',
     validate: notEmpty,
-    default: options => options.admin.email
+    default: answers => answers.admin.email
   })
 
   questions.push({
@@ -171,6 +171,17 @@ async function setupQuestionnaire(is_docker, db) {
   })
 
   const answers = await inquirer.prompt(questions)
+  if (is_docker) {
+    answers.server = { host: '0.0.0.0', port: 13120 }
+    answers.upload_path = '/opt/gancio/uploads'
+    if(db === 'sqlite') {
+      answers.db = { dialect: db, storage: '/opt/gancio/db.sqlite' }
+    } else {
+      answers.db = { dialect: db, host: 'db', database: 'gancio',
+        username: 'gancio', password: 'gancio'}
+    }
+  }
+
   return answers
 }
 
@@ -198,10 +209,10 @@ async function start (options) {
   // is first run?
   if (firstrun.check(options.config)) {
     if (options.docker) {
-      consola.error('Something goes wrong, did you run "docker-compose run --rm gancio gancio setup"')
+      consola.error('⚠ ️ Something goes wrong, did you run "docker-compose run --rm gancio gancio setup"')
       process.exit(-1)
     }
-    consola.error(`Configuration file "${options.config}" not found! Use "--config <CONFIG_FILE.json>" to specify another path.
+    consola.error(` ⚠ Configuration file "${options.config}" not found! Use "--config <CONFIG_FILE.json>" to specify another path.
 If this is your first run use 'gancio setup --config <CONFIG_FILE.json>' `)
     process.exit(-1)
   }

@@ -5,10 +5,17 @@ const basename = path.basename(__filename)
 const config = require('config')
 const consola = require('consola')
 const db = {}
+let sequelize = null
 
-const sequelize = new Sequelize(config.db)
+try {
+  sequelize = new Sequelize(config.db)
+} catch(e) {
+  consola.warn(` ⚠️ Cannot connect to db, check your configuration => ${e}`)
+  process.exit(-1)
+}
+
 sequelize.authenticate().catch(e => {
-  consola.error('Error connecting to DB: ', String(e))
+  consola.error(' ⚠ Error connecting to DB: ', String(e))
   process.exit(-1)
 })
 
