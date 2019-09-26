@@ -19,7 +19,7 @@ services:
     image: node:latest
     container_name: gancio
     restart: always
-    command: gancio start --docker --db=postgresql
+    command: gancio start --docker --db=postgres
     volumes:
       - ./config.json:/opt/gancio/config.json
       - ./uploads:/opt/gancio/uploads

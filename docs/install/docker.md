@@ -48,7 +48,7 @@ docker-compose run --rm gancio gancio setup --docker --db=sqlite
 1. **Download docker-compose.yml and Dockerfile**
 ```bash
 wget https://gancio.org/docker/Dockerfile
-wget https://gancio.org/docker/sqlite/docker-compose.yml
+wget https://gancio.org/docker/postgres/docker-compose.yml
 ```
 
 1. Create an empty configuration (**this is needed**)
