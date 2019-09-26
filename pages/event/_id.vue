@@ -44,7 +44,7 @@
         small.float-right 🔖 {{event.likes.length}}
         small.float-right.mr-3 ✊ {{event.boost.length}}<br/>
         strong {{$tc('common.comments', event.comments.length)}} -
-        <small>{{$t('event.interact_with_me_at')}} <u>{{event.user && event.user.username}}@{{settings.baseurl|url2host}}</u></small>
+        <small>{{$t('event.interact_with_me_at')}} <u>{{fedi_user}}@{{settings.baseurl|url2host}}</u></small>
 
         .card-header(v-for='comment in event.comments' :key='comment.id')
           a.float-right(:href='comment.data.url')
@@ -133,6 +133,10 @@ export default {
   computed: {
     ...mapGetters(['filteredEvents']),
     ...mapState(['settings']),
+    fedi_user () {
+      // TODO:
+      return this.settings.fedi_admin
+    },
     next () {
       let found = false
       const event = this.filteredEvents.find(e => {

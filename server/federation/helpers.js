@@ -85,10 +85,15 @@ const Helpers = {
         // object: event.toAP(instanceAdmin.username, [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]])
         object: event.toAP(instanceAdmin.username, recipients[sharedInbox])
       }
-      body['@context'] = 'https://www.w3.org/ns/activitystreams'
+      body['@context'] = [
+        'https://www.w3.org/ns/activitystreams',
+        'https://w3id.org/security/v1',
+        { Hashtag: 'as:Hashtag' } ]
       Helpers.signAndSend(body, instanceAdmin, sharedInbox)
     }
 
+    return 
+    // TODO
     // in case the event is published by the Admin itself do not add user
     if (instanceAdmin.id === user.id) {
       debug('Event published by instance Admin')

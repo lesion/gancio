@@ -38,7 +38,8 @@ module.exports = (sequelize, DataTypes) => {
 
   //
   event.prototype.toAP = function (username, follower = []) {
-    const tags = this.tags && this.tags.map(t => '#' + t.tag).join(' ')
+    const tags = this.tags && this.tags.map(t => `<a href='/tags/${t.tag}' class='mention hashtag' rel='tag'>#${t.tag}</a>`).join(' ')
+
     const content = `<a href='${config.baseurl}/event/${this.id}'>${this.title}</a><br/>
     📍${this.place.name}<br/>
     ⏰ ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/><br/>
@@ -57,13 +58,14 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     return {
-      type: 'Note',
       id: `${config.baseurl}/federation/m/${this.id}`,
       url: `${config.baseurl}/federation/m/${this.id}`,
-      attachment,
+      type: 'Note',
+      // attachment,
       tag: this.tags.map(tag => ({
         type: 'Hashtag',
-        name: '#' + tag.tag
+        name: '#' + tag.tag,
+        href: '/tags/' + tag.tag
       })),
       published: this.createdAt,
       attributedTo: `${config.baseurl}/federation/u/${username}`,
@@ -72,7 +74,12 @@ module.exports = (sequelize, DataTypes) => {
       content,
       summary: null,
       sensitive: false,
-      // }
+      startTime: moment.unix(this.start_datetime),
+      location: {
+        type: 'Place',
+        name: this.place.name,
+        address: this.place.address
+      }
     }
   }
 

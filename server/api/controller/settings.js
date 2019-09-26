@@ -1,4 +1,4 @@
-const { setting: Setting } = require('../models')
+const { setting: Setting, user: User } = require('../models')
 const config = require('config')
 const consola = require('consola')
 const path = require('path')
@@ -25,6 +25,12 @@ const settingsController = {
           settingsController.settings[s.key] = s.value
         }
       })
+
+      // set fediverse admin actor
+      const fedi_admin = await User.findOne({ where: { email: config.admin_email }})
+      if (fedi_admin) {
+        settingsController.settings['fedi_admin'] = fedi_admin.username
+      }
 
       // // initialize user_locale
       if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {

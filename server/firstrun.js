@@ -45,7 +45,7 @@ module.exports = {
     await db.user.create({
       email: admin.email,
       password: admin.password,
-      username: admin.email,
+      username: config.title.toLowerCase().replace(/ /g, ''),
       display_name: config.title,
       is_admin: true,
       is_active: true
