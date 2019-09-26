@@ -82,3 +82,11 @@ docker-compose logs
 1. Point your web browser to [http://localhost:13120](http://localhost:13120) or where you specified during setup and enjoy :tada:
 
 1. You can edit `config.json` file and restart the container on your needs, see [Configuration](/config) for more details.
+
+
+## Upgrade
+
+```bash
+cd /opt/gancio
+docker-compose up -d --no-deps --build
+```
