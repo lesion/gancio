@@ -282,6 +282,7 @@
   <li><a href="#use-sqlite" id="markdown-toc-use-sqlite">Use sqlite</a></li>
   <li><a href="#use-postgresql" id="markdown-toc-use-postgresql">Use postgreSQL</a></li>
   <li><a href="#start-gancio" id="markdown-toc-start-gancio">Start gancio</a></li>
+  <li><a href="#upgrade" id="markdown-toc-upgrade">Upgrade</a></li>
 </ol>
 
 <h2 id="initial-setup">Initial setup</h2>
@@ -371,6 +372,12 @@ docker-compose run --rm gancio gancio setup --docker --db=postgres
   </li>
   <li>You can edit <code class="highlighter-rouge">config.json</code> file and restart the container on your needs, see <a href="/config">Configuration</a> for more details.</li>
 </ol>
+
+<h2 id="upgrade">Upgrade</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> /opt/gancio
+docker-compose up <span class="nt">-d</span> <span class="nt">--no-deps</span> <span class="nt">--build</span>
+</code></pre></div></div>
 
 
           

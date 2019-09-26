@@ -290,7 +290,7 @@ apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">instal
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add gancio <span class="nt">--prod</span>
 </code></pre></div>    </div>
   </li>
-  <li>Setup with postgreSQL (optional as you can choose sqlite)
+  <li>Setup with postgreSQL <strong>(optional as you can choose sqlite)</strong>
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-get <span class="nb">install </span>postgresql
 <span class="c"># Create the database</span>
 su postgres <span class="nt">-c</span> psql
@@ -324,9 +324,17 @@ su gancio
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>yarn global add pm2
 pm2 start gancio <span class="nt">--</span> <span class="nt">--config</span> config.json
 
-<span class="c"># Run this command to run your application as a service:</span>
-<span class="nb">sudo env </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/local/bin pm2 startup <span class="nt">-u</span> gancio
+<span class="c"># Run this command to run your application as a service and automatically restart after a reboot:</span>
+pm2 startup <span class="c"># read the output!</span>
+<span class="nb">sudo </span>pm2 startup <span class="nt">-u</span> gancio
 </code></pre></div></div>
+
+<ol>
+  <li>Upgrade</li>
+</ol>
+
+<p>sudo yarn global add gancio
+sudo service pm2 restart</p>
 
 
           
