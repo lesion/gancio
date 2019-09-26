@@ -29,7 +29,7 @@ module.exports = {
       'actor': `${config.baseurl}/federation/u/${user.username}`,
       'object': body
     }
-    Helpers.signAndSend(message, user, body.actor)
+    Helpers.signAndSend(message, user, req.fedi_user.inbox)
     res.sendStatus(200)
   },
 

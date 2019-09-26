@@ -24,24 +24,24 @@ const Helpers = {
     next()
   },
 
-  async signAndSend (message, user, to) {
+  async signAndSend (message, user, inbox) {
     // get the URI of the actor object and append 'inbox' to it
-    const toUrl = url.parse(to)
+    const inboxUrl = url.parse(inbox)
     // const toPath = toOrigin.path + '/inbox'
     // get the private key
     const privkey = user.rsa.privateKey
     const signer = crypto.createSign('sha256')
     const d = new Date()
-    const stringToSign = `(request-target): post ${toUrl.path}\nhost: ${toUrl.hostname}\ndate: ${d.toUTCString()}`
-    debug('Sign and send', user.username, to)
+    const stringToSign = `(request-target): post ${inboxUrl.path}\nhost: ${inboxUrl.hostname}\ndate: ${d.toUTCString()}`
+    debug('Sign and send', user.username, inbox)
     signer.update(stringToSign)
     signer.end()
     const signature = signer.sign(privkey)
     const signature_b64 = signature.toString('base64')
     const header = `keyId="${config.baseurl}/federation/u/${user.username}",headers="(request-target) host date",signature="${signature_b64}"`
-    const ret = await fetch(to, {
+    const ret = await fetch(inbox, {
       headers: {
-        'Host': toUrl.hostname,
+        'Host': inboxUrl.hostname,
         'Date': d.toUTCString(),
         'Signature': header,
         'Content-Type': 'application/activity+json; charset=utf-8',
