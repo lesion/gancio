@@ -3,3 +3,6 @@ All notable changes to this project will be documented in this file.
 
 [unreleased]
 
+- [fix] image previews from external website
+- [fix] docker-compose postgresql docs
+- [improve] export white logo to fediverse
