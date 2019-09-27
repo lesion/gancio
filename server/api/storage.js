@@ -19,7 +19,7 @@ const DiskStorage = {
     const thumbPath = path.resolve(config.upload_path, 'thumb', filename)
     const outStream = fs.createWriteStream(finalPath)
     const thumbStream = fs.createWriteStream(thumbPath)
-    const resizer = sharp().resize(800).jpeg({ quality: 90 })
+    const resizer = sharp().resize(1200).jpeg({ quality: 95 })
     const thumbnailer = sharp().resize(400).jpeg({ quality: 90 })
 
     file.stream.pipe(thumbnailer).pipe(thumbStream)
