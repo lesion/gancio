@@ -92,7 +92,7 @@ export default {
         { hid: 'og-title', property: 'og:title', content: this.event.title },
         { hid: 'og-url', property: 'og:url', content: `${this.settings.baseurl}/event/${this.event.id}` },
         { property: 'og:type', content: 'event' },
-        { property: 'og:image', content: `${this.settings.baseurl}/${this.imgPath}` },
+        { property: 'og:image', content: `${this.settings.baseurl}${this.imgPath}` },
         { property: 'og:site_name', content: this.settings.title },
         { property: 'og:updated_time', content: moment.unix(this.event.start_datetime).format() },
         { property: 'article:published_time', content: moment.unix(this.event.start_datetime).format() },
@@ -103,7 +103,7 @@ export default {
         { property: 'twitter:description', content: this.event.description.replace("\n",'').slice(0, 100) }
       ],
       link: [
-        { rel: 'image_src', href: `${this.settings.baseurl}/${this.imgPath}` },
+        { rel: 'image_src', href: `${this.settings.baseurl}${this.imgPath}` },
         { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' },
         ...tags_feed,
         place_feed
