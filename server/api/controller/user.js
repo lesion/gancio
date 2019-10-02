@@ -8,9 +8,6 @@ const config = require('config')
 const mail = require('../mail')
 const { user: User, event: Event, tag: Tag, place: Place, fed_users: FedUsers } = require('../models')
 const settingsController = require('./settings')
-const federation = require('../../federation/helpers')
-const util = require('util')
-const generateKeyPair = util.promisify(crypto.generateKeyPair)
 const debug = require('debug')('user:controller')
 
 const userController = {
@@ -56,12 +53,14 @@ const userController = {
         try {
           console.error('media files not removed')
           // TOFIX
-          // await fs.unlink(old_path)
-          // await fs.unlink(old_thumb_path)
+          await fs.unlink(old_thumb_path)
+          await fs.unlink(old_path)
         } catch (e) {
-          console.error(e)
+          debug(e)
         }
       }
+      const notifier = require('../../notifier')
+      await notifier.notifyEvent('Delete', event.id)
       await event.destroy()
       res.sendStatus(200)
     } else {
@@ -75,12 +74,11 @@ const userController = {
 
     const eventDetails = {
       title: body.title,
-      // remove html tag
+      // remove html tags
       description: body.description ? body.description.replace(/(<([^>]+)>)/ig, '') : '',
       multidate: body.multidate,
       start_datetime: body.start_datetime,
       end_datetime: body.end_datetime,
-
       recurrent: body.recurrent,
       // publish this event only if authenticated
       is_visible: !!req.user
@@ -101,8 +99,9 @@ const userController = {
       await event.setPlace(place)
       event.place = place
     } catch (e) {
-      console.error(e)
+      debug(e)
     }
+
     // create/assign tags
     if (body.tags) {
       await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
@@ -112,21 +111,18 @@ const userController = {
       event.tags = tags
     }
 
+    // associate user to event and reverse
     if (req.user) {
       await req.user.addEvent(event)
       await event.setUser(req.user)
     }
 
-    // send response to client
+    // return created event to the client
     res.json(event)
 
-    const user = await User.findByPk(req.user.id, { include: { model: FedUsers, as: 'followers' }})
-    if (user) { federation.sendEvent(event, user) }
-
-    // res.sendStatus(200)
-
-    // send notification (mastodon/email/confirmation)
-    // notifier.notifyEvent(event.id)
+    // send notification (mastodon/email)
+    const notifier = require('../../notifier')
+    notifier.notifyEvent('Create', event.id)
   },
 
   async updateEvent (req, res) {
@@ -167,6 +163,8 @@ const userController = {
     }
     const newEvent = await Event.findByPk(event.id, { include: [Tag, Place] })
     res.json(newEvent)
+    const notifier = require('../../notifier')
+    notifier.notifyEvent('Update', event.id)
   },
 
   async forgotPassword (req, res) {

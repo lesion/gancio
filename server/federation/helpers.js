@@ -52,7 +52,7 @@ const Helpers = {
     debug('sign %s => %s', ret.status, await ret.text())
   },
 
-  async sendEvent (event, user) {
+  async sendEvent (event, user, type='Create') {
     if (!settingsController.settings.enable_federation) {
       debug('event not send, federation disabled')
       return
@@ -77,7 +77,7 @@ const Helpers = {
       debug('Notify %s with event %s (from admin %s) cc => %d', sharedInbox, event.title, instanceAdmin.username, recipients[sharedInbox].length)
       const body = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
-        type: 'Create',
+        type,
         to: ['https://www.w3.org/ns/activitystreams#Public'],
         cc: [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]],
         //cc: recipients[sharedInbox],

@@ -2,17 +2,16 @@ const crypto = require('crypto')
 const moment = require('moment')
 const { Op } = require('sequelize')
 const lodash = require('lodash')
-const { event: Event, comment: Comment, tag: Tag, place: Place, user: User, notification: Notification } = require('../models')
+const { event: Event, comment: Comment, tag: Tag, place: Place, 
+  user: User, notification: Notification, event_notification: EventNotification } = require('../models')
 const Sequelize = require('sequelize')
-const notifier = require('../../notifier')
-const federation = require('../../federation/helpers')
 const debug = require('debug')('controller:event')
 
 const eventController = {
 
-  // NOT USED ANYWHERE, comments are added from fediverse
+  // NOT USED ANYWHERE, comments are added from fediverse, should we remove this?
   async addComment (req, res) {
-    // comment could be added to an event or to another comment
+    // comments could be added to an event or to another comment
     let event = await Event.findOne({ where: { activitypub_id: { [Op.eq]: req.body.id } } })
     if (!event) {
       const comment = await Comment.findOne({ where: { activitypub_id: { [Op.eq]: req.body.id } }, include: Event })
@@ -44,7 +43,8 @@ const eventController = {
     res.json({ tags, places })
   },
 
-  async getNotifications (event) {
+  async getNotifications (event, action) {
+    debug('getNotifications "%s" (%s)', event.title, action)
     function match (event, filters) {
       // matches if no filter specified
       if (!filters) { return true }
@@ -64,10 +64,12 @@ const eventController = {
         }
       }
     }
-    const notifications = await Notification.findAll()
+
+    const notifications = await Notification.findAll({ where: { action }, include: [ Event ] })
 
     // get notification that matches with selected event
-    return notifications.filter(notification => match(event, notification.filters))
+    const ret = notifications.filter(notification => match(event, notification.filters))
+    return ret
   },
 
   async updateTag (req, res) {
@@ -123,8 +125,8 @@ const eventController = {
       res.sendStatus(200)
 
       // send notification
-      // notifier.notifyEvent(event.id)
-      // federation.sendEvent(event, req.user)
+      const notifier = require('../../notifier')
+      notifier.notifyEvent('Create', event.id)
     } catch (e) {
       res.sendStatus(404)
     }

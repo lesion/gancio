@@ -32,7 +32,7 @@ const exportController = {
       },
       include: [ { model: Tag, ...where_tags }, { model: Place, attributes: ['name', 'id', 'address'] }]
     })
-    
+
     switch (type) {
       case 'rss':
       case 'feed':

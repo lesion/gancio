@@ -1,63 +1,54 @@
 const mail = require('./api/mail')
 // const bot = require('./api/controller/fediverse')
-const settingsController = require('./api/controller/settings')
 const config = require('config')
-const eventController = require('./api/controller/event')
-const get = require('lodash/get')
+const debug = require('debug')('notifier')
+const fediverseHelpers = require('./federation/helpers')
 
 const { event: Event, notification: Notification, event_notification: EventNotification,
-  user: User, place: Place, tag: Tag } = require('./api/models')
+  user: User, place: Place, tag: Tag, fed_users: FedUsers } = require('./api/models')
+const eventController = require('./api/controller/event')
 
 const notifier = {
   async sendNotification (notification, event) {
-    return
     const promises = []
+    debug('Send %s notification %s', notification.type, notification.action)
+    let p
     switch (notification.type) {
       case 'mail':
         return mail.send(notification.email, 'event', { event, config, notification })
       case 'admin_email':
-        return mail.send([config.smtp.auth.user, config.admin_email], 'event', { event, to_confirm: !event.is_visible, config, notification })
-      // case 'mastodon':
-      //   // instance publish
-      //   if (bot.bot) {
-      //     const b = bot.post(event).then(b => {
-      //       event.activitypub_id = String(b.data.id)
-      //       return event.save()
-      //     }).catch(e => {
-      //       console.error("ERROR !! ", e)
-      //     })
-      //     promises.push(b)
-      //   }
+        p = mail.send([config.smtp.auth.user, config.admin_email], 'event', { event, to_confirm: !event.is_visible, config, notification })
+        promises.push(p)
+      case 'ap':
+        p = fediverseHelpers.sendEvent(event, event.user, notification.action)
+        promises.push(p)
     }
     return Promise.all(promises)
   },
-  async notifyEvent (eventId) {
-    const event = await Event.findByPk(eventId, {
-      include: [ Tag, Place, User ]
+  async notifyEvent (action, eventId) {
+    let event = await Event.findByPk(eventId, {
+
+      include: [ Tag, Place, Notification, { model: User, include: { model: FedUsers, as: 'followers'}} ]
     })
 
+    debug('%s -> %s', action, event.title)
+    
     // insert notifications
-    const notifications = await eventController.getNotifications(event)
-    const a = await event.setNotifications(notifications)
+    const notifications = await eventController.getNotifications(event, action)
+    await event.addNotifications(notifications)
+    const event_notifications = await event.getNotifications()
 
-    const eventNotifications = await EventNotification.findAll({
-      where: {
-        notificationId: notifications.map(n => n.id),
-        status: 'new'
-      }
-    })
-
-    const promises = eventNotifications.map(async e => {
-      const notification = await Notification.findByPk(e.notificationId)
+    const promises = event_notifications.map(async notification => {
       try {
+        // await notification.event_notification.update({ status: 'sending' })
         await notifier.sendNotification(notification, event)
-        e.status = 'sent'
+        notification.event_notification.status = 'sent'
       } catch (err) {
-        e.status = 'error'
+        debug(err)
+        notification.event_notification.status = 'error'
       }
-      return e.save()
+      return notification.event_notification.save()
     })
-
     return Promise.all(promises)
   },
   async  notify () {
@@ -68,7 +59,7 @@ const notifier = {
       if (!event.place) { return }
       const notification = await Notification.findByPk(e.notificationId)
       try {
-        await sendNotification(notification, event, e)
+        await sendNotification(type, notification, event)
         e.status = 'sent'
         return e.save()
       } catch (err) {

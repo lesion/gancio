@@ -22,7 +22,7 @@ const mail = {
         }
       },
       message: {
-        from: `${config.title} <${config.admin_email}>`
+        from: `📅 ${config.title} <${config.admin_email}>`
       },
       send: true,
       i18n: {
@@ -32,7 +32,7 @@ const mail = {
         updateFiles: false,
         defaultLocale: settings.locale,
         locale: settings.locale,
-        locales: ['it', 'es']
+        locales: ['it', 'es'] // TOFIX
       },
       transport: config.smtp
     })
@@ -44,9 +44,9 @@ const mail = {
       },
       locals: {
         ...locals,
-        locale: 'it',
+        locale: 'it', // TOFIX
         config: { title: config.title, baseurl: config.baseurl, description: config.description },
-        datetime: datetime => moment(datetime).format('ddd, D MMMM HH:mm')
+        datetime: datetime => moment.unix(datetime).utc(false).format('ddd, D MMMM HH:mm')
       }
     }
     return email.send(msg)

@@ -4,13 +4,23 @@ module.exports = (sequelize, DataTypes) => {
     filters: DataTypes.JSON,
     email: DataTypes.STRING,
     remove_code: DataTypes.STRING,
+    action: {
+      type: DataTypes.ENUM,
+      values: ['Create', 'Update', 'Delete']
+    },
     type: {
       type: DataTypes.ENUM,
-      values: ['mail', 'admin_email', 'mastodon']
+      values: ['mail', 'admin_email', 'ap']
     }
-  }, {})
+  }, {
+    indexes: [{
+      unique: true,
+      fields: ['action', 'type']
+    }]
+  })
+
   notification.associate = function (models) {
-    notification.belongsToMany(models.event, { through: models.event_notification })
+    notification.belongsToMany(models.event, { through: 'event_notification' })
     // associations can be defined here
   }
   return notification

@@ -10,5 +10,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {})
 
-  return event_notification
+ return event_notification
 }
