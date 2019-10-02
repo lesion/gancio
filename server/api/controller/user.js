@@ -184,12 +184,7 @@ const userController = {
     if (!recover_code) { return res.sendStatus(400) }
     const user = await User.findOne({ where: { recover_code: { [Op.eq]: recover_code } } })
     if (!user) { return res.sendStatus(400) }
-    try {
-      await user.update({ recover_code: '' })
       res.sendStatus(200)
-    } catch (e) {
-      res.sendStatus(400)
-    }
   },
 
   async updatePasswordWithRecoverCode (req, res) {
@@ -198,10 +193,8 @@ const userController = {
     if (!recover_code || !password) { return res.sendStatus(400) }
     const user = await User.findOne({ where: { recover_code: { [Op.eq]: recover_code } } })
     if (!user) { return res.sendStatus(400) }
-    user.recover_code = ''
-    user.password = password
     try {
-      await user.save()
+      await user.update({ recover_code: '', password })
       res.sendStatus(200)
     } catch (e) {
       res.sendStatus(400)
