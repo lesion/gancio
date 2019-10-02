@@ -17,6 +17,8 @@ services:
   gancio:
     build: .
     image: node:latest
+    environment:
+      - DEBUG=*,-babel,-follow-redirects,-send,-body-parser:*,-express:*,-connect:*,-sequelize:*
     container_name: gancio
     restart: always
     command: gancio start --docker --db=postgres
