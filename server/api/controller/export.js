@@ -51,8 +51,8 @@ const exportController = {
 
   ics (res, events) {
     const eventsMap = events.map(e => {
-      const tmpStart = moment.unix(e.start_datetime)
-      const tmpEnd = moment.unix(e.end_datetime)
+      const tmpStart = moment.unix(e.start_datetime).utc(false)
+      const tmpEnd = moment.unix(e.end_datetime).utc(false)
       const start = [tmpStart.year(), tmpStart.month() + 1, tmpStart.date(), tmpStart.hour(), tmpStart.minute()]
       const end = [tmpEnd.year(), tmpEnd.month() + 1, tmpEnd.date(), tmpEnd.hour(), tmpEnd.minute()]
       return {

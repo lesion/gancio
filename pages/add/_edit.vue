@@ -114,7 +114,7 @@
 import { mapActions, mapState, mapGetters } from 'vuex'
 import uniq from 'lodash/uniq'
 import map from 'lodash/map'
-import moment from 'dayjs'
+import moment from 'moment'
 
 import List from '@/components/List'
 import { Message } from 'element-ui'
@@ -252,7 +252,7 @@ export default {
         return this.events.filter(e =>
           !e.multidate
             ? date_start.isSame(moment.unix(e.start_datetime), 'day') ||
-            date_start.isBefore(moment.unix(e.start_datime)) && date_end.isAfter(moment.unix(e.start_datetime))
+            date_start.isBefore(moment.unix(e.start_dateime)) && date_end.isAfter(moment.unix(e.start_datetime))
             : date_start.isSame(moment.unix(e.start_datetime), 'day') || date_start.isSame(moment.unix(e.end_datetime)) ||
             date_start.isAfter(moment.unix(e.start_datetime)) && date_start.isBefore(moment.unix(e.end_datetime)))
       } else if (this.event.type === 'recurrent') {
@@ -268,6 +268,7 @@ export default {
       }
     },
     ...mapGetters(['filteredEvents']),
+    // TOFIX
     attributes () {
       let attributes = []
       attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'yellow' } })
@@ -389,8 +390,8 @@ export default {
       formData.append('place_address', this.event.place.address)
       formData.append('description', this.event.description)
       formData.append('multidate', this.event.type === 'multidate')
-      formData.append('start_datetime', start_datetime.unix())
-      formData.append('end_datetime', end_datetime.unix())
+      formData.append('start_datetime', start_datetime.utc(true).unix())
+      formData.append('end_datetime', end_datetime.utc(true).unix())
 
       if (this.edit) {
         formData.append('id', this.event.id)

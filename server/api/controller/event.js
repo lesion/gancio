@@ -188,11 +188,13 @@ const eventController = {
       .month(req.params.month)
       .startOf('month')
       .startOf('week')
+      .utc(false)
 
     let end = moment()
       .year(req.params.year)
       .month(req.params.month)
       .endOf('month')
+      .utc(false)
 
     const shownDays = end.diff(start, 'days')
     if (shownDays <= 35) { end = end.add(1, 'week') }
@@ -231,7 +233,7 @@ const eventController = {
       if (!recurrent.frequency) { return false }
 
       let cursor = moment(start).startOf('week')
-      const start_date = moment.unix(e.start_datetime)
+      const start_date = moment.unix(e.start_datetime).utc(false)
       const duration = moment.unix(e.end_datetime).diff(start_date, 's')
       const frequency = recurrent.frequency
       const days = recurrent.days
@@ -239,7 +241,6 @@ const eventController = {
 
       // default frequency is '1d' => each day
       const toAdd = { n: 1, unit: 'day' }
-      cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
 
       // each week or 2 (search for the first specified day)
       if (frequency === '1w' || frequency === '2w') {
@@ -252,6 +253,8 @@ const eventController = {
         toAdd.unit = 'week'
         // cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
       }
+
+      cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
 
       // each month or 2
       if (frequency === '1m' || frequency === '2m') {
@@ -275,12 +278,13 @@ const eventController = {
             cursor.day(d - 1)
           }
           if (cursor.isAfter(dueTo) || cursor.isBefore(start)) { return }
-          e.start_datetime = cursor.unix()
+          e.start_datetime = cursor.utc(true).unix()
           e.end_datetime = e.start_datetime + duration
           events.push(Object.assign({}, e))
         })
         if (cursor.isAfter(dueTo)) { break }
         cursor = first_event_of_week.add(toAdd.n, toAdd.unit)
+        cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
       }
 
       return events

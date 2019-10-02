@@ -36,13 +36,12 @@ module.exports = (sequelize, DataTypes) => {
     event.hasMany(models.comment)
   }
 
-  //
   event.prototype.toAP = function (username, follower = []) {
     const tags = this.tags && this.tags.map(t => `<a href='/tags/${t.tag}' class='mention hashtag' rel='tag'>#${t.tag}</a>`).join(' ')
 
     const content = `<a href='${config.baseurl}/event/${this.id}'>${this.title}</a><br/>
     📍${this.place.name}<br/>
-    ⏰ ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/><br/>
+    ⏰ ${moment.unix(this.start_datetime).utc(false).format('dddd, D MMMM (HH:mm)')}<br/><br/>
       ${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description}<br/>
       ${tags} <br/>`
 
@@ -74,12 +73,6 @@ module.exports = (sequelize, DataTypes) => {
       content,
       summary: null,
       sensitive: false,
-      startTime: moment.unix(this.start_datetime),
-      location: {
-        type: 'Place',
-        name: this.place.name,
-        address: this.place.address
-      }
     }
   }
 

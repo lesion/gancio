@@ -7,13 +7,13 @@ rss(version='2.0')
         language #{config.locale}
         each event in events
             item
-                title [#{moment.unix(event.start_datetime).format("YY-MM-DD")}] #{event.title} @#{event.place.name}
+                title [#{moment.unix(event.start_datetime).utc(false).format("YY-MM-DD")}] #{event.title} @#{event.place.name}
                 link #{config.baseurl}/event/#{event.id}
                 description
                     | <![CDATA[
                     | <h4>#{event.title}</h4>
                     | <strong>#{event.place.name} - #{event.place.address}</strong>
-                    | <small>(#{moment.unix(event.start_datetime).format("dddd, D MMMM HH:mm")})</small><br/>
+                    | <small>(#{moment.unix(event.start_datetime).utc(false).format("dddd, D MMMM HH:mm")})</small><br/>
                     if (event.image_path)
                         | <img src="#{config.apiurl}/media/#{event.image_path}"/>
                     | <pre>!{event.description}</pre>
