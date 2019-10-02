@@ -3,6 +3,7 @@ const { Nuxt, Builder } = require('nuxt')
 // Import and Set Nuxt.js options
 const nuxt_config = require('../nuxt.config.js')
 const config = require('config')
+const consola = require('consola')
 
 async function main () {
   nuxt_config.server = config.server
@@ -18,6 +19,7 @@ async function main () {
     await nuxt.ready()
   }
   nuxt.listen()
+  consola.info('Listen on %s:%d , visit me here => %s', config.server.host, config.server.port, config.baseurl )
 
   // close connections/port/unix socket
   function shutdown () {
