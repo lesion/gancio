@@ -193,15 +193,16 @@ async function upgrade (options) {
   const umzug = new Umzug({
     storage: 'sequelize',
     storageOptions: { sequelize: db },
+    logging: consola.info,
     migrations: {
       wrap: fun => {
-        return () => fun(db.queryInterface, Sequelize).catch(() => false)
+        return () => fun(db.queryInterface, Sequelize).catch(e => { consola.error(e); return false; })
      },
      path: path.resolve(__dirname, 'migrations')
     }
   })
-  const migrations = await umzug.up()
-  db.close()
+  await umzug.up()
+  return await db.close()
 }
 
 
