@@ -64,11 +64,15 @@ module.exports = {
     consola.info('Add default notification')
 
     // send confirmed event to mastodon
-    await db.notification.create({ type: 'mastodon', filters: { is_visible: true } })
-    await db.notification.create({ type: 'email', filters: { is_visible: true } })
+    await db.notification.create({ action: 'Create', type: 'ap', filters: { is_visible: true } })
+    await db.notification.create({ action: 'Update', type: 'ap', filters: { is_visible: true } })
+    await db.notification.create({ action: 'Delete', type: 'ap', filters: { is_visible: true } })
 
-    // send every event to admin
-    await db.notification.create({ type: 'admin_email' })
+    // send anon email to administrator
+    await db.notification.create({ action: 'Create', type: 'admin_email', filters: { is_visible: false } })
+
+    // TODO
+    // await db.notification.create({ action: 'Create', type: 'email', filters: { is_visible: true } })
 
     // close db connection
     await db.sequelize.close()
