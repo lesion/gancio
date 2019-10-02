@@ -1,8 +1,8 @@
 extends ../layout.pug
 block content
   h3 #{event.title}
-  p Dove: #{event.place.name} - #{event.place.address}
-  p Quando: #{datetime(event.start_datetime)}
+  p 📍 Dove: #{event.place.name} - #{event.place.address}
+  p ⏰ Quando: #{datetime(event.start_datetime)}
   br
   if event.image_path
     <center>
@@ -16,6 +16,6 @@ block content
   <a href="#{config.baseurl}/event/#{event.id}">#{config.baseurl}/event/#{event.id}</a>
   hr
   if to_confirm
-    p Puoi confermare questo evento <a href="#{config.baseurl}/admin/confirm/#{event.id}">qui</a>
+    p Puoi confermare questo evento premendo il tasto conferma a <a href="#{config.baseurl}/event/#{event.id}">questa pagina</a>
   else
     p Puoi eliminare queste notifiche <a href="#{config.baseurl}/del_notification/#{notification.remove_code}">qui</a>

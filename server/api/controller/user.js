@@ -184,7 +184,7 @@ const userController = {
     if (!recover_code) { return res.sendStatus(400) }
     const user = await User.findOne({ where: { recover_code: { [Op.eq]: recover_code } } })
     if (!user) { return res.sendStatus(400) }
-      res.sendStatus(200)
+    res.sendStatus(200)
   },
 
   async updatePasswordWithRecoverCode (req, res) {
@@ -204,7 +204,7 @@ const userController = {
   async current (req, res) {
     if (!req.user) return res.status(400).send('Not logged')
     const user = await User.findByPk(req.user.id, { include: { model: FedUsers, as: 'followers' } })
-    res.json(user) 
+    res.json(user)
   },
 
   async getAll (req, res) {
