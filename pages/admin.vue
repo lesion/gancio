@@ -28,11 +28,11 @@
           span.ml-1 {{$t('common.events')}}
         p {{$t('admin.event_confirm_description')}}
         el-table(:data='paginatedEvents' small primary-key='id' v-loading='loading')
-          el-table-column(:label='$t("common.name")')
+          el-table-column(:label='$t("common.name")' width='300')
             template(slot-scope='data') {{data.row.title}}
-          el-table-column(:label='$t("common.where")')
+          el-table-column(:label='$t("common.where")' width='250')
             template(slot-scope='data') {{data.row.place.name}}
-          el-table-column(:label='$t("common.confirm")')
+          el-table-column(:label='$t("common.confirm")' width='250')
             template(slot-scope='data')
               el-button(type='primary' @click='confirm(data.row.id)' size='mini') {{$t('common.confirm')}}
               el-button(type='success' @click='preview(data.row.id)' size='mini') {{$t('common.preview')}}
