@@ -1,7 +1,12 @@
 All notable changes to this project will be documented in this file.
 
-### unreleased
+### 0.14.18
 - [improve] better quality for images
+- [fix] password recovery email
+- [feat] new action field for notification 
+- [feat] add DEBUG env variable in docker-compose.yml
+- [style] fixed width in confirmation events table
+- [fix] #38 timezone issue in rss export and using tor...
 
 ### 0.14.17
 - [fix] image previews from external website
