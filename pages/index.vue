@@ -7,7 +7,6 @@
 <script>
 import Home from '~/components/Home.vue'
 import Nav from '~/components/Nav.vue'
-import { mapState } from 'vuex'
 
 export default {
   name: 'Index',
@@ -22,7 +21,6 @@ export default {
       console.error(e)
     }
   },
-  computed: mapState(['events']),
   components: { Nav, Home }
 }
 </script>
