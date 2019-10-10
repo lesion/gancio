@@ -1,6 +1,7 @@
 const path = require('path')
 const config = require('config')
 const express = require('express')
+const corst = require('cors')
 const api = require('./api')
 const federation = require('./federation')
 const webfinger = require('./federation/webfinger')
@@ -19,7 +20,7 @@ router.use(spamFilter)
 
 router.use('/favicon.ico', express.static(path.resolve(config.favicon || './assets/favicon.ico')))
 router.use('/media/', express.static(config.upload_path))
-router.get('/feed/:type', exportController.export)
+router.get('/feed/:type', cors(), exportController.export)
 router.use('/api', api)
 
 // federation api / activitypub / webfinger / nodeinfo
