@@ -1,4 +1,4 @@
-<template lang="pug">
+<template lang='pug'>
   #home
     Nav
     Home
@@ -11,7 +11,7 @@ import Nav from '~/components/Nav.vue'
 export default {
   name: 'Index',
   async fetch ({ store, $axios }) {
-    try {
+    try { 
       const now = new Date()
       const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
       store.commit('setEvents', events)

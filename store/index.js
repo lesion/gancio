@@ -146,11 +146,8 @@ export const actions = {
   // this method is called server side only for each request
   // we use it to get configuration from db, setting locale, etc...
   async nuxtServerInit ({ commit }, { app, store, req }) {
-    
-    // TOFIX: check if we could retrieve it directly?
-    const settings = await app.$axios.$get('/settings')
+    const settings = req.settings
     commit('setSettings', settings)
-
     // apply settings
     commit('showRecurrentEvents', settings.allow_recurrent_event && settings.recurrent_event_visible)
   },

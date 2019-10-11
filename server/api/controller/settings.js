@@ -5,6 +5,17 @@ const path = require('path')
 const fs = require('fs')
 const package = require('../../../package.json')
 
+/**
+ * Settings controller: store instance settings
+ * Current supported settings:
+ * 
+ * 
+ * Usage:
+ *   backend/fediverse/api:
+ * 
+ *   frontend:
+ */
+
 const settingsController = {
   settings: { initialized: false },
   user_locale: {},
