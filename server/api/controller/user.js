@@ -229,11 +229,11 @@ const userController = {
 
     if (!req.body.password) { delete req.body.password }
 
-    await user.update(req.body)
-
     if (!user.is_active && req.body.is_active && user.recover_code) {
       mail.send(user.email, 'confirm', { user, config })
     }
+
+    await user.update(req.body)
     res.json(user)
   },
 
