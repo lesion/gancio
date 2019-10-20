@@ -9,6 +9,13 @@ const url = require('url')
 const debug = require('debug')('webfinger')
 
 router.use(cors())
+router.use((req, res, next) => {
+  // is federation enabled ?
+  if (req.settings.enable_federation) return next()
+  debug('Federation disabled')
+  res.status(404).send('Federation disabled')
+})
+
 
 router.get('/webfinger', async (req, res) => {
   if (!req.query || !req.query.resource || !req.query.resource.includes('acct:')) {
