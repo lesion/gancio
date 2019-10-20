@@ -48,12 +48,14 @@
     hr
     //- comments from fediverse
     #comments(v-if='settings.enable_federation')
-      small.float-right 🔖 {{event.likes.length}}
-      small.float-right.mr-3 ✊ {{event.boost.length}}<br/>
-      strong {{$tc('common.comments', event.comments.length)}} - 
-      <small>{{$t('event.interact_with_me_at')}} <u>{{fedi_user}}@{{settings.baseurl|url2host}}</u></small>
+      div.float-right(v-if='!settings.disable_gamification')
+        small.mr-3 🔖 {{event.likes.length}}
+        small ✊ {{event.boost.length}}<br/>
 
-      .card-header(v-for='comment in event.comments' :key='comment.id')
+      strong(v-if='settings.enable_comments') {{$tc('common.comments', event.comments.length)}} - 
+      small {{$t('event.interact_with_me_at')}} <u>{{fedi_user}}@{{settings.baseurl|url2host}}</u>
+
+      .card-header(v-if='settings.enable_comments' v-for='comment in event.comments' :key='comment.id')
         a.float-right(:href='comment.data.url')
           small  {{comment.data.published|datetime}}
         div.mt-1(v-html='comment_filter(comment.data.content)')
