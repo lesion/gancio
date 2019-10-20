@@ -4,7 +4,7 @@ div
   el-collapse
     el-collapse-item
       template(slot='title')
-        h4  <v-icon name='plus'/> {{$t('common.new_user')}}
+        el-button(mini size='mini')  <v-icon name='plus'/> {{$t('common.new_user')}}
       el-form(inline)
         el-form-item(:label="$t('common.username')")
           el-input(v-model='new_user.username')

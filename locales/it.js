@@ -52,7 +52,12 @@ export default {
     username: 'Nomignolo',
     comments: 'nessun commento|un commento|{n} commenti',
     activate_user: 'Confermato',
-    displayname: 'Nome mostrato'
+    displayname: 'Nome mostrato',
+    federation: 'Federazione',
+    set_password: 'Imposta password',
+    copy_link: 'Copia link',
+    send_via_mail: 'Invia mail',
+    add_to_calendar: 'Aggiungi al tuo calendario'
   },
 
   login: {
@@ -132,7 +137,7 @@ export default {
     due: 'alle',
     from: 'Dalle',
     image_too_big: 'Immagine troppo grande! Massimo 4M',
-    interact_with_me_at: 'Seguimi nel fediverso su'
+    interact_with_me_at: 'Seguimi nel fediverso su',
   },
 
   admin: {
@@ -151,7 +156,8 @@ export default {
     allow_recurrent_event: 'Abilita eventi fissi',
     recurrent_event_visible: 'Appuntamenti fissi visibili di default',
     federation: 'Federazione / ActivityPub',
-    enable_federation: 'Abilita la federazione!'
+    enable_federation: 'Abilita la federazione!',
+    select_instance_timezone: 'Seleziona la timezone'
   },
 
   auth: {

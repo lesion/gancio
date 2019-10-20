@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-card#admin
+  el-main
     nuxt-link.float-right(to='/')
       el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
 
@@ -31,7 +31,7 @@
           el-table-column(:label='$t("common.name")' width='300')
             template(slot-scope='data') {{data.row.title}}
           el-table-column(:label='$t("common.where")' width='250')
-            template(slot-scope='data') {{data.row.place.name}}
+            template(slot-scope='data') {{dperPageata.row.place.name}}
           el-table-column(:label='$t("common.confirm")' width='250')
             template(slot-scope='data')
               el-button(type='primary' @click='confirm(data.row.id)' size='mini') {{$t('common.confirm')}}
@@ -44,32 +44,14 @@
         template(slot='label')
           v-icon(name='cog')
           span  {{$t('common.settings')}}
+        Settings
 
-        el-form(inline label-width="400px")
-
-          //- allow open registration
-          el-form-item(:label="$t('admin.allow_registration_description')")
-            el-switch(name='reg' v-model='allow_registration')
-
-          //- allow anon event
-          el-form-item(:label="$t('admin.allow_anon_event')")
-            el-switch(v-model='allow_anon_event')
-
-          el-form-item(:label="$t('admin.allow_recurrent_event')")
-            el-switch(v-model='allow_recurrent_event')
-
-          el-form-item(v-show='allow_recurrent_event' :label="$t('admin.recurrent_event_visible')")
-            el-switch(v-model='recurrent_event_visible')
-
-        el-divider {{$t('admin.federation')}}
-        el-form(inline label-width='400px')
-          el-form-item(:label="$t('admin.enable_federation')")
-            el-switch(v-model='enable_federation')
-
-            //- el-form-item(:label="$t('admin.allow_boost_like')")
-            //-   el-switch(v-model='allow_comments')
-      //- el-tab-pane.pt-1
-        
+      //- FEDERATION
+      el-tab-pane.pt-1
+        template(slot='label')
+          v-icon(name='network-wired')
+          span.ml-1 {{$t('common.federation')}}
+        Federation
 
 </template>
 <script>
@@ -77,19 +59,18 @@ import { mapState, mapActions } from 'vuex'
 import { Message, MessageBox } from 'element-ui'
 import Users from '../components/admin/Users'
 import Places from '../components/admin/Places'
+import Settings from '../components/admin/Settings'
+import Federation from '../components/admin/Federation'
 
 export default {
   name: 'Admin',
-  components: { Users, Places },
+  components: { Users, Places, Settings, Federation },
   middleware: ['auth'],
   data () {
     return {
       perPage: 10,
       eventPage: 1,
-      tagPage: 1,
-      tagFields: ['tag', 'color'],
       description: '',
-      tag: { name: '', color: '' },
       events: [],
       loading: false,
       tab: '0',
@@ -108,50 +89,14 @@ export default {
       console.error(e)
     }
   },
-  async mounted () {
-    const code = this.$route.query.code
-
-    if (code) {
-      this.tab = '4'
-      const instance = await this.$axios.$post('/user/code', { code, is_admin: true })
-    }
-  },
   computed: {
-    ...mapState(['tags', 'settings']),
-    allow_registration: {
-      get () { return this.settings.allow_registration },
-      set (value) { this.setSetting({ key: 'allow_registration', value }) }
-    },
-    allow_anon_event: {
-      get () { return this.settings.allow_anon_event },
-      set (value) { this.setSetting({ key: 'allow_anon_event', value }) }
-    },
-    allow_recurrent_event: {
-      get () { return this.settings.allow_recurrent_event },
-      set (value) { this.setSetting({ key: 'allow_recurrent_event', value }) }
-    },
-    recurrent_event_visible: {
-      get () { return this.settings.recurrent_event_visible },
-      set (value) { this.setSetting({ key: 'recurrent_event_visible', value }) }
-    },
-    enable_federation: {
-      get () { return this.settings.enable_federation },
-      set (value) { this.setSetting({ key: 'enable_federation', value }) }
-    },
+    ...mapState(['settings']),
     paginatedEvents () {
       return this.events.slice((this.eventPage - 1) * this.perPage,
         this.eventPage * this.perPage)
     },
-    paginatedTags () {
-      return this.tags.slice((this.tagPage - 1) * this.perPage,
-        this.tagPage * this.perPage)
-    }
   },
   methods: {
-    ...mapActions(['setSetting']),
-    tagSelected (tag) {
-      this.tag = { color: tag.color, tag: tag.tag }
-    },
     preview (id) {
       this.$router.push(`/event/${id}`)
     },
