@@ -69,7 +69,7 @@ router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
   }
 
   if (req.params.nodeinfo_version === '2.1') {
-    ret.software.repository = 'https://git.lattuga.net/cisti/gancio'
+    ret.software.repository = 'https://framagit.org/les/gancio'
   }
   res.json(ret)
 })
