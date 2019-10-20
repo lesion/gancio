@@ -1,66 +1,80 @@
 <template lang="pug">
-  el-card#eventDetail
+  el-main#eventDetail
     //- close button
-    nuxt-link.float-right(to='/')
-      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
+    //- nuxt-link.float-right(to='/')
+    //-   el-button(circle  icon='el-icon-close' type='danger' size='mini' plain)
 
-    div(v-if='!event')
-      h5 {{$t('event.not_found')}}
+    nuxt-link.mr-3(to='/')
+      img#logo(src='/favicon.ico')
 
-    div(v-else)
-      //- title
-      h5.text-center {{event.title}}
-      div.nextprev
-        nuxt-link(v-if='prev' :to='`/event/${prev}`')
-          el-button( type='success' size='mini')
-            v-icon(name='chevron-left')
-        nuxt-link.float-right(v-if='next' :to='`/event/${next}`')
-          el-button(type='success' size='mini')
-            v-icon(name='chevron-right')
+    span.title {{event.title}}
 
-      //- image
-      img.main(:src='imgPath' v-if='event.image_path')
+    div.float-right
+      nuxt-link.mr-1(:to='`/event/${prev}`')
+        el-button(circle plain size='small' icon='el-icon-arrow-left' :disabled='!prev')
+      nuxt-link(:to='`/event/${next}`')
+        el-button(circle plain size='small' :disabled='!next' icon='el-icon-arrow-right')
 
-      .info
-        div {{event|when}}
-        div {{event.place.name}} - {{event.place.address}}
-
-      //- description and tags
-      div(v-if='event.description || event.tags')
+    //- image
+    el-row.mt-3
+      el-col(:sm='18')
+        img.main.mb-3(:src='imgPath' v-if='event.image_path')
         pre(v-html='$options.filters.linkify(event.description)')
-        el-tag.mr-1(v-for='tag in event.tags'
+        el-tag.mr-1.mb-1(v-for='tag in event.tags'
           size='mini' :key='tag.tag') {{tag.tag}}
 
-      //- show hide, confirm, delete, edit buttons when allowed
-      div(v-if='mine')
-        hr
-        el-button(v-if='event.is_visible' size='mini' plain type='warning' @click.prevents='toggle') {{$t('common.hide')}}
-        el-button(v-else plain type='success' size='mini' @click.prevents='toggle') {{$t('common.confirm')}}
-        el-button(plain type='danger' size='mini' @click.prevent='remove') {{$t('common.remove')}}
-        el-button(plain type='primary' size='mini' @click='$router.replace(`/add/${event.id}`)') {{$t('common.edit')}}
+      el-col(:sm='6')
+        el-menu.menu
+          el-divider {{$t('common.when')}}
+            //- When(:event='event')
+          p {{event|when}}
+          p {{event|to}}
+          el-divider {{$t('common.where')}}
+          p {{event.place.name}}
+          p {{event.place.address}}
+          el-divider {{$t('common.actions')}}
+          el-menu-item(v-clipboard:success='copyLink'
+            v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') <i class='el-icon-paperclip'></i> {{$t('common.copy_link')}}
+          el-menu-item
+            a.d-block(:href='`${settings.baseurl}/api/event/${event.id}.ics`') {{$t('common.add_to_calendar')}}
+          //- el-button(plain size='mini' type='primary'
+          //-   icon='el-icon-document' ) {{$t('common.send_via_mail')}}
+          el-menu-item
+            div(@click.prevents='toggle') {{$t(event.is_visible?'common.hide':'common.confirm')}}
+          el-menu-item
+            div(@click.prevent='remove') {{$t('common.remove')}}
+          el-menu-item(@click='$router.replace(`/add/${event.id}`)') {{$t('common.edit')}}
 
-      //- comments from fediverse
-      #comments.card-body(v-if='settings.enable_federation')
-        small.float-right 🔖 {{event.likes.length}}
-        small.float-right.mr-3 ✊ {{event.boost.length}}<br/>
-        strong {{$tc('common.comments', event.comments.length)}} -
-        <small>{{$t('event.interact_with_me_at')}} <u>{{fedi_user}}@{{settings.baseurl|url2host}}</u></small>
+    hr
+    //- comments from fediverse
+    #comments(v-if='settings.enable_federation')
+      small.float-right 🔖 {{event.likes.length}}
+      small.float-right.mr-3 ✊ {{event.boost.length}}<br/>
+      strong {{$tc('common.comments', event.comments.length)}} - 
+      <small>{{$t('event.interact_with_me_at')}} <u>{{fedi_user}}@{{settings.baseurl|url2host}}</u></small>
 
-        .card-header(v-for='comment in event.comments' :key='comment.id')
-          a.float-right(:href='comment.data.url')
-            small  {{comment.data.published|datetime}}
-          div.mt-1(v-html='comment_filter(comment.data.content)')
-          img(v-for='img in comment.data.media_attachments' :src='img.url')
+      .card-header(v-for='comment in event.comments' :key='comment.id')
+        a.float-right(:href='comment.data.url')
+          small  {{comment.data.published|datetime}}
+        div.mt-1(v-html='comment_filter(comment.data.content)')
+        img(v-for='img in comment.data.media_attachments' :src='img.url')
 
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { MessageBox } from 'element-ui'
+import When from '../../components/When'
 import moment from 'dayjs'
 
 export default {
   name: 'Event',
   transition: null,
+  data () {
+    return {
+      copied: false
+    }
+  },
+  components: { When },
   // Watch for $route.query.page to call
   // Component methods (asyncData, fetch, validate, layout, etc.)
   // watchQuery: ['id'],
@@ -171,6 +185,10 @@ export default {
   },
   methods: {
     ...mapActions(['delEvent']),
+    copyLink () {
+      this.copied=true
+      setTimeout(() => this.copied=false, 3000)
+    },
     comment_filter (value) {
       return value.replace(/<a.*href="([^">]+).*>(?:.(?!\<\/a\>))*.<\/a>/, (orig, url) => {
         // get extension
@@ -196,6 +214,7 @@ export default {
       }
     },
     async toggle () {
+      console.error(this)
       try {
         if (this.event.is_visible) {
           await this.$axios.$get(`/event/unconfirm/${this.id}`)
@@ -214,27 +233,25 @@ export default {
 <style lang='less'>
 
 #eventDetail {
-  max-width: 1000px;
-  border-radius: 0px;
-  margin: 0 auto;
+  
+  .menu {
+    border-right: none;
+    border-left: 1px solid #e6e6e6;
+    p {
+      margin-left: 10px;
+    }
+  }
+
+  .title {
+    font-size: 1.6rem;
+    color: #404246;
+    line-height: 1;
+  }
 
   pre {
     color: #404246;
     font-size: 1em;
     font-family: BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Helvetica,Arial,sans-serif !important;
-  }
-
-  h5 {
-    font-size: 2em;
-    font-weight: 600;
-    min-height: 40px;
-  }
-
-  .info {
-    margin: 10px;
-    font-size: 1.3em;
-    font-weight: 600;
-    text-align: center;
   }
 
   img {
@@ -268,7 +285,8 @@ export default {
 
 @media only screen and (max-width: 768px) {
   #eventDetail {
-    font-size: 12px;
+    font-size: 13px;
+    padding: 0 5px;
   }
 }
 
