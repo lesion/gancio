@@ -2,6 +2,7 @@ const settingsController = require('./api/controller/settings')
 const acceptLanguage = require('accept-language')
 const expressJwt = require('express-jwt')
 const debug = require('debug')
+const moment = require('moment-timezone')
 const config = require('config')
 const package = require('../package.json')
 
@@ -39,6 +40,7 @@ module.exports = {
     acceptLanguage.languages(supportedLanguages)
     req.settings.locale = acceptLanguage.get(acceptedLanguages)
     req.settings.user_locale = settingsController.user_locale[req.settings.locale]
+    moment.locale(req.settings.locale)
 
     // auth
     jwt(req, res, () => {

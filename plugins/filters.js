@@ -1,32 +1,32 @@
 import Vue from 'vue'
-import moment from 'moment'
-// import 'dayjs/locale/it'
-// import 'dayjs/locale/es'
+import moment from 'moment-timezone'
 
 export default ({ app, store }) => {
+
+  // set timezone to instance_timezone!!
+  // to show local time relative to event's place
+  // not where in the worlds I'm looking at the page from
+  moment.tz.setDefault(store.state.settings.instance_timezone)
+
   // replace links with anchors
   // TODO: remove fb tracking id
-  Vue.filter('linkify', value => value.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>'))
+  Vue.filter('linkify', value => value.replace(/(https?:\/\/([^\s]+))/g, '<a href="$1">$2</a>'))
+
   Vue.filter('url2host', url => url.match(/^https?:\/\/(.[^/:]+)/i)[1])
-  Vue.filter('datetime', value => moment(value).utc(false).locale(store.state.locale).format('ddd, D MMMM HH:mm'))
-  // Vue.filter('short_datetime', value => moment(value).locale(store.state.locale).format('D/MM HH:mm'))
-  // Vue.filter('hour', value => moment(value).locale(store.state.locale).format('HH:mm'))
+  Vue.filter('datetime', value => moment(value).locale(store.state.locale).format('ddd, D MMMM HH:mm'))
 
   // shown in mobile homepage
-  Vue.filter('day', value => moment.unix(value).utc(false).locale(store.state.locale).format('dddd, D MMM'))
-  // Vue.filter('month', value => moment(value).locale(store.state.locale).format('MMM'))
+  Vue.filter('day', value => moment.unix(value).locale(store.state.locale).format('dddd, D MMM'))
 
+  Vue.filter('to', value => moment().to(value.start_datetime*1000))
   // format event start/end datetime based on page
   Vue.filter('when', (event, where) => {
     moment.locale(store.state.locale)
 
-    // show local time relative to event's place
-    // (not where in the worlds I'm looking at the page from)
-    const start = moment.unix(event.start_datetime).utc(false)
-    const end = moment.unix(event.end_datetime).utc(false)
+    const start = moment.unix(event.start_datetime)
+    const end = moment.unix(event.end_datetime)
     
-    const normal = `${start.format('dddd, D MMMM (HH:mm-')}${end.format('HH:mm)')}`
-
+    const normal = `${start.format('dddd, D MMMM (HH:mm-')}${end.format('HH:mm) z Z ')}`
     // recurrent event
     if (event.recurrent && where !== 'home') {
       const { frequency, days, type } = JSON.parse(event.recurrent)

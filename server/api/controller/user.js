@@ -249,8 +249,10 @@ const userController = {
       }
 
       req.body.recover_code = crypto.randomBytes(16).toString('hex')
+      debug('Register user ', req.body.email)
       const user = await User.create(req.body)
       try {
+        debug(`Sending registration email to ${user.email}`)
         mail.send(user.email, 'register', { user, config })
         mail.send(config.admin_email, 'admin_register', { user, config })
       } catch (e) {

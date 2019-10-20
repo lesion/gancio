@@ -9,6 +9,7 @@ export const state = () => ({
   tags: [],
   places: [],
   settings: {
+    instance_timezone: 'Europe/Rome',
     allow_registration: true,
     allow_anon_event: true,
     allow_recurrent_event: true,

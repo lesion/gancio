@@ -5,6 +5,10 @@
   },
   "confirm": {
     "subject": "Puoi iniziare a pubblicare eventi",
+    "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}</a> è stato creato."
+  },
+  "user_confirm": {
+    "subject": "Puoi iniziare a pubblicare eventi",
     "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}</a> è stato creato. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confermalo</a>."
   },
   "recover": {

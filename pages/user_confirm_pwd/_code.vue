@@ -8,8 +8,7 @@
       el-form
         el-form-item {{$t('common.new_password')}}
           el-input(type='password', v-model='new_password')
-        el-button(plain type="success" icon='el-icon-send'
-          :disabled='!new_password' @click='change_password') {{$t('common.send')}}
+        el-button(plain type="success" icon='el-icon-send', @click='change_password') {{$t('common.send')}}
 
     div(v-else) {{$t('recover.not_valid_code')}}
 

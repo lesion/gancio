@@ -1,10 +1,11 @@
 const crypto = require('crypto')
-const moment = require('moment')
+const moment = require('moment-timezone')
 const { Op } = require('sequelize')
 const lodash = require('lodash')
 const { event: Event, comment: Comment, tag: Tag, place: Place, 
   user: User, notification: Notification, event_notification: EventNotification } = require('../models')
 const Sequelize = require('sequelize')
+const exportController = require('./export')
 const debug = require('debug')('controller:event')
 
 const eventController = {
@@ -90,6 +91,7 @@ const eventController = {
   // TODO retrieve next/prev event also
   // select id, start_datetime, title from events where start_datetime > (select start_datetime from events where id=89) order by start_datetime limit 20;
   async get (req, res) {
+    const format = req.params.format || 'json'
     const is_admin = req.user && req.user.is_admin
     const id = req.params.event_id
     const event = await Event.findByPk(id, {
@@ -107,7 +109,11 @@ const eventController = {
     })
 
     if (event && (event.is_visible || is_admin)) {
-      res.json(event)
+      if (format === 'json') {
+        res.json(event)
+      } else if (format === 'ics') {
+        exportController.ics(req, res, [event])
+      }
     } else {
       res.sendStatus(404)
     }
@@ -190,13 +196,11 @@ const eventController = {
       .month(req.params.month)
       .startOf('month')
       .startOf('week')
-      .utc(false)
 
     let end = moment()
       .year(req.params.year)
       .month(req.params.month)
       .endOf('month')
-      .utc(false)
 
     const shownDays = end.diff(start, 'days')
     if (shownDays <= 35) { end = end.add(1, 'week') }
@@ -235,7 +239,7 @@ const eventController = {
       if (!recurrent.frequency) { return false }
 
       let cursor = moment(start).startOf('week')
-      const start_date = moment.unix(e.start_datetime).utc(false)
+      const start_date = moment.unix(e.start_datetime)
       const duration = moment.unix(e.end_datetime).diff(start_date, 's')
       const frequency = recurrent.frequency
       const days = recurrent.days
@@ -280,7 +284,7 @@ const eventController = {
             cursor.day(d - 1)
           }
           if (cursor.isAfter(dueTo) || cursor.isBefore(start)) { return }
-          e.start_datetime = cursor.utc(true).unix()
+          e.start_datetime = cursor.unix()
           e.end_datetime = e.start_datetime + duration
           events.push(Object.assign({}, e))
         })

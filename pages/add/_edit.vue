@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-card
+  el-main
     nuxt-link.float-right(to='/')
       el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
 
@@ -390,8 +390,8 @@ export default {
       formData.append('place_address', this.event.place.address)
       formData.append('description', this.event.description)
       formData.append('multidate', this.event.type === 'multidate')
-      formData.append('start_datetime', start_datetime.utc(true).unix())
-      formData.append('end_datetime', end_datetime.utc(true).unix())
+      formData.append('start_datetime', start_datetime.unix())
+      formData.append('end_datetime', end_datetime.unix())
 
       if (this.edit) {
         formData.append('id', this.event.id)

@@ -46,7 +46,7 @@ const mail = {
         ...locals,
         locale: 'it', // TOFIX
         config: { title: config.title, baseurl: config.baseurl, description: config.description },
-        datetime: datetime => moment.unix(datetime).utc(false).format('ddd, D MMMM HH:mm')
+        datetime: datetime => moment.unix(datetime).format('ddd, D MMMM HH:mm')
       }
     }
     return email.send(msg)

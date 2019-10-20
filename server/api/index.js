@@ -24,14 +24,6 @@ api.use(bodyParser.json())
 const jwt = expressJwt({
   secret: config.secret,
   credentialsRequired: false,
-  // getToken: function fromHeaderOrQuerystring (req) {
-  //   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-  //     return req.headers.authorization.split(' ')[1]
-  //   } else if (req.cookies && req.cookies['auth._token.local']) {
-  //     const [ prefix, token ] = req.cookies['auth._token.local'].split(' ')
-  //     if (prefix === 'Bearer') { return token }
-  //   }
-  // }
 })
 
 // api.use(jwt)
@@ -95,7 +87,7 @@ api.get('/event/confirm/:event_id', isAuth, isAdmin, eventController.confirm)
 api.get('/event/unconfirm/:event_id', isAuth, isAdmin, eventController.unconfirm)
 
 // get event
-api.get('/event/:event_id', fillUser, eventController.get)
+api.get('/event/:event_id.:format?', fillUser, eventController.get)
 
 // export events (rss/ics)
 api.get('/export/:type', exportController.export)

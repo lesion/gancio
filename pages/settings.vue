@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-card
+  el-main
     nuxt-link.float-right(to='/')
       el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
     h5 {{$t('common.settings')}}

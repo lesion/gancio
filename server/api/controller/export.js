@@ -1,7 +1,6 @@
 const { event: Event, place: Place, tag: Tag } = require('../models')
 const { Op } = require('sequelize')
-const moment = require('moment')
-const config = require('config')
+const moment = require('moment-timezone')
 const ics = require('ics')
 
 const exportController = {
@@ -36,31 +35,38 @@ const exportController = {
     switch (type) {
       case 'rss':
       case 'feed':
-        return exportController.feed(res, events.slice(0, 20))
+        return exportController.feed(req, res, events.slice(0, 20))
       case 'ics':
-        return exportController.ics(res, events)
+        return exportController.ics(req, res, events)
       case 'json':
         return res.json(events)
     }
   },
 
-  feed (res, events) {
+  feed (req, res, events) {
     res.type('application/rss+xml; charset=UTF-8')
-    res.render('feed/rss.pug', { events, config, moment })
+    res.render('feed/rss.pug', { events, settings: req.settings, moment })
   },
 
-  ics (res, events) {
+  ics (req, res, events) {
     const eventsMap = events.map(e => {
-      const tmpStart = moment.unix(e.start_datetime).utc(false)
-      const tmpEnd = moment.unix(e.end_datetime).utc(false)
-      const start = [tmpStart.year(), tmpStart.month() + 1, tmpStart.date(), tmpStart.hour(), tmpStart.minute()]
-      const end = [tmpEnd.year(), tmpEnd.month() + 1, tmpEnd.date(), tmpEnd.hour(), tmpEnd.minute()]
+      const tmpStart = moment.unix(e.start_datetime)
+      const tmpEnd = moment.unix(e.end_datetime)
+      const start = tmpStart.utc(true).format('YYYY-M-D-H-m').split('-')
+      const end = tmpEnd.utc(true).format('YYYY-M-D-H-m').split('-')
       return {
         start,
+        // startOutputType: 'utc',
         end,
-        title: e.title,
+        // endOutputType: 'utc',
+        title: `[1${req.settings.title}] ${e.title}`,
         description: e.description,
-        location: e.place.name + ' ' + e.place.address
+        location: `${e.place.name} - ${e.place.address}`,
+        url: `${req.settings.baseurl}/event/${e.id}`,
+        alarms: [{
+          action: 'display',
+          trigger: {hours: 1, before: true}
+        }]
       }
     })
     res.type('text/calendar; charset=UTF-8')

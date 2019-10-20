@@ -31,7 +31,7 @@
           el-table-column(:label='$t("common.name")' width='300')
             template(slot-scope='data') {{data.row.title}}
           el-table-column(:label='$t("common.where")' width='250')
-            template(slot-scope='data') {{dperPageata.row.place.name}}
+            template(slot-scope='data') {{data.row.place.name}}
           el-table-column(:label='$t("common.confirm")' width='250')
             template(slot-scope='data')
               el-button(type='primary' @click='confirm(data.row.id)' size='mini') {{$t('common.confirm')}}
