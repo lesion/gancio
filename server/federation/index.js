@@ -15,6 +15,7 @@ const debug = require('debug')('federation')
  * ref: https://www.w3.org/TR/activitypub/#Overview
  */
 
+router.use(cors())
 router.use((req, res, next) => {
   if(settingsController.settings.enable_federation) return next()
   debug('Federation disabled!')
@@ -22,7 +23,6 @@ router.use((req, res, next) => {
   next(false)
 })
 
-router.use(cors())
 router.use(express.json({ type: ['application/json', 'application/activity+json', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'] }))
 
 router.get('/m/:event_id', async (req, res) => {

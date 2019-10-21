@@ -14,7 +14,9 @@ export const state = () => ({
     allow_anon_event: true,
     allow_recurrent_event: true,
     recurrent_event_visible: false,
-    enable_federation: false
+    enable_federation: false,
+    enable_comments: false,
+    disable_gamification: true
   },
   in_past: false,
   filters: {
