@@ -1,10 +1,7 @@
 <template lang="pug">
   el-main#eventDetail
-    //- close button
-    //- nuxt-link.float-right(to='/')
-    //-   el-button(circle  icon='el-icon-close' type='danger' size='mini' plain)
 
-    nuxt-link.mr-3(to='/')
+    nuxt-link.mr-2(to='/')
       img#logo(src='/favicon.ico')
 
     span.title {{event.title}}
@@ -17,21 +14,23 @@
 
     //- image
     el-row.mt-3
-      el-col(:sm='18')
+      el-col(:md='18')
         img.main.mb-3(:src='imgPath' v-if='event.image_path')
+        div.d-block.d-lg-none
+          span <b>{{event|when}}</b> - {{event|to}}<br/>
+          span <b>{{event.place.name}}</b> - {{event.place.address}}
+          hr
         pre(v-html='$options.filters.linkify(event.description)')
         el-tag.mr-1.mb-1(v-for='tag in event.tags'
           size='mini' :key='tag.tag') {{tag.tag}}
 
-      el-col(:sm='6')
+      el-col.d-none.d-lg-block(:md='6')
         el-menu.menu
-          el-divider {{$t('common.when')}}
+          //- el-divider {{$t('common.when')}}
             //- When(:event='event')
-          p {{event|when}}
-          p {{event|to}}
-          el-divider {{$t('common.where')}}
-          p {{event.place.name}}
-          p {{event.place.address}}
+          el-divider {{$t('common.info')}}
+          p <b>{{event|when}}</b> - {{event|to}}
+          p <b>{{event.place.name}}</b> - {{event.place.address}}
           el-divider {{$t('common.actions')}}
           el-menu-item(v-clipboard:success='copyLink'
             v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') <i class='el-icon-paperclip'></i> {{$t('common.copy_link')}}
@@ -39,13 +38,13 @@
             a.d-block(:href='`${settings.baseurl}/api/event/${event.id}.ics`') {{$t('common.add_to_calendar')}}
           //- el-button(plain size='mini' type='primary'
           //-   icon='el-icon-document' ) {{$t('common.send_via_mail')}}
-          el-menu-item
-            div(@click.prevents='toggle') {{$t(event.is_visible?'common.hide':'common.confirm')}}
-          el-menu-item
-            div(@click.prevent='remove') {{$t('common.remove')}}
-          el-menu-item(@click='$router.replace(`/add/${event.id}`)') {{$t('common.edit')}}
-
+          EventAdmin(v-if='is_mine' :event='event')
     hr
+
+    .d-block.d-lg-none
+      el-button(plain size='mini' type='primary' v-clipboard:success='copyLink'
+        v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') <i class='el-icon-paperclip'></i> {{$t('common.copy_link')}}
+      a.el-button.el-button--success.el-button--mini.is-plain(role='button' plain size='mini' type='success' :href='`${settings.baseurl}/api/event/${event.id}.ics`') {{$t('common.add_to_calendar')}}
     //- comments from fediverse
     #comments(v-if='settings.enable_federation')
       div.float-right(v-if='!settings.disable_gamification')
@@ -65,7 +64,7 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { MessageBox } from 'element-ui'
-import When from '../../components/When'
+import EventAdmin from './eventAdmin'
 import moment from 'dayjs'
 
 export default {
@@ -76,18 +75,7 @@ export default {
       copied: false
     }
   },
-  components: { When },
-  // Watch for $route.query.page to call
-  // Component methods (asyncData, fetch, validate, layout, etc.)
-  // watchQuery: ['id'],
-  // Key for <NuxtChild> (transitions)
-  // key: to => to.fullPath,
-  // Called to know which transition to apply
-  // transition(to, from) {
-  //   if (!from) return 'slide-left'
-  //   return +to.params.id < +from.params.id ? 'slide-right' : 'slide-left'
-  // },
-
+  components: { EventAdmin },
   head () {
     if (!this.event) { return {} }
     const tags_feed = this.event.tags.map(tag => ({ rel: 'alternate', type: 'application/rss+xml',
@@ -137,15 +125,15 @@ export default {
       error({ statusCode: 404, message: 'Event not found' })
     }
   },
-  async fetch ({ $axios, store }) {
-    try {
-      const now = new Date()
-      const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
-      return store.commit('setEvents', events)
-    } catch (e) {
-      console.error(e)
-    }
-  },
+  // async fetch ({ $axios, store }) {
+  //   try {
+  //     // const now = new Date()
+  //     // const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
+  //     // return store.commit('setEvents', events)
+  //   } catch (e) {
+  //     console.error(e)
+  //   }
+  // },
   computed: {
     ...mapGetters(['filteredEvents']),
     ...mapState(['settings']),
@@ -180,7 +168,7 @@ export default {
     imgPath () {
       return this.event.image_path && '/media/' + this.event.image_path
     },
-    mine () {
+    is_mine () {
       if (!this.$auth.user) { return false }
       return this.event.userId === this.$auth.user.id || this.$auth.user.is_admin
     }
@@ -202,33 +190,6 @@ export default {
         }
       })
     },
-    async remove () {
-      try {
-        await MessageBox.confirm(this.$t('event.remove_confirmation'), this.$t('common.confirm'), {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'error' })
-        await this.$axios.delete(`/user/event/${this.id}`)
-        this.delEvent(Number(this.id))
-        this.$router.replace('/')
-      } catch (e) {
-        console.error(e)
-      }
-    },
-    async toggle () {
-      console.error(this)
-      try {
-        if (this.event.is_visible) {
-          await this.$axios.$get(`/event/unconfirm/${this.id}`)
-          this.event.is_visible = false
-        } else {
-          await this.$axios.$get(`/event/confirm/${this.id}`)
-          this.event.is_visible = true
-        }
-      } catch (e) {
-        console.error(e)
-      }
-    }
   }
 }
 </script>
@@ -245,6 +206,9 @@ export default {
   }
 
   .title {
+    max-width: 80%;
+    max-height: 0.1rem;
+    overflow: hidden;
     font-size: 1.6rem;
     color: #404246;
     line-height: 1;
@@ -257,7 +221,7 @@ export default {
   }
 
   img {
-    max-height: 89vh;
+    max-height: 88vh;
     object-fit: contain;
     &.main {
       width: 100%;
@@ -272,23 +236,18 @@ export default {
       visibility: visible !important;
     }
   }
-
-  .avatar {
-    width: auto;
-    height: 40px;
-    border-radius: 5px;
-  }
-
   .nextprev {
     font-size: 10px;
     margin-bottom: 5px;
   }
 }
 
+
 @media only screen and (max-width: 768px) {
   #eventDetail {
-    font-size: 13px;
-    padding: 0 5px;
+    .menu {
+      border: 0px;
+    }
   }
 }
 
