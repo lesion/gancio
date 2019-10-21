@@ -1,9 +1,6 @@
 <template lang="pug">
   section
-
-    a(href='#totop')
-      el-button.top.d-block.d-sm-none(icon='el-icon-top' circle type='primary' plain)
-    a.totop(name='totop')
+    el-backtop(target='body')
     //- el-backtop(target='#home')
     client-only
       Calendar
@@ -60,19 +57,5 @@ section {
   width: 100%;
   max-width: 1500px;
   margin: 0 auto;
-
-  .top {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    z-index: 1;
-    opacity: 0.7;
-    font-size: 16px;
-  }
-
-  .totop {
-    position: absolute;
-    top: 0px;
-  }
 }
 </style>
