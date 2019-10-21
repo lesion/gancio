@@ -1,9 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const { user: User } = require('../api/models')
+const { event: Event, user: User } = require('../api/models')
 const cors = require('cors')
 const settingsController = require('../api/controller/settings')
-const config = require('config')
 const version = require('../../package.json').version
 const url = require('url')
 const debug = require('debug')('webfinger')
@@ -24,7 +23,7 @@ router.get('/webfinger', async (req, res) => {
   }
 
   const resource = req.query.resource
-  const domain = url.parse(config.baseurl).host
+  const domain = url.parse(req.settings.baseurl).host
   const [, name, req_domain] = resource.match(/acct:(.*)@(.*)/)
 
   if (domain !== req_domain) {
@@ -44,7 +43,7 @@ router.get('/webfinger', async (req, res) => {
       {
         rel: 'self',
         type: 'application/activity+json',
-        href: `${config.baseurl}/federation/u/${name}`
+        href: `${req.settings.baseurl}/federation/u/${name}`
       }
     ]
   }
@@ -53,10 +52,12 @@ router.get('/webfinger', async (req, res) => {
 })
 
 router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
+  const usersCount = (await User.findAndCountAll()).count
+  const eventsCount = (await Event.findAndCountAll()).count
   const ret = {
     metadata: {
-      nodeDescription: 'Gancio instance',
-      nodeName: config.title
+      nodeDescription: req.settings.description,
+      nodeName: req.settings.title
     },
     openRegistrations: settingsController.settings.allow_registration,
     protocols: ['activitypub'],
@@ -67,9 +68,9 @@ router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
     },
     usage: {
       localComments: 0,
-      localPosts: 0,
+      localPosts: eventsCount,
       users: {
-        total: 3
+        total: usersCount
       }
     },
     version: req.params.nodeinfo_version
@@ -82,11 +83,13 @@ router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
 })
 
 router.get('/x-nodeinfo2', async (req, res) => {
+  const usersCount = (await User.findAndCountAll()).count
+  const eventsCount = (await Event.findAndCountAll()).count
   const ret = {
     version: '1.0',
     server: {
-      baseUrl: config.baseurl,
-      name: config.title,
+      baseUrl: req.settings.baseurl,
+      name: req.settings.title,
       software: 'Gancio',
       version
     },
@@ -94,10 +97,10 @@ router.get('/x-nodeinfo2', async (req, res) => {
     openRegistrations: settingsController.settings.allow_registration,
     usage: {
       users: {
-        total: 10
+        total: usersCount
       }
     },
-    localPost: 3,
+    localPost: eventsCount,
     localComments: 0
   }
   res.json(ret)
@@ -106,8 +109,8 @@ router.get('/x-nodeinfo2', async (req, res) => {
 router.get('/nodeinfo', async (req, res) => {
   const ret = {
     links: [
-      { href: `${config.baseurl}/.well-known/nodeinfo/2.0`, rel: `http://nodeinfo.diaspora.software/ns/schema/2.0` },
-      { href: `${config.baseurl}/.well-known/nodeinfo/2.1`, rel: `http://nodeinfo.diaspora.software/ns/schema/2.1` }
+      { href: `${req.settings.baseurl}/.well-known/nodeinfo/2.0`, rel: `http://nodeinfo.diaspora.software/ns/schema/2.0` },
+      { href: `${req.settings.baseurl}/.well-known/nodeinfo/2.1`, rel: `http://nodeinfo.diaspora.software/ns/schema/2.1` }
     ]
   }
   res.json(ret)
@@ -117,7 +120,7 @@ router.use('/host-meta', (req, res) => {
   res.type('application/xml')
   res.send(`<?xml version="1.0" encoding="UTF-8"?>
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
-  <Link rel="lrdd" type="application/xrd+xml" template="${config.baseurl}/.well-known/webfinger?resource={uri}"/>
+  <Link rel="lrdd" type="application/xrd+xml" template="${req.settings.baseurl}/.well-known/webfinger?resource={uri}"/>
 </XRD>`)
 })
 
