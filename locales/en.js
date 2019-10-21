@@ -50,7 +50,14 @@ export default {
     me: 'You',
     password_updated: 'Password updated!',
     username: 'Username',
-    comments: 'Comments'
+    comments: 'Comments',
+    activate_user: 'Confired',
+    displayname: 'Display name',
+    federation: 'Federation',
+    set_password: 'Set password',
+    copy_link: 'Copy link',
+    send_via_mail: 'Send email',
+    add_to_calendar: 'Add to calendar'
   },
 
   login: {
@@ -144,7 +151,10 @@ Adding this link to your feed reader will keep you up to date.`,
     allow_recurrent_event: 'Enable recurrent events',
     recurrent_event_visible: 'Show recurrent events by default',
     federation: 'Federation / ActivityPub',
-    enable_federation: 'Enable federation'
+    enable_federation: 'Enable federation',
+    select_instance_timezone: 'Select instance timezone',
+    enable_comments: 'Enable comments',
+    disable_gamification: 'Disable gamification'
   },
 
   auth: {
@@ -153,6 +163,7 @@ Adding this link to your feed reader will keep you up to date.`,
   },
 
   settings: {
+    update_confirm: 'Do you want to save your modification?',
     change_password: 'Modify your password',
     password_updated: 'Password updated',
     danger_section: 'Dangerous section',
@@ -163,6 +174,12 @@ Adding this link to your feed reader will keep you up to date.`,
   error: {
     nick_taken: 'This nickname is already used',
     email_taken: 'This email is already used'
+  },
+
+  confirm: {
+    title: 'User confirmation',
+    not_valid: 'Mmmmm something goes wrong.',
+    valid: 'Your account is confirmed, you can <a href="/login">log in</a>.'
   },
 
   ordinal: {

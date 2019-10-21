@@ -157,7 +157,9 @@ export default {
     recurrent_event_visible: 'Appuntamenti fissi visibili di default',
     federation: 'Federazione / ActivityPub',
     enable_federation: 'Abilita la federazione!',
-    select_instance_timezone: 'Seleziona la timezone'
+    select_instance_timezone: 'Seleziona la timezone',
+    enable_comments: 'Abilita commenti',
+    disable_gamification: 'Disabilita gamification'
   },
 
   auth: {
