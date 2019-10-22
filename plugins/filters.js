@@ -26,7 +26,7 @@ export default ({ app, store }) => {
     const start = moment.unix(event.start_datetime)
     const end = moment.unix(event.end_datetime)
     
-    const normal = `${start.format('dddd, D MMMM (HH:mm-')}${end.format('HH:mm) z Z ')}`
+    const normal = `${start.format('dddd, D MMMM (HH:mm-')}${end.format('HH:mm) ')}`
     // recurrent event
     if (event.recurrent && where !== 'home') {
       const { frequency, days, type } = JSON.parse(event.recurrent)
