@@ -59,7 +59,7 @@ const exportController = {
         // startOutputType: 'utc',
         end,
         // endOutputType: 'utc',
-        title: `[1${req.settings.title}] ${e.title}`,
+        title: `[${req.settings.title}] ${e.title}`,
         description: e.description,
         location: `${e.place.name} - ${e.place.address}`,
         url: `${req.settings.baseurl}/event/${e.id}`,
