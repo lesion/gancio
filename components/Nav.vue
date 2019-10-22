@@ -1,11 +1,13 @@
 <template lang="pug">
   el-menu.d-flex.nav(mode='horizontal' background-color="#222C32")
-
+    Login(:show='showLogin', @close='showLogin=false')
+    Register(:show='showRegister', @close='showRegister=false')
     nuxt-link(to='/about')
       el-menu-item(:title="$t('common.info')")
         img#logo(src='/favicon.ico')
 
-    nuxt-link(to='/login')
+    //- el-link(@click='showLogin=true')
+    nuxt-link(to='/?ref=login')
       el-menu-item(v-if='!$auth.loggedIn' :title="$t('common.login')")
         v-icon(color='lightgreen' name='user')
 
@@ -42,15 +44,37 @@
 import { Message } from 'element-ui'
 import { mapState } from 'vuex'
 import Search from '@/components/Search'
+import Login from '@/components/Login'
+import Register from '@/components/Register'
 
 export default {
   name: 'Nav',
-  components: { Search },
+  components: { Search, Login, Register },
+  data (ctx) {
+    return {
+      showLogin: this.$route.query.ref === 'login',
+      showRegister: this.$route.query.ref === 'register'
+    }
+  },
   computed: {
     could_add () {
       return (this.$auth.loggedIn || this.settings.allow_anon_event)
     },
     ...mapState(['filters', 'settings'])
+  },
+  beforeRouteUpdate (to, from, next) {
+    console.error('ciaosdfj oaisjdf oaidj ', to.params)
+  },
+  watch: {
+    '$route.query.ref' (value) {
+      if (value === 'register') {
+        this.showRegister = true
+        this.showLogin = false
+      } else if (value === 'login') {
+        this.showLogin = true
+        this.showRegister = false
+      }
+    }
   },
   methods: {
     logout () {
