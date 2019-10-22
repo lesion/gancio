@@ -56,9 +56,12 @@ module.exports = {
     const settings = require('./api/controller/settings')
     await settings.set('allow_registration', true)
     await settings.set('allow_anon_event', true)
-    await settings.set('allow_recurrent_event', true)
+    await settings.set('allow_recurrent_event', false)
     await settings.set('recurrent_event_visible', true)
     await settings.set('enable_federation', false)
+    await settings.set('enable_comments', false)
+    await settings.set('disable_gamification', true)
+    await settings.set('instance_timezone', 'Europe/Rome')
 
     // add default notification
     consola.info('Add default notification')
