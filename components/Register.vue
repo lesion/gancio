@@ -1,5 +1,5 @@
 <template lang='pug'>
-  el-dialog(:visible='show' @close='close'
+  el-dialog(:visible='show' @close='close' :close-on-click-modal='false'
     append-to-body :title="$t('common.register')")
 
     p(v-html="$t('register.description')")
@@ -18,7 +18,7 @@
       el-input.mb-2(v-model='user.description' type="textarea" rows='3' :placeholder="$t('common.description')")
 
     span(slot='footer')
-      el-button(plain type="success" :disabled='disabled' @click='register') {{$t('common.send')}} <v-icon :name='loading?"circle-notch":"chevron-right"' :spin='loading'/>
+      el-button(plain type="success" :disabled='disabled' @click='register') {{$t('common.send')}} <v-icon name='chevron-right'/>
 </template>
 
 <script>

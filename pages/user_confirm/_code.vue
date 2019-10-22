@@ -1,9 +1,7 @@
 <template lang="pug">
-  el-card
-    nuxt-link.float-right(to='/')
-      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
+  el-main
+    h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{$t('common.set_password')}}
 
-    h5 <img src='/favicon.ico'/> {{$t('common.set_password')}}
     div(v-if='valid')
       el-form
         el-form-item {{$t('common.new_password')}}
@@ -40,7 +38,7 @@ export default {
           type: 'success',
           message: this.$t('common.password_updated')
         })
-        this.$router.replace('/login')
+        this.$router.replace('/?ref=login')
       } catch (e) {
         Message({
           showClose: true,

@@ -184,7 +184,7 @@ export default {
   confirm: {
     title: 'Conferma utente',
     not_valid: 'Mmmmm qualcosa è andato storto.',
-    valid: 'Il tuo account è stato confermato, ora puoi <a href="/login">entrare</a>'
+    valid: 'Il tuo account è stato confermato, ora puoi <a href="/?ref=login">entrare</a>'
   },
 
   ordinal: {

@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-dialog(:visible='true' @close="$router.push('/')")
+  el-dialog(:visible='true' @close="$router.push('/')" :close-on-click-modal='false')
     template(slot='title')
       h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link>  {{$t('common.recover_password')}}
     div(v-if='valid')
@@ -35,7 +35,7 @@ export default {
           type: 'success',
           message: this.$t('common.password_updated')
         })
-        this.$router.replace('/login')
+        this.$router.replace('/?ref=login')
       } catch (e) {
         Message({
           showClose: true,

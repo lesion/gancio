@@ -179,7 +179,7 @@ Adding this link to your feed reader will keep you up to date.`,
   confirm: {
     title: 'User confirmation',
     not_valid: 'Mmmmm something goes wrong.',
-    valid: 'Your account is confirmed, you can <a href="/login">log in</a>.'
+    valid: 'Your account is confirmed, you can <a href="/?ref=login">log in</a>.'
   },
 
   ordinal: {

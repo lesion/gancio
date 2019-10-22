@@ -5,11 +5,11 @@
   },
   "confirm": {
     "subject": "Puoi iniziare a pubblicare eventi",
-    "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}</a> è stato creato."
+    "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}</a> è stato confermato. Scrivici a {{config.admin}} per qualsiasi informazione e fai a modino."
   },
   "user_confirm": {
     "subject": "Puoi iniziare a pubblicare eventi",
-    "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}</a> è stato creato. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confermalo</a>."
+    "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}</a> è stato creato. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confermalo e scegli una password</a>."
   },
   "recover": {
     "subject": "Recupero password",
