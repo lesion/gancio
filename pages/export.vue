@@ -1,9 +1,6 @@
 <template lang="pug">
-  el-card
-
-    nuxt-link.float-right(to='/')
-      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
-    h5 {{$t('common.export')}}
+  el-main
+    h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{$t('common.export')}}
 
     p {{$t('export.intro')}}
     Search

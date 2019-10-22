@@ -1,21 +1,23 @@
 <template lang="pug">
   el-main#eventDetail
 
-    nuxt-link.mr-2(to='/')
-      img#logo(src='/favicon.ico')
+    .head
+      nuxt-link.mr-2(to='/')
+        img#logo(src='/favicon.ico')
 
-    span.title {{event.title}}
+      span.title {{event.title}}
 
-    div.float-right
-      nuxt-link.mr-1(:to='`/event/${prev}`')
-        el-button(circle plain size='small' icon='el-icon-arrow-left' :disabled='!prev')
-      nuxt-link(:to='`/event/${next}`')
-        el-button(circle plain size='small' :disabled='!next' icon='el-icon-arrow-right')
+      div.float-right
+        nuxt-link.mr-1(:to='`/event/${prev}`')
+          el-button(circle plain size='small' icon='el-icon-arrow-left' :disabled='!prev')
+        nuxt-link(:to='`/event/${next}`')
+          el-button(circle plain size='small' :disabled='!next' icon='el-icon-arrow-right')
 
-    //- image
-    el-row.mt-3
+    el-row
       el-col(:md='18')
+        //- event image
         img.main.mb-3(:src='imgPath' v-if='event.image_path')
+        //- info for mobile screen
         div.d-block.d-lg-none
           span <b>{{event|when}}</b> - {{event|to}}<br/>
           span <b>{{event.place.name}}</b> - {{event.place.address}}
@@ -24,17 +26,16 @@
         el-tag.mr-1.mb-1(v-for='tag in event.tags'
           size='mini' :key='tag.tag') {{tag.tag}}
 
+      //- info & actions for desktop
       el-col.d-none.d-lg-block(:md='6')
-        el-menu.menu
-          //- el-divider {{$t('common.when')}}
-            //- When(:event='event')
-          el-divider {{$t('common.info')}}
+        el-menu.menu.mt-2
           p <b>{{event|when}}</b> - {{event|to}}
           p <b>{{event.place.name}}</b> - {{event.place.address}}
           el-divider {{$t('common.actions')}}
           el-menu-item(v-clipboard:success='copyLink'
             v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') <i class='el-icon-paperclip'></i> {{$t('common.copy_link')}}
-          el-menu-item
+          //- TODO (ics of recurrent events)
+          el-menu-item(v-if='!event.recurrent')
             a.d-block(:href='`${settings.baseurl}/api/event/${event.id}.ics`') {{$t('common.add_to_calendar')}}
           //- el-button(plain size='mini' type='primary'
           //-   icon='el-icon-document' ) {{$t('common.send_via_mail')}}
@@ -196,7 +197,18 @@ export default {
 <style lang='less'>
 
 #eventDetail {
-  
+  background-color: white;
+  margin-bottom: 30px;
+  .head {
+    z-index: 1;
+    position: sticky;
+    top: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: white;
+    border-bottom: 1px solid #e6e6e6;
+  }
+
   .menu {
     border-right: none;
     border-left: 1px solid #e6e6e6;

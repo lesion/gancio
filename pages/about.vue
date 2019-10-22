@@ -1,8 +1,6 @@
 <template lang="pug">
-  el-card
-    nuxt-link.float-right(to='/')
-      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)    
-    h3 {{$t('common.info')}}
+  el-main
+    h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{$t('common.info')}}
 
     div(v-html='$t("about")')
     hr

@@ -1,9 +1,6 @@
 <template lang="pug">
   el-main
-    nuxt-link.float-right(to='/')
-      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
-
-    h5 {{$t('common.admin')}}
+    h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{$t('common.admin')}}
 
     el-tabs(v-model='tab')
 

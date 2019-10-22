@@ -1,9 +1,6 @@
 <template lang="pug">
   el-main
-    nuxt-link.float-right(to='/')
-      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
-
-    h5 {{edit?$t('common.edit_event'):$t('common.add_event')}}
+    h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{edit?$t('common.edit_event'):$t('common.add_event')}}
     el-form(v-loading='loading')
       client-only
         el-tabs.mb-2(v-model='activeTab')
@@ -60,7 +57,7 @@
               el-select.ml-2(v-if='event.type==="recurrent"' v-model='event.recurrent.frequency' placeholder='Frequenza')
                 el-option(:label="$t('event.each_week')" value='1w' key='1w')
                 el-option(:label="$t('event.each_2w')" value='2w' key='2w')
-                el-option(:label="$t('event.each_month')" value='1m' key='1m')
+                //- el-option(:label="$t('event.each_month')" value='1m' key='1m')
 
             v-date-picker.mb-2.mt-3(
               :mode='event.type === "multidate" ? "range" : event.type === "recurrent" ? "multiple" : "single"'

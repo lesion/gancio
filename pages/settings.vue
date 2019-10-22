@@ -1,8 +1,7 @@
 <template lang="pug">
   el-main
-    nuxt-link.float-right(to='/')
-      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
-    h5 {{$t('common.settings')}}
+    h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{$t('common.settings')}}
+
     el-divider {{$auth.user.email}}
     el-form(action='/api/user' method='PUT' @submit.native.prevent='update_settings' inline label-width='200px')
 
