@@ -1,17 +1,13 @@
 <template lang="pug">
-  el-card
-    nuxt-link.float-right(to='/')
-      el-button(circle  icon='el-icon-close' type='danger' size='small' plain)
-
-    h5 <img src='/favicon.ico'/> {{$t('common.recover_password')}}
+  el-dialog(:visible='true' @close="$router.push('/')")
+    template(slot='title')
+      h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link>  {{$t('common.recover_password')}}
     div(v-if='valid')
-      el-form
-        el-form-item {{$t('common.new_password')}}
-          el-input(type='password', v-model='new_password')
-        el-button(plain type="success" icon='el-icon-send', @click='change_password') {{$t('common.send')}}
-
+      el-input(type='password', :placeholder='$t("common.new_password")' v-model='new_password' prefix-icon='el-icon-lock')
     div(v-else) {{$t('recover.not_valid_code')}}
 
+    template(v-if='valid' slot='footer')
+      el-button(plain type="success" icon='el-icon-send', @click='change_password') {{$t('common.send')}}
 </template>
 <script>
 import { Message } from 'element-ui'
