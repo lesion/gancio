@@ -105,7 +105,7 @@ Adding this link to your feed reader will keep you up to date.`,
     anon: 'Anon',
     anon_description: `You can add an event without registering or logging in, but in this case you will have to wait for someone to read it 
     confirming that it is an event suitable for this space, delegating this choice. Furthermore it will not be possible to modify it.<br/><br/>
-    You can instead <a href='/login'>log in</a> or <a href='/register'>register</a>, otherwise go ahead and get an answer as soon as possible.`,
+    You can instead <a href='/?ref=login'>log in</a> or <a href='/?ref=register'>register</a>, otherwise go ahead and get an answer as soon as possible.`,
     same_day: 'on same day',
     what_description: 'Title',
     description_description: 'Description',

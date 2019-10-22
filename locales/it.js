@@ -106,7 +106,7 @@ export default {
     anon_description: `Puoi inserire un evento senza registrarti o fare il login, 
       ma in questo caso dovrai aspettare che qualcuno lo legga confermando che si
       tratta di un evento adatto a questo spazio, delegando questa scelta. Inoltre non sarà possibile modificarlo.<br/><br/> 
-      Puoi invece fare il <a href='/login'>login</a> o <a href='/register'>registrarti</a>,
+      Puoi invece fare il <a href='/?ref=login'>login</a> o <a href='/?ref=register'>registrarti</a>,
       altrimenti vai avanti e riceverai una risposta il prima possibile. `,
     same_day: 'Stesso giorno',
     what_description: 'Nome evento',

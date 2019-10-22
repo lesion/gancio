@@ -99,7 +99,7 @@ export default {
     anon_description: `Podés ingresar un evento sin registrarte o iniciar sesión,
        pero en este caso tendrás que esperar a que alguien lo lea para confirmar que
        es un evento adecuado para este espacio, delegando esta elección. Además, no será posible modificarlo. <br/> <br/>
-       Si no te gusta, podés <a href='/login'> iniciar sesión </a> o <a href='/register'> registrarte </a>,
+       Si no te gusta, podés <a href='/?ref=login'> iniciar sesión </a> o <a href='/?ref=register'> registrarte </a>,
        de lo contrario, continúa y recibirás una respuesta lo antes posible.`,
     same_day: 'Mismo día',
     what_description: 'Nombre evento',
