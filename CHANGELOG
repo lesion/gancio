@@ -1,8 +1,14 @@
 All notable changes to this project will be documented in this file.
 
-### unreleased
+### 0.15.0
+- [fix] backtop icon on mobile
+- [fix] webfinger nodeinfo return real node info
+- [fix] register email confirmation
+- [feat] add federation settings (enable comments/boost/like)
+- [feat] new event page layout
+- [feat] could download .ics of event
 - [feat] add cors to feed requests
-- [refactoring] settings middleware
+- [refactoring] settings middleware, cleaning codebase
 
 ### 0.14.18
 - [improve] better quality for images
