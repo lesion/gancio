@@ -37,8 +37,6 @@
           //- TODO (ics of recurrent events)
           el-menu-item(v-if='!event.recurrent')
             a.d-block(:href='`${settings.baseurl}/api/event/${event.id}.ics`') {{$t('common.add_to_calendar')}}
-          //- el-button(plain size='mini' type='primary'
-          //-   icon='el-icon-document' ) {{$t('common.send_via_mail')}}
           EventAdmin(v-if='is_mine' :event='event')
     hr
 
@@ -57,7 +55,7 @@
 
       .card-header(v-if='settings.enable_comments' v-for='comment in event.comments' :key='comment.id')
         a.float-right(:href='comment.data.url')
-          small  {{comment.data.published|datetime}}
+          small {{comment.data.published|datetime}}
         div.mt-1(v-html='comment_filter(comment.data.content)')
         img(v-for='img in comment.data.media_attachments' :src='img.url')
 
@@ -115,12 +113,15 @@ export default {
       ]      
     }
   },
-  async asyncData ({ $axios, params, error }) {
+  async asyncData ({ $axios, params, error, store }) {
     try {
       const [ id, start_datetime ] = params.id.split('_')
       const event = await $axios.$get(`/event/${id}`)
       event.start_datetime = start_datetime ? Number(start_datetime) : event.start_datetime
       event.end_datetime = event.end_datetime
+      const now = new Date()
+      const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
+      store.commit('setEvents', events)
       return { event, id: Number(id) }
     } catch (e) {
       error({ statusCode: 404, message: 'Event not found' })
