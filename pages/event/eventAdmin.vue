@@ -8,6 +8,8 @@ div
   el-menu-item(@click='$router.replace(`/add/${event.id}`)') {{$t('common.edit')}}
 </template>
 <script>
+import { MessageBox } from 'element-ui'
+
 export default {
   name: 'EventAdmin',
   props: ['event'],
