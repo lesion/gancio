@@ -17,7 +17,7 @@ module.exports = {
 
     // modify values of `type` field
     try {
-      await queryInterface.removeColumn('notifications', 'type')
+      await queryInterface.removeColumn('notifications', 'type').catch()
     } catch {}
 
     try {
