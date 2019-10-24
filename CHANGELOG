@@ -1,5 +1,9 @@
 All notable changes to this project will be documented in this file.
 
+### 0.15.2
+- [fix] delete event
+- [fix] wrong html hierarchy
+
 ### 0.15.0
 - [fix] backtop icon on mobile
 - [fix] webfinger nodeinfo return real node info
