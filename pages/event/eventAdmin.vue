@@ -9,11 +9,13 @@ el-menu
 </template>
 <script>
 import { MessageBox } from 'element-ui'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'EventAdmin',
   props: ['event'],
   methods: {
+    ...mapActions(['delEvent']),
     async remove () {
       try {
         await MessageBox.confirm(this.$t('event.remove_confirmation'), this.$t('common.confirm'), {

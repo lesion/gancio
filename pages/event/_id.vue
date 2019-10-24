@@ -176,7 +176,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['delEvent']),
     copyLink () {
       this.copied=true
       setTimeout(() => this.copied=false, 3000)
