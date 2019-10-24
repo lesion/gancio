@@ -51,10 +51,8 @@ const userController = {
         const old_path = path.join(config.upload_path, event.image_path)
         const old_thumb_path = path.join(config.upload_path, 'thumb', event.image_path)
         try {
-          console.error('media files not removed')
-          // TOFIX
-          await fs.unlink(old_thumb_path)
-          await fs.unlink(old_path)
+          fs.unlinkSync(old_thumb_path)
+          fs.unlinkSync(old_path)
         } catch (e) {
           debug(e)
         }
