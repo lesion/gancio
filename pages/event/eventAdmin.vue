@@ -1,5 +1,5 @@
 <template lang='pug'>
-div
+el-menu
   el-divider {{$t('common.admin')}}
   el-menu-item
     div(@click.prevents='toggle') {{$t(event.is_visible?'common.hide':'common.confirm')}}
