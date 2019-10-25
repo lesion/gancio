@@ -94,8 +94,7 @@ const eventController = {
     const format = req.params.format || 'json'
     const is_admin = req.user && req.user.is_admin
     const id = req.params.event_id
-    const event = await Event.findByPk(id, {
-      plain: true,
+    let event = await Event.findByPk(id, {
       attributes: {
         exclude: ['createdAt', 'updatedAt']
       },
@@ -109,6 +108,8 @@ const eventController = {
     })
 
     if (event && (event.is_visible || is_admin)) {
+      event = event.toJSON()
+      event.tags = event.tags.map(t => t.tag)
       if (format === 'json') {
         res.json(event)
       } else if (format === 'ics') {
