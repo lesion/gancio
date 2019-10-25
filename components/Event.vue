@@ -1,5 +1,5 @@
 <template lang="pug">
-  nuxt-link.event(:to='`/event/${link}`' target='_blank' :class='{ withImg: event.image_path }')
+  nuxt-link.event(:to='`/event/${link}`' :class='{ withImg: event.image_path }')
 
     //- image
     img(v-if='showImage && event.image_path' :src='`/media/thumb/${event.image_path}`')
