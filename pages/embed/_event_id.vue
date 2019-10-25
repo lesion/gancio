@@ -12,9 +12,6 @@
         //- date / place
         .date {{event.place.name}}<br/> {{event.place.address}}
 
-      //- ul.tags(v-if='event.tags')
-      //-   li(v-for='tag in event.tags' :key='tag') {{tag}}
-      //-   li(v-if='settings.enable_federation && event.comments && event.comments.length') <u>{{$tc('common.comments', event.comments.length)}}</u>
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -32,7 +29,6 @@ export default {
     try {
       const [ id, start_datetime ] = params.event_id.split('_')
       const event = await $axios.$get(`/event/${id}`)
-      console.error(event.tags)
       event.start_datetime = start_datetime ? Number(start_datetime) : event.start_datetime
       event.end_datetime = event.end_datetime
       return { event, id: Number(id) }
@@ -72,7 +68,7 @@ a {
 
 a:hover {
   transform: prospective(10) translateX(10);
-  margin-left: 15px;
+  margin-left: 5px;
 }
 
 .embed_event {
