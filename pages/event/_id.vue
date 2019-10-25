@@ -24,7 +24,7 @@
           hr
         pre(v-html='$options.filters.linkify(event.description)')
         el-tag.mr-1.mb-1(v-for='tag in event.tags'
-          size='mini' :key='tag.tag') {{tag.tag}}
+          size='mini' :key='tag') {{tag}}
 
       //- info & actions for desktop
       el-col.d-none.d-lg-block(:md='6')
@@ -78,7 +78,7 @@ export default {
   head () {
     if (!this.event) { return {} }
     const tags_feed = this.event.tags.map(tag => ({ rel: 'alternate', type: 'application/rss+xml',
-        title: `${this.settings.title} events tagged ${tag.tag}`, href: this.settings.baseurl + `/feed/rss?tags=${tag.tag}` }))
+        title: `${this.settings.title} events tagged ${tag}`, href: this.settings.baseurl + `/feed/rss?tags=${tag}` }))
     const place_feed = { rel: 'alternate', type: 'application/rss+xml',
       title: `${this.settings.title} events  @${this.event.place.name}`, href: this.settings.baseurl + `/feed/rss?places=${this.event.placeId}` }
     

@@ -1,9 +1,11 @@
 All notable changes to this project will be documented in this file.
 
-### unreleased
+### 0.15.6
+- [fix] tags in event
+
+### 0.15.5
 - [model] migrations setup
 - [feat] embeddable event widget/iframe
-
 
 ### 0.15.2
 - [fix] delete event
