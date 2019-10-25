@@ -1,6 +1,6 @@
 {
   "name": "gancio",
-  "version": "0.15.3",
+  "version": "0.15.4",
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
@@ -39,7 +39,7 @@
   ],
   "dependencies": {
     "@nuxtjs/auth": "^4.8.4",
-    "@nuxtjs/axios": "^5.6.0",
+    "@nuxtjs/axios": "^5.8.0",
     "accept-language": "^3.0.18",
     "axios": "^0.19.0",
     "bcryptjs": "^2.4.3",
@@ -63,15 +63,15 @@
     "less": "^3.10.3",
     "lodash": "^4.17.14",
     "mkdirp": "^0.5.1",
-    "moment-timezone": "^0.5.26",
+    "moment-timezone": "^0.5.27",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "node-fetch": "^2.6.0",
-    "nuxt": "^2.9.2",
+    "nuxt": "^2.10.2",
     "nuxt-express-module": "^0.0.11",
     "pg": "^7.12.1",
     "sass-loader": "^8.0.0",
-    "sequelize": "^5.19.0",
+    "sequelize": "^5.21.1",
     "sequelize-cli": "^5.5.1",
     "sharp": "^0.23.0",
     "sqlite3": "^4.1.0",
@@ -79,7 +79,7 @@
     "v-calendar": "^1.0.0-beta.16",
     "vue-awesome": "^3.5.3",
     "vue-clipboard2": "^0.3.1",
-    "vue-i18n": "^8.14.1",
+    "vue-i18n": "^8.15.0",
     "yargs": "^14.0.0"
   },
   "devDependencies": {
@@ -90,7 +90,7 @@
     "eslint-config-standard": ">=14.1.0",
     "eslint-loader": "^3.0.0",
     "eslint-plugin-import": ">=2.17.3",
-    "eslint-plugin-jest": ">=22.17.0",
+    "eslint-plugin-jest": ">=22.20.0",
     "eslint-plugin-node": ">=10.0.0",
     "eslint-plugin-nuxt": ">=0.4.2",
     "eslint-plugin-prettier": "^3.1.1",
@@ -98,7 +98,7 @@
     "eslint-plugin-standard": ">=4.0.1",
     "eslint-plugin-vue": "^5.2.2",
     "less-loader": "^5.0.0",
-    "nodemon": "^1.19.2",
+    "nodemon": "^1.19.4",
     "prettier": "^1.17.1",
     "pug-plain-loader": "^1.0.0",
     "webpack-cli": "^3.3.9"
