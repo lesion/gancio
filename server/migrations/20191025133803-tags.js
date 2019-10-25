@@ -1,13 +1,18 @@
 'use strict';
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('fed_users', {
-      ap_id: {
+    return queryInterface.createTable('tags',
+    {
+      tag: {
         type: Sequelize.STRING,
+        allowNull: false,
+        index: true,
         primaryKey: true
       },
-      object: {
-        type: Sequelize.JSON
+      weigth: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0, allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -17,9 +22,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    })
   },
+
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('fed_users');
+    return queryInterface.dropTable('tags')
   }
 };

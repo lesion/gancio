@@ -185,11 +185,10 @@ async function setupQuestionnaire(is_docker, db) {
   return answers
 }
 
-async function upgrade (options) {
+async function run_migrations (db_conf) {
   const Umzug = require('umzug')
   const Sequelize = require('sequelize')
-  const config = require('config')
-  const db = new Sequelize(config.db)
+  const db = new Sequelize(db_conf)
   const umzug = new Umzug({
     storage: 'sequelize',
     storageOptions: { sequelize: db },
@@ -217,13 +216,15 @@ async function start (options) {
 If this is your first run use 'gancio setup --config <CONFIG_FILE.json>' `)
     process.exit(-1)
   }
-  await upgrade(options)
+  const config = require('config')
+  await run_migrations(config.db)
   require('./index')
 }
 
 async function setup (options) {
   consola.info(`You're going to setup gancio on this machine.`)
   const config = await setupQuestionnaire(options.docker, options.db)
+  await run_migrations(config.db)
   const ret = await firstrun.setup(config, options.config)
   if (!ret) process.exit(-1)
   if (options.docker) {

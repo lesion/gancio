@@ -4,6 +4,7 @@ const moment = require('moment')
 module.exports = (sequelize, DataTypes) => {
   const event = sequelize.define('event', {
     id: {
+      allowNull: false,
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true

@@ -27,18 +27,11 @@ module.exports = {
 
     // sync db
     const db = require('./api/models')
-
-    try {
-      await db.user.findAll()
+    const users = await db.user.findAll()
+    if (users.length) {
       consola.warn(` ⚠   Non empty db! Please move your current db elsewhere than retry.`)
       return false
-    } catch (e) { }
-
-    consola.info(`Create tables schema`)
-    await db.sequelize.sync().catch(e => {
-      consola.error(' ⚠ ️ Error creating tables', e)
-      return false
-    })
+    }
 
     // create admin user
     consola.info('Create admin user', admin)

@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       index: true,
       primaryKey: true
     },
-    weigth: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false }
+    weigth: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false },
   }, {})
 
   tag.associate = function (models) {
