@@ -59,16 +59,17 @@
                 el-option(:label="$t('event.each_2w')" value='2w' key='2w')
                 //- el-option(:label="$t('event.each_month')" value='1m' key='1m')
 
-            v-date-picker.mb-2.mt-3(
-              :mode='event.type === "multidate" ? "range" : event.type === "recurrent" ? "multiple" : "single"'
-              :attributes='attributes'
-              v-model='date'
-              :locale='$i18n.locale'
-              :from-page.sync='page'
-              is-inline
-              is-expanded
-              :min-date='event.type !== "recurrent" && new Date()'
-            )
+            #picker.mx-auto
+              v-date-picker.mb-2.mt-3(
+                :mode='event.type === "multidate" ? "range" : event.type === "recurrent" ? "multiple" : "single"'
+                :attributes='attributes'
+                v-model='date'
+                :locale='$i18n.locale'
+                :from-page.sync='page'
+                is-inline
+                is-expanded
+                :min-date='event.type !== "recurrent" && new Date()'
+              )
 
             div.text-center.mb-2(v-if='event.type === "recurrent"')
               span(v-if='event.recurrent.frequency !== "1m" && event.recurrent.frequency !== "2m"') {{whenPatterns}}
@@ -419,3 +420,8 @@ export default {
   }
 }
 </script>
+<style>
+#picker {
+  max-width: 400px;
+}
+</style>

@@ -1,23 +1,23 @@
 <template lang="pug">
-    nuxt-link.event(:to='`event/${link}`' :class='{ withImg: event.image_path }')
+  nuxt-link.event(:to='`/event/${link}`' target='_blank' :class='{ withImg: event.image_path }')
 
-      //- image
-      img(v-if='showImage && event.image_path' :src='`/media/thumb/${event.image_path}`')
+    //- image
+    img(v-if='showImage && event.image_path' :src='`/media/thumb/${event.image_path}`')
 
-      .event-info
-        .content-info
+    .event-info
+      .content-info
 
-          //-  title
-          h2 {{event.title}}
+        //-  title
+        h2 {{event.title}}
 
-          //- date / place
-          .date
-            div <v-icon name='clock'/> {{event|when('home')}}
-            div <v-icon name='map-marker-alt' /> {{event.place.name}}
+        //- date / place
+        .date
+          div <v-icon name='clock'/> {{event|when('home')}}
+          div <v-icon name='map-marker-alt' /> {{event.place.name}}
 
-        ul.tags(v-if='showTags && event.tags')
-          li(v-for='tag in event.tags' :key='tag') {{tag}}
-          li(v-if='settings.enable_federation && event.comments && event.comments.length') <u>{{$tc('common.comments', event.comments.length)}}</u>
+      ul.tags(v-if='showTags && event.tags')
+        li(v-for='tag in event.tags' :key='tag') {{tag}}
+        li(v-if='settings.enable_federation && event.comments && event.comments.length') <u>{{$tc('common.comments', event.comments.length)}}</u>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'

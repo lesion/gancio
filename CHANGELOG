@@ -1,5 +1,10 @@
 All notable changes to this project will be documented in this file.
 
+### unreleased
+- [model] migrations setup
+- [feat] embeddable event widget/iframe
+
+
 ### 0.15.2
 - [fix] delete event
 - [fix] wrong html hierarchy

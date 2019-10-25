@@ -127,15 +127,6 @@ export default {
       error({ statusCode: 404, message: 'Event not found' })
     }
   },
-  // async fetch ({ $axios, store }) {
-  //   try {
-  //     // const now = new Date()
-  //     // const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
-  //     // return store.commit('setEvents', events)
-  //   } catch (e) {
-  //     console.error(e)
-  //   }
-  // },
   computed: {
     ...mapGetters(['filteredEvents']),
     ...mapState(['settings']),
@@ -199,6 +190,8 @@ export default {
 #eventDetail {
   background-color: white;
   margin-bottom: 30px;
+  padding-top: 0px;
+
   .head {
     z-index: 1;
     position: sticky;
