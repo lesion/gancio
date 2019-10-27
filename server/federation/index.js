@@ -50,7 +50,7 @@ router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
       } else if (b.object.type === 'Like') {
         Ego.unbookmark(req, res)
       } else if (b.object.type === 'Announce') {
-        console.error('Unboost')
+        Ego.unboost(req, res)
       }
       break
     case 'Announce':
