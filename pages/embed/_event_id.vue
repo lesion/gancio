@@ -16,21 +16,20 @@
 <script>
 import { mapState } from 'vuex'
 import Event from '../../components/Event'
-import moment from 'dayjs'
-import get from 'lodash/get'
 
 export default {
   layout: 'event_iframe',
   components: { Event },
-  data: {
-   loading: true
+  data () {
+    return {
+      loading: true
+    }
   },
   async asyncData ({ $axios, params, error, store }) {
     try {
       const [ id, start_datetime ] = params.event_id.split('_')
       const event = await $axios.$get(`/event/${id}`)
       event.start_datetime = start_datetime ? Number(start_datetime) : event.start_datetime
-      event.end_datetime = event.end_datetime
       return { event, id: Number(id) }
     } catch (e) {
       error({ statusCode: 404, message: 'Event not found' })

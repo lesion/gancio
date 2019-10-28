@@ -11,16 +11,16 @@ const settingsController = require('../api/controller/settings')
 const Helpers = {
 
   // ignore unimplemented ping url from fediverse
-  async spamFilter (req, res, next) {
+  spamFilter (req, res, next) {
     const urlToIgnore = [
       '/api/v1/instance',
       '/api/meta',
       '/api/statusnet/version.json',
       '/api/gnusocial/version.json',
       '/api/statusnet/config.json',
-      '/poco',
+      '/poco'
     ]
-    if (urlToIgnore.includes(req.path)) return res.status(404).send('Not Found')
+    if (urlToIgnore.includes(req.path)) { return res.status(404).send('Not Found') }
     next()
   },
 
@@ -52,7 +52,7 @@ const Helpers = {
     debug('sign %s => %s', ret.status, await ret.text())
   },
 
-  async sendEvent (event, user, type='Create') {
+  async sendEvent (event, user, type = 'Create') {
     if (!settingsController.settings.enable_federation) {
       debug('event not send, federation disabled')
       return
@@ -60,7 +60,7 @@ const Helpers = {
 
     // event is sent by user that published it and by the admin instance
     // collect followers from admin and user
-    const instanceAdmin = await User.findOne({ where: { email: config.admin_email }, include: { model: FedUsers, as: 'followers'  } })
+    const instanceAdmin = await User.findOne({ where: { email: config.admin_email }, include: { model: FedUsers, as: 'followers' } })
     if (!instanceAdmin || !instanceAdmin.username) {
       debug('Instance admin not found (there is no user with email => %s)', config.admin_email)
       return
@@ -69,18 +69,18 @@ const Helpers = {
     let recipients = {}
     instanceAdmin.followers.forEach(follower => {
       const sharedInbox = follower.object.endpoints.sharedInbox
-      if (!recipients[sharedInbox]) recipients[sharedInbox] = []
+      if (!recipients[sharedInbox]) { recipients[sharedInbox] = [] }
       recipients[sharedInbox].push(follower.ap_id)
     })
 
-    for(const sharedInbox in recipients) {
+    for (const sharedInbox in recipients) {
       debug('Notify %s with event %s (from admin %s) cc => %d', sharedInbox, event.title, instanceAdmin.username, recipients[sharedInbox].length)
       const body = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
         type,
         to: ['https://www.w3.org/ns/activitystreams#Public'],
         cc: [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]],
-        //cc: recipients[sharedInbox],
+        // cc: recipients[sharedInbox],
         actor: `${config.baseurl}/federation/u/${instanceAdmin.username}`,
         // object: event.toAP(instanceAdmin.username, [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]])
         object: event.toAP(instanceAdmin.username, recipients[sharedInbox])

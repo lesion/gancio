@@ -21,7 +21,7 @@ module.exports = {
     consola.info(`Save configuration to ${config_path}`)
     try {
       fs.writeFileSync(config_path, JSON.stringify(config, null, 2))
-    } catch(e) {
+    } catch (e) {
       consola.warn(` ⚠️ ${e}. You can specify configuration path using '--config'`)
     }
 

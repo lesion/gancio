@@ -2,7 +2,6 @@ import Vue from 'vue'
 import moment from 'moment-timezone'
 
 export default ({ app, store }) => {
-
   // set timezone to instance_timezone!!
   // to show local time relative to event's place
   // not where in the worlds I'm looking at the page from
@@ -18,14 +17,14 @@ export default ({ app, store }) => {
   // shown in mobile homepage
   Vue.filter('day', value => moment.unix(value).locale(store.state.locale).format('dddd, D MMM'))
 
-  Vue.filter('to', value => moment().to(value.start_datetime*1000))
+  Vue.filter('to', value => moment().to(value.start_datetime * 1000))
   // format event start/end datetime based on page
   Vue.filter('when', (event, where) => {
     moment.locale(store.state.locale)
 
     const start = moment.unix(event.start_datetime)
     const end = moment.unix(event.end_datetime)
-    
+
     const normal = `${start.format('dddd, D MMMM (HH:mm-')}${end.format('HH:mm) ')}`
     // recurrent event
     if (event.recurrent && where !== 'home') {

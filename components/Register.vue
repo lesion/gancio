@@ -9,7 +9,7 @@
         :placeholder='$t("common.username")' prefix-icon='el-icon-user')
 
       el-input.mb-2(ref='email' v-model='user.email' type='email' required
-        :placeholder='$t("common.email")' autocomplete='email' 
+        :placeholder='$t("common.email")' autocomplete='email'
         prefix-icon='el-icon-message' name='email')
 
       el-input.mb-2(v-model='user.password' type="password"

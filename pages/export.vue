@@ -53,11 +53,8 @@
 </template>
 <script>
 import { mapState, mapGetters } from 'vuex'
-import Calendar from '@/components/Calendar'
 import List from '@/components/List'
 import Search from '@/components/Search'
-
-import { intersection } from 'lodash'
 import { Message } from 'element-ui'
 
 export default {
@@ -68,18 +65,18 @@ export default {
       title: `${this.settings.title} - ${this.$t('common.export')}`
     }
   },
-  async asyncData ({ $axios, params, store }) {
-    // get metadata just in case we are not coming from home
-    if (store.state.tags.length) return
-    const { tags, places } = await $axios.$get('/event/meta')
-    store.commit('update', { tags, places })
-  },
   data () {
     return {
       type: 'rss',
       notification: { email: '' },
       list: { title: 'Gancio' }
     }
+  },
+  async asyncData ({ $axios, params, store }) {
+    // get metadata just in case we are not coming from home
+    if (store.state.tags.length) { return }
+    const { tags, places } = await $axios.$get('/event/meta')
+    store.commit('update', { tags, places })
   },
   methods: {
     copy (msg) {

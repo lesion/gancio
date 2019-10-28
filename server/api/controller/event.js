@@ -2,8 +2,8 @@ const crypto = require('crypto')
 const moment = require('moment-timezone')
 const { Op } = require('sequelize')
 const lodash = require('lodash')
-const { event: Event, comment: Comment, tag: Tag, place: Place, 
-  user: User, notification: Notification, event_notification: EventNotification } = require('../models')
+const { event: Event, comment: Comment, tag: Tag, place: Place,
+  user: User, notification: Notification } = require('../models')
 const Sequelize = require('sequelize')
 const exportController = require('./export')
 const debug = require('debug')('controller:event')
@@ -142,7 +142,7 @@ const eventController = {
   async unconfirm (req, res) {
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
-    if (!event) { return sendStatus(404) }
+    if (!event) { return req.sendStatus(404) }
 
     try {
       event.is_visible = false
@@ -219,7 +219,7 @@ const eventController = {
           { start_datetime: { [Op.between]: [start.unix(), end.unix()] } }
         ]
       },
-      attributes: { exclude: ['createdAt', 'updatedAt', 'placeId' ] },
+      attributes: { exclude: [ 'createdAt', 'updatedAt', 'placeId' ] },
       order: [[Tag, 'weigth', 'DESC']],
       include: [
         { model: Comment, required: false, attributes: ['id'] },

@@ -118,7 +118,6 @@ import List from '@/components/List'
 import { Message } from 'element-ui'
 
 export default {
-  name: 'Add',
   name: 'newEvent',
   components: { List },
   validate ({ store }) {
@@ -241,6 +240,7 @@ export default {
       } else if (freq === '1d') {
         return this.$t('event.recurrent_each_day')
       }
+      return
     },
     todayEvents () {
       if (this.event.type === 'multidate') {
@@ -250,11 +250,11 @@ export default {
         return this.events.filter(e =>
           !e.multidate
             ? date_start.isSame(moment.unix(e.start_datetime), 'day') ||
-            date_start.isBefore(moment.unix(e.start_dateime)) && date_end.isAfter(moment.unix(e.start_datetime))
+            (date_start.isBefore(moment.unix(e.start_dateime)) && date_end.isAfter(moment.unix(e.start_datetime)))
             : date_start.isSame(moment.unix(e.start_datetime), 'day') || date_start.isSame(moment.unix(e.end_datetime)) ||
-            date_start.isAfter(moment.unix(e.start_datetime)) && date_start.isBefore(moment.unix(e.end_datetime)))
+            (date_start.isAfter(moment.unix(e.start_datetime)) && date_start.isBefore(moment.unix(e.end_datetime))))
       } else if (this.event.type === 'recurrent') {
-
+        return []
       } else {
         const date = moment(this.date)
         return this.events.filter(e =>
@@ -292,13 +292,17 @@ export default {
       switch (Number(this.activeTab)) {
         case 0 + t:
           return true
+          break
         case 1 + t:
           return this.event.title.length > 0
+          break
         case 2 + t:
           return this.event.place.name.length > 0 &&
             this.event.place.address.length > 0
+          break
         case 3 + t:
           if (this.date && this.time.start) { return true }
+          break
         case 4 + t:
           return this.event.place.name.length > 0 &&
             this.event.place.address.length > 0 &&
@@ -312,7 +316,7 @@ export default {
     recurrentDays () {
       if (this.event.type !== 'recurrent' || !this.date || !this.date.length) { return }
       const type = this.event.recurrent.type
-      if (type === 'ordinal') { return map(this.date, d => moment(d).date()) } else if (type === 'weekday') { return map(this.date, moment(d).day() + 1) }
+      if (type === 'ordinal') { return map(this.date, d => moment(d).date()) } else if (type === 'weekday') { return map(this.date, d => moment(d).day() + 1) }
     },
     next () {
       this.activeTab = String(Number(this.activeTab) + 1)

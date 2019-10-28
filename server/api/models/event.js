@@ -76,7 +76,7 @@ module.exports = (sequelize, DataTypes) => {
       cc: follower || [],
       content,
       summary: null,
-      sensitive: false,
+      sensitive: false
     }
   }
 

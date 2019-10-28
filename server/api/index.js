@@ -21,16 +21,16 @@ api.use(cookieParser())
 api.use(bodyParser.urlencoded({ extended: false }))
 api.use(bodyParser.json())
 
-const jwt = expressJwt({
-  secret: config.secret,
-  credentialsRequired: false,
-})
+// const jwt = expressJwt({
+//   secret: config.secret,
+//   credentialsRequired: false
+// })
 
 // api.use(jwt)
 
 // AUTH
 api.post('/auth/login', userController.login)
-api.get('/auth/user',  fillUser, userController.current)
+api.get('/auth/user', fillUser, userController.current)
 
 api.post('/user/recover', userController.forgotPassword)
 api.post('/user/check_recover_code', userController.checkRecoverCode)
@@ -38,7 +38,7 @@ api.post('/user/recover_password', userController.updatePasswordWithRecoverCode)
 
 // register and add users
 api.post('/user/register', userController.register)
-api.post('/user',  isAuth, isAdmin, userController.create)
+api.post('/user', isAuth, isAdmin, userController.create)
 
 // update user
 api.put('/user', isAuth, userController.update)
@@ -94,7 +94,6 @@ api.get('/export/:type', exportController.export)
 
 // get events in this range
 api.get('/event/:month/:year', eventController.getAll)
-
 
 // Handle 404
 api.use((req, res) => {

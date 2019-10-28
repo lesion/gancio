@@ -6,8 +6,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     object: DataTypes.JSON
   }, {})
-  fed_users.associate = function(models) {
+  fed_users.associate = function (models) {
+    fed_users.belongsTo(models.instances)
     // associations can be defined here
-  };
+  }
   return fed_users
 }

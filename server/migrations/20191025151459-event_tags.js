@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -16,25 +16,25 @@ module.exports = {
         primaryKey: true,
         references: {
           model: 'events',
-          key: 'id',
+          key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       tagTag: {
         primaryKey: true,
         type: Sequelize.STRING,
         references: {
           model: 'tags',
-          key: 'tag',
+          key: 'tag'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
+        onDelete: 'CASCADE'
+      }
     })
   },
 
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('event_tags')
   }
-};
+}

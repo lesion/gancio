@@ -52,8 +52,8 @@
 
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
-import { Message, MessageBox } from 'element-ui'
+import { mapState } from 'vuex'
+import { Message } from 'element-ui'
 import Users from '../components/admin/Users'
 import Places from '../components/admin/Places'
 import Settings from '../components/admin/Settings'
@@ -91,7 +91,7 @@ export default {
     paginatedEvents () {
       return this.events.slice((this.eventPage - 1) * this.perPage,
         this.eventPage * this.perPage)
-    },
+    }
   },
   methods: {
     preview (id) {

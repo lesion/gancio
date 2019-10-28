@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -16,20 +16,20 @@ module.exports = {
         primaryKey: true,
         references: {
           model: 'events',
-          key: 'id',
+          key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       notificationId: {
         primaryKey: true,
         type: Sequelize.INTEGER,
         references: {
           model: 'notifications',
-          key: 'id',
+          key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onDelete: 'CASCADE'
       }
     })
   },

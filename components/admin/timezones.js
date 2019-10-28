@@ -1,4 +1,4 @@
 export default [
   'Europe/Rome',
-  'Europe/Paris',
+  'Europe/Paris'
 ]

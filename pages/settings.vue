@@ -50,7 +50,7 @@ export default {
   },
   async asyncData ({ $axios, params }) {
     const user = await $axios.$get('/auth/user')
-    return { user, username_editable: user.username.length===0 }
+    return { user, username_editable: user.username.length === 0 }
   },
   computed: {
     ...mapState(['settings']),
@@ -77,8 +77,8 @@ export default {
           cancelButtonText: this.$t('common.cancel'),
           type: 'error'
         }).then(async () => {
-          this.user = await this.$axios.$put('/user', { ...this.user, password: this.password })
-        }).catch( e => {
+        this.user = await this.$axios.$put('/user', { ...this.user, password: this.password })
+      }).catch(e => {
         Message({ message: e, showClose: true, type: 'warning' })
       })
     },

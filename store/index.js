@@ -148,7 +148,7 @@ export const mutations = {
 export const actions = {
   // this method is called server side only for each request
   // we use it to get configuration from db, setting locale, etc...
-  async nuxtServerInit ({ commit }, { app, store, req }) {
+  nuxtServerInit ({ commit }, { app, store, req }) {
     const settings = req.settings
     commit('setSettings', settings)
     // apply settings
@@ -157,7 +157,7 @@ export const actions = {
   async updateEvents ({ commit }, page) {
     const month = moment().month()
     const year = moment().year()
-    commit('setPast', page.year<year || page.year===year && page.month<=month )
+    commit('setPast', page.year < year || (page.year === year && page.month <= month))
     const events = await this.$axios.$get(`/event/${page.month - 1}/${page.year}`)
     commit('setEvents', events)
   },

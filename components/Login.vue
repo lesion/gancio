@@ -34,7 +34,7 @@ export default {
     return {
       password: '',
       email: '',
-      loading: false,
+      loading: false
     }
   },
   computed: {
@@ -61,7 +61,7 @@ export default {
       Message({ message: this.$t('login.check_email'), type: 'success' })
     },
     async submit (e) {
-      if (this.disabled) return false
+      if (this.disabled) { return false }
       e.preventDefault()
       try {
         this.loading = true

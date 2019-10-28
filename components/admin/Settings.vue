@@ -5,7 +5,7 @@
       el-form-item(:label="$t('admin.select_instance_timezone')")
         el-select(v-model='instance_timezone' filterable)
           el-option(v-for='timezone in timezones' :key='timezone.value' :value='timezone.value')
-            span.float-left {{timezone.value}} 
+            span.float-left {{timezone.value}}
             small.float-right.text-danger {{timezone.offset}}
 
       //- allow open registration
@@ -57,7 +57,7 @@ export default {
     recurrent_event_visible: {
       get () { return this.settings.recurrent_event_visible },
       set (value) { this.setSetting({ key: 'recurrent_event_visible', value }) }
-    },
+    }
   },
   methods: mapActions(['setSetting'])
 }

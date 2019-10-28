@@ -9,7 +9,7 @@ let sequelize = null
 
 try {
   sequelize = new Sequelize(config.db)
-} catch(e) {
+} catch (e) {
   consola.warn(` ⚠️ Cannot connect to db, check your configuration => ${e}`)
   process.exit(-1)
 }

@@ -14,12 +14,12 @@ module.exports = {
   },
 
   async unboost (req, res) {
-    const match = req.body.object.match*`${config.baseurl}/federation/m/(.*)`)
-    if (!match || match.length < 2) return res.status(404).send('Event not found!')
+    const match = req.body.object.match(`${config.baseurl}/federation/m/(.*)`)
+    if (!match || match.length < 2) { return res.status(404).send('Event not found!') }
     debug('unboost %s', match[1])
     const event = await Event.findByPk(Number(match[1]))
-    if (!event) return res.status(404).send('Event not found!')
-    await event.update({ boost: [...event.boost.filter(actor => actor !== body.actor )]})
+    if (!event) { return res.status(404).send('Event not found!') }
+    await event.update({ boost: event.boost.filter(actor => actor !== req.body.actor) })
   },
 
   async bookmark (req, res) {
@@ -40,7 +40,7 @@ module.exports = {
     const event = await Event.findByPk(Number(match[1]))
     debug('%s unbookmark %s (%d)', body.actor, event.title, event.likes.length)
     if (!event) { return res.status(404).send('Event not found!') }
-    await event.update({ likes: [...event.likes.filter(actor => actor !== body.actor)] })
+    await event.update({ likes: event.likes.filter(actor => actor !== body.actor) })
     res.sendStatus(201)
   }
 }

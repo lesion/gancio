@@ -1,24 +1,24 @@
 'use strict'
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('notifications', {
+    return queryInterface.createTable('instances', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      filters: Sequelize.JSON,
-      email: Sequelize.STRING,
-      remove_code: Sequelize.STRING,
-      action: {
-        type: Sequelize.ENUM,
-        values: ['Create', 'Update', 'Delete']
+      domain: {
+        type: Sequelize.STRING
       },
-      type: {
-        type: Sequelize.ENUM,
-        values: ['mail', 'admin_email', 'ap']
+      name: {
+        type: Sequelize.STRING
+      },
+      blocked: {
+        type: Sequelize.BOOLEAN
+      },
+      data: {
+        type: Sequelize.JSON
       },
       createdAt: {
         allowNull: false,
@@ -31,6 +31,6 @@ module.exports = {
     })
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('notifications')
+    return queryInterface.dropTable('instances')
   }
 }

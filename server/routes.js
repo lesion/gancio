@@ -26,7 +26,7 @@ router.use('/media/', express.static(config.upload_path))
 // get instance settings
 router.use(helpers.initMiddleware)
 
-// rss/ics/atom feed 
+// rss/ics/atom feed
 router.get('/feed/:type', cors(), exportController.export)
 
 // api!

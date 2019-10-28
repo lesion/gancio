@@ -10,11 +10,10 @@ const debug = require('debug')('webfinger')
 router.use(cors())
 router.use((req, res, next) => {
   // is federation enabled ?
-  if (req.settings.enable_federation) return next()
+  if (req.settings.enable_federation) { return next() }
   debug('Federation disabled')
   res.status(404).send('Federation disabled')
 })
-
 
 router.get('/webfinger', async (req, res) => {
   if (!req.query || !req.query.resource || !req.query.resource.includes('acct:')) {
@@ -28,7 +27,7 @@ router.get('/webfinger', async (req, res) => {
 
   if (domain !== req_domain) {
     debug('Bad webfinger request, requested domain "%s" instead of "%s"', req_domain, domain)
-    return res.status(400).send('Bad request. Please make sure "acct:USER@DOMAIN" is what you are sending as the "resource" query parameter.')    
+    return res.status(400).send('Bad request. Please make sure "acct:USER@DOMAIN" is what you are sending as the "resource" query parameter.')
   }
 
   const user = await User.findOne({ where: { username: name } })

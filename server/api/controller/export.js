@@ -65,7 +65,7 @@ const exportController = {
         url: `${req.settings.baseurl}/event/${e.id}`,
         alarms: [{
           action: 'display',
-          trigger: {hours: 1, before: true}
+          trigger: { hours: 1, before: true }
         }]
       }
     })

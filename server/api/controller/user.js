@@ -200,7 +200,7 @@ const userController = {
   },
 
   async current (req, res) {
-    if (!req.user) return res.status(400).send('Not logged')
+    if (!req.user) { return res.status(400).send('Not logged') }
     const user = await User.findByPk(req.user.id, { include: { model: FedUsers, as: 'followers' } })
     res.json(user)
   },
@@ -214,7 +214,7 @@ const userController = {
 
   async update (req, res) {
     // user to modify
-    user = await User.findByPk(req.body.id)
+    const user = await User.findByPk(req.body.id)
 
     if (!user) { return res.status(404).json({ success: false, message: 'User not found!' }) }
 

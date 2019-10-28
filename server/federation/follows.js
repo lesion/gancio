@@ -10,14 +10,14 @@ module.exports = {
     const body = req.body
     if (typeof body.object !== 'string') { return }
     const username = body.object.replace(`${config.baseurl}/federation/u/`, '')
-    const user = await User.findOne({ where: { username }, include: {  model: FedUsers, as: 'followers' }})
+    const user = await User.findOne({ where: { username }, include: { model: FedUsers, as: 'followers' } })
     if (!user) { return res.status(404).send('User not found') }
 
     // check for duplicate
     if (!user.followers.includes(body.actor)) {
       await user.addFollowers([req.fedi_user.id])
       // await user.update({ followers: [...user.followers, body.actor] })
-      debug('%s followed by %s (%d)', username, body.actor, user.followers.length+1)
+      debug('%s followed by %s (%d)', username, body.actor, user.followers.length + 1)
     } else {
       debug('duplicate %s followed by %s', username, body.actor)
     }
@@ -37,7 +37,7 @@ module.exports = {
   async unfollow (req, res) {
     const body = req.body
     const username = body.object.object.replace(`${config.baseurl}/federation/u/`, '')
-    const user = await User.findOne({ where: { username }, include: { model: FedUsers, as: 'followers'} })
+    const user = await User.findOne({ where: { username }, include: { model: FedUsers, as: 'followers' } })
     if (!user) { return res.status(404).send('User not found') }
 
     if (body.actor !== body.object.actor || body.actor !== req.fedi_user.id) {
@@ -45,7 +45,7 @@ module.exports = {
       return res.status(400).send('Bad things')
     }
 
-    if (req.fedi_user) await user.removeFollowers(req.fedi_user.id)
+    if (req.fedi_user) { await user.removeFollowers(req.fedi_user.id) }
     debug('%s unfollowed by %s', username, body.actor)
     res.sendStatus(200)
   }

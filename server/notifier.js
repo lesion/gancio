@@ -9,7 +9,7 @@ const { event: Event, notification: Notification, event_notification: EventNotif
 const eventController = require('./api/controller/event')
 
 const notifier = {
-  async sendNotification (notification, event) {
+  sendNotification (notification, event) {
     const promises = []
     debug('Send %s notification %s', notification.type, notification.action)
     let p
@@ -19,6 +19,7 @@ const notifier = {
       case 'admin_email':
         p = mail.send([config.smtp.auth.user, config.admin_email], 'event', { event, to_confirm: !event.is_visible, config, notification })
         promises.push(p)
+        break
       case 'ap':
         p = fediverseHelpers.sendEvent(event, event.user, notification.action)
         promises.push(p)
@@ -26,13 +27,13 @@ const notifier = {
     return Promise.all(promises)
   },
   async notifyEvent (action, eventId) {
-    let event = await Event.findByPk(eventId, {
+    const event = await Event.findByPk(eventId, {
 
-      include: [ Tag, Place, Notification, { model: User, include: { model: FedUsers, as: 'followers'}} ]
+      include: [ Tag, Place, Notification, { model: User, include: { model: FedUsers, as: 'followers' } } ]
     })
 
     debug('%s -> %s', action, event.title)
-    
+
     // insert notifications
     const notifications = await eventController.getNotifications(event, action)
     await event.addNotifications(notifications)
@@ -59,7 +60,7 @@ const notifier = {
       if (!event.place) { return }
       const notification = await Notification.findByPk(e.notificationId)
       try {
-        await sendNotification(type, notification, event)
+        await notifier.sendNotification(notification, event)
         e.status = 'sent'
         return e.save()
       } catch (err) {

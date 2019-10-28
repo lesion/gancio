@@ -1,5 +1,4 @@
 const { event: Event, comment: Comment } = require('../api/models')
-const config = require('config')
 const debug = require('debug')('fediverse:comment')
 
 module.exports = {
@@ -7,7 +6,7 @@ module.exports = {
     const body = req.body
     // search for related event
     const inReplyTo = body.object.inReplyTo
-    const match = inReplyTo.match('.*\/federation\/m\/(.*)')
+    const match = inReplyTo.match('.*/federation/m/(.*)')
     if (!match || match.length < 2) {
       debug('Comment not found %s', inReplyTo)
       return res.status(404).send('Event not found!')

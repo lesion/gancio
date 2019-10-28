@@ -13,11 +13,8 @@ import { mapState } from 'vuex'
 export default {
   name: 'Index',
   computed: mapState(['settings']),
-  mounted (ctx) {
-    moment.tz.setDefault(this.settings.instance_timezone)
-  },
   async fetch ({ store, $axios }) {
-    try { 
+    try {
       moment.tz.setDefault(store.state.settings.instance_timezone)
       const now = new Date()
       const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
@@ -27,6 +24,9 @@ export default {
     } catch (e) {
       console.error(e)
     }
+  },
+  mounted (ctx) {
+    moment.tz.setDefault(this.settings.instance_timezone)
   },
   components: { Nav, Home }
 }

@@ -50,7 +50,7 @@
         small.mr-3 🔖 {{event.likes.length}}
         small ✊ {{event.boost.length}}<br/>
 
-      strong(v-if='settings.enable_comments') {{$tc('common.comments', event.comments.length)}} - 
+      strong(v-if='settings.enable_comments') {{$tc('common.comments', event.comments.length)}} -
       small {{$t('event.interact_with_me_at')}} <u>{{fedi_user}}@{{settings.baseurl|url2host}}</u>
 
       .card-header(v-if='settings.enable_comments' v-for='comment in event.comments' :key='comment.id')
@@ -61,37 +61,40 @@
 
 </template>
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
-import { MessageBox } from 'element-ui'
+import { mapState, mapGetters } from 'vuex'
 import EventAdmin from './eventAdmin'
 import moment from 'dayjs'
 
 export default {
   name: 'Event',
   transition: null,
+  components: { EventAdmin },
   data () {
     return {
       copied: false
     }
   },
-  components: { EventAdmin },
   head () {
     if (!this.event) { return {} }
-    const tags_feed = this.event.tags.map(tag => ({ rel: 'alternate', type: 'application/rss+xml',
-        title: `${this.settings.title} events tagged ${tag}`, href: this.settings.baseurl + `/feed/rss?tags=${tag}` }))
-    const place_feed = { rel: 'alternate', type: 'application/rss+xml',
-      title: `${this.settings.title} events  @${this.event.place.name}`, href: this.settings.baseurl + `/feed/rss?places=${this.event.placeId}` }
-    
+    const tags_feed = this.event.tags.map(tag => ({ rel: 'alternate',
+      type: 'application/rss+xml',
+      title: `${this.settings.title} events tagged ${tag}`,
+      href: this.settings.baseurl + `/feed/rss?tags=${tag}` }))
+    const place_feed = { rel: 'alternate',
+      type: 'application/rss+xml',
+      title: `${this.settings.title} events  @${this.event.place.name}`,
+      href: this.settings.baseurl + `/feed/rss?places=${this.event.placeId}` }
+
     return {
       title: `${this.settings.title} - ${this.event.title}`,
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         { hid: 'description',
           name: 'description',
-          content: this.event.description.replace("\n",'').slice(0, 1000) },
+          content: this.event.description.replace('\n', '').slice(0, 1000) },
         { hid: 'og-description',
           name: 'og:description',
-          content: this.event.description.replace("\n",'').slice(0, 100) },
+          content: this.event.description.replace('\n', '').slice(0, 100) },
         { hid: 'og-title', property: 'og:title', content: this.event.title },
         { hid: 'og-url', property: 'og:url', content: `${this.settings.baseurl}/event/${this.event.id}` },
         { property: 'og:type', content: 'event' },
@@ -99,18 +102,18 @@ export default {
         { property: 'og:site_name', content: this.settings.title },
         { property: 'og:updated_time', content: moment.unix(this.event.start_datetime).format() },
         { property: 'article:published_time', content: moment.unix(this.event.start_datetime).format() },
-        { property: 'article:section', content: 'event'},
-        { property: 'twitter:card', content: 'summary'},
+        { property: 'article:section', content: 'event' },
+        { property: 'twitter:card', content: 'summary' },
         { property: 'twitter:title', content: this.event.title },
         { property: 'twitter:image', content: `${this.settings.baseurl}${this.imgPath}` },
-        { property: 'twitter:description', content: this.event.description.replace("\n",'').slice(0, 100) }
+        { property: 'twitter:description', content: this.event.description.replace('\n', '').slice(0, 100) }
       ],
       link: [
         { rel: 'image_src', href: `${this.settings.baseurl}${this.imgPath}` },
         { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' },
         ...tags_feed,
         place_feed
-      ]      
+      ]
     }
   },
   async asyncData ({ $axios, params, error, store }) {
@@ -118,7 +121,6 @@ export default {
       const [ id, start_datetime ] = params.id.split('_')
       const event = await $axios.$get(`/event/${id}`)
       event.start_datetime = start_datetime ? Number(start_datetime) : event.start_datetime
-      event.end_datetime = event.end_datetime
       const now = new Date()
       const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
       store.commit('setEvents', events)
@@ -168,11 +170,11 @@ export default {
   },
   methods: {
     copyLink () {
-      this.copied=true
-      setTimeout(() => this.copied=false, 3000)
+      this.copied = true
+      setTimeout(() => { this.copied = false }, 3000)
     },
     comment_filter (value) {
-      return value.replace(/<a.*href="([^">]+).*>(?:.(?!\<\/a\>))*.<\/a>/, (orig, url) => {
+      return value.replace(/<a.*href="([^">]+).*>(?:.(?!<\/a>))*.<\/a>/, (orig, url) => {
         // get extension
         const ext = url.slice(-4)
         if (['.mp3', '.ogg'].includes(ext)) {
@@ -181,7 +183,7 @@ export default {
           return orig
         }
       })
-    },
+    }
   }
 }
 </script>
@@ -246,7 +248,6 @@ export default {
     margin-bottom: 5px;
   }
 }
-
 
 @media only screen and (max-width: 768px) {
   #eventDetail {

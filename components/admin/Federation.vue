@@ -22,12 +22,12 @@ export default {
     },
     enable_comments: {
       get () { return this.settings.enable_comments },
-      set (value) { this.setSetting({ key: 'enable_comments', value }) }      
+      set (value) { this.setSetting({ key: 'enable_comments', value }) }
     },
     disable_gamification: {
       get () { return this.settings.disable_gamification },
       set (value) { this.setSetting({ key: 'disable_gamification', value }) }
-    },
+    }
   }
 }
 </script>

@@ -19,7 +19,7 @@ async function main () {
     await nuxt.ready()
   }
   nuxt.listen()
-  consola.info('Listen on %s:%d , visit me here => %s', config.server.host, config.server.port, config.baseurl )
+  consola.info('Listen on %s:%d , visit me here => %s', config.server.host, config.server.port, config.baseurl)
 
   // close connections/port/unix socket
   function shutdown () {

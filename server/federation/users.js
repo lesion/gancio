@@ -6,9 +6,9 @@ const debug = require('debug')('fediverse:user')
 module.exports = {
   async get (req, res) {
     const name = req.params.name
-    if (!name) return res.status(400).send('Bad request.')
-    const user = await User.findOne({where: { username: name }})
-    if (!user) return res.status(404).send(`No record found for ${name}`)
+    if (!name) { return res.status(400).send('Bad request.') }
+    const user = await User.findOne({ where: { username: name } })
+    if (!user) { return res.status(404).send(`No record found for ${name}`) }
     const ret = {
       '@context': [
         'https://www.w3.org/ns/activitystreams',
@@ -44,9 +44,9 @@ module.exports = {
     const name = req.params.name
     const page = req.query.page
     debug('Retrieve %s followers', name)
-    if (!name) return res.status(400).send('Bad request.')
-    const user = await User.findOne({where: { username: name }, include: { model: FedUsers, as: 'followers' }})
-    if (!user) return res.status(404).send(`No record found for ${name}`)
+    if (!name) { return res.status(400).send('Bad request.') }
+    const user = await User.findOne({ where: { username: name }, include: { model: FedUsers, as: 'followers' } })
+    if (!user) { return res.status(404).send(`No record found for ${name}`) }
 
     res.type('application/activity+json; charset=utf-8')
 
@@ -58,7 +58,7 @@ module.exports = {
         type: 'OrderedCollection',
         totalItems: user.followers.length,
         first: `${config.baseurl}/federation/u/${name}/followers?page=true`,
-        last: `${config.baseurl}/federation/u/${name}/followers?page=true`,
+        last: `${config.baseurl}/federation/u/${name}/followers?page=true`
       })
     }
     return res.json({
@@ -66,22 +66,22 @@ module.exports = {
       id: `${config.baseurl}/federation/u/${name}/followers?page=${page}`,
       type: 'OrderedCollectionPage',
       totalItems: user.followers.length,
-      partOf: `${config.baseurl}/federation/u/${name}/followers` ,
-      orderedItems: user.followers        
+      partOf: `${config.baseurl}/federation/u/${name}/followers`,
+      orderedItems: user.followers
     })
   },
 
   async outbox (req, res) {
     const name = req.params.name
     const page = req.query.page
-    
-    if (!name) return res.status(400).send('Bad request.')
+
+    if (!name) { return res.status(400).send('Bad request.') }
     const user = await User.findOne({
       include: [ { model: Event, include: [ Place, Tag ] } ],
       where: { username: name }
     })
 
-    if (!user) return res.status(404).send(`No record found for ${name}`)
+    if (!user) { return res.status(404).send(`No record found for ${name}`) }
 
     debug('Inside outbox, should return all events from this user')
 
@@ -98,14 +98,14 @@ module.exports = {
         last: `${config.baseurl}/federation/u/${name}/outbox?page=true`
       })
     }
-    
+
     debug('With pagination %s', page)
     return res.json({
       '@context': 'https://www.w3.org/ns/activitystreams',
       id: `${config.baseurl}/federation/u/${name}/outbox?page=${page}`,
       type: 'OrderedCollectionPage',
       totalItems: user.events.length,
-      partOf: `${config.baseurl}/federation/u/${name}/outbox` ,
+      partOf: `${config.baseurl}/federation/u/${name}/outbox`,
       orderedItems: user.events.map(e => ({
         id: `${config.baseurl}/federation/m/${e.id}#create`,
         type: 'Create',
@@ -115,6 +115,6 @@ module.exports = {
         actor: `${config.baseurl}/federation/u/${user.username}`,
         object: e.toAP(user.username)
       }))
-    })    
+    })
   }
 }

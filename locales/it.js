@@ -137,7 +137,7 @@ export default {
     due: 'alle',
     from: 'Dalle',
     image_too_big: 'Immagine troppo grande! Massimo 4M',
-    interact_with_me_at: 'Seguimi nel fediverso su',
+    interact_with_me_at: 'Seguimi nel fediverso su'
   },
 
   admin: {

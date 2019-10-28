@@ -16,8 +16,10 @@ const debug = require('debug')('federation')
  */
 
 router.use(cors())
+
+// is federation enabled? middleware
 router.use((req, res, next) => {
-  if(settingsController.settings.enable_federation) return next()
+  if (settingsController.settings.enable_federation) { return next() }
   debug('Federation disabled!')
   res.status(401).send('Federation disabled')
   next(false)
@@ -27,7 +29,7 @@ router.use(express.json({ type: ['application/json', 'application/activity+json'
 
 router.get('/m/:event_id', async (req, res) => {
   const event_id = req.params.event_id
-  if (req.accepts('html')) return res.redirect(301, `/event/${event_id}`)
+  if (req.accepts('html')) { return res.redirect(301, `/event/${event_id}`) }
 
   const event = await Event.findByPk(req.params.event_id, { include: [ User, Tag, Place ] })
   if (!event) { return res.status(404).send('Not found') }
@@ -57,7 +59,7 @@ router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
       Ego.boost(req, res)
       break
     case 'Note':
-      console.error('This is a note ! I probably should not receive this')
+      debug('This is a note! I probably should create a comment here')
       break
     case 'Like':
       Ego.bookmark(req, res)
@@ -70,7 +72,7 @@ router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
       if (b.object.type === 'Note' && b.object.inReplyTo) {
         await Comments.create(req, res)
       } else {
-        console.error('Create what? ', b.object.type)
+        debug('Create with unsupported Object or not a reply => %s ', b.object.type)
       }
       break
   }

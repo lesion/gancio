@@ -29,7 +29,7 @@ export default {
   methods: {
     async change_password () {
       try {
-        const res = await this.$axios.$post('/user/recover_password', { recover_code: this.code, password: this.new_password })
+        await this.$axios.$post('/user/recover_password', { recover_code: this.code, password: this.new_password })
         Message({
           showClose: true,
           type: 'success',
