@@ -124,6 +124,9 @@ const eventController = {
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
     if (!event) { return res.sendStatus(404) }
+    if (!req.user.is_admin && req.user.id !== event.userId) {
+      return res.sendStatus(403)
+    }
 
     try {
       event.is_visible = true
@@ -143,6 +146,9 @@ const eventController = {
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
     if (!event) { return req.sendStatus(404) }
+    if (!req.user.is_admin && req.user.id !== event.userId) {
+      return res.sendStatus(403)
+    }
 
     try {
       event.is_visible = false

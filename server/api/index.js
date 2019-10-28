@@ -83,8 +83,8 @@ api.post('/settings', fillUser, isAdmin, settingsController.setRequest)
 api.get('/settings/user_locale', settingsController.getUserLocale)
 
 // confirm event
-api.get('/event/confirm/:event_id', isAuth, isAdmin, eventController.confirm)
-api.get('/event/unconfirm/:event_id', isAuth, isAdmin, eventController.unconfirm)
+api.get('/event/confirm/:event_id', isAuth, eventController.confirm)
+api.get('/event/unconfirm/:event_id', isAuth, eventController.unconfirm)
 
 // get event
 api.get('/event/:event_id.:format?', fillUser, eventController.get)
