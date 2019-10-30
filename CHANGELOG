@@ -1,5 +1,12 @@
 All notable changes to this project will be documented in this file.
 
+### unreleased
+- [feat] embed event as widget in external website
+- [fedi] instances moderation in admin
+- [fix] toggle event visibility by owner
+- [fedi] manage unboost
+- [refactoring] auth as middleware
+
 ### 0.15.7
 - [fix] minor
 
