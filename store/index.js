@@ -149,6 +149,9 @@ export const actions = {
   // this method is called server side only for each request
   // we use it to get configuration from db, setting locale, etc...
   nuxtServerInit ({ commit }, { app, store, req }) {
+    if (req.user) {
+      this.$auth.setUser(req.user)
+    }
     const settings = req.settings
     commit('setSettings', settings)
     // apply settings

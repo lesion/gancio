@@ -1,10 +1,11 @@
 const settingsController = require('./api/controller/settings')
+const { user: User } = require('./api/models')
+const { Op } = require('sequelize')
 const acceptLanguage = require('accept-language')
 const expressJwt = require('express-jwt')
-const debug = require('debug')
 const moment = require('moment-timezone')
 const config = require('config')
-const package = require('../package.json')
+const pkg = require('../package.json')
 
 const jwt = expressJwt({
   secret: config.secret,
@@ -22,17 +23,14 @@ const jwt = expressJwt({
 
 module.exports = {
   initMiddleware (req, res, next) {
-
     // initialize settings
     req.settings = settingsController.settings
     req.secretSettings = settingsController.secretSettings
 
-    // const package = require('../package.json')
-
     req.settings.baseurl = config.baseurl
     req.settings.title = config.title
     req.settings.description = config.description
-    req.settings.version = package.version
+    req.settings.version = pkg.version
 
     // set locale and user locale
     const acceptedLanguages = req.headers['accept-language']
@@ -43,9 +41,11 @@ module.exports = {
     moment.locale(req.settings.locale)
 
     // auth
-    jwt(req, res, () => {
+    jwt(req, res, async () => {
+      if (!req.user) { return next() }
+      req.user = await User.findOne({
+        where: { id: { [Op.eq]: req.user.id }, is_active: true } })
       next()
     })
-
   }
 }

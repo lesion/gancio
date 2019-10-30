@@ -2,6 +2,7 @@
   div
     el-form(inline label-width="400px")
       //- select timezone
+      client-only
       el-form-item(:label="$t('admin.select_instance_timezone')")
         el-select(v-model='instance_timezone' filterable)
           el-option(v-for='timezone in timezones' :key='timezone.value' :value='timezone.value')

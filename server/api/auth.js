@@ -2,16 +2,10 @@ const { Op } = require('sequelize')
 const { user: User } = require('./models')
 
 const Auth = {
-  async fillUser (req, res, next) {
-    if (!req.user) { return next() }
-    req.user = await User.findOne({
-      where: { id: { [Op.eq]: req.user.id }, is_active: true }
-    }).catch(e => {
-      res.sendStatus(404)
-      return next(false)
-    })
-    next()
-  },
+
+  /** isAuth middleware
+   * req.user is filled in server/helper.js#initMiddleware
+  */
   async isAuth (req, res, next) {
     if (!req.user) {
       return res
@@ -29,6 +23,8 @@ const Auth = {
     }
     next()
   },
+
+  /** isAdmin middleware */
   isAdmin (req, res, next) {
     if (!req.user) {
       return res

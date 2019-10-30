@@ -3,6 +3,7 @@ const config = require('config')
 const express = require('express')
 const cors = require('cors')
 const api = require('./api')
+const cookieParser = require('cookie-parser')
 const federation = require('./federation')
 const webfinger = require('./federation/webfinger')
 const { spamFilter } = require('./federation/helpers')
@@ -24,6 +25,7 @@ router.use('/favicon.ico', express.static(path.resolve(config.favicon || './asse
 router.use('/media/', express.static(config.upload_path))
 
 // get instance settings
+router.use(cookieParser())
 router.use(helpers.initMiddleware)
 
 // rss/ics/atom feed
