@@ -73,15 +73,6 @@ const eventController = {
     return ret
   },
 
-  async updateTag (req, res) {
-    const tag = await Tag.findByPk(req.body.tag)
-    if (tag) {
-      res.json(await tag.update(req.body))
-    } else {
-      res.sendStatus(404)
-    }
-  },
-
   async updatePlace (req, res) {
     const place = await Place.findByPk(req.body.id)
     await place.update(req.body)

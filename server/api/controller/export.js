@@ -29,7 +29,7 @@ const exportController = {
         start_datetime: { [Op.gte]: yesterday },
         ...where
       },
-      include: [ { model: Tag, ...where_tags }, { model: Place, attributes: ['name', 'id', 'address'] }]
+      include: [{ model: Tag, ...where_tags }, { model: Place, attributes: ['name', 'id', 'address'] }]
     })
 
     switch (type) {

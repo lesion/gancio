@@ -194,9 +194,7 @@ export default {
       data.event.description = event.description.replace(/(<([^>]+)>)/ig, '')
       data.event.id = event.id
       data.event.recurrent = {}
-      if (event.tags) {
-        data.event.tags = event.tags.map(t => t.tag)
-      }
+      data.event.tags = event.tags
       return data
     }
     return {}

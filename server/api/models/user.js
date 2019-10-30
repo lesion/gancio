@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     display_name: DataTypes.STRING,
-    settings: DataTypes.JSON,
+    settings: {
+      type: DataTypes.JSON,
+      defaultValue: '{}'
+    },
     email: {
       type: DataTypes.STRING,
       unique: { msg: 'error.email_taken' },

@@ -3,11 +3,11 @@
     el-form(inline label-width="400px")
       //- select timezone
       client-only
-      el-form-item(:label="$t('admin.select_instance_timezone')")
-        el-select(v-model='instance_timezone' filterable)
-          el-option(v-for='timezone in timezones' :key='timezone.value' :value='timezone.value')
-            span.float-left {{timezone.value}}
-            small.float-right.text-danger {{timezone.offset}}
+        el-form-item(:label="$t('admin.select_instance_timezone')")
+          el-select(v-model='instance_timezone' filterable)
+            el-option(v-for='timezone in timezones' :key='timezone.value' :value='timezone.value')
+              span.float-left {{timezone.value}}
+              small.float-right.text-danger {{timezone.offset}}
 
       //- allow open registration
       el-form-item(:label="$t('admin.allow_registration_description')")

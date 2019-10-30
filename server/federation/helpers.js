@@ -4,7 +4,7 @@ const crypto = require('crypto')
 const config = require('config')
 const httpSignature = require('http-signature')
 const debug = require('debug')('federation:helpers')
-const { user: User, fed_users: FedUsers } = require('../api/models')
+const { user: User, fed_users: FedUsers, instances: Instances } = require('../api/models')
 const url = require('url')
 const settingsController = require('../api/controller/settings')
 
@@ -26,7 +26,7 @@ const Helpers = {
 
   async signAndSend (message, user, inbox) {
     // get the URI of the actor object and append 'inbox' to it
-    const inboxUrl = url.parse(inbox)
+    const inboxUrl = new url.URL(inbox)
     // const toPath = toOrigin.path + '/inbox'
     // get the private key
     const privkey = user.rsa.privateKey
@@ -66,7 +66,7 @@ const Helpers = {
       return
     }
 
-    let recipients = {}
+    const recipients = {}
     instanceAdmin.followers.forEach(follower => {
       const sharedInbox = follower.object.endpoints.sharedInbox
       if (!recipients[sharedInbox]) { recipients[sharedInbox] = [] }
@@ -92,75 +92,118 @@ const Helpers = {
       Helpers.signAndSend(body, instanceAdmin, sharedInbox)
     }
 
-    return 
     // TODO
     // in case the event is published by the Admin itself do not add user
-    if (instanceAdmin.id === user.id) {
-      debug('Event published by instance Admin')
-      return
-    } 
-    if (!user.settings.enable_federation || !user.username) {
-      debug('Federation disabled for user %d (%s)', user.id, user.username)
-      return
-    }
+    // if (instanceAdmin.id === user.id) {
+    //   debug('Event published by instance Admin')
+    //   return
+    // }
+    // if (!user.settings.enable_federation || !user.username) {
+    //   debug('Federation disabled for user %d (%s)', user.id, user.username)
+    //   return
+    // }
 
-    debug('Sending to user followers => ', user.username)
-    user = await User.findByPk( user.id, { include: { model: FedUsers, as: 'followers' }})
-    debug('Sending to user followers => ', user.followers.length)
-    recipients = {}
-    user.followers.forEach(follower => {
-      const sharedInbox = follower.object.endpoints.sharedInbox
-      if (!recipients[sharedInbox]) recipients[sharedInbox] = []
-      recipients[sharedInbox].push(follower.ap_id)
-    })
+    // debug('Sending to user followers => ', user.username)
+    // user = await User.findByPk(user.id, { include: { model: FedUsers, as: 'followers' } })
+    // debug('Sending to user followers => ', user.followers.length)
+    // recipients = {}
+    // user.followers.forEach(follower => {
+    //   const sharedInbox = follower.object.endpoints.sharedInbox
+    //   if (!recipients[sharedInbox]) { recipients[sharedInbox] = [] }
+    //   recipients[sharedInbox].push(follower.ap_id)
+    // })
 
-    for(const sharedInbox in recipients) {
-      debug('Notify %s with event %s (from user %s) cc => %d', sharedInbox, event.title, user.username, recipients[sharedInbox].length)
-      const body = {
-        id: `${config.baseurl}/federation/m/${event.id}#create`,
-        type: 'Create',
-        to: ['https://www.w3.org/ns/activitystreams#Public'],
-        cc: [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]],
-        //cc: recipients[sharedInbox],
-        actor: `${config.baseurl}/federation/u/${user.username}`,
-        // object: event.toAP(user.username, [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]])
-        object: event.toAP(user.username, recipients[sharedInbox])
-      }
-      body['@context'] = 'https://www.w3.org/ns/activitystreams'
-      Helpers.signAndSend(body, user, sharedInbox)
-    }
-
+    // for (const sharedInbox in recipients) {
+    //   debug('Notify %s with event %s (from user %s) cc => %d', sharedInbox, event.title, user.username, recipients[sharedInbox].length)
+    //   const body = {
+    //     id: `${config.baseurl}/federation/m/${event.id}#create`,
+    //     type: 'Create',
+    //     to: ['https://www.w3.org/ns/activitystreams#Public'],
+    //     cc: [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]],
+    //     // cc: recipients[sharedInbox],
+    //     actor: `${config.baseurl}/federation/u/${user.username}`,
+    //     // object: event.toAP(user.username, [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]])
+    //     object: event.toAP(user.username, recipients[sharedInbox])
+    //   }
+    //   body['@context'] = 'https://www.w3.org/ns/activitystreams'
+    //   Helpers.signAndSend(body, user, sharedInbox)
+    // }
   },
 
-  async getActor (url, force = false) {
+  async getActor (URL, instance, force = false) {
     let fedi_user
-    
-    // try with cache first
-    if (!force) fedi_user = await FedUsers.findByPk(url)
 
-    if (fedi_user) return fedi_user.object
-    fedi_user = await fetch(url, { headers: { 'Accept': 'application/jrd+json, application/json' } })
+    // try with cache first
+    if (!force) {
+      fedi_user = await FedUsers.findByPk(URL, { include: Instances })
+      if (fedi_user) {
+        debug(fedi_user)
+        if (!fedi_user.instances) {
+          debug(fedi_user.instances)
+          debug(instance.name)
+          fedi_user.setInstance(instance)
+        }
+        return fedi_user.object
+      }
+    }
+
+    fedi_user = await fetch(URL, { headers: { 'Accept': 'application/jrd+json, application/json' } })
       .then(res => {
         if (!res.ok) {
-          debug('[ERR] Actor %s => %s', url, res.statusText)
+          debug('[ERR] Actor %s => %s', URL, res.statusText)
           return false
         }
         return res.json()
       })
+
     if (fedi_user) {
-      await FedUsers.create({ap_id: url, object: fedi_user})
+      await FedUsers.create({ ap_id: URL, object: fedi_user })
     }
     return fedi_user
   },
 
+  async getInstance (actor_url, force = false) {
+    actor_url = new url.URL(actor_url)
+    const domain = actor_url.host
+    const instance_url = `${actor_url.protocol}//${actor_url.host}`
+    debug('getInstance %s', domain)
+    let instance
+    if (!force) {
+      instance = await Instances.findByPk(domain)
+      if (instance) { return instance }
+    }
+
+    instance = await fetch(`${instance_url}/api/v1/instance`, { headers: { 'Accept': 'application/json' } })
+      .then(res => res.json())
+      .then(instance => {
+        const data = {
+          stats: instance.stats,
+          thumbnail: instance.thumbnail
+        }
+        return Instances.create({ name: instance.title, domain, data, blocked: false })
+      })
+      .catch(e => {
+        debug(e)
+        return false
+      })
+    return instance
+  },
+
   // ref: https://blog.joinmastodon.org/2018/07/how-to-make-friends-and-verify-requests/
   async verifySignature (req, res, next) {
-    let user = await Helpers.getActor(req.body.actor)
+    const instance = await Helpers.getInstance(req.body.actor)
+    if (!instance) { return res.status(401).send('Instance not found') }
+    if (instance.blocked) {
+      debug('Instance %s blocked', instance.domain)
+      return res.status(401).send('Instance blocked')
+    }
+
+    let user = await Helpers.getActor(req.body.actor, instance)
     if (!user) { return res.status(401).send('Actor not found') }
-    
+
     // little hack -> https://github.com/joyent/node-http-signature/pull/83
     req.headers.authorization = 'Signature ' + req.headers.signature
-    
+
     req.fedi_user = user
 
     // another little hack :/
@@ -168,16 +211,15 @@ const Helpers = {
     req.url = '/federation' + req.url
     const parsed = httpSignature.parseRequest(req)
     if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) { return next() }
-    
+
     // signature not valid, try without cache
-    user = await Helpers.getActor(req.body.actor, true)
+    user = await Helpers.getActor(req.body.actor, instance, true)
     if (!user) { return res.status(401).send('Actor not found') }
     if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) { return next() }
-    
+
     // still not valid
     debug('Invalid signature from user %s', req.body.actor)
     res.send('Request signature could not be verified', 401)
-
   }
 }
 

@@ -48,7 +48,7 @@
         template(slot='label')
           v-icon(name='network-wired')
           span.ml-1 {{$t('common.federation')}}
-        Federation
+        Federation(:instances='instances')
 
 </template>
 <script>
@@ -65,6 +65,7 @@ export default {
   middleware: ['auth'],
   data () {
     return {
+      instances: [],
       perPage: 10,
       eventPage: 1,
       description: '',
@@ -81,7 +82,8 @@ export default {
     try {
       const users = await $axios.$get('/users')
       const events = await $axios.$get('/event/unconfirmed')
-      return { users, events, mastodon_instance: store.state.settings.mastodon_instance }
+      const instances = await $axios.$get('/instances')
+      return { users, events, instances, mastodon_instance: store.state.settings.mastodon_instance }
     } catch (e) {
       console.error(e)
     }

@@ -2,14 +2,13 @@ const express = require('express')
 const multer = require('multer')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-const expressJwt = require('express-jwt')
-const config = require('config')
 
 const { isAuth, isAdmin } = require('./auth')
 const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 const userController = require('./controller/user')
 const settingsController = require('./controller/settings')
+const instancesController = require('./controller/instances')
 
 const storage = require('./storage')
 const upload = multer({ storage })
@@ -83,6 +82,9 @@ api.get('/export/:type', exportController.export)
 
 // get events in this range
 api.get('/event/:month/:year', eventController.getAll)
+
+api.get('/instances', isAdmin, instancesController.getAll)
+api.post('/instances/toggle_block', isAdmin, instancesController.toggleBlock)
 
 // Handle 404
 api.use((req, res) => {

@@ -1,7 +1,11 @@
 'use strict'
 module.exports = (sequelize, DataTypes) => {
   const instances = sequelize.define('instances', {
-    domain: DataTypes.STRING,
+    domain: {
+      primaryKey: true,
+      allowNull: false,
+      type: DataTypes.STRING
+    },
     name: DataTypes.STRING,
     blocked: DataTypes.BOOLEAN,
     data: DataTypes.JSON

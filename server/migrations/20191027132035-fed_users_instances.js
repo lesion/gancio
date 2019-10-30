@@ -2,11 +2,11 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addColumn('fed_users', 'instanceId', {
-      type: Sequelize.INTEGER,
+    return queryInterface.addColumn('fed_users', 'instanceDomain', {
+      type: Sequelize.STRING,
       references: {
         model: 'instances',
-        key: 'id'
+        key: 'domain'
       },
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
@@ -14,6 +14,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropColumn('fed_users', 'instanceId')
+    return queryInterface.removeColumn('fed_users', 'instanceDomain')
   }
 }
