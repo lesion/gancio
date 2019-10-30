@@ -27,16 +27,22 @@
           size='mini' :key='tag') {{tag}}
 
       //- info & actions for desktop
+      el-dialog.embedDialog(:visible.sync='showEmbed' :title='`Embed ${event.title}`')
+        EmbedEvent(:event='event')
       el-col.d-none.d-lg-block(:md='6')
         el-menu.menu.mt-2
           p <b>{{event|when}}</b> - {{event|to}}
           p <b>{{event.place.name}}</b> - {{event.place.address}}
           el-divider {{$t('common.actions')}}
-          el-menu-item(v-clipboard:success='copyLink'
+          el-menu-item(
+            v-clipboard:success='copyLink'
             v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') <i class='el-icon-paperclip'></i> {{$t('common.copy_link')}}
+
+          el-menu-item(@click='showEmbed=true') <i class='el-icon-embed'></i> {{$t('common.embed')}}
+
           //- TODO (ics of recurrent events)
           el-menu-item(v-if='!event.recurrent')
-            a.d-block(:href='`${settings.baseurl}/api/event/${event.id}.ics`') {{$t('common.add_to_calendar')}}
+            a.d-block(:href='`${settings.baseurl}/api/event/${event.id}.ics`') <i class='el-icon-cal'></i> {{$t('common.add_to_calendar')}}
           EventAdmin(v-if='is_mine' :event='event')
     hr
 
@@ -63,14 +69,18 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import EventAdmin from './eventAdmin'
+import EmbedEvent from './embedEvent'
+import { Message } from 'element-ui'
+
 import moment from 'dayjs'
 
 export default {
   name: 'Event',
   transition: null,
-  components: { EventAdmin },
+  components: { EventAdmin, EmbedEvent },
   data () {
     return {
+      showEmbed: false,
       copied: false
     }
   },
@@ -170,8 +180,7 @@ export default {
   },
   methods: {
     copyLink () {
-      this.copied = true
-      setTimeout(() => { this.copied = false }, 3000)
+      Message({ message: this.$t('common.copied'), type: 'success' })
     },
     comment_filter (value) {
       return value.replace(/<a.*href="([^">]+).*>(?:.(?!<\/a>))*.<\/a>/, (orig, url) => {
@@ -193,6 +202,14 @@ export default {
   background-color: white;
   margin-bottom: 30px;
   padding-top: 0px;
+
+  .embedDialog {
+    .el-dialog {
+      min-height: 500px;
+      max-width: 1000px;
+      width: 100%;
+    }
+  }
 
   .head {
     z-index: 1;

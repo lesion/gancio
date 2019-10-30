@@ -57,7 +57,10 @@ export default {
     set_password: 'Imposta password',
     copy_link: 'Copia link',
     send_via_mail: 'Invia mail',
-    add_to_calendar: 'Aggiungi al tuo calendario'
+    add_to_calendar: 'Aggiungi al tuo calendario',
+    instances: 'Istanze',
+    copied: 'Copiato',
+    embed: 'Incorpora'
   },
 
   login: {
@@ -159,7 +162,9 @@ export default {
     enable_federation: 'Abilita la federazione!',
     select_instance_timezone: 'Seleziona la timezone',
     enable_comments: 'Abilita commenti',
-    disable_gamification: 'Disabilita gamification'
+    disable_gamification: 'Disabilita gamification',
+    block_instance: 'Blocca',
+    unblock_instance: 'Sblocca'
   },
 
   auth: {
