@@ -1,6 +1,6 @@
 All notable changes to this project will be documented in this file.
 
-### unreleased
+### 0.16.0
 - [feat] embed event as widget in external website
 - [fedi] instances moderation in admin
 - [fix] toggle event visibility by owner
