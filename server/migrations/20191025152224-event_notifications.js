@@ -3,6 +3,12 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('event_notifications', {
+      status: {
+        type: Sequelize.ENUM,
+        values: ['new', 'sent', 'error'],
+        defaultValue: 'new',
+        index: true
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

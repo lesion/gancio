@@ -5,7 +5,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM,
       values: ['new', 'sent', 'error'],
       defaultValue: 'new',
-      errorMessage: DataTypes.TEXT,
       index: true
     }
   }, {})
