@@ -201,7 +201,7 @@ const userController = {
 
   async current (req, res) {
     if (!req.user) { return res.status(400).send('Not logged') }
-    const user = await User.findByPk(req.user.id, { include: { model: FedUsers, as: 'followers' } })
+    const user = await User.scope('withoutPassword').findByPk(req.user.id, { include: { model: FedUsers, as: 'followers' } })
     res.json(user)
   },
 

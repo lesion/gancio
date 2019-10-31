@@ -66,6 +66,8 @@ export default {
       try {
         this.loading = true
         await this.$auth.loginWith('local', { data: { email: this.email, password: this.password } })
+        const user = await this.$axios.get('/auth/user')
+        this.$auth.setUser(user.data)
         this.loading = false
         Message({ message: this.$t('login.ok'), showClose: true, type: 'success' })
         this.close()
