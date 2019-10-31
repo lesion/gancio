@@ -64,7 +64,7 @@ export default {
           message: this.$t(`register.${user.is_admin ? 'admin_' : ''}complete`),
           type: 'success'
         })
-        this.$router.replace('/')
+        this.close()
       } catch (e) {
         const error = get(e, 'response.data.errors[0].message', String(e))
         Message({
