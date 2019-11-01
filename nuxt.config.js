@@ -58,6 +58,9 @@ module.exports = {
     prefix: '/api'
   },
   auth: {
+    redirect: {
+      login: '/?ref=login'
+    },
     strategies: {
       local: {
         endpoints: {
