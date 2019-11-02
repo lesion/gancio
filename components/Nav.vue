@@ -39,6 +39,10 @@
       el-menu-item(v-if='$auth.loggedIn' @click='logout' :title="$t('common.logout')")
         v-icon(color='red' name='sign-out-alt')
 
+    a(href='/feed/rss')
+      el-menu-item(:title="$t('common.feed')")
+        v-icon(color='orange' name='rss')
+
 </template>
 <script>
 import { Message } from 'element-ui'
