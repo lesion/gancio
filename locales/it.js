@@ -160,9 +160,12 @@ export default {
     recurrent_event_visible: 'Appuntamenti fissi visibili di default',
     federation: 'Federazione / ActivityPub',
     enable_federation: 'Abilita la federazione!',
+    enable_federation_help: 'Sarà possibile seguire questa istanza dal fediverso',
     select_instance_timezone: 'Seleziona la timezone',
     enable_comments: 'Abilita commenti',
-    disable_gamification: 'Disabilita gamification',
+    enable_comments_help: 'Permette di aggiungere risorse all\'evento dal fediverso',
+    disable_gamification: 'Evita gamification',
+    disable_gamification_help: 'Nasconde le piccole icone che mostrano il numero di boost/bookmark in arrivo dal fediverso',
     block_instance: 'Blocca',
     unblock_instance: 'Sblocca'
   },

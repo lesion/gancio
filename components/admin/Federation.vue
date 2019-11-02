@@ -3,13 +3,25 @@
     el-form(inline label-width='200px')
       el-form-item(:label="$t('admin.enable_federation')")
         el-switch(v-model='enable_federation')
-      el-form-item(:label="$t('admin.enable_comments')")
-        el-switch(v-model='enable_comments')
-      el-form-item(:label="$t('admin.disable_gamification')")
-        el-switch(v-model='disable_gamification')
+        el-popover(:content="$t('admin.enable_federation_help')" trigger='hover')
+          span.ml-1(slot='reference')
+            i.el-icon-info
 
-      el-divider {{$t('common.instances')}}
-      el-table(:data='paginatedInstances' small)
+      el-form-item(v-show='enable_federation' :label="$t('admin.enable_comments')")
+        el-switch(v-model='enable_comments')
+        el-popover(:content="$t('admin.enable_comments_help')" trigger='hover')
+          span.ml-1(slot='reference')
+            i.el-icon-info
+
+      el-form-item(v-show='enable_federation' :label="$t('admin.disable_gamification')")
+        el-switch(v-model='disable_gamification')
+        el-popover(:content="$t('admin.disable_gamification_help')" trigger='hover')
+          span.ml-1(slot='reference')
+            i.el-icon-info
+
+
+      el-divider(v-if='enable_federation') {{$t('common.instances')}}
+      el-table(v-if='enable_federation' :data='paginatedInstances' small)
         el-table-column(label='Domain' width='250')
           template(slot-scope='data')
             span(slot='reference') <img class='instance_thumb' :src="data.row.data.thumbnail"/> {{data.row.domain}}
@@ -19,7 +31,7 @@
         el-table-column(label='Users' width='150')
           template(slot-scope='data')
             span(slot='reference') {{data.row.users}}
-        el-table-column(:label="$t('common.actions')" width='300')
+        el-table-column(:label="$t('common.actions')" width='200')
           template(slot-scope='data')
             el-button-group
               el-button(size='mini'
@@ -27,7 +39,7 @@
                 @click='toggleBlock(data.row)') {{data.row.blocked?$t('admin.unblock_instance'):$t('admin.block_instance')}}
 
       client-only
-        el-pagination(:page-size='perPage' :currentPage.sync='instancePage' :total='instances.length')
+        el-pagination(v-if='enable_federation && instances.length>perPage' :page-size='perPage' :currentPage.sync='instancePage' :total='instances.length')
 
 </template>
 <script>
