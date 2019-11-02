@@ -1,5 +1,5 @@
 <template lang='pug'>
-  el-dialog(:visible='show' @close='close' :close-on-click-modal='false'
+  el-dialog(:visible='show' @close='close' :close-on-click-modal='false' @opened='() => $refs.email.focus()'
     append-to-body :title="$t('common.login')")
 
     p(v-html="$t('login.description')")
