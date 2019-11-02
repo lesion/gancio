@@ -19,7 +19,7 @@
         img.main.mb-3(:src='imgPath' v-if='event.image_path')
         //- info for mobile screen
         div.d-block.d-lg-none
-          span <b>{{event|when}}</b> - {{event|to}}<br/>
+          span <b>{{event|when}}</b>, <small>{{event|to}}</small><br/>
           span <b>{{event.place.name}}</b> - {{event.place.address}}
           hr
         pre(v-html='$options.filters.linkify(event.description)')
@@ -27,29 +27,32 @@
           size='mini' :key='tag') {{tag}}
 
       //- info & actions for desktop
-      el-dialog.embedDialog(:visible.sync='showEmbed' :title='`Embed ${event.title}`')
+      el-dialog.embedDialog(:visible.sync='showEmbed')
+        h4(slot='title') {{$t('common.embed_title')}}
         EmbedEvent(:event='event')
       el-col.d-none.d-lg-block(:md='6')
         el-menu.menu.mt-2
-          p <b>{{event|when}}</b> - {{event|to}}
-          p <b>{{event.place.name}}</b> - {{event.place.address}}
+          p <i class='el-icon-watch'></i>  <b>{{event|when}}</b> <br/><small>{{event|to}}</small>
+          p <i class='el-icon-map-location'></i>  <b>{{event.place.name}}</b> - {{event.place.address}}
           el-divider {{$t('common.actions')}}
           el-menu-item(
             v-clipboard:success='copyLink'
             v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') <i class='el-icon-paperclip'></i> {{$t('common.copy_link')}}
 
-          el-menu-item(@click='showEmbed=true') <i class='el-icon-embed'></i> {{$t('common.embed')}}
+          el-menu-item(@click='showEmbed=true') <i class='el-icon-copy-document'></i> {{$t('common.embed')}}
 
           //- TODO (ics of recurrent events)
           el-menu-item(v-if='!event.recurrent')
-            a.d-block(:href='`${settings.baseurl}/api/event/${event.id}.ics`') <i class='el-icon-cal'></i> {{$t('common.add_to_calendar')}}
+            a.d-block(:href='`${settings.baseurl}/api/event/${event.id}.ics`') <i class='el-icon-date'></i> {{$t('common.add_to_calendar')}}
           EventAdmin(v-if='is_mine' :event='event')
     hr
 
     .d-block.d-lg-none
       el-button(plain size='mini' type='primary' v-clipboard:success='copyLink'
         v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') <i class='el-icon-paperclip'></i> {{$t('common.copy_link')}}
-      a.el-button.el-button--success.el-button--mini.is-plain(role='button' plain size='mini' type='success' :href='`${settings.baseurl}/api/event/${event.id}.ics`') {{$t('common.add_to_calendar')}}
+      a.el-button.el-button--success.el-button--mini.is-plain(role='button' plain size='mini' type='success'
+        :href='`${settings.baseurl}/api/event/${event.id}.ics`') <i class='el-icon-date'></i> {{$t('common.add_to_calendar')}}
+
     //- comments from fediverse
     #comments(v-if='settings.enable_federation')
       div.float-right(v-if='!settings.disable_gamification')
