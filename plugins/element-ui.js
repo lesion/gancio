@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { Button, Select, Tag, Option, Table, FormItem, Card, Row, Col, Upload, Checkbox, RadioButton, RadioGroup,
   Form, Tabs, TabPane, Switch, Input, Loading, TimeSelect, Badge, ButtonGroup, Divider, Step, Steps, Radio, Main,
   TableColumn, ColorPicker, Pagination, Popover, Tooltip, Dialog, Image, Backtop, Collapse, CollapseItem, Link,
-  Dropdown, DropdownMenu, DropdownItem, Submenu, PageHeader, Header, Icon,
+  Dropdown, DropdownMenu, DropdownItem, Submenu, PageHeader, Header, Icon, Alert,
   Container, Footer, Timeline, TimelineItem, Menu, MenuItem } from 'element-ui'
 import locale from 'element-ui/lib/locale'
 
@@ -15,6 +15,7 @@ const locales = {
 export default ({ app, store }) => {
   locale.use(locales[store.state.locale])
   Vue.use(Button)
+  Vue.use(Alert)
   Vue.use(Icon)
   Vue.use(Dropdown)
   Vue.use(Header)

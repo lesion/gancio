@@ -60,7 +60,9 @@ export default {
     add_to_calendar: 'Aggiungi al tuo calendario',
     instances: 'Istanze',
     copied: 'Copiato',
-    embed: 'Incorpora'
+    embed: 'Incorpora',
+    embed_title: 'Mostra questo evento sul tuo sito web',
+    embed_help: 'Copiando il seguente codice sul tuo sito web l\'evento verrà incluso come qui di lato'
   },
 
   login: {

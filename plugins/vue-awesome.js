@@ -32,6 +32,7 @@ import 'vue-awesome/icons/calendar-day'
 import 'vue-awesome/icons/calendar-week'
 import 'vue-awesome/icons/calendar-alt'
 import 'vue-awesome/icons/network-wired'
+import 'vue-awesome/icons/rss'
 
 import Icon from 'vue-awesome/components/Icon'
 
