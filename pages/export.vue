@@ -20,13 +20,14 @@
         span(v-html='$t(`export.feed_description`)')
         el-input(v-model='link')
           el-button(slot='append' plain
-          v-clipboard:copy='link'
+          v-clipboard:copy='link' v-clipboard:success='copyLink'
           type="primary" icon='el-icon-document' ) {{$t("common.copy")}}
 
       el-tab-pane.pt-1(label='ics/ical' name='ics')
         p(v-html='$t(`export.ical_description`)')
         el-input(v-model='link')
-          el-button(slot='append' v-clipboard:copy='link' plain type="primary" icon='el-icon-document') {{$t("common.copy")}}
+          el-button(slot='append' v-clipboard:copy='link' v-clipboard:success='copyLink'
+            plain type="primary" icon='el-icon-document') {{$t("common.copy")}}
 
       el-tab-pane.pt-1(label='list' name='list')
         p(v-html='$t(`export.list_description`)')
@@ -40,7 +41,8 @@
               :events='filteredEvents'
             )
         el-input.mb-1(type='textarea' v-model='listScript' readonly )
-        el-button.float-right(plain v-clipboard:copy='listScript' type='primary' icon='el-icon-document') {{$t('common.copy')}}
+        el-button.float-right(plain v-clipboard:copy='listScript' v-clipboard:success='copyLink'
+          type='primary' icon='el-icon-document') {{$t('common.copy')}}
 
       //- TOFIX
       //- el-tab-pane.pt-1(label='calendar' name='calendar')
@@ -79,8 +81,8 @@ export default {
     store.commit('update', { tags, places })
   },
   methods: {
-    copy (msg) {
-      this.$copyText(msg).then(e => console.error('ok ', e)).catch(e => console.error('err ', e))
+    copyLink () {
+      Message({ message: this.$t('common.copied'), type: 'success' })
     },
     async add_notification () {
       if (!this.notification.email) {
