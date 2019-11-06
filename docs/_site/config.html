@@ -283,7 +283,7 @@ This shoud be a <code class="highlighter-rouge">.json</code> or a <code class="h
   <li><a href="#database" id="markdown-toc-database">Database</a></li>
   <li><a href="#upload-path" id="markdown-toc-upload-path">Upload path</a></li>
   <li><a href="#smtp" id="markdown-toc-smtp">SMTP</a></li>
-  <li><a href="#admin" id="markdown-toc-admin">Admin</a></li>
+  <li><a href="#admin_email" id="markdown-toc-admin_email">Admin_email</a></li>
   <li><a href="#favicon" id="markdown-toc-favicon">Favicon</a></li>
   <li><a href="#user-locale" id="markdown-toc-user-locale">User locale</a></li>
   <li><a href="#secret" id="markdown-toc-secret">Secret</a></li>
@@ -341,10 +341,31 @@ This shoud be a <code class="highlighter-rouge">.json</code> or a <code class="h
   </li>
   <li>
     <h3 id="smtp">SMTP</h3>
+    <p>SMTP configuration.
+Gancio should send emails at following events:</p>
   </li>
+  <li>the admin should receive emails of anon event (if enabled) to confirm them.</li>
+  <li>the admin should receive emails of registration request (if enabled) to confirm them.</li>
+  <li>an user should receive an email of registration requested.</li>
+  <li>an user should receive an email of confirmed registration.</li>
+  <li>an user should receive a confirmation email when subscribed directly by admin.</li>
+</ul>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"smtp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"auth"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"pass"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"secure"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"host"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<ul>
   <li>
-    <h3 id="admin">Admin</h3>
-    <p>Email of administrator. Email from gancio comes from this email.</p>
+    <h3 id="admin_email">Admin_email</h3>
+    <p>Email of administrator. Note that email from gancio comes from this email and that
+the SMTP configuration above should allow to use this address as from.</p>
   </li>
   <li>
     <h3 id="favicon">Favicon</h3>
