@@ -6,7 +6,7 @@ import messages from '../locales'
 
 Vue.use(VueI18n)
 
-export default async ({ app, store, req }) => {
+export default ({ app, store, req }) => {
   if (process.server) {
     store.commit('setLocale', req.settings.locale)
     if (req.settings.user_locale) { store.commit('setUserLocale', req.settings.user_locale) }

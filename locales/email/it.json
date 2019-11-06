@@ -5,7 +5,7 @@
   },
   "confirm": {
     "subject": "Puoi iniziare a pubblicare eventi",
-    "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}</a> è stato confermato. Scrivici a {{config.admin}} per qualsiasi informazione e fai a modino."
+    "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}</a> è stato confermato. Scrivici a {{config.admin_email}} per qualsiasi informazione e fai a modino."
   },
   "user_confirm": {
     "subject": "Puoi iniziare a pubblicare eventi",
