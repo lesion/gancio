@@ -53,8 +53,29 @@ Where to save images
 `"upload_path": "./uploads"`
 
 - ### SMTP
-- ### Admin
-Email of administrator. Email from gancio comes from this email.
+SMTP configuration.
+Gancio should send emails at following events:
+- the admin should receive emails of anon event (if enabled) to confirm them.
+- the admin should receive emails of registration request (if enabled) to confirm them.
+- an user should receive an email of registration requested.
+- an user should receive an email of confirmed registration.
+- an user should receive a confirmation email when subscribed directly by admin.
+
+```json
+"smtp": {
+    "auth": {
+      "user": "",
+      "pass": ""
+    },
+    "secure": true,
+    "host": ""
+  }
+```
+
+- ### Admin_email
+Email of administrator. Note that email from gancio comes from this email and that
+the SMTP configuration above should allow to use this address as from.
+
 
 - ### Favicon
 You could specify another favicon. This is also used as logo (top-left
