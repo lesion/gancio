@@ -15,8 +15,12 @@
 
     el-row
       el-col(:md='18')
+
         //- event image
-        img.main.mb-3(:src='imgPath' v-if='event.image_path')
+        el-image.main_image.mb-3(:src='imgPath' v-if='event.image_path' fit='contain')
+          div.loading(slot='placeholder')
+            el-icon(name='loading')
+
         //- info for mobile screen
         div.d-block.d-lg-none
           span <b>{{event|when}}</b>, <small>{{event|to}}</small><br/>
@@ -26,13 +30,14 @@
         el-tag.mr-1.mb-1(v-for='tag in event.tags'
           size='mini' :key='tag') {{tag}}
 
-      //- info & actions for desktop
       el-dialog.embedDialog(:visible.sync='showEmbed')
         h4(slot='title') {{$t('common.embed_title')}}
         EmbedEvent(:event='event')
+
+      //- info & actions for desktop
       el-col.d-none.d-lg-block(:md='6')
         el-menu.menu.mt-2
-          p <i class='el-icon-watch'></i>  <b>{{event|when}}</b> <br/><small>{{event|to}}</small>
+          p <i class='el-icon-time'></i>  <b>{{event|when}}</b> <br/><small>{{event|to}}</small>
           p <i class='el-icon-map-location'></i>  <b>{{event.place.name}}</b> - {{event.place.address}}
           el-divider {{$t('common.actions')}}
           el-menu-item(
@@ -93,55 +98,93 @@ export default {
       showFollowMe: false
     }
   },
-  head () {
-    if (!this.event) { return {} }
-    const tags_feed = this.event.tags.map(tag => ({ rel: 'alternate',
+  head() {
+    if (!this.event) {
+      return {}
+    }
+    const tags_feed = this.event.tags.map(tag => ({
+      rel: 'alternate',
       type: 'application/rss+xml',
       title: `${this.settings.title} events tagged ${tag}`,
-      href: this.settings.baseurl + `/feed/rss?tags=${tag}` }))
-    const place_feed = { rel: 'alternate',
+      href: this.settings.baseurl + `/feed/rss?tags=${tag}`
+    }))
+    const place_feed = {
+      rel: 'alternate',
       type: 'application/rss+xml',
       title: `${this.settings.title} events  @${this.event.place.name}`,
-      href: this.settings.baseurl + `/feed/rss?places=${this.event.placeId}` }
+      href: this.settings.baseurl + `/feed/rss?places=${this.event.placeId}`
+    }
 
     return {
       title: `${this.settings.title} - ${this.event.title}`,
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description',
+        {
+          hid: 'description',
           name: 'description',
-          content: this.event.description.replace('\n', '').slice(0, 1000) },
-        { hid: 'og-description',
+          content: this.event.description.replace('\n', '').slice(0, 1000)
+        },
+        {
+          hid: 'og-description',
           name: 'og:description',
-          content: this.event.description.replace('\n', '').slice(0, 100) },
+          content: this.event.description.replace('\n', '').slice(0, 100)
+        },
         { hid: 'og-title', property: 'og:title', content: this.event.title },
-        { hid: 'og-url', property: 'og:url', content: `${this.settings.baseurl}/event/${this.event.id}` },
+        {
+          hid: 'og-url',
+          property: 'og:url',
+          content: `${this.settings.baseurl}/event/${this.event.id}`
+        },
         { property: 'og:type', content: 'event' },
-        { property: 'og:image', content: `${this.settings.baseurl}${this.imgPath}` },
+        {
+          property: 'og:image',
+          content: `${this.settings.baseurl}${this.imgPath}`
+        },
         { property: 'og:site_name', content: this.settings.title },
-        { property: 'og:updated_time', content: moment.unix(this.event.start_datetime).format() },
-        { property: 'article:published_time', content: moment.unix(this.event.start_datetime).format() },
+        {
+          property: 'og:updated_time',
+          content: moment.unix(this.event.start_datetime).format()
+        },
+        {
+          property: 'article:published_time',
+          content: moment.unix(this.event.start_datetime).format()
+        },
         { property: 'article:section', content: 'event' },
         { property: 'twitter:card', content: 'summary' },
         { property: 'twitter:title', content: this.event.title },
-        { property: 'twitter:image', content: `${this.settings.baseurl}${this.imgPath}` },
-        { property: 'twitter:description', content: this.event.description.replace('\n', '').slice(0, 100) }
+        {
+          property: 'twitter:image',
+          content: `${this.settings.baseurl}${this.imgPath}`
+        },
+        {
+          property: 'twitter:description',
+          content: this.event.description.replace('\n', '').slice(0, 100)
+        }
       ],
       link: [
         { rel: 'image_src', href: `${this.settings.baseurl}${this.imgPath}` },
-        { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' },
+        {
+          rel: 'alternate',
+          type: 'application/rss+xml',
+          title: this.settings.title,
+          href: this.settings.baseurl + '/feed/rss'
+        },
         ...tags_feed,
         place_feed
       ]
     }
   },
-  async asyncData ({ $axios, params, error, store }) {
+  async asyncData({ $axios, params, error, store }) {
     try {
-      const [ id, start_datetime ] = params.id.split('_')
+      const [id, start_datetime] = params.id.split('_')
       const event = await $axios.$get(`/event/${id}`)
-      event.start_datetime = start_datetime ? Number(start_datetime) : event.start_datetime
+      event.start_datetime = start_datetime
+        ? Number(start_datetime)
+        : event.start_datetime
       const now = new Date()
-      const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
+      const events = await $axios.$get(
+        `/event/${now.getMonth()}/${now.getFullYear()}`
+      )
       store.commit('setEvents', events)
       return { event, id: Number(id) }
     } catch (e) {
@@ -151,62 +194,81 @@ export default {
   computed: {
     ...mapGetters(['filteredEvents']),
     ...mapState(['settings']),
-    fedi_user () {
+    fedi_user() {
       // TODO:
       return this.settings.fedi_admin
     },
-    next () {
+    next() {
       let found = false
       const event = this.filteredEvents.find(e => {
-        if (found) { return e }
-        found = (e.start_datetime === this.event.start_datetime && e.id === this.event.id)
+        if (found) {
+          return e
+        }
+        found =
+          e.start_datetime === this.event.start_datetime &&
+          e.id === this.event.id
       })
-      if (!event) { return false }
+      if (!event) {
+        return false
+      }
       if (event.recurrent) {
         return `${event.id}_${event.start_datetime}`
       }
       return event.id
     },
-    prev () {
+    prev() {
       let event = false
       this.filteredEvents.find(e => {
-        if (e.start_datetime === this.event.start_datetime && e.id === this.event.id) { return true }
+        if (
+          e.start_datetime === this.event.start_datetime &&
+          e.id === this.event.id
+        ) {
+          return true
+        }
         event = e
       })
-      if (!event) { return false }
+      if (!event) {
+        return false
+      }
       if (event.recurrent) {
         return `${event.id}_${event.start_datetime}`
       }
       return event.id
     },
-    imgPath () {
+    imgPath() {
       return this.event.image_path && '/media/' + this.event.image_path
     },
-    is_mine () {
-      if (!this.$auth.user) { return false }
-      return this.event.userId === this.$auth.user.id || this.$auth.user.is_admin
+    is_mine() {
+      if (!this.$auth.user) {
+        return false
+      }
+      return (
+        this.event.userId === this.$auth.user.id || this.$auth.user.is_admin
+      )
     }
   },
   methods: {
-    copyLink () {
-      Message({ message: this.$t('common.copied'), type: 'success' })
+    copyLink() {
+      Message({ message: this.$t('common.copied'), type: 'success', showClose: true })
     },
-    comment_filter (value) {
-      return value.replace(/<a.*href="([^">]+).*>(?:.(?!<\/a>))*.<\/a>/, (orig, url) => {
-        // get extension
-        const ext = url.slice(-4)
-        if (['.mp3', '.ogg'].includes(ext)) {
-          return `<audio controls><source src='${url}'></audio>`
-        } else {
-          return orig
+    comment_filter(value) {
+      return value.replace(
+        /<a.*href="([^">]+).*>(?:.(?!<\/a>))*.<\/a>/,
+        (orig, url) => {
+          // get extension
+          const ext = url.slice(-4)
+          if (['.mp3', '.ogg'].includes(ext)) {
+            return `<audio controls><source src='${url}'></audio>`
+          } else {
+            return orig
+          }
         }
-      })
+      )
     }
   }
 }
 </script>
 <style lang='less'>
-
 #eventDetail {
   background-color: white;
   margin-bottom: 30px;
@@ -258,14 +320,29 @@ export default {
   pre {
     color: #404246;
     font-size: 1em;
-    font-family: BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Helvetica,Arial,sans-serif !important;
+    font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen,
+      Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica, Arial,
+      sans-serif !important;
   }
 
-  img {
-    max-height: 88vh;
-    object-fit: contain;
-    &.main {
-      width: 100%;
+  .main_image {
+    width: 100%;
+    transition: height .100s;
+    height: auto;
+
+    img {
+      // object-fit: contain;
+      margin: 0 auto;
+      max-height: 88vh;
+    }
+
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+      margin: 0 auto;
+      height: 100px;
     }
   }
 
@@ -290,5 +367,4 @@ export default {
     }
   }
 }
-
 </style>
