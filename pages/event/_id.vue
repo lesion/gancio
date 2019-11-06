@@ -54,13 +54,18 @@
         :href='`${settings.baseurl}/api/event/${event.id}.ics`') <i class='el-icon-date'></i> {{$t('common.add_to_calendar')}}
 
     //- comments from fediverse
-    #comments(v-if='settings.enable_federation')
+    #comments.mt-1(v-if='settings.enable_federation')
       div.float-right(v-if='!settings.disable_gamification')
         small.mr-3 🔖 {{event.likes.length}}
         small ✊ {{event.boost.length}}<br/>
 
       strong(v-if='settings.enable_comments') {{$tc('common.comments', event.comments.length)}} -
-      small {{$t('event.interact_with_me_at')}} <u>{{fedi_user}}@{{settings.baseurl|url2host}}</u>
+      small {{$t('event.interact_with_me_at')}} 
+        el-button(type='text' size='mini' @click='showFollowMe=true') @{{fedi_user}}@{{settings.baseurl|url2host}}
+
+      el-dialog.followDialog(:visible.sync='showFollowMe')
+        h4(slot='title') {{$t('common.follow_me_title')}}
+        FollowMe
 
       .card-header(v-if='settings.enable_comments' v-for='comment in event.comments' :key='comment.id')
         a.float-right(:href='comment.data.url')
@@ -73,6 +78,7 @@
 import { mapState, mapGetters } from 'vuex'
 import EventAdmin from './eventAdmin'
 import EmbedEvent from './embedEvent'
+import FollowMe from './followMe'
 import { Message } from 'element-ui'
 
 import moment from 'dayjs'
@@ -80,11 +86,11 @@ import moment from 'dayjs'
 export default {
   name: 'Event',
   transition: null,
-  components: { EventAdmin, EmbedEvent },
-  data () {
+  components: { EventAdmin, EmbedEvent, FollowMe },
+  data() {
     return {
       showEmbed: false,
-      copied: false
+      showFollowMe: false
     }
   },
   head () {
@@ -210,6 +216,14 @@ export default {
     .el-dialog {
       min-height: 500px;
       max-width: 1000px;
+      width: 100%;
+    }
+  }
+
+  .followDialog {
+    .el-dialog {
+      min-height: 300px;
+      max-width: 600px;
       width: 100%;
     }
   }
