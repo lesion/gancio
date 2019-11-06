@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { event: Event, user: User } = require('../api/models')
+const { event: Event, user: User, comment: Comment } = require('../api/models')
 const cors = require('cors')
 const settingsController = require('../api/controller/settings')
 const version = require('../../package.json').version
@@ -17,7 +17,7 @@ router.use((req, res, next) => {
 
 router.get('/webfinger', async (req, res) => {
   if (!req.query || !req.query.resource || !req.query.resource.includes('acct:')) {
-    debug('Bad webfinger request => %s', resource.query)
+    debug('Bad webfinger request => %s', req.query && req.query.resource)
     return res.status(400).send('Bad request. Please make sure "acct:USER@DOMAIN" is what you are sending as the "resource" query parameter.')
   }
 
@@ -60,7 +60,7 @@ router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
     },
     openRegistrations: settingsController.settings.allow_registration,
     protocols: ['activitypub'],
-    services: { inbound: [], outbound: ['atom1.0'] },
+    services: { inbound: [], outbound: ['rss2.0'] },
     software: {
       name: 'gancio',
       version
@@ -84,6 +84,8 @@ router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
 router.get('/x-nodeinfo2', async (req, res) => {
   const usersCount = (await User.findAndCountAll()).count
   const eventsCount = (await Event.findAndCountAll()).count
+  const commentsCount = (await Comment.findAndCountAll()).count
+
   const ret = {
     version: '1.0',
     server: {
@@ -97,15 +99,15 @@ router.get('/x-nodeinfo2', async (req, res) => {
     usage: {
       users: {
         total: usersCount
-      }
-    },
-    localPost: eventsCount,
-    localComments: 0
+      },
+      localPost: eventsCount,
+      localComments: commentsCount
+    }
   }
   res.json(ret)
 })
 
-router.get('/nodeinfo', async (req, res) => {
+router.get('/nodeinfo', (req, res) => {
   const ret = {
     links: [
       { href: `${req.settings.baseurl}/.well-known/nodeinfo/2.0`, rel: `http://nodeinfo.diaspora.software/ns/schema/2.0` },
