@@ -48,7 +48,12 @@ const exportController = {
     res.render('feed/rss.pug', { events, settings: req.settings, moment })
   },
 
-  ics (req, res, events) {
+  /**
+   * send an ics of specified events (optionally with reminders)
+   * @param {*} events array of events from sequelize
+   * @param {*} alarms https://github.com/adamgibbons/ics#attributes (alarms)
+   */
+  ics (req, res, events, alarms = []) {
     const eventsMap = events.map(e => {
       const tmpStart = moment.unix(e.start_datetime)
       const tmpEnd = moment.unix(e.end_datetime)
@@ -63,15 +68,12 @@ const exportController = {
         description: e.description,
         location: `${e.place.name} - ${e.place.address}`,
         url: `${req.settings.baseurl}/event/${e.id}`,
-        alarms: [{
-          action: 'display',
-          trigger: { hours: 1, before: true }
-        }]
+        alarms
       }
     })
     res.type('text/calendar; charset=UTF-8')
-    const { error, value } = ics.createEvents(eventsMap)
-    res.send(value)
+    const ret = ics.createEvents(eventsMap)
+    res.send(ret.value)
   }
 }
 

@@ -104,7 +104,11 @@ const eventController = {
       if (format === 'json') {
         res.json(event)
       } else if (format === 'ics') {
-        exportController.ics(req, res, [event])
+        // last arg is alarms/reminder, ref: https://github.com/adamgibbons/ics#attributes (alarms)
+        exportController.ics(req, res, [event], [{
+          action: 'display',
+          trigger: { hours: 1, before: true }
+        }])
       }
     } else {
       res.sendStatus(404)
