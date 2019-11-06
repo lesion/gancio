@@ -119,8 +119,11 @@ const userController = {
     res.json(event)
 
     // send notification (mastodon/email)
+    // only if user is authenticated
+    if (req.user) {
     const notifier = require('../../notifier')
     notifier.notifyEvent('Create', event.id)
+    }
   },
 
   async updateEvent (req, res) {
