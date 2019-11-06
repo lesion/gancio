@@ -1,5 +1,17 @@
 All notable changes to this project will be documented in this file.
 
+### unreleased
+- [feat] add rss link @homepage
+- [ui] add lot of explanation text
+- [ui] show copied messages
+- [admin] show n of unconfirmed users/events
+- [ui] spinner while event image is loading
+- [fedi] add follow me dialog in event
+- [fix] do not add reminders in full ics export
+- [fix] remove spaces from hashtags sent via AP
+- [fix] #56 unconfirmed event sent via ap
+- [fix] localPosts/comments in fediverse stats
+
 ### 0.16.0
 - [feat] embed event as widget in external website
 - [fedi] instances moderation in admin
