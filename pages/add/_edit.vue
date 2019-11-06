@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-main
+  el-main#add_event
     h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{edit?$t('common.edit_event'):$t('common.add_event')}}
     el-form(v-loading='loading')
       client-only
@@ -423,6 +423,10 @@ export default {
 }
 </script>
 <style>
+#add_event {
+  max-width: 800px;
+}
+
 #picker {
   max-width: 400px;
 }

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import merge from 'lodash/merge'
 import messages from '../locales'
-// import acceptLanguage from 'accept-language'
 
 Vue.use(VueI18n)
 

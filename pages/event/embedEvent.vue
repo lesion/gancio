@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     copyLink () {
-      Message({ message: this.$t('common.copied'), type: 'success' })
+      Message({ message: this.$t('common.copied'), type: 'success', showClose: true })
     }
   }
 }

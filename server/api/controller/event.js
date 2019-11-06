@@ -10,7 +10,10 @@ const debug = require('debug')('controller:event')
 
 const eventController = {
 
-  // NOT USED ANYWHERE, comments are added from fediverse, should we remove this?
+  /** add a comment to event
+   * @todo not used anywhere, should we use with webmention?
+   * @todo should we use this for roply coming from fediverse?
+   */
   async addComment (req, res) {
     // comments could be added to an event or to another comment
     let event = await Event.findOne({ where: { activitypub_id: { [Op.eq]: req.body.id } } })
@@ -115,6 +118,9 @@ const eventController = {
     }
   },
 
+  /** confirm an anonymous event
+   * and send its relative notifications
+   */
   async confirm (req, res) {
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
@@ -154,6 +160,7 @@ const eventController = {
     }
   },
 
+  /** get all unconfirmed events */
   async getUnconfirmed (req, res) {
     const events = await Event.findAll({
       where: {
