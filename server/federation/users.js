@@ -14,6 +14,7 @@ module.exports = {
         'https://www.w3.org/ns/activitystreams',
         'https://w3id.org/security/v1'
       ],
+      summary: config.description,
       id: `${config.baseurl}/federation/u/${name}`,
       type: 'Person',
       name: user.display_name || user.username,

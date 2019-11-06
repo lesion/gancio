@@ -137,10 +137,7 @@ const Helpers = {
     if (!force) {
       fedi_user = await FedUsers.findByPk(URL, { include: Instances })
       if (fedi_user) {
-        debug(fedi_user)
         if (!fedi_user.instances) {
-          debug(fedi_user.instances)
-          debug(instance.name)
           fedi_user.setInstance(instance)
         }
         return fedi_user.object
