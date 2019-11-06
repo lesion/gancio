@@ -9,6 +9,7 @@
         template(slot='label')
           v-icon(name='users')
           span.ml-1 {{$t('common.users')}}
+          el-badge(v-show='unconfirmedUsers.length>0' :value='unconfirmedUsers.length')
         Users(:users='users')
 
       //- PLACES
@@ -23,6 +24,7 @@
         template(slot='label')
           v-icon(name='calendar')
           span.ml-1 {{$t('common.events')}}
+          el-badge(v-show='events.length>0' :value='events.length')
         p {{$t('admin.event_confirm_description')}}
         el-table(:data='paginatedEvents' small primary-key='id' v-loading='loading')
           el-table-column(:label='$t("common.name")' width='300')
@@ -83,13 +85,16 @@ export default {
       const users = await $axios.$get('/users')
       const events = await $axios.$get('/event/unconfirmed')
       const instances = await $axios.$get('/instances')
-      return { users, events, instances, mastodon_instance: store.state.settings.mastodon_instance }
+      return { users, events, instances }
     } catch (e) {
       console.error(e)
     }
   },
   computed: {
     ...mapState(['settings']),
+    unconfirmedUsers () {
+      return this.users.filter(u => !u.is_active)
+    },
     paginatedEvents () {
       return this.events.slice((this.eventPage - 1) * this.perPage,
         this.eventPage * this.perPage)
