@@ -32,11 +32,11 @@
       el-menu-item(:title="$t('common.share')")
         v-icon(name='share' color='yellow')
 
-      el-menu-item(v-if='$auth.loggedIn' @click='logout' :title="$t('common.logout')")
-        v-icon(color='red' name='sign-out-alt')
+    el-menu-item(v-if='$auth.loggedIn' @click='logout' :title="$t('common.logout')")
+      v-icon(color='red' name='sign-out-alt')
 
     el-menu-item(:title="$t('common.feed')" v-clipboard:copy='`settings.baseurl/feed/rss`' v-clipboard:success='copyLink')
-        v-icon(color='orange' name='rss')
+      v-icon(color='orange' name='rss')
 
 </template>
 <script>

@@ -9,14 +9,14 @@
     el-switch.mt-1.mb-1.ml-2.d-block(
       v-if='recurrentFilter && settings.allow_recurrent_event'
       inactive-text=''
-      active-text='anche appuntamenti fissi'
+      :active-text="$t('event.recurrent_event_too')"
       inactive-color='lightgreen'
       v-model='showRecurrent'
     )
     el-switch.mt-1.mb-1.ml-2.d-block(
       v-if='pastFilter'
-      inactive-text='solo futuri'
-      active-text='anche passati'
+      :inactive-text="$t('event.only_future')"
+      :active-text="$t('event.past_too')"
       inactive-color='lightgreen'
       v-model='showPast'
     )
