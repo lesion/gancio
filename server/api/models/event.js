@@ -38,16 +38,17 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   event.prototype.toAP = function (username, follower = []) {
-    const tags = this.tags && this.tags.map(t => {
-      const tag = t.tag.replace(/[ #]/g, '_')
-      return `<a href='/tags/${t.tag}' class='mention hashtag status-link' rel='tag'><span>#${t.tag}</span></a>`
+    const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, ' '))
+    const tag_links = tags.map(t => {
+      return `<a href='/tags/${t}' class='mention hashtag status-link' rel='tag'><span>#${t}</span></a>`
     }).join(' ')
 
+    // @todo: each instance support different note's length
     const content = `<a href='${config.baseurl}/event/${this.id}'>${this.title}</a><br/>
-    📍${this.place.name}<br/>
-    ⏰ ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/><br/>
+    📍 ${this.place.name}<br/>
+    📅 ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/><br/>
       ${this.description.length > 200 ? this.description.substr(0, 200) + '...' : this.description}<br/>
-      ${tags} <br/>`
+      ${tag_links} <br/>`
 
     const attachment = []
     if (this.image_path) {
@@ -64,11 +65,12 @@ module.exports = (sequelize, DataTypes) => {
       id: `${config.baseurl}/federation/m/${this.id}`,
       url: `${config.baseurl}/federation/m/${this.id}`,
       type: 'Note',
+      // do not send attachment, in mastodon a link preview is shown instead
       // attachment,
-      tag: this.tags.map(tag => ({
+      tag: tags.map(tag => ({
         type: 'Hashtag',
-        name: '#' + tag.tag,
-        href: '/tags/' + tag.tag
+        name: '#' + tag,
+        href: '/tags/' + tag
       })),
       published: this.createdAt,
       attributedTo: `${config.baseurl}/federation/u/${username}`,
