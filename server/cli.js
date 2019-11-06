@@ -290,3 +290,4 @@ require('yargs')
   .help('h')
   .alias('h', 'help')
   .epilog('Made with ❤ by underscore hacklab - https://gancio.org')
+  .argv
