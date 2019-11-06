@@ -13,13 +13,14 @@ div
         el-form-item(:label="$t('common.admin')")
           el-switch(v-model='new_user.is_admin')
         el-button.float-right(@click='create_user' type='success' plain) {{$t('common.send')}}
+      el-alert.mb-1(type='info' show-icon :closable='false') {{$t('admin.user_add_help')}}
 
   //- USERS LIST
   el-table(:data='paginatedUsers' small)
-    el-table-column(label='Username' width='150')
+    el-table-column(label='Username' width='250')
       template(slot-scope='data')
         span(slot='reference') {{data.row.username}}
-    el-table-column(label='Email' width='300')
+    el-table-column(label='Email' width='250')
       template(slot-scope='data')
         el-popover(trigger='hover' :content='data.row.description' width='400')
           span(slot='reference') {{data.row.email}}
