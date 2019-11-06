@@ -6,41 +6,36 @@
       el-menu-item(:title="$t('common.info')")
         img#logo(src='/favicon.ico')
 
-    //- el-link(@click='showLogin=true')
-    nuxt-link(to='/?ref=login')
-      el-menu-item(v-if='!$auth.loggedIn' :title="$t('common.login')")
+    nuxt-link(v-if='!$auth.loggedIn' to='/?ref=login')
+      el-menu-item(:title="$t('common.login')")
         v-icon(color='lightgreen' name='user')
 
     nuxt-link(v-if='could_add' to='/add')
       el-menu-item(:title="$t('common.add_event')")
         v-icon(color='lightgreen' name='plus')
 
-    el-popover(
-      placement="bottom"
-      trigger="click")
+    el-popover(placement="bottom" trigger="click")
       Search(past-filter recurrent-filter)
       el-menu-item(slot='reference' :title="$t('common.search')" icon='el-share-button')
         v-icon(color='lightblue' name='search')
         el-badge(v-if='filters.tags.length+filters.places.length>0' is-dot type='warning')
 
-    nuxt-link(to='/settings')
-      el-menu-item(v-if='$auth.loggedIn' :title="$t('common.settings')")
+    nuxt-link(v-if='$auth.loggedIn' to='/settings')
+      el-menu-item(:title="$t('common.settings')")
         v-icon(color='orange' name='cog')
 
-    nuxt-link(to='/admin')
-      el-menu-item(v-if='$auth.user && $auth.user.is_admin' :title="$t('common.admin')")
+    nuxt-link(v-if='$auth.user && $auth.user.is_admin'  to='/admin')
+      el-menu-item(:title="$t('common.admin')")
         v-icon(color='lightblue' name='tools')
 
     nuxt-link(to='/export')
       el-menu-item(:title="$t('common.share')")
         v-icon(name='share' color='yellow')
 
-    nuxt-link(to='#')
       el-menu-item(v-if='$auth.loggedIn' @click='logout' :title="$t('common.logout')")
         v-icon(color='red' name='sign-out-alt')
 
-    a(href='/feed/rss')
-      el-menu-item(:title="$t('common.feed')")
+    el-menu-item(:title="$t('common.feed')" v-clipboard:copy='`settings.baseurl/feed/rss`' v-clipboard:success='copyLink')
         v-icon(color='orange' name='rss')
 
 </template>
@@ -54,7 +49,7 @@ import Register from '@/components/Register'
 export default {
   name: 'Nav',
   components: { Search, Login, Register },
-  data (ctx) {
+  data () {
     return {
       showLogin: this.$route.query.ref === 'login',
       showRegister: this.$route.query.ref === 'register'
@@ -65,9 +60,6 @@ export default {
       return (this.$auth.loggedIn || this.settings.allow_anon_event)
     },
     ...mapState(['filters', 'settings'])
-  },
-  beforeRouteUpdate (to, from, next) {
-    console.error('ciaosdfj oaisjdf oaidj ', to.params)
   },
   watch: {
     '$route.query.ref' (value) {
@@ -81,12 +73,11 @@ export default {
     }
   },
   methods: {
+    copyLink () {
+      Message({ message: this.$t('common.feed_url_copied'), type: 'success', showClose: true })
+    },
     logout () {
-      Message({
-        showClose: true,
-        message: this.$t('common.logout_ok'),
-        type: 'success'
-      })
+      Message({ showClose: true, message: this.$t('common.logout_ok'), type: 'success' })
       this.$auth.logout()
     }
   }
