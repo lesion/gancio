@@ -1,6 +1,6 @@
 All notable changes to this project will be documented in this file.
 
-### unreleased
+### 0.17.0
 - [feat] add rss link @homepage
 - [ui] add lot of explanation text
 - [ui] show copied messages
