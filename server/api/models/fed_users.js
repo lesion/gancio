@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
   fed_users.associate = function (models) {
     fed_users.belongsTo(models.instances)
     fed_users.belongsToMany(models.user, { through: 'user_followers', as: 'followers' })
-
   }
   return fed_users
 }

@@ -78,7 +78,6 @@ router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
   if (req.params.nodeinfo_version === '2.1') {
     ret.software.repository = 'https://framagit.org/les/gancio'
   }
-  res.set('Content-Type', `application/json; profile=http://nodeinfo.diaspora.software/ns/schema/${req.params.nodeinfo_version}#`)
   res.json(ret)
 })
 
@@ -105,7 +104,6 @@ router.get('/x-nodeinfo2', async (req, res) => {
       localComments: commentsCount
     }
   }
-  res.set('Content-Type', 'application/json')
   res.json(ret)
 })
 
