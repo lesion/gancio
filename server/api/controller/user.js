@@ -209,8 +209,8 @@ const userController = {
   },
 
   async getAll (req, res) {
-    const users = await User.findAll({
-      order: [['createdAt', 'DESC']]
+    const users = await User.scope('withoutPassword').findAll({
+      order: [['is_admin', 'DESC'], ['createdAt', 'DESC']]
     })
     res.json(users)
   },
