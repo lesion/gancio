@@ -12,16 +12,23 @@ module.exports = {
     const ret = {
       '@context': [
         'https://www.w3.org/ns/activitystreams',
-        'https://w3id.org/security/v1'
+        'https://w3id.org/security/v1',
+        {
+          toot: 'http://joinmastodon.org/ns#',
+          schema: 'http://schema.org#',
+          ProperyValue: 'schema:PropertyValue',
+          value: 'schema:value'
+        }
       ],
-      summary: config.description,
       id: `${config.baseurl}/federation/u/${name}`,
       type: 'Person',
+      summary: config.description,
       name: user.display_name || user.username,
       preferredUsername: user.username,
       inbox: `${config.baseurl}/federation/u/${name}/inbox`,
-      outbox: `${config.baseurl}/federation/u/${name}/outbox`,
-      followers: `${config.baseurl}/federation/u/${name}/followers`,
+      // outbox: `${config.baseurl}/federation/u/${name}/outbox`,
+      // followers: `${config.baseurl}/federation/u/${name}/followers`,
+      discoverable: true,
       attachment: [{
         type: 'PropertyValue',
         name: 'Website',
@@ -46,7 +53,7 @@ module.exports = {
     const page = req.query.page
     debug('Retrieve %s followers', name)
     if (!name) { return res.status(400).send('Bad request.') }
-    const user = await User.findOne({ where: { username: name }, include: { model: FedUsers, as: 'followers' } })
+    const user = await User.findOne({ where: { username: name }, include: [{ model: FedUsers, as: 'followers' }] })
     if (!user) { return res.status(404).send(`No record found for ${name}`) }
 
     res.type('application/activity+json; charset=utf-8')
@@ -59,7 +66,8 @@ module.exports = {
         type: 'OrderedCollection',
         totalItems: user.followers.length,
         first: `${config.baseurl}/federation/u/${name}/followers?page=true`,
-        last: `${config.baseurl}/federation/u/${name}/followers?page=true`
+        last: `${config.baseurl}/federation/u/${name}/followers?page=true`,
+        orderedItems: user.followers.map(f => f.ap_id)
       })
     }
     return res.json({
@@ -68,7 +76,7 @@ module.exports = {
       type: 'OrderedCollectionPage',
       totalItems: user.followers.length,
       partOf: `${config.baseurl}/federation/u/${name}/followers`,
-      orderedItems: user.followers
+      orderedItems: user.followers.map(f => f.ap_id)
     })
   },
 
@@ -89,9 +97,8 @@ module.exports = {
     // https://www.w3.org/TR/activitypub/#outbox
     res.type('application/activity+json; charset=utf-8')
     if (!page) {
-      debug('Without pagination ')
       return res.json({
-        '@context': 'https://www.w3.org/ns/activitystreams',
+        '@context': ['https://www.w3.org/ns/activitystreams'],
         id: `${config.baseurl}/federation/u/${name}/outbox`,
         type: 'OrderedCollection',
         totalItems: user.events.length,
@@ -102,20 +109,22 @@ module.exports = {
 
     debug('With pagination %s', page)
     return res.json({
-      '@context': 'https://www.w3.org/ns/activitystreams',
+      '@context': ['https://www.w3.org/ns/activitystreams', { Hashtag: 'as:Hashtag' }],
       id: `${config.baseurl}/federation/u/${name}/outbox?page=${page}`,
       type: 'OrderedCollectionPage',
       totalItems: user.events.length,
       partOf: `${config.baseurl}/federation/u/${name}/outbox`,
       orderedItems: user.events.map(e => ({
-        id: `${config.baseurl}/federation/m/${e.id}#create`,
-        type: 'Create',
-        to: ['https://www.w3.org/ns/activitystreams#Public'],
-        cc: [`${config.baseurl}/federation/u/${user.username}/followers`],
-        published: e.createdAt,
-        actor: `${config.baseurl}/federation/u/${user.username}`,
-        object: e.toAP(user.username)
-      }))
+        ...e.toAP(user.username), actor: `${config.baseurl}/federation/u/${user.username}`}))
+      //   user.events.map(e => ({
+      //   id: `${config.baseurl}/federation/m/${e.id}#create`,
+      //   type: 'Create',
+      //   to: ['https://www.w3.org/ns/activitystreams#Public'],
+      //   cc: [`${config.baseurl}/federation/u/${user.username}/followers`],
+      //   published: e.createdAt,
+      //   actor: `${config.baseurl}/federation/u/${user.username}`,
+      //   object: e.toAP(user.username)
+      // }))
     })
   }
 }
