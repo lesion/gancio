@@ -39,13 +39,14 @@ div
               @click='delete_user(data.row)') {{$t('admin.delete_user')}}
         div(v-else)
           span {{$t('common.me')}}
-
+        el-tag(v-if='settings.fedi_admin===data.row.username' size='mini' type='primary') instance account
   client-only
     el-pagination(:page-size='perPage' :currentPage.sync='userPage' :total='users_.length')
 
 </template>
 <script>
 import { Message, MessageBox } from 'element-ui'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Users',
@@ -62,6 +63,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['settings']),
     paginatedUsers () {
       return this.users_.slice((this.userPage - 1) * this.perPage,
         this.userPage * this.perPage)
