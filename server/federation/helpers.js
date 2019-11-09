@@ -27,13 +27,10 @@ const Helpers = {
   async signAndSend (message, user, inbox) {
     // get the URI of the actor object and append 'inbox' to it
     const inboxUrl = new url.URL(inbox)
-    // const toPath = toOrigin.path + '/inbox'
-    // get the private key
     const privkey = user.rsa.privateKey
     const signer = crypto.createSign('sha256')
     const d = new Date()
-    const stringToSign = `(request-target): post ${inboxUrl.path}\nhost: ${inboxUrl.hostname}\ndate: ${d.toUTCString()}`
-    debug('Sign and send', user.username, inbox)
+    const stringToSign = `(request-target): post ${inboxUrl.pathname}\nhost: ${inboxUrl.hostname}\ndate: ${d.toUTCString()}`
     signer.update(stringToSign)
     signer.end()
     const signature = signer.sign(privkey)

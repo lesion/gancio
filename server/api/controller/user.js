@@ -66,7 +66,9 @@ const userController = {
     }
   },
 
-  // ADD EVENT
+  /**
+   * add event
+   */
   async addEvent (req, res) {
     const body = req.body
 
