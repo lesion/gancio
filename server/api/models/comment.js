@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const comment = sequelize.define('comment', {
     activitypub_id: {
-      type: DataTypes.STRING(18),
+      type: DataTypes.STRING,
       index: true,
       unique: true
     },
