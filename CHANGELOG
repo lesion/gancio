@@ -1,5 +1,15 @@
 All notable changes to this project will be documented in this file.
 
+### 0.17.5
+- [fedi] comments moderation
+- [fedi] user moderation
+- [fedi] instance moderation
+- [hotfix] cli setup
+- [doc] fix debian upgrade
+- [fix] comment ap_id key length
+- [fix] fediverse signature
+- [fedi] better /inbox /followers response
+
 ### 0.17.0
 - [feat] add rss link @homepage
 - [ui] add lot of explanation text
