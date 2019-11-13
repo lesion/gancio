@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file.
 
+### 0.17.7
+- [fix] #58 wrong url for RSS feed
+
 ### 0.17.5
 - [fedi] comments moderation
 - [fedi] user moderation
