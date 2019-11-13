@@ -63,6 +63,7 @@ sudo pm2 startup -u gancio
 ```
 
 1. Upgrade
-
+```bash
 sudo yarn global add gancio
 sudo service pm2 restart
+```
