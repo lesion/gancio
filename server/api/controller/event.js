@@ -96,7 +96,7 @@ const eventController = {
         { model: Tag, attributes: ['tag', 'weigth'], through: { attributes: [] } },
         { model: User, attributes: ['username'] },
         { model: Place, attributes: ['name', 'address'] },
-        Comment
+        { model: Comment, where: !is_admin && { hidden: false }, required: false }
       ],
       order: [ [Comment, 'id', 'DESC'] ]
     })

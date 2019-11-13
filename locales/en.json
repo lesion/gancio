@@ -150,8 +150,8 @@
     "select_instance_timezone": "Select instance timezone",
     "enable_comments": "Enable comments",
     "enable_comments_help": "Allows you to add resources to the event from the fediverse",
-    "disable_gamification": "Avoid gamification",
-    "disable_gamification_help": "Hides the small icons that show the number of boosts / bookmarks coming from the fediverse",
+    "hide_boost_bookmark": "Hides boost/bookmark numbers",
+    "hide_boost_bookmark_help": "Hides the small icons that show the number of boosts / bookmarks coming from the fediverse",
     "block_instance": "Block",
     "unblock_instance": "Unblock",
     "user_add_help": "We will send an email to the new user with instructions to confirm the subscription and choose a password"

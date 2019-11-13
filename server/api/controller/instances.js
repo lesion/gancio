@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const { fed_users: FedUsers, instances: Instances } = require('../models')
+const { fed_users: FedUsers, instances: Instances, comment: Comment } = require('../models')
 
 const instancesController = {
   async getAll (req, res) {
@@ -12,6 +12,15 @@ const instancesController = {
     })
     return res.json(instances)
   },
+
+  /**
+   * get instance users
+   */
+  async get (req, res) {
+    const fedi_users = await FedUsers.findAll({ where: { instanceDomain: req.params.instance_domain }, include: [Comment] })
+    return res.json(fedi_users)
+  },
+
   async toggleBlock (req, res) {
     const instance = await Instances.findByPk(req.body.instance)
     if (!instance) { return res.status(404).send('Not found') }

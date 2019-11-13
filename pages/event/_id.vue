@@ -50,8 +50,8 @@
           el-menu-item(v-if='!event.recurrent')
             a.d-block(:href='`${settings.baseurl}/api/event/${event.id}.ics`') <i class='el-icon-date'></i> {{$t('common.add_to_calendar')}}
           EventAdmin(v-if='is_mine' :event='event')
-    hr
 
+    hr
     .d-block.d-lg-none
       el-button(plain size='mini' type='primary' v-clipboard:success='copyLink'
         v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') <i class='el-icon-paperclip'></i> {{$t('common.copy_link')}}
@@ -64,7 +64,7 @@
         small.mr-3 🔖 {{event.likes.length}}
         small ✊ {{event.boost.length}}<br/>
 
-      strong(v-if='settings.enable_comments') {{$tc('common.comments', event.comments.length)}} -
+      strong(v-if='settings.enable_comments') {{$tc('common.resources', event.comments.length)}} -
       small {{$t('event.interact_with_me_at')}} 
         el-button(type='text' size='mini' @click='showFollowMe=true') @{{fedi_user}}@{{settings.baseurl|url2host}}
 
@@ -72,11 +72,18 @@
         h4(slot='title') {{$t('common.follow_me_title')}}
         FollowMe
 
-      .card-header(v-if='settings.enable_comments' v-for='comment in event.comments' :key='comment.id')
+      .card-header(v-if='settings.enable_comments' v-for='comment in event.comments' :key='comment.id' :class='{disabled: comment.hidden}')
         a.float-right(:href='comment.data.url')
           small {{comment.data.published|datetime}}
         div.mt-1(v-html='comment_filter(comment.data.content)')
         img(v-for='img in comment.data.media_attachments' :src='img.url')
+        el-dropdown
+          el-button(type="primary" icon="el-icon-arrow-down" size='mini') {{$t('common.moderation')}}
+          el-dropdown-menu(slot='dropdown')
+            el-dropdown-item(v-if='!comment.hidden' icon='el-icon-remove' @click.native='hideComment(comment, true)') {{$t('admin.hide_resource')}}
+            el-dropdown-item(v-else icon='el-icon-success' @click.native='hideComment(comment, false)') {{$t('admin.show_resource')}}
+            el-dropdown-item(icon='el-icon-delete' @click.native='removeComment(comment)') {{$t('admin.remove_resource')}}
+            el-dropdown-item(icon='el-icon-lock' @click.native='blockUser(comment)') {{$t('admin.block_user')}}
 
 </template>
 <script>
@@ -84,7 +91,7 @@ import { mapState, mapGetters } from 'vuex'
 import EventAdmin from './eventAdmin'
 import EmbedEvent from './embedEvent'
 import FollowMe from './followMe'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 
 import moment from 'dayjs'
 
@@ -236,7 +243,11 @@ export default {
       return event.id
     },
     imgPath() {
-      return this.event.image_path && '/media/' + this.event.image_path
+      if (this.event.image_path) {
+        return '/media/thumb/' + this.event.image_path
+      } else {
+        return '/logo.png'
+      }
     },
     is_mine() {
       if (!this.$auth.user) {
@@ -248,6 +259,25 @@ export default {
     }
   },
   methods: {
+    async hideComment (comment, hidden) {
+      await this.$axios.$post(`/comments/${comment.id}`, { hidden })
+      comment.hidden = hidden
+    },
+    async blockUser (comment) {
+      await this.$axios.post('/instances/toggle_user_block', { user_id: comment.fedUserApId })
+      Message({ message: this.$t('admin.user_blocked', {user: comment.fedUserApId}), type: 'success', showClose: true })
+    },
+    async removeComment (comment) {
+      MessageBox.confirm(this.$t('admin.remove_resource_confirm'),
+        this.$t('common.confirm'), {
+          confirmButtonText: this.$t('common.ok'),
+          cancelButtonText: this.$t('common.cancel'),
+          type: 'error'
+        }).then(async () => {
+          await this.$axios.delete(`/comments/${comment.id}`)
+          this.event.comments = this.event.comments.filter(c => c.id !== comment.id)
+        })
+    },
     copyLink() {
       Message({ message: this.$t('common.copied'), type: 'success', showClose: true })
     },
@@ -350,8 +380,17 @@ export default {
     img {
       max-width: 100%;
     }
+    .card-header {
+      border-left: 3px solid transparent;
+    }
+    .card-header:hover {
+      border-left: 3px solid #888;
+    }
     .invisible {
       visibility: visible !important;
+    }
+    .disabled {
+      opacity: 0.5;
     }
   }
   .nextprev {

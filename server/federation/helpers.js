@@ -137,7 +137,7 @@ const Helpers = {
         if (!fedi_user.instances) {
           fedi_user.setInstance(instance)
         }
-        return fedi_user.object
+        return fedi_user
       }
     }
 
@@ -151,7 +151,7 @@ const Helpers = {
       })
 
     if (fedi_user) {
-      await FedUsers.create({ ap_id: URL, object: fedi_user })
+      fedi_user = await FedUsers.create({ ap_id: URL, object: fedi_user })
     }
     return fedi_user
   },
@@ -194,6 +194,10 @@ const Helpers = {
 
     let user = await Helpers.getActor(req.body.actor, instance)
     if (!user) { return res.status(401).send('Actor not found') }
+    if (user.blocked) {
+      debug('User %s blocked', user.ap_id)
+      return res.status(401).send('User blocked')
+    }
 
     // little hack -> https://github.com/joyent/node-http-signature/pull/83
     req.headers.authorization = 'Signature ' + req.headers.signature
@@ -204,12 +208,12 @@ const Helpers = {
     // https://github.com/joyent/node-http-signature/issues/87
     req.url = '/federation' + req.url
     const parsed = httpSignature.parseRequest(req)
-    if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) { return next() }
+    if (httpSignature.verifySignature(parsed, user.object.publicKey.publicKeyPem)) { return next() }
 
     // signature not valid, try without cache
     user = await Helpers.getActor(req.body.actor, instance, true)
     if (!user) { return res.status(401).send('Actor not found') }
-    if (httpSignature.verifySignature(parsed, user.publicKey.publicKeyPem)) { return next() }
+    if (httpSignature.verifySignature(parsed, user.object.publicKey.publicKeyPem)) { return next() }
 
     // still not valid
     debug('Invalid signature from user %s', req.body.actor)

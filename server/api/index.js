@@ -9,6 +9,7 @@ const exportController = require('./controller/export')
 const userController = require('./controller/user')
 const settingsController = require('./controller/settings')
 const instancesController = require('./controller/instances')
+const fedUserController = require('./controller/fed_user')
 
 const storage = require('./storage')
 const upload = multer({ storage })
@@ -84,7 +85,11 @@ api.get('/export/:type', exportController.export)
 api.get('/event/:month/:year', eventController.getAll)
 
 api.get('/instances', isAdmin, instancesController.getAll)
+api.get('/instances/:instance_domain', isAdmin, instancesController.get)
 api.post('/instances/toggle_block', isAdmin, instancesController.toggleBlock)
+api.post('/instances/toggle_user_block', isAdmin, fedUserController.toggleBlock)
+api.post('/comments/:comment_id', isAdmin, fedUserController.hideComment)
+api.delete('/comments/:comment_id', isAdmin, fedUserController.removeComment)
 
 // Handle 404
 api.use((req, res) => {

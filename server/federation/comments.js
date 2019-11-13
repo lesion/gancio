@@ -24,6 +24,7 @@ module.exports = {
 
     await Comment.create({
       activitypub_id: body.object.id,
+      fedUserApId: req.body.actor,
       data: body.object,
       eventId: event.id
     })

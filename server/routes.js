@@ -22,6 +22,7 @@ router.use(spamFilter)
 
 // serve favicon and static content
 router.use('/favicon.ico', express.static(path.resolve(config.favicon || './assets/favicon.ico')))
+router.use('/logo.png', express.static('./static/gancio.png'))
 router.use('/media/', express.static(config.upload_path))
 
 // get instance settings

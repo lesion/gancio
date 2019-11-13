@@ -50,7 +50,6 @@
     "me": "Sei te",
     "password_updated": "Password modificata!",
     "username": "Nomignolo",
-    "comments": "nessun commento|un commento|{n} commenti",
     "activate_user": "Confermato",
     "displayname": "Nome mostrato",
     "federation": "Federazione",
@@ -66,7 +65,9 @@
     "feed": "Feed rss",
     "feed_url_copied": "Feed url copiato, incollalo nel tuo feed reader",
     "follow_me_title": "Segui gli aggiornamenti dal fediverso",
-    "follow": "Segui"
+    "follow": "Segui",
+    "resources": "nessuna risorsa|una risorsa|{n} risorse",
+    "moderation": "Moderazione"
   },
   "login": {
     "description": "Entrando puoi pubblicare nuovi eventi.",
@@ -128,7 +129,7 @@
     "due": "alle",
     "from": "Dalle",
     "image_too_big": "Immagine troppo grande! Massimo 4M",
-    "interact_with_me_at": "Seguimi nel fediverso su",
+    "interact_with_me_at": "Seguimi dal fediverso su",
     "follow_me_description": "Tra i vari modi di rimanere aggiornati degli eventi pubblicati qui su {title},\n      puoi seguire l'account <u>{account}</u> dal fediverso, ad esempio via mastodon, ed eventualmente aggiungere risorse a questo evento da lì.<br/><br/>\n      Se non hai mai sentito parlare di mastodon e del fediverso ti consigliamo di leggere <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>questo articolo</a>.<br/><br/> Inserisci la tua istanza qui sotto (es. mastodon.cisti.org o mastodon.bida.im)"
   },
   "admin": {
@@ -150,11 +151,18 @@
     "select_instance_timezone": "Seleziona la timezone",
     "enable_comments": "Abilita commenti",
     "enable_comments_help": "Permette di aggiungere risorse all'evento dal fediverso",
-    "disable_gamification": "Evita gamification",
-    "disable_gamification_help": "Nasconde le piccole icone che mostrano il numero di boost/bookmark in arrivo dal fediverso",
-    "block_instance": "Blocca",
-    "unblock_instance": "Sblocca",
-    "user_add_help": "Manderemo una email al nuovo utente con le istruzioni per confermare l'iscrizione e scegliere una password"
+    "hide_boost_bookmark": "Nasconde numero condivisioni/segnalibri",
+    "hide_boost_bookmark_help": "Nasconde le piccole icone che mostrano il numero di boost/bookmark in arrivo dal fediverso",
+    "block": "Blocca",
+    "unblock": "Sblocca",
+    "user_add_help": "Manderemo una email al nuovo utente con le istruzioni per confermare l'iscrizione e scegliere una password",
+    "comments": "Risorse",
+    "hide_resource": "Nascondi risorsa",
+    "show_resource": "Mostra risorsa",
+    "remove_resource": "Elimina risorsa",
+    "remove_resource_confirm": "Sicura di voler eliminare questa risorsa?",
+    "block_user": "Blocca questo utente",
+    "user_blocked": "L'utente {user} non potrà più aggiungere risorse"
   },
   "auth": {
     "not_confirmed": "Non abbiamo ancora confermato questa mail...",
