@@ -40,7 +40,10 @@ module.exports = {
     { src: '@/plugins/v-calendar', ssr: false }, // calendar, fix ssr
     '@/plugins/i18n.js'
   ],
-  compression: false,
+
+  render: {
+    compressor: false
+  },
   /*
    ** Nuxt.js modules
    */
