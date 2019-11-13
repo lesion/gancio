@@ -146,7 +146,7 @@ async function setupQuestionnaire (is_docker, db) {
     name: 'admin.email',
     message: `Admin email (a first user with this username will be created)`,
     default: options => {
-      const baseurl = new url.URL(options.baseurl, true)
+      const baseurl = new url.URL(options.baseurl)
       return (
         options.title.replace(' ', '').toLowerCase() + '@' + baseurl.hostname
       )
