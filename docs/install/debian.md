@@ -19,7 +19,7 @@ apt-get update && apt-get install yarn
 
 1. Install Gancio
 ```bash
-yarn add gancio --prod
+yarn global add gancio --prod
 ```
 
 1. Setup with postgreSQL __(optional as you can choose sqlite)__
