@@ -145,7 +145,7 @@ export default {
         { property: 'og:type', content: 'event' },
         {
           property: 'og:image',
-          content: `${this.settings.baseurl}${this.imgPath}`
+          content: this.thumbImgPath
         },
         { property: 'og:site_name', content: this.settings.title },
         {
@@ -161,7 +161,7 @@ export default {
         { property: 'twitter:title', content: this.event.title },
         {
           property: 'twitter:image',
-          content: `${this.settings.baseurl}${this.imgPath}`
+          content: this.thumbImgPath
         },
         {
           property: 'twitter:description',
@@ -169,7 +169,7 @@ export default {
         }
       ],
       link: [
-        { rel: 'image_src', href: `${this.settings.baseurl}${this.imgPath}` },
+        { rel: 'image_src', href: this.thumbImgPath },
         {
           rel: 'alternate',
           type: 'application/rss+xml',
@@ -242,11 +242,14 @@ export default {
       }
       return event.id
     },
-    imgPath() {
+    imgPath () {
+      return '/media/' + this.event.image_path
+    },
+    thumbImgPath() {
       if (this.event.image_path) {
-        return '/media/thumb/' + this.event.image_path
+        return this.settings.baseurl + '/media/thumb/' + this.event.image_path
       } else {
-        return '/logo.png'
+        return this.settings.baseurl + '/logo.png'
       }
     },
     is_mine() {
