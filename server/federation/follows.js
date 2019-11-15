@@ -15,7 +15,7 @@ module.exports = {
 
     // check for duplicate
     if (!user.followers.includes(body.actor)) {
-      await user.addFollowers([req.fedi_user.id])
+      await user.addFollowers([req.fedi_user.ap_id])
       // await user.update({ followers: [...user.followers, body.actor] })
       debug('%s followed by %s (%d)', username, body.actor, user.followers.length + 1)
     } else {
@@ -29,7 +29,7 @@ module.exports = {
       'actor': `${config.baseurl}/federation/u/${user.username}`,
       'object': body
     }
-    Helpers.signAndSend(message, user, req.fedi_user.inbox)
+    Helpers.signAndSend(message, user, req.fedi_user.object.inbox)
     res.sendStatus(200)
   },
 
@@ -40,12 +40,12 @@ module.exports = {
     const user = await User.findOne({ where: { username }, include: { model: FedUsers, as: 'followers' } })
     if (!user) { return res.status(404).send('User not found') }
 
-    if (body.actor !== body.object.actor || body.actor !== req.fedi_user.id) {
+    if (body.actor !== body.object.actor || body.actor !== req.fedi_user.ap_id) {
       debug('Unfollow an user created by a different actor !?!?')
       return res.status(400).send('Bad things')
     }
 
-    if (req.fedi_user) { await user.removeFollowers(req.fedi_user.id) }
+    if (req.fedi_user) { await user.removeFollowers(req.fedi_user.ap_id) }
     debug('%s unfollowed by %s', username, body.actor)
     res.sendStatus(200)
   }
