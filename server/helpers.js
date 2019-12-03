@@ -1,6 +1,5 @@
 const settingsController = require('./api/controller/settings')
 const { user: User } = require('./api/models')
-const { Op } = require('sequelize')
 const acceptLanguage = require('accept-language')
 const expressJwt = require('express-jwt')
 const moment = require('moment-timezone')
@@ -22,7 +21,8 @@ const jwt = expressJwt({
 })
 
 module.exports = {
-  initMiddleware (req, res, next) {
+  async initMiddleware (req, res, next) {
+    await settingsController.load()
     // initialize settings
     req.settings = settingsController.settings
     req.secretSettings = settingsController.secretSettings
@@ -44,7 +44,7 @@ module.exports = {
     jwt(req, res, async () => {
       if (!req.user) { return next() }
       req.user = await User.findOne({
-        where: { id: { [Op.eq]: req.user.id }, is_active: true } })
+        where: { id: req.user.id, is_active: true } })
       next()
     })
   }

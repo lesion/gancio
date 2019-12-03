@@ -4,7 +4,7 @@ const crypto = require('crypto')
 const config = require('config')
 const httpSignature = require('http-signature')
 const debug = require('debug')('federation:helpers')
-const { user: User, fed_users: FedUsers, instances: Instances } = require('../api/models')
+const { APUser, Instance } = require('../api/models')
 const url = require('url')
 const settingsController = require('../api/controller/settings')
 
@@ -24,10 +24,10 @@ const Helpers = {
     next()
   },
 
-  async signAndSend (message, user, inbox) {
+  async signAndSend (message, inbox) {
     // get the URI of the actor object and append 'inbox' to it
     const inboxUrl = new url.URL(inbox)
-    const privkey = user.rsa.privateKey
+    const privkey = settingsController.secretSettings.privateKey
     const signer = crypto.createSign('sha256')
     const d = new Date()
     const stringToSign = `(request-target): post ${inboxUrl.pathname}\nhost: ${inboxUrl.hostname}\ndate: ${d.toUTCString()}`
@@ -35,7 +35,7 @@ const Helpers = {
     signer.end()
     const signature = signer.sign(privkey)
     const signature_b64 = signature.toString('base64')
-    const header = `keyId="${config.baseurl}/federation/u/${user.username}",headers="(request-target) host date",signature="${signature_b64}"`
+    const header = `keyId="${config.baseurl}/federation/u/${settingsController.settings.instance_name}",headers="(request-target) host date",signature="${signature_b64}"`
     const ret = await fetch(inbox, {
       headers: {
         'Host': inboxUrl.hostname,
@@ -49,82 +49,38 @@ const Helpers = {
     debug('sign %s => %s', ret.status, await ret.text())
   },
 
-  async sendEvent (event, user, type = 'Create') {
+  async sendEvent (event, type = 'Create') {
     if (!settingsController.settings.enable_federation) {
       debug('event not send, federation disabled')
       return
     }
 
-    // event is sent by user that published it and by the admin instance
-    // collect followers from admin and user
-    const instanceAdmin = await User.findOne({ where: { email: config.admin_email }, include: { model: FedUsers, as: 'followers' } })
-    if (!instanceAdmin || !instanceAdmin.username) {
-      debug('Instance admin not found (there is no user with email => %s)', config.admin_email)
-      return
-    }
-
+    const followers = await APUser.findAll({ where: { follow: true } })
     const recipients = {}
-    instanceAdmin.followers.forEach(follower => {
+    followers.forEach(follower => {
       const sharedInbox = follower.object.endpoints.sharedInbox
       if (!recipients[sharedInbox]) { recipients[sharedInbox] = [] }
       recipients[sharedInbox].push(follower.ap_id)
     })
 
     for (const sharedInbox in recipients) {
-      debug('Notify %s with event %s (from admin %s) cc => %d', sharedInbox, event.title, instanceAdmin.username, recipients[sharedInbox].length)
+      debug('Notify %s with event %s cc => %d', sharedInbox, event.title , recipients[sharedInbox].length)
       const body = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
         type,
         to: ['https://www.w3.org/ns/activitystreams#Public'],
-        cc: [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]],
+        cc: [`${config.baseurl}/federation/u/${settingsController.settings.instance_name}/followers`, ...recipients[sharedInbox]],
         // cc: recipients[sharedInbox],
-        actor: `${config.baseurl}/federation/u/${instanceAdmin.username}`,
-        // object: event.toAP(instanceAdmin.username, [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]])
-        object: event.toAP(instanceAdmin.username, recipients[sharedInbox])
+        actor: `${config.baseurl}/federation/u/${settingsController.settings.instance_name}`,
+        // object: event.toNoteAP(instanceAdmin.username, [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]])
+        object: event.toNoteAP(settingsController.settings.instance_name, recipients[sharedInbox])
       }
       body['@context'] = [
         'https://www.w3.org/ns/activitystreams',
         'https://w3id.org/security/v1',
         { Hashtag: 'as:Hashtag' } ]
-      Helpers.signAndSend(body, instanceAdmin, sharedInbox)
+      Helpers.signAndSend(body, sharedInbox)
     }
-
-    // TODO
-    // in case the event is published by the Admin itself do not add user
-    // if (instanceAdmin.id === user.id) {
-    //   debug('Event published by instance Admin')
-    //   return
-    // }
-    // if (!user.settings.enable_federation || !user.username) {
-    //   debug('Federation disabled for user %d (%s)', user.id, user.username)
-    //   return
-    // }
-
-    // debug('Sending to user followers => ', user.username)
-    // user = await User.findByPk(user.id, { include: { model: FedUsers, as: 'followers' } })
-    // debug('Sending to user followers => ', user.followers.length)
-    // recipients = {}
-    // user.followers.forEach(follower => {
-    //   const sharedInbox = follower.object.endpoints.sharedInbox
-    //   if (!recipients[sharedInbox]) { recipients[sharedInbox] = [] }
-    //   recipients[sharedInbox].push(follower.ap_id)
-    // })
-
-    // for (const sharedInbox in recipients) {
-    //   debug('Notify %s with event %s (from user %s) cc => %d', sharedInbox, event.title, user.username, recipients[sharedInbox].length)
-    //   const body = {
-    //     id: `${config.baseurl}/federation/m/${event.id}#create`,
-    //     type: 'Create',
-    //     to: ['https://www.w3.org/ns/activitystreams#Public'],
-    //     cc: [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]],
-    //     // cc: recipients[sharedInbox],
-    //     actor: `${config.baseurl}/federation/u/${user.username}`,
-    //     // object: event.toAP(user.username, [`${config.baseurl}/federation/u/${user.username}/followers`, ...recipients[sharedInbox]])
-    //     object: event.toAP(user.username, recipients[sharedInbox])
-    //   }
-    //   body['@context'] = 'https://www.w3.org/ns/activitystreams'
-    //   Helpers.signAndSend(body, user, sharedInbox)
-    // }
   },
 
   async getActor (URL, instance, force = false) {
@@ -132,7 +88,7 @@ const Helpers = {
 
     // try with cache first
     if (!force) {
-      fedi_user = await FedUsers.findByPk(URL, { include: Instances })
+      fedi_user = await APUser.findByPk(URL, { include: Instance })
       if (fedi_user) {
         if (!fedi_user.instances) {
           fedi_user.setInstance(instance)
@@ -151,7 +107,7 @@ const Helpers = {
       })
 
     if (fedi_user) {
-      fedi_user = await FedUsers.create({ ap_id: URL, object: fedi_user })
+      fedi_user = await APUser.create({ ap_id: URL, object: fedi_user })
     }
     return fedi_user
   },
@@ -163,7 +119,7 @@ const Helpers = {
     debug('getInstance %s', domain)
     let instance
     if (!force) {
-      instance = await Instances.findByPk(domain)
+      instance = await Instance.findByPk(domain)
       if (instance) { return instance }
     }
 
@@ -174,7 +130,7 @@ const Helpers = {
           stats: instance.stats,
           thumbnail: instance.thumbnail
         }
-        return Instances.create({ name: instance.title, domain, data, blocked: false })
+        return Instance.create({ name: instance.title, domain, data, blocked: false })
       })
       .catch(e => {
         debug(e)

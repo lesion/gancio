@@ -17,6 +17,6 @@
   },
   "admin_register": {
     "subject": "New registration",
-    "content": "{{user.username}} has requested registration on {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confirm it <a href='{{config.baseurl}}/admin'>here</a>."
+    "content": "{{user.email}} has requested registration on {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confirm it <a href='{{config.baseurl}}/admin'>here</a>."
   }
 }

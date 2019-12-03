@@ -17,6 +17,6 @@
   },
   "admin_register":{
     "subject": "Nuova registrazione",
-    "content": "{{user.username}} si è registrato/a a {{config.title}} scrivendo:<br/><pre>{{user.description}}</pre><br/> Puoi confermarlo <a href='{{config.baseurl}}/admin'>qui</a>."
+    "content": "{{user.email}} si è registrato/a a {{config.title}} scrivendo:<br/><pre>{{user.description}}</pre><br/> Puoi confermarlo <a href='{{config.baseurl}}/admin'>qui</a>."
   }
 }

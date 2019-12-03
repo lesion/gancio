@@ -5,9 +5,6 @@
     p(v-html="$t('register.description')")
     div(v-loading='loading')
 
-      el-input.mb-2(v-model='user.username' type='text' name='username'
-        :placeholder='$t("common.username")' prefix-icon='el-icon-user')
-
       el-input.mb-2(ref='email' v-model='user.email' type='email' required
         :placeholder='$t("common.email")' autocomplete='email'
         prefix-icon='el-icon-message' name='email')

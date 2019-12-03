@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    el-form(inline label-width='200px')
+    el-form(label-width='200px')
       el-form-item(:label="$t('admin.enable_federation')")
         el-switch(v-model='enable_federation')
         el-popover(:content="$t('admin.enable_federation_help')" trigger='hover')

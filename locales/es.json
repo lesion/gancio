@@ -49,7 +49,6 @@
     "disable": "Deshabilita",
     "me": "Sos tú",
     "password_updated": "Contraseña actualizada!",
-    "username": "Nickname",
     "comments": "ningún comentario|un comentario|{n} comentarios"
   },
   "login": {

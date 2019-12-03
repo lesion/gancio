@@ -38,7 +38,6 @@ export default {
   name: 'Settings',
   data () {
     return {
-      username_editable: false,
       password: '',
       user: { }
     }
@@ -50,7 +49,7 @@ export default {
   },
   async asyncData ({ $axios, params }) {
     const user = await $axios.$get('/auth/user')
-    return { user, username_editable: user.username.length === 0 }
+    return { user }
   },
   computed: {
     ...mapState(['settings']),

@@ -6,8 +6,6 @@ div
       template(slot='title')
         el-button(mini size='mini')  <v-icon name='plus'/> {{$t('common.new_user')}}
       el-form(inline)
-        el-form-item(:label="$t('common.username')")
-          el-input(v-model='new_user.username')
         el-form-item(:label="$t('common.email')")
           el-input(v-model='new_user.email')
         el-form-item(:label="$t('common.admin')")
@@ -17,9 +15,6 @@ div
 
   //- USERS LIST
   el-table(:data='paginatedUsers' small)
-    el-table-column(label='Username' width='250')
-      template(slot-scope='data')
-        span(slot='reference') {{data.row.username}}
     el-table-column(label='Email' width='250')
       template(slot-scope='data')
         el-popover(trigger='hover' :content='data.row.description' width='400')
@@ -39,7 +34,6 @@ div
               @click='delete_user(data.row)') {{$t('admin.delete_user')}}
         div(v-else)
           span {{$t('common.me')}}
-        el-tag(v-if='settings.fedi_admin===data.row.username' size='mini' type='primary') instance account
   client-only
     el-pagination(:page-size='perPage' :currentPage.sync='userPage' :total='users_.length')
 

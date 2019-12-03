@@ -18,5 +18,5 @@ rss(version='2.0' xmlns:atom="http://www.w3.org/2005/Atom")
                         | <img src="#{settings.baseurl}/media/#{event.image_path}"/>
                     | <pre>!{event.description}</pre>
                     | ]]>
-                pubDate= new Date(event.createdAt).toUTCString()
+                pubDate= new Date(event.updatedAt).toUTCString()
                 guid(isPermaLink='false') #{settings.baseurl}/event/#{event.id}

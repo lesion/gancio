@@ -15,23 +15,20 @@ router.use((req, res, next) => {
   res.status(404).send('Federation disabled')
 })
 
-router.get('/webfinger', async (req, res) => {
+router.get('/webfinger', (req, res) => {
   if (!req.query || !req.query.resource || !req.query.resource.includes('acct:')) {
     debug('Bad webfinger request => %s', req.query && req.query.resource)
     return res.status(400).send('Bad request. Please make sure "acct:USER@DOMAIN" is what you are sending as the "resource" query parameter.')
   }
 
   const resource = req.query.resource
-  const domain = url.parse(req.settings.baseurl).host
+  const domain = (new url.URL(req.settings.baseurl)).host
   const [, name, req_domain] = resource.match(/acct:(.*)@(.*)/)
-
   if (domain !== req_domain) {
     debug('Bad webfinger request, requested domain "%s" instead of "%s"', req_domain, domain)
     return res.status(400).send('Bad request. Please make sure "acct:USER@DOMAIN" is what you are sending as the "resource" query parameter.')
   }
-
-  const user = await User.findOne({ where: { username: name } })
-  if (!user) {
+  if (name !== req.settings.instance_name) {
     debug('User not found: %s', name)
     return res.status(404).send(`No record found for ${name}`)
   }

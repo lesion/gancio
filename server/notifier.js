@@ -5,7 +5,7 @@ const debug = require('debug')('notifier')
 const fediverseHelpers = require('./federation/helpers')
 
 const { event: Event, notification: Notification, event_notification: EventNotification,
-  user: User, place: Place, tag: Tag, fed_users: FedUsers } = require('./api/models')
+  user: User, place: Place, tag: Tag, ap_user: APUser } = require('./api/models')
 const eventController = require('./api/controller/event')
 
 const notifier = {
@@ -21,14 +21,14 @@ const notifier = {
         promises.push(p)
         break
       case 'ap':
-        p = fediverseHelpers.sendEvent(event, event.user, notification.action)
+        p = fediverseHelpers.sendEvent(event, notification.action)
         promises.push(p)
     }
     return Promise.all(promises)
   },
   async notifyEvent (action, eventId) {
     const event = await Event.findByPk(eventId, {
-      include: [ Tag, Place, Notification, { model: User, include: { model: FedUsers, as: 'followers' } } ]
+      include: [ Tag, Place, Notification, { model: User, include: { model: APUser, as: 'followers' } } ]
     })
 
     debug('%s -> %s', action, event.title)

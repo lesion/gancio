@@ -23,8 +23,8 @@ module.exports = {
       id: `${config.baseurl}/federation/u/${name}`,
       type: 'Person',
       summary: config.description,
-      name: user.display_name || user.username,
-      preferredUsername: user.username,
+      name,
+      preferredUsername: name,
       inbox: `${config.baseurl}/federation/u/${name}/inbox`,
       // outbox: `${config.baseurl}/federation/u/${name}/outbox`,
       // followers: `${config.baseurl}/federation/u/${name}/followers`,
@@ -42,19 +42,23 @@ module.exports = {
       publicKey: {
         id: `${config.baseurl}/federation/u/${name}#main-key`,
         owner: `${config.baseurl}/federation/u/${name}`,
-        publicKeyPem: get(user, 'rsa.publicKey', '')
+        publicKeyPem: req.settings.publicKey
       }
     }
     res.type('application/activity+json; charset=utf-8')
     res.json(ret)
   },
-  async followers (req, res) {
+
+  async followers(req, res) {
+    // TODO
     const name = req.params.name
     const page = req.query.page
     debug('Retrieve %s followers', name)
     if (!name) { return res.status(400).send('Bad request.') }
-    const user = await User.findOne({ where: { username: name }, include: [{ model: FedUsers, as: 'followers' }] })
-    if (!user) { return res.status(404).send(`No record found for ${name}`) }
+    if (name !== req.settings.instance_name) {
+      return res.status(404).send(`No record found for ${name}`)
+    }
+    const followers = await APUser.findAll({ where: { follower: true } })
 
     res.type('application/activity+json; charset=utf-8')
 
@@ -64,19 +68,19 @@ module.exports = {
         '@context': 'https://www.w3.org/ns/activitystreams',
         id: `${config.baseurl}/federation/u/${name}/followers`,
         type: 'OrderedCollection',
-        totalItems: user.followers.length,
+        totalItems: followers.length,
         first: `${config.baseurl}/federation/u/${name}/followers?page=true`,
         last: `${config.baseurl}/federation/u/${name}/followers?page=true`,
-        orderedItems: user.followers.map(f => f.ap_id)
+        orderedItems: followers.map(f => f.ap_id)
       })
     }
     return res.json({
       '@context': 'https://www.w3.org/ns/activitystreams',
       id: `${config.baseurl}/federation/u/${name}/followers?page=${page}`,
       type: 'OrderedCollectionPage',
-      totalItems: user.followers.length,
+      totalItems: followers.length,
       partOf: `${config.baseurl}/federation/u/${name}/followers`,
-      orderedItems: user.followers.map(f => f.ap_id)
+      orderedItems: followers.map(f => f.ap_id)
     })
   },
 
@@ -115,7 +119,7 @@ module.exports = {
       totalItems: user.events.length,
       partOf: `${config.baseurl}/federation/u/${name}/outbox`,
       orderedItems: user.events.map(e => ({
-        ...e.toAP(user.username), actor: `${config.baseurl}/federation/u/${user.username}`}))
+        ...e.toNoteAP(user.username), actor: `${config.baseurl}/federation/u/${user.username}` }))
       //   user.events.map(e => ({
       //   id: `${config.baseurl}/federation/m/${e.id}#create`,
       //   type: 'Create',
@@ -123,7 +127,7 @@ module.exports = {
       //   cc: [`${config.baseurl}/federation/u/${user.username}/followers`],
       //   published: e.createdAt,
       //   actor: `${config.baseurl}/federation/u/${user.username}`,
-      //   object: e.toAP(user.username)
+      //   object: e.toNoteAP(user.username)
       // }))
     })
   }

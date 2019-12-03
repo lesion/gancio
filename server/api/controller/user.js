@@ -6,19 +6,14 @@ const { Op } = require('sequelize')
 const jsonwebtoken = require('jsonwebtoken')
 const config = require('config')
 const mail = require('../mail')
-const { user: User, event: Event, tag: Tag, place: Place, fed_users: FedUsers } = require('../models')
+const { user: User, event: Event, tag: Tag, place: Place } = require('../models')
 const settingsController = require('./settings')
 const debug = require('debug')('user:controller')
 
 const userController = {
   async login (req, res) {
     // find the user
-    const user = await User.findOne({ where: {
-      [Op.or]: [
-        { email: req.body.email },
-        { username: req.body.email }
-      ]
-    } })
+    const user = await User.findOne({ where: { email: req.body.email } })
     if (!user) {
       res.status(403).json({ success: false, message: 'auth.fail' })
     } else if (user) {
@@ -206,7 +201,7 @@ const userController = {
 
   async current (req, res) {
     if (!req.user) { return res.status(400).send('Not logged') }
-    const user = await User.scope('withoutPassword').findByPk(req.user.id, { include: { model: FedUsers, as: 'followers' } })
+    const user = await User.scope('withoutPassword').findByPk(req.user.id)
     res.json(user)
   },
 
@@ -226,9 +221,6 @@ const userController = {
     if (req.body.id !== req.user.id && !req.user.is_admin) {
       return res.status(400).json({ succes: false, message: 'Not allowed' })
     }
-
-    // ensure username to not change if not empty
-    req.body.username = user.username ? user.username : req.body.username
 
     if (!req.body.password) { delete req.body.password }
 

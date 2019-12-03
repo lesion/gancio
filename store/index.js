@@ -10,13 +10,14 @@ export const state = () => ({
   places: [],
   settings: {
     instance_timezone: 'Europe/Rome',
+    instance_name: '',
     allow_registration: true,
     allow_anon_event: true,
     allow_recurrent_event: true,
     recurrent_event_visible: false,
     enable_federation: false,
-    enable_comments: false,
-    disable_gamification: true
+    enable_resources: false,
+    hide_boosts: true
   },
   in_past: false,
   filters: {
