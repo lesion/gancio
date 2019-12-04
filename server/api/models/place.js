@@ -1,6 +1,7 @@
-'use strict'
+
 module.exports = (sequelize, DataTypes) => {
-  const place = sequelize.define('place', {
+
+  const Place = sequelize.define('place', {
     name: {
       type: DataTypes.STRING,
       unique: true,
@@ -10,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
     address: DataTypes.STRING
   }, {})
 
-  place.associate = function (models) {
-    place.hasMany(models.event)
+  Place.associate = function (models) {
+    Place.hasMany(models.event)
   }
 
-  return place
+  return Place
 }

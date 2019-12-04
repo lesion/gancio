@@ -1,6 +1,6 @@
-'use strict'
+
 module.exports = (sequelize, DataTypes) => {
-  const tag = sequelize.define('tag', {
+  const Tag = sequelize.define('tag', {
     tag: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -10,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
     weigth: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false }
   }, {})
 
-  tag.associate = function (models) {
-    tag.belongsToMany(models.event, { through: 'event_tags' })
+  Tag.associate = function (models) {
+    Tag.belongsToMany(models.event, { through: 'event_tags' })
   }
 
-  return tag
+  return Tag
 }

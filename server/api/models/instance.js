@@ -1,6 +1,6 @@
 'use strict'
 module.exports = (sequelize, DataTypes) => {
-  const instances = sequelize.define('instances', {
+  const Instance = sequelize.define('instance', {
     domain: {
       primaryKey: true,
       allowNull: false,
@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
     data: DataTypes.JSON
   }, {})
 
-  instances.associate = function (models) {
-    instances.hasMany(models.fed_users)
+  Instance.associate = function (models) {
+    Instance.hasMany(models.ap_user)
   }
 
-  return instances
+  return Instance
 }

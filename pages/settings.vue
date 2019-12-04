@@ -8,21 +8,6 @@
       el-form-item(:label="$t('settings.change_password')")
         el-input(v-model='password' type='password')
 
-      //- allow federation
-      div(v-if='settings.enable_federation')
-        el-form-item(:label="$t('admin.enable_federation')")
-          el-switch(v-model='user.settings.enable_federation')
-
-        div(v-if='user.settings.enable_federation')
-          el-form-item(:label="$t('common.username')")
-            el-input(v-if='username_editable' type='text' name='username' v-model='user.username')
-              template(slot='suffix') @{{baseurl}}
-            span(v-else) {{user.username}}@{{baseurl}}
-              //- el-button(slot='append') {{$t('common.save')}}
-
-          el-form-item(:label="$t('common.displayname')")
-            el-input(type='text' v-model='user.display_name')
-
       el-button(type='success' native-type='submit') {{$t('common.save')}}
 
     el-divider {{$t('settings.danger_section')}}

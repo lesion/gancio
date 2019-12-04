@@ -1,6 +1,6 @@
 <template lang='pug'>
   div
-    p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.fedi_admin}@${domain}`})")
+    p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${domain}`})")
     el-input(v-model='instance_hostname')
       a(slot='append' :href='link' target='_blank')
         el-button(:disabled='(!couldGo || !proceed)' plain type="primary" icon='el-icon-document') {{$t("common.follow")}}
@@ -51,7 +51,7 @@ export default {
     },
     link () {
       // check if exists
-      return `https://${this.instance_hostname}/authorize_interaction?uri=gancio@gancio.cisti.org`
+      return `https://${this.instance_hostname}/authorize_interaction?uri=${this.settings.instance_name}@${this.domain}`
     }
   }
 }
