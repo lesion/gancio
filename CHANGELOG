@@ -1,8 +1,11 @@
 All notable changes to this project will be documented in this file.
 
-### unreleased
+
+### 0.17.11
 - [refactor] s/fed_user/ap_user
 - [fedi] admin moderation
+
+### 0.17.10
 - [refactor] s/comment/resource/
 - [refactor] remove `username` field
 - [doc] about and federation
