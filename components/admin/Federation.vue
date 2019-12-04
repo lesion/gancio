@@ -76,7 +76,7 @@
               el-button-group
                 el-button(size='mini'
                   :type='data.row.hidden?"danger":"warning"'
-                  @click='toggleHideResource(data.row)') {{data.row.hidden?$t('admin.show_resource'):$t('admin.hide_resource')}}
+                  @click='toggleHideResource(data.row)') {{data.row.hidden?$t('common.show'):$t('common.hide')}}
 
 
 </template>

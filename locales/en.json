@@ -50,6 +50,7 @@
     "me": "You",
     "password_updated": "Password updated!",
     "resources": "Resources",
+    "n_resources": "no resource|a resource|{n} resources",
     "activate_user": "Confirmed",
     "displayname": "Display name",
     "federation": "Federation",
@@ -65,7 +66,8 @@
     "feed": "Feed rss",
     "feed_url_copied": "Feed url copied, paste it in your feed reader",
     "follow_me_title": "Follow updates from fediverse",
-    "follow": "Follow"
+    "follow": "Follow",
+    "moderation": "Moderation"
   },
   "login": {
     "description": "By logging in you can publish new events.",
@@ -153,7 +155,12 @@
     "block": "Block",
     "unblock": "Unblock",
     "user_add_help": "We will send an email to the new user with instructions to confirm the subscription and choose a password",
-    "instance_name": "Instance name"
+    "instance_name": "Instance name",
+    "show_resource": "Show resource",
+    "hide_resource": "Hide resource",
+    "delete_resource": "Delete resource",
+    "delete_resource_confirm": "Are you sure to delete this resource?",
+    "block_user": "Block user"
   },
   "auth": {
     "not_confirmed": "Not confirmed yet",

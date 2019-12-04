@@ -17,7 +17,7 @@
 
       ul.tags(v-if='showTags && event.tags')
         li(v-for='tag in event.tags' :key='tag') {{tag}}
-        li(v-if='settings.enable_federation && event.comments && event.comments.length') <u>{{$tc('common.resources', event.comments.length)}}</u>
+        li(v-if='settings.enable_federation && event.resources && event.resources.length') <u>{{$tc('common.n_resources', event.resources.length)}}</u>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'

@@ -82,7 +82,7 @@
           el-dropdown-menu(slot='dropdown')
             el-dropdown-item(v-if='!resource.hidden' icon='el-icon-remove' @click.native='hideResource(resource, true)') {{$t('admin.hide_resource')}}
             el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(resource, false)') {{$t('admin.show_resource')}}
-            el-dropdown-item(icon='el-icon-delete' @click.native='removeResource(resource)') {{$t('admin.remove_resource')}}
+            el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(resource)') {{$t('admin.delete_resource')}}
             el-dropdown-item(icon='el-icon-lock' @click.native='blockUser(resource)') {{$t('admin.block_user')}}
 
 </template>
@@ -266,8 +266,8 @@ export default {
       await this.$axios.post('/instances/toggle_user_block', { user_id: resource.apUserApId })
       Message({ message: this.$t('admin.user_blocked', {user: resource.apUserApId}), type: 'success', showClose: true })
     },
-    async removeResource (resource) {
-      MessageBox.confirm(this.$t('admin.remove_resource_confirm'),
+    async deleteResource (resource) {
+      MessageBox.confirm(this.$t('admin.delete_resource_confirm'),
         this.$t('common.confirm'), {
           confirmButtonText: this.$t('common.ok'),
           cancelButtonText: this.$t('common.cancel'),
