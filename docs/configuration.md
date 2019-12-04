@@ -5,7 +5,7 @@ permalink: /config
 nav_order: 3
 ---
 
-# Configuration
+## Configuration
 {: .no_toc }
 Main `gancio` configuration is done with a configuration file.
 This shoud be a `.json` or a `.js` file and could be specified using the `--config` flag.

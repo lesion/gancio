@@ -7,7 +7,7 @@ nav_order: 2
 has_toc: false
 ---
 
-# Install (production)
+## Install (production)
 
 - [Install on Debian](/install/debian)
 - [Install using docker](/install/docker)

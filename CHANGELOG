@@ -1,8 +1,11 @@
 All notable changes to this project will be documented in this file.
 
+### unreleased
+- [refactor] remove `username` field
+- [doc] about and federation
+
 ### 0.17.8
 - [fix] use thumb in head og:img only
-
 
 ### 0.17.7
 - [fix] #58 wrong url for RSS feed

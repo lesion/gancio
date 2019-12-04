@@ -33,10 +33,12 @@ plugins:
 search_enabled: true
 
 aux_links:
+  "Blog":
+    - https://blog.gancio.org
   "Source":
     - https://framagit.org/les/gancio
   "Forum":
-    - https://framavox.org/g/hMXTDgtJ/gancio
+    - https://socialhub.activitypub.rocks/c/software/gancio
 
 
 

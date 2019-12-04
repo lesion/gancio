@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
-  <title> - Gancio</title>
+  <title>Federation - Gancio</title>
 
   
 
@@ -26,17 +26,17 @@
   <script src="https://gancio.org/assets/js/jquery.fancybox.min.js"></script>
 
   <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Gancio | A shared agenda for local communities with AP support</title>
+<title>Federation | Gancio</title>
 <meta name="generator" content="Jekyll v3.8.6" />
-<meta property="og:title" content="Gancio" />
+<meta property="og:title" content="Federation" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="A shared agenda for local communities with AP support" />
 <meta property="og:description" content="A shared agenda for local communities with AP support" />
-<link rel="canonical" href="https://gancio.org/404.html" />
-<meta property="og:url" content="https://gancio.org/404.html" />
+<link rel="canonical" href="https://gancio.org/federation" />
+<meta property="og:url" content="https://gancio.org/federation" />
 <meta property="og:site_name" content="Gancio" />
 <script type="application/ld+json">
-{"@type":"WebPage","url":"https://gancio.org/404.html","headline":"Gancio","description":"A shared agenda for local communities with AP support","@context":"https://schema.org"}</script>
+{"@type":"WebPage","url":"https://gancio.org/federation","headline":"Federation","description":"A shared agenda for local communities with AP support","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 </head>
@@ -56,7 +56,7 @@
         
           <li class="navigation-list-item active">
             
-            <a href="https://gancio.org/404.html" class="navigation-list-link active"></a>
+            <a href="https://gancio.org/404.html" class="navigation-list-link"></a>
             
           </li>
         
@@ -250,9 +250,9 @@
     
       
         
-          <li class="navigation-list-item">
+          <li class="navigation-list-item active">
             
-            <a href="https://gancio.org/federation" class="navigation-list-link">Federation</a>
+            <a href="https://gancio.org/federation" class="navigation-list-link active">Federation</a>
             
           </li>
         
@@ -296,26 +296,15 @@
           
         
         <div id="main-content" class="page-content" role="main">
-          <style type="text/css" media="screen">
-  .container {
-    margin: 10px auto;
-    max-width: 600px;
-    text-align: center;
-  }
-  h1 {
-    margin: 30px 0;
-    font-size: 4em;
-    line-height: 1;
-    letter-spacing: -1px;
-  }
-</style>
+          <h2 id="federation">Federation</h2>
 
-<div class="container">
-  <h1>404</h1>
+<p>Each instance has only one <a href="https://www.w3.org/TR/activitypub/#actors">AP Actor</a> that publishes each event.
+We are considering the introduction of other “Actor” but they will not be linked to users, rather to places or tags/categories.
+There are no personal homes with a timeline of people I follow, everyone has a sort of local timeline of the instance, it’s an anti filter-bubble feature.</p>
 
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
-</div>
+<p>Events are not published with the type <code class="highlighter-rouge">Event</code> but with type <code class="highlighter-rouge">Note</code> because we wanted to add the possibility to interact with events from mastodon instances (boost / bookmark and “comments” that we call resources because we don’t want it to become a place of debate, but more a place where to keep a historical memory of events, e.g. an audio recording of a talk).</p>
+
+<p>When mastodon will support <code class="highlighter-rouge">Event</code> object type we will change for sure.</p>
 
 
           
