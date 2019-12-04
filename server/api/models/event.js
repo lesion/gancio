@@ -2,7 +2,7 @@ const config = require('config')
 const moment = require('moment')
 
 module.exports = (sequelize, DataTypes) => {
-  const event = sequelize.define('event', {
+  const Event = sequelize.define('event', {
     id: {
       allowNull: false,
       type: DataTypes.INTEGER,
@@ -29,15 +29,15 @@ module.exports = (sequelize, DataTypes) => {
     boost: { type: DataTypes.JSON, defaultValue: [] }
   }, {})
 
-  event.associate = function (models) {
-    event.belongsTo(models.place)
-    event.belongsTo(models.user)
-    event.belongsToMany(models.tag, { through: 'event_tags' })
-    event.belongsToMany(models.notification, { through: 'event_notification' })
-    event.hasMany(models.comment)
+  Event.associate = function (models) {
+    Event.belongsTo(models.place)
+    Event.belongsTo(models.user)
+    Event.belongsToMany(models.tag, { through: 'event_tags' })
+    Event.belongsToMany(models.notification, { through: 'event_notification' })
+    Event.hasMany(models.resource)
   }
 
-  event.prototype.toAP = function (username, follower = []) {
+  Event.prototype.toNoteAP = function (username, follower = []) {
     const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, ' '))
     const tag_links = tags.map(t => {
       return `<a href='/tags/${t}' class='mention hashtag status-link' rel='tag'><span>#${t}</span></a>`
@@ -82,5 +82,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  return event
+  return Event
 }

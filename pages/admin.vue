@@ -50,7 +50,7 @@
         template(slot='label')
           v-icon(name='network-wired')
           span.ml-1 {{$t('common.federation')}}
-        Federation(:instances='instances')
+        Federation
 
 </template>
 <script>
@@ -67,7 +67,6 @@ export default {
   middleware: ['auth'],
   data () {
     return {
-      instances: [],
       perPage: 10,
       eventPage: 1,
       description: '',
@@ -84,8 +83,7 @@ export default {
     try {
       const users = await $axios.$get('/users')
       const events = await $axios.$get('/event/unconfirmed')
-      const instances = await $axios.$get('/instances')
-      return { users, events, instances }
+      return { users, events }
     } catch (e) {
       console.error(e)
     }

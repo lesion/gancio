@@ -3,9 +3,9 @@ const router = express.Router()
 const cors = require('cors')
 const Follows = require('./follows')
 const Users = require('./users')
-const { event: Event, user: User, tag: Tag, place: Place } = require('../api/models')
+const { Event, User, Tag, Place } = require('../api/models')
 const settingsController = require('../api/controller/settings')
-const Comments = require('./comments')
+const Resources = require('./resources')
 const Helpers = require('./helpers')
 const Ego = require('./ego')
 const debug = require('debug')('federation')
@@ -65,12 +65,12 @@ router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
       Ego.bookmark(req, res)
       break
     case 'Delete':
-      await Comments.remove(req, res)
+      await Resources.remove(req, res)
       break
     case 'Create':
       // this is a reply
       if (b.object.type === 'Note' && b.object.inReplyTo) {
-        await Comments.create(req, res)
+        await Resources.create(req, res)
       } else {
         debug('Create with unsupported Object or not a reply => %s ', b.object.type)
       }

@@ -8,8 +8,9 @@ const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 const userController = require('./controller/user')
 const settingsController = require('./controller/settings')
-const instancesController = require('./controller/instances')
-const fedUserController = require('./controller/fed_user')
+const instanceController = require('./controller/instance')
+const apUserController = require('./controller/ap_user')
+const resourceController = require('./controller/resource')
 
 const storage = require('./storage')
 const upload = multer({ storage })
@@ -84,12 +85,13 @@ api.get('/export/:type', exportController.export)
 // get events in this range
 api.get('/event/:month/:year', eventController.getAll)
 
-api.get('/instances', isAdmin, instancesController.getAll)
-api.get('/instances/:instance_domain', isAdmin, instancesController.get)
-api.post('/instances/toggle_block', isAdmin, instancesController.toggleBlock)
-api.post('/instances/toggle_user_block', isAdmin, fedUserController.toggleBlock)
-api.post('/comments/:comment_id', isAdmin, fedUserController.hideComment)
-api.delete('/comments/:comment_id', isAdmin, fedUserController.removeComment)
+api.get('/instances', isAdmin, instanceController.getAll)
+api.get('/instances/:instance_domain', isAdmin, instanceController.get)
+api.post('/instances/toggle_block', isAdmin, instanceController.toggleBlock)
+api.post('/instances/toggle_user_block', isAdmin, apUserController.toggleBlock)
+api.put('/resources/:resource_id', isAdmin, resourceController.hide)
+api.delete('/resources/:resource_id', isAdmin, resourceController.remove)
+api.get('/resources', isAdmin, resourceController.getAll)
 
 // Handle 404
 api.use((req, res) => {

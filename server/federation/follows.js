@@ -1,6 +1,5 @@
 const config = require('config')
 const Helpers = require('./helpers')
-const { user: User, fed_users: FedUsers } = require('../api/models')
 const crypto = require('crypto')
 const debug = require('debug')('federation:follows')
 

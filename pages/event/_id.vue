@@ -58,32 +58,32 @@
       a.el-button.el-button--success.el-button--mini.is-plain(role='button' plain size='mini' type='success'
         :href='`${settings.baseurl}/api/event/${event.id}.ics`') <i class='el-icon-date'></i> {{$t('common.add_to_calendar')}}
 
-    //- comments from fediverse
-    #comments.mt-1(v-if='settings.enable_federation')
-      div.float-right(v-if='!settings.disable_gamification')
+    //- resources from fediverse
+    #resources.mt-1(v-if='settings.enable_federation')
+      div.float-right(v-if='!settings.hide_boosts')
         small.mr-3 🔖 {{event.likes.length}}
         small ✊ {{event.boost.length}}<br/>
 
-      strong(v-if='settings.enable_comments') {{$tc('common.resources', event.comments.length)}} -
+      strong(v-if='settings.enable_resources') {{$tc('common.resources', event.resources.length)}} -
       small {{$t('event.interact_with_me_at')}} 
-        el-button(type='text' size='mini' @click='showFollowMe=true') @{{fedi_user}}@{{settings.baseurl|url2host}}
+        el-button(type='text' size='mini' @click='showFollowMe=true') @{{settings.instance_name}}@{{settings.baseurl|url2host}}
 
       el-dialog.followDialog(:visible.sync='showFollowMe')
         h4(slot='title') {{$t('common.follow_me_title')}}
         FollowMe
 
-      .card-header(v-if='settings.enable_comments' v-for='comment in event.comments' :key='comment.id' :class='{disabled: comment.hidden}')
-        a.float-right(:href='comment.data.url')
-          small {{comment.data.published|datetime}}
-        div.mt-1(v-html='comment_filter(comment.data.content)')
-        img(v-for='img in comment.data.media_attachments' :src='img.url')
+      .card-header(v-if='settings.enable_resources' v-for='resource in event.resources' :key='resource.id' :class='{disabled: resource.hidden}')
+        a.float-right(:href='resource.data.url')
+          small {{resource.data.published|datetime}}
+        div.mt-1(v-html='resource_filter(resource.data.content)')
+        img(v-for='img in resource.data.media_attachments' :src='img.url')
         el-dropdown
           el-button(type="primary" icon="el-icon-arrow-down" size='mini') {{$t('common.moderation')}}
           el-dropdown-menu(slot='dropdown')
-            el-dropdown-item(v-if='!comment.hidden' icon='el-icon-remove' @click.native='hideComment(comment, true)') {{$t('admin.hide_resource')}}
-            el-dropdown-item(v-else icon='el-icon-success' @click.native='hideComment(comment, false)') {{$t('admin.show_resource')}}
-            el-dropdown-item(icon='el-icon-delete' @click.native='removeComment(comment)') {{$t('admin.remove_resource')}}
-            el-dropdown-item(icon='el-icon-lock' @click.native='blockUser(comment)') {{$t('admin.block_user')}}
+            el-dropdown-item(v-if='!resource.hidden' icon='el-icon-remove' @click.native='hideResource(resource, true)') {{$t('admin.hide_resource')}}
+            el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(resource, false)') {{$t('admin.show_resource')}}
+            el-dropdown-item(icon='el-icon-delete' @click.native='removeResource(resource)') {{$t('admin.remove_resource')}}
+            el-dropdown-item(icon='el-icon-lock' @click.native='blockUser(resource)') {{$t('admin.block_user')}}
 
 </template>
 <script>
@@ -201,10 +201,6 @@ export default {
   computed: {
     ...mapGetters(['filteredEvents']),
     ...mapState(['settings']),
-    fedi_user() {
-      // TODO:
-      return this.settings.fedi_admin
-    },
     next() {
       let found = false
       const event = this.filteredEvents.find(e => {
@@ -262,29 +258,29 @@ export default {
     }
   },
   methods: {
-    async hideComment (comment, hidden) {
-      await this.$axios.$post(`/comments/${comment.id}`, { hidden })
-      comment.hidden = hidden
+    async hideResource (resource, hidden) {
+      await this.$axios.$put(`/resources/${resource.id}`, { hidden })
+      resource.hidden = hidden
     },
-    async blockUser (comment) {
-      await this.$axios.post('/instances/toggle_user_block', { user_id: comment.fedUserApId })
-      Message({ message: this.$t('admin.user_blocked', {user: comment.fedUserApId}), type: 'success', showClose: true })
+    async blockUser (resource) {
+      await this.$axios.post('/instances/toggle_user_block', { user_id: resource.apUserApId })
+      Message({ message: this.$t('admin.user_blocked', {user: resource.apUserApId}), type: 'success', showClose: true })
     },
-    async removeComment (comment) {
+    async removeResource (resource) {
       MessageBox.confirm(this.$t('admin.remove_resource_confirm'),
         this.$t('common.confirm'), {
           confirmButtonText: this.$t('common.ok'),
           cancelButtonText: this.$t('common.cancel'),
           type: 'error'
         }).then(async () => {
-          await this.$axios.delete(`/comments/${comment.id}`)
-          this.event.comments = this.event.comments.filter(c => c.id !== comment.id)
+          await this.$axios.delete(`/resources/${resource.id}`)
+          this.event.resources = this.event.resources.filter(r => r.id !== resources.id)
         })
     },
     copyLink() {
       Message({ message: this.$t('common.copied'), type: 'success', showClose: true })
     },
-    comment_filter(value) {
+    resource_filter(value) {
       return value.replace(
         /<a.*href="([^">]+).*>(?:.(?!<\/a>))*.<\/a>/,
         (orig, url) => {
@@ -379,7 +375,7 @@ export default {
     }
   }
 
-  #comments {
+  #resources {
     img {
       max-width: 100%;
     }

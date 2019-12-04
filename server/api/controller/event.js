@@ -2,29 +2,28 @@ const crypto = require('crypto')
 const moment = require('moment-timezone')
 const { Op } = require('sequelize')
 const lodash = require('lodash')
-const { event: Event, comment: Comment, tag: Tag, place: Place,
-  user: User, notification: Notification } = require('../models')
+const { event: Event, resource: Resource, tag: Tag, place: Place, notification: Notification } = require('../models')
 const Sequelize = require('sequelize')
 const exportController = require('./export')
 const debug = require('debug')('controller:event')
 
 const eventController = {
 
-  /** add a comment to event
+  /** add a resource to event
    * @todo not used anywhere, should we use with webmention?
    * @todo should we use this for roply coming from fediverse?
    */
-  async addComment (req, res) {
-    // comments could be added to an event or to another comment
-    let event = await Event.findOne({ where: { activitypub_id: { [Op.eq]: req.body.id } } })
-    if (!event) {
-      const comment = await Comment.findOne({ where: { activitypub_id: { [Op.eq]: req.body.id } }, include: Event })
-      event = comment.event
-    }
-    const comment = new Comment(req.body)
-    event.addComment(comment)
-    res.json(comment)
-  },
+  // async addComment (req, res) {
+  //   // comments could be added to an event or to another comment
+  //   let event = await Event.findOne({ where: { activitypub_id: { [Op.eq]: req.body.id } } })
+  //   if (!event) {
+  //     const comment = await Resource.findOne({ where: { activitypub_id: { [Op.eq]: req.body.id } }, include: Event })
+  //     event = comment.event
+  //   }
+  //   const comment = new Comment(req.body)
+  //   event.addComment(comment)
+  //   res.json(comment)
+  // },
 
   async getMeta (req, res) {
     const places = await Place.findAll({
@@ -94,11 +93,10 @@ const eventController = {
       },
       include: [
         { model: Tag, attributes: ['tag', 'weigth'], through: { attributes: [] } },
-        { model: User, attributes: ['username'] },
         { model: Place, attributes: ['name', 'address'] },
-        { model: Comment, where: !is_admin && { hidden: false }, required: false }
+        { model: Resource, where: !is_admin && { hidden: false }, required: false }
       ],
-      order: [ [Comment, 'id', 'DESC'] ]
+      order: [ [Resource, 'id', 'DESC'] ]
     })
 
     if (event && (event.is_visible || is_admin)) {
@@ -230,12 +228,11 @@ const eventController = {
       attributes: { exclude: [ 'createdAt', 'updatedAt', 'placeId' ] },
       order: [[Tag, 'weigth', 'DESC']],
       include: [
-        { model: Comment, required: false, attributes: ['id'] },
+        { model: Resource, required: false, attributes: ['id'] },
         { model: Tag, required: false },
         { model: Place, required: false, attributes: ['id', 'name', 'address'] }
       ]
     })
-
     events = events.map(e => e.get()).map(e => {
       e.tags = e.tags.map(t => t.tag)
       return e

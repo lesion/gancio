@@ -1,14 +1,13 @@
-const { user: User, event: Event, place: Place, tag: Tag, fed_users: FedUsers } = require('../api/models')
+const { User, Event, Place, Tag, APUser } = require('../api/models')
 const config = require('config')
-const get = require('lodash/get')
 const debug = require('debug')('fediverse:user')
 
 module.exports = {
-  async get (req, res) {
+  get (req, res) {
     const name = req.params.name
     if (!name) { return res.status(400).send('Bad request.') }
-    const user = await User.findOne({ where: { username: name } })
-    if (!user) { return res.status(404).send(`No record found for ${name}`) }
+    // const user = await User.findOne({ where: { username: name } })
+    if (name !== req.settings.instance_name) { return res.status(404).send(`No record found for ${name}`) }
     const ret = {
       '@context': [
         'https://www.w3.org/ns/activitystreams',
