@@ -28,7 +28,7 @@ const notifier = {
   },
   async notifyEvent (action, eventId) {
     const event = await Event.findByPk(eventId, {
-      include: [ Tag, Place, Notification, { model: User, include: { model: APUser, as: 'followers' } } ]
+      include: [ Tag, Place, Notification, { model: User } ]
     })
 
     debug('%s -> %s', action, event.title)
