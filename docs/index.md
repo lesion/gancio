@@ -26,9 +26,9 @@ A shared agenda for local communities.
 - **Focus on content** not on people:
 nowhere on gancio appears the identity of who published the event, not even under a nickname, not even to administrators (except in the db). This is not an ego-friendly platform.
 
-- **Visitors first**. We do not want logged user to get more features than random visitor. We do not want users to register, except to publish events and even in this case you can publish an anononymous event.
+- **Visitors first**. We do not want logged user to get more features than random visitor. We do not want users to register, except to publish events and even in this case you can publish an anonymous event.
 
-- **Anononymous events**: optionally a visitor can create events without being registered (an administrator has to confirm them)
+- **Anonymous events**: optionally a visitor can create events without being registered (an administrator has to confirm them)
 
 - **We are not interested in making hits** so we export events in many ways, via RSS feeds, via global or individual ics, incorporating lists of events or single event via iframe on other websites.
 
