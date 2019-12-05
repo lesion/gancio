@@ -17,8 +17,8 @@ const instancesController = {
    * get instance users
    */
   async get (req, res) {
-    const fedi_users = await APUser.findAll({ where: { instanceDomain: req.params.instance_domain }, include: [Resource] })
-    return res.json(fedi_users)
+    const ap_users = await APUser.findAll({ where: { instanceDomain: req.params.instance_domain }, include: [Resource] })
+    return res.json(ap_users)
   },
 
   async toggleBlock (req, res) {

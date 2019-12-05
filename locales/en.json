@@ -150,7 +150,7 @@
     "select_instance_timezone": "Select instance timezone",
     "enable_resources": "Enable resources",
     "enable_resources_help": "Allows you to add resources to the event from the fediverse",
-    "hide_boost_bookmark": "Hides boost/bookmark numbers",
+    "hide_boost_bookmark": "Hides boost/bookmarks",
     "hide_boost_bookmark_help": "Hides the small icons that show the number of boosts / bookmarks coming from the fediverse",
     "block": "Block",
     "unblock": "Unblock",
@@ -160,7 +160,9 @@
     "hide_resource": "Hide resource",
     "delete_resource": "Delete resource",
     "delete_resource_confirm": "Are you sure to delete this resource?",
-    "block_user": "Block user"
+    "block_user": "Block user",
+    "filter_instances": "Filter instances",
+    "filter_users": "Filter users"
   },
   "auth": {
     "not_confirmed": "Not confirmed yet",

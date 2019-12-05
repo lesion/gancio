@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { event: Event, user: User, comment: Comment } = require('../api/models')
+const { event: Event, user: User, resource: Resource } = require('../api/models')
 const cors = require('cors')
 const settingsController = require('../api/controller/settings')
 const version = require('../../package.json').version
@@ -50,6 +50,8 @@ router.get('/webfinger', (req, res) => {
 router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
   const usersCount = (await User.findAndCountAll()).count
   const eventsCount = (await Event.findAndCountAll()).count
+  const resourcesCount = (await Resource.findAndCountAll()).count
+
   const ret = {
     metadata: {
       nodeDescription: req.settings.description,
@@ -64,7 +66,7 @@ router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
     },
     version: req.params.nodeinfo_version,
     usage: {
-      localComments: 0,
+      localComments: resourcesCount,
       localPosts: eventsCount,
       users: {
         total: usersCount
@@ -81,7 +83,7 @@ router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
 router.get('/x-nodeinfo2', async (req, res) => {
   const usersCount = (await User.findAndCountAll()).count
   const eventsCount = (await Event.findAndCountAll()).count
-  const commentsCount = (await Comment.findAndCountAll()).count
+  const resourcesCount = (await Resource.findAndCountAll()).count
 
   const ret = {
     version: '1.0',
@@ -98,7 +100,7 @@ router.get('/x-nodeinfo2', async (req, res) => {
         total: usersCount
       },
       localPosts: eventsCount,
-      localComments: commentsCount
+      localComments: resourcesCount
     }
   }
   res.json(ret)

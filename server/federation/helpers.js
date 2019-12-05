@@ -4,7 +4,7 @@ const crypto = require('crypto')
 const config = require('config')
 const httpSignature = require('http-signature')
 const debug = require('debug')('federation:helpers')
-const { APUser, Instance } = require('../api/models')
+const { ap_user: APUser, instance: Instance } = require('../api/models')
 const url = require('url')
 const settingsController = require('../api/controller/settings')
 
@@ -55,7 +55,7 @@ const Helpers = {
       return
     }
 
-    const followers = await APUser.findAll({ where: { follow: true } })
+    const followers = await APUser.findAll({ where: { follower: true } })
     const recipients = {}
     followers.forEach(follower => {
       const sharedInbox = follower.object.endpoints.sharedInbox
