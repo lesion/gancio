@@ -97,7 +97,7 @@ const Helpers = {
       }
     }
 
-    fedi_user = await fetch(URL, { headers: { 'Accept': 'application/jrd+json, application/json' } })
+    fedi_user = await fetch(URL, { headers: { Accept: 'application/jrd+json, application/json' } })
       .then(res => {
         if (!res.ok) {
           debug('[ERR] Actor %s => %s', URL, res.statusText)
@@ -123,7 +123,7 @@ const Helpers = {
       if (instance) { return instance }
     }
 
-    instance = await fetch(`${instance_url}/api/v1/instance`, { headers: { 'Accept': 'application/json' } })
+    instance = await fetch(`${instance_url}/api/v1/instance`, { headers: { Accept: 'application/json' } })
       .then(res => res.json())
       .then(instance => {
         const data = {
