@@ -2,6 +2,7 @@ const express = require('express')
 const multer = require('multer')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
+const cors = require('cors')()
 
 const { isAuth, isAdmin } = require('./auth')
 const eventController = require('./controller/event')
@@ -77,13 +78,13 @@ api.get('/event/confirm/:event_id', isAuth, eventController.confirm)
 api.get('/event/unconfirm/:event_id', isAuth, eventController.unconfirm)
 
 // get event
-api.get('/event/:event_id.:format?', eventController.get)
+api.get('/event/:event_id.:format?', cors, eventController.get)
 
 // export events (rss/ics)
-api.get('/export/:type', exportController.export)
+api.get('/export/:type', cors, exportController.export)
 
 // get events in this range
-api.get('/event/:month/:year', eventController.getAll)
+api.get('/event/:month/:year', cors, eventController.getAll)
 
 api.get('/instances', isAdmin, instanceController.getAll)
 api.get('/instances/:instance_domain', isAdmin, instanceController.get)
