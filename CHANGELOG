@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file.
 
+### 0.17.12
+- [ui] add admin section on event page in mobile #63
+- [fix] remove username from users
 
 ### 0.17.11
 - [refactor] s/fed_user/ap_user
