@@ -19,6 +19,9 @@
     "email": "lesion@autistici.org",
     "url": "https://framagit.org/les/gancio/issues"
   },
+  "keywords": [
+    "AP", "gancio", "events", "federation", "activitypub", "event", "server", "self-host", "app"
+  ],
   "repository": {
     "type": "git",
     "url": "https://framagit.org/les/gancio"
