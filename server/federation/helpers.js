@@ -38,14 +38,15 @@ const Helpers = {
     const header = `keyId="${config.baseurl}/federation/u/${settingsController.settings.instance_name}",headers="(request-target) host date",signature="${signature_b64}"`
     const ret = await fetch(inbox, {
       headers: {
-        'Host': inboxUrl.hostname,
-        'Date': d.toUTCString(),
-        'Signature': header,
+        Host: inboxUrl.hostname,
+        Date: d.toUTCString(),
+        Signature: header,
         'Content-Type': 'application/activity+json; charset=utf-8',
-        'Accept': 'application/activity+json, application/json; chartset=utf-8'
+        Accept: 'application/activity+json, application/json; chartset=utf-8'
       },
       method: 'POST',
-      body: JSON.stringify(message) })
+      body: JSON.stringify(message)
+})
     debug('sign %s => %s', ret.status, await ret.text())
   },
 
@@ -64,7 +65,7 @@ const Helpers = {
     })
 
     for (const sharedInbox in recipients) {
-      debug('Notify %s with event %s cc => %d', sharedInbox, event.title , recipients[sharedInbox].length)
+      debug('Notify %s with event %s cc => %d', sharedInbox, event.title, recipients[sharedInbox].length)
       const body = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
         type,
@@ -78,7 +79,7 @@ const Helpers = {
       body['@context'] = [
         'https://www.w3.org/ns/activitystreams',
         'https://w3id.org/security/v1',
-        { Hashtag: 'as:Hashtag' } ]
+        { Hashtag: 'as:Hashtag' }]
       Helpers.signAndSend(body, sharedInbox)
     }
   },

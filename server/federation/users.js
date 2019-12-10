@@ -84,6 +84,7 @@ module.exports = {
   },
 
   async outbox (req, res) {
+    // TODO
     const name = req.params.name
     const page = req.query.page
 

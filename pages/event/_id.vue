@@ -53,6 +53,13 @@
 
     hr
     .d-block.d-lg-none
+      el-dropdown
+        el-button.mr-1.mb-1(type='' icon='el-icon-arrow-down' size='mini') {{$t('common.admin')}}
+        el-dropdown-menu(slot='dropdown')
+          el-dropdown-item(@click.native='toggle') {{$t(event.is_visible?'common.hide':'common.confirm')}}
+          el-dropdown-item(@click.native='$router.replace(`/add/${event.id}`)') {{$t('common.edit')}}
+          el-dropdown-item(@click.native='remove') {{$t('common.remove')}}
+
       el-button(plain size='mini' type='primary' v-clipboard:success='copyLink'
         v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') <i class='el-icon-paperclip'></i> {{$t('common.copy_link')}}
       a.el-button.el-button--success.el-button--mini.is-plain(role='button' plain size='mini' type='success'
@@ -258,6 +265,32 @@ export default {
     }
   },
   methods: {
+    async remove () {
+      try {
+        await MessageBox.confirm(this.$t('event.remove_confirmation'), this.$t('common.confirm'), {
+          confirmButtonText: this.$t('common.ok'),
+          cancelButtonText: this.$t('common.cancel'),
+          type: 'error' })
+        await this.$axios.delete(`/user/event/${this.event.id}`)
+        this.delEvent(Number(this.event.id))
+        this.$router.replace('/')
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async toggle () {
+      try {
+        if (this.event.is_visible) {
+          await this.$axios.$get(`/event/unconfirm/${this.event.id}`)
+          this.event.is_visible = false
+        } else {
+          await this.$axios.$get(`/event/confirm/${this.event.id}`)
+          this.event.is_visible = true
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    },
     async hideResource (resource, hidden) {
       await this.$axios.$put(`/resources/${resource.id}`, { hidden })
       resource.hidden = hidden
