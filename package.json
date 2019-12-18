@@ -1,6 +1,6 @@
 {
   "name": "gancio",
-  "version": "0.17.12",
+  "version": "0.17.13",
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
@@ -19,6 +19,9 @@
     "email": "lesion@autistici.org",
     "url": "https://framagit.org/les/gancio/issues"
   },
+  "keywords": [
+    "AP", "gancio", "events", "federation", "activitypub", "event", "server", "self-host", "app"
+  ],
   "repository": {
     "type": "git",
     "url": "https://framagit.org/les/gancio"
