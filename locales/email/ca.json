@@ -1,0 +1,23 @@
+{
+  "register": {
+    "subject": "Request registration received",
+    "content": "We received the registration request. We will confirm it as soon as possible."
+  },
+  "confirm": {
+    "subject": "You can now start publishing events",
+    "content": "Hi, your account on <a href='{{config.baseurl}}'>{{config.title}}</a> has been confirmed. Write to us at {{config.admin}} for any information."
+  },
+  "user_confirm": {
+    "subject": "You can now start publishing events",
+    "content": "Hi, your account on <a href='{{config.baseurl}}'>{{config.title}}</a> has been created. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confirm it and choose a password.</a>"
+  },
+  "recover": {
+    "subject": "Password recovery",
+    "content": "Hi, you requested a password recovery on {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Click here</a> to confirm"
+  },
+  "admin_register": {
+    "subject": "New registration",
+    "content": "{{user.email}} has requested registration on {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confirm it <a href='{{config.baseurl}}/admin'>here</a>."
+  }
+}
+
