@@ -9,7 +9,7 @@ import locale from 'element-ui/lib/locale'
 const locales = {
   it: require('element-ui/lib/locale/lang/it'),
   en: require('element-ui/lib/locale/lang/en'),
-  es: require('element-ui/lib/locale/lang/es')
+  es: require('element-ui/lib/locale/lang/es'),
   ca: require('element-ui/lib/locale/lang/ca')
 }
 

@@ -34,7 +34,7 @@ module.exports = {
 
     // set locale and user locale
     const acceptedLanguages = req.headers['accept-language']
-    const supportedLanguages = ['en', 'it', 'es']
+    const supportedLanguages = ['en', 'it', 'es', 'ca']
     acceptLanguage.languages(supportedLanguages)
     req.settings.locale = acceptLanguage.get(acceptedLanguages)
     req.settings.user_locale = settingsController.user_locale[req.settings.locale]
