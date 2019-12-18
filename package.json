@@ -1,6 +1,6 @@
 {
   "name": "gancio",
-  "version": "0.17.13",
+  "version": "0.17.14",
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
@@ -20,7 +20,15 @@
     "url": "https://framagit.org/les/gancio/issues"
   },
   "keywords": [
-    "AP", "gancio", "events", "federation", "activitypub", "event", "server", "self-host", "app"
+    "AP",
+    "gancio",
+    "events",
+    "federation",
+    "activitypub",
+    "event",
+    "server",
+    "self-host",
+    "app"
   ],
   "repository": {
     "type": "git",
