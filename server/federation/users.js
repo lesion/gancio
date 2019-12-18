@@ -1,4 +1,4 @@
-const { User, Event, Place, Tag, APUser } = require('../api/models')
+const { event: Event, place: Place, tag: Tag, ap_user: APUser } = require('../api/models')
 const config = require('config')
 const debug = require('debug')('fediverse:user')
 
@@ -48,7 +48,7 @@ module.exports = {
     res.json(ret)
   },
 
-  async followers(req, res) {
+  async followers (req, res) {
     // TODO
     const name = req.params.name
     const page = req.query.page
@@ -89,12 +89,9 @@ module.exports = {
     const page = req.query.page
 
     if (!name) { return res.status(400).send('Bad request.') }
-    const user = await User.findOne({
-      include: [ { model: Event, include: [ Place, Tag ] } ],
-      where: { username: name }
-    })
+    if (name !== req.settings.instance_name) { return res.status(404).send(`No record found for ${name}`) }
 
-    if (!user) { return res.status(404).send(`No record found for ${name}`) }
+    const events = await Event.findAll( { include: [Tag, Place] })
 
     debug('Inside outbox, should return all events from this user')
 
@@ -105,7 +102,7 @@ module.exports = {
         '@context': ['https://www.w3.org/ns/activitystreams'],
         id: `${config.baseurl}/federation/u/${name}/outbox`,
         type: 'OrderedCollection',
-        totalItems: user.events.length,
+        totalItems: events.length,
         first: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
         last: `${config.baseurl}/federation/u/${name}/outbox?page=true`
       })
@@ -116,10 +113,9 @@ module.exports = {
       '@context': ['https://www.w3.org/ns/activitystreams', { Hashtag: 'as:Hashtag' }],
       id: `${config.baseurl}/federation/u/${name}/outbox?page=${page}`,
       type: 'OrderedCollectionPage',
-      totalItems: user.events.length,
+      totalItems: events.length,
       partOf: `${config.baseurl}/federation/u/${name}/outbox`,
-      orderedItems: user.events.map(e => ({
-        ...e.toNoteAP(user.username), actor: `${config.baseurl}/federation/u/${user.username}` }))
+      orderedItems: events.map(e => ({ ...e.toNoteAP(name), actor: `${config.baseurl}/federation/u/${name}` }))
       //   user.events.map(e => ({
       //   id: `${config.baseurl}/federation/m/${e.id}#create`,
       //   type: 'Create',

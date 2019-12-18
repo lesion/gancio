@@ -31,7 +31,7 @@ router.get('/m/:event_id', async (req, res) => {
   const event_id = req.params.event_id
   if (req.accepts('html')) { return res.redirect(301, `/event/${event_id}`) }
 
-  const event = await Event.findByPk(req.params.event_id, { include: [ User, Tag, Place ] })
+  const event = await Event.findByPk(req.params.event_id, { include: [User, Tag, Place] })
   if (!event) { return res.status(404).send('Not found') }
   return res.json(event.toNoteAP(event.user.username))
 })
