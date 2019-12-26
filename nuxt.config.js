@@ -96,6 +96,8 @@ module.exports = {
     splitChunks: {
       layouts: true
     },
+    parallel: true,
+    hardSource: true,
     cache: true
   }
 }
