@@ -1,6 +1,5 @@
 const express = require('express')
 const multer = require('multer')
-const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const cors = require('cors')()
 
@@ -12,6 +11,7 @@ const settingsController = require('./controller/settings')
 const instanceController = require('./controller/instance')
 const apUserController = require('./controller/ap_user')
 const resourceController = require('./controller/resource')
+const oauthController = require('./controller/oauth')
 
 const storage = require('./storage')
 const upload = multer({ storage })
@@ -19,9 +19,8 @@ const upload = multer({ storage })
 const debug = require('debug')('api')
 
 const api = express.Router()
-api.use(cookieParser())
-api.use(bodyParser.urlencoded({ extended: false }))
-api.use(bodyParser.json())
+api.use(express.urlencoded({ extended: false }))
+api.use(express.json())
 
 // AUTH
 api.post('/auth/login', userController.login)
@@ -93,6 +92,9 @@ api.post('/instances/toggle_user_block', isAdmin, apUserController.toggleBlock)
 api.put('/resources/:resource_id', isAdmin, resourceController.hide)
 api.delete('/resources/:resource_id', isAdmin, resourceController.remove)
 api.get('/resources', isAdmin, resourceController.getAll)
+
+api.get('/client/:client_id', isAuth, oauthController.getClient)
+api.post('/client', oauthController.createClient)
 
 // Handle 404
 api.use((req, res) => {

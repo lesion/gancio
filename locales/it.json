@@ -67,7 +67,8 @@
     "follow": "Segui",
     "n_resources": "nessuna risorsa|una risorsa|{n} risorse",
     "resources": "Risorse",
-    "moderation": "Moderazione"
+    "moderation": "Moderazione",
+    "authorize": "Autorizza"
   },
   "login": {
     "description": "Entrando puoi pubblicare nuovi eventi.",

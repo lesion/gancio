@@ -31,11 +31,13 @@
           el-tab-pane
             span(slot='label') <v-icon name='map-marker-alt'/> {{$t('common.where')}}
             p(v-html="$t('event.where_description')")
-
+            span {{event.place.name}}
             el-select.mb-3(v-model='event.place.name'
+              @keypress.tab='testBlur'
               @change='placeChoosed'
               filterable allow-create
               default-first-option
+              @blur='testBlur'
             )
               el-option(v-for='place in places' :label='place.name' :value='place.name' :key='place.id')
             div {{$t("common.address")}}
@@ -92,6 +94,8 @@
           //- MEDIA / FLYER / POSTER
           el-tab-pane
             span(slot='label') {{$t('common.media')}} <v-icon name='image'/>
+            div.mb-2 {{$t('event.media_description')}}
+            img(:src='mediaUrl' @load='imageLoaded')
             el-upload.text-center(
               action=''
               :limit="1"
@@ -100,12 +104,10 @@
               accept='image/*'
               :on-remove='cleanFile'
               :on-change='uploadedFile'
-              :multiple='false'
-              :file-list="fileList"
-            )
+              :multiple='false')
               i.el-icon-upload
-              div.el-upload__text {{$t('event.media_description')}}
-            el-button.float-right(@click='done' :disabled='!couldProceed') {{edit?$t('common.edit'):$t('common.send')}}
+            el-input(v-model='mediaUrl' @blur='checkMediaUrl')
+            el-button.mt-2.float-right(@click='done' :disabled='!couldProceed') {{edit?$t('common.edit'):$t('common.send')}}
 
 </template>
 <script>
@@ -148,7 +150,8 @@ export default {
       date: null,
       time: { start: '20:00', end: null },
       edit: false,
-      loading: false
+      loading: false,
+      mediaUrl: '',
     }
   },
   watch: {
@@ -311,6 +314,33 @@ export default {
   },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
+    testBlur (e) {
+      console.error('nel blur!')
+      this.event.place.name = e.target.value
+    },
+    imageLoaded () {
+      console.error('image loaded!')
+    },
+    async checkMediaUrl () {
+      // if (!this.mediaUrl) return
+      // this.fileList.push({ name: this.mediaUrl, url: this.mediaUrl })
+      // const img = document.createElement('img')
+      // const c = document.createElement('canvas')
+      // const ctx = c.getContext('2d')
+      // img.crossOrigin = ''
+      // img.src = this.mediaUrl
+        // console.error('image loaded')
+        // c.width = this.naturalWidth
+        // c.height = this.naturalHeight
+        // ctx.drawImage(this, 0, 0)
+        // c.toBlob( raw => {
+        //   this.event.image = { name: this.mediaUrl, raw}
+        // }, 'image/jpeg', 0.9)
+      // }
+      // fetch(this.mediaUrl, { mode: 'cors' })
+      //   .then( ret => ret.blob() )
+      //   .then( raw => { if (!raw) return; this.event.image = { name: this.mediaUrl, raw }})
+    },
     recurrentDays () {
       if (this.event.type !== 'recurrent' || !this.date || !this.date.length) { return }
       const type = this.event.recurrent.type
@@ -326,6 +356,7 @@ export default {
       this.activeTab = String(Number(this.activeTab - 1))
     },
     placeChoosed () {
+      console.error('dentro place choosed')
       const place = this.places.find(p => p.name === this.event.place.name)
       if (place && place.address) {
         this.event.place.address = place.address
