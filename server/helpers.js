@@ -40,6 +40,7 @@ module.exports = {
     req.settings.user_locale = settingsController.user_locale[req.settings.locale]
     moment.locale(req.settings.locale)
 
+    // TODO: oauth
     // auth
     jwt(req, res, async () => {
       if (!req.user) { return next() }

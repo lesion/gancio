@@ -26,29 +26,28 @@ app.use('/favicon.ico', express.static(path.resolve(config.favicon || './assets/
 app.use('/logo.png', express.static('./static/gancio.png'))
 app.use('/media/', express.static(config.upload_path))
 
-// get instance settings
+// initialize instance settings / authentication / locale
 app.use(cookieParser())
 app.use(helpers.initMiddleware)
-
-app.use('/oauth', oauth)
 
 // rss/ics/atom feed
 app.get('/feed/:type', cors(), exportController.export)
 
 // api!
 app.use('/api', api)
+app.use('/oauth', oauth)
 
 // federation api / activitypub / webfinger / nodeinfo
 app.use('/.well-known', webfinger)
 app.use('/federation', federation)
 
 // // Handle 500
-// app.use((error, req, res, next) => {
-//   debug('Error 500: %s', error)
-//   res.status(500).send('500: Internal Server Error')
-// })
+app.use((error, req, res, next) => {
+  debug('Error 500: %s', error)
+  res.status(500).send('500: Internal Server Error')
+})
 
 // remaining request goes to nuxt
-// first nuxt component is ./pages/index.vue
+// first nuxt component is ./pages/index.vue (with ./layouts/default.vue)
 
 module.exports = app
