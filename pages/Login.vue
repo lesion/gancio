@@ -1,7 +1,7 @@
 <template lang='pug'>
   el-main
-    el-card.mt-5
-      h3(slot='header') Login
+    el-card
+      h4(slot='header').text-center <el-icon name='user'/> {{$t('common.login')}}
       p(v-html="$t('login.description')")
       div(v-loading='loading')
 
@@ -15,9 +15,10 @@
         div
           el-button.text-right(type='text' @click='forgot') {{$t('login.forgot_password')}}
 
-        el-button.mt-5(plain type="success"
+        el-button.mt-5.mr-1(plain type="success"
           :disabled='disabled' @click='submit') {{$t('common.login')}}
-        el-button(type='primary' plain  href='/?ref=register' v-if='settings.allow_registration') {{$t('login.not_registered')}}
+        nuxt-link(to='/register' v-if='settings.allow_registration')
+          el-button(type='primary' plain) {{$t('login.not_registered')}}
 </template>
 
 <script>
@@ -33,9 +34,6 @@ export default {
       email: '',
       loading: false
     }
-  },
-  head () {
-    title: 'Login'
   },
   computed: {
     ...mapState(['settings']),
@@ -71,12 +69,16 @@ export default {
         Message({ message: this.$t('login.ok'), showClose: true, type: 'success' })
         this.close()
       } catch (e) {
-        e = get(e, 'response.data.message', e)
-        Message({ message: this.$t('login.error') + this.$t(e), showClose: true, type: 'error' })
+        Message({ message: this.$t('login.error') + this.$t(get(e, 'response.data.message', e)), showClose: true, type: 'error' })
         this.loading = false
         return
       }
       this.email = this.password = ''
+    }
+  },
+  head () {
+    return {
+      title: this.settings.title + ' - ' + this.$t('common.login')
     }
   }
 }

@@ -1,76 +1,54 @@
 <template lang="pug">
-  el-menu.d-flex.nav(mode='horizontal' background-color="#222C32")
-    Login(:show='showLogin', @close='showLogin=false')
-    Register(:show='showRegister', @close='showRegister=false')
-    nuxt-link(to='/about')
-      el-menu-item(:title="$t('common.info')")
-        img#logo(src='/favicon.ico')
+  div#nav
+    nuxt-link#logo(to='/')
+      img(src='/favicon.ico')
+      span.ml-1.hidden-xs-only {{settings.title}}
+        small.hidden-sm-only  {{settings.description}}
 
-    nuxt-link(v-if='!$auth.loggedIn' to='/?ref=login')
-      el-menu-item(:title="$t('common.login')")
-        v-icon(color='lightgreen' name='user')
+    el-menu#menu(mode='horizontal' router )
+      el-menu-item(v-if='could_add' index='/add')
+        i.el-icon-plus
+        span.hidden-xs-only {{$t('common.add_event')}}
 
-    nuxt-link(v-if='could_add' to='/add')
-      el-menu-item(:title="$t('common.add_event')")
-        v-icon(color='lightgreen' name='plus')
+      //- nuxt-link(to='/export')
+      el-menu-item(index='/export')
+        i.el-icon-share
+        span.hidden-xs-only {{$t('common.share')}}
 
-    el-popover(placement="bottom" trigger="click")
-      Search(past-filter recurrent-filter)
-      el-menu-item(slot='reference' :title="$t('common.search')" icon='el-share-button')
-        v-icon(color='lightblue' name='search')
-        el-badge(v-if='filters.tags.length+filters.places.length>0' is-dot type='warning')
+      el-menu-item(v-if='!$auth.loggedIn' index='/login')
+        i.el-icon-user
+        span.hidden-xs-only {{$t('common.login')}}
+      el-submenu(v-if='$auth.loggedIn' index=3)
+        template(slot='title')
+          i.el-icon-user
+          span.hidden-xs-only {{$t('common.user')}}
+        el-menu-item(divided index='/settings')
+          i.el-icon-s-tools
+          span {{$t('common.settings')}}
+        el-menu-item(v-if='$auth.user.is_admin'  index='/admin')
+          i.el-icon-s-operation
+          span {{$t('common.admin')}}
+        el-menu-item(@click='logout')
+          i.el-icon-switch-button
+          span  {{$t('common.logout')}}
 
-    nuxt-link(v-if='$auth.loggedIn' to='/settings')
-      el-menu-item(:title="$t('common.settings')")
-        v-icon(color='orange' name='cog')
-
-    nuxt-link(v-if='$auth.user && $auth.user.is_admin'  to='/admin')
-      el-menu-item(:title="$t('common.admin')")
-        v-icon(color='lightblue' name='tools')
-
-    nuxt-link(to='/export')
-      el-menu-item(:title="$t('common.share')")
-        v-icon(name='share' color='yellow')
-
-    el-menu-item(v-if='$auth.loggedIn' @click='logout' :title="$t('common.logout')")
-      v-icon(color='red' name='sign-out-alt')
-
-    el-menu-item(:title="$t('common.feed')" v-clipboard:copy='`${settings.baseurl}/feed/rss`' v-clipboard:success='copyLink')
-      v-icon(color='orange' name='rss')
+      el-menu-item(type='text' v-clipboard:copy='`${settings.baseurl}/feed/rss`' v-clipboard:success='copyLink')
+        v-icon(color='orange' name='rss')
 
 </template>
 <script>
 import { Message } from 'element-ui'
 import { mapState } from 'vuex'
 import Search from '@/components/Search'
-import Login from '@/components/Login'
-import Register from '@/components/Register'
 
 export default {
   name: 'Nav',
-  components: { Search, Login, Register },
-  data () {
-    return {
-      showLogin: this.$route.query.ref === 'login',
-      showRegister: this.$route.query.ref === 'register'
-    }
-  },
+  components: { Search },
   computed: {
     could_add () {
       return (this.$auth.loggedIn || this.settings.allow_anon_event)
     },
     ...mapState(['filters', 'settings'])
-  },
-  watch: {
-    '$route.query.ref' (value) {
-      if (value === 'register') {
-        this.showRegister = true
-        this.showLogin = false
-      } else if (value === 'login') {
-        this.showLogin = true
-        this.showRegister = false
-      }
-    }
   },
   methods: {
     copyLink () {
@@ -84,13 +62,28 @@ export default {
 }
 </script>
 
-<style>
-
-.el-menu.el-menu--horizontal {
-  border-bottom: none;
-}
+<style lang='less'>
 
 #logo {
-  height: 30px;
+  float: left;
+  height: 60px;
+  line-height: 60px;
+  color: white;
+  font-size: 1.5em;
+  font-weight: 600;
+  text-decoration: none;
+  small {
+    font-size: 0.5em;
+  }
 }
+
+#menu {
+  float: right;
+  border-bottom: none;
+
+  .el-menu-item {
+    padding: 0px 15px;
+  }
+}
+
 </style>
