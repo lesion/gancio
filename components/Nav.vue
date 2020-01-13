@@ -65,9 +65,11 @@ export default {
 <style lang='less'>
 
 #logo {
+  img {
+    height: 60px;
+    line-height: 60px;
+  }
   float: left;
-  height: 60px;
-  line-height: 60px;
   color: white;
   font-size: 1.5em;
   font-weight: 600;
