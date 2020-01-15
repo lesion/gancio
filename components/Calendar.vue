@@ -2,8 +2,9 @@
   #calendar
     v-calendar(
       title-position='left'
-      :locale='$i18n.locale'
       is-dark
+      :columns="$screens({ default: 1, lg: 2 })"
+      :locale='$i18n.locale'
       :attributes='attributes'
       :from-page.sync='page'
       is-expanded
@@ -13,8 +14,8 @@
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import moment from 'dayjs'
-import { intersection, sample, take, get } from 'lodash'
+import moment from 'moment-timezone'
+import { take, get } from 'lodash'
 
 export default {
   name: 'Calendar',
@@ -73,10 +74,11 @@ export default {
 
       attributes = attributes.concat(this.filteredEventsWithPast
         .filter(e => e.multidate)
-        .map(e => ({ key: e.id,
+        .map(e => ({
+          key: e.id,
           highlight: getColor(e),
-          dates: {
-            start: new Date(e.start_datetime * 1000), end: new Date(e.end_datetime * 1000) } })))
+          dates: { start: new Date(e.start_datetime * 1000), end: new Date(e.end_datetime * 1000) }
+        })))
 
       return attributes
     }
@@ -85,15 +87,11 @@ export default {
 </script>
 
 <style>
-#calendar {
-  margin: 0 auto;
-  max-width: 500px;
-  align-self: center;
-}
 
 .vc-opacity-0 {
-  opacity: 0.2 !important;
+  opacity: 0.3 !important;
 }
+
 /* .vc-highlight {
   color: red;
   height: 22px !important;
@@ -102,6 +100,6 @@ export default {
 } */
 
 .past-event {
-  opacity: 0.2;
+  opacity: 0.3;
 }
 </style>
