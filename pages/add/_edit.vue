@@ -1,170 +1,131 @@
 <template lang="pug">
-  el-main#add_event
-    h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{edit?$t('common.edit_event'):$t('common.add_event')}}
+  el-main
+    h5.text-center {{edit?$t('common.edit_event'):$t('common.add_event')}}
     el-form(v-loading='loading')
+
+      //- NOT LOGGED EVENT
+      div(v-if='!$auth.loggedIn')
+        el-divider <v-icon name='user-secret'/> {{$t('event.anon')}}
+        p(v-html="$t('event.anon_description')")
+
+      //- title
+      span {{$t('event.what_description')}}
+      el-input.mb-3(v-model='event.title' ref='title' autofocus)
+
+      //- description
+      span {{$t('event.description_description')}}
+      Editor.mb-3(v-model='event.description' border no-save style='max-height: 400px;')
+
+      //- tags
+      div {{$t('event.tag_description')}}
+      el-select.mb-3(v-model='event.tags' multiple filterable
+        @input.native='queryTags=$event.target.value' @change='queryTags=""'
+        allow-create default-first-option placeholder='Tag')
+        el-option(v-for='tag in filteredTags' :key='tag' :label='tag' :value='tag')
+
+      //- WHERE
+      el-divider
+        i.el-icon-location-outline
+        span {{$t('common.where')}}
+      p(v-html="$t('event.where_description')")
+
+      el-autocomplete(v-model='event.place.name' @blur='selectPlace($event.target.value)'
+        highlight-first-item
+        :fetch-suggestions='filterPlaces' @select='selectPlace')
+
+      div {{$t("common.address")}}
+      el-input.mb-3(ref='address' v-model='event.place.address' :disabled='disableAddress')
+
+      //- WHEN
+      el-divider <v-icon name='clock'/> {{$t('common.when')}}
+
+      .text-center
+        el-radio-group(v-model="event.type")
+          el-radio-button(label="normal") <v-icon name='calendar-day'/> {{$t('event.normal')}}
+          el-radio-button(label="multidate") <v-icon name='calendar-week'/> {{$t('event.multidate')}}
+          el-radio-button(v-if='settings.allow_recurrent_event' label="recurrent") <v-icon name='calendar-alt'/> {{$t('event.recurrent')}}
+        br
+        span {{$t(`event.${event.type}_description`)}}
+        el-select.ml-2(v-if='event.type==="recurrent"' v-model='event.recurrent.frequency' placeholder='Frequenza')
+          el-option(:label="$t('event.each_week')" value='1w' key='1w')
+          el-option(:label="$t('event.each_2w')" value='2w' key='2w')
+          //- el-option(:label="$t('event.each_month')" value='1m' key='1m')
+
       client-only
-        el-tabs.mb-2(v-model='activeTab')
+        #picker.mx-auto
+          v-date-picker.mb-2.mt-3(
+            :mode='event.type === "multidate" ? "range" : event.type === "recurrent" ? "multiple" : "single"'
+            :attributes='attributes'
+            v-model='date'
+            :locale='$i18n.locale'
+            :from-page.sync='page'
+            is-inline
+            is-expanded
+            :min-date='event.type !== "recurrent" && new Date()')
 
-          //- NOT LOGGED EVENT
-          el-tab-pane(v-if='!$auth.loggedIn')
-            span(slot='label') {{$t('event.anon')}} <v-icon name='user-secret'/>
-            p(v-html="$t('event.anon_description')")
-            el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
+      div.text-center.mb-2(v-if='event.type === "recurrent"')
+        span(v-if='event.recurrent.frequency !== "1m" && event.recurrent.frequency !== "2m"') {{whenPatterns}}
+        el-radio-group(v-else v-model='event.recurrent.type')
+          el-radio-button(v-for='whenPattern in whenPatterns' :label='whenPattern.key' :key='whenPatterns.key')
+            span {{whenPattern.label}}
 
-          //- WHAT
-          el-tab-pane
-            span(slot='label') {{$t('common.what')}} <v-icon name='file-alt'/>
-            span {{$t('event.what_description')}}
-            el-input.mb-3(v-model='event.title' ref='title')
-            span {{$t('event.description_description')}}
-            el-input.mb-3(v-model='event.description' type='textarea' :rows='9')
-            span {{$t('event.tag_description')}}
-            br
-            el-select(v-model='event.tags' multiple filterable allow-create
-              default-first-option placeholder='Tag')
-              el-option(v-for='tag in tags' :key='tag'
-                :label='tag' :value='tag')
+      .text-center(inline)
+        el-form-item(:label="$t('event.from')")
+          el-time-select.mr-2(ref='time_start'
+            v-model="time.start"
+            :picker-options="{ start: '00:00', step: '00:30', end: '24:00'}")
+        el-form-item(:label="$t('event.due')")
+          el-time-select(v-model='time.end'
+            :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
 
-            el-button.float-right(@click.native='next' :disabled='!couldProceed') {{$t('common.next')}}
+      List(v-if='event.type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
+      //- el-button.float-right(@click='next' type='succes' :disabled='!couldProceed') {{$t('common.next')}}
 
-          //- WHERE
-          el-tab-pane
-            span(slot='label') <v-icon name='map-marker-alt'/> {{$t('common.where')}}
-            p(v-html="$t('event.where_description')")
-            span {{event.place.name}}
-            el-select.mb-3(v-model='event.place.name'
-              @keypress.tab='testBlur'
-              @change='placeChoosed'
-              filterable allow-create
-              default-first-option
-              @blur='testBlur'
-            )
-              el-option(v-for='place in places' :label='place.name' :value='place.name' :key='place.id')
-            div {{$t("common.address")}}
-            el-input.mb-3(ref='address' v-model='event.place.address'
-              :disabled='places_name.indexOf(event.place.name)>-1'
-              @keydown.native.enter='next')
-            el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
+      //- MEDIA / FLYER / POSTER
+      el-divider <v-icon name='image'/> {{$t('common.media')}}
 
-          //- WHEN
-          el-tab-pane
-            span(slot='label') {{$t('common.when')}} <v-icon name='clock'/>
-            .text-center
-              el-radio-group(v-model="event.type")
-                el-radio-button(label="normal") <v-icon name='calendar-day'/> {{$t('event.normal')}}
-                el-radio-button(label="multidate") <v-icon name='calendar-week'/> {{$t('event.multidate')}}
-                el-radio-button(v-if='settings.allow_recurrent_event' label="recurrent") <v-icon name='calendar-alt'/> {{$t('event.recurrent')}}
-              br
-              span {{$t(`event.${event.type}_description`)}}
-              el-select.ml-2(v-if='event.type==="recurrent"' v-model='event.recurrent.frequency' placeholder='Frequenza')
-                el-option(:label="$t('event.each_week')" value='1w' key='1w')
-                el-option(:label="$t('event.each_2w')" value='2w' key='2w')
-                //- el-option(:label="$t('event.each_month')" value='1m' key='1m')
-
-            #picker.mx-auto
-              v-date-picker.mb-2.mt-3(
-                :mode='event.type === "multidate" ? "range" : event.type === "recurrent" ? "multiple" : "single"'
-                :attributes='attributes'
-                v-model='date'
-                :locale='$i18n.locale'
-                :from-page.sync='page'
-                is-inline
-                is-expanded
-                :min-date='event.type !== "recurrent" && new Date()'
-              )
-
-            div.text-center.mb-2(v-if='event.type === "recurrent"')
-              span(v-if='event.recurrent.frequency !== "1m" && event.recurrent.frequency !== "2m"') {{whenPatterns}}
-              el-radio-group(v-else v-model='event.recurrent.type')
-                el-radio-button(v-for='whenPattern in whenPatterns' :label='whenPattern.key' :key='whenPatterns.key')
-                  span {{whenPattern.label}}
-
-            el-form.text-center(inline)
-              el-form-item(:label="$t('event.from')")
-                el-time-select.mr-2(ref='time_start'
-                  v-model="time.start"
-                  :picker-options="{ start: '00:00', step: '00:30', end: '24:00'}")
-              el-form-item(:label="$t('event.due')")
-                el-time-select(v-model='time.end'
-                  :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
-
-            List(v-if='event.type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
-            el-button.float-right(@click='next' type='succes' :disabled='!couldProceed') {{$t('common.next')}}
-
-          //- MEDIA / FLYER / POSTER
-          el-tab-pane
-            span(slot='label') {{$t('common.media')}} <v-icon name='image'/>
-            div.mb-2 {{$t('event.media_description')}}
-            img(:src='mediaUrl' @load='imageLoaded')
-            el-upload.text-center(
-              action=''
-              :limit="1"
-              :auto-upload='false'
-              drag
-              accept='image/*'
-              :on-remove='cleanFile'
-              :on-change='uploadedFile'
-              :multiple='false')
-              i.el-icon-upload
-            el-input(v-model='mediaUrl' @blur='checkMediaUrl')
-            el-button.mt-2.float-right(@click='done' :disabled='!couldProceed') {{edit?$t('common.edit'):$t('common.send')}}
+      div.mb-2 {{$t('event.media_description')}}
+      //- img(:src='mediaUrl' @load='imageLoaded')
+      el-upload.text-center(
+        action=''
+        :limit="1"
+        :auto-upload='false'
+        drag
+        accept='image/*'
+        :on-remove='cleanFile'
+        :on-change='uploadedFile'
+        :multiple='false')
+        i.el-icon-upload
+      //- el-input(v-model='mediaUrl')
+      el-button.mt-2.float-right(@click='done' :disabled='!couldProceed') {{edit?$t('common.edit'):$t('common.send')}}
 
 </template>
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
-import uniq from 'lodash/uniq'
-import map from 'lodash/map'
-import moment from 'moment'
-
+import { mapActions, mapState } from 'vuex'
+import _ from 'lodash'
+import moment from 'moment-timezone'
+import Editor from '@/components/Editor'
 import List from '@/components/List'
 import { Message } from 'element-ui'
 
 export default {
-  name: 'newEvent',
-  components: { List },
+  name: 'NewEvent',
+  components: { List, Editor },
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
-  head () {
-    return {
-      title: `${this.settings.title} - ${this.$t('common.add_event')}`
-    }
-  },
-  data () {
-    const month = moment().month() + 1
-    const year = moment().year()
-    return {
-      event: {
-        type: 'normal',
-        place: { name: '', address: '' },
-        title: '',
-        description: '',
-        tags: [],
-        image: false,
-        recurrent: { frequency: '1w', days: [], type: 'weekday' }
-      },
-      page: { month, year },
-      fileList: [],
-      id: null,
-      activeTab: '0',
-      date: null,
-      time: { start: '20:00', end: null },
-      edit: false,
-      loading: false,
-      mediaUrl: '',
-    }
-  },
-  watch: {
-    'time.start' (value) {
-      if (!value) { return }
-      const [h, m] = value.split(':')
-      this.time.end = (Number(h) + 1) + ':' + m
-    },
-    // month selected
-    page () {
-      this.updateEvents(this.page)
-    }
-  },
+  // fetch ({ store, $axios }) {
+    // try {
+    // const now = new Date()
+    // const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
+    // store.commit('setEvents', events)
+    // const { tags, places } = await $axios.$get('/event/meta')
+    // store.commit('update', { tags, places })
+    // } catch (e) {
+    // console.error('Error ', e)
+    // }
+  //   moment.locale(store.state.locale)
+  // },
   async asyncData ({ params, $axios, error, store }) {
     if (params.edit) {
       const data = { time: {}, event: { place: {} } }
@@ -194,7 +155,7 @@ export default {
       data.time.start = moment.unix(event.start_datetime).format('HH:mm')
       data.time.end = moment.unix(event.end_datetime).format('HH:mm')
       data.event.title = event.title
-      data.event.description = event.description.replace(/(<([^>]+)>)/ig, '')
+      data.event.description = event.description
       data.event.id = event.id
       data.event.recurrent = {}
       data.event.tags = event.tags
@@ -202,37 +163,43 @@ export default {
     }
     return {}
   },
-  async fetch ({ store, $axios }) {
-    try {
-      const now = new Date()
-      const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
-      store.commit('setEvents', events)
-      const { tags, places } = await $axios.$get('/event/meta')
-      store.commit('update', { tags, places })
-    } catch (e) {
-      console.error('Error ', e)
+  data () {
+    const month = moment().month() + 1
+    const year = moment().year()
+    return {
+      event: {
+        type: 'normal',
+        place: { name: '', address: '' },
+        title: '',
+        description: '',
+        tags: [],
+        image: false,
+        recurrent: { frequency: '1w', days: [], type: 'weekday' }
+      },
+      page: { month, year },
+      fileList: [],
+      id: null,
+      date: null,
+      time: { start: '20:00', end: null },
+      edit: false,
+      loading: false,
+      mediaUrl: '',
+      queryTags: '',
+      disableAddress: true
     }
-    moment.locale(store.state.locale)
   },
   computed: {
-    ...mapState({
-      tags: state => state.tags.map(t => t.tag),
-      places_name: state => state.places.map(p => p.name).sort((a, b) => b.weigth - a.weigth),
-      places: state => state.places,
-      user: state => state.user,
-      events: state => state.events,
-      settings: state => state.settings
-    }),
+    ...mapState(['tags', 'places', 'events', 'settings']),
     whenPatterns () {
       const dates = this.date
-      if (!dates || !dates.length) { return }
+      if (!dates || !dates.length) { return '' }
 
       const freq = this.event.recurrent.frequency
-      const weekDays = uniq(map(dates, date => moment(date).format('dddd')))
+      const weekDays = _(dates).map(date => moment(date).format('dddd')).uniq()
       if (freq === '1w' || freq === '2w') {
         return this.$t(`event.recurrent_${freq}_days`, { days: weekDays.join(', ') })
       } else if (freq === '1m' || freq === '2m') {
-        const days = uniq(map(dates, date => moment(date).date()))
+        const days = _(dates).map(date => moment(date).date()).uniq()
         const n = Math.floor((days[0] - 1) / 7) + 1
         return [
           { label: this.$tc(`event.recurrent_${freq}_days`, days.length, { days }), key: 'ordinal' },
@@ -241,7 +208,7 @@ export default {
       } else if (freq === '1d') {
         return this.$t('event.recurrent_each_day')
       }
-      return
+      return ''
     },
     todayEvents () {
       if (this.event.type === 'multidate') {
@@ -262,109 +229,88 @@ export default {
           !e.multidate
             ? !e.recurrent && date.isSame(moment.unix(e.start_datetime), 'day')
             : moment.unix(e.start_datetime).isSame(date, 'day') ||
-              moment.unix(e.start_datetime).isBefore(date) && moment.unix(e.end_datetime).isAfter(date)
+              (moment.unix(e.start_datetime).isBefore(date) && moment.unix(e.end_datetime).isAfter(date))
         )
       }
     },
-    ...mapGetters(['filteredEvents']),
-    // TOFIX
+    ...mapState(['events']),
     attributes () {
       let attributes = []
-      attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'yellow' } })
+      attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'red' } })
 
-      attributes = attributes.concat(this.filteredEvents
+      attributes = attributes.concat(this.events
         .filter(e => !e.multidate && (!e.recurrent || this.event.type === 'recurrent'))
         .map(e => ({ key: e.id, dot: { color: this.event.type === 'recurrent' ? 'orange' : 'green' }, dates: moment.unix(e.start_datetime).toDate() })))
 
-      attributes = attributes.concat(this.filteredEvents
-        .filter(e => e.multidate && !e.recurrent)
-        .map(e => ({ key: e.id,
-          highlight: {},
+      console.error(this.event.type)
+      if (this.event.type === 'recurrent' && this.date && this.date.length) {
+        attributes.push({
+          key: 'recurrent',
+          dot: { color: 'orange' },
           dates: {
-            start: moment.unix(e.start_datetime).toDate(), end: moment.unix(e.end_datetime).toDate() } })))
+            weeklyInterval: this.event.recurrent.frequency === '1w' ? 1 : 2, // this.event.recurrent.freq,
+            weekdays: _.map(this.date, date => moment(date).day() + 1),
+            start: new Date(this.date[0])
+          }
+        })
+      }
+      attributes = attributes.concat(this.events
+        .filter(e => e.multidate && !e.recurrent)
+        .map(e => ({
+          key: e.id,
+          highlight: {},
+          dates: { start: moment.unix(e.start_datetime).toDate(), end: moment.unix(e.end_datetime).toDate() }
+        })))
 
       return attributes
     },
-    disableAddress () {
-      return this.places_name.find(p => p.name === this.event.place.name)
+    filteredTags () {
+      const queryTags = this.queryTags.toLowerCase()
+      return _(this.tags)
+        .filter(t => !this.event.tags.includes(t))
+        .filter(t => t.includes(queryTags))
+        .take(5)
+        .value()
     },
     couldProceed () {
-      const t = this.$auth.loggedIn ? -1 : 0
-      switch (Number(this.activeTab)) {
-        case 0 + t:
-          return true
-          break
-        case 1 + t:
-          return this.event.title.length > 0
-          break
-        case 2 + t:
-          return this.event.place.name.length > 0 &&
-            this.event.place.address.length > 0
-          break
-        case 3 + t:
-          if (this.date && this.time.start) { return true }
-          break
-        case 4 + t:
-          return this.event.place.name.length > 0 &&
-            this.event.place.address.length > 0 &&
-            (this.date && this.time.start) &&
-             this.event.title.length > 0
-      }
+      return (this.event.place.name.length > 0 &&
+        this.event.place.address.length > 0 &&
+        (this.date && this.time.start) &&
+          this.event.title.length > 0)
     }
+  },
+  mounted () {
+    this.$refs.title.focus()
   },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
-    testBlur (e) {
-      console.error('nel blur!')
-      this.event.place.name = e.target.value
+    filterPlaces (q, cb) {
+      const query = q.toLowerCase()
+      const ret = _(this.places)
+        .filter(p => p.name.toLowerCase().includes(query))
+        .take(5)
+        .map(p => ({ value: p.name }))
+        .value()
+      ret.unshift({ value: q })
+      cb(ret)
     },
-    imageLoaded () {
-      console.error('image loaded!')
-    },
-    async checkMediaUrl () {
-      // if (!this.mediaUrl) return
-      // this.fileList.push({ name: this.mediaUrl, url: this.mediaUrl })
-      // const img = document.createElement('img')
-      // const c = document.createElement('canvas')
-      // const ctx = c.getContext('2d')
-      // img.crossOrigin = ''
-      // img.src = this.mediaUrl
-        // console.error('image loaded')
-        // c.width = this.naturalWidth
-        // c.height = this.naturalHeight
-        // ctx.drawImage(this, 0, 0)
-        // c.toBlob( raw => {
-        //   this.event.image = { name: this.mediaUrl, raw}
-        // }, 'image/jpeg', 0.9)
-      // }
-      // fetch(this.mediaUrl, { mode: 'cors' })
-      //   .then( ret => ret.blob() )
-      //   .then( raw => { if (!raw) return; this.event.image = { name: this.mediaUrl, raw }})
-    },
-    recurrentDays () {
-      if (this.event.type !== 'recurrent' || !this.date || !this.date.length) { return }
-      const type = this.event.recurrent.type
-      if (type === 'ordinal') { return map(this.date, d => moment(d).date()) } else if (type === 'weekday') { return map(this.date, d => moment(d).day() + 1) }
-    },
-    next () {
-      this.activeTab = String(Number(this.activeTab) + 1)
-      if (this.activeTab === '2') {
-        this.$refs.title.focus()
-      }
-    },
-    prev () {
-      this.activeTab = String(Number(this.activeTab - 1))
-    },
-    placeChoosed () {
-      console.error('dentro place choosed')
+    selectPlace (p) {
       const place = this.places.find(p => p.name === this.event.place.name)
       if (place && place.address) {
         this.event.place.address = place.address
+        this.disableAddress = true
       } else {
+        this.disableAddress = false
         this.event.place.address = ''
       }
-      this.$refs.address.focus()
+      this.$nextTick(this.$refs.address.focus)
     },
+    // recurrentDays () {
+    //   if (this.event.type !== 'recurrent' || !this.date || !this.date.length) { return }
+    //   const type = this.event.recurrent.type
+    //   if (type === 'ordinal') { return map(this.date, d => moment(d).date()) } else if (type === 'weekday') { return map(this.date, d => moment(d).day() + 1) }
+    // },
+    // },
     cleanFile () {
       this.event.image = null
     },
@@ -380,11 +326,11 @@ export default {
     async done () {
       this.loading = true
       let start_datetime, end_datetime
-      const [ start_hour, start_minute ] = this.time.start.split(':')
+      const [start_hour, start_minute] = this.time.start.split(':')
       if (!this.time.end) {
         this.time.end = (Number(start_hour) + 2) + ':' + start_minute
       }
-      const [ end_hour, end_minute ] = this.time.end.split(':')
+      const [end_hour, end_minute] = this.time.end.split(':')
 
       const formData = new FormData()
 
@@ -404,7 +350,7 @@ export default {
         end_datetime = moment().set('hour', end_hour).set('minute', end_minute)
         const recurrent = {
           frequency: this.event.recurrent.frequency,
-          days: this.event.recurrent.type === 'ordinal' ? map(this.date, d => moment(d).date()) : map(this.date, d => moment(d).day() + 1),
+          days: this.event.recurrent.type === 'ordinal' ? _.map(this.date, d => moment(d).date()) : _.map(this.date, d => moment(d).day() + 1),
           type: this.event.recurrent.type
         }
         if (end_hour < start_hour) {
@@ -439,26 +385,44 @@ export default {
         this.loading = false
         Message({ type: 'success', showClose: true, message: this.$auth.loggedIn ? this.$t('event.added') : this.$t('event.added_anon') })
       } catch (e) {
+        console.error(e.response)
         switch (e.request.status) {
           case 413:
             Message({ type: 'error', showClose: true, message: this.$t('event.image_too_big') })
             break
           default:
-            Message({ type: 'error', showClose: true, message: e })
+            Message({ type: 'error', showClose: true, message: e.response.data })
         }
         this.loading = false
-        console.error(e)
       }
+    }
+  },
+  head () {
+    return {
+      title: `${this.settings.title} - ${this.$t('common.add_event')}`
     }
   }
 }
 </script>
-<style>
+<style style='less'>
+
+i {
+  font-size: 1.3em;
+}
+
 #add_event {
   max-width: 800px;
 }
 
 #picker {
-  max-width: 400px;
+  max-width: 600px;
+}
+
+.el-upload,
+.el-upload-dragger {
+  overflow: hidden;
+  text-align: center;
+  margin: 0 auto;
+  max-width: 80%;
 }
 </style>
