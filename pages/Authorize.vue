@@ -25,19 +25,18 @@ export default {
   layout: 'modal',
   name: 'Authorize',
   middleware: ['auth'],
-  head: { title: 'Authorize' },
-  data () {
-    return {
-      client: { name: 'Test' }
-    }
-  },
   async asyncData ({ $axios, query }) {
     // retrieve client validity
     try {
       const client = await $axios.$get(`/client/${query.client_id}`)
       return { client }
-    } catch(e) {
+    } catch (e) {
       console.error(e)
+    }
+  },
+  data () {
+    return {
+      client: { name: 'Test' }
     }
   },
   computed: {
@@ -48,5 +47,8 @@ export default {
       return `oauth/authorize?${query}`
     }
   },
+  head () {
+    return { title: `${this.settings.title} - Authorize` }
+  }
 }
 </script>
