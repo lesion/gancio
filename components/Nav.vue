@@ -39,11 +39,9 @@
 <script>
 import { Message } from 'element-ui'
 import { mapState } from 'vuex'
-import Search from '@/components/Search'
 
 export default {
   name: 'Nav',
-  components: { Search },
   computed: {
     could_add () {
       return (this.$auth.loggedIn || this.settings.allow_anon_event)
@@ -66,9 +64,9 @@ export default {
 
 #logo {
   img {
-    height: 60px;
-    line-height: 60px;
+    max-height: 60px;
   }
+  line-height: 60px;
   float: left;
   color: white;
   font-size: 1.5em;
