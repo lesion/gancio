@@ -49,11 +49,11 @@
           el-input(v-model='usersFilter' :placeholder="$t('admin.filter_users')")
           client-only
             el-pagination(v-if='enable_federation && users.length>perPage' :page-size='perPage' :currentPage.sync='instancePage' :total='users.length')
-          el-table(:data='paginatedSelectedUsers' small)  
+          el-table(:data='paginatedSelectedUsers' small)
             el-table-column(label='User' width='150')
               template(slot-scope='data')
                 span(slot='reference')
-                  a(:href='data.row.object.id' target='_blank') {{data.row.object.name}} 
+                  a(:href='data.row.object.id' target='_blank') {{data.row.object.name}}
                   small ({{data.row.object.preferredUsername}})
             el-table-column(:label="$t('common.resources')" width='90')
               template(slot-scope='data')
@@ -88,7 +88,6 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 
-
 export default {
   name: 'Federation',
   data () {
@@ -101,11 +100,10 @@ export default {
       instancesFilter: '',
       users: [],
       resources: [],
-      instances: [],
+      instances: []
     }
   },
   async mounted () {
-    console.error('mounted ')
     this.instances = await this.$axios.$get('/instances')
     this.resources = await this.$axios.$get('/resources')
     // this.users = await this.$axios.$get('/users')
@@ -127,14 +125,14 @@ export default {
       user.blocked = !user.blocked
     },
     async toggleHideResource (resource) {
-      await this.$axios.put(`/resources/${resource.id}`, { hidden: !resource.hidden})
+      await this.$axios.put(`/resources/${resource.id}`, { hidden: !resource.hidden })
       resource.hidden = !resource.hidden
     }
   },
   computed: {
     ...mapState(['settings']),
     paginatedResources () {
-      return this.resources.slice((this.resourcePage -1) * this.perPage,
+      return this.resources.slice((this.resourcePage - 1) * this.perPage,
         this.resourcePage * this.perPage)
     },
     paginatedInstances () {
@@ -142,13 +140,13 @@ export default {
         this.instancePage * this.perPage)
     },
     filteredUsers () {
-      if (!this.usersFilter) return this.users
+      if (!this.usersFilter) { return this.users }
       this.usersFilter = this.usersFilter.toLowerCase()
       console.error(this.users)
       return this.users.filter(user => user.name.includes(this.usersFilter) || user.preferredName.includes(this.usersFilter))
     },
     filteredInstances () {
-      if (!this.instancesFilter) return this.instances
+      if (!this.instancesFilter) { return this.instances }
       this.instancesFilter = this.instancesFilter.toLowerCase()
       return this.instances.filter(instance => instance.name.includes(this.instancesFilter) || instance.domain.includes(this.instancesFilter))
     },
@@ -158,7 +156,7 @@ export default {
     },
     instance_name: {
       get () { return this.settings.instance_name },
-      set (value) { this.setSetting({ key: 'instance_name', value })}
+      set (value) { this.setSetting({ key: 'instance_name', value }) }
     },
     enable_federation: {
       get () { return this.settings.enable_federation },
