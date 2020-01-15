@@ -35,7 +35,7 @@ export default {
           type: 'success',
           message: this.$t('common.password_updated')
         })
-        this.$router.replace('/?ref=login')
+        this.$router.replace('/login')
       } catch (e) {
         Message({
           showClose: true,
