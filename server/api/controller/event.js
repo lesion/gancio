@@ -37,13 +37,14 @@ const eventController = {
     })
 
     const tags = await Tag.findAll({
+      raw: true,
       order: [['weigth', 'DESC']],
       attributes: {
-        exclude: ['createdAt', 'updatedAt']
+        exclude: ['createdAt', 'updatedAt', 'weigth']
       }
     })
 
-    res.json({ tags, places })
+    res.json({ tags: tags.map(t => t.tag), places })
   },
 
   async getNotifications (event, action) {
@@ -86,7 +87,7 @@ const eventController = {
   async get (req, res) {
     const format = req.params.format || 'json'
     const is_admin = req.user && req.user.is_admin
-    const id = req.params.event_id
+    const id = Number(req.params.event_id)
     let event = await Event.findByPk(id, {
       attributes: {
         exclude: ['createdAt', 'updatedAt']
@@ -96,7 +97,7 @@ const eventController = {
         { model: Place, attributes: ['name', 'address'] },
         { model: Resource, where: !is_admin && { hidden: false }, required: false }
       ],
-      order: [ [Resource, 'id', 'DESC'] ]
+      order: [[Resource, 'id', 'DESC']]
     })
 
     if (event && (event.is_visible || is_admin)) {
@@ -196,6 +197,58 @@ const eventController = {
     res.sendStatus(200)
   },
 
+  async select (req, res) {
+    const start = req.query.start || 0
+    const limit = req.query.limit
+    const show_recurrent = req.query.show_recurrent || false
+    const filter_tags = req.query.tags || ''
+    const filter_places = req.query.places || ''
+
+    let where = {}
+    let where_tags = {}
+    if (show_recurrent) {
+      where = {
+        [Op.or]: [
+          { recurrent: { [Op.ne]: null } },
+          { start_datetime: { [Op.gt]: start }}
+        ]
+      }
+    } else {
+      where = {
+        start_datetime: { [Op.gt]: start }
+      }
+    }
+    where.is_visible = true
+
+    if (filter_tags) {
+      where_tags = { where: { tag: filter_tags.split(',') } }
+    }
+
+    if (filter_places) {
+      where.placeId = filter_places.split(',')
+    }
+
+    let events = await Event.findAll({
+      where,
+      limit,
+      attributes: {
+        exclude: ['slug', 'likes', 'boost', 'userId', 'is_visible', 'description', 'createdAt', 'updatedAt', 'placeId'],
+        // include: [[Sequelize.fn('COUNT', Sequelize.col('activitypub_id')), 'ressources']]
+      },
+      order: ['start_datetime', [Tag, 'weigth', 'DESC']],
+      include: [
+        { model: Resource, required: false, attributes: ['id'] },
+        { model: Tag, ...where_tags, attributes: ['tag'], through: { attributes: [] },},
+        { model: Place, required: false, attributes: ['id', 'name', 'address'] }
+      ],
+    })
+    events = events.map(e => e.get()).map(e => {
+      e.tags = e.tags.map(t => t.tag)
+      return e
+    })
+
+    res.json(events)
+  },
   async getAll (req, res) {
     // this is due how v-calendar shows dates
     const start = moment()
