@@ -1,33 +1,35 @@
 <template lang="pug">
-  div.ml-2.mt-1.text-center
+  el-main
     //- el-switch.mb-1(v-if='$auth.loggedIn'
     //-   active-text='solo miei'
     //-   inactive-text='tutti'
     //-   inactive-color='lightgreen'
     //-   v-model='onlyMine'
     //- )
-    el-switch.mt-1.mb-1.ml-2.d-block(
+    el-switch.mt-1.mb-2.ml-2(
       v-if='recurrentFilter && settings.allow_recurrent_event'
-      inactive-text=''
-      :active-text="$t('event.recurrent_event_too')"
-      inactive-color='lightgreen'
+      :active-text="$t('event.show_recurrent')"
       v-model='showRecurrent'
     )
-    el-switch.mt-1.mb-1.ml-2.d-block(
+    el-switch.mt-1.mb-2.ml-2(
       v-if='pastFilter'
-      :inactive-text="$t('event.only_future')"
-      :active-text="$t('event.past_too')"
-      inactive-color='lightgreen'
+      :active-text="$t('event.show_past')"
       v-model='showPast'
     )
-    client-only
-      el-select.search(v-model='filter'
-        multiple
-        filterable collapse-tags default-first-option
-        :placeholder='$t("common.search")')
-        el-option(v-for='(keyword, id) in keywords' :key='keyword.value'
-          :label='keyword.label' :value='keyword.value')
 
+    el-autocomplete.mb-1#search.inline-input(placeholder='Cerca' prefix-icon='el-icon-search'
+      highlight-first-item
+      v-model='search' :debounce='200'
+      :fetch-suggestions='querySearch' clearable
+      @select='addFilter')
+      template(slot-scope='{ item }')
+        span.float-left {{ item.label }}
+        i.float-right.el-icon-place(v-if='item.type==="place"')
+        i.float-right.el-icon-collection-tag(v-if='item.type==="tag"')
+    br
+    el-tag.mr-1(type='success' v-for='f in filter'
+      disable-transitions closable :key='f.type + f.id'
+      @close='removeFilter(f)') {{f.label}}
 </template>
 
 <script>
@@ -40,16 +42,15 @@ export default {
   },
   data () {
     return {
-      onlyMine: false
+      search: ''
     }
   },
-  methods: mapActions(['setSearchPlaces', 'setSearchTags', 'showPastEvents', 'showRecurrentEvents']),
   computed: {
     ...mapState(['tags', 'places', 'filters', 'settings']),
     // TOFIX: optimize
     keywords () {
-      const tags = this.tags.map(t => ({ value: 't' + t.tag, label: t.tag, weigth: t.weigth }))
-      const places = this.places.map(p => ({ value: 'p' + p.id, label: p.name, weigth: p.weigth }))
+      const tags = this.tags.map(t => ({ type: 'tag', label: t, weigth: t.weigth, id: t }))
+      const places = this.places.map(p => ({ type: 'place', label: p.name, weigth: p.weigth, id: p.id }))
       return tags.concat(places).sort((a, b) => b.weigth - a.weigth)
     },
     showPast: {
@@ -60,17 +61,65 @@ export default {
       set (value) { this.showRecurrentEvents(value) },
       get () { return this.filters.show_recurrent_events }
     },
-    filter: {
-      set (filters) {
-        const tags = filters.filter(f => f[0] === 't').map(t => t.slice(1))
-        this.setSearchTags(tags)
-        const places = filters.filter(f => f[0] === 'p').map(p => +p.slice(1))
-        this.setSearchPlaces(places)
-      },
-      get () {
-        return this.filters.tags.map(t => 't' + t).concat(this.filters.places.map(p => 'p' + p))
+    filter () {
+    //   set (filters) {
+    //     const tags = filters.filter(f => f[0] === 't').map(t => t.slice(1))
+    //     this.setSearchTags(tags)
+    //     const places = filters.filter(f => f[0] === 'p').map(p => +p.slice(1))
+    //     this.setSearchPlaces(places)
+    //   },
+    //   get () {
+      return this.filters.tags.concat(this.filters.places)
+      // }
+    }
+  },
+  methods: {
+    ...mapActions(['setSearchPlaces', 'setSearchTags',
+      'showPastEvents', 'showRecurrentEvents', 'updateEvent']),
+    removeFilter (item) {
+      if (item.type === 'tag') {
+        this.setSearchTags(this.filters.tags.filter(t => t.id !== item.id))
+      } else {
+        this.setSearchPlaces(this.filters.places.filter(p => p.id !== item.id))
       }
+    },
+    querySearch (queryString, cb) {
+      const ret = this.keywords
+        .filter(k => !this.filter.map(f => f.id).includes(k.id))
+        .filter(k => k.label.toLowerCase().includes(queryString))
+        .slice(0, 5)
+      cb(ret)
+    },
+    addFilter (item) {
+      if (item.type === 'tag') {
+        this.setSearchTags(this.filters.tags.concat(item))
+      } else {
+        this.setSearchPlaces(this.filters.places.concat(item))
+      }
+      this.search = ''
     }
   }
 }
 </script>
+<style lang='less'>
+#search {
+  border: none;
+  border-radius: 0px;
+  border-bottom: 2px solid lightgray;
+  color: white;
+  background-color: #333;
+}
+
+.el-switch__label {
+  color: #aaa;
+}
+
+.el-switch__label.is-active {
+  color: lightgreen;
+}
+
+.el-switch__core {
+  background-color: #555;
+  border-color: #777;
+}
+</style>
