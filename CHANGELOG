@@ -3,9 +3,9 @@ All notable changes to this project will be documented in this file.
 unreleased
 - oauth server implementation
 
-### 1.17.14
-[locale] add catalan
-[fix] fedi outbox
+### 0.17.14
+- [locale] add catalan
+- [fix] fedi outbox
 
 ### 0.17.12
 - [ui] add admin section on event page in mobile #63
