@@ -87,6 +87,27 @@ module.exports = {
    ** Build configuration
    */
   build: {
+    optimization: {
+      minimize: true,
+      namedModules: true,
+      namedChunks: true,
+      splitChunks: {
+        name: true,
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name (module) {
+              // get the name. E.g. node_modules/packageName/not/this/part.js
+              // or node_modules/packageName
+              const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
+              // npm package names are URL-safe, but some servers don't like @ symbols
+              return `npm.${packageName.replace('@', '')}`
+            }
+          }
+        }
+      }
+    },
     transpile: [/^element-ui/, /^vue-awesome/, /^@nuxt/],
     splitChunks: {
       layouts: true
