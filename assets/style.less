@@ -1,120 +1,126 @@
-@home_background: #222C32;
-@background: white;
-@success: #c7ffbc;
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
+
+blockquote {
+  border-left: 3px solid grey;
+  font-style: italic;
+  color: #666;
+  padding-left: 1em;
+}
+
+code {
+  font-family: sans-serif;
+  display: inline-block;
+  padding: 0 .4rem;
+  border-radius: 5px;
+  font-size: .8rem;
+  font-weight: 700;
+  background: rgba(0,0,0,.1);
+  color: rgba(0,0,0,.8);
+}
+    
+html, body {
+  font-family: sans-serif;
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  background-color: #333;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
 
 #__nuxt, #__layout {
-  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+    
+#main {
+  min-height: 200px;
+  scrollbar-width: thin;
+  transition: all .3s;
+  background-color: white;
+  &.dark {
+    background-color: #333;
+    color: white;
+  }
 }
 
-#home {
-  background-color: @home_background;
-  min-height: 100%;
-}
-
-a, a:hover {
-  text-decoration: none;
-}
-
-html, body {
-  margin: 0px;
-  background-color: @background;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  font-family: BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Helvetica,Arial,sans-serif !important;  
-  font-size: 15px;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-.el-form-item {
-  margin-bottom: 5px;
-}
-
-.el-main {
+#content {
+  flex-grow: 1;
   max-width: 1000px;
-  border-radius: 0px;
-  margin: auto;
-  padding: 10px;
-  overflow: unset;
+  width: 100%;
+  margin: 0 auto;
+}
+    
+#header, #footer {
+  color: white;
+  background-color: #222;
+  font-size: 18px;
+  // > *{
+  //   max-width: 1200px;
+  //   margin: 0 auto;
+  // }
 }
 
-.el-select-dropdown {
-  max-width: 100%;
-  left: 0px;
+    
+#footer {
+  a {
+    color: orangered;
+    transition: color .4s;
+    &:hover {
+      text-decoration: none;
+      color: orange;
+    }
+  }
+
+  #links a {
+    margin-left: 15px;
+  }
+  min-height: 6em;
+  padding-top: 2em;
+  font-size: 1em;
 }
+    
+#header .el-menu--horizontal {
+  background-color: #222;
+  color: white;
+  .el-menu-item, .el-submenu__title {
+    color: white;
+  }
+
+  .el-menu-item:not(.is-disabled):focus,
+  .el-menu-item.is-active,
+  .el-menu-item:not(.is-disabled):hover,
+  .el-submenu:focus > .el-submenu__title,
+  .el-submenu:hover > .el-submenu__title,
+  .el-submenu.is-active > .el-submenu__title,
+  .el-submenu.is-opened {
+    color: white;
+    background-color: #333
+  }
+}
+
 
 .page-enter-active, .page-leave-active {
-  transition: opacity .2s, transform .3s;
+  transition: opacity .2s, transform .2s;
 }
 .page-enter, .page-leave-active {
-  transition: opacity .3s, transform .2s;
+  transition: opacity .2s, transform .2s;
   opacity: 0;
   transform: translateX(30px);
 }
 
-pre {
-  font-family: BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Helvetica,Arial,sans-serif !important;
-  margin-bottom: 0px;
-  white-space: pre-line;
-  font-family: unset;
+.el-card {
+  max-width: 700px;
+  margin: 0 auto;
 }
 
-.el-message-box {
-  max-width: 95%;
-}
-
-.el-popover {
-  word-break: normal;
-}
-
-.el-dialog {
-  z-index: 100;
-  max-width: 550px;
-  .el-dialog__body {
-    word-break: unset;
-  }
-  .el-dialog__headerbtn {
-    font-size: 27px;
-    top: 9px;
-    right: 10px;
-    .el-dialog__close {
-      color: red;
-      // padding: 5px;
-      // background-color: #f0f0f0;
-      // border-radius: 22px;
-      // border: 1px solid #f0f0f0;
-    }
-  }
-  p {
-    font-size: 16px;
-  }
-}
-
-.el-input__icon {
-  font-size: 20px;
-}
-
-@media only screen and (max-width: 768px) {
-  .el-dialog {
-    margin-top: 0px !important;
-    border-radius: 0px;
-    width: 100%;
-  }
-  
-  html {
-    font-size: 13px;
-  }
-
-  .el-main {
-    margin-top: 0px !important;
-    border-radius: 0px;
-    padding: 5px;
-  }
-
-  .el-menu-item {
-    padding: 0px 17px;
+.el-menu-item {
+  a {
+    color: #303133;
+    display: block;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 }

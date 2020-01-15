@@ -19,14 +19,15 @@ module.exports = {
   /*
    ** Customize the progress-bar color
    */
-  // loading: { color: '#fff' },
-
+  loading: { color: 'orange', height: '5px' },
   /*
    ** Global CSS
    */
   css: [
     'bootstrap/dist/css/bootstrap.min.css',
-    'element-ui/lib/theme-chalk/index.css'
+    'element-ui/lib/theme-chalk/index.css',
+    'element-ui/lib/theme-chalk/display.css',
+    '@/assets/style.less'
   ],
 
   /*
@@ -42,7 +43,12 @@ module.exports = {
   ],
 
   render: {
-    compressor: false
+    compressor: false,
+    bundleRenderer: {
+      shouldPreload: (file, type) => {
+        return ['script', 'style', 'font'].includes(type)
+      }
+    }
   },
   /*
    ** Nuxt.js modules
@@ -62,7 +68,7 @@ module.exports = {
   },
   auth: {
     redirect: {
-      login: '/?ref=login'
+      login: '/login'
     },
     strategies: {
       local: {
@@ -81,23 +87,10 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    optimization: {
-      splitChunks: {
-        cacheGroups: {
-          element: {
-            test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
-            name: 'element-ui',
-            chunks: 'all'
-          }
-        }
-      }
-    },
-    transpile: [/^element-ui/, /^vue-awesome/],
+    transpile: [/^element-ui/, /^vue-awesome/, /^@nuxt/],
     splitChunks: {
       layouts: true
     },
-    parallel: true,
-    hardSource: true,
     cache: true
   }
 }
