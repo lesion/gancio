@@ -68,10 +68,10 @@ api.delete('/event/notification/:code', eventController.delNotification)
 
 api.get('/settings', settingsController.getAllRequest)
 api.post('/settings', isAdmin, settingsController.setRequest)
+api.post('/settings/favicon', isAdmin, multer({ dest: 'thumb/' }).single('favicon'), settingsController.setFavicon)
+// api.get('/settings/user_locale', settingsController.getUserLocale)
 
-api.get('/settings/user_locale', settingsController.getUserLocale)
-
-// confirm event
+// confirm eventtags
 api.get('/event/confirm/:event_id', isAuth, eventController.confirm)
 api.get('/event/unconfirm/:event_id', isAuth, eventController.unconfirm)
 
@@ -83,6 +83,7 @@ api.get('/export/:type', cors, exportController.export)
 
 // get events in this range
 api.get('/event/:month/:year', cors, eventController.getAll)
+api.get('/event', cors, eventController.select)
 
 api.get('/instances', isAdmin, instanceController.getAll)
 api.get('/instances/:instance_domain', isAdmin, instanceController.get)

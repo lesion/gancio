@@ -30,7 +30,7 @@ module.exports = {
     const db = require('./api/models')
     const users = await db.user.findAll()
     if (users.length) {
-      consola.warn(` ⚠   Non empty db! Please move your current db elsewhere than retry.`)
+      consola.warn(' ⚠   Non empty db! Please move your current db elsewhere than retry.')
       return false
     }
 
@@ -51,7 +51,7 @@ module.exports = {
     await db.notification.create({ action: 'Update', type: 'ap', filters: { is_visible: true } })
     await db.notification.create({ action: 'Delete', type: 'ap', filters: { is_visible: true } })
 
-    // send anon email to administrator
+    // send anon event to administrator
     await db.notification.create({ action: 'Create', type: 'admin_email', filters: { is_visible: false } })
 
     // TODO

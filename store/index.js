@@ -1,4 +1,4 @@
-import moment from 'dayjs'
+import moment from 'moment-timezone'
 import intersection from 'lodash/intersection'
 import find from 'lodash/find'
 
@@ -44,7 +44,9 @@ export const getters = {
       if (!state.filters.show_recurrent_events && e.recurrent) { return false }
 
       if (search_for_places) {
-        if (find(state.filters.places, p => p === e.place.id)) { return true }
+        if (find(state.filters.places, p => p.id === e.place.id)) {
+          return true
+        }
       }
 
       if (search_for_tags) {
@@ -70,11 +72,11 @@ export const getters = {
       if (!state.filters.show_recurrent_events && e.recurrent) { return false }
 
       if (!match && search_for_places) {
-        if (find(state.filters.places, p => p === e.place.id)) { return true }
+        if (find(state.filters.places, p => p.id === e.place.id)) { return true }
       }
 
       if (search_for_tags) {
-        const common_tags = intersection(e.tags, state.filters.tags)
+        const common_tags = intersection(e.tags, state.filters.tags.map(t => t.tag))
         if (common_tags.length > 0) { return true }
       }
 
@@ -147,22 +149,33 @@ export const mutations = {
 }
 
 export const actions = {
-  // this method is called server side only for each request
-  // we use it to get configuration from db, setting locale, etc...
-  nuxtServerInit ({ commit }, { app, store, req }) {
-    if (req.user) {
-      this.$auth.setUser(req.user)
-    }
+  // this method is called server side only for each request for nuxt
+  // we use it to get configuration from db, set locale, etc...
+  async nuxtServerInit ({ commit }, { app, store, req }) {
+    if (req.user) { this.$auth.setUser(req.user) }
+
     const settings = req.settings
     commit('setSettings', settings)
+
+    const start_datetime = moment().startOf('month').startOf('week').unix()
+    const events = await this.$axios.$get(`/event?start=${start_datetime}`)
+    commit('setEvents', events)
+
+    const { tags, places } = await this.$axios.$get('/event/meta')
+    store.commit('update', { tags, places })
+
     // apply settings
     commit('showRecurrentEvents', settings.allow_recurrent_event && settings.recurrent_event_visible)
   },
-  async updateEvents ({ commit }, page) {
+  async updateEvents ({ commit, state }, page) {
     const month = moment().month()
     const year = moment().year()
     commit('setPast', page.year < year || (page.year === year && page.month <= month))
-    const events = await this.$axios.$get(`/event/${page.month - 1}/${page.year}`)
+    // const events = await this.$axios.$get(`/event/${page.month - 1}/${page.year}`)
+    const start_datetime = moment().year(page.year).month(page.month - 1).unix()
+    const query = `start=${start_datetime}`
+
+    const events = await this.$axios.$get(`/event?${query}`)
     commit('setEvents', events)
   },
   async updateMeta ({ commit }) {

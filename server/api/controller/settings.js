@@ -100,15 +100,21 @@ const settingsController = {
     }
   },
 
-  getUserLocale (req, res) {
-    // load user locale specified in configuration
-    res.json(settingsController.user_locale)
-  },
+  // getUserLocale (req, res) {
+  //   // load user locale specified in configuration
+  //   res.json(settingsController.user_locale)
+  // },
 
   async setRequest (req, res) {
     const { key, value, is_secret } = req.body
     const ret = await settingsController.set(key, value, is_secret)
     if (ret) { res.sendStatus(200) } else { res.sendStatus(400) }
+  },
+
+  async setFavicon (req, res) {
+    if (!req.file) return res.status(400).send('Mmmmm sould not be here!')
+    await settingsController.set('favicon', path.join(req.file.destination, req.file.filename))
+    res.sendStatus(200)
   },
 
   getAllRequest (req, res) {

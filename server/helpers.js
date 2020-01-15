@@ -13,7 +13,7 @@ const jwt = expressJwt({
     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
       return req.headers.authorization.split(' ')[1]
     } else if (req.cookies && req.cookies['auth._token.local']) {
-      const [ prefix, token ] = req.cookies['auth._token.local'].split(' ')
+      const [prefix, token] = req.cookies['auth._token.local'].split(' ')
       if (prefix === 'Bearer') { return token }
     }
     return null
@@ -28,8 +28,8 @@ module.exports = {
     req.secretSettings = settingsController.secretSettings
 
     req.settings.baseurl = config.baseurl
-    req.settings.title = config.title
-    req.settings.description = config.description
+    req.settings.title = req.settings.title || config.title
+    req.settings.description = req.settings.description || config.description
     req.settings.version = pkg.version
 
     // set locale and user locale
@@ -39,6 +39,7 @@ module.exports = {
     req.settings.locale = acceptLanguage.get(acceptedLanguages)
     req.settings.user_locale = settingsController.user_locale[req.settings.locale]
     moment.locale(req.settings.locale)
+    moment.tz.setDefault(req.settings.instance_timezone)
 
     // TODO: oauth
     // auth

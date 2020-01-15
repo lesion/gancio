@@ -22,13 +22,16 @@ app.use((req, res, next) => {
 app.use(spamFilter)
 
 // serve favicon and static content
-app.use('/favicon.ico', express.static(path.resolve(config.favicon || './assets/favicon.ico')))
 app.use('/logo.png', express.static('./static/gancio.png'))
 app.use('/media/', express.static(config.upload_path))
 
 // initialize instance settings / authentication / locale
 app.use(cookieParser())
 app.use(helpers.initMiddleware)
+app.use('/favicon.ico', (req, res, next) => {
+  const favicon_path = req.settings.favicon || config.favicon || './assets/favicon.ico'
+  return express.static(path.resolve(favicon_path))(req, res, next)
+})
 
 // rss/ics/atom feed
 app.get('/feed/:type', cors(), exportController.export)

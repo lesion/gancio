@@ -31,11 +31,8 @@ export default {
       user: {}
     }
   },
-  head () {
-    return {
-      title: this.settings.title + ' - ' + this.$t('common.register')
-    }
-  },
+  // https://nuxtjs.org/api/pages-validate/
+  // If the validate method does not return true, Nuxt.js will automatically load the 404 error page.
   validate ({ store }) {
     return store.state.settings.allow_registration
   },
@@ -70,6 +67,11 @@ export default {
         })
       }
       this.loading = false
+    }
+  },
+  head () {
+    return {
+      title: this.settings.title + ' - ' + this.$t('common.register')
     }
   }
 }
