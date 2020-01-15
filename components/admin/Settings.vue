@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    el-form(inline label-width="400px")
+    el-form(label-width="400px")
       //- select timezone
       client-only
         el-form-item(:label="$t('admin.select_instance_timezone')")
@@ -9,9 +9,24 @@
               span.float-left {{timezone.value}}
               small.float-right.text-danger {{timezone.offset}}
 
+      el-form-item(:label="$t('common.title')")
+        el-input(v-model='title' @blur='save("title", title)')
+
+      el-form-item(:label="$t('common.description')")
+        el-input(v-model='description' @blur='save("description", description)')
+
       //- allow open registration
       el-form-item(:label="$t('admin.allow_registration_description')")
         el-switch(name='reg' v-model='allow_registration')
+
+      el-form-item(:label="$t('admin.favicon')")
+        el-upload(ref='upload' :action='`${settings.baseurl}/api/settings/favicon`'
+            :limit='1'
+            name='favicon'
+            accept='image/*'
+            :multiple='false')
+          el-button(slot='trigger' size='small' type='primary') select file
+          .el-upload__tip(slot='tip') jpg/png files with a size less than 500kb
 
       //- allow anon event
       el-form-item(:label="$t('admin.allow_anon_event')")
@@ -30,7 +45,14 @@ import moment from 'moment-timezone'
 import timezones from './timezones'
 export default {
   name: 'Settings',
+  data ({ $store }) {
+    return {
+      title: $store.state.settings.title,
+      description: $store.state.settings.description,
+    }
+  },
   computed: {
+    ...mapState(['settings']),
     timezones () {
       const current_timezone = moment.tz.guess()
       return timezones
@@ -60,6 +82,13 @@ export default {
       set (value) { this.setSetting({ key: 'recurrent_event_visible', value }) }
     }
   },
-  methods: mapActions(['setSetting'])
+  methods: {
+    ...mapActions(['setSetting']),
+    save (key, value) {
+      if (this.settings[key] !== value) {
+        this.setSetting({ key, value })
+      }
+    }
+  }
 }
 </script>
