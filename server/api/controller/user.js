@@ -4,6 +4,7 @@ const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
 const jsonwebtoken = require('jsonwebtoken')
+const sanitizeHtml = require('sanitize-html')
 const config = require('config')
 const mail = require('../mail')
 const { user: User, event: Event, tag: Tag, place: Place } = require('../models')
@@ -65,12 +66,15 @@ const userController = {
    * add event
    */
   async addEvent (req, res) {
+    if (req.err) {
+      debug(req.err)
+      return res.status(400).json(req.err.toString())
+    }
     const body = req.body
-
     const eventDetails = {
       title: body.title,
       // remove html tags
-      description: body.description ? body.description.replace(/(<([^>]+)>)/ig, '') : '',
+      description: sanitizeHtml(body.description),
       multidate: body.multidate,
       start_datetime: body.start_datetime,
       end_datetime: body.end_datetime,
@@ -88,8 +92,10 @@ const userController = {
     // create place if needed
     let place
     try {
-      place = await Place.findOrCreate({ where: { name: body.place_name },
-        defaults: { address: body.place_address } })
+      place = await Place.findOrCreate({
+        where: { name: body.place_name },
+        defaults: { address: body.place_address }
+      })
         .spread((place, created) => place)
       await event.setPlace(place)
       event.place = place
@@ -124,6 +130,9 @@ const userController = {
   },
 
   async updateEvent (req, res) {
+    if (req.err) {
+      return res.status(400).json(req.err.toString())
+    }
     const body = req.body
     const event = await Event.findByPk(body.id)
     if (!req.user.is_admin && event.userId !== req.user.id) {
@@ -140,15 +149,15 @@ const userController = {
       body.image_path = req.file.filename
     }
 
-    body.description = body.description
-      .replace(/(<([^>]+)>)/ig, '') // remove all tags from description
+    body.description = sanitizeHtml(body.description)
 
     await event.update(body)
     let place
     try {
-      place = await Place.findOrCreate({ where: { name: body.place_name },
-        defaults: { address: body.place_address } })
-        .spread((place, created) => place)
+      place = await Place.findOrCreate({
+        where: { name: body.place_name },
+        defaults: { address: body.place_address }
+      }).spread((place, created) => place)
     } catch (e) {
       console.log('error', e)
     }
