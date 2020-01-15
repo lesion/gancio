@@ -78,7 +78,7 @@
   },
   "event": {
     "anon": "Anónimo",
-    "anon_description": "Podés ingresar un evento sin registrarte o iniciar sesión,\n       pero en este caso tendrás que esperar a que alguien lo lea para confirmar que\n       es un evento adecuado para este espacio, delegando esta elección. Además, no será posible modificarlo. <br/> <br/>\n       Si no te gusta, podés <a href='/?ref=login'> iniciar sesión </a> o <a href='/?ref=register'> registrarte </a>,\n       de lo contrario, continúa y recibirás una respuesta lo antes posible.",
+    "anon_description": "Podés ingresar un evento sin registrarte o iniciar sesión,\n       pero en este caso tendrás que esperar a que alguien lo lea para confirmar que\n       es un evento adecuado para este espacio, delegando esta elección. Además, no será posible modificarlo. <br/> <br/>\n       Si no te gusta, podés <a href='/login'> iniciar sesión </a> o <a href='/register'> registrarte </a>,\n       de lo contrario, continúa y recibirás una respuesta lo antes posible.",
     "same_day": "Mismo día",
     "what_description": "Nombre evento",
     "description_description": "Descripción, podés copiar y pegar",

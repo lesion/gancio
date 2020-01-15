@@ -67,7 +67,8 @@
     "feed_url_copied": "Feed url copied, paste it in your feed reader",
     "follow_me_title": "Follow updates from fediverse",
     "follow": "Follow",
-    "moderation": "Moderation"
+    "moderation": "Moderation",
+    "user": "User"
   },
   "login": {
     "description": "By logging in you can publish new events.",
@@ -96,7 +97,7 @@
   },
   "event": {
     "anon": "Anon",
-    "anon_description": "You can add an event without registering or logging in, but in this case you will have to wait for someone to read it \n    confirming that it is an event suitable for this space, delegating this choice. Furthermore it will not be possible to modify it.<br/><br/>\n    You can instead <a href='/?ref=login'>log in</a> or <a href='/?ref=register'>register</a>, otherwise go ahead and get an answer as soon as possible.",
+    "anon_description": "You can add an event without registering or logging in, but in this case you will have to wait for someone to read it \n    confirming that it is an event suitable for this space, delegating this choice. Furthermore it will not be possible to modify it.<br/><br/>\n    You can instead <a href='/login'>log in</a> or <a href='/register'>register</a>, otherwise go ahead and get an answer as soon as possible.",
     "same_day": "on same day",
     "what_description": "Title",
     "description_description": "Description",
@@ -109,8 +110,8 @@
     "not_found": "Event not found",
     "remove_confirmation": "Are you sure to remove this event?",
     "recurrent": "Recurrent",
-    "recurrent_event_too": "recurrent events too",
-    "past_too": "past too",
+    "show_recurrent": "recurrent events too",
+    "show_past": "past too",
     "only_future": "only next events",
     "recurrent_description": "Choose the frequency and select the days",
     "multidate_description": "It's a festival? Choose when it starts and when it ends",

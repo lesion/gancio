@@ -61,14 +61,16 @@
     "embed": "Incorpora",
     "embed_title": "Mostra questo evento sul tuo sito web",
     "embed_help": "Copiando il seguente codice sul tuo sito web l'evento verrà incluso come qui di lato",
-    "feed": "Feed rss",
+    "feed": "Feed",
     "feed_url_copied": "Feed url copiato, incollalo nel tuo feed reader",
     "follow_me_title": "Segui gli aggiornamenti dal fediverso",
     "follow": "Segui",
     "n_resources": "nessuna risorsa|una risorsa|{n} risorse",
     "resources": "Risorse",
     "moderation": "Moderazione",
-    "authorize": "Autorizza"
+    "authorize": "Autorizza",
+    "title": "Titolo",
+    "user": "Utente"
   },
   "login": {
     "description": "Entrando puoi pubblicare nuovi eventi.",
@@ -86,7 +88,7 @@
     "intro": "Contrariamente alle piattaforme del capitalismo, che fanno di tutto per tenere\n      i dati e gli utenti al loro interno, crediamo che le informazioni, come le persone,\n      debbano essere libere. Per questo puoi rimanere aggiornata sugli eventi che vuoi, come meglio credi, senza necessariamente passare da questo sito.",
     "email_description": "Puoi ricevere via mail gli eventi che ti interessano.",
     "insert_your_address": "Indirizzo email",
-    "feed_description": "Per seguire gli aggiornamenti da computer o smartphone senza la necessità di aprire periodicamente il sito, il metodo consigliato è quello dei Feed RSS.</p>\n\n      <p>Con i feed rss utilizzi un'apposita applicazione per ricevere aggiornamenti dai siti che più ti interessano.  È un buon metodo per seguire anche molti siti in modo molto rapido, senza necessità di creare un account o altre complicazioni.</p>\n    \n      <li>Se hai Android, ti consigliamo <a href=\"https://play.google.com/store/apps/details?id=net.frju.flym\">Flym</a> o Feeder</li>\n      <li>Per iPhone/iPad puoi usare <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\">Feed4U</a></li>\n      <li>Per il computer fisso/portatile consigliamo  Feedbro, da installare all'interno <a href=\"https://addons.mozilla.org/en-GB/firefox/addon/feedbroreader/\">di Firefox </a>o <a href=\"https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa\">di Chrome</a> e compatibile con tutti i principali sistemi operativi.</li>\n      <br/>\n      Aggiungendo questo link al tuo lettore di feed, rimarrai aggiornata.",
+    "feed_description": "Per seguire gli aggiornamenti da computer o smartphone senza la necessità di aprire periodicamente il sito, il metodo consigliato è quello dei Feed RSS.</p>\n\n      <p>Con i feed rss utilizzi un'apposita applicazione per ricevere aggiornamenti dai siti che più ti interessano.  È un buon metodo per seguire anche molti siti in modo molto rapido, senza necessità di creare un account o altre complicazioni.</p>\n    \n      <li>Se hai Android, ti consigliamo <a href=\"https://play.google.com/store/apps/details?id=net.frju.flym\">Flym</a> o Feeder</li>\n      <li>Per iPhone/iPad puoi usare <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\">Feed4U</a></li>\n      <li>Per il computer fisso/portatile consigliamo Brief, da installare all'interno <a href=\"https://addons.mozilla.org/it/firefox/addon/brief/\">di Firefox </a> e compatibile con tutti i principali sistemi operativi.</li>\n      <br/>\n      Aggiungendo questo link al tuo lettore di feed, rimarrai aggiornata.",
     "ical_description": "I computer e gli smartphone sono comunemente attrezzati con un'applicazione per gestire un calendario. A questi programmi solitamente è possibile far importare un calendario remoto.",
     "list_description": "Se hai un sito web e vuoi mostrare una lista di eventi, puoi usare il seguente codice"
   },
@@ -97,7 +99,7 @@
   },
   "event": {
     "anon": "Anonimo",
-    "anon_description": "Puoi inserire un evento senza registrarti o fare il login, \n      ma in questo caso dovrai aspettare che qualcuno lo legga confermando che si\n      tratta di un evento adatto a questo spazio, delegando questa scelta. Inoltre non sarà possibile modificarlo.<br/><br/> \n      Puoi invece fare il <a href='/?ref=login'>login</a> o <a href='/?ref=register'>registrarti</a>,\n      altrimenti vai avanti e riceverai una risposta il prima possibile. ",
+    "anon_description": "Puoi inserire un evento senza registrarti o fare il login, \n      ma in questo caso dovrai aspettare che qualcuno lo legga confermando che si\n      tratta di un evento adatto a questo spazio, delegando questa scelta. Inoltre non sarà possibile modificarlo.<br/><br/> \n      Puoi invece fare il <a href='/login'>login</a> o <a href='/register'>registrarti</a>,\n      altrimenti vai avanti, lo confermeremo appena possibile. ",
     "same_day": "Stesso giorno",
     "what_description": "Nome evento",
     "description_description": "Descrizione, dajene di copia/incolla",
@@ -110,9 +112,8 @@
     "not_found": "Evento non trovato",
     "remove_confirmation": "Sicura di voler eliminare questo evento?",
     "recurrent": "Ricorrente",
-    "recurrent_event_too": "mostra appuntamenti fissi",
-    "past_too": "anche passati",
-    "only_future": "solo prossimi eventi",
+    "show_recurrent": "appuntamenti ricorrenti",
+    "show_past": "eventi passati",
     "recurrent_description": "Scegli la frequenza e seleziona i giorni",
     "multidate_description": "Un festival o una tre giorni?  Scegli quando comincia e quando finisce.",
     "multidate": "Più giorni",
@@ -165,7 +166,8 @@
     "user_blocked": "L'utente {user} non potrà più aggiungere risorse",
     "filter_instances": "Filtra istanze",
     "filter_users": "Filtra utenti",
-    "instance_name": "Nome istanza"
+    "instance_name": "Nome istanza",
+    "favicon": "Logo"
   },
   "auth": {
     "not_confirmed": "Non abbiamo ancora confermato questa mail...",
@@ -186,7 +188,7 @@
   "confirm": {
     "title": "Conferma utente",
     "not_valid": "Mmmmm qualcosa è andato storto.",
-    "valid": "Il tuo account è stato confermato, ora puoi <a href=\"/?ref=login\">entrare</a>"
+    "valid": "Il tuo account è stato confermato, ora puoi <a href=\"/login\">entrare</a>"
   },
   "ordinal": {
     "1": "primo",
