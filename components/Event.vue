@@ -2,7 +2,7 @@
   nuxt-link.event(:to='`/event/${link}`' :class='{ withImg: event.image_path }')
 
     //- image
-    img(v-if='showImage && event.image_path' :src='`/media/thumb/${event.image_path}`')
+    el-image(v-if='showImage && event.image_path' lazy :src='`/media/thumb/${event.image_path}`')
 
     .event-info
       .content-info
@@ -20,7 +20,7 @@
         li(v-if='settings.enable_federation && event.resources && event.resources.length') <u>{{$tc('common.n_resources', event.resources.length)}}</u>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   props: {
@@ -49,7 +49,6 @@ export default {
 }
 </script>
 <style lang='less'>
-@import '../assets/style.less';
 
 @media only screen and (min-width: 574px) {
   .event {
@@ -87,10 +86,10 @@ export default {
     padding: 0.8em 1em;
 
     h2 {
-      color: @success;
+      color: rgb(174, 255, 174);
       font-size: 16px;
-      font-size: 1.2rem;
-      font-weight: 400;
+      font-size: 1.1rem;
+      font-weight: 600;
       margin: 0px;
     }
 
