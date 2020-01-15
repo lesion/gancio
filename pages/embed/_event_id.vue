@@ -18,21 +18,21 @@ import { mapState } from 'vuex'
 import Event from '../../components/Event'
 
 export default {
-  layout: 'event_iframe',
+  layout: 'iframe',
   components: { Event },
-  data () {
-    return {
-      loading: true
-    }
-  },
   async asyncData ({ $axios, params, error, store }) {
     try {
-      const [ id, start_datetime ] = params.event_id.split('_')
+      const [id, start_datetime] = params.event_id.split('_')
       const event = await $axios.$get(`/event/${id}`)
       event.start_datetime = start_datetime ? Number(start_datetime) : event.start_datetime
       return { event, id: Number(id) }
     } catch (e) {
       error({ statusCode: 404, message: 'Event not found' })
+    }
+  },
+  data () {
+    return {
+      loading: true
     }
   },
   computed: {
@@ -61,6 +61,8 @@ export default {
  */
 </script>
 <style lang='less'>
+.embed_event{
+
 a {
   transition: margin .1s;
 }
@@ -107,7 +109,7 @@ a:hover {
   // transition: all .2s;
   margin: 0px;
 }
-
+}
 // .embed_event:hover {
   // transform: scale(1.03);
 // }

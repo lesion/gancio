@@ -54,8 +54,6 @@
 
         strong(v-if='settings.enable_resources') {{$tc('common.resources', event.resources.length)}} -
         small {{$t('event.interact_with_me_at')}}
-      small {{$t('event.interact_with_me_at')}} 
-        small {{$t('event.interact_with_me_at')}}
           el-button(type='text' size='mini' @click='showFollowMe=true') @{{settings.instance_name}}@{{settings.baseurl|url2host}}
 
         el-dialog.followDialog(:visible.sync='showFollowMe')
