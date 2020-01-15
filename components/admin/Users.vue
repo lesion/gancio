@@ -4,7 +4,7 @@ div
   el-collapse
     el-collapse-item
       template(slot='title')
-        el-button(mini size='mini')  <v-icon name='plus'/> {{$t('common.new_user')}}
+        el-button(type='text' mini size='mini')  <v-icon name='plus'/> {{$t('common.new_user')}}
       el-form(inline)
         el-form-item(:label="$t('common.email')")
           el-input(v-model='new_user.email')
@@ -19,7 +19,7 @@ div
       template(slot-scope='data')
         el-popover(trigger='hover' :content='data.row.description' width='400')
           span(slot='reference') {{data.row.email}}
-    el-table-column(:label="$t('common.actions')" width='300')
+    el-table-column(:label="$t('common.actions')" width='350')
       template(slot-scope='data')
         div(v-if='data.row.id!==$auth.user.id')
           el-button-group
@@ -34,8 +34,9 @@ div
               @click='delete_user(data.row)') {{$t('admin.delete_user')}}
         div(v-else)
           span {{$t('common.me')}}
+    el-table-column
   client-only
-    el-pagination(:page-size='perPage' :currentPage.sync='userPage' :total='users_.length')
+    el-pagination(:page-size='perPage' :currentPage.sync='userPage' v-if='perPage<users_.length' :total='users_.length')
 
 </template>
 <script>
@@ -64,7 +65,7 @@ export default {
     }
   },
   methods: {
-    async delete_user (user) {
+    delete_user (user) {
       MessageBox.confirm(this.$t('admin.delete_user_confirm'),
         this.$t('common.confirm'), {
           confirmButtonText: this.$t('common.ok'),
@@ -81,7 +82,7 @@ export default {
           this.users_ = this.users_.filter(u => u.id !== user.id)
         })
     },
-    async toggle (user) {
+    toggle (user) {
       user.is_active = !user.is_active
       this.$axios.$put('/user', user)
     },
