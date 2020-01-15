@@ -20,10 +20,10 @@
             @click='place = data.row') {{$t('common.edit')}}
 
     client-only
-      el-pagination(:page-size='perPage' :currentPage.sync='placePage' :total='places.length')
+      el-pagination(v-if='places.length>perPage' :page-size='perPage' :currentPage.sync='placePage' :total='places.length')
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
