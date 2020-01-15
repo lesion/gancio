@@ -1,9 +1,7 @@
 <template lang="pug">
   el-main
-    h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{$t('common.export')}}
-
     p {{$t('export.intro')}}
-    Search
+    //- Search
     el-tabs.mt-2(v-model='type')
 
       //- TOFIX
@@ -60,41 +58,19 @@ import Search from '@/components/Search'
 import { Message } from 'element-ui'
 
 export default {
-  name: 'Export',
+  name: 'Exports',
   components: { List, Search },
-  head () {
-    return {
-      title: `${this.settings.title} - ${this.$t('common.export')}`
-    }
-  },
-  data () {
-    return {
-      type: 'rss',
-      notification: { email: '' },
-      list: { title: 'Gancio' }
-    }
-  },
   async asyncData ({ $axios, params, store }) {
     // get metadata just in case we are not coming from home
     if (store.state.tags.length) { return }
     const { tags, places } = await $axios.$get('/event/meta')
     store.commit('update', { tags, places })
   },
-  methods: {
-    copyLink () {
-      Message({ message: this.$t('common.copied'), type: 'success' })
-    },
-    async add_notification () {
-      if (!this.notification.email) {
-        Message({ message: 'Inserisci una mail', showClose: true, type: 'error' })
-        // return this.$refs.email.focus()
-      }
-      // await api.addNotification({ ...this.notification, filters: this.filters})
-      // this.$refs.modal.hide()
-      Message({ message: this.$t('email_notification_activated'), showClose: true, type: 'success' })
-    },
-    imgPath (event) {
-      return event.image_path && event.image_path
+  data () {
+    return {
+      type: 'rss',
+      notification: { email: '' },
+      list: { title: 'Gancio' }
     }
   },
   computed: {
@@ -134,6 +110,28 @@ export default {
     },
     showLink () {
       return (['rss', 'ics'].includes(this.type))
+    }
+  },
+  methods: {
+    copyLink () {
+      Message({ message: this.$t('common.copied'), type: 'success' })
+    },
+    add_notification () {
+      if (!this.notification.email) {
+        Message({ message: 'Inserisci una mail', showClose: true, type: 'error' })
+        // return this.$refs.email.focus()
+      }
+      // await api.addNotification({ ...this.notification, filters: this.filters})
+      // this.$refs.modal.hide()
+      Message({ message: this.$t('email_notification_activated'), showClose: true, type: 'success' })
+    },
+    imgPath (event) {
+      return event.image_path && event.image_path
+    }
+  },
+  head () {
+    return {
+      title: `${this.settings.title} - ${this.$t('common.export')}`
     }
   }
 }
