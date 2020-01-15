@@ -1,0 +1,101 @@
+---
+layout: default
+title: Changelog
+permalink: /changelog
+nav_order: 10
+---
+
+
+All notable changes to this project will be documented in this file.
+
+unreleased
+- oauth server implementation
+
+### 0.17.14
+- [locale] add catalan
+- [fix] fedi outbox
+
+### 0.17.12
+- [ui] add admin section on event page in mobile #63
+- [fix] remove username from users
+
+### 0.17.11
+- [refactor] s/fed_user/ap_user
+- [fedi] admin moderation
+
+### 0.17.10
+- [refactor] s/comment/resource/
+- [refactor] remove `username` field
+- [doc] about and federation
+
+### 0.17.8
+- [fix] use thumb in head og:img only
+
+### 0.17.7
+- [fix] #58 wrong url for RSS feed
+
+### 0.17.5
+- [fedi] comments moderation
+- [fedi] user moderation
+- [fedi] instance moderation
+- [hotfix] cli setup
+- [doc] fix debian upgrade
+- [fix] comment ap_id key length
+- [fix] fediverse signature
+- [fedi] better /inbox /followers response
+
+### 0.17.0
+- [feat] add rss link @homepage
+- [ui] add lot of explanation text
+- [ui] show copied messages
+- [admin] show n of unconfirmed users/events
+- [ui] spinner while event image is loading
+- [fedi] add follow me dialog in event
+- [fix] do not add reminders in full ics export
+- [fix] remove spaces from hashtags sent via AP
+- [fix] #56 unconfirmed event sent via ap
+- [fix] localPosts/comments in fediverse stats
+
+### 0.16.0
+- [feat] embed event as widget in external website
+- [fedi] instances moderation in admin
+- [fix] toggle event visibility by owner
+- [fedi] manage unboost
+- [refactoring] auth as middleware
+
+### 0.15.7
+- [fix] minor
+
+### 0.15.6
+- [fix] tags in event
+
+### 0.15.5
+- [model] migrations setup
+- [feat] embeddable event widget/iframe
+
+### 0.15.2
+- [fix] delete event
+- [fix] wrong html hierarchy
+
+### 0.15.0
+- [fix] backtop icon on mobile
+- [fix] webfinger nodeinfo return real node info
+- [fix] register email confirmation
+- [feat] add federation settings (enable comments/boost/like)
+- [feat] new event page layout
+- [feat] could download .ics of event
+- [feat] add cors to feed requests
+- [refactoring] settings middleware, cleaning codebase
+
+### 0.14.18
+- [improve] better quality for images
+- [fix] password recovery email
+- [feat] new action field for notification 
+- [feat] add DEBUG env variable in docker-compose.yml
+- [style] fixed width in confirmation events table
+- [fix] #38 timezone issue in rss export and using tor...
+
+### 0.14.17
+- [fix] image previews from external website
+- [fix] docker-compose postgresql docs
+- [improve] export white logo to fediverse
