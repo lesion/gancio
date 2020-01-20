@@ -171,7 +171,7 @@
         "favicon": "Logo"
     },
     "auth": {
-        "not_confirmed": "Not confirmed yet",
+        "not_confirmed": "Not confirmed yet...",
         "fail": "Auth failed!. Are you sure password is correct?"
     },
     "settings": {
@@ -189,7 +189,7 @@
     "confirm": {
         "title": "User confirmation",
         "not_valid": "Mmmmm something goes wrong.",
-        "valid": "Your account is confirmed, you can <a href=\"/?ref=login\">log in</a>."
+        "valid": "Your account is confirmed, you can <a href=\"/login\">log in</a>"
     },
     "ordinal": {
         "1": "first",
