@@ -26,6 +26,7 @@ html, body {
   background-color: #333;
   overflow-y: auto;
   scrollbar-width: thin;
+  padding: 0 !important;
 }
 
 #__nuxt, #__layout {
@@ -36,8 +37,9 @@ html, body {
     
 #main {
   min-height: 200px;
+  overflow: hidden;
   scrollbar-width: thin;
-  transition: all .3s;
+  // transition: background-color 1s, opacity 1s, color 1s;
   background-color: white;
   &.dark {
     background-color: #333;
@@ -101,11 +103,12 @@ html, body {
 }
 
 
-.page-enter-active, .page-leave-active {
-  transition: opacity .2s, transform .2s;
+.page-enter-active {
+  transition: opacity .2s, transform .3s;
 }
+
 .page-enter, .page-leave-active {
-  transition: opacity .2s, transform .2s;
+  transition: opacity .3s, transform .3s;
   opacity: 0;
   transform: translateX(30px);
 }
