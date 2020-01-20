@@ -3,10 +3,11 @@
     v-calendar(
       title-position='left'
       is-dark
+      @update:from-page='updatePage'
       :columns="$screens({ default: 1, lg: 2 })"
       :locale='$i18n.locale'
       :attributes='attributes'
-      :from-page.sync='page'
+      transition='fade'
       is-expanded
       is-inline
       @dayclick='click')
@@ -24,19 +25,6 @@ export default {
     const year = moment().year()
     return {
       page: { month, year }
-    }
-  },
-  watch: {
-    // month selected
-    page () {
-      this.updateEvents(this.page)
-    }
-  },
-  methods: {
-    ...mapActions(['updateEvents']),
-    click (day) {
-      const element = document.getElementById(day.day)
-      if (element) { element.scrollIntoView() } // Even IE6 supports this
     }
   },
   computed: {
@@ -64,10 +52,9 @@ export default {
       attributes = attributes.concat(this.filteredEventsWithPast
         .filter(e => !e.multidate)
         .map(e => {
-          const color = getColor(e)
           return {
             key: e.id,
-            dot: color,
+            dot: getColor(e),
             dates: new Date(e.start_datetime * 1000)
           }
         }))
@@ -82,6 +69,16 @@ export default {
 
       return attributes
     }
+  },
+  methods: {
+    ...mapActions(['updateEvents', 'showPastEvents']),
+    updatePage (page) {
+      this.updateEvents(page)
+    },
+    click (day) {
+      const element = document.getElementById(day.day)
+      if (element) { element.scrollIntoView() } // Even IE6 supports this
+    }
   }
 }
 </script>
@@ -91,13 +88,6 @@ export default {
 .vc-opacity-0 {
   opacity: 0.3 !important;
 }
-
-/* .vc-highlight {
-  color: red;
-  height: 22px !important;
-  opacity: 0.4;
-  border-radius: 15px;
-} */
 
 .past-event {
   opacity: 0.3;
