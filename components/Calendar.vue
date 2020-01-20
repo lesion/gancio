@@ -45,7 +45,7 @@ export default {
 
     // TODO: could be better
     attributes () {
-      const colors = ['green', 'orange', 'yellow', 'teal', 'indigo', 'blue', 'red', 'purple', 'pink', 'grey']
+      const colors = ['green', 'orange', 'yellow', 'teal', 'indigo', 'blue', 'red', 'purple', 'pink', 'gray']
       const tags = take(this.tags, 10).map(t => t.tag)
       let attributes = []
       attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'green' } })
