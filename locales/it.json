@@ -70,7 +70,8 @@
     "moderation": "Moderazione",
     "authorize": "Autorizza",
     "title": "Titolo",
-    "user": "Utente"
+    "user": "Utente",
+    "filter": "Filtra"
   },
   "login": {
     "description": "Entrando puoi pubblicare nuovi eventi.",
