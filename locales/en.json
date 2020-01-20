@@ -70,7 +70,8 @@
         "moderation": "Moderation",
         "user": "User",
         "authorize": "Authorize",
-        "title": "Title"
+        "title": "Title",
+        "filter": "Filter"
     },
     "login": {
         "description": "By logging in you can publish new events.",
