@@ -146,7 +146,7 @@ export default {
       font-size: 10px;
       height: 1.4em; /* or any other relative font sizes */
       /* You would have to include the following two lines to make this work in Safari */
-      max-width: 100%;
+      // max-width: 100%;
       max-height: 100%;
     }
 
