@@ -63,10 +63,8 @@ export default {
 <style lang='less'>
 .embed_event {
   transition: margin .1s;
-  background-image: url('/favicon.ico');
-  background-repeat: no-repeat;
-  background-position-x: right;
-  background-position-y: bottom;
+  background: url('/favicon.ico') no-repeat right 5px bottom 5px;
+  background-size: 32px;
   background-color: #1f1f1f;
 
   display: inline-block;
