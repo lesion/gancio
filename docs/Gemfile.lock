@@ -66,6 +66,7 @@ GEM
       mini_portile2 (~> 2.4.0)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
+    premonition (2.0.0)
     public_suffix (3.1.1)
     rake (12.3.1)
     rb-fsevent (0.10.3)
@@ -95,6 +96,7 @@ DEPENDENCIES
   jemoji
   just-the-docs
   mini_magick
+  premonition (~> 2.0.0)
   tzinfo (~> 1.2)
   tzinfo-data
   wdm (~> 0.1.0)

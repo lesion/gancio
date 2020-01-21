@@ -6,7 +6,7 @@ description: "Gancio is a shared agenda for local communities."
 permalink: /
 ---
 
-# <img src='https://git.lattuga.net/repo-avatars/476' width="60px"/> Gancio
+# ![](assets/gancio.png) ancio
 {: .fs-9 }
 
 A shared agenda for local communities.
@@ -30,7 +30,7 @@ nowhere on gancio appears the identity of who published the event, not even unde
 
 - **Anonymous events**: optionally a visitor can create events without being registered (an administrator has to confirm them)
 
-- **We are not interested in making hits** so we export events in many ways, via RSS feeds, via global or individual ics, incorporating lists of events or single event via iframe on other websites.
+- **We are not interested in making hits** so we export events in many ways, via RSS feeds, via global or individual ics, incorporating lists of events or single event via iframe on other websites and via [AP](/federation)
 
 - Very easy UI
 - Multidays events support (festival, conferences...)

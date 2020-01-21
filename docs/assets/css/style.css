@@ -10,3 +10,12 @@
 .navigation-list-item a:hover {
   color: black;
 }
+
+
+html, body {
+  font-family: sans-serif;
+}
+
+.page-content h1:first-of-type {
+  font-weight: 500;
+}

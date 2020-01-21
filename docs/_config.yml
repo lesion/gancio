@@ -28,7 +28,7 @@ theme: "just-the-docs"
 plugins:
   - jekyll-feed
   - jemoji
-
+  - premonition
 
 search_enabled: true
 
@@ -39,6 +39,8 @@ aux_links:
     - https://framagit.org/les/gancio
   "Forum":
     - https://socialhub.activitypub.rocks/c/software/gancio
+  "Mastodon":
+    - https://mastodon.cisti.org/@gancio
 
 
 
