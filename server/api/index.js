@@ -95,6 +95,7 @@ api.delete('/resources/:resource_id', isAdmin, resourceController.remove)
 api.get('/resources', isAdmin, resourceController.getAll)
 
 api.get('/clients', isAuth, oauthController.getClients)
+api.get('/client/:client_id', isAuth, oauthController.getClient)
 api.post('/client', oauthController.createClient)
 
 // api.get('/verify', oauth.oauthServer.authenticate(), (req, res) => {

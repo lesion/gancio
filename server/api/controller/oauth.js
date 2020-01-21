@@ -21,7 +21,7 @@ const oauthController = {
   async createClient (req, res) {
     debug('Create client ', req.body.client_name)
     // only write scope is supported
-    if (req.body.scopes && req.body.scopes !== 'write') {
+    if (req.body.scopes && req.body.scopes !== 'event:write') {
       return res.status(422).json({ error: 'Invalid scopes' })
     }
 
@@ -29,7 +29,7 @@ const oauthController = {
       id: await randomString(256),
       name: req.body.client_name,
       redirectUris: req.body.redirect_uris,
-      scopes: req.body.scopes || 'write',
+      scopes: req.body.scopes || 'event:write',
       website: req.body.website,
       client_secret: await randomString(256)
     }
@@ -43,6 +43,20 @@ const oauthController = {
       debug(e)
       res.status(400).json(e)
     }
+  },
+
+  async getClient (req, res) {
+    const client = await OAuthClient.findByPk(req.params.client_id, { raw: true })
+    if (!client) {
+      return res.status(404).send('Not found!')
+    }
+    res.json({
+      client_id: client.id,
+      redirect_uris: client.redirectUris,
+      name: client.name,
+      website: client.website,
+      scopes: client.scopes
+    })
   },
 
   async getClients (req, res) {

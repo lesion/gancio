@@ -1,7 +1,9 @@
 <template lang='pug'>
   el-container#modal
     el-header
-    el-row(:gutter='20')
-      el-col(:span='12' :offset='6')
+    .row.p-0.m-0
+      .col.p-0
+      .col-xl-5.col-lg-6.col-sm-10.col-xs-12.col-md-7.p-0
         nuxt
+      .col.p-0
 </template>

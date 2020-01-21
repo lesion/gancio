@@ -25,7 +25,7 @@ POST
 #### Request parameters
 
 | client_name | `string` | A name for your application |
-| redirect_uri | `string` | Where the user should be redirected after authorization |
+| redirect_uris | `string` | Where the user should be redirected after authorization |
 | scopes | `string` | Space separated list of scopes. If none is provided, defaults to `write` as it's the only supported scope!|
 | website | `string` | A URL to the homepage of your app |
 
@@ -33,7 +33,7 @@ POST
 ```bash
 curl -X POST \
         -d 'client_name=Wordpress Event Manager' \
-        -d 'redirect_uri=https://noblogs.org/' \
+        -d 'redirect_uris=https://noblogs.org/' \
         -d 'website=https://myapp.example' \
         http://localhost:13120/api/client
 ```
@@ -47,7 +47,7 @@ Application, with `client_id` and `client_secret`
    "scopes" : "write",
    "website" : "https://myapp.example",
    "client_secret" : "909029fa12797e6bdfb5baf5e379675dfa4e3ad4",
-   "redirect_uri" : "https://noblogs.org",
+   "redirect_uris" : "https://noblogs.org",
    "client_id" : "0f377e34b2aaf517f7db534f32d26b0dd938fb6d"
 }
 ```

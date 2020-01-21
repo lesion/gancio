@@ -1,18 +1,21 @@
 <template lang='pug'>
   el-card.mt-5
-    h4(slot='header') <nuxt-link :to='"/"'><img src='/favicon.ico'/></nuxt-link> {{settings.title}} - {{$t('common.authorize')}}
+    h4(slot='header')
+      nuxt-link(to='/')
+        img(src='/favicon.ico')
+      span  {{settings.title}} - {{$t('common.authorize')}}
+    <u>{{$auth.user.email}}</u>
     div
-      h5 <u>{{$auth.user.email}}</u>
-      p External application <code>{{client.name}}</code> want following permission grants:
+      p(v-html="$t('oauth.authorization_request', { app: client.name, instance_name: settings.title })")
       ul
-        li(v-for="s in scope.split(' ')") {{s}}
-      span(v-if='redirect_uri!=="urn:ietf:wg:oauth:2.0:oob"') You will be redirected to <code>{{$route.query.redirect_uri}}</code>
-      el-row.mt-3(justify='center')
-        el-col(:span='12' :offset='6' style='text-align: center')
-          a(:href='authorizeURL')
-            el-button.mr-1(plain type='success') {{$t('common.authorize')}}
-          a(href='/')
-            el-button.mt-1(plain type='warning') {{$t('common.cancel')}}
+        li(v-for="s in scope.split(' ')") {{$t(`oauth.scopes.${scope}`)}}
+      span(v-html="$t('oauth.redirected_to', {url: $route.query.redirect_uri})")
+      br
+      br
+      a(:href='authorizeURL')
+        el-button.mr-1(plain type='success') {{$t('common.authorize')}}
+      a(href='/')
+        el-button.mt-1(plain type='warning') {{$t('common.cancel')}}
 </template>
 
 <script>
@@ -31,7 +34,7 @@ export default {
     if (!redirect_uri) {
       err = 'redirect_uri is missing'
     }
-    if (!scope || scope !== 'write') {
+    if (!scope || scope !== 'event:write') {
       err = 'scope is missing or wrong'
     }
     if (!response_type || response_type !== 'code') {
@@ -70,3 +73,11 @@ export default {
   }
 }
 </script>
+<style lang='less'>
+  h4 img {
+    max-height: 40px;
+    border-radius: 20px;
+    background-color: #333;
+    border: 1px solid #333;
+  }
+</style>
