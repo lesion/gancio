@@ -1,19 +1,17 @@
 
 module.exports = (sequelize, DataTypes) => {
   const OAuthClient = sequelize.define('oauth_client', {
-    client_id: {
+    id: {
       type: DataTypes.STRING,
-      primaryKey: true
+      primaryKey: true,
+      allowNull: false
     },
     name: DataTypes.STRING,
-    scopes: DataTypes.STRING,
     client_secret: DataTypes.STRING,
-    redirectUris: DataTypes.STRING
+    scopes: DataTypes.STRING,
+    redirectUris: DataTypes.STRING,
+    website: DataTypes.STRING
   }, {})
-
-  OAuthClient.associate = function (models) {
-    OAuthClient.belongsTo(models.user)
-  }
 
   return OAuthClient
 }

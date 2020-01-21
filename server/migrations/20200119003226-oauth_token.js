@@ -1,14 +1,15 @@
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('oauth_codes', {
-      authorizationCode: {
-        type: Sequelize.STRING,
-        primaryKey: true
+    return queryInterface.createTable('oauth_tokens', {
+      accessToken: {
+        allowNull: false,
+        primaryKey: true,
+        type: Sequelize.STRING
       },
-      expiresAt: Sequelize.DATE,
+      accessTokenExpiresAt: Sequelize.DATE,
+      refreshToken: Sequelize.STRING,
+      refreshTokenExpiresAt: Sequelize.DATE,
       scope: Sequelize.STRING,
-      redirect_uri: Sequelize.STRING,
       createdAt: { type: Sequelize.DATE, allowNull: false },
       updatedAt: { type: Sequelize.DATE, allowNull: false },
       clientId: {
@@ -33,6 +34,12 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('oauth_codes')
+    /*
+      Add reverting commands here.
+      Return a promise to correctly handle asynchronicity.
+
+      Example:
+      */
+    return queryInterface.dropTable('oauth_tokens')
   }
 }

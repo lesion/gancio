@@ -11,6 +11,7 @@ const instanceController = require('./controller/instance')
 const apUserController = require('./controller/ap_user')
 const resourceController = require('./controller/resource')
 const oauthController = require('./controller/oauth')
+const oauth = require('./oauth')
 
 const storage = require('./storage')
 const upload = multer({ storage })
@@ -82,7 +83,7 @@ api.get('/event/:event_id.:format?', cors, eventController.get)
 api.get('/export/:type', cors, exportController.export)
 
 // get events in this range
-api.get('/event/:month/:year', cors, eventController.getAll)
+// api.get('/event/:month/:year', cors, eventController.getAll)
 api.get('/event', cors, eventController.select)
 
 api.get('/instances', isAdmin, instanceController.getAll)
@@ -93,8 +94,11 @@ api.put('/resources/:resource_id', isAdmin, resourceController.hide)
 api.delete('/resources/:resource_id', isAdmin, resourceController.remove)
 api.get('/resources', isAdmin, resourceController.getAll)
 
-api.get('/client/:client_id', isAuth, oauthController.getClient)
+api.get('/clients', isAuth, oauthController.getClients)
 api.post('/client', oauthController.createClient)
+
+// api.get('/verify', oauth.oauthServer.authenticate(), (req, res) => {
+// })
 
 // Handle 404
 api.use((req, res) => {
@@ -104,7 +108,7 @@ api.use((req, res) => {
 
 // Handle 500
 api.use((error, req, res, next) => {
-  debug(error)
+  debug(error.toString())
   res.status(500).send('500: Internal Server Error')
 })
 

@@ -42,11 +42,9 @@ module.exports = {
     moment.tz.setDefault(req.settings.instance_timezone)
 
     // TODO: oauth
-    // auth
     jwt(req, res, async () => {
       if (!req.user) { return next() }
-      req.user = await User.findOne({
-        where: { id: req.user.id, is_active: true } })
+      req.user = await User.findOne({ where: { id: req.user.id, is_active: true } })
       next()
     })
   }

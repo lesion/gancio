@@ -14,7 +14,6 @@
 
         el-input.mb-2(v-model='user.description' type="textarea" rows='3' :placeholder="$t('common.description')")
 
-      span(slot='footer')
         el-button(plain type="success" :disabled='disabled' @click='register') {{$t('common.send')}} <v-icon name='chevron-right'/>
 </template>
 

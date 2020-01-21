@@ -3,13 +3,12 @@
 </template>
 <script>
 import Home from '~/components/Home.vue'
-import Nav from '~/components/Nav.vue'
 import moment from 'moment-timezone'
 import { mapState } from 'vuex'
 
 export default {
   name: 'Index',
-  components: { Nav, Home },
+  components: { Home },
   fetch ({ store }) {
     moment.tz.setDefault(store.state.settings.instance_timezone)
   },

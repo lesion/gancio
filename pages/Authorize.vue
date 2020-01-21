@@ -1,37 +1,55 @@
 <template lang='pug'>
-    //- el-card.mt-5
-    //- div(slot='header')
-    //-   h4 <img src='/favicon.ico'/>   App authorization
-    div(v-if='client')
+  el-card.mt-5
+    h4(slot='header') <nuxt-link :to='"/"'><img src='/favicon.ico'/></nuxt-link> {{settings.title}} - {{$t('common.authorize')}}
+    div
       h5 <u>{{$auth.user.email}}</u>
-      p External application <b>{{client.name}}</b> want following permission grants:
+      p External application <code>{{client.name}}</code> want following permission grants:
       ul
-        li(v-for="scope in $route.query.scope.split(' ')") {{scope}}
-      span You will be redirected to <b>{{$route.query.redirect_uri}}</b>
+        li(v-for="s in scope.split(' ')") {{s}}
+      span(v-if='redirect_uri!=="urn:ietf:wg:oauth:2.0:oob"') You will be redirected to <code>{{$route.query.redirect_uri}}</code>
       el-row.mt-3(justify='center')
         el-col(:span='12' :offset='6' style='text-align: center')
           a(:href='authorizeURL')
             el-button.mr-1(plain type='success') {{$t('common.authorize')}}
-          a(to='/')
+          a(href='/')
             el-button.mt-1(plain type='warning') {{$t('common.cancel')}}
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
-import { Message } from 'element-ui'
-import get from 'lodash/get'
+import { mapState } from 'vuex'
 
 export default {
   layout: 'modal',
   name: 'Authorize',
   middleware: ['auth'],
-  async asyncData ({ $axios, query }) {
+  async asyncData ({ $axios, query, error, req }) {
+    const { client_id, redirect_uri, scope, response_type } = query
+    let err = ''
+    if (!client_id) {
+      err = 'client_id is missing'
+    }
+    if (!redirect_uri) {
+      err = 'redirect_uri is missing'
+    }
+    if (!scope || scope !== 'write') {
+      err = 'scope is missing or wrong'
+    }
+    if (!response_type || response_type !== 'code') {
+      err = 'response_type is missing or wrong'
+    }
+
     // retrieve client validity
     try {
-      const client = await $axios.$get(`/client/${query.client_id}`)
-      return { client }
+      const client = await $axios.$get(`/client/${client_id}`)
+      if (!client) {
+        err = 'client not found'
+      }
+      if (err) {
+        return error({ statusCode: 404, message: err })
+      }
+      return { client, redirect_uri, scope, response_type }
     } catch (e) {
-      console.error(e)
+      error({ statusCode: 400, message: 'Something goes wrong with OAuth authorization' })
     }
   },
   data () {

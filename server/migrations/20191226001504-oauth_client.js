@@ -2,25 +2,18 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('oauth_clients', {
-      client_id: {
-        type: Sequelize.STRING,
-        primaryKey: true
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        type: Sequelize.STRING
       },
       name: Sequelize.STRING,
-      scopes: Sequelize.STRING,
       client_secret: Sequelize.STRING,
+      scopes: Sequelize.STRING,
       redirectUris: Sequelize.STRING,
+      website: Sequelize.STRING,
       createdAt: { type: Sequelize.DATE, allowNull: false },
-      updatedAt: { type: Sequelize.DATE, allowNull: false },
-      userId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'users',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
+      updatedAt: { type: Sequelize.DATE, allowNull: false }
     })
   },
 

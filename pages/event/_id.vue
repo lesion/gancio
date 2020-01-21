@@ -39,8 +39,7 @@
             el-menu-item(@click='showEmbed=true') <i class='el-icon-copy-document'></i> {{$t('common.embed')}}
 
             //- TODO (ics of recurrent events)
-            //- el-menu-item(v-if='!event.recurrent')
-            el-menu-item
+            el-menu-item(v-if='!event.recurrent')
               a(:href='`${settings.baseurl}/api/event/${event.id}.ics`') <i class='el-icon-date'></i> {{$t('common.add_to_calendar')}}
           EventAdmin(v-if='is_mine' :event='event')
 
@@ -96,7 +95,7 @@ export default {
         : event.start_datetime
       // const now = new Date()
       // const events = await $axios.$get(
-        // `/event/${now.getMonth()}/${now.getFullYear()}`
+      // `/event/${now.getMonth()}/${now.getFullYear()}`
       // )
       // store.commit('setEvents', events)
       return { event, id: Number(id) }
@@ -281,7 +280,7 @@ export default {
       await this.$axios.post('/instances/toggle_user_block', { user_id: resource.apUserApId })
       Message({ message: this.$t('admin.user_blocked', { user: resource.apUserApId }), type: 'success', showClose: true })
     },
-    async deleteResource (resource) {
+    deleteResource (resource) {
       MessageBox.confirm(this.$t('admin.delete_resource_confirm'),
         this.$t('common.confirm'), {
           confirmButtonText: this.$t('common.ok'),

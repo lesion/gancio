@@ -61,28 +61,29 @@ export default {
  */
 </script>
 <style lang='less'>
-.embed_event{
-
-a {
-  transition: margin .1s;
-}
-
-a:hover {
-  transform: prospective(10) translateX(10);
-  margin-left: 5px;
-}
-
 .embed_event {
+  transition: margin .1s;
   background-image: url('/favicon.ico');
   background-repeat: no-repeat;
   background-position-x: right;
   background-position-y: bottom;
-  img {
-    width: 150px;
-    object-fit: cover;
-    object-position: top;
-    margin-right: 5px;
-    height: 100%;
+  background-color: #1f1f1f;
+
+  display: inline-block;
+  border: 1px solid #b1a3a3;
+  margin: 0px auto;
+  padding: 0px;
+  width: 400px;
+  height: 210px;
+  overflow: hidden;
+  border-radius: 10px;
+  // transition: all .2s;
+  margin: 0px;
+
+  &:hover {
+    transform: prospective(10) translateX(10);
+    margin-left: 5px;
+    text-decoration: none;
   }
 
   .event-info {
@@ -97,20 +98,13 @@ a:hover {
     }
   }
 
-  background-color: #1f1f1f;
-  display: inline-block;
-  border: 1px solid #b1a3a3;
-  margin: 0px auto;
-  padding: 0px;
-  width: 400px;
-  height: 210px;
-  overflow: hidden;
-  border-radius: 10px;
-  // transition: all .2s;
-  margin: 0px;
+  img {
+    width: 150px;
+    object-fit: cover;
+    object-position: top;
+    margin-right: 5px;
+    height: 100%;
+  }
+
 }
-}
-// .embed_event:hover {
-  // transform: scale(1.03);
-// }
 </style>

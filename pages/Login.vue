@@ -5,10 +5,10 @@
       p(v-html="$t('login.description')")
       div(v-loading='loading')
 
-        el-input.mb-2(v-model='email' type='email' name='email' prefix-icon='el-icon-user'
+        el-input.mb-2(v-model='email' type='email' title='email' prefix-icon='el-icon-user'
           :placeholder='$t("common.email")' autocomplete='email' ref='email')
 
-        el-input.mb-1(v-model='password'  @keyup.enter.native="submit"
+        el-input.mb-1(v-model='password' @keyup.enter.native="submit"
           prefix-icon='el-icon-lock' name='password'
           type='password' :placeholder='$t("common.password")')
 
@@ -41,6 +41,9 @@ export default {
       return !this.email || !this.password
     }
   },
+  mounted () {
+    this.$refs.email.focus()
+  },
   methods: {
     ...mapActions(['login']),
     close () {
@@ -63,8 +66,8 @@ export default {
       try {
         this.loading = true
         await this.$auth.loginWith('local', { data: { email: this.email, password: this.password } })
-        const user = await this.$axios.$get('/auth/user')
-        this.$auth.setUser(user)
+        // const user = await this.$axios.$get('/auth/user')
+        // this.$auth.setUser(user)
         this.loading = false
         Message({ message: this.$t('login.ok'), showClose: true, type: 'success' })
         this.close()

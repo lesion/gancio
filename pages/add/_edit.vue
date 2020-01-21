@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-main
+  el-main#edit_page
     h5.text-center {{edit?$t('common.edit_event'):$t('common.add_event')}}
     el-form(v-loading='loading')
 
@@ -18,10 +18,11 @@
 
       //- tags
       div {{$t('event.tag_description')}}
-      el-select.mb-3(v-model='event.tags' multiple filterable
-        @input.native='queryTags=$event.target.value' @change='queryTags=""'
-        allow-create default-first-option placeholder='Tag')
-        el-option(v-for='tag in filteredTags' :key='tag' :label='tag' :value='tag')
+      client-only
+        el-select.mb-3(v-model='event.tags' multiple filterable
+          @input.native='queryTags=$event.target.value' @change='queryTags=""'
+          allow-create default-first-option placeholder='Tag')
+          el-option(v-for='tag in filteredTags' :key='tag.tag' :label='tag.tag' :value='tag.tag')
 
       //- WHERE
       el-divider
@@ -69,8 +70,9 @@
           el-radio-button(v-for='whenPattern in whenPatterns' :label='whenPattern.key' :key='whenPatterns.key')
             span {{whenPattern.label}}
 
-      .text-center(inline)
-        el-form-item(:label="$t('event.from')")
+        //- form.el-form.text-center.inline.el-form-inline
+      .text-center
+        el-form-item(:label="$t('event.from')" width='100')
           el-time-select.mr-2(ref='time_start'
             v-model="time.start"
             :picker-options="{ start: '00:00', step: '00:30', end: '24:00'}")
@@ -79,7 +81,6 @@
             :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
 
       List(v-if='event.type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
-      //- el-button.float-right(@click='next' type='succes' :disabled='!couldProceed') {{$t('common.next')}}
 
       //- MEDIA / FLYER / POSTER
       el-divider <v-icon name='image'/> {{$t('common.media')}}
@@ -114,18 +115,6 @@ export default {
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
-  // fetch ({ store, $axios }) {
-    // try {
-    // const now = new Date()
-    // const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
-    // store.commit('setEvents', events)
-    // const { tags, places } = await $axios.$get('/event/meta')
-    // store.commit('update', { tags, places })
-    // } catch (e) {
-    // console.error('Error ', e)
-    // }
-  //   moment.locale(store.state.locale)
-  // },
   async asyncData ({ params, $axios, error, store }) {
     if (params.edit) {
       const data = { time: {}, event: { place: {} } }
@@ -267,8 +256,9 @@ export default {
     filteredTags () {
       const queryTags = this.queryTags.toLowerCase()
       return _(this.tags)
-        .filter(t => !this.event.tags.includes(t))
-        .filter(t => t.includes(queryTags))
+        .filter(t => !this.event.tags.includes(t.tag))
+        .filter(t => t.tag.includes(queryTags))
+        // .pick('tag')
         .take(5)
         .value()
     },
@@ -416,6 +406,10 @@ i {
 
 #picker {
   max-width: 600px;
+}
+
+#edit_page .el-form-item {
+    display: inline-flex;
 }
 
 .el-upload,
