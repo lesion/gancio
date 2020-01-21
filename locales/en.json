@@ -200,5 +200,12 @@
         "5": "fifth",
         "-1": "last"
     },
-    "about": "\n  <p><a href='https://gancio.org'>Gancio</a> is a shared agenda for local communities.</p>\n  "
+    "about": "\n  <p><a href='https://gancio.org'>Gancio</a> is a shared agenda for local communities.</p>\n  ",
+    "oauth": {
+        "authorization_request": "Application <code>{app}</code> is asking for the following authorization on <code>{instance_name}</code>:",
+        "redirected_to": "After confirmation you will be redirected to the address <code>{url}</code>",
+        "scopes": {
+            "event:write": "Add and edit your events"
+        }
+    }
 }
