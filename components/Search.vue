@@ -1,21 +1,14 @@
 <template lang="pug">
   el-main
-    //- el-switch.mb-1(v-if='$auth.loggedIn'
-    //-   active-text='solo miei'
-    //-   inactive-text='tutti'
-    //-   inactive-color='lightgreen'
-    //-   v-model='onlyMine'
-    //- )
     el-switch.mt-1.mb-2.ml-2(
       v-if='recurrentFilter && settings.allow_recurrent_event'
       :active-text="$t('event.show_recurrent')"
-      v-model='showRecurrent'
-    )
+      v-model='showRecurrent')
+
     el-switch.mt-1.mb-2.ml-2(
       v-if='pastFilter'
       :active-text="$t('event.show_past')"
-      v-model='showPast'
-    )
+      v-model='showPast')
 
     el-autocomplete.mb-1#search.inline-input(:placeholder='$t("common.filter")' prefix-icon='el-icon-search'
       highlight-first-item
