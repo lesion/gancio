@@ -75,7 +75,7 @@ module.exports = {
         endpoints: {
           login: { url: '/auth/login', method: 'post', propertyName: 'token' },
           logout: false,
-          user: false
+          user: { url: '/auth/user', method: 'get', propertyName: false }
         },
         tokenRequired: true,
         tokenType: 'Bearer'
