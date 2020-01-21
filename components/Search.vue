@@ -17,7 +17,7 @@
       v-model='showPast'
     )
 
-    el-autocomplete.mb-1#search.inline-input(placeholder='Cerca' prefix-icon='el-icon-search'
+    el-autocomplete.mb-1#search.inline-input(:placeholder='$t("common.filter")' prefix-icon='el-icon-search'
       highlight-first-item
       v-model='search' :debounce='200'
       :fetch-suggestions='querySearch' clearable
@@ -27,7 +27,7 @@
         i.float-right.el-icon-place(v-if='item.type==="place"')
         i.float-right.el-icon-collection-tag(v-if='item.type==="tag"')
     br
-    el-tag.mr-1(type='success' v-for='f in filter'
+    el-tag.mr-1(type='success' v-for='f in filter' size='small'
       disable-transitions closable :key='f.type + f.id'
       @close='removeFilter(f)') {{f.label}}
 </template>
@@ -49,9 +49,10 @@ export default {
     ...mapState(['tags', 'places', 'filters', 'settings']),
     // TOFIX: optimize
     keywords () {
-      const tags = this.tags.map(t => ({ type: 'tag', label: t, weigth: t.weigth, id: t }))
+      const tags = this.tags.map(t => ({ type: 'tag', label: t.tag, weigth: t.weigth, id: t.tag }))
       const places = this.places.map(p => ({ type: 'place', label: p.name, weigth: p.weigth, id: p.id }))
-      return tags.concat(places).sort((a, b) => b.weigth - a.weigth)
+      const keywords = tags.concat(places).sort((a, b) => b.weigth - a.weigth)
+      return keywords
     },
     showPast: {
       set (value) { this.showPastEvents(value) },
@@ -62,15 +63,7 @@ export default {
       get () { return this.filters.show_recurrent_events }
     },
     filter () {
-    //   set (filters) {
-    //     const tags = filters.filter(f => f[0] === 't').map(t => t.slice(1))
-    //     this.setSearchTags(tags)
-    //     const places = filters.filter(f => f[0] === 'p').map(p => +p.slice(1))
-    //     this.setSearchPlaces(places)
-    //   },
-    //   get () {
       return this.filters.tags.concat(this.filters.places)
-      // }
     }
   },
   methods: {

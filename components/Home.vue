@@ -9,8 +9,8 @@
         Search(past-filter recurrent-filter)
 
     .row.m-0
-      .p-0.col-sm-6.col-lg-4.col-xl-4(v-for='event in events' :key='event.id')
-        a.d-block.d-sm-none.sticky(:id='event.newDay' v-if='event.newDay')
+      .p-0.col-sm-6.col-lg-4.col-xl-4(v-for='event in events' :key='event.id + event.start_datetime')
+        a.d-block.d-sm-none(:id='event.newDay' v-if='event.newDay')
           el-divider {{event.start_datetime|day}}
         Event(
           :id='event.start_datetime'

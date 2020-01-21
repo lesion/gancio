@@ -65,7 +65,7 @@
                     :type='data.row.blocked?"danger":"warning"'
                     @click='toggleUserBlock(data.row)') {{data.row.blocked?$t('admin.unblock'):$t('admin.block')}}
 
-      //- div(v-show='enable_federation')
+      div(v-show='enable_federation')
         el-divider {{$t('common.resources')}}
         el-table(:data='paginatedResources' small :row-style='resourceStyle')
           el-table-column(:label="$t('common.event')")
@@ -86,7 +86,7 @@
 
 </template>
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'Federation',
@@ -141,14 +141,13 @@ export default {
     },
     filteredUsers () {
       if (!this.usersFilter) { return this.users }
-      this.usersFilter = this.usersFilter.toLowerCase()
-      console.error(this.users)
-      return this.users.filter(user => user.name.includes(this.usersFilter) || user.preferredName.includes(this.usersFilter))
+      const usersFilter = this.usersFilter.toLowerCase()
+      return this.users.filter(user => user.name.includes(usersFilter) || user.preferredName.includes(usersFilter))
     },
     filteredInstances () {
       if (!this.instancesFilter) { return this.instances }
-      this.instancesFilter = this.instancesFilter.toLowerCase()
-      return this.instances.filter(instance => instance.name.includes(this.instancesFilter) || instance.domain.includes(this.instancesFilter))
+      const instancesFilter = this.instancesFilter.toLowerCase()
+      return this.instances.filter(instance => instance.name.includes(instancesFilter) || instance.domain.includes(instancesFilter))
     },
     paginatedSelectedUsers () {
       return this.filteredUsers.slice((this.userPage - 1) * this.perPage,

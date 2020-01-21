@@ -69,7 +69,6 @@ export default {
     }
   },
   mounted () {
-    console.error('dentro mounted di editor!')
     this.editor = new Editor({
       onUpdate: _.debounce(({ getHTML }) => this.$emit('input', getHTML()), 300),
       content: this.value,
