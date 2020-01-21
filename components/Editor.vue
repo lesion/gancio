@@ -95,12 +95,9 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang='less'>
 
 .editor {
-  $color-black: #000000;
-  $color-white: #ffffff;
-  $color-grey: #dddddd;
   overflow-y: auto;
   scrollbar-width: thin;
 
@@ -122,7 +119,7 @@ export default {
     top: 0px;
     overflow: hidden;
     z-index: 1;
-    background: $color-grey;
+    background: #dddddd;
     border-radius: 3px;
     padding: 0.1rem;
     transition: opacity 0.2s, visibility 0.2s, left .2s, bottom .2s;
