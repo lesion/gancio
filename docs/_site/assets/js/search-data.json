@@ -15,83 +15,97 @@
   },
   "2": {
     "id": "2",
+    "title": "Changelog",
+    "content": "All notable changes to this project will be documented in this file. unreleased oauth server implementation 0.17.14 [locale] add catalan [fix] fedi outbox 0.17.12 [ui] add admin section on event page in mobile #63 [fix] remove username from users 0.17.11 [refactor] s/fed_user/ap_user [fedi] admin moderation 0.17.10 [refactor] s/comment/resource/ [refactor] remove username field [doc] about and federation 0.17.8 [fix] use thumb in head og:img only 0.17.7 [fix] #58 wrong url for RSS feed 0.17.5 [fedi] comments moderation [fedi] user moderation [fedi] instance moderation [hotfix] cli setup [doc] fix debian upgrade [fix] comment ap_id key length [fix] fediverse signature [fedi] better /inbox /followers response 0.17.0 [feat] add rss link @homepage [ui] add lot of explanation text [ui] show copied messages [admin] show n of unconfirmed users/events [ui] spinner while event image is loading [fedi] add follow me dialog in event [fix] do not add reminders in full ics export [fix] remove spaces from hashtags sent via AP [fix] #56 unconfirmed event sent via ap [fix] localPosts/comments in fediverse stats 0.16.0 [feat] embed event as widget in external website [fedi] instances moderation in admin [fix] toggle event visibility by owner [fedi] manage unboost [refactoring] auth as middleware 0.15.7 [fix] minor 0.15.6 [fix] tags in event 0.15.5 [model] migrations setup [feat] embeddable event widget/iframe 0.15.2 [fix] delete event [fix] wrong html hierarchy 0.15.0 [fix] backtop icon on mobile [fix] webfinger nodeinfo return real node info [fix] register email confirmation [feat] add federation settings (enable comments/boost/like) [feat] new event page layout [feat] could download .ics of event [feat] add cors to feed requests [refactoring] settings middleware, cleaning codebase 0.14.18 [improve] better quality for images [fix] password recovery email [feat] new action field for notification [feat] add DEBUG env variable in docker-compose.yml [style] fixed width in confirmation events table [fix] #38 timezone issue in rss export and using tor… 0.14.17 [fix] image previews from external website [fix] docker-compose postgresql docs [improve] export white logo to fediverse",
+    "url": "https://gancio.org/changelog",
+    "relUrl": "/changelog"
+  },
+  "3": {
+    "id": "3",
     "title": "Configuration",
     "content": "Configuration Main gancio configuration is done with a configuration file. This shoud be a .json or a .js file and could be specified using the --config flag. eg. gancio start --config ./config.json eg. pm2 start gancio start -- --config ~/config.json Title Description BaseURL Server Database Upload path SMTP Admin_email Favicon User locale Secret Default settings Title The title will be in rss feed, in html head and in emails: &quot;title&quot;: &quot;Gancio&quot; Description &quot;description&quot;: &quot;a shared agenda for local communities&quot; BaseURL URL where your site will be accessible (include http or https): &quot;baseurl&quot;: &quot;https://gancio.cisti.org&quot; Server This probably support unix socket too :D &quot;server&quot;: { &quot;host&quot;: &quot;localhost&quot;, &quot;port&quot;: 13120 } Database DB configuration, look here for options. &quot;db&quot;: { &quot;dialect&quot;: &quot;sqlite&quot;, &quot;storage&quot;: &quot;/tmp/db.sqlite&quot; } Upload path Where to save images &quot;upload_path&quot;: &quot;./uploads&quot; SMTP SMTP configuration. Gancio should send emails at following events: the admin should receive emails of anon event (if enabled) to confirm them. the admin should receive emails of registration request (if enabled) to confirm them. an user should receive an email of registration requested. an user should receive an email of confirmed registration. an user should receive a confirmation email when subscribed directly by admin. &quot;smtp&quot;: { &quot;auth&quot;: { &quot;user&quot;: &quot;&quot;, &quot;pass&quot;: &quot;&quot; }, &quot;secure&quot;: true, &quot;host&quot;: &quot;&quot; } Admin_email Email of administrator. Note that email from gancio comes from this email and that the SMTP configuration above should allow to use this address as from. Favicon You could specify another favicon. This is also used as logo (top-left corner): &quot;favicon&quot;: &quot;./favicon.ico&quot; User locale Probably you want to modify some text for your specific community, that’s why we thought the user_locale configuration: you can specify your version of each string of gancio making a directory with your locales inside. For example, let’s say you want to modify the text inside the /about page: mkdir /opt/gancio/user_locale put something like this in /opt/gancio/user_locale/en.js to override the about in english: export default { about: &#39;A new about&#39; } and then point the user_locale configuration to that directory: &quot;user_locale&quot;: &quot;/opt/gancio/user_locale&quot; Watch here for a list of strings you can override. :warning: Note that a restart is needed when you change user_locale’s content. Secret Default settings { &quot;title&quot;: &quot;Gancio&quot;, &quot;description&quot;: &quot;A shared agenda for local communities&quot;, &quot;baseurl&quot;: &quot;http://localhost:13120&quot;, &quot;server&quot;: { &quot;host&quot;: &quot;0.0.0.0&quot;, &quot;port&quot;: 13120 }, &quot;db&quot;: { &quot;dialect&quot;: &quot;sqlite&quot;, &quot;storage&quot;: &quot;/tmp/db.sqlite&quot; }, &quot;upload_path&quot;: &quot;./&quot;, &quot;favicon&quot;: &quot;../dist/favicon.ico&quot;, &quot;smtp&quot;: { &quot;auth&quot;: { &quot;user&quot;: &quot;&quot;, &quot;pass&quot;: &quot;&quot; }, &quot;secure&quot;: true, &quot;host&quot;: &quot;&quot; }, &quot;admin_email&quot;: &quot;&quot;, &quot;secret&quot;: &quot;notsosecret&quot; }",
     "url": "https://gancio.org/config",
     "relUrl": "/config"
   },
-  "3": {
-    "id": "3",
+  "4": {
+    "id": "4",
     "title": "Debian",
     "content": "Debian installation Install Node.js &amp; yarn (from root) curl -sL https://deb.nodesource.com/setup_12.x | bash - apt-get install -y nodejs curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - echo &quot;deb https://dl.yarnpkg.com/debian/ stable main&quot; &gt; /etc/apt/sources.list.d/yarn.list apt-get update &amp;&amp; apt-get install yarn source Install Gancio yarn global add gancio --prod Setup with postgreSQL (optional as you can choose sqlite) apt-get install postgresql # Create the database su postgres -c psql postgres=# create database gancio; postgres=# create user gancio with encrypted password &#39;gancio&#39;; postgres=# grant all privileges on database gancio to gancio; Create a user to run gancio from adduser gancio su gancio Launch interactive setup gancio setup --config config.json Start gancio start --config config.json Point your web browser to http://localhost:13120 or where you selected during setup. Setup nginx as a proxy To deploy gancio in production you should use something like pm2: sudo yarn global add pm2 pm2 start gancio -- --config config.json # Run this command to run your application as a service and automatically restart after a reboot: pm2 startup # read the output! sudo pm2 startup -u gancio Upgrade sudo yarn global add gancio sudo service pm2 restart",
     "url": "https://gancio.org/install/debian",
     "relUrl": "/install/debian"
   },
-  "4": {
-    "id": "4",
+  "5": {
+    "id": "5",
     "title": "Hacking",
     "content": "Development Stack Gancio is built with following technologies: Nuxt.js Vue.js Express Node.js Sequelize Element.ui Testing on your own machine Download source git clone https://framagit.org/les/gancio Install dependencies yarn Hacking yarn dev Please use the issue board and the forum to discuss any modification.",
     "url": "https://gancio.org/dev",
     "relUrl": "/dev"
   },
-  "5": {
-    "id": "5",
+  "6": {
+    "id": "6",
     "title": "Docker",
     "content": "Initial setup Use sqlite Use postgreSQL Start gancio Upgrade Initial setup You do not need to clone the full repo as we distribute gancio via npm. A Dockerfile and a docker-compose.yml are the only files needed. Create a directory where everything related to gancio is stored (db, images, config) mkdir /opt/gancio cd /opt/gancio note that you can choose a different directory. Use sqlite Download docker-compose.yml and Dockerfile wget https://gancio.org/docker/Dockerfile wget https://gancio.org/docker/sqlite/docker-compose.yml Create an empty db and config (this is needed) touch config.json db.sqlite mkdir user_locale Build docker image and launch interactive setup in one step docker-compose build docker-compose run --rm gancio gancio setup --docker --db=sqlite Use postgreSQL Download docker-compose.yml and Dockerfile wget https://gancio.org/docker/Dockerfile wget https://gancio.org/docker/postgres/docker-compose.yml Create an empty configuration (this is needed) touch config.json mkdir user_locale Build docker image and launch interactive setup in one step docker-compose build docker-compose run --rm gancio gancio setup --docker --db=postgres Start gancio Run your container docker-compose up -d Look at logs with docker-compose logs Setup nginx as a proxy Point your web browser to http://localhost:13120 or where you specified during setup and enjoy :tada: You can edit config.json file and restart the container on your needs, see Configuration for more details. Upgrade cd /opt/gancio docker-compose up -d --no-deps --build",
     "url": "https://gancio.org/install/docker",
     "relUrl": "/install/docker"
   },
-  "6": {
-    "id": "6",
+  "7": {
+    "id": "7",
     "title": "Federation",
     "content": "Federation Each instance has only one AP Actor that publishes each event. We are considering the introduction of other “Actor” but they will not be linked to users, rather to places or tags/categories. There are no personal homes with a timeline of people I follow, everyone has a sort of local timeline of the instance, it’s an anti filter-bubble feature. Events are not published with the type Event but with type Note because we wanted to add the possibility to interact with events from mastodon instances (boost / bookmark and “comments” that we call resources because we don’t want it to become a place of debate, but more a place where to keep a historical memory of events, e.g. an audio recording of a talk). When mastodon will support Event object type we will change for sure.",
     "url": "https://gancio.org/federation",
     "relUrl": "/federation"
   },
-  "7": {
-    "id": "7",
+  "8": {
+    "id": "8",
     "title": "Home",
     "content": "Gancio A shared agenda for local communities. Get started now Demo Source Some relevant key features: Focus on content not on people: nowhere on gancio appears the identity of who published the event, not even under a nickname, not even to administrators (except in the db). This is not an ego-friendly platform. Visitors first. We do not want logged user to get more features than random visitor. We do not want users to register, except to publish events and even in this case you can publish an anonymous event. Anonymous events: optionally a visitor can create events without being registered (an administrator has to confirm them) We are not interested in making hits so we export events in many ways, via RSS feeds, via global or individual ics, incorporating lists of events or single event via iframe on other websites. Very easy UI Multidays events support (festival, conferences…) Recurrent events support (each monday, each two monday, each monday and friday, each two saturday, etc.) Filters events for tags or places RSS and ICS export (with filters) embeddable iframe (example) boost / bookmark / comment events from the fediverse! Lot of configurations available (user registration open/close, enable federation, enable recurrent events) License Gancio is distributed by an AGPL-3.0 Licence.",
     "url": "https://gancio.org/",
     "relUrl": "/"
   },
-  "8": {
-    "id": "8",
+  "9": {
+    "id": "9",
     "title": "Install",
     "content": "Install (production) Install on Debian Install using docker Post installation Nginx as a proxy If you wanna hack or run the current develop release take a look at Hacking &amp; contribute",
     "url": "https://gancio.org/install",
     "relUrl": "/install"
   },
-  "9": {
-    "id": "9",
+  "10": {
+    "id": "10",
     "title": "Instances",
     "content": "Instances gancio.cisti.org (Torino, Italy) lapunta.org (Firenze, Italy)",
     "url": "https://gancio.org/instances",
     "relUrl": "/instances"
   },
-  "10": {
-    "id": "10",
+  "11": {
+    "id": "11",
     "title": "Support a new language",
     "content": "Add a new locale watch this commit",
     "url": "https://gancio.org/dev/locales",
     "relUrl": "/dev/locales"
   },
-  "11": {
-    "id": "11",
+  "12": {
+    "id": "12",
     "title": "Migration",
     "content": "If you need to modify the db’s structure while hacking, just change server/api/models/ and remember to create a migration, to understand how things works check the sequelize documentation",
     "url": "https://gancio.org/dev/migration",
     "relUrl": "/dev/migration"
   },
-  "12": {
-    "id": "12",
+  "13": {
+    "id": "13",
     "title": "Nginx",
     "content": "Nginx proxy configuration This is the default nginx configuration for gancio, please modify at least the server_name and ssl_certificate’s path. Note that this does not include a cache configuration and that gancio does not use a cache control at all, if you can help with this task you’re welcome. server { listen 80; listen [::]:80; server_name gancio.cisti.org; root /var/www/letsencrypt; location /.well-known/acme-challenge/ { allow all; } location / { return 301 https://$host$request_uri; } } server { listen 443 ssl http2; listen [::]:443 ssl http2; server_name gancio.cisti.org; ssl_protocols TLSv1.2; ssl_ciphers HIGH:!MEDIUM:!LOW:!aNULL:!NULL:!SHA; ssl_prefer_server_ciphers on; ssl_session_cache shared:SSL:10m; # Uncomment these lines once you acquire a certificate: # ssl_certificate /etc/letsencrypt/live/gancio.cisti.org/fullchain.pem; # ssl_certificate_key /etc/letsencrypt/live/gancio.cisti.org/privkey.pem; keepalive_timeout 70; sendfile on; client_max_body_size 80m; gzip on; gzip_disable &quot;msie6&quot;; gzip_vary on; gzip_proxied any; gzip_comp_level 6; gzip_buffers 16 8k; gzip_http_version 1.1; gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript; add_header Strict-Transport-Security &quot;max-age=31536000&quot;; location / { try_files $uri @proxy; } location @proxy { proxy_set_header Host $host; proxy_set_header X-Forwarded-Proto https; proxy_set_header Proxy &quot;&quot;; proxy_pass_header Server; proxy_pass http://127.0.0.1:13120; proxy_buffering on; proxy_redirect off; proxy_http_version 1.1; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection $connection_upgrade; tcp_nodelay on; } }",
     "url": "https://gancio.org/install/nginx",
     "relUrl": "/install/nginx"
   },
-  "13": {
-    "id": "13",
+  "14": {
+    "id": "14",
+    "title": "OAuth",
+    "content": "OAuth An open standard for token-based authentication and authorization on the Internet. Gancio supports OAuth 2.0, an authorization framework described in RFC 6749 that allows third-party applications to obtain limited access to an HTTP service on behalf of a resource owner, through the use of a standardized authorization flow that generates a client access token to be used with HTTP requests. To obtain an OAuth token for a Gancio instance, make sure that you allow your users to specify the domain they want to connect to before login. Use that domain to acquire a client id/secret and then proceed with normal OAuth 2. Create client Create a new application to obtain OAuth2 credentials. POST /api/client Request parameters client_name string A name for your application redirect_uri string Where the user should be redirected after authorization scopes string Space separated list of scopes. If none is provided, defaults to write as it’s the only supported scope! website string A URL to the homepage of your app Example curl -X POST -d &#39;client_name=Wordpress Event Manager&#39; -d &#39;redirect_uri=https://noblogs.org/&#39; -d &#39;website=https://myapp.example&#39; http://localhost:13120/api/client Returns Application, with client_id and client_secret { &quot;name&quot; : &quot;Wordpress Event Manager&quot;, &quot;scopes&quot; : &quot;write&quot;, &quot;website&quot; : &quot;https://myapp.example&quot;, &quot;client_secret&quot; : &quot;909029fa12797e6bdfb5baf5e379675dfa4e3ad4&quot;, &quot;redirect_uri&quot; : &quot;https://noblogs.org&quot;, &quot;client_id&quot; : &quot;0f377e34b2aaf517f7db534f32d26b0dd938fb6d&quot; } List of scopes write Grant access to add/update events. Authorize a user Displays an authorization form to the user. If approved, it will create and return an authorization code, then redirect to the desired redirect_uri. The authorization code can be used while requesting a token to obtain access to user-level methods. GET /authorize Request parameters response_type string Should be set equal to code redirect_uri string Where the user should be redirected after authorization scope string Should be write client_id string Client ID, obtained during app registration.",
+    "url": "https://gancio.org/oauth",
+    "relUrl": "/oauth"
+  },
+  "15": {
+    "id": "15",
     "title": "Project Structure",
     "content": "Project structure API / backend Client / frontend Federation / ActivityPub API / backend Source code inside server/api/. index.js is basically a routing table pointing each PATH with specified HTTP VERB to a method of a controller. jwt is used to authenticate api request. Express.js is based on middleware, passing each request to a chain of methods. If you come from a PHP background, note that the main difference with Node.js is that the server process is always running and able to manage multiple requests and tasks together (asyncronically) while each php process is tied to a single request. Sequelize is used as ORM. Take a look in /server/api/models. Client / frontend Nuxt.js is used here! Nuxt is basically Vue plus SSR (Server Side Rendering). Client routing in nuxt is automatic (if you don’t need something special), just put your page inside pages and that’s it! Federation / ActivityPub Code inside server/federation.",
     "url": "https://gancio.org/dev/structure",

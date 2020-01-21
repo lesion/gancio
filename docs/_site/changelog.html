@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
-  <title>About - Gancio</title>
+  <title>Changelog - Gancio</title>
 
   
 
@@ -26,17 +26,17 @@
   <script src="https://gancio.org/assets/js/jquery.fancybox.min.js"></script>
 
   <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>About | Gancio</title>
+<title>Changelog | Gancio</title>
 <meta name="generator" content="Jekyll v3.8.6" />
-<meta property="og:title" content="About" />
+<meta property="og:title" content="Changelog" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="A shared agenda for local communities with AP support" />
 <meta property="og:description" content="A shared agenda for local communities with AP support" />
-<link rel="canonical" href="https://gancio.org/about" />
-<meta property="og:url" content="https://gancio.org/about" />
+<link rel="canonical" href="https://gancio.org/changelog" />
+<meta property="og:url" content="https://gancio.org/changelog" />
 <meta property="og:site_name" content="Gancio" />
 <script type="application/ld+json">
-{"@type":"WebPage","url":"https://gancio.org/about","headline":"About","description":"A shared agenda for local communities with AP support","@context":"https://schema.org"}</script>
+{"@type":"WebPage","url":"https://gancio.org/changelog","headline":"Changelog","description":"A shared agenda for local communities with AP support","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 </head>
@@ -248,9 +248,9 @@
     
       
         
-          <li class="navigation-list-item active">
+          <li class="navigation-list-item">
             
-            <a href="https://gancio.org/about" class="navigation-list-link active">About</a>
+            <a href="https://gancio.org/about" class="navigation-list-link">About</a>
             
           </li>
         
@@ -278,9 +278,9 @@
     
       
         
-          <li class="navigation-list-item">
+          <li class="navigation-list-item active">
             
-            <a href="https://gancio.org/changelog" class="navigation-list-link">Changelog</a>
+            <a href="https://gancio.org/changelog" class="navigation-list-link active">Changelog</a>
             
           </li>
         
@@ -324,16 +324,133 @@
           
         
         <div id="main-content" class="page-content" role="main">
-          <h2 id="about">About</h2>
+          <p>All notable changes to this project will be documented in this file.</p>
 
-<p>Gancio was born in Italy from political hacking movements, in particular from the <a href="https://autistici.org/underscore">hacklab underscore</a>.
-We deal not only with technology but also with politics because we believe that technology is not neutral, that the Internet can also become an instrument of oppression, that information and software must be free and that knowledge is not for sale. For us, hacking is study and sharing, it is conscious and unconventional use of tools.</p>
+<p>unreleased</p>
+<ul>
+  <li>oauth server implementation</li>
+</ul>
 
-<p>In 2018 we set up a “radical local server” <a href="https://cisti.org">cisti.org</a> that hosts services explicitly designed for local people / movements / groups / collectives and it is NOT our intention to grow. In fact, we believe that one of the main issues of technology is the scale.</p>
+<h3 id="01714">0.17.14</h3>
+<ul>
+  <li>[locale] add catalan</li>
+  <li>[fix] fedi outbox</li>
+</ul>
 
-<p>We liked very much the idea of the federation and following the example of our brothers and sisters in bologna (the <a href="https://bida.im">bida.im</a> collective) we setup a mastodon instance as a first service.</p>
+<h3 id="01712">0.17.12</h3>
+<ul>
+  <li>[ui] add admin section on event page in mobile #63</li>
+  <li>[fix] remove username from users</li>
+</ul>
 
-<p>The next step was to host a shared calendar, but as we didn’t find anything that would fit, we decided to write it ourselves.</p>
+<h3 id="01711">0.17.11</h3>
+<ul>
+  <li>[refactor] s/fed_user/ap_user</li>
+  <li>[fedi] admin moderation</li>
+</ul>
+
+<h3 id="01710">0.17.10</h3>
+<ul>
+  <li>[refactor] s/comment/resource/</li>
+  <li>[refactor] remove <code class="highlighter-rouge">username</code> field</li>
+  <li>[doc] about and federation</li>
+</ul>
+
+<h3 id="0178">0.17.8</h3>
+<ul>
+  <li>[fix] use thumb in head og:img only</li>
+</ul>
+
+<h3 id="0177">0.17.7</h3>
+<ul>
+  <li>[fix] #58 wrong url for RSS feed</li>
+</ul>
+
+<h3 id="0175">0.17.5</h3>
+<ul>
+  <li>[fedi] comments moderation</li>
+  <li>[fedi] user moderation</li>
+  <li>[fedi] instance moderation</li>
+  <li>[hotfix] cli setup</li>
+  <li>[doc] fix debian upgrade</li>
+  <li>[fix] comment ap_id key length</li>
+  <li>[fix] fediverse signature</li>
+  <li>[fedi] better /inbox /followers response</li>
+</ul>
+
+<h3 id="0170">0.17.0</h3>
+<ul>
+  <li>[feat] add rss link @homepage</li>
+  <li>[ui] add lot of explanation text</li>
+  <li>[ui] show copied messages</li>
+  <li>[admin] show n of unconfirmed users/events</li>
+  <li>[ui] spinner while event image is loading</li>
+  <li>[fedi] add follow me dialog in event</li>
+  <li>[fix] do not add reminders in full ics export</li>
+  <li>[fix] remove spaces from hashtags sent via AP</li>
+  <li>[fix] #56 unconfirmed event sent via ap</li>
+  <li>[fix] localPosts/comments in fediverse stats</li>
+</ul>
+
+<h3 id="0160">0.16.0</h3>
+<ul>
+  <li>[feat] embed event as widget in external website</li>
+  <li>[fedi] instances moderation in admin</li>
+  <li>[fix] toggle event visibility by owner</li>
+  <li>[fedi] manage unboost</li>
+  <li>[refactoring] auth as middleware</li>
+</ul>
+
+<h3 id="0157">0.15.7</h3>
+<ul>
+  <li>[fix] minor</li>
+</ul>
+
+<h3 id="0156">0.15.6</h3>
+<ul>
+  <li>[fix] tags in event</li>
+</ul>
+
+<h3 id="0155">0.15.5</h3>
+<ul>
+  <li>[model] migrations setup</li>
+  <li>[feat] embeddable event widget/iframe</li>
+</ul>
+
+<h3 id="0152">0.15.2</h3>
+<ul>
+  <li>[fix] delete event</li>
+  <li>[fix] wrong html hierarchy</li>
+</ul>
+
+<h3 id="0150">0.15.0</h3>
+<ul>
+  <li>[fix] backtop icon on mobile</li>
+  <li>[fix] webfinger nodeinfo return real node info</li>
+  <li>[fix] register email confirmation</li>
+  <li>[feat] add federation settings (enable comments/boost/like)</li>
+  <li>[feat] new event page layout</li>
+  <li>[feat] could download .ics of event</li>
+  <li>[feat] add cors to feed requests</li>
+  <li>[refactoring] settings middleware, cleaning codebase</li>
+</ul>
+
+<h3 id="01418">0.14.18</h3>
+<ul>
+  <li>[improve] better quality for images</li>
+  <li>[fix] password recovery email</li>
+  <li>[feat] new action field for notification</li>
+  <li>[feat] add DEBUG env variable in docker-compose.yml</li>
+  <li>[style] fixed width in confirmation events table</li>
+  <li>[fix] #38 timezone issue in rss export and using tor…</li>
+</ul>
+
+<h3 id="01417">0.14.17</h3>
+<ul>
+  <li>[fix] image previews from external website</li>
+  <li>[fix] docker-compose postgresql docs</li>
+  <li>[improve] export white logo to fediverse</li>
+</ul>
 
 
           
