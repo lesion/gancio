@@ -36,6 +36,9 @@ export const getters = {
     const search_for_tags = !!state.filters.tags.length
     const search_for_places = !!state.filters.places.length
 
+    const search_place_ids = state.filters.places.map(p => p.id)
+    const search_tags_tags = state.filters.tags.map(t => t.id)
+
     return state.events.filter(e => {
       // filter past events
       if (!state.filters.show_past_events && e.past) { return false }
@@ -44,13 +47,13 @@ export const getters = {
       if (!state.filters.show_recurrent_events && e.recurrent) { return false }
 
       if (search_for_places) {
-        if (find(state.filters.places, p => p.id === e.place.id)) {
+        if (search_place_ids.includes(e.place.id)) {
           return true
         }
       }
 
       if (search_for_tags) {
-        const common_tags = intersection(e.tags, state.filters.tags)
+        const common_tags = intersection(e.tags, search_tags_tags)
         if (common_tags.length > 0) { return true }
       }
 
@@ -158,7 +161,11 @@ export const actions = {
     commit('setSettings', settings)
 
     const start_datetime = moment().startOf('month').startOf('week').unix()
-    const events = await this.$axios.$get(`/event?start=${start_datetime}`)
+    let query = `start=${start_datetime}`
+    if (settings.recurrent_event_visible) {
+      query += '&show_recurrent'
+    }
+    const events = await this.$axios.$get(`/event?${query}`)
     commit('setEvents', events)
 
     const { tags, places } = await this.$axios.$get('/event/meta')
@@ -167,16 +174,15 @@ export const actions = {
     // apply settings
     commit('showRecurrentEvents', settings.allow_recurrent_event && settings.recurrent_event_visible)
   },
-  async updateEvents ({ commit, state }, page) {
-    const month = moment().month()
-    const year = moment().year()
-    commit('setPast', page.year < year || (page.year === year && page.month <= month))
-    // const events = await this.$axios.$get(`/event/${page.month - 1}/${page.year}`)
-    const start_datetime = moment().year(page.year).month(page.month - 1).unix()
+  async updateEvents ({ commit }, page) {
+    const [month, year] = [moment().month(), moment().year()]
+    const in_past = page.year < year || (page.year === year && page.month <= month)
+    // commit('setPast', in_past)
+    const start_datetime = moment().year(page.year).month(page.month - 1).startOf('month').startOf('week').unix()
     const query = `start=${start_datetime}`
-
     const events = await this.$axios.$get(`/event?${query}`)
     commit('setEvents', events)
+    commit('showPastEvents', in_past)
   },
   async updateMeta ({ commit }) {
     const { tags, places } = await this.$axios.$get('/event/meta')
