@@ -65,7 +65,7 @@ Grant access to add/update events.
 Displays an authorization form to the user. If approved, it will create and return an authorization code, then redirect to the desired `redirect_uri`. 
 The authorization code can be used while requesting a token to obtain access to user-level methods.
 
-[![assets/thumbs/oauth_auth.png](assets/thumbs/oauth_auth.png)](assets/oauth_auth.png){: data-fancybox="group" data-caption="OAuth authorization form"}
+[![/assets/thumbs/oauth_auth.png](/assets/thumbs/oauth_auth.png)](/assets/oauth_auth.png){: data-fancybox="group" data-caption="OAuth authorization form"}
 
 
 GET
