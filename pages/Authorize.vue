@@ -13,9 +13,9 @@
       br
       br
       a(:href='authorizeURL')
-        el-button.mr-1(plain type='success') {{$t('common.authorize')}}
+        el-button.mr-1(plain type='success' icon='el-icon-check') {{$t('common.authorize')}}
       a(href='/')
-        el-button.mt-1(plain type='warning') {{$t('common.cancel')}}
+        el-button.mt-1(plain type='danger') {{$t('common.cancel')}}
 </template>
 
 <script>
