@@ -326,7 +326,6 @@ export default {
     top: 0px;
     border-bottom: 1px solid lightgray;
     z-index: 1;
-    background: #fff;
   }
 
   .embedDialog {
