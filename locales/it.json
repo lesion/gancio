@@ -71,7 +71,8 @@
     "authorize": "Autorizza",
     "title": "Titolo",
     "user": "Utente",
-    "filter": "Filtra"
+    "filter": "Filtra",
+    "event": "Evento"
   },
   "login": {
     "description": "Entrando puoi pubblicare nuovi eventi.",
