@@ -1,22 +1,23 @@
-<template lang="pug">
-  el-dialog(:visible='true' @close="$router.push('/')" :close-on-click-modal='false')
-    template(slot='title')
-      h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link>  {{$t('common.recover_password')}}
+<template lang='pug'>
+  el-card.mt-5
+    h4(slot='header')
+      nuxt-link(to='/')
+        img(src='/favicon.ico')
+      span  {{settings.title}} - {{$t('common.authorize')}}
     div(v-if='valid')
       el-input(type='password', :placeholder='$t("common.new_password")' v-model='new_password' prefix-icon='el-icon-lock')
     div(v-else) {{$t('recover.not_valid_code')}}
 
-    template(v-if='valid' slot='footer')
-      el-button(plain type="success" icon='el-icon-send', @click='change_password') {{$t('common.send')}}
+    el-button.mt-2(plain v-if='valid' type="success" icon='el-icon-check'
+      @click='change_password') {{$t('common.send')}}
 </template>
 <script>
 import { Message } from 'element-ui'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Recover',
-  data () {
-    return { new_password: '' }
-  },
+  layout: 'modal',
   async asyncData ({ params, $axios }) {
     const code = params.code
     try {
@@ -26,6 +27,10 @@ export default {
       return { valid: false }
     }
   },
+  data () {
+    return { new_password: '' }
+  },
+  computed: mapState(['settings']),
   methods: {
     async change_password () {
       try {
@@ -44,6 +49,17 @@ export default {
         })
       }
     }
+  },
+  head () {
+    return { title: `${this.settings.title} - Authorize` }
   }
 }
 </script>
+<style lang='less'>
+  h4 img {
+    max-height: 40px;
+    border-radius: 20px;
+    background-color: #333;
+    border: 1px solid #333;
+  }
+</style>
