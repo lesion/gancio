@@ -8,8 +8,18 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
-unreleased
-- oauth server implementation
+### 0.20.0
+- New layout (navbar/footer/visible filters)
+- two month calendar on large display
+- admin could edit title, description, about, favicon & logo directly form admin panel
+- new add event layout => https://demo.gancio.org/add
+- new editor to describe events (bold, italic, link) supported also using copy/paste
+- the editor also support live markdown (try using ### at line start)
+- start oauth2 server implementation (documentation: https://gancio.org/dev/oauth)
+- add fediverse moderation
+- fix embedding an event via iframe
+- images converted in .webp
+- new catalan translation, thanks @fadelkon
 
 ### 0.17.14
 - [locale] add catalan
