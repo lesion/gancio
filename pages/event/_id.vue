@@ -357,6 +357,7 @@ export default {
   .menu {
     border-right: none;
     border-left: 1px solid #e6e6e6;
+    background-color: transparent;
     p {
       margin-left: 10px;
     }

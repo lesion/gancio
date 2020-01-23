@@ -110,9 +110,11 @@ export default {
   },
   methods: {
     ...mapActions(['setSetting']),
-    // resourceStyle ({ row }) {
-    //   if (row.hidden) return 'opacity: 0.5'
-    // },
+    resourceStyle ({ row }) {
+      if (row.hidden) {
+        return { opacity: 0.5 }
+      }
+    },
     async instanceSelected (instance) {
       this.users = await this.$axios.$get(`/instances/${instance.domain}`)
     },
