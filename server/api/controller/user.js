@@ -1,9 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const crypto = require('crypto')
-const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
-const jsonwebtoken = require('jsonwebtoken')
 const sanitizeHtml = require('sanitize-html')
 const config = require('config')
 const mail = require('../mail')
@@ -12,33 +10,6 @@ const settingsController = require('./settings')
 const debug = require('debug')('user:controller')
 
 const userController = {
-  async login (req, res) {
-    // find the user
-    const user = await User.findOne({ where: { email: req.body.email } })
-    if (!user) {
-      res.status(403).json({ success: false, message: 'auth.fail' })
-    } else if (user) {
-      if (!user.is_active) {
-        res.status(403).json({ success: false, message: 'auth.not_confirmed' })
-      // check if password matches
-      } else if (!await user.comparePassword(req.body.password)) {
-        res.status(403).json({ success: false, message: 'auth.fail' })
-      } else {
-        // if user is found and password is right
-        // create a token
-        const accessToken = jsonwebtoken.sign(
-          {
-            id: user.id,
-            email: user.email,
-            scope: [user.is_admin ? 'admin' : 'user']
-          },
-          config.secret
-        )
-        res.json({ token: accessToken })
-      }
-    }
-  },
-
   async delEvent (req, res) {
     const event = await Event.findByPk(req.params.id)
     // check if event is mine (or user is admin)

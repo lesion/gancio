@@ -2,7 +2,7 @@ const express = require('express')
 const multer = require('multer')
 const cors = require('cors')()
 
-const { isAuth, isAdmin } = require('./auth')
+const { isAuth, isAdmin, hasPerm } = require('./auth')
 const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 const userController = require('./controller/user')
@@ -11,7 +11,6 @@ const instanceController = require('./controller/instance')
 const apUserController = require('./controller/ap_user')
 const resourceController = require('./controller/resource')
 const oauthController = require('./controller/oauth')
-const oauth = require('./oauth')
 
 const storage = require('./storage')
 const upload = multer({ storage })
@@ -22,10 +21,9 @@ const api = express.Router()
 api.use(express.urlencoded({ extended: false }))
 api.use(express.json())
 
-// AUTH
-api.post('/auth/login', userController.login)
-api.get('/auth/user', userController.current)
-
+api.get('/user', isAuth, (req, res) => res.json(res.locals.oauth.token.user))
+// api.post('/user/login', userController.login)
+// api.get('/user/logout', userController.logout)
 api.post('/user/recover', userController.forgotPassword)
 api.post('/user/check_recover_code', userController.checkRecoverCode)
 api.post('/user/recover_password', userController.updatePasswordWithRecoverCode)
@@ -35,12 +33,11 @@ api.post('/user/register', userController.register)
 api.post('/user', isAdmin, userController.create)
 
 // update user
-api.put('/user', isAuth, userController.update)
+api.put('/user', hasPerm('user:update'), userController.update)
 
 // delete user
 api.delete('/user/:id', isAdmin, userController.remove)
-
-// api.delete('/user', userController.remove)
+api.delete('/user', hasPerm('user:remove'), userController.remove)
 
 // get all users
 api.get('/users', isAdmin, userController.getAll)
@@ -52,10 +49,10 @@ api.put('/place', isAdmin, eventController.updatePlace)
 api.post('/user/event', upload.single('image'), userController.addEvent)
 
 // update event
-api.put('/user/event', isAuth, upload.single('image'), userController.updateEvent)
+api.put('/user/event', hasPerm('event:write'), upload.single('image'), userController.updateEvent)
 
 // remove event
-api.delete('/user/event/:id', isAuth, userController.delEvent)
+api.delete('/user/event/:id', hasPerm('event:remove'), userController.delEvent)
 
 // get tags/places
 api.get('/event/meta', eventController.getMeta)
@@ -63,18 +60,17 @@ api.get('/event/meta', eventController.getMeta)
 // get unconfirmed events
 api.get('/event/unconfirmed', isAdmin, eventController.getUnconfirmed)
 
-// add event notification
+// add event notification TODO
 api.post('/event/notification', eventController.addNotification)
 api.delete('/event/notification/:code', eventController.delNotification)
 
 api.get('/settings', settingsController.getAllRequest)
 api.post('/settings', isAdmin, settingsController.setRequest)
 api.post('/settings/favicon', isAdmin, multer({ dest: 'thumb/' }).single('favicon'), settingsController.setFavicon)
-// api.get('/settings/user_locale', settingsController.getUserLocale)
 
-// confirm eventtags
-api.get('/event/confirm/:event_id', isAuth, eventController.confirm)
-api.get('/event/unconfirm/:event_id', isAuth, eventController.unconfirm)
+// confirm event
+api.get('/event/confirm/:event_id', hasPerm('event:write'), eventController.confirm)
+api.get('/event/unconfirm/:event_id', hasPerm('event:write'), eventController.unconfirm)
 
 // get event
 api.get('/event/:event_id.:format?', cors, eventController.get)
@@ -94,18 +90,11 @@ api.put('/resources/:resource_id', isAdmin, resourceController.hide)
 api.delete('/resources/:resource_id', isAdmin, resourceController.remove)
 api.get('/resources', isAdmin, resourceController.getAll)
 
-api.get('/clients', isAuth, oauthController.getClients)
-api.get('/client/:client_id', isAuth, oauthController.getClient)
+api.get('/clients', hasPerm('oauth:read'), oauthController.getClients)
+api.get('/client/:client_id', hasPerm('oauth:read'), oauthController.getClient)
 api.post('/client', oauthController.createClient)
 
-// api.get('/verify', oauth.oauthServer.authenticate(), (req, res) => {
-// })
-
-// Handle 404
-api.use((req, res) => {
-  debug('404 Page not found: %s', req.path)
-  res.status(404).send('404: Page not Found')
-})
+api.use((req, res) => res.sendStatus(404))
 
 // Handle 500
 api.use((error, req, res, next) => {

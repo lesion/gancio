@@ -67,15 +67,27 @@ module.exports = {
     prefix: '/api'
   },
   auth: {
+    // localStorage: false, // https://github.com/nuxt-community/auth-module/issues/425
+    cookie: {
+      prefix: 'auth.',
+      expires: 360,
+      maxAge: 60 * 60 * 24 * 30
+    },
     redirect: {
-      login: '/login'
+      login: '../login'
     },
     strategies: {
       local: {
         endpoints: {
-          login: { url: '/auth/login', method: 'post', propertyName: 'token' },
+          login: {
+            url: '../oauth/login',
+            method: 'post',
+            propertyName: 'access_token',
+            withCredentials: true,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+          },
           logout: false,
-          user: { url: '/auth/user', method: 'get', propertyName: false }
+          user: { url: '/user', method: 'get', propertyName: false }
         },
         tokenRequired: true,
         tokenType: 'Bearer'

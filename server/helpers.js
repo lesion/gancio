@@ -1,27 +1,12 @@
 const settingsController = require('./api/controller/settings')
-const { user: User } = require('./api/models')
 const acceptLanguage = require('accept-language')
-const expressJwt = require('express-jwt')
 const moment = require('moment-timezone')
 const config = require('config')
 const pkg = require('../package.json')
 
-const jwt = expressJwt({
-  secret: config.secret,
-  credentialsRequired: false,
-  getToken: function fromHeaderOrQuerystring (req) {
-    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-      return req.headers.authorization.split(' ')[1]
-    } else if (req.cookies && req.cookies['auth._token.local']) {
-      const [prefix, token] = req.cookies['auth._token.local'].split(' ')
-      if (prefix === 'Bearer') { return token }
-    }
-    return null
-  }
-})
-
 module.exports = {
-  async initMiddleware (req, res, next) {
+
+  async initSettings (req, res, next) {
     await settingsController.load()
     // initialize settings
     req.settings = settingsController.settings
@@ -40,12 +25,7 @@ module.exports = {
     req.settings.user_locale = settingsController.user_locale[req.settings.locale]
     moment.locale(req.settings.locale)
     moment.tz.setDefault(req.settings.instance_timezone)
-
-    // TODO: oauth
-    jwt(req, res, async () => {
-      if (!req.user) { return next() }
-      req.user = await User.findOne({ where: { id: req.user.id, is_active: true } })
-      next()
-    })
+    next()
   }
+
 }

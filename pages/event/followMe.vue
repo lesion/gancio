@@ -8,13 +8,12 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { Message } from 'element-ui'
 import debounce from 'lodash/debounce'
 import url from 'url'
 
 export default {
-  
-  name: 'embedEvent',
+
+  name: 'EmbedEvent',
   data () {
     return {
       instance_hostname: '',
@@ -23,20 +22,7 @@ export default {
       get_instance_info: debounce(this.getInstanceInfo, 500)
     }
   },
-  methods: {
-    getInstanceInfo () {
-      const instance_url = `https://${this.instance_hostname}/api/v1/instance`
-      fetch(instance_url)
-        .then( ret => ret.json())
-        .then(ret => {
-          this.instance = ret
-          this.proceed = true
-        })
-        .catch( e => {
-          this.proceed = false
-        })
-    }
-  },
+
   computed: {
     ...mapState(['settings']),
     domain () {
@@ -45,13 +31,25 @@ export default {
     },
     couldGo () {
       // check if is mastodon
-      const instance_url = `https://${this.instance_hostname}/api/v1/instance`
       this.get_instance_info()
       return true
     },
     link () {
       // check if exists
       return `https://${this.instance_hostname}/authorize_interaction?uri=${this.settings.instance_name}@${this.domain}`
+    }
+  },
+  methods: {
+    getInstanceInfo () {
+      const instance_url = `https://${this.instance_hostname}/api/v1/instance`
+      this.$axios.$get(instance_url)
+        .then(ret => {
+          this.instance = ret
+          this.proceed = true
+        })
+        .catch(e => {
+          this.proceed = false
+        })
     }
   }
 }

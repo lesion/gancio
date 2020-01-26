@@ -143,9 +143,6 @@ export const mutations = {
   setLocale (state, locale) {
     state.locale = locale
   },
-  setUserLocale (state, user_locale) {
-    state.user_locale = user_locale
-  },
   setPast (state, in_past) {
     state.in_past = in_past
   }
@@ -154,25 +151,14 @@ export const mutations = {
 export const actions = {
   // this method is called server side only for each request for nuxt
   // we use it to get configuration from db, set locale, etc...
-  async nuxtServerInit ({ commit }, { app, store, req }) {
-    if (req.user) { this.$auth.setUser(req.user) }
+  nuxtServerInit ({ commit }, { req }) {
+    commit('setSettings', req.settings)
 
-    const settings = req.settings
-    commit('setSettings', settings)
-
-    const start_datetime = moment().startOf('month').startOf('week').unix()
-    let query = `start=${start_datetime}`
-    if (settings.recurrent_event_visible) {
-      query += '&show_recurrent'
-    }
-    const events = await this.$axios.$get(`/event?${query}`)
-    commit('setEvents', events)
-
-    const { tags, places } = await this.$axios.$get('/event/meta')
-    store.commit('update', { tags, places })
+    commit('setEvents', req.events)
+    commit('update', req.meta)
 
     // apply settings
-    commit('showRecurrentEvents', settings.allow_recurrent_event && settings.recurrent_event_visible)
+    commit('showRecurrentEvents', req.settings.allow_recurrent_event && req.settings.recurrent_event_visible)
   },
   async updateEvents ({ commit }, page) {
     const [month, year] = [moment().month(), moment().year()]

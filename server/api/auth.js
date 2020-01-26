@@ -1,38 +1,35 @@
-const { Op } = require('sequelize')
-const { user: User } = require('./models')
+const debug = require('debug')('auth')
+const oauth = require('./oauth')
 
 const Auth = {
 
   /** isAuth middleware
    * req.user is filled in server/helper.js#initMiddleware
   */
-  async isAuth (req, res, next) {
-    if (!req.user) {
-      return res
-        .status(403)
-        .send({ message: 'Failed to authenticate token ' })
-    }
-
-    req.user = await User.findOne({
-      where: { id: { [Op.eq]: req.user.id }, is_active: true }
-    })
-    if (!req.user) {
-      return res
-        .status(403)
-        .send({ message: 'Failed to authenticate token ' })
-    }
-    next()
+  isAuth (req, res, next) {
+    return oauth.oauthServer.authenticate()(req, res, next)
   },
 
   /** isAdmin middleware */
   isAdmin (req, res, next) {
-    if (!req.user) {
-      return res
-        .status(403)
-        .send({ message: 'Failed to authenticate token ' })
+    oauth.oauthServer.authenticate()(req, res, () => {
+      req.user = res.locals.oauth.token.user
+      if (req.user.is_admin) {
+        next()
+      } else {
+        res.status(404)
+      }
+    })
+  },
+
+  hasPerm (scope) {
+    return (req, res, next) => {
+      debug(scope, req.path)
+      oauth.oauthServer.authenticate({ scope })(req, res, () => {
+        req.user = res.locals.oauth.token.user
+        next()
+      })
     }
-    if (req.user.is_admin && req.user.is_active) { return next() }
-    return res.status(403).send({ message: 'Admin needed' })
   }
 
 }

@@ -48,7 +48,7 @@ export default {
   data ({ $store }) {
     return {
       title: $store.state.settings.title,
-      description: $store.state.settings.description,
+      description: $store.state.settings.description
     }
   },
   computed: {

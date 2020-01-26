@@ -18,6 +18,7 @@
       el-menu-item(v-if='!$auth.loggedIn' index='/login')
         i.el-icon-user
         span.hidden-xs-only {{$t('common.login')}}
+
       el-submenu(v-if='$auth.loggedIn' index=3)
         template(slot='title')
           i.el-icon-user

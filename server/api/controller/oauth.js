@@ -76,12 +76,12 @@ const oauthController = {
      * */
     async getAccessToken (accessToken) {
       const oauth_token = await OAuthToken.findByPk(accessToken,
-        { include: [User, { model: OAuthClient, as: 'client' }], nest: true, raw: true })
+        { include: [User, { model: OAuthClient, as: 'client' }] })
       return oauth_token
     },
 
     /**
-     * Invoked to retrieve a client using a client id or a client id/client secret combination, depending on the grant type.
+     * Invoked to retrieve a client using a client id or a client id/client secret combination, depend on the grant type.
      */
     async getClient (client_id, client_secret) {
       const client = await OAuthClient.findByPk(client_id, { raw: true })
@@ -89,7 +89,7 @@ const oauthController = {
         return false
       }
 
-      if (client) { client.grants = ['authorization_code'] }
+      if (client) { client.grants = ['authorization_code', 'password'] }
 
       return client
     },
@@ -119,11 +119,32 @@ const oauthController = {
       return oauth_code.destroy()
     },
 
+    async getUser (username, password) {
+      const user = await User.findOne({ where: { email: username } })
+      if (!user || !user.is_active) {
+        return false
+      }
+      // check if password matches
+      if (await user.comparePassword(password)) {
+        return user
+      }
+      return false
+    },
+
     async saveAuthorizationCode (code, client, user) {
       code.userId = user.id
       code.oauthClientId = client.id
       const ret = await OAuthCode.create(code)
       return ret
+    },
+
+    verifyScope (token, scope) {
+      debug(token.user.is_admin)
+      if (token.user.is_admin) {
+        return true
+      } else {
+        return false
+      }
     }
 
   }

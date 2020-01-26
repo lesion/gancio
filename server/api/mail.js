@@ -32,7 +32,7 @@ const mail = {
         updateFiles: false,
         defaultLocale: settings.locale,
         locale: settings.locale,
-        locales: ['it', 'es'] // TOFIX
+        locales: ['it', 'es', 'en', 'ca']
       },
       transport: config.smtp
     })

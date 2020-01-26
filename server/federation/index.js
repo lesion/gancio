@@ -82,4 +82,10 @@ router.get('/u/:name/outbox', Users.outbox)
 router.get('/u/:name/followers', Users.followers)
 router.get('/u/:name', Users.get)
 
+// Handle 404
+router.use((req, res) => {
+  debug('404 Page not found: %s', req.path)
+  res.status(404).send('404: Page not Found')
+})
+
 module.exports = router

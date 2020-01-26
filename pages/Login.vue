@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { Message } from 'element-ui'
 import get from 'lodash/get'
 
@@ -45,10 +45,6 @@ export default {
     this.$refs.email.focus()
   },
   methods: {
-    ...mapActions(['login']),
-    close () {
-      this.$router.replace('/')
-    },
     async forgot () {
       if (!this.email) {
         Message({ message: this.$t('login.insert_email'), showClose: true, type: 'error' })
@@ -65,10 +61,15 @@ export default {
       e.preventDefault()
       try {
         this.loading = true
-        await this.$auth.loginWith('local', { data: { email: this.email, password: this.password } })
+        const data = new URLSearchParams()
+        data.append('username', this.email)
+        data.append('password', this.password)
+        data.append('grant_type', 'password')
+        data.append('client_id', 'self')
+        await this.$auth.loginWith('local', { data })
         this.loading = false
         Message({ message: this.$t('login.ok'), showClose: true, type: 'success' })
-        this.close()
+        this.$router.replace('/')
       } catch (e) {
         Message({ message: this.$t('login.error') + this.$t(get(e, 'response.data.message', e)), showClose: true, type: 'error' })
         this.loading = false

@@ -1,4 +1,4 @@
-const fetch = require('node-fetch')
+const fetch = require('axios')
 // const request = require('request')
 const crypto = require('crypto')
 const config = require('config')
@@ -36,18 +36,22 @@ const Helpers = {
     const signature = signer.sign(privkey)
     const signature_b64 = signature.toString('base64')
     const header = `keyId="${config.baseurl}/federation/u/${settingsController.settings.instance_name}",headers="(request-target) host date",signature="${signature_b64}"`
-    const ret = await fetch(inbox, {
-      headers: {
-        Host: inboxUrl.hostname,
-        Date: d.toUTCString(),
-        Signature: header,
-        'Content-Type': 'application/activity+json; charset=utf-8',
-        Accept: 'application/activity+json, application/json; chartset=utf-8'
-      },
-      method: 'POST',
-      body: JSON.stringify(message)
-})
-    debug('sign %s => %s', ret.status, await ret.text())
+    try {
+      const ret = await fetch(inbox, {
+        headers: {
+          Host: inboxUrl.hostname,
+          Date: d.toUTCString(),
+          Signature: header,
+          'Content-Type': 'application/activity+json; charset=utf-8',
+          Accept: 'application/activity+json, application/json; chartset=utf-8'
+        },
+        method: 'POST',
+        body: JSON.stringify(message)
+      })
+      debug('sign %s => %s', ret.status, await ret.text())
+    } catch (e) {
+      debug('ERROR ', e.toString())
+    }
   },
 
   async sendEvent (event, type = 'Create') {

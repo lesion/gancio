@@ -13,19 +13,11 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { Message, MessageBox } from 'element-ui'
+import { MessageBox } from 'element-ui'
 import url from 'url'
 
 export default {
   name: 'Settings',
-  async asyncData ({ $axios, params, error }) {
-    try {
-      const user = await $axios.$get('/auth/user')
-      return { user }
-    } catch (e) {
-      error({ statusCode: 404, message: 'Something goes wrong...' })
-    }
-  },
   middleware: ['auth'],
   data () {
     return {

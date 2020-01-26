@@ -10,6 +10,7 @@ const oauthServer = new OAuthServer({
   useErrorHandler: true,
   continueMiddleware: false,
   debug: true,
+  requireClientAuthentication: { password: false },
   authenticateHandler: {
     handle (req) {
       if (!req.user) {
@@ -25,8 +26,11 @@ oauth.use(express.json())
 oauth.use(express.urlencoded({ extended: false }))
 
 oauth.post('/token', oauthServer.token())
+oauth.post('/login', oauthServer.token())
 
 oauth.get('/authorize', oauthServer.authorize())
+
+oauth.use((req, res) => res.sendStatus(404))
 
 oauth.use((err, req, res, next) => {
   const error_msg = err.toString()
