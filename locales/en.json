@@ -113,7 +113,7 @@
         "not_found": "Event not found",
         "remove_confirmation": "Are you sure to remove this event?",
         "recurrent": "Recurrent",
-        "show_recurrent": "recurrent events too",
+        "show_recurrent": "recurrent events",
         "show_past": "past too",
         "only_future": "only next events",
         "recurrent_description": "Choose the frequency and select the days",
