@@ -4,12 +4,20 @@ const moment = require('moment')
 const config = require('config')
 const settings = require('./controller/settings')
 const debug = require('debug')('email')
-
-// TOFIX
-moment.locale('it')
+const { Task, TaskManager } = require('../taskManager')
 
 const mail = {
-  send (addresses, template, locals) {
+  send (addresses, template, locals, locale) {
+    const task = new Task({
+      name: 'MAIL',
+      removable: true,
+      method: mail._send,
+      args: [addresses, template, locals, locale]
+    })
+    TaskManager.add(task)
+  },
+
+  _send (addresses, template, locales, locale) {
     debug(`Send ${template} email to ${addresses}`)
     const email = new Email({
       views: { root: path.join(__dirname, '..', 'emails') },
@@ -43,8 +51,8 @@ const mail = {
         bcc: config.admin_email
       },
       locals: {
-        ...locals,
-        locale: 'it', // TOFIX
+        ...locales,
+        locale,
         config: { title: config.title, baseurl: config.baseurl, description: config.description },
         datetime: datetime => moment.unix(datetime).format('ddd, D MMMM HH:mm')
       }

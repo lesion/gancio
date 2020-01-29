@@ -209,7 +209,7 @@ const userController = {
     if (!req.body.password) { delete req.body.password }
 
     if (!user.is_active && req.body.is_active && user.recover_code) {
-      mail.send(user.email, 'confirm', { user, config })
+      mail.send(user.email, 'confirm', { user, config }, req.settings.locale)
     }
 
     await user.update(req.body)
@@ -230,20 +230,10 @@ const userController = {
       req.body.recover_code = crypto.randomBytes(16).toString('hex')
       debug('Register user ', req.body.email)
       const user = await User.create(req.body)
-      try {
-        debug(`Sending registration email to ${user.email}`)
-        mail.send(user.email, 'register', { user, config })
-        mail.send(config.admin_email, 'admin_register', { user, config })
-      } catch (e) {
-        return res.status(400).json(e)
-      }
-      const payload = {
-        id: user.id,
-        email: user.email,
-        scope: [user.is_admin ? 'admin' : 'user']
-      }
-      const token = jwt.sign(payload, config.secret)
-      res.json({ token, user })
+      debug(`Sending registration email to ${user.email}`)
+      mail.send(user.email, 'register', { user, config }, req.settings.locale)
+      mail.send(config.admin_email, 'admin_register', { user, config }, req.settings.locale)
+      res.sendStatus(200)
     } catch (e) {
       res.status(404).json(e)
     }
@@ -254,7 +244,7 @@ const userController = {
       req.body.is_active = true
       req.body.recover_code = crypto.randomBytes(16).toString('hex')
       const user = await User.create(req.body)
-      mail.send(user.email, 'user_confirm', { user, config })
+      mail.send(user.email, 'user_confirm', { user, config }, req.settings.locale)
       res.json(user)
     } catch (e) {
       res.status(404).json(e)
