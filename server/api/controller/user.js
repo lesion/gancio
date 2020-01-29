@@ -37,66 +37,70 @@ const userController = {
    * add event
    */
   async addEvent (req, res) {
+    // req.err comes from multer streaming error
     if (req.err) {
       debug(req.err)
       return res.status(400).json(req.err.toString())
     }
-    const body = req.body
-    const eventDetails = {
-      title: body.title,
-      // remove html tags
-      description: sanitizeHtml(body.description),
-      multidate: body.multidate,
-      start_datetime: body.start_datetime,
-      end_datetime: body.end_datetime,
-      recurrent: body.recurrent,
-      // publish this event only if authenticated
-      is_visible: !!req.user
-    }
 
-    if (req.file) {
-      eventDetails.image_path = req.file.filename
-    }
-
-    const event = await Event.create(eventDetails)
-
-    // create place if needed
-    let place
     try {
-      place = await Place.findOrCreate({
+      const body = req.body
+      const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
+
+      const eventDetails = {
+        title: body.title,
+        // remove html tags
+        description: sanitizeHtml(body.description),
+        multidate: body.multidate,
+        start_datetime: body.start_datetime,
+        end_datetime: body.end_datetime,
+        recurrent,
+        // publish this event only if authenticated
+        is_visible: !!req.user
+      }
+
+      if (req.file) {
+        eventDetails.image_path = req.file.filename
+      }
+
+      const event = await Event.create(eventDetails)
+
+      // create place if needed
+      const place = await Place.findOrCreate({
         where: { name: body.place_name },
         defaults: { address: body.place_address }
       })
         .spread((place, created) => place)
       await event.setPlace(place)
       event.place = place
+
+      // create/assign tags
+      if (body.tags) {
+        await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
+        const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
+        await Promise.all(tags.map(t => t.update({ weigth: Number(t.weigth) + 1 })))
+        await event.addTags(tags)
+        event.tags = tags
+      }
+
+      // associate user to event and reverse
+      if (req.user) {
+        await req.user.addEvent(event)
+        await event.setUser(req.user)
+      }
+
+      // return created event to the client
+      res.json(event)
+
+      // send notification (mastodon/email)
+      // only if user is authenticated
+      if (req.user) {
+        const notifier = require('../../notifier')
+        notifier.notifyEvent('Create', event.id)
+      }
     } catch (e) {
-      debug(e)
-    }
-
-    // create/assign tags
-    if (body.tags) {
-      await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
-      const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
-      await Promise.all(tags.map(t => t.update({ weigth: Number(t.weigth) + 1 })))
-      await event.addTags(tags)
-      event.tags = tags
-    }
-
-    // associate user to event and reverse
-    if (req.user) {
-      await req.user.addEvent(event)
-      await event.setUser(req.user)
-    }
-
-    // return created event to the client
-    res.json(event)
-
-    // send notification (mastodon/email)
-    // only if user is authenticated
-    if (req.user) {
-      const notifier = require('../../notifier')
-      notifier.notifyEvent('Create', event.id)
+      res.sendStatus(400)
+      debug(e.toString())
     }
   },
 
