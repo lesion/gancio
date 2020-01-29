@@ -1,5 +1,4 @@
 const bcrypt = require('bcryptjs')
-const debug = require('debug')('model:user')
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
@@ -38,7 +37,6 @@ module.exports = (sequelize, DataTypes) => {
 
   User.beforeSave(async (user, options) => {
     if (user.changed('password')) {
-      debug('Password for %s modified', user.email)
       const salt = await bcrypt.genSalt(10)
       const hash = await bcrypt.hash(user.password, salt)
       user.password = hash
