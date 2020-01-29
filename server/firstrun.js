@@ -16,7 +16,15 @@ module.exports = {
     const admin = { email: config.admin.email, password: config.admin.password }
     delete config.admin
 
-    config.smtp.secure = true
+    if (config.smtp_type === 'sendmail') {
+      config.smtp = {
+        sendmail: true,
+        newline: 'unix',
+        path: config.smtp.path
+      }
+    }
+    delete config.smtp_type
+    delete config.smtp_need_auth
     config.admin_email = admin.email
     config.db.logging = false
     consola.info(`Save configuration to ${config_path}`)

@@ -133,6 +133,7 @@ async function setupQuestionnaire (is_docker, db) {
           consola.warn(`"${p}" does not exists, trying to create it`)
           try {
             mkdirp.sync(p)
+            consola.info(`${p} succesfully created`)
           } catch (e) {
             console.error(String(e))
             return false
@@ -144,7 +145,7 @@ async function setupQuestionnaire (is_docker, db) {
   }
   questions.push({
     name: 'admin.email',
-    message: `Admin email (a first user with this username will be created)`,
+    message: 'Admin email (a first user with this username will be created, also used as sender address)',
     default: options => {
       const baseurl = new url.URL(options.baseurl)
       return (
@@ -162,23 +163,65 @@ async function setupQuestionnaire (is_docker, db) {
   })
 
   questions.push({
+    name: 'smtp_type',
+    message: 'How should we send the emails ?',
+    type: 'list',
+    choices: ['sendmail', 'SMTP']
+  })
+
+  questions.push({
+    name: 'smtp.path',
+    message: 'Where sendmail binary is ?',
+    default: '/usr/sbin/sendmail',
+    when: answers => answers.smtp_type === 'sendmail',
+    validate: sendmail_path => sendmail_path.length > 0 && fs.existsSync(path.resolve(sendmail_path))
+  })
+
+  questions.push({
     name: 'smtp.host',
     message: 'SMTP Host',
-    validate: notEmpty
+    default: 'localhost',
+    validate: notEmpty,
+    when: answers => answers.smtp_type !== 'sendmail'
+  })
+
+  questions.push({
+    name: 'smtp.secure',
+    message: 'Does SMTP server support TLS?',
+    when: answers => answers.smtp_type !== 'sendmail' && !['localhost', '127.0.0.1'].includes(answers.smtp.host),
+    default: true,
+    type: 'confirm'
+  })
+
+  questions.push({
+    name: 'smtp.port',
+    message: 'SMTP Port',
+    default: answers => ['localhost', '127.0.0.1'].includes(answers.smtp.host) ? 25 : (answers.smtp.secure ? 465 : 587),
+    when: answers => answers.smtp_type !== 'sendmail'
+  })
+
+  questions.push({
+    name: 'smtp_need_auth',
+    message: 'is SMTP authentication needed?',
+    type: 'confirm',
+    default: answers => !['localhost', '127.0.0.1'].includes(answers.smtp.host),
+    when: answers => answers.smtp_type !== 'sendmail'
   })
 
   questions.push({
     name: 'smtp.auth.user',
     message: 'SMTP User',
     validate: notEmpty,
-    default: answers => answers.admin.email
+    default: answers => answers.admin.email,
+    when: answers => answers.smtp_type !== 'sendmail' && answers.smtp_need_auth
   })
 
   questions.push({
     name: 'smtp.auth.pass',
     message: 'SMTP Password',
     type: 'password',
-    validate: notEmpty
+    validate: notEmpty,
+    when: answers => answers.smtp_type !== 'sendmail' && answers.smtp_need_auth
   })
 
   const answers = await inquirer.prompt(questions)
@@ -243,7 +286,7 @@ If this is your first run use 'gancio setup --config <CONFIG_FILE.json>' `)
 }
 
 async function setup (options) {
-  consola.info(`You're going to setup gancio on this machine.`)
+  consola.info('You\'re going to setup gancio on this machine.')
   const config = await setupQuestionnaire(options.docker, options.db)
   await run_migrations(config.db)
   const ret = await firstrun.setup(config, options.config)
@@ -251,8 +294,8 @@ async function setup (options) {
     process.exit(-1)
   }
   if (options.docker) {
-    consola.info(`You can edit ./config.json to modify your configuration.`)
-    consola.info(`Start the server with "docker-compose up"`)
+    consola.info('You can edit ./config.json to modify your configuration.')
+    consola.info('Start the server with "docker-compose up"')
   } else {
     consola.info(
       `You can edit '${options.config}' to modify your configuration. `
