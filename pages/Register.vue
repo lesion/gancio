@@ -42,10 +42,12 @@ export default {
       return !this.user.password || !this.user.email || !this.user.description
     }
   },
+  mounted () {
+    this.$refs.email.focus()
+  },
   methods: {
     close () {
       this.$router.replace('/')
-      this.$emit('close')
     },
     async register () {
       this.loading = true
