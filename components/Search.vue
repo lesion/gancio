@@ -1,11 +1,11 @@
 <template lang="pug">
   el-main
-    el-switch.mt-1.mb-2.ml-2(
+    el-switch.mt-1.mb-2.ml-2.d-block(
       v-if='recurrentFilter && settings.allow_recurrent_event'
       :active-text="$t('event.show_recurrent')"
       v-model='showRecurrent')
 
-    el-switch.mt-1.mb-2.ml-2(
+    el-switch.mt-1.mb-2.ml-2.d-block(
       v-if='pastFilter'
       :active-text="$t('event.show_past')"
       v-model='showPast')
