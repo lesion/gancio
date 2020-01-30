@@ -72,7 +72,9 @@
     "title": "Titolo",
     "user": "Utente",
     "filter": "Filtra",
-    "event": "Evento"
+    "event": "Evento",
+    "pause": "Pausa",
+    "start": "Avvia"
   },
   "login": {
     "description": "Entrando puoi pubblicare nuovi eventi.",

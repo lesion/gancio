@@ -21,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
 
   Notification.associate = function (models) {
     Notification.belongsToMany(models.event, { through: 'event_notification' })
-    // associations can be defined here
   }
   return Notification
 }

@@ -7,6 +7,7 @@ const config = require('config')
 const mail = require('../mail')
 const { user: User, event: Event, tag: Tag, place: Place } = require('../models')
 const settingsController = require('./settings')
+const eventController = require('./event')
 const debug = require('debug')('user:controller')
 
 const userController = {
@@ -89,6 +90,12 @@ const userController = {
         await event.setUser(req.user)
       }
 
+      // create recurrent instances of event if needed
+      // without waiting for the task manager
+      if (event.recurrent) {
+        eventController._createRecurrent()
+      }
+
       // return created event to the client
       res.json(event)
 
@@ -155,7 +162,7 @@ const userController = {
     if (!user) { return res.sendStatus(200) }
 
     user.recover_code = crypto.randomBytes(16).toString('hex')
-    mail.send(user.email, 'recover', { user, config })
+    mail.send(user.email, 'recover', { user, config }, req.settings.locale)
 
     await user.save()
     res.sendStatus(200)

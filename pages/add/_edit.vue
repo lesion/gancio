@@ -135,7 +135,7 @@ export default {
         data.event.type = 'multidate'
       } else if (event.recurrent) {
         data.event.type = 'recurrent'
-        data.event.recurrent = JSON.parse(event.recurrent)
+        data.event.recurrent = event.recurrent
       } else {
         data.event.type = 'normal'
         data.date = moment.unix(event.start_datetime)
@@ -184,15 +184,15 @@ export default {
       if (!dates || !dates.length) { return '' }
 
       const freq = this.event.recurrent.frequency
-      const weekDays = _(dates).map(date => moment(date).format('dddd')).uniq()
+      const weekDays = _(dates).map(date => moment(date).format('dddd')).uniq().value()
       if (freq === '1w' || freq === '2w') {
         return this.$t(`event.recurrent_${freq}_days`, { days: weekDays.join(', ') })
       } else if (freq === '1m' || freq === '2m') {
-        const days = _(dates).map(date => moment(date).date()).uniq()
+        const days = _(dates).map(date => moment(date).date()).uniq().value()
         const n = Math.floor((days[0] - 1) / 7) + 1
         return [
           { label: this.$tc(`event.recurrent_${freq}_days`, days.length, { days }), key: 'ordinal' },
-          { label: this.$tc(`event.recurrent_${freq}_ordinal`, days.length, { n: this.$t(`ordinal.${n}`), days: weekDays.join(', ') }), key: 'weekday' }
+          { label: this.$tc(`event.recurrent_${freq}_ordinal`, days.length, { n, days: weekDays.join(', ') }), key: 'weekday' }
         ]
       } else if (freq === '1d') {
         return this.$t('event.recurrent_each_day')
@@ -231,7 +231,6 @@ export default {
         .filter(e => !e.multidate && (!e.recurrent || this.event.type === 'recurrent'))
         .map(e => ({ key: e.id, dot: { color: this.event.type === 'recurrent' ? 'orange' : 'green' }, dates: moment.unix(e.start_datetime).toDate() })))
 
-      console.error(this.event.type)
       if (this.event.type === 'recurrent' && this.date && this.date.length) {
         attributes.push({
           key: 'recurrent',

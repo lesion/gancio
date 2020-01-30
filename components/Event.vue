@@ -1,5 +1,5 @@
 <template lang="pug">
-  nuxt-link.event(:to='`/event/${link}`' :class='{ withImg: event.image_path }')
+  nuxt-link.event(:to='`/event/${event.id}`' :class='{ withImg: event.image_path }')
 
     //- image
     el-image(v-if='showImage && event.image_path' lazy :src='`/media/thumb/${event.image_path}`')
@@ -24,7 +24,7 @@ import { mapState } from 'vuex'
 
 export default {
   props: {
-    event: Object,
+    event: { type: Object, default: () => ({}) },
     showTags: {
       type: Boolean,
       default: true
@@ -35,16 +35,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['settings']),
-    date () {
-      return new Date(this.event.start_datetime).getDate()
-    },
-    link () {
-      if (this.event.recurrent) {
-        return `${this.event.id}_${this.event.start_datetime}`
-      }
-      return this.event.id
-    }
+    ...mapState(['settings'])
   }
 }
 </script>

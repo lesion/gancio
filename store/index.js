@@ -44,7 +44,7 @@ export const getters = {
       if (!state.filters.show_past_events && e.past) { return false }
 
       // filter recurrent events
-      if (!state.filters.show_recurrent_events && e.recurrent) { return false }
+      if (!state.filters.show_recurrent_events && e.parentId) { return false }
 
       if (search_for_places) {
         if (search_place_ids.includes(e.place.id)) {
@@ -72,7 +72,7 @@ export const getters = {
       const match = false
 
       // filter recurrent events
-      if (!state.filters.show_recurrent_events && e.recurrent) { return false }
+      if (!state.filters.show_recurrent_events && e.parentId) { return false }
 
       if (!match && search_for_places) {
         if (find(state.filters.places, p => p.id === e.place.id)) { return true }

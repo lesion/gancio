@@ -29,8 +29,8 @@
         //- info & actions for desktop
         el-col.menu(:sm='6' :xs='24')
           el-menu.menu.mt-2(router)
-            p <i class='el-icon-time'></i>  <b>{{event|when}}</b> <br/><small>{{event|to}}</small>
-            p <i class='el-icon-map-location'></i>  <b>{{event.place.name}}</b> - {{event.place.address}}
+            p <i class='el-icon-date'></i>  <b>{{event|when}}</b> <br/><small>{{event|to}}</small>
+            p <i class='el-icon-location-outline'></i>  <b>{{event.place.name}}</b> - {{event.place.address}}
             el-divider {{$t('common.actions')}}
             el-menu-item(
               v-clipboard:success='copyLink'
@@ -80,7 +80,7 @@ import EmbedEvent from './embedEvent'
 import FollowMe from './followMe'
 import { Message, MessageBox } from 'element-ui'
 
-import moment from 'dayjs'
+import moment from 'moment-timezone'
 
 export default {
   name: 'Event',
@@ -88,17 +88,8 @@ export default {
   components: { EventAdmin, EmbedEvent, FollowMe },
   async asyncData ({ $axios, params, error, store }) {
     try {
-      const [id, start_datetime] = params.id.split('_')
-      const event = await $axios.$get(`/event/${id}`)
-      event.start_datetime = start_datetime
-        ? Number(start_datetime)
-        : event.start_datetime
-      // const now = new Date()
-      // const events = await $axios.$get(
-      // `/event/${now.getMonth()}/${now.getFullYear()}`
-      // )
-      // store.commit('setEvents', events)
-      return { event, id: Number(id) }
+      const event = await $axios.$get(`/event/${params.id}`)
+      return { event, id: Number(params.id) }
     } catch (e) {
       error({ statusCode: 404, message: 'Event not found' })
     }
@@ -201,9 +192,6 @@ export default {
       if (!event) {
         return false
       }
-      if (event.recurrent) {
-        return `${event.id}_${event.start_datetime}`
-      }
       return event.id
     },
     prev () {
@@ -219,9 +207,6 @@ export default {
       })
       if (!event) {
         return false
-      }
-      if (event.recurrent) {
-        return `${event.id}_${event.start_datetime}`
       }
       return event.id
     },

@@ -1,20 +1,19 @@
 <template lang="pug">
-    nuxt-link.embed_event(:to='`/event/${link}`' target='_blank' :class='{ withImg: event.image_path }')
+  nuxt-link.embed_event(:to='`/event/${id}`' target='_blank' :class='{ withImg: event.image_path }')
 
-      //- image
-      img.float-left(v-if='event.image_path' :src='`/media/thumb/${event.image_path}`')
-      .event-info
+    //- image
+    img.float-left(v-if='event.image_path' :src='`/media/thumb/${event.image_path}`')
+    .event-info
 
-        //-  title
-        .date {{event|when('home')}}<br/>
-        h4 {{event.title}}
+      //-  title
+      .date {{event|when('home')}}<br/>
+      h4 {{event.title}}
 
-        //- date / place
-        .date {{event.place.name}}<br/> {{event.place.address}}
+      //- date / place
+      .date {{event.place.name}}<br/> {{event.place.address}}
 
 </template>
 <script>
-import { mapState } from 'vuex'
 import Event from '../../components/Event'
 
 export default {
@@ -22,10 +21,8 @@ export default {
   components: { Event },
   async asyncData ({ $axios, params, error, store }) {
     try {
-      const [id, start_datetime] = params.event_id.split('_')
-      const event = await $axios.$get(`/event/${id}`)
-      event.start_datetime = start_datetime ? Number(start_datetime) : event.start_datetime
-      return { event, id: Number(id) }
+      const event = await $axios.$get(`/event/${params.event_id}`)
+      return { event, id: Number(params.event_id) }
     } catch (e) {
       error({ statusCode: 404, message: 'Event not found' })
     }
@@ -34,31 +31,10 @@ export default {
     return {
       loading: true
     }
-  },
-  computed: {
-    ...mapState(['settings']),
-    date () {
-      return new Date(this.event.start_datetime).getDate()
-    },
-    link () {
-      if (this.event.recurrent) {
-        return `${this.event.id}_${this.event.start_datetime}`
-      }
-      return this.event.id
-    }
   }
 }
 
-/**
- * <style>
-.embedded_gancio {
-  border: none;
-  width: 450px;
-  height: 220px;
-  float: left;
-}</style>
-<iframe src='http://localhost:13120/embed/1' class='embedded_gancio'></iframe>
- */
+// <iframe src='http://localhost:13120/embed/1' class='embedded_gancio'></iframe>
 </script>
 <style lang='less'>
 .embed_event {
