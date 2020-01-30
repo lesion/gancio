@@ -5,8 +5,7 @@ div
     el-menu-item
       div(v-if='event.is_visible' @click='toggle(false)') <i class='el-icon-open'/> {{$t('common.hide')}}
       div(v-else @click='toggle(false)') <i class='el-icon-turn-off'/> {{$t('common.confirm')}}
-    el-menu-item
-      div(@click='remove(false)') <i class='el-icon-delete'/> {{$t('common.remove')}}
+    el-menu-item(v-if='!event.parentId' @click='remove(false)') <i class='el-icon-delete'/> {{$t('common.remove')}}
     el-menu-item(@click='$router.replace(`/add/${event.id}`)') <i class='el-icon-edit'/> {{$t('common.edit')}}
     div(v-if='event.parentId')
       el-divider  {{$t('event.recurrent')}}
