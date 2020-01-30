@@ -24,8 +24,10 @@ const exportController = {
 
     const events = await Event.findAll({
       order: ['start_datetime'],
+      attributes: { exclude: ['is_visible', 'recurrent', 'createdAt', 'updatedAt', 'likes', 'boost', 'slug', 'userId', 'placeId'] },
       where: {
         is_visible: true,
+        recurrent: { [Op.eq]: null },
         start_datetime: { [Op.gte]: yesterday },
         ...where
       },
