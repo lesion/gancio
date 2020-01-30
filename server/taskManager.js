@@ -39,11 +39,11 @@ class Task {
 
 class TaskManager {
   constructor () {
-    this.interval = 60 * 100
+    this.interval = 60 * 1000
     this.tasks = []
   }
 
-  start (interval = 60 * 100) {
+  start (interval = 60 * 1000) {
     this.interval = interval
     this.timeout = setTimeout(this.tick.bind(this), interval)
   }

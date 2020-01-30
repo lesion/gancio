@@ -341,8 +341,11 @@ export default {
 
   .menu {
     border-right: none;
-    border-left: 1px solid #e6e6e6;
     background-color: transparent;
+  }
+
+  div.menu {
+    border-left: 1px solid #e6e6e6;
     p {
       margin-left: 10px;
     }
@@ -416,7 +419,7 @@ export default {
 @media only screen and (max-width: 768px) {
   #eventDetail {
     .menu {
-      border: 0px;
+      border: 0px !important;
     }
 
     .title {
