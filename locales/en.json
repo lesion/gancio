@@ -71,14 +71,17 @@
         "user": "User",
         "authorize": "Authorize",
         "title": "Title",
-        "filter": "Filter"
+        "filter": "Filter",
+        "event": "Event",
+        "pause": "Pause",
+        "start": "Start"
     },
     "login": {
         "description": "By logging in you can publish new events.",
         "check_email": "Check your mailbox (spam too)",
         "not_registered": "Aren't registered?",
         "forgot_password": "Forgot the password?",
-        "error": "Error: ",
+        "error": "Error during login, check your data.",
         "insert_email": "Insert your email",
         "ok": "Logged in"
     },
