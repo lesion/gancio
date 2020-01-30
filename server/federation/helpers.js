@@ -18,6 +18,10 @@ const Helpers = {
       '/api/statusnet/version.json',
       '/api/gnusocial/version.json',
       '/api/statusnet/config.json',
+      '/status.php',
+      '/siteinfo.json',
+      '/friendika/json',
+      '/friendica/json',
       '/poco'
     ]
     if (urlToIgnore.includes(req.path)) { return res.status(404).send('Not Found') }
