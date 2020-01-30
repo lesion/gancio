@@ -22,9 +22,11 @@ class Task {
       const ret = this.method.apply(this, this.args)
       if (ret && typeof ret.then === 'function') {
         ret.catch(e => debug('TASK ERROR ', this.name, e))
+        return ret
       }
     } catch (e) {
       debug('TASK ERROR ', this.name, e)
+      return Promise.resolve(false)
     }
   }
 }
@@ -65,17 +67,10 @@ class TaskManager {
     if (!this.tasks.length) {
       return
     }
-
-    this.tasks = this.tasks
-      .filter(async task => {
-        if (task.removable) {
-          await task.process()
-        } else {
-          return task
-        }
-      })
-
-    return Promise.all(this.tasks.map(task => task.process()))
+    const removableTasks = this.tasks.filter(t => t.removable).map(t => t.process())
+    this.tasks = this.tasks.filter(t => !t.removable)
+    const tasks = this.tasks.map(t => t.process())
+    return Promise.all(tasks.concat(removableTasks))
   }
 
   async tick () {

@@ -1,14 +1,15 @@
 const mail = require('./api/mail')
-// const bot = require('./api/controller/fediverse')
 const config = require('config')
 const debug = require('debug')('notifier')
 const fediverseHelpers = require('./federation/helpers')
 
-const { event: Event, notification: Notification, event_notification: EventNotification,
+const {
+  event: Event, notification: Notification, event_notification: EventNotification,
   user: User, place: Place, tag: Tag, ap_user: APUser } = require('./api/models')
 const eventController = require('./api/controller/event')
 
 const notifier = {
+
   sendNotification (notification, event) {
     const promises = []
     debug('Send %s notification %s', notification.type, notification.action)
@@ -26,6 +27,7 @@ const notifier = {
     }
     return Promise.all(promises)
   },
+
   async notifyEvent (action, eventId) {
     const event = await Event.findByPk(eventId, {
       include: [Tag, Place, Notification, { model: User }]
@@ -51,6 +53,7 @@ const notifier = {
     })
     return Promise.all(promises)
   },
+
   async  notify () {
     // get all event notification in queue
     const eventNotifications = await EventNotification.findAll({ where: { status: 'new' } })

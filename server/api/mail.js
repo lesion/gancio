@@ -59,7 +59,7 @@ const mail = {
     }
     return email.send(msg)
       .catch(e => {
-        debug('Error sending email =>', e)
+        debug('Error sending email =>', e.toString())
       })
   }
 }
