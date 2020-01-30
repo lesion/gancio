@@ -13,7 +13,8 @@ class Task {
   }
 
   process () {
-    --this.processInNTick
+    debug('PROCESS ', this.name)
+    this.processInNTick--
     if (this.processInNTick > 0) {
       return
     }
@@ -41,11 +42,11 @@ class Task {
 
 class TaskManager {
   constructor () {
-    this.interval = 60 * 1000
+    this.interval = 60 * 100
     this.tasks = []
   }
 
-  start (interval = 60 * 1000) {
+  start (interval = 60 * 100) {
     this.interval = interval
     this.timeout = setTimeout(this.tick.bind(this), interval)
   }
@@ -74,7 +75,6 @@ class TaskManager {
   }
 
   async tick () {
-    debug('TICK')
     await this.process()
     this.timeout = setTimeout(this.tick.bind(this), this.interval)
   }

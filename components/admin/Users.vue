@@ -5,7 +5,7 @@ div
     el-collapse-item
       template(slot='title')
         el-button(type='text' mini size='mini')  <v-icon name='plus'/> {{$t('common.new_user')}}
-      el-form(inline)
+      el-form(inline @submit.native.prevent='create_user')
         el-form-item(:label="$t('common.email')")
           el-input(v-model='new_user.email')
         el-form-item(:label="$t('common.admin')")

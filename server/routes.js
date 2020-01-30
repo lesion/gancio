@@ -4,6 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const api = require('./api')
 const oauth = require('./api/oauth')
+const auth = require('./api/auth')
 const cookieParser = require('cookie-parser')
 const federation = require('./federation')
 const webfinger = require('./federation/webfinger')
@@ -44,6 +45,9 @@ app.use('/federation', federation)
 
 // api!
 app.use(cookieParser())
+
+// fill req.user if request is authenticated
+app.use(auth.fillUser)
 app.use('/api', api)
 app.use('/oauth', oauth)
 

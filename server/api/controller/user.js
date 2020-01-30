@@ -107,7 +107,7 @@ const userController = {
       }
     } catch (e) {
       res.sendStatus(400)
-      debug(e.toString())
+      debug(e)
     }
   },
 

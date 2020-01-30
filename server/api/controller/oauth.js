@@ -6,6 +6,7 @@ const {
   oauth_code: OAuthCode, user: User
 } = require('../models')
 const debug = require('debug')('oauth')
+const moment = require('moment')
 
 async function randomString (len = 16) {
   const bytes = await randomBytes(len * 8)
@@ -19,7 +20,6 @@ const oauthController = {
 
   // create client => http:///gancio.org/oauth#create-client
   async createClient (req, res) {
-    debug('Create client ', req.body.client_name)
     // only write scope is supported
     if (req.body.scopes && req.body.scopes !== 'event:write') {
       return res.status(422).json({ error: 'Invalid scopes' })
@@ -101,13 +101,13 @@ const oauthController = {
 
     async getAuthorizationCode (code) {
       const oauth_code = await OAuthCode.findByPk(code,
-        { include: [User, { type: OAuthClient, as: 'client' }], nest: true, raw: true })
+        { include: [User, { model: OAuthClient, as: 'client' }] })
       return oauth_code
     },
 
     async saveToken (token, client, user) {
       token.userId = user.id
-      token.oauthClientId = client.id
+      token.clientId = client.id
       const oauth_token = await OAuthToken.create(token)
       oauth_token.client = client
       oauth_token.user = user
@@ -115,7 +115,7 @@ const oauthController = {
     },
 
     async revokeAuthorizationCode (code) {
-      const oauth_code = await OAuthCode.findByPk(code)
+      const oauth_code = await OAuthCode.findByPk(code.authorizationCode)
       return oauth_code.destroy()
     },
 
@@ -133,17 +133,19 @@ const oauthController = {
 
     async saveAuthorizationCode (code, client, user) {
       code.userId = user.id
-      code.oauthClientId = client.id
+      code.clientId = client.id
+      code.expiresAt = moment(code.expiresAt).toDate()
       const ret = await OAuthCode.create(code)
       return ret
     },
 
+    // TODO
     verifyScope (token, scope) {
-      debug(token.user.is_admin)
+      debug('VERIFY SCOPE ', scope)
       if (token.user.is_admin) {
         return true
       } else {
-        return false
+        return true
       }
     }
 
