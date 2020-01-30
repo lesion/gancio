@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
-  <title>Internationalization - Gancio</title>
+  <title>Recurrent events - Gancio</title>
 
   
 
@@ -28,17 +28,17 @@
   <script src="https://gancio.org/assets/js/jquery.fancybox.min.js"></script>
 
   <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Internationalization | Gancio</title>
+<title>Recurrent events | Gancio</title>
 <meta name="generator" content="Jekyll v3.8.6" />
-<meta property="og:title" content="Internationalization" />
+<meta property="og:title" content="Recurrent events" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="A shared agenda for local communities with AP support" />
 <meta property="og:description" content="A shared agenda for local communities with AP support" />
-<link rel="canonical" href="https://gancio.org/dev/locales" />
-<meta property="og:url" content="https://gancio.org/dev/locales" />
+<link rel="canonical" href="https://gancio.org/usage/recurrent" />
+<meta property="og:url" content="https://gancio.org/usage/recurrent" />
 <meta property="og:site_name" content="Gancio" />
 <script type="application/ld+json">
-{"@type":"WebPage","headline":"Internationalization","url":"https://gancio.org/dev/locales","description":"A shared agenda for local communities with AP support","@context":"https://schema.org"}</script>
+{"@type":"WebPage","headline":"Recurrent events","url":"https://gancio.org/usage/recurrent","description":"A shared agenda for local communities with AP support","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 </head>
@@ -96,7 +96,7 @@
     
       
         
-          <li class="navigation-list-item">
+          <li class="navigation-list-item active">
             
             <a href="https://gancio.org/usage" class="navigation-list-link">Usage</a>
             
@@ -114,9 +114,9 @@
                   
                 
                   
-                    <li class="navigation-list-item ">
+                    <li class="navigation-list-item  active">
                       
-                      <a href="https://gancio.org/usage/recurrent" class="navigation-list-link">Recurrent events</a>
+                      <a href="https://gancio.org/usage/recurrent" class="navigation-list-link active">Recurrent events</a>
                       
                     </li>
                   
@@ -236,7 +236,7 @@
     
       
         
-          <li class="navigation-list-item active">
+          <li class="navigation-list-item">
             
             <a href="https://gancio.org/dev" class="navigation-list-link">Hacking</a>
             
@@ -282,9 +282,9 @@
                   
                 
                   
-                    <li class="navigation-list-item  active">
+                    <li class="navigation-list-item ">
                       
-                      <a href="https://gancio.org/dev/locales" class="navigation-list-link active">Internationalization</a>
+                      <a href="https://gancio.org/dev/locales" class="navigation-list-link">Internationalization</a>
                       
                     </li>
                   
@@ -398,17 +398,52 @@
             <nav class="breadcrumb-nav">
               <ol class="breadcrumb-nav-list">
                 
-                  <li class="breadcrumb-nav-list-item"><a href="https://gancio.org/dev">Hacking</a></li>
+                  <li class="breadcrumb-nav-list-item"><a href="https://gancio.org/usage">Usage</a></li>
                 
-                <li class="breadcrumb-nav-list-item"><span>Internationalization</span></li>
+                <li class="breadcrumb-nav-list-item"><span>Recurrent events</span></li>
               </ol>
             </nav>
           
         
         <div id="main-content" class="page-content" role="main">
-          <h2 id="internationalization">Internationalization</h2>
+          <p>Gancio supports recurrent events if enabled to (<code class="highlighter-rouge">Admin &gt; Settings</code>,
+disabled by default).</p>
 
-<p>We’re self-hosting an instance of <a href="https://weblate.gancio.org">weblate</a> you can use to help us with translations.</p>
+<p><img src="/assets/usage/enable_recurrent.png" alt="/assets/usage/enable_recurrent.png" /></p>
+
+<p>When enabled, you are able to create recurrent events. Recurrent
+events are not shown by default to visitors, they have to enable it, or you
+can choose to show them by default in admin panel.</p>
+
+<p><img src="/assets/usage/show_recurrent.png" alt="/assets/usage/show_recurrent.png" /></p>
+
+<h2 id="add-a-recurrent-event">Add a recurrent event</h2>
+
+<p>Same as adding a normal event, but you can choose choose the details of
+event recurrence. Choose a frequency first:</p>
+
+<p><img src="/assets/usage/recurrent_details.png" alt="/assets/usage/recurrent_details.png" /></p>
+
+<p>and use the calendar to select one or more days.</p>
+
+<p><img src="/assets/usage/recurrent_details2.png" alt="/assets/usage/recurrent_details2.png" /></p>
+
+<h2 id="how-does-it-work">How does it work</h2>
+
+<p>Behind the scene, gancio ensures that at least the next three occurrences
+of the event are always created. It creates that single events by copying
+the properties of the parent event, so if you modify the parent
+event’s title, or the day of the week, each newly created occurrence will took
+the new title and the new selected day. Old occurrences will be preserved.</p>
+
+<p>You can edit a specific event occurrence with more details, a different
+poster/flyer, a different title/description or decide to completely hide it.</p>
+
+<h2 id="stoppause-a-recurrent-event-eg-during-summer">Stop/pause a recurrent event (eg. during summer)</h2>
+<p>A specific menu is shown viewing an instance of recurrent event…</p>
+
+<p><img src="/assets/usage/recurrent_menu.png" alt="/assets/usage/recurrent_menu.png" /></p>
+
 
 
           

@@ -106,10 +106,24 @@
   },
   "15": {
     "id": "15",
+    "title": "Recurrent events",
+    "content": "Gancio supports recurrent events if enabled to (Admin &gt; Settings, disabled by default). When enabled, you are able to create recurrent events. Recurrent events are not shown by default to visitors, they have to enable it, or you can choose to show them by default in admin panel. Add a recurrent event Same as adding a normal event, but you can choose choose the details of event recurrence. Choose a frequency first: and use the calendar to select one or more days. How does it work Behind the scene, gancio ensures that at least the next three occurrences of the event are always created. It creates that single events by copying the properties of the parent event, so if you modify the parent event’s title, or the day of the week, each newly created occurrence will took the new title and the new selected day. Old occurrences will be preserved. You can edit a specific event occurrence with more details, a different poster/flyer, a different title/description or decide to completely hide it. Stop/pause a recurrent event (eg. during summer) A specific menu is shown viewing an instance of recurrent event…",
+    "url": "https://gancio.org/usage/recurrent",
+    "relUrl": "/usage/recurrent"
+  },
+  "16": {
+    "id": "16",
     "title": "Project Structure",
     "content": "Project structure API / backend Client / frontend Federation / ActivityPub API / backend Source code inside server/api/. index.js is basically a routing table pointing each PATH with specified HTTP VERB to a method of a controller. jwt is used to authenticate api request. Express.js is based on middleware, passing each request to a chain of methods. If you come from a PHP background, note that the main difference with Node.js is that the server process is always running and able to manage multiple requests and tasks together (asyncronically) while each php process is tied to a single request. Sequelize is used as ORM. Take a look in /server/api/models. Client / frontend Nuxt.js is used here! Nuxt is basically Vue plus SSR (Server Side Rendering). Client routing in nuxt is automatic (if you don’t need something special), just put your page inside pages and that’s it! Federation / ActivityPub Code inside server/federation.",
     "url": "https://gancio.org/dev/structure",
     "relUrl": "/dev/structure"
+  },
+  "17": {
+    "id": "17",
+    "title": "Usage",
+    "content": "sadf",
+    "url": "https://gancio.org/usage",
+    "relUrl": "/usage"
   }
   
 }
