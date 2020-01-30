@@ -1,5 +1,5 @@
 const config = require('config')
-const moment = require('moment')
+const moment = require('moment-timezone')
 
 module.exports = (sequelize, DataTypes) => {
   const Event = sequelize.define('event', {
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     image_path: DataTypes.STRING,
     is_visible: DataTypes.BOOLEAN,
     recurrent: DataTypes.JSON,
-    // parent: DataTypes.INTEGER
+    // parent: DataTypes.INTEGER,
     likes: { type: DataTypes.JSON, defaultValue: [] },
     boost: { type: DataTypes.JSON, defaultValue: [] }
   }, {})
@@ -35,6 +35,8 @@ module.exports = (sequelize, DataTypes) => {
     Event.belongsToMany(models.tag, { through: 'event_tags' })
     Event.belongsToMany(models.notification, { through: 'event_notification' })
     Event.hasMany(models.resource)
+    Event.hasMany(Event, { as: 'child', foreignKey: 'parentId' })
+    Event.belongsTo(models.event, { as: 'parent' })
   }
 
   Event.prototype.toNoteAP = function (username, follower = []) {

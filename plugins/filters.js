@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import moment from 'moment-timezone'
-import url from 'url'
 
 export default ({ app, store }) => {
   // set timezone to instance_timezone!!
@@ -28,7 +27,7 @@ export default ({ app, store }) => {
     const normal = `${start.format('dddd, D MMMM (HH:mm-')}${end.format('HH:mm) ')}`
     // recurrent event
     if (event.recurrent && where !== 'home') {
-      const { frequency, days, type } = JSON.parse(event.recurrent)
+      const { frequency, days, type } = event.recurrent
       if (frequency === '1w' || frequency === '2w') {
         const recurrent = app.i18n.tc(`event.recurrent_${frequency}_days`, days.length, { days: days.map(d => moment().day(d - 1).format('dddd')) })
         return `${normal} - ${recurrent}`

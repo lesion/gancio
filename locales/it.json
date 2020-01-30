@@ -72,14 +72,16 @@
     "title": "Titolo",
     "user": "Utente",
     "filter": "Filtra",
-    "event": "Evento"
+    "event": "Evento",
+    "pause": "Pausa",
+    "start": "Avvia"
   },
   "login": {
     "description": "Entrando puoi pubblicare nuovi eventi.",
     "check_email": "Controlla la tua posta (anche lo spam)",
     "not_registered": "Non sei registrata?",
     "forgot_password": "Dimenticato la password?",
-    "error": "Errore: ",
+    "error": "Errore durante il login, controlla i dati.",
     "insert_email": "Inserisci la mail",
     "ok": "Tutto rego"
   },

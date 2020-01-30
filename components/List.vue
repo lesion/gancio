@@ -1,4 +1,4 @@
-<template lang="pug">
+<template lang='pug'>
 div#list
   el-divider(v-if='title') {{title}}
   el-timeline
@@ -6,17 +6,15 @@ div#list
       v-for='event in events'
       :key='`${event.id}_${event.start_datetime}`'
       :timestamp='event|when'
-      placement='top' icon='el-icon-arrow-down' size='large'
-    )
+      placement='top' icon='el-icon-arrow-down' size='large')
 
       div.float-right
         small @{{event.place.name}}
 
-      a(:href='"/event/" + link(event)' target='_blank') {{event.title}}
+      a(:href='`/event/${event.id}`' target='_blank') {{event.title}}
       hr
 </template>
 <script>
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'List',
@@ -50,17 +48,6 @@ export default {
     showDescription: {
       type: Boolean,
       default: true
-    }
-  },
-  data () {
-    return { }
-  },
-  methods: {
-    link (event) {
-      if (event.recurrent) {
-        return `${event.id}_${event.start_datetime}`
-      }
-      return event.id
     }
   }
 }

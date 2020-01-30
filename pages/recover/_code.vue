@@ -3,7 +3,7 @@
     h4(slot='header')
       nuxt-link(to='/')
         img(src='/favicon.ico')
-      span  {{settings.title}} - {{$t('common.authorize')}}
+      span  {{settings.title}} - {{$t('common.recover_password')}}
     div(v-if='valid')
       el-input(type='password', :placeholder='$t("common.new_password")' v-model='new_password' prefix-icon='el-icon-lock')
     div(v-else) {{$t('recover.not_valid_code')}}

@@ -7,6 +7,7 @@ const config = require('config')
 const mail = require('../mail')
 const { user: User, event: Event, tag: Tag, place: Place } = require('../models')
 const settingsController = require('./settings')
+const eventController = require('./event')
 const debug = require('debug')('user:controller')
 
 const userController = {
@@ -37,66 +38,76 @@ const userController = {
    * add event
    */
   async addEvent (req, res) {
+    // req.err comes from multer streaming error
     if (req.err) {
       debug(req.err)
       return res.status(400).json(req.err.toString())
     }
-    const body = req.body
-    const eventDetails = {
-      title: body.title,
-      // remove html tags
-      description: sanitizeHtml(body.description),
-      multidate: body.multidate,
-      start_datetime: body.start_datetime,
-      end_datetime: body.end_datetime,
-      recurrent: body.recurrent,
-      // publish this event only if authenticated
-      is_visible: !!req.user
-    }
 
-    if (req.file) {
-      eventDetails.image_path = req.file.filename
-    }
-
-    const event = await Event.create(eventDetails)
-
-    // create place if needed
-    let place
     try {
-      place = await Place.findOrCreate({
+      const body = req.body
+      const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
+
+      const eventDetails = {
+        title: body.title,
+        // remove html tags
+        description: sanitizeHtml(body.description),
+        multidate: body.multidate,
+        start_datetime: body.start_datetime,
+        end_datetime: body.end_datetime,
+        recurrent,
+        // publish this event only if authenticated
+        is_visible: !!req.user
+      }
+
+      if (req.file) {
+        eventDetails.image_path = req.file.filename
+      }
+
+      const event = await Event.create(eventDetails)
+
+      // create place if needed
+      const place = await Place.findOrCreate({
         where: { name: body.place_name },
         defaults: { address: body.place_address }
       })
         .spread((place, created) => place)
       await event.setPlace(place)
       event.place = place
+
+      // create/assign tags
+      if (body.tags) {
+        await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
+        const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
+        await Promise.all(tags.map(t => t.update({ weigth: Number(t.weigth) + 1 })))
+        await event.addTags(tags)
+        event.tags = tags
+      }
+
+      // associate user to event and reverse
+      if (req.user) {
+        await req.user.addEvent(event)
+        await event.setUser(req.user)
+      }
+
+      // create recurrent instances of event if needed
+      // without waiting for the task manager
+      if (event.recurrent) {
+        eventController._createRecurrent()
+      }
+
+      // return created event to the client
+      res.json(event)
+
+      // send notification (mastodon/email)
+      // only if user is authenticated
+      if (req.user) {
+        const notifier = require('../../notifier')
+        notifier.notifyEvent('Create', event.id)
+      }
     } catch (e) {
-      debug(e)
-    }
-
-    // create/assign tags
-    if (body.tags) {
-      await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
-      const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
-      await Promise.all(tags.map(t => t.update({ weigth: Number(t.weigth) + 1 })))
-      await event.addTags(tags)
-      event.tags = tags
-    }
-
-    // associate user to event and reverse
-    if (req.user) {
-      await req.user.addEvent(event)
-      await event.setUser(req.user)
-    }
-
-    // return created event to the client
-    res.json(event)
-
-    // send notification (mastodon/email)
-    // only if user is authenticated
-    if (req.user) {
-      const notifier = require('../../notifier')
-      notifier.notifyEvent('Create', event.id)
+      res.sendStatus(400)
+      debug(e.toString())
     }
   },
 
@@ -151,7 +162,7 @@ const userController = {
     if (!user) { return res.sendStatus(200) }
 
     user.recover_code = crypto.randomBytes(16).toString('hex')
-    mail.send(user.email, 'recover', { user, config })
+    mail.send(user.email, 'recover', { user, config }, req.settings.locale)
 
     await user.save()
     res.sendStatus(200)
@@ -205,7 +216,7 @@ const userController = {
     if (!req.body.password) { delete req.body.password }
 
     if (!user.is_active && req.body.is_active && user.recover_code) {
-      mail.send(user.email, 'confirm', { user, config })
+      mail.send(user.email, 'confirm', { user, config }, req.settings.locale)
     }
 
     await user.update(req.body)
@@ -226,20 +237,10 @@ const userController = {
       req.body.recover_code = crypto.randomBytes(16).toString('hex')
       debug('Register user ', req.body.email)
       const user = await User.create(req.body)
-      try {
-        debug(`Sending registration email to ${user.email}`)
-        mail.send(user.email, 'register', { user, config })
-        mail.send(config.admin_email, 'admin_register', { user, config })
-      } catch (e) {
-        return res.status(400).json(e)
-      }
-      const payload = {
-        id: user.id,
-        email: user.email,
-        scope: [user.is_admin ? 'admin' : 'user']
-      }
-      const token = jwt.sign(payload, config.secret)
-      res.json({ token, user })
+      debug(`Sending registration email to ${user.email}`)
+      mail.send(user.email, 'register', { user, config }, req.settings.locale)
+      mail.send(config.admin_email, 'admin_register', { user, config }, req.settings.locale)
+      res.sendStatus(200)
     } catch (e) {
       res.status(404).json(e)
     }
@@ -250,7 +251,7 @@ const userController = {
       req.body.is_active = true
       req.body.recover_code = crypto.randomBytes(16).toString('hex')
       const user = await User.create(req.body)
-      mail.send(user.email, 'user_confirm', { user, config })
+      mail.send(user.email, 'user_confirm', { user, config }, req.settings.locale)
       res.json(user)
     } catch (e) {
       res.status(404).json(e)

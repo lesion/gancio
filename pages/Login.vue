@@ -24,7 +24,6 @@
 <script>
 import { mapState } from 'vuex'
 import { Message } from 'element-ui'
-import get from 'lodash/get'
 
 export default {
   name: 'Login',
@@ -71,7 +70,7 @@ export default {
         Message({ message: this.$t('login.ok'), showClose: true, type: 'success' })
         this.$router.replace('/')
       } catch (e) {
-        Message({ message: this.$t('login.error') + this.$t(get(e, 'response.data.message', e)), showClose: true, type: 'error' })
+        Message({ message: this.$t('login.error'), showClose: true, type: 'error' })
         this.loading = false
         return
       }

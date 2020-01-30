@@ -42,18 +42,20 @@ export default {
       return !this.user.password || !this.user.email || !this.user.description
     }
   },
+  mounted () {
+    this.$refs.email.focus()
+  },
   methods: {
     close () {
       this.$router.replace('/')
-      this.$emit('close')
     },
     async register () {
       this.loading = true
       try {
-        const { user } = await this.$axios.$post('/user/register', this.user)
+        await this.$axios.$post('/user/register', this.user)
         Message({
           showClose: true,
-          message: this.$t(`register.${user.is_admin ? 'admin_' : ''}complete`),
+          message: this.$t('register.complete'),
           type: 'success'
         })
         this.close()

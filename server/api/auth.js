@@ -10,6 +10,13 @@ const Auth = {
     return oauth.oauthServer.authenticate()(req, res, next)
   },
 
+  fillUser (req, res, next) {
+    oauth.oauthServer.authenticate()(req, res, () => {
+      req.user = res.locals.oauth.token.user
+      next()
+    })
+  },
+
   /** isAdmin middleware */
   isAdmin (req, res, next) {
     oauth.oauthServer.authenticate()(req, res, () => {

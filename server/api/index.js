@@ -2,7 +2,7 @@ const express = require('express')
 const multer = require('multer')
 const cors = require('cors')()
 
-const { isAuth, isAdmin, hasPerm } = require('./auth')
+const { isAuth, isAdmin, hasPerm, fillUser } = require('./auth')
 const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 const userController = require('./controller/user')
@@ -46,7 +46,7 @@ api.get('/users', isAdmin, userController.getAll)
 api.put('/place', isAdmin, eventController.updatePlace)
 
 // add event
-api.post('/user/event', upload.single('image'), userController.addEvent)
+api.post('/user/event', fillUser, upload.single('image'), userController.addEvent)
 
 // update event
 api.put('/user/event', hasPerm('event:write'), upload.single('image'), userController.updateEvent)
