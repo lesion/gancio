@@ -17,13 +17,13 @@ const helpers = require('./helpers')
 const { startOfMonth, startOfWeek, getUnixTime } = require('date-fns')
 const app = express()
 
+// ignore unimplemented ping url from fediverse
+app.use(spamFilter)
+
 app.use((req, res, next) => {
   debug(req.path)
   next()
 })
-
-// ignore unimplemented ping url from fediverse
-app.use(spamFilter)
 
 // serve favicon and static content
 app.use('/logo.png', express.static('./static/gancio.png'))

@@ -175,13 +175,13 @@ export const actions = {
     commit('update', { tags, places })
   },
   async addEvent ({ commit }, formData) {
-    const event = await this.$axios.$post('/user/event', formData)
+    const event = await this.$axios.$post('/event', formData)
     if (event.user) {
       commit('addEvent', event)
     }
   },
   async updateEvent ({ commit }, formData) {
-    const event = await this.$axios.$put('/user/event', formData)
+    const event = await this.$axios.$put('/event', formData)
     if (event.user) {
       commit('updateEvent', event)
     }

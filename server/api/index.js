@@ -21,9 +21,14 @@ const api = express.Router()
 api.use(express.urlencoded({ extended: false }))
 api.use(express.json())
 
-api.get('/user', isAuth, (req, res) => res.json(res.locals.oauth.token.user))
-// api.post('/user/login', userController.login)
-// api.get('/user/logout', userController.logout)
+/**
+ * Get current authenticated user
+ * @category User
+ * @path /api/user
+ * @method GET
+ */
+api.get('/user', isAuth, (req, res) => res.json(req.user))
+
 api.post('/user/recover', userController.forgotPassword)
 api.post('/user/check_recover_code', userController.checkRecoverCode)
 api.post('/user/recover_password', userController.updatePasswordWithRecoverCode)
@@ -45,14 +50,31 @@ api.get('/users', isAdmin, userController.getAll)
 // update a place (modify address..)
 api.put('/place', isAdmin, eventController.updatePlace)
 
-// add event
-api.post('/user/event', upload.single('image'), userController.addEvent)
+/**
+ * Add a new event
+ * @category Event
+ * @path /event
+ * @method POST
+ * @note `Content-Type` has to be `multipart/form-data` 'cause support image upload
+ * @param {string} title - event's title
+ * @param {string} description - event's description (html accepted and sanitized)
+ * @param {string} place_name - the name of the place
+ * @param {string} [place_address] - the address of the place
+ * @param {integer} start_datetime - start timestamp
+ * @param {integer} multidate - is a multidate event?
+ * @param {array} tags - List of tags
+ * @param {object} [recurrent] - Recurrent event details
+ * @param {string} [recurrent.frequency] - could be `1w` or `2w`
+ * @param {string} [recurrent.type] - not used
+ * @param {array} [recurrent.days] - array of days
+ * @param {image} [image] - Image
+ */
+api.post('/event', upload.single('image'), eventController.add)
 
-// update event
-api.put('/user/event', hasPerm('event:write'), upload.single('image'), userController.updateEvent)
+api.put('/event', hasPerm('event:write'), upload.single('image'), eventController.update)
 
 // remove event
-api.delete('/user/event/:id', hasPerm('event:remove'), userController.delEvent)
+api.delete('/event/:id', hasPerm('event:remove'), eventController.remove)
 
 // get tags/places
 api.get('/event/meta', eventController.getMeta)

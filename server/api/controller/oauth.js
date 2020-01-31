@@ -76,7 +76,7 @@ const oauthController = {
      * */
     async getAccessToken (accessToken) {
       const oauth_token = await OAuthToken.findByPk(accessToken,
-        { include: [User, { model: OAuthClient, as: 'client' }] })
+        { include: [{ model: User, attributes: { exclude: ['password'] } }, { model: OAuthClient, as: 'client' }] })
       return oauth_token
     },
 

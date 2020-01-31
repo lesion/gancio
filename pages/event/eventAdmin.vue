@@ -36,7 +36,7 @@ export default {
           type: 'error'
         })
         const id = parent ? this.event.parentId : this.event.id
-        await this.$axios.delete(`/user/event/${id}`)
+        await this.$axios.delete(`/event/${id}`)
         this.delEvent(Number(id))
         this.$router.replace('/')
       } catch (e) {
