@@ -11,6 +11,7 @@ const instanceController = require('./controller/instance')
 const apUserController = require('./controller/ap_user')
 const resourceController = require('./controller/resource')
 const oauthController = require('./controller/oauth')
+const placeController = require('./controller/place')
 
 const storage = require('./storage')
 const upload = multer({ storage })
@@ -115,6 +116,8 @@ api.get('/resources', isAdmin, resourceController.getAll)
 api.get('/clients', hasPerm('oauth:read'), oauthController.getClients)
 api.get('/client/:client_id', hasPerm('oauth:read'), oauthController.getClient)
 api.post('/client', oauthController.createClient)
+
+api.get('/place/:place_id', placeController._nominatim)
 
 api.use((req, res) => res.sendStatus(404))
 

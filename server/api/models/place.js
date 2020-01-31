@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       index: true,
       allowNull: false
     },
-    address: DataTypes.STRING
+    address: DataTypes.STRING,
+    details: DataTypes.JSON
   }, {})
 
   Place.associate = function (models) {
