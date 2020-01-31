@@ -28,7 +28,7 @@ export default {
   data () {
     return {
       perPage: 10,
-      placePage: 0,
+      placePage: 1,
       place: { name: '', address: '', id: null }
     }
   },
