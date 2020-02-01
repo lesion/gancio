@@ -86,7 +86,6 @@
       el-divider <v-icon name='image'/> {{$t('common.media')}}
 
       div.mb-2 {{$t('event.media_description')}}
-      //- img(:src='mediaUrl' @load='imageLoaded')
       el-upload.text-center(
         action=''
         :limit="1"

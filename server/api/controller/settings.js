@@ -1,4 +1,4 @@
-const { setting: Setting, user: User } = require('../models')
+const { setting: Setting } = require('../models')
 const config = require('config')
 const consola = require('consola')
 const path = require('path')
@@ -100,11 +100,6 @@ const settingsController = {
     }
   },
 
-  // getUserLocale (req, res) {
-  //   // load user locale specified in configuration
-  //   res.json(settingsController.user_locale)
-  // },
-
   async setRequest (req, res) {
     const { key, value, is_secret } = req.body
     const ret = await settingsController.set(key, value, is_secret)
@@ -112,7 +107,9 @@ const settingsController = {
   },
 
   async setFavicon (req, res) {
-    if (!req.file) return res.status(400).send('Mmmmm sould not be here!')
+    if (!req.file) {
+      return res.status(400).send('Mmmmm sould not be here!')
+    }
     await settingsController.set('favicon', path.join(req.file.destination, req.file.filename))
     res.sendStatus(200)
   },
@@ -130,5 +127,4 @@ const settingsController = {
   }
 }
 
-// settingsController.initialize()
 module.exports = settingsController

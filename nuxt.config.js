@@ -70,8 +70,9 @@ module.exports = {
     // localStorage: false, // https://github.com/nuxt-community/auth-module/issues/425
     cookie: {
       prefix: 'auth.',
-      expires: 360,
-      maxAge: 60 * 60 * 24 * 30
+      options: {
+        maxAge: 60 * 60 * 24 * 30 * 12 * 5
+      }
     },
     redirect: {
       login: '../login'
