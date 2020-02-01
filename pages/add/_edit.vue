@@ -96,7 +96,7 @@
         :on-change='uploadedFile'
         :multiple='false')
         i.el-icon-upload
-      //- el-input(v-model='mediaUrl')
+      el-input(v-model='image_url')
       el-button.mt-2.float-right(@click='done' :disabled='!couldProceed') {{edit?$t('common.edit'):$t('common.send')}}
 
 </template>
@@ -171,7 +171,7 @@ export default {
       time: { start: '20:00', end: null },
       edit: false,
       loading: false,
-      mediaUrl: '',
+      image_url: '',
       queryTags: '',
       disableAddress: true
     }
@@ -350,6 +350,11 @@ export default {
       if (this.event.image) {
         formData.append('image', this.event.image.raw, this.event.image.name)
       }
+
+      if (this.image_url) {
+        formData.append('image_url', this.image_url)
+      }
+
       formData.append('title', this.event.title)
       formData.append('place_name', this.event.place.name)
       formData.append('place_address', this.event.place.address)

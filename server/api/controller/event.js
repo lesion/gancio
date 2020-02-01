@@ -5,6 +5,7 @@ const config = require('config')
 const fs = require('fs')
 const { Op } = require('sequelize')
 const _ = require('lodash')
+const helpers = require('../../helpers')
 const { event: Event, resource: Resource, tag: Tag, place: Place, notification: Notification } = require('../models')
 const Sequelize = require('sequelize')
 const exportController = require('./export')
@@ -220,6 +221,15 @@ const eventController = {
 
       if (req.file) {
         eventDetails.image_path = req.file.filename
+      }
+
+      // remote url
+      if (body.image_url) {
+        const img_path = await helpers.downloadImage(body.image_url)
+        if (img_path) {
+          debug('!!!! FINISH !!! ', img_path)
+          eventDetails.image_path = img_path
+        }
       }
 
       const event = await Event.create(eventDetails)
