@@ -6,6 +6,7 @@ gancio_config.json
 config.json
 db.sqlite
 thumb
+docs/_site
 
 ### Node template
 # Logs
