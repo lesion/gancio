@@ -24,8 +24,8 @@ api.use(express.json())
 /**
  * Get current authenticated user
  * @category User
- * @path /api/user
- * @method GET
+ * @name /api/user
+ * @type GET
  */
 api.get('/user', isAuth, (req, res) => res.json(req.user))
 
@@ -53,9 +53,9 @@ api.put('/place', isAdmin, eventController.updatePlace)
 /**
  * Add a new event
  * @category Event
- * @path /event
- * @method POST
- * @note `Content-Type` has to be `multipart/form-data` 'cause support image upload
+ * @name /event
+ * @type POST
+ * @info `Content-Type` has to be `multipart/form-data` 'cause support image upload
  * @param {string} title - event's title
  * @param {string} description - event's description (html accepted and sanitized)
  * @param {string} place_name - the name of the place
