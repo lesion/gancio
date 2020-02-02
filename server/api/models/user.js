@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
     settings: {
       type: DataTypes.JSON,
-      defaultValue: '{}'
+      defaultValue: []
     },
     email: {
       type: DataTypes.STRING,

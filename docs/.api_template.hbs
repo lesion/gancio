@@ -1,20 +1,34 @@
 {{#orphans}}
 
-### {{description}}
+## {{description}}
 
 {{type.names}}
+{{#if_eq type.names 'POST'}}
+{: .label .label-orange}
+{{else}}
 {: .label .label-green}
+{{/if_eq}}
 
-`{{name}}`
-
-{{#each params}}
-| {{name}} | `{{type.names}}` | {{{description}}} |
-{{/each}}
+**`{{name}}`**
 
 {{#each customTags}}
 > {{tag}} "{{tag}}"
 > {{{value}}}
 {{/each}}
 
+
+{{#if params}}
+**Params**
+
+{{#each params}}
+| {{name}} | `{{type.names}}` | {{{description}}} |
+{{/each}}
+{{/if}}
+
+
+{{#each examples}}
+{{{this}}}
+{{/each}}
+---
 {{/orphans}}
 
