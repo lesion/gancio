@@ -1,0 +1,20 @@
+{{#orphans}}
+
+### {{description}}
+
+{{type.names}}
+{: .label .label-green}
+
+`{{name}}`
+
+{{#each params}}
+| {{name}} | `{{type.names}}` | {{{description}}} |
+{{/each}}
+
+{{#each customTags}}
+> {{tag}} "{{tag}}"
+> {{{value}}}
+{{/each}}
+
+{{/orphans}}
+
