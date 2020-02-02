@@ -158,7 +158,7 @@
         "enable_resources": "Enable resources",
         "enable_resources_help": "Allows you to add resources to the event from the fediverse",
         "hide_boost_bookmark": "Hides boost/bookmarks",
-        "hide_boost_bookmark_help": "Hides the small icons that show the number of boosts / bookmarks coming from the fediverse",
+        "hide_boost_bookmark_help": "Hides the small icons that show the number of boosts and bookmarks coming from the fediverse",
         "block": "Block",
         "unblock": "Unblock",
         "user_add_help": "We will send an email to the new user with instructions to confirm the subscription and choose a password",
