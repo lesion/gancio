@@ -40,13 +40,23 @@ module.exports = {
   },
 
   async remove (req, res) {
-    const resource = await Resource.findOne({ where: { activitypub_id: req.body.object.id } })
+    const resource = await Resource.findOne({
+      where: { activitypub_id: req.body.object.id },
+      include: [{ model: APUser, required: false, attributes: ['ap_id'] }]
+    })
     if (!resource) {
       debug('Comment %s not found', req.body.object.id)
       return res.status(404).send('Not found')
     }
-    await resource.destroy()
-    debug('Comment %s removed!', req.body.object.id)
-    return res.sendStatus(201)
+    // check if fedi_user that requested resource removal
+    // is the same that created the resource at first place
+    debug(res.fedi_user.ap_id, resource.ap_user.ap_id)
+    if (res.fedi_user.ap_id === resource.ap_user.id) {
+      await resource.destroy()
+      debug('Comment %s removed!', req.body.object.id)
+      res.sendStatus(201)
+    } else {
+      res.sendStatus(403)
+    }
   }
 }
