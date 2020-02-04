@@ -15,7 +15,7 @@
         EmbedEvent(:event='event')
 
       el-row
-        el-col(:sm='18' :xs="24")
+        el-col.p-2(:sm='18' :xs="24")
 
           //- event image
           el-image.main_image.mb-3(:src='imgPath' v-if='event.image_path' fit='contain')
@@ -51,26 +51,37 @@
           small.mr-3 🔖 {{event.likes.length}}
           small ✊ {{event.boost.length}}<br/>
 
-        strong(v-if='settings.enable_resources') {{$tc('common.resources', event.resources.length)}} -
-        small {{$t('event.interact_with_me_at')}}
-          el-button(type='text' size='mini' @click='showFollowMe=true') @{{settings.instance_name}}@{{settings.baseurl|url2host}}
+        p.p-2
+          el-button(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
+          span(v-if='settings.enable_resources')  -  {{$tc('common.resources', event.resources.length)}}
 
-        el-dialog.followDialog(:visible.sync='showFollowMe')
+        el-dialog.followDialog(:visible.sync='showFollowMe' destroy-on-close)
           h4(slot='title') {{$t('common.follow_me_title')}}
           FollowMe
 
-        .card-header(v-if='settings.enable_resources' v-for='resource in event.resources' :key='resource.id' :class='{disabled: resource.hidden}')
-          a.float-right(:href='resource.data.url')
-            small {{resource.data.published|datetime}}
+        el-dialog.showResource#resourceDialog(:visible.sync='showResources' fullscreen
+          width='95vw'
+          destroy-on-close
+          @keydown.native.right='$refs.carousel.next()'
+          @keydown.native.left='$refs.carousel.prev()')
+          el-carousel(:interval='10000' ref='carousel' arrow='always')
+            el-carousel-item(v-for='attachment in selectedResource.data.attachment' :key='attachment.url')
+              el-image(:src='attachment.url')
+        el-card.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources' :key='resource.id' :class='{disabled: resource.hidden}')
+          span
+            el-dropdown.mr-2(v-if='$auth.user && $auth.user.is_admin')
+              el-button(circle icon='el-icon-more' size='mini')
+              el-dropdown-menu(slot='dropdown')
+                el-dropdown-item(v-if='!resource.hidden' icon='el-icon-remove' @click.native='hideResource(resource, true)') {{$t('admin.hide_resource')}}
+                el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(resource, false)') {{$t('admin.show_resource')}}
+                el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(resource)') {{$t('admin.delete_resource')}}
+                el-dropdown-item(icon='el-icon-lock' @click.native='blockUser(resource)') {{$t('admin.block_user')}}
+            a(:href='resource.data.url || resource.data.context')
+              small {{resource.data.published|datetime}}
+
           div.mt-1(v-html='resource_filter(resource.data.content)')
-          img(v-for='img in resource.data.media_attachments' :src='img.url')
-          el-dropdown
-            el-button(type="primary" icon="el-icon-arrow-down" size='mini') {{$t('common.moderation')}}
-            el-dropdown-menu(slot='dropdown')
-              el-dropdown-item(v-if='!resource.hidden' icon='el-icon-remove' @click.native='hideResource(resource, true)') {{$t('admin.hide_resource')}}
-              el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(resource, false)') {{$t('admin.show_resource')}}
-              el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(resource)') {{$t('admin.delete_resource')}}
-              el-dropdown-item(icon='el-icon-lock' @click.native='blockUser(resource)') {{$t('admin.block_user')}}
+          span.previewImage(@click='showResource(resource)')
+            img(v-for='img in resource.data.attachment' :src='img.url')
 
 </template>
 <script>
@@ -97,7 +108,9 @@ export default {
   data () {
     return {
       showEmbed: false,
-      showFollowMe: false
+      showFollowMe: false,
+      showResources: false,
+      selectedResource: { data: { attachment: [] } }
     }
   },
   head () {
@@ -230,6 +243,11 @@ export default {
     }
   },
   methods: {
+    showResource (resource) {
+      this.showResources = true
+      this.selectedResource = resource
+      document.getElementById('resourceDialog').focus()
+    },
     async remove () {
       try {
         await MessageBox.confirm(this.$t('event.remove_confirmation'), this.$t('common.confirm'), {
@@ -262,23 +280,32 @@ export default {
       resource.hidden = hidden
     },
     async blockUser (resource) {
-      await this.$axios.post('/instances/toggle_user_block', { user_id: resource.apUserApId })
-      Message({ message: this.$t('admin.user_blocked', { user: resource.apUserApId }), type: 'success', showClose: true })
-    },
-    deleteResource (resource) {
-      MessageBox.confirm(this.$t('admin.delete_resource_confirm'),
-        this.$t('common.confirm'), {
+      try {
+        await MessageBox.confirm(this.$t('admin.user_block_confirm'), {
           confirmButtonText: this.$t('common.ok'),
           cancelButtonText: this.$t('common.cancel'),
           type: 'error'
-        }).then(async () => {
+        })
+        await this.$axios.post('/instances/toggle_user_block', { ap_id: resource.ap_user.ap_id })
+        Message({ message: this.$t('admin.user_blocked', { user: resource.ap_user.ap_id }), type: 'success', showClose: true })
+      } catch (e) { }
+    },
+    async deleteResource (resource) {
+      try {
+        await MessageBox.confirm(this.$t('admin.delete_resource_confirm'),
+          this.$t('common.confirm'), {
+            confirmButtonText: this.$t('common.ok'),
+            cancelButtonText: this.$t('common.cancel'),
+            type: 'error'
+          })
         await this.$axios.delete(`/resources/${resource.id}`)
         this.event.resources = this.event.resources.filter(r => r.id !== resource.id)
-      })
+      } catch (e) { }
     },
     copyLink () {
       Message({ message: this.$t('common.copied'), type: 'success', showClose: true })
     },
+    // TOFIX
     resource_filter (value) {
       return value.replace(
         /<a.*href="([^">]+).*>(?:.(?!<\/a>))*.<\/a>/,
@@ -327,7 +354,7 @@ export default {
       max-width: 600px;
       width: 100%;
       .el-dialog__body {
-        word-break: normal;
+        word-break: normal !important;
       }
     }
   }
@@ -411,6 +438,20 @@ export default {
     }
     .disabled {
       opacity: 0.5;
+    }
+    .previewImage {
+      display: flex;
+      flex-flow: wrap;
+      justify-content: space-evenly;
+      img {
+        margin-left: 5px;
+        margin-top: 5px;
+        object-fit: cover;
+        min-height: 100px;
+        max-width: 45%;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
     }
   }
   .nextprev {
