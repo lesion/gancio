@@ -46,6 +46,7 @@ import 'vue-awesome/icons/heading'
 import 'vue-awesome/icons/link'
 import 'vue-awesome/icons/hands-helping'
 import 'vue-awesome/icons/question'
+import 'vue-awesome/icons/vector-square'
 
 import Icon from 'vue-awesome/components/Icon'
 

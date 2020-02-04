@@ -166,7 +166,7 @@ async function setupQuestionnaire (is_docker, db) {
     name: 'smtp_type',
     message: 'How should we send the emails ?',
     type: 'list',
-    choices: ['sendmail', 'SMTP']
+    choices: ['SMTP', 'sendmail']
   })
 
   questions.push({
