@@ -66,10 +66,11 @@ import Users from '../components/admin/Users'
 import Places from '../components/admin/Places'
 import Settings from '../components/admin/Settings'
 import Federation from '../components/admin/Federation'
+import Moderation from '../components/admin/Moderation'
 
 export default {
   name: 'Admin',
-  components: { Users, Places, Settings, Federation },
+  components: { Users, Places, Settings, Federation, Moderation },
   middleware: ['auth'],
   data () {
     return {
