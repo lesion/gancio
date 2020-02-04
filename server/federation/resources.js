@@ -1,39 +1,44 @@
-const { event: Event, resource: Resource } = require('../api/models')
+const { event: Event, resource: Resource, ap_user: APUser } = require('../api/models')
 const debug = require('debug')('fediverse:resource')
 const sanitize = require('sanitize-html')
 module.exports = {
 
+  // create a resource from AP Note
   async create (req, res) {
     const body = req.body
 
     // search for related event
+    let event
+
+    // it's an answer
     const inReplyTo = body.object.inReplyTo
-    const match = inReplyTo.match('.*/federation/m/(.*)')
-    if (!match || match.length < 2) {
-      debug('Resource not found %s', inReplyTo)
-      return res.status(404).send('Event not found!')
+
+    if (inReplyTo) {
+      // .. to an event ?
+      const match = inReplyTo && inReplyTo.match('.*/federation/m/(.*)')
+      debug('Event reply => ', inReplyTo)
+      if (match) {
+        event = await Event.findByPk(Number(match[1]))
+      } else {
+        // in reply to another resource...
+        const resource = await Resource.findOne({ where: { activitypub_id: inReplyTo }, include: [Event] })
+        event = resource && resource.event
+      }
     }
 
-    let event = await Event.findByPk(Number(match[1]))
-    debug('Resource coming for %s', inReplyTo)
-    if (!event) {
-      // in reply to another resource...
-      const resource = await Resource.findOne({ where: { activitypub_id: inReplyTo }, include: [Event] })
-      if (!resource) { return res.status(404).send('Not found') }
-      event = resource.event
-    }
-    debug('resource from %s to "%s"', req.body.actor, event.title)
+    debug('resource from %s to "%s"', req.body.actor, event && event.title)
 
+    // TODO should probably map links here
     // clean resource
     body.object.content = sanitize(body.object.content, {
-      nonTextTags: ['span', 'style', 'script', 'textarea', 'noscript']
+      nonTextTags: ['style', 'script', 'textarea', 'noscript']
     })
 
     await Resource.create({
       activitypub_id: body.object.id,
       apUserApId: req.body.actor,
       data: body.object,
-      eventId: event.id
+      eventId: event && event.id
     })
 
     res.sendStatus(201)
