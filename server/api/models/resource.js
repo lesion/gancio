@@ -1,5 +1,4 @@
 module.exports = (sequelize, DataTypes) => {
-
   const Resource = sequelize.define('resource', {
     activitypub_id: {
       type: DataTypes.STRING,

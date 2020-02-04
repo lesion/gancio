@@ -13,7 +13,6 @@ class Task {
   }
 
   process () {
-    debug('PROCESS ', this.name)
     this.processInNTick--
     if (this.processInNTick > 0) {
       return

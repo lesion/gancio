@@ -5,7 +5,14 @@ const config = require('config')
 const fs = require('fs')
 const { Op } = require('sequelize')
 const _ = require('lodash')
-const { event: Event, resource: Resource, tag: Tag, place: Place, notification: Notification } = require('../models')
+const {
+  event: Event,
+  resource: Resource,
+  tag: Tag,
+  place: Place,
+  notification: Notification,
+  ap_user: APUser
+} = require('../models')
 const Sequelize = require('sequelize')
 const exportController = require('./export')
 const sanitizeHtml = require('sanitize-html')
@@ -85,12 +92,18 @@ const eventController = {
     try {
       event = await Event.findByPk(id, {
         attributes: {
-          exclude: ['createdAt', 'updatedAt']
+          exclude: ['createdAt', 'updatedAt', 'placeId']
         },
         include: [
-          { model: Tag, attributes: ['tag', 'weigth'], through: { attributes: [] } },
+          { model: Tag, required: false, attributes: ['tag', 'weigth'], through: { attributes: [] } },
           { model: Place, attributes: ['name', 'address'] },
-          { model: Resource, where: !is_admin && { hidden: false }, required: false },
+          {
+            model: Resource,
+            where: !is_admin && { hidden: false },
+            include: [{ model: APUser, required: false, attributes: ['object', 'ap_id'] }],
+            required: false,
+            attributes: ['id', 'activitypub_id', 'data', 'hidden']
+          },
           { model: Event, required: false, as: 'parent' }
         ],
         order: [[Resource, 'id', 'DESC']]
@@ -98,7 +111,6 @@ const eventController = {
     } catch (e) {
       return res.sendStatus(400)
     }
-
     if (event && (event.is_visible || is_admin)) {
       event = event.toJSON()
       event.tags = event.tags.map(t => t.tag)

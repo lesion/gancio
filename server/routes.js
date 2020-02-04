@@ -21,7 +21,7 @@ const app = express()
 app.use(spamFilter)
 
 app.use((req, res, next) => {
-  debug(req.path)
+  debug(req.method, req.path)
   next()
 })
 

@@ -1,15 +1,9 @@
-const Sequelize = require('sequelize')
 const { ap_user: APUser, instance: Instance, resource: Resource } = require('../models')
 
 const instancesController = {
   async getAll (req, res) {
-    const instances = await Instance.findAll({
-      attributes: {
-        include: [[Sequelize.fn('count', Sequelize.col('domain')), 'users']]
-      },
-      group: ['domain'],
-      include: [{ model: APUser, attributes: [] }]
-    })
+    const instances = await Instance.findAll()
+
     return res.json(instances)
   },
 

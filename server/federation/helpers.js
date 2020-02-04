@@ -1,4 +1,4 @@
-const fetch = require('axios')
+const axios = require('axios')
 // const request = require('request')
 const crypto = require('crypto')
 const config = require('config')
@@ -41,7 +41,7 @@ const Helpers = {
     const signature_b64 = signature.toString('base64')
     const header = `keyId="${config.baseurl}/federation/u/${settingsController.settings.instance_name}",headers="(request-target) host date",signature="${signature_b64}"`
     try {
-      const ret = await fetch(inbox, {
+      const ret = await axios(inbox, {
         headers: {
           Host: inboxUrl.hostname,
           Date: d.toUTCString(),
@@ -49,10 +49,10 @@ const Helpers = {
           'Content-Type': 'application/activity+json; charset=utf-8',
           Accept: 'application/activity+json, application/json; chartset=utf-8'
         },
-        method: 'POST',
-        body: JSON.stringify(message)
+        method: 'post',
+        data: JSON.stringify(message)
       })
-      debug('sign %s => %s', ret.status, await ret.text())
+      debug('sign %s => %s', ret.status, ret.data)
     } catch (e) {
       debug('ERROR ', e.toString())
     }
@@ -77,11 +77,9 @@ const Helpers = {
       const body = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
         type,
-        to: ['https://www.w3.org/ns/activitystreams#Public'],
-        cc: [`${config.baseurl}/federation/u/${settingsController.settings.instance_name}/followers`, ...recipients[sharedInbox]],
-        // cc: recipients[sharedInbox],
+        to: recipients[sharedInbox],
+        cc: ['https://www.w3.org/ns/activitystreams#Public', `${config.baseurl}/federation/u/${settingsController.settings.instance_name}/followers`],
         actor: `${config.baseurl}/federation/u/${settingsController.settings.instance_name}`,
-        // object: event.toNoteAP(instanceAdmin.username, [`${config.baseurl}/federation/u/${instanceAdmin.username}/followers`, ...recipients[sharedInbox]])
         object: event.toNoteAP(settingsController.settings.instance_name, recipients[sharedInbox])
       }
       body['@context'] = [
@@ -106,13 +104,13 @@ const Helpers = {
       }
     }
 
-    fedi_user = await fetch(URL, { headers: { Accept: 'application/jrd+json, application/json' } })
+    fedi_user = await axios.get(URL, { headers: { Accept: 'application/jrd+json, application/json' } })
       .then(res => {
-        if (!res.ok) {
+        if (res.status !== 200) {
           debug('[ERR] Actor %s => %s', URL, res.statusText)
           return false
         }
-        return res.json()
+        return res.data
       })
 
     if (fedi_user) {
@@ -132,8 +130,8 @@ const Helpers = {
       if (instance) { return instance }
     }
 
-    instance = await fetch(`${instance_url}/api/v1/instance`, { headers: { Accept: 'application/json' } })
-      .then(res => res.json())
+    instance = await axios.$get(`${instance_url}/api/v1/instance`, { headers: { Accept: 'application/json' } })
+      // .then(res => { console.error(res.data); return res.data })
       .then(instance => {
         const data = {
           stats: instance.stats,

@@ -1,5 +1,6 @@
 const config = require('config')
 const moment = require('moment-timezone')
+// const debug = require('debug')('event:modals')
 
 module.exports = (sequelize, DataTypes) => {
   const Event = sequelize.define('event', {
@@ -24,7 +25,6 @@ module.exports = (sequelize, DataTypes) => {
     image_path: DataTypes.STRING,
     is_visible: DataTypes.BOOLEAN,
     recurrent: DataTypes.JSON,
-    // parent: DataTypes.INTEGER,
     likes: { type: DataTypes.JSON, defaultValue: [] },
     boost: { type: DataTypes.JSON, defaultValue: [] }
   }, {})
@@ -76,8 +76,8 @@ module.exports = (sequelize, DataTypes) => {
       })),
       published: this.createdAt,
       attributedTo: `${config.baseurl}/federation/u/${username}`,
-      to: ['https://www.w3.org/ns/activitystreams#Public'],
-      cc: follower || [],
+      to: follower || [],
+      cc: ['https://www.w3.org/ns/activitystreams#Public', `${config.baseurl}/federation/u/${username}/followers`],
       content,
       summary: null,
       sensitive: false
