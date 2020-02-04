@@ -69,9 +69,11 @@ router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
       break
     case 'Create':
       // this is a reply
-      if (b.object.type === 'Note' && b.object.inReplyTo) {
+      if (b.object.type === 'Note') {
+        debug('Create a resource!')
         await Resources.create(req, res)
       } else {
+        // await Resources.create(req, res)
         debug('Create with unsupported Object or not a reply => %s ', b.object.type)
       }
       break
