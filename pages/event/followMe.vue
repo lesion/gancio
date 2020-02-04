@@ -1,7 +1,7 @@
 <template lang='pug'>
   div
     p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${domain}`})")
-    el-input(v-model='instance_hostname')
+    el-input(v-model='instance_hostname' ref='instance')
       a(slot='append' :href='link' target='_blank')
         el-button(:disabled='(!couldGo || !proceed)' plain type="primary" icon='el-icon-document') {{$t("common.follow")}}
     p.mt-2 <img class='instance_thumb' :src="instance.thumbnail"/> {{instance.title}}
@@ -30,6 +30,7 @@ export default {
       return URL.hostname
     },
     couldGo () {
+      console.error(this.instance_hostname)
       // check if is mastodon
       this.get_instance_info()
       return true
