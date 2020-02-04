@@ -1,5 +1,9 @@
 <template lang='pug'>
   el-container#main(:class='{dark: $route.name==="index"}')
+    el-dialog.followDialog(:visible.sync='showFollowMe')
+      h4(slot='title') {{$t('common.follow_me_title')}}
+      FollowMe
+
     el-backtop
     el-header#header
       Nav
@@ -10,18 +14,23 @@
         .col.col-7
           small <a href='https://gancio.org'>Gancio {{settings.version}}</a>
         .col#links
+          a(rel='me' :href='settings.baseurl' @click.prevent='showFollowMe=true') follow me
           nuxt-link(to='/about') about
           a(href='https://gancio.org') docs
           a(href='https://blog.gancio.org') blog
-          a(href='https://socialhub.activitypub.rocks/c/software/gancio/43') forum
           a(href='https://framagit.org/les/gancio') source
 
 </template>
 <script>
 import Nav from '~/components/Nav.vue'
 import { mapState } from 'vuex'
+import FollowMe from '../pages/event/followMe'
+
 export default {
-  components: { Nav },
+  components: { Nav, FollowMe },
+  data () {
+    return { showFollowMe: false }
+  },
   computed: mapState(['settings'])
 }
 </script>

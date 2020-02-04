@@ -51,6 +51,13 @@
             span.ml-1 {{$t('common.federation')}}
           Federation
 
+        //- MODERATION
+        el-tab-pane.pt-1(v-if='settings.enable_federation')
+          template(slot='label')
+            v-icon(name='vector-square')
+            span.ml-1 {{$t('common.moderation')}}
+          Moderation
+
 </template>
 <script>
 import { mapState } from 'vuex'

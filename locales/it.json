@@ -135,7 +135,7 @@
     "due": "alle",
     "from": "Dalle",
     "image_too_big": "Immagine troppo grande! Massimo 4M",
-    "interact_with_me_at": "Seguimi dal fediverso su",
+    "interact_with_me": "Seguimi dal fediverso",
     "follow_me_description": "Tra i vari modi di rimanere aggiornati degli eventi pubblicati qui su {title},\n      puoi seguire l'account <u>{account}</u> dal fediverso, ad esempio via mastodon, ed eventualmente aggiungere risorse a questo evento da lì.<br/><br/>\n      Se non hai mai sentito parlare di mastodon e del fediverso ti consigliamo di leggere <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>questo articolo</a>.<br/><br/> Inserisci la tua istanza qui sotto (es. mastodon.cisti.org o mastodon.bida.im)"
   },
   "admin": {
@@ -171,7 +171,8 @@
     "filter_instances": "Filtra istanze",
     "filter_users": "Filtra utenti",
     "instance_name": "Nome istanza",
-    "favicon": "Logo"
+    "favicon": "Logo",
+    "user_block_confirm": "Sicura di voler bloccare l'utente?"
   },
   "auth": {
     "not_confirmed": "Non abbiamo ancora confermato questa mail...",
