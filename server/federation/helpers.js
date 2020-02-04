@@ -130,8 +130,8 @@ const Helpers = {
       if (instance) { return instance }
     }
 
-    instance = await axios.$get(`${instance_url}/api/v1/instance`, { headers: { Accept: 'application/json' } })
-      // .then(res => { console.error(res.data); return res.data })
+    instance = await axios.get(`${instance_url}/api/v1/instance`, { headers: { Accept: 'application/json' } })
+      .then(res => res.data)
       .then(instance => {
         const data = {
           stats: instance.stats,
