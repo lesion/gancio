@@ -74,7 +74,8 @@
     "filter": "Filtra",
     "event": "Evento",
     "pause": "Pausa",
-    "start": "Avvia"
+    "start": "Avvia",
+    "fediverse": "Fediverso"
   },
   "login": {
     "description": "Entrando puoi pubblicare nuovi eventi.",
@@ -115,6 +116,7 @@
     "confirmed": "Evento confermato",
     "not_found": "Evento non trovato",
     "remove_confirmation": "Sicura di voler eliminare questo evento?",
+    "remove_recurrent_confirmation": "Sicura di voler eliminare questo evento ricorrente?\n\n Gli eventi passati verranno mantenuti ma non ne verranno creati altri.",
     "recurrent": "Ricorrente",
     "show_recurrent": "appuntamenti ricorrenti",
     "show_past": "eventi passati",
