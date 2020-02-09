@@ -1,26 +1,28 @@
 <template lang='pug'>
   .editor(:class='{ "with-border": border }')
-    editor-menu-bar.menubar(:editor='editor' v-slot='{ commands, isActive, getMarkAttrs, focused }')
-        el-button-group
-          el-popover(trigger='hover' placement='bottom-start')
-            el-button.float-left(slot='reference' size='mini') <v-icon name='question'/>
-            template
-              div <v-icon name='heading'/> → Title ⇒ <code>ctrl+shift+4</code> or start a line with <code>#</code>
-              div <v-icon name='bold'/> → Bold ⇒ <code>ctrl+b</code>
-              div <v-icon name='italic'/> → Italic ⇒ <code>ctrl+i</code>
-              div <v-icon name='underline'/> → Underline ⇒ <code>ctrl+u</code>
-              div <v-icon name='list-ul'/> → List ⇒ <code>ctrl+shift+8</code> or start a line with <code>-</code>
-              div <v-icon name='list-ol'/> → Ordered List ⇒ <code>ctrl+shift+9</code> or start a line with <code>1.</code>
-              div <v-icon name='quote-right'/> → Quote ⇒ <code>ctrl+shift+&gt;</code> or start a line with <code>&gt;</code>
-              div <v-icon name='link'/> → Link ⇒ Select a word and fill the input
-          el-button(size='mini' :class='{ "is-active": isActive.heading({level:4})}' @click='commands.heading({level: 4})') <v-icon name='heading'/>
-          el-button(size='mini' :class='{ "is-active": isActive.bold() }' @click='commands.bold')
-            <v-icon name='bold' />
-          el-button(size='mini' :class='{ "is-active": isActive.italic() }' @click='commands.italic') <v-icon name='italic'/>
-          el-button(size='mini' :class='{ "is-active": isActive.underline() }' @click='commands.underline') <v-icon name='underline'/>
-          el-button(size='mini' :class='{ "is-active": isActive.link() }' @click='commands.link({href: ""}); $refs.link.focus(); linkActive=true') <v-icon name='link'/>
-          input(:value='isActive.link() && getMarkAttrs("link") && getMarkAttrs("link").href || ""' ref='link' :class='{ "is-active": isActive.link() || linkActive }'
-            @blur='commands.link({ href: $event.target.value})' @keypress.enter='commands.link({ href: $event.target.value})')
+    editor-menu-bubble(:editor='editor' :keep-in-bounds='true' v-slot='{ commands, isActive, getMarkAttrs, menu }')
+      el-button-group.menububble(:class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`")
+        el-popover(trigger='hover' placement='bottom-start')
+          el-button.float-left(slot='reference' size='mini') <v-icon name='question'/>
+          template
+            span This editor supports inline <code>markdown</code>
+            div <v-icon name='heading'/> → Title ⇒ Start a line with <code>#</code>
+            div <v-icon name='bold'/> → Bold ⇒ <code>ctrl+b</code>
+            div <v-icon name='italic'/> → Italic ⇒ <code>ctrl+i</code>
+            div <v-icon name='underline'/> → Underline ⇒ <code>ctrl+u</code>
+            div <v-icon name='list-ul'/> → List ⇒ Start a line with <code>-</code>
+            div <v-icon name='list-ol'/> → Ordered List ⇒ Start a line with <code>1.</code>
+            div <v-icon name='quote-right'/> → Quote ⇒ Start a line with <code>&gt;</code>
+            div <v-icon name='code'/> → Code ⇒ Use backtick <code>`</code>
+            div <v-icon name='link'/> → Link ⇒ Select a word and fill the input
+        //- el-button(size='mini' :class='{ "is-active": isActive.heading({level:4})}' @click='commands.heading({level: 4})') <v-icon name='heading'/>
+        //- el-button(size='mini' :class='{ "is-active": isActive.bold() }' @click='commands.bold')
+          <v-icon name='bold' />
+        //- el-button(size='mini' :class='{ "is-active": isActive.italic() }' @click='commands.italic') <v-icon name='italic'/>
+        //- el-button(size='mini' :class='{ "is-active": isActive.underline() }' @click='commands.underline') <v-icon name='underline'/>
+        el-button(size='mini' :class='{ "is-active": isActive.link() }' @click='commands.link({href: ""}); $refs.link.focus(); linkActive=true') <v-icon name='link'/>
+        input(:value='isActive.link() && getMarkAttrs("link") && getMarkAttrs("link").href || ""' ref='link' :class='{ "is-active": isActive.link() || linkActive }'
+          placeholder='https://' @keypress.enter='commands.link({ href: $event.target.value})')
           //- el-button(size='mini' :class='{ "is-active": isActive.strike() }' @click='commands.strike') <v-icon name='strikethrough'/>
         //- br
         //- el-button-group
@@ -98,7 +100,9 @@ export default {
 <style lang='less'>
 
 .editor {
+  position: relative;
   overflow-y: auto;
+  padding-top: 1.7em;
   scrollbar-width: thin;
 
   &.with-border {
@@ -113,17 +117,23 @@ export default {
     overflow-y: auto;
   }
 
-  .menubar {
-    position: sticky;
+  .menububble {
+    position: absolute;
     display: flex;
-    top: 0px;
     overflow: hidden;
+    opacity: 0;
     z-index: 1;
     background: #dddddd;
+    transform: translateX(-50%);
     border-radius: 3px;
-    padding: 0.1rem;
+    padding: 0.07rem;
     transition: opacity 0.2s, visibility 0.2s, left .2s, bottom .2s;
+    visibility: hidden;
 
+    &.is-active {
+      opacity: 1;
+      visibility: visible;
+    }
     input {
       padding: 0;
       margin: 1px;
