@@ -5,6 +5,8 @@ const config = require('config')
 const fs = require('fs')
 const { Op } = require('sequelize')
 const _ = require('lodash')
+const helpers = require('../../helpers')
+
 const {
   event: Event,
   resource: Resource,
@@ -15,7 +17,6 @@ const {
 } = require('../models')
 const Sequelize = require('sequelize')
 const exportController = require('./export')
-const sanitizeHtml = require('sanitize-html')
 
 const debug = require('debug')('controller:event')
 
@@ -301,7 +302,7 @@ const eventController = {
       body.image_path = req.file.filename
     }
 
-    body.description = sanitizeHtml(body.description)
+    body.description = helpers.sanitizeHTML(body.description)
 
     await event.update(body)
     let place

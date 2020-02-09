@@ -1,6 +1,7 @@
 const { event: Event, resource: Resource, ap_user: APUser } = require('../api/models')
 const debug = require('debug')('fediverse:resource')
-const sanitize = require('sanitize-html')
+const helpers = require('../helpers')
+
 module.exports = {
 
   // create a resource from AP Note
@@ -30,7 +31,7 @@ module.exports = {
 
     // TODO should probably map links here
     // clean resource
-    body.object.content = sanitize(body.object.content, {
+    body.object.content = helpers.sanitizeHTML(body.object.content, {
       nonTextTags: ['style', 'script', 'textarea', 'noscript']
     })
 
