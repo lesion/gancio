@@ -23,7 +23,7 @@ html, body {
   font-family: sans-serif;
   scroll-behavior: smooth;
   text-rendering: optimizeSpeed;
-  background-color: #333;
+  background-color: #111;
   overflow-y: auto;
   scrollbar-width: thin;
   padding: 0 !important;
@@ -39,10 +39,10 @@ html, body {
   min-height: 200px;
   overflow: hidden;
   scrollbar-width: thin;
-  // transition: background-color 1s, opacity 1s, color 1s;
+  transition: background-color .5s, opacity .5s; //, color 1s;
   background-color: white;
   &.dark {
-    background-color: #333;
+    background-color: #111;
   }
 }
 
@@ -97,19 +97,19 @@ html, body {
   .el-submenu.is-active > .el-submenu__title,
   .el-submenu.is-opened {
     color: white;
-    background-color: #333
+    background-color: #111;
   }
 }
 
 
 .page-enter-active {
-  transition: opacity .2s, transform .3s;
+  transition: opacity .05s;
 }
 
 .page-enter, .page-leave-active {
-  transition: opacity .3s, transform .3s;
+  transition: opacity .3s; //, transform .3s;
   opacity: 0;
-  transform: translateX(30px);
+  // transform: translateX(30px);
 }
 
 .el-card {
@@ -137,8 +137,18 @@ html, body {
   background-color: #f9fff6;
 }
 
-@media only screen and (max-width: 768px) {
-  .el-main {
-    padding: 0px !important;
-  }
+.el-button--mini, .el-button--mini.is-round {
+  padding: 6px 12px;
+  font-size: 0.8rem;
 }
+
+.bg-dark {
+  background-color: #292929 !important;
+}
+
+// @media only screen and (max-width: 768px) {
+  // .el-card {
+    // padding: 0px !important;
+    // border-radius: 0px;
+  // }
+// }
