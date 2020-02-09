@@ -1,6 +1,6 @@
 <template lang="pug">
   div#nav
-    nuxt-link#logo(to='/')
+    nuxt-link#logo(:to='$route.name==="index"?"/about":"/"')
       img(src='/favicon.ico')
       span.ml-1.hidden-xs-only {{settings.title}}
         small.hidden-sm-only  {{settings.description}}
