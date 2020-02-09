@@ -10,7 +10,7 @@
     .card-body
       div
         i.el-icon-date
-        span  {{event|when}}
+        span  {{event|when('home')}}
       el-button.mt-1.bg-dark.text-warning.float-right(plain size='mini' round type='text' icon='el-icon-location-outline' @click='addPlace') {{event.place.name}}
       //- date / place
       .description.mt-3(v-if='!event.image_path || !event.tags.length' v-html='description')
@@ -95,6 +95,7 @@ export default {
     overflow: hidden;
     padding: .25rem 0.5rem;
     line-height: 1.8rem;
+    min-height: 2.2rem;
   }
   .description {
     color: #999;
