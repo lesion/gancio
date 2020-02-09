@@ -14,12 +14,15 @@
       //-     el-input.mt-2(v-model='notification.email' :placeholder="$t('export.insert_your_address')" ref='email')
       //-     el-button.mt-2.float-right(native-type= 'submit' type='success' @click='add_notification') {{$t('common.send')}}
 
-      el-tab-pane.pt-1(label='feed rss' name='rss')
+      el-tab-pane.pt-1(label='Feed rss' name='rss')
         span(v-html='$t(`export.feed_description`)')
         el-input(v-model='link')
           el-button(slot='append' plain
           v-clipboard:copy='link' v-clipboard:success='copyLink'
           type="primary" icon='el-icon-document' ) {{$t("common.copy")}}
+
+      el-tab-pane.pt-1(:label="$t('common.fediverse')" name='fediverse')
+        FollowMe
 
       el-tab-pane.pt-1(label='ics/ical' name='ics')
         p(v-html='$t(`export.ical_description`)')
@@ -36,8 +39,7 @@
           el-col.float-right(:span='12')
             List(
               :title='list.title'
-              :events='filteredEvents'
-            )
+              :events='filteredEvents')
         el-input.mb-1(type='textarea' v-model='listScript' readonly )
         el-button.float-right(plain v-clipboard:copy='listScript' v-clipboard:success='copyLink'
           type='primary' icon='el-icon-document') {{$t('common.copy')}}
@@ -54,12 +56,12 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import List from '@/components/List'
-import Search from '@/components/Search'
+import FollowMe from '../components/FollowMe'
 import { Message } from 'element-ui'
 
 export default {
   name: 'Exports',
-  components: { List, Search },
+  components: { List, FollowMe },
   async asyncData ({ $axios, params, store }) {
     // get metadata just in case we are not coming from home
     if (store.state.tags.length) { return }
@@ -76,6 +78,10 @@ export default {
   computed: {
     ...mapState(['filters', 'events', 'settings']),
     ...mapGetters(['filteredEvents']),
+    domain () {
+      const URL = url.parse(this.settings.baseurl)
+      return URL.hostname
+    },
     listScript () {
       const params = []
       if (this.list.title) {

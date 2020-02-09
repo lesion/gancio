@@ -1,6 +1,6 @@
 <template lang='pug'>
   el-container#main(:class='{dark: $route.name==="index"}')
-    el-dialog.followDialog(:visible.sync='showFollowMe')
+    el-dialog(:visible.sync='showFollowMe')
       h4(slot='title') {{$t('common.follow_me_title')}}
       FollowMe
 
@@ -24,7 +24,7 @@
 <script>
 import Nav from '~/components/Nav.vue'
 import { mapState } from 'vuex'
-import FollowMe from '../pages/event/followMe'
+import FollowMe from '../components/FollowMe'
 
 export default {
   components: { Nav, FollowMe },

@@ -136,7 +136,7 @@
     "from": "Dalle",
     "image_too_big": "Immagine troppo grande! Massimo 4M",
     "interact_with_me": "Seguimi dal fediverso",
-    "follow_me_description": "Tra i vari modi di rimanere aggiornati degli eventi pubblicati qui su {title},\n      puoi seguire l'account <u>{account}</u> dal fediverso, ad esempio via mastodon, ed eventualmente aggiungere risorse a questo evento da lì.<br/><br/>\n      Se non hai mai sentito parlare di mastodon e del fediverso ti consigliamo di leggere <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>questo articolo</a>.<br/><br/> Inserisci la tua istanza qui sotto (es. mastodon.cisti.org o mastodon.bida.im)"
+    "follow_me_description": "Tra i vari modi di rimanere aggiornati degli eventi pubblicati qui su {title},\n      puoi seguire l'account <u>{account}</u> dal fediverso, ad esempio via mastodon, ed eventualmente aggiungere risorse ad un evento da lì.<br/><br/>\n      Se non hai mai sentito parlare di mastodon e del fediverso ti consigliamo di leggere <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>questo articolo</a>.<br/><br/> Inserisci la tua istanza qui sotto (es. mastodon.cisti.org o mastodon.bida.im)"
   },
   "admin": {
     "place_description": "Nel caso in cui un luogo sia errato o cambi indirizzo, puoi modificarlo. <br/>Considera che tutti gli eventi associati a questo luogo cambieranno indirizzo (anche quelli passati!)",

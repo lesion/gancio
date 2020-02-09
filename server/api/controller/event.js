@@ -222,7 +222,7 @@ const eventController = {
       const eventDetails = {
         title: body.title,
         // remove html tags
-        description: sanitizeHtml(body.description),
+        description: helpers.sanitizeHTML(body.description),
         multidate: body.multidate,
         start_datetime: body.start_datetime,
         end_datetime: body.end_datetime,

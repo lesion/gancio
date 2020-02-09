@@ -55,7 +55,7 @@
           el-button(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
           span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
 
-        el-dialog.followDialog(:visible.sync='showFollowMe' destroy-on-close)
+        el-dialog(:visible.sync='showFollowMe' destroy-on-close)
           h4(slot='title') {{$t('common.follow_me_title')}}
           FollowMe
 
@@ -88,7 +88,7 @@
 import { mapState, mapGetters } from 'vuex'
 import EventAdmin from './eventAdmin'
 import EmbedEvent from './embedEvent'
-import FollowMe from './followMe'
+import FollowMe from '../../components/FollowMe'
 import { Message, MessageBox } from 'element-ui'
 
 import moment from 'moment-timezone'
