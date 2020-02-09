@@ -62,7 +62,7 @@ app.use((error, req, res, next) => {
 // prefill current events, tags, places (used in every path)
 app.use(async (req, res, next) => {
   const start_datetime = getUnixTime(startOfWeek(startOfMonth(new Date())))
-  req.events = await eventController._select(start_datetime, 100, req.settings.recurrent_event_visible)
+  req.events = await eventController._select(start_datetime, 100)
   req.meta = await eventController._getMeta()
   next()
 })
