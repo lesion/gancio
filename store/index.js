@@ -36,9 +36,6 @@ export const getters = {
     const search_for_tags = !!state.filters.tags.length
     const search_for_places = !!state.filters.places.length
 
-    const search_place_ids = state.filters.places.map(p => p.id)
-    const search_tags_tags = state.filters.tags.map(t => t.id)
-
     return state.events.filter(e => {
       // filter past events
       if (!state.filters.show_past_events && e.past) { return false }
@@ -46,20 +43,18 @@ export const getters = {
       // filter recurrent events
       if (!state.filters.show_recurrent_events && e.parentId) { return false }
 
-      if (search_for_places) {
-        if (search_place_ids.includes(e.place.id)) {
-          return true
-        }
+      if (search_for_places && !state.filters.places.includes(e.place.id)) {
+        return false
       }
 
       if (search_for_tags) {
-        const common_tags = intersection(e.tags, search_tags_tags)
-        if (common_tags.length > 0) { return true }
+        const common_tags = intersection(e.tags, state.filters.tags)
+        if (common_tags.length === 0) { return false }
       }
 
       if (!search_for_places && !search_for_tags) { return true }
 
-      return false
+      return true
     })
   },
 
@@ -69,23 +64,19 @@ export const getters = {
     const search_for_places = !!state.filters.places.length
 
     return state.events.filter(e => {
-      const match = false
-
       // filter recurrent events
       if (!state.filters.show_recurrent_events && e.parentId) { return false }
 
-      if (!match && search_for_places) {
-        if (find(state.filters.places, p => p.id === e.place.id)) { return true }
+      if (search_for_places && !state.filters.places.includes(e.place.id)) {
+        return false
       }
 
       if (search_for_tags) {
-        const common_tags = intersection(e.tags, state.filters.tags.map(t => t.tag))
-        if (common_tags.length > 0) { return true }
+        const common_tags = intersection(e.tags, state.filters.tags)
+        if (common_tags.length === 0) { return false }
       }
 
-      if (!search_for_places && !search_for_tags) { return true }
-
-      return false
+      return true
     })
   }
 }
