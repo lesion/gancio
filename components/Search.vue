@@ -19,10 +19,11 @@
         span.float-left {{ item.label }}
         i.float-right.el-icon-place(v-if='item.type==="place"')
         i.float-right.el-icon-collection-tag(v-if='item.type==="tag"')
-    br
-    el-tag.mr-1(type='success' v-for='f in filter' size='small'
-      disable-transitions closable :key='f.type + f.id'
-      @close='removeFilter(f)') {{f.label}}
+    #filters
+      el-button.mr-1.bg-dark(type='text' round plain v-for='t in filters.tags' size='mini'
+        :key='t' @click='removeTag(t)') {{t}}
+      el-button.mr-1.bg-dark.text-warning(type='text' round plain v-for='p in selectedPlaces' size='mini'
+        :key='p' @click='removePlace(p.id)') {{p.name}}
 </template>
 
 <script>
@@ -40,10 +41,12 @@ export default {
   },
   computed: {
     ...mapState(['tags', 'places', 'filters', 'settings']),
-    // TOFIX: optimize
+    selectedPlaces () {
+      return this.places.filter(p => this.filters.places.includes(p.id))
+    },
     keywords () {
-      const tags = this.tags.map(t => ({ type: 'tag', label: t.tag, weigth: t.weigth, id: t.tag }))
-      const places = this.places.map(p => ({ type: 'place', label: p.name, weigth: p.weigth, id: p.id }))
+      const tags = this.tags.filter(t => !this.filters.tags.includes(t.tag)).map(t => ({ type: 'tag', label: t.tag, weigth: t.weigth, id: t.tag }))
+      const places = this.places.filter(p => !this.filters.places.includes(p.id)).map(p => ({ type: 'place', label: p.name, weigth: p.weigth, id: p.id }))
       const keywords = tags.concat(places).sort((a, b) => b.weigth - a.weigth)
       return keywords
     },
@@ -62,12 +65,11 @@ export default {
   methods: {
     ...mapActions(['setSearchPlaces', 'setSearchTags',
       'showPastEvents', 'showRecurrentEvents', 'updateEvent']),
-    removeFilter (item) {
-      if (item.type === 'tag') {
-        this.setSearchTags(this.filters.tags.filter(t => t.id !== item.id))
-      } else {
-        this.setSearchPlaces(this.filters.places.filter(p => p.id !== item.id))
-      }
+    removeTag (tag) {
+      this.setSearchTags(this.filters.tags.filter(t => t !== tag))
+    },
+    removePlace (place) {
+      this.setSearchPlaces(this.filters.places.filter(p => p !== place))
     },
     querySearch (queryString, cb) {
       const ret = this.keywords
@@ -78,9 +80,9 @@ export default {
     },
     addFilter (item) {
       if (item.type === 'tag') {
-        this.setSearchTags(this.filters.tags.concat(item))
+        this.setSearchTags(this.filters.tags.concat(item.id))
       } else {
-        this.setSearchPlaces(this.filters.places.concat(item))
+        this.setSearchPlaces(this.filters.places.concat(item.id))
       }
       this.search = ''
     }
@@ -93,7 +95,11 @@ export default {
   border-radius: 0px;
   border-bottom: 2px solid lightgray;
   color: white;
-  background-color: #333;
+  background-color: #111;
+}
+
+#filters {
+  line-height: 2rem;
 }
 
 .el-switch__label {

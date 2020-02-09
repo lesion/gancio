@@ -9,6 +9,7 @@
           el-button(circle plain size='small' icon='el-icon-arrow-left' :disabled='!prev')
         nuxt-link(:to='`/event/${next}`')
           el-button(circle plain size='small' :disabled='!next' icon='el-icon-arrow-right')
+
     el-main
       el-dialog.embedDialog(:visible.sync='showEmbed')
         h4(slot='title') {{$t('common.embed_title')}}
@@ -23,10 +24,9 @@
               el-icon(name='loading')
 
           pre(v-html='event.description')
-          el-tag.mr-1.mb-1(v-for='tag in event.tags'
-            size='mini' :key='tag') {{tag}}
+          el-button.ml-1.text-primary(plain round size='mini' v-for='tag in event.tags' :key='tag') {{tag}}
 
-        //- info & actions for desktop
+        //- info & actions
         el-col.menu(:sm='6' :xs='24')
           el-menu.menu.mt-2(router)
             p <i class='el-icon-date'></i>  <b>{{event|when}}</b> <br/><small>{{event|to}}</small>
@@ -53,7 +53,7 @@
 
         p.p-2
           el-button(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
-          span(v-if='settings.enable_resources')  -  {{$tc('common.resources', event.resources.length)}}
+          span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
 
         el-dialog.followDialog(:visible.sync='showFollowMe' destroy-on-close)
           h4(slot='title') {{$t('common.follow_me_title')}}

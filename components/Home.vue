@@ -8,14 +8,8 @@
       .col
         Search(past-filter recurrent-filter)
 
-    .row.m-0
-      .p-0.col-sm-6.col-lg-4.col-xl-4(v-for='event in events' :key='event.id + event.start_datetime')
-        a.d-block.d-sm-none(:id='event.newDay' v-if='event.newDay')
-          el-divider {{event.start_datetime|day}}
-        Event(
-          :id='event.start_datetime'
-          :event='event'
-        )
+    #events
+      Event(v-for='event in events' :key='event.id' :event='event')
 
 </template>
 
@@ -53,3 +47,10 @@ export default {
   }
 }
 </script>
+<style lang='less'>
+#events {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+</style>

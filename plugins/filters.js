@@ -4,11 +4,12 @@ import moment from 'moment-timezone'
 export default ({ app, store }) => {
   // set timezone to instance_timezone!!
   // to show local time relative to event's place
-  // not where in the worlds I'm looking at the page from
+  // not where in the world I'm looking at the page from
   moment.tz.setDefault(store.state.settings.instance_timezone)
+  moment.locale(store.state.locale)
 
   // replace links with anchors
-  // TODO: remove fb tracking id
+  // TODO: remove fb tracking id?
   Vue.filter('linkify', value => value.replace(/(https?:\/\/([^\s]+))/g, '<a href="$1">$2</a>'))
   Vue.filter('url2host', url => url.match(/^https?:\/\/(.[^/:]+)/i)[1])
   Vue.filter('datetime', value => moment(value).locale(store.state.locale).format('ddd, D MMMM HH:mm'))
@@ -19,8 +20,6 @@ export default ({ app, store }) => {
   Vue.filter('to', value => moment().to(value.start_datetime * 1000))
   // format event start/end datetime based on page
   Vue.filter('when', (event, where) => {
-    moment.locale(store.state.locale)
-
     const start = moment.unix(event.start_datetime)
     const end = moment.unix(event.end_datetime)
 
@@ -46,7 +45,7 @@ export default ({ app, store }) => {
 
     // normal event
     if (event.end_datetime && event.end_datetime !== event.start_datetime) {
-      return `${start.format('ddd, D MMMM (HH:mm-')}${end.format('HH:mm)')}`
+      return `${start.format('ddd, D MMMM HH:mm')}`
     }
     return start.format('dddd, D MMMM (HH:mm)')
   })

@@ -1,26 +1,25 @@
 <template lang="pug">
-  nuxt-link.event(:to='`/event/${event.id}`' :class='{ withImg: event.image_path }')
+  .card.event.mt-1.text-white(body-style='padding: 0px;')
+    nuxt-link(:to='`/event/${event.id}`')
+      img(v-if='showImage && event.image_path' :src='`/media/thumb/${event.image_path}`')
+      .float-right
+        i.text-danger.el-icon-refresh(v-if='event.parentId')
+        .badge.text-info(v-if='settings.enable_resources && event.resources && event.resources.length') {{event.resources.length}}
+      .title {{event.title}}
 
-    //- image
-    el-image(v-if='showImage && event.image_path' lazy :src='`/media/thumb/${event.image_path}`')
+    .card-body
+      div
+        i.el-icon-date
+        span  {{event|when}}
+      el-button.mt-1.bg-dark.text-warning.float-right(plain size='mini' round type='text' icon='el-icon-location-outline' @click='addPlace') {{event.place.name}}
+      //- date / place
+      .description.mt-3(v-if='!event.image_path || !event.tags.length' v-html='description')
 
-    .event-info
-      .content-info
-
-        //-  title
-        h2 {{event.title}}
-
-        //- date / place
-        .date
-          div <v-icon name='clock'/> {{event|when('home')}}
-          div <v-icon name='map-marker-alt' /> {{event.place.name}}
-
-      ul.tags(v-if='showTags && event.tags')
-        li(v-for='tag in event.tags' :key='tag') {{tag}}
-        li(v-if='settings.enable_federation && event.resources && event.resources.length') <u>{{$tc('common.n_resources', event.resources.length)}}</u>
+    .card-footer(v-if='event.tags.length')
+      el-button.ml-1.bg-dark(type='text' plain round size='mini' v-for='tag in event.tags' :key='tag' @click='addTag(tag)') {{tag}}
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   props: {
@@ -35,26 +34,74 @@ export default {
     }
   },
   computed: {
-    ...mapState(['settings'])
+    ...mapState(['settings', 'filters']),
+    description () {
+      return this.event.description.slice(0, 500)
+    },
+    show_footer () {
+      return (this.event.tags.length || this.event.resources.length)
+    }
+  },
+  methods: {
+    ...mapActions(['setSearchTags', 'setSearchPlaces']),
+    addTag (tag) {
+      if (this.filters.tags.includes(tag)) {
+        this.setSearchTags(this.filters.tags.filter(t => t !== tag))
+      } else {
+        this.setSearchTags(this.filters.tags.concat([tag]))
+      }
+    },
+    addPlace () {
+      const place = this.event.place.id
+      if (this.filters.places.includes(place)) {
+        this.setSearchPlaces(this.filters.places.filter(p => p !== place))
+      } else {
+        this.setSearchPlaces(this.filters.places.concat(place))
+      }
+    }
   }
 }
 </script>
 <style lang='less'>
-
-@media only screen and (min-width: 574px) {
-  .event {
-    height: 100%;
-  }
-}
 .event {
-  padding: 3px;
-  display: flex;
-  flex-direction: column;
+  width: 320px;
+  max-width: 450px;
+  flex-grow: 1;
+  margin: .2em;
+  background-color: #202020;
 
-  // height: 100%;
-
-  &:hover {
+  a:hover {
     text-decoration: none;
+    .title {
+      border-bottom: 1px solid #888;
+      color: white;
+    }
+  }
+
+  .title {
+    margin-left: 1rem;
+    margin-top: 1rem;
+    margin-right: 1rem;
+    border-bottom: 1px solid #333;
+    transition: border-color .5s;
+    font-size: 1.2em;
+    max-height: 3em;
+    overflow: hidden;
+    color: #fea;
+  }
+
+  .card-footer {
+    max-height: 4.5em;
+    overflow: hidden;
+    padding: .25rem 0.5rem;
+    line-height: 1.8rem;
+  }
+  .description {
+    color: #999;
+    font-size: 0.8em;
+    p {
+      margin: 0px;
+    }
   }
 
   img {
@@ -63,60 +110,5 @@ export default {
     object-fit: cover;
     object-position: top;
   }
-
-  .event-info {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: #111214;
-
-  }
-
-  .content-info {
-    padding: 0.8em 1em;
-
-    h2 {
-      color: rgb(174, 255, 174);
-      font-size: 16px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin: 0px;
-    }
-
-    p {
-      max-height: 92px;
-      overflow: hidden;
-      color: white;
-      margin: 0px;
-    }
-
-    .date {
-      font-weight: 400;
-      font-size: 1rem;
-      color: white;
-    }
-  }
-
-  .tags {
-    font-size: 15px;
-    padding: 1px;
-    margin-bottom: 0;
-    display:flex;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      background: #1B1F21;
-      display: inline-block;
-      padding: 2px 10px;
-      color: rgba(255,255,255,0.9);
-      margin: 1px;
-      text-align: center;
-      flex-grow: 1;
-    }
-
-  }
 }
-
 </style>
