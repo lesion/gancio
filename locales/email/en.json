@@ -5,7 +5,7 @@
     },
     "confirm": {
         "subject": "You can now start publishing events",
-        "content": "Hi, your account on <a href='{{config.baseurl}}'>{{config.title}}</a> has been confirmed. Write to us at {{config.admin}} for any information."
+        "content": "Hi, your account on <a href='{{config.baseurl}}'>{{config.title}}</a> has been confirmed. Write to us at {{config.admin_email}} for any information."
     },
     "user_confirm": {
         "subject": "You can now start publishing events",
