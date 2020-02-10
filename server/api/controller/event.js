@@ -105,7 +105,7 @@ const eventController = {
             required: false,
             attributes: ['id', 'activitypub_id', 'data', 'hidden']
           },
-          { model: Event, required: false, as: 'parent', attributes: ['id', 'recurrent'] }
+          { model: Event, required: false, as: 'parent', attributes: ['id', 'recurrent', 'is_visible'] }
         ],
         order: [[Resource, 'id', 'DESC']]
       })
