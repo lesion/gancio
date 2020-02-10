@@ -74,7 +74,8 @@
         "filter": "Filter",
         "event": "Event",
         "pause": "Pause",
-        "start": "Start"
+        "start": "Start",
+        "fediverse": "Fediverse"
     },
     "login": {
         "description": "By logging in you can publish new events.",
@@ -137,8 +138,9 @@
         "from": "From",
         "image_too_big": "Too big image! Max 4M",
         "interact_with_me_at": "Interact with me on fediverse at",
-        "follow_me_description": "Among the various ways to stay up to date on the events published here on {title},\n       you can follow the account {account} from the fediverse, for example via mastodon, and possibly add resources to this event from there. <br/> <br/>\n       If you have never heard of mastodon and the fediverse we recommend reading <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'> this article </a>. <br/> <br/> Enter your instance below (eg mastodon.cisti.org or mastodon.bida.im)",
-        "interact_with_me": "Follow me"
+        "follow_me_description": "Among the various ways to stay up to date on the events published here on {title},\n       you can follow the account <u>{account}</u> from the fediverse, for example via mastodon, and possibly add resources to an event from there. <br/> <br/>\n       If you have never heard of mastodon and the fediverse we recommend reading <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'> this article </a>. <br/> <br/> Enter your instance below (e.g. mastodon.social)",
+        "interact_with_me": "Follow me",
+        "remove_recurrent_confirmation": "Are you sure to remove this recurrent event?\nPast events will be maintained but no more will be created."
     },
     "admin": {
         "place_description": "In the event that a place is incorrect or change address, you can change it. <br/> Consider that all events associated with this place will change address (even past ones!)",
