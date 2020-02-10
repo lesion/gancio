@@ -292,19 +292,32 @@ const eventController = {
       return res.sendStatus(403)
     }
 
-    if (req.file) {
-      if (event.image_path) {
-        const old_path = path.resolve(config.upload_path, event.image_path)
-        const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.image_path)
-        await fs.unlink(old_path, e => console.error(e))
-        await fs.unlink(old_thumb_path, e => console.error(e))
-      }
-      body.image_path = req.file.filename
+    const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
+    const eventDetails = {
+      title: body.title,
+      // remove html tags
+      description: helpers.sanitizeHTML(body.description),
+      multidate: body.multidate,
+      start_datetime: body.start_datetime,
+      end_datetime: body.end_datetime,
+      recurrent
     }
 
-    body.description = helpers.sanitizeHTML(body.description)
+    if (req.file) {
+      if (event.image_path && !event.recurrent) {
+        const old_path = path.resolve(config.upload_path, event.image_path)
+        const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.image_path)
+        try {
+          await fs.unlinkSync(old_path)
+          await fs.unlinkSync(old_thumb_path)
+        } catch (e) {
+          debug(e.toString())
+        }
+      }
+      eventDetails.image_path = req.file.filename
+    }
 
-    await event.update(body)
+    await event.update(eventDetails)
     let place
     try {
       place = await Place.findOrCreate({
@@ -323,6 +336,13 @@ const eventController = {
     }
     const newEvent = await Event.findByPk(event.id, { include: [Tag, Place] })
     res.json(newEvent)
+
+    // create recurrent instances of event if needed
+    // without waiting for the task manager
+    if (event.recurrent) {
+      eventController._createRecurrent()
+    }
+
     const notifier = require('../../notifier')
     notifier.notifyEvent('Update', event.id)
   },
@@ -331,14 +351,14 @@ const eventController = {
     const event = await Event.findByPk(req.params.id)
     // check if event is mine (or user is admin)
     if (event && (req.user.is_admin || req.user.id === event.userId)) {
-      if (event.image_path) {
+      if (event.image_path && !event.recurrent) {
         const old_path = path.join(config.upload_path, event.image_path)
         const old_thumb_path = path.join(config.upload_path, 'thumb', event.image_path)
         try {
           fs.unlinkSync(old_thumb_path)
           fs.unlinkSync(old_path)
         } catch (e) {
-          debug(e)
+          debug(e.toString())
         }
       }
       const notifier = require('../../notifier')
@@ -447,6 +467,9 @@ const eventController = {
         cursor.date(d)
       } else {
         cursor.day(d - 1)
+        if (cursor.isBefore(moment())) {
+          cursor.day(d - 1 + 7)
+        }
       }
       event.start_datetime = cursor.unix()
       event.end_datetime = event.start_datetime + duration
