@@ -28,7 +28,7 @@ export default ({ app, store }) => {
     if (event.parent && where !== 'home') {
       const { frequency, days, type } = event.parent.recurrent
       if (frequency === '1w' || frequency === '2w') {
-        const recurrent = app.i18n.tc(`event.recurrent_${frequency}_days`, days.length, { days: days.map(d => moment().day(d).format('dddd')) })
+        const recurrent = app.i18n.tc(`event.recurrent_${frequency}_days`, days.length, { days: days.map(d => moment().day(d - 1).format('dddd')) })
         return `${normal} - ${recurrent}`
       } else if (frequency === '1m' || frequency === '2m') {
         const d = type === 'ordinal' ? days : days.map(d => moment().day(d - 1).format('dddd'))

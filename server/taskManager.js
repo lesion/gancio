@@ -67,10 +67,14 @@ class TaskManager {
     if (!this.tasks.length) {
       return
     }
-    const removableTasks = this.tasks.filter(t => t.removable).map(t => t.process())
-    this.tasks = this.tasks.filter(t => !t.removable)
+
+    // process all tasks
     const tasks = this.tasks.map(t => t.process())
-    return Promise.all(tasks.concat(removableTasks))
+
+    // remove removable tasks
+    this.tasks = this.tasks.filter(t => !t.removable)
+
+    return Promise.all(tasks)
   }
 
   async tick () {

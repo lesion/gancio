@@ -139,7 +139,6 @@ export default {
 
       data.time.start = moment.unix(event.start_datetime).format('HH:mm')
       data.time.end = moment.unix(event.end_datetime).format('HH:mm')
-      data.date = [moment.unix(event.start_datetime).toDate()]
       data.event.title = event.title
       data.event.description = event.description
       data.event.id = event.id
