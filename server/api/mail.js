@@ -21,7 +21,7 @@ const mail = {
     debug(`Send ${template} email to ${addresses}`)
     const email = new Email({
       views: { root: path.join(__dirname, '..', 'emails') },
-      htmlToText: false,
+      htmlToText: true,
       juice: true,
       juiceResources: {
         preserveImportant: true,
@@ -53,7 +53,7 @@ const mail = {
       locals: {
         ...locales,
         locale,
-        config: { title: config.title, baseurl: config.baseurl, description: config.description },
+        config: { title: config.title, baseurl: config.baseurl, description: config.description, admin_email: config.admin_email },
         datetime: datetime => moment.unix(datetime).format('ddd, D MMMM HH:mm')
       }
     }
