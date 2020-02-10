@@ -9,16 +9,14 @@
       Nav
     #content
       nuxt
-    el-footer#footer
-      .row
-        .col.col-7
-          small <a href='https://gancio.org'>Gancio {{settings.version}}</a>
-        .col#links
-          a(rel='me' :href='settings.baseurl' @click.prevent='showFollowMe=true') follow me
-          nuxt-link(to='/about') about
-          a(href='https://gancio.org') docs
-          a(href='https://blog.gancio.org') blog
-          a(href='https://framagit.org/les/gancio') source
+    el-footer.mt-1#footer
+      #links
+        a(href='https://gancio.org') Gancio {{settings.version}}</a>
+        span  ⇒
+        a(rel='me' :href='settings.baseurl' @click.prevent='showFollowMe=true') follow me
+        nuxt-link(to='/about') about
+        a(href='https://blog.gancio.org') blog
+        a(href='https://framagit.org/les/gancio') source
 
 </template>
 <script>

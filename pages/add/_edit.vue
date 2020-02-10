@@ -29,7 +29,6 @@
         i.el-icon-location-outline
         span {{$t('common.where')}}
       p(v-html="$t('event.where_description')")
-
       el-autocomplete(v-model='event.place.name' @blur='selectPlace($event.target.value)'
         highlight-first-item
         :fetch-suggestions='filterPlaces' @select='selectPlace')
@@ -39,7 +38,6 @@
 
       //- WHEN
       el-divider <v-icon name='clock'/> {{$t('common.when')}}
-
       .text-center
         el-radio-group(v-model="event.type")
           el-radio-button(label="normal") <v-icon name='calendar-day'/> {{$t('event.normal')}}
@@ -70,7 +68,6 @@
           el-radio-button(v-for='whenPattern in whenPatterns' :label='whenPattern.key' :key='whenPatterns.key')
             span {{whenPattern.label}}
 
-        //- form.el-form.text-center.inline.el-form-inline
       .text-center
         el-form-item(:label="$t('event.from')" width='100')
           el-time-select.mr-2(ref='time_start'
@@ -126,26 +123,26 @@ export default {
         error({ statusCode: 404, message: 'Event not found!' })
         return {}
       }
-
+      data.event.recurrent = {}
       data.event.place.name = event.place.name
       data.event.place.address = event.place.address || ''
       if (event.multidate) {
-        data.date = { start: moment.unix(event.start_datetime), end: moment.unix(event.end_datetime) }
+        data.date = { start: moment.unix(event.start_datetime).toDate(), end: moment.unix(event.end_datetime).toDate() }
         data.event.type = 'multidate'
       } else if (event.recurrent) {
         data.event.type = 'recurrent'
         data.event.recurrent = event.recurrent
       } else {
         data.event.type = 'normal'
-        data.date = moment.unix(event.start_datetime)
+        data.date = moment.unix(event.start_datetime).toDate()
       }
 
       data.time.start = moment.unix(event.start_datetime).format('HH:mm')
       data.time.end = moment.unix(event.end_datetime).format('HH:mm')
+      data.date = [moment.unix(event.start_datetime).toDate()]
       data.event.title = event.title
       data.event.description = event.description
       data.event.id = event.id
-      data.event.recurrent = {}
       data.event.tags = event.tags
       return data
     }
@@ -224,10 +221,10 @@ export default {
     ...mapState(['events']),
     attributes () {
       let attributes = []
-      attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'red' } })
+      // attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'red' } })
 
       attributes = attributes.concat(this.events
-        .filter(e => !e.multidate && (!e.recurrent || this.event.type === 'recurrent'))
+        .filter(e => !e.multidate && (!e.parentId || this.event.type === 'recurrent'))
         .map(e => ({ key: e.id, dot: { color: this.event.type === 'recurrent' ? 'orange' : 'green' }, dates: moment.unix(e.start_datetime).toDate() })))
 
       if (this.event.type === 'recurrent' && this.date && this.date.length) {
@@ -235,14 +232,14 @@ export default {
           key: 'recurrent',
           dot: { color: 'orange' },
           dates: {
-            weeklyInterval: this.event.recurrent.frequency === '1w' ? 1 : 2, // this.event.recurrent.freq,
+            weeklyInterval: this.event.recurrent.frequency === '1w' ? 1 : 2,
             weekdays: _.map(this.date, date => moment(date).day() + 1),
             start: new Date(this.date[0])
           }
         })
       }
       attributes = attributes.concat(this.events
-        .filter(e => e.multidate && !e.recurrent)
+        .filter(e => e.multidate && !e.parentId)
         .map(e => ({
           key: e.id,
           highlight: {},
