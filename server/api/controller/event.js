@@ -105,7 +105,7 @@ const eventController = {
             required: false,
             attributes: ['id', 'activitypub_id', 'data', 'hidden']
           },
-          { model: Event, required: false, as: 'parent' }
+          { model: Event, required: false, as: 'parent', attributes: ['id', 'recurrent'] }
         ],
         order: [[Resource, 'id', 'DESC']]
       })
@@ -113,7 +113,7 @@ const eventController = {
       return res.sendStatus(400)
     }
     if (event && (event.is_visible || is_admin)) {
-      event = event.toJSON()
+      event = event.get()
       event.tags = event.tags.map(t => t.tag)
       if (format === 'json') {
         res.json(event)
@@ -272,7 +272,7 @@ const eventController = {
 
       // send notification (mastodon/email)
       // only if user is authenticated
-      if (req.user) {
+      if (req.user && !event.recurrent) {
         const notifier = require('../../notifier')
         notifier.notifyEvent('Create', event.id)
       }
@@ -362,7 +362,7 @@ const eventController = {
       where,
       limit,
       attributes: {
-        exclude: ['slug', 'likes', 'boost', 'userId', 'is_visible', 'description', 'createdAt', 'updatedAt', 'placeId']
+        exclude: ['slug', 'likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'placeId']
         // include: [[Sequelize.fn('COUNT', Sequelize.col('activitypub_id')), 'ressources']]
       },
       order: ['start_datetime', [Tag, 'weigth', 'DESC']],
@@ -373,7 +373,7 @@ const eventController = {
       ]
     })
 
-    return _(events).map(e => {
+    return events.map(e => {
       e = e.get()
       e.tags = e.tags ? e.tags.map(t => t && t.tag) : []
       return e
@@ -390,7 +390,7 @@ const eventController = {
   },
 
   /**
-   * Ensure we have at least 3 instances of recurrent events
+   * Ensure we have the next instances of recurrent events
    */
   _createRecurrentOccurrence (e) {
     const event = {
@@ -398,15 +398,14 @@ const eventController = {
       title: e.title,
       description: e.description,
       image_path: e.image_path,
-      is_visible: e.is_visible,
+      is_visible: true,
       userId: e.userId,
       placeId: e.placeId
     }
 
     const recurrent = e.recurrent
-    let left = 3 - e.child.length
-    const start = e.child.length ? moment.unix(e.child[e.child.length - 1].start_datetime) : moment()
-    let cursor = start.startOf('week')
+    const cursor = moment()
+    // let cursor = start.startOf('week')
     const start_date = moment.unix(e.start_datetime)
     const duration = moment.unix(e.end_datetime).diff(start_date, 's')
     const frequency = recurrent.frequency
@@ -418,7 +417,7 @@ const eventController = {
 
     // each week or 2 (search for the first specified day)
     if (frequency === '1w' || frequency === '2w') {
-      cursor.add(days[0] - 1, 'day')
+      // cursor.add(days[0] - 1, 'day')
       if (frequency === '2w') {
         const nWeeks = cursor.diff(e.start_datetime, 'w') % 2
         if (!nWeeks) { cursor.add(1, 'week') }
@@ -442,45 +441,36 @@ const eventController = {
     }
 
     // add event at specified frequency
-    while (true) {
-      if (!left) { break }
-      left -= 1
-      const first_event_of_week = cursor.clone()
-      days.forEach(d => {
-        debug(cursor)
-        if (type === 'ordinal') {
-          cursor.date(d)
-        } else {
-          cursor.day(d - 1)
-        }
-        event.start_datetime = cursor.unix()
-        event.end_datetime = event.start_datetime + duration
-        Event.create(event)
-        cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
-      })
-      cursor = first_event_of_week.add(toAdd.n, toAdd.unit)
-    }
+    // const first_event_of_week = cursor.clone()
+    days.forEach(d => {
+      if (type === 'ordinal') {
+        cursor.date(d)
+      } else {
+        cursor.day(d - 1)
+      }
+      event.start_datetime = cursor.unix()
+      event.end_datetime = event.start_datetime + duration
+      Event.create(event)
+      cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
+    })
+    // cursor = first_event_of_week.add(toAdd.n, toAdd.unit)
   },
 
   /**
    * Create instances of recurrent events
-   * Remove old
-   * @param {*} start_datetime
+   * @param {Number} start_datetime
    */
   async _createRecurrent (start_datetime = moment().unix()) {
     // select recurrent events
     const events = await Event.findAll({
       where: { is_visible: true, recurrent: { [Op.ne]: null } },
-      include: [{ model: Event, as: 'child', required: false, where: { start_datetime: { [Op.gt]: start_datetime } } }],
+      include: [{ model: Event, as: 'child', required: false, where: { start_datetime: { [Op.gte]: start_datetime } } }],
       order: ['start_datetime']
     })
 
-    const creations = []
-    events
-      .filter(e => e.child && e.child.length < 3)
-      .forEach(e => {
-        eventController._createRecurrentOccurrence(e)
-      })
+    const creations = events
+      .filter(e => e.child.length === 0)
+      .map(eventController._createRecurrentOccurrence)
 
     return Promise.all(creations)
   }

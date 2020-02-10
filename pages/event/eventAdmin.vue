@@ -6,7 +6,7 @@ div
       div(v-if='event.is_visible' @click='toggle(false)') <i class='el-icon-open'/> {{$t('common.hide')}}
       div(v-else @click='toggle(false)') <i class='el-icon-turn-off'/> {{$t('common.confirm')}}
     el-menu-item(@click='$router.replace(`/add/${event.id}`)') <i class='el-icon-edit'/> {{$t('common.edit')}}
-    el-menu-item(v-if='!event.parentId' @click='remove(false)') <i class='el-icon-delete'/> {{$t('common.remove')}}
+    el-menu-item(@click='remove(false)') <i class='el-icon-delete'/> {{$t('common.remove')}}
     div(v-if='event.parentId')
       el-divider  {{$t('event.recurrent')}}
       el-menu-item(v-if='event.parent.is_visible' @click='toggle(true)') <i class='el-icon-video-pause'/> {{$t('common.pause')}}
@@ -30,7 +30,7 @@ export default {
     ...mapActions(['delEvent']),
     async remove (parent = false) {
       try {
-        await MessageBox.confirm(this.$t('event.remove_confirmation'), this.$t('common.confirm'), {
+        await MessageBox.confirm(this.$t(`event.remove_${parent ? 'recurrent_' : ''}confirmation`), this.$t('common.confirm'), {
           confirmButtonText: this.$t('common.ok'),
           cancelButtonText: this.$t('common.cancel'),
           type: 'error'

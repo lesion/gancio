@@ -25,10 +25,10 @@ export default ({ app, store }) => {
 
     const normal = `${start.format('dddd, D MMMM (HH:mm-')}${end.format('HH:mm) ')}`
     // recurrent event
-    if (event.recurrent && where !== 'home') {
-      const { frequency, days, type } = event.recurrent
+    if (event.parent && where !== 'home') {
+      const { frequency, days, type } = event.parent.recurrent
       if (frequency === '1w' || frequency === '2w') {
-        const recurrent = app.i18n.tc(`event.recurrent_${frequency}_days`, days.length, { days: days.map(d => moment().day(d - 1).format('dddd')) })
+        const recurrent = app.i18n.tc(`event.recurrent_${frequency}_days`, days.length, { days: days.map(d => moment().day(d).format('dddd')) })
         return `${normal} - ${recurrent}`
       } else if (frequency === '1m' || frequency === '2m') {
         const d = type === 'ordinal' ? days : days.map(d => moment().day(d - 1).format('dddd'))
