@@ -22,6 +22,18 @@ export default ({ app, store }) => {
   Vue.filter('to', timestamp => moment.unix(timestamp).to())
   // format event start/end datetime based on page
 
+  Vue.filter('recurrentDetail', event => {
+    const { frequency, days, type } = event.parent.recurrent
+    let recurrent
+    if (frequency === '1w' || frequency === '2w') {
+      recurrent = app.i18n.tc(`event.recurrent_${frequency}_days`, days.length, { days: days.map(d => moment().day(d - 1).format('dddd')) })
+    } else if (frequency === '1m' || frequency === '2m') {
+      const d = type === 'ordinal' ? days : days.map(d => moment().day(d - 1).format('dddd'))
+      recurrent = app.i18n.tc(`event.recurrent_${frequency}_${type}`, days.length, { days: d })
+    }
+    return recurrent
+
+  })
   Vue.filter('when', (event) => {
     const start = moment.unix(event.start_datetime)
     const end = moment.unix(event.end_datetime)

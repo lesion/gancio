@@ -8,11 +8,15 @@
       .p-name.p-summary.title {{event.title}}
 
     .card-body
+      //-  when
       div
         i.el-icon-date
         time.dt-start(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  {{event|when}}
+
+      //- place
       el-button.p-location.mt-1.bg-dark.text-warning.float-right(plain size='mini' round type='text' icon='el-icon-location-outline' @click='addPlace') {{event.place.name}}
-      //- date / place
+
+      //- description
       .description.p-description.mt-3(v-if='!event.image_path || !event.tags.length' v-html='description')
 
     .card-footer(v-if='event.tags.length')
