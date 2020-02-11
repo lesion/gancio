@@ -1,19 +1,19 @@
 <template lang="pug">
-  .card.event.mt-1.text-white(body-style='padding: 0px;')
+  .card.event.h-event.mt-1.text-white(body-style='padding: 0px;')
     nuxt-link(:to='`/event/${event.id}`')
       img(v-if='showImage && event.image_path' :src='`/media/thumb/${event.image_path}`')
       .float-right
         i.text-danger.el-icon-refresh(v-if='event.parentId')
         .badge.text-info(v-if='settings.enable_resources && event.resources && event.resources.length') {{event.resources.length}}
-      .title {{event.title}}
+      .p-name.p-summary.title {{event.title}}
 
     .card-body
       div
         i.el-icon-date
-        span  {{event|when('home')}}
-      el-button.mt-1.bg-dark.text-warning.float-right(plain size='mini' round type='text' icon='el-icon-location-outline' @click='addPlace') {{event.place.name}}
+        time.dt-start(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  {{event|when}}
+      el-button.p-location.mt-1.bg-dark.text-warning.float-right(plain size='mini' round type='text' icon='el-icon-location-outline' @click='addPlace') {{event.place.name}}
       //- date / place
-      .description.mt-3(v-if='!event.image_path || !event.tags.length' v-html='description')
+      .description.p-description.mt-3(v-if='!event.image_path || !event.tags.length' v-html='description')
 
     .card-footer(v-if='event.tags.length')
       el-button.ml-1.bg-dark(type='text' plain round size='mini' v-for='tag in event.tags' :key='tag' @click='addTag(tag)') {{tag}}

@@ -97,7 +97,7 @@ const eventController = {
         },
         include: [
           { model: Tag, required: false, attributes: ['tag', 'weigth'], through: { attributes: [] } },
-          { model: Place, attributes: ['name', 'address'] },
+          { model: Place, attributes: ['name', 'address', 'id'] },
           {
             model: Resource,
             where: !is_admin && { hidden: false },

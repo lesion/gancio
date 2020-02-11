@@ -6,7 +6,7 @@
     .event-info
 
       //-  title
-      .date {{event|when('home')}}<br/>
+      .date {{event|when}}<br/>
       h4 {{event.title}}
 
       //- date / place

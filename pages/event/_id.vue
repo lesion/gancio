@@ -1,8 +1,8 @@
 <template lang="pug">
-  el-container#eventDetail
+  el-container#eventDetail.h-event
     el-header
 
-      span.title {{event.title}}
+      span.title.p-summary.p-name {{event.title}}
 
       #arrow
         nuxt-link.mr-1(:to='`/event/${prev}`')
@@ -23,14 +23,17 @@
             div.loading(slot='placeholder')
               el-icon(name='loading')
 
-          pre(v-html='event.description')
-          el-button.ml-1.text-primary(plain round size='mini' v-for='tag in event.tags' :key='tag') {{tag}}
+          pre.p-description(v-html='event.description')
+          el-button.p-category.ml-1.text-primary(plain round size='mini' v-for='tag in event.tags' :key='tag') {{tag}}
 
         //- info & actions
         el-col.menu(:sm='6' :xs='24')
-          el-menu.menu.mt-2(router)
-            p <i class='el-icon-date'></i>  <b>{{event|when}}</b> <br/><small>{{event|to}}</small>
-            p <i class='el-icon-location-outline'></i>  <b>{{event.place.name}}</b> - {{event.place.address}}
+          el-menu.menu(router)
+            time.dt-start(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")') <i class='el-icon-date'></i>  <b>{{event|when}}</b> <br/><small>{{event.start_datetime|to}}</small>
+            p
+              i.el-icon-location-outline
+              b.p-location {{event.place.name}}
+              span  - {{event.place.address}}
             el-divider {{$t('common.actions')}}
             el-menu-item(
               v-clipboard:success='copyLink'
@@ -77,7 +80,7 @@
                 el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(resource)') {{$t('admin.delete_resource')}}
                 el-dropdown-item(icon='el-icon-lock' @click.native='blockUser(resource)') {{$t('admin.block_user')}}
             a(:href='resource.data.url || resource.data.context')
-              small {{resource.data.published|datetime}}
+              small {{resource.data.published|dateFormat('ddd, D MMMM HH:mm')}}
 
           div.mt-1(v-html='resource_filter(resource.data.content)')
           span.previewImage(@click='showResource(resource)')
@@ -127,7 +130,7 @@ export default {
       rel: 'alternate',
       type: 'application/rss+xml',
       title: `${this.settings.title} events  @${this.event.place.name}`,
-      href: this.settings.baseurl + `/feed/rss?places=${this.event.placeId}`
+      href: this.settings.baseurl + `/feed/rss?places=${this.event.place.id}`
     }
 
     return {
@@ -325,6 +328,10 @@ export default {
 </script>
 <style lang='less'>
 #eventDetail {
+  time {
+    margin: 0rem 0rem 0rem 1rem;
+    display: inline-block;
+  }
 
   #arrow {
     position: absolute;
@@ -377,7 +384,7 @@ export default {
   div.menu {
     border-left: 1px solid #e6e6e6;
     p {
-      margin-left: 10px;
+      margin: 1rem 0rem 1rem 1rem;
     }
   }
 
