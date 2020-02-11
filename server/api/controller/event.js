@@ -6,6 +6,8 @@ const fs = require('fs')
 const { Op } = require('sequelize')
 const _ = require('lodash')
 const helpers = require('../../helpers')
+const linkifyHtml = require('linkifyjs/html')
+const Sequelize = require('sequelize')
 
 const {
   event: Event,
@@ -15,7 +17,6 @@ const {
   notification: Notification,
   ap_user: APUser
 } = require('../models')
-const Sequelize = require('sequelize')
 const exportController = require('./export')
 
 const debug = require('debug')('controller:event')
@@ -222,7 +223,7 @@ const eventController = {
       const eventDetails = {
         title: body.title,
         // remove html tags
-        description: helpers.sanitizeHTML(body.description),
+        description: helpers.sanitizeHTML(linkifyHtml(body.description)),
         multidate: body.multidate,
         start_datetime: body.start_datetime,
         end_datetime: body.end_datetime,
@@ -296,7 +297,7 @@ const eventController = {
     const eventDetails = {
       title: body.title,
       // remove html tags
-      description: helpers.sanitizeHTML(body.description),
+      description: helpers.sanitizeHTML(linkifyHtml(body.description)),
       multidate: body.multidate,
       start_datetime: body.start_datetime,
       end_datetime: body.end_datetime,
