@@ -175,6 +175,7 @@ const eventController = {
   async getUnconfirmed (req, res) {
     const events = await Event.findAll({
       where: {
+        parentId: null,
         is_visible: false
       },
       order: [['start_datetime', 'ASC']],

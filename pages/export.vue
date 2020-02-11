@@ -21,7 +21,7 @@
           v-clipboard:copy='link' v-clipboard:success='copyLink'
           type="primary" icon='el-icon-document' ) {{$t("common.copy")}}
 
-      el-tab-pane.pt-1(:label="$t('common.fediverse')" name='fediverse')
+      el-tab-pane.pt-1(v-if='settings.enable_federation' :label="$t('common.fediverse')" name='fediverse')
         FollowMe
 
       el-tab-pane.pt-1(label='ics/ical' name='ics')

@@ -13,7 +13,7 @@
       #links
         a(href='https://gancio.org') Gancio {{settings.version}}</a>
         span  ⇒
-        a(rel='me' :href='settings.baseurl' @click.prevent='showFollowMe=true') follow me
+        a(v-if='settings.enable_federation' rel='me' :href='settings.baseurl' @click.prevent='showFollowMe=true') follow me
         nuxt-link(to='/about') about
         a(href='https://blog.gancio.org') blog
         a(href='https://framagit.org/les/gancio') source
