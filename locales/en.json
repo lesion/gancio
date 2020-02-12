@@ -75,7 +75,8 @@
         "event": "Event",
         "pause": "Pause",
         "start": "Start",
-        "fediverse": "Fediverse"
+        "fediverse": "Fediverse",
+        "skip": "Skip"
     },
     "login": {
         "description": "By logging in you can publish new events.",
