@@ -1,5 +1,32 @@
 All notable changes to this project will be documented in this file.
 
+
+### 0.21.0
+- a new recurring events logic (a la taskwarrior):
+  - each occurrence of a recurring event could be personalized.
+  - occurrence of recurring events are skippable.
+  - occurrence generation could be paused.
+- support `h-event` microformats! in homepage and in any single event's page
+- add a background task manager (email, recurring events creation)
+- sanitize html content coming from fediverse and event description with dompurify
+  - also remove `fbclid` params in links
+- front end search optimization
+- use oauth2 for everything, password flow for webclient, this also fix
+  some issue with authentication
+- clickable tags / places @ home (to add them as filters)
+- use a cleaner menububble for the new editor
+- add local smtp and sendmail options on configuration setup
+- check permission for resource removal request from fediverse
+- add resource from fediverse also when inReplyTo is another resource
+- automatic API documentation inclusion in docs
+- split moderation in another tab inside admin panel
+- use axios instead of fetch everywhere
+- lot of ux improvements & error handling
+- search links in event description with linkifyjs while add/edit events
+- remove text templates for emails and use html2text instead
+- fix email unique index for users!
+
+
 ### 0.20.0
   - New layout (navbar/footer/visible filters)
   - two month calendar on large display
