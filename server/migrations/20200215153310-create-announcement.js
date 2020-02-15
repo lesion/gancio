@@ -13,6 +13,7 @@ module.exports = {
       until: {
         type: Sequelize.DATE
       },
+      visible: Sequelize.BOOLEAN,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
