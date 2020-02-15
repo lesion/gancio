@@ -43,7 +43,7 @@ module.exports = {
     }
 
     // create admin user
-    consola.info('Create admin user', admin)
+    consola.info(`Create admin with email: ${admin.email}`)
     await db.user.create({
       email: admin.email,
       password: admin.password,

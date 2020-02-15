@@ -5,6 +5,7 @@ const mail = require('../mail')
 const { user: User } = require('../models')
 const settingsController = require('./settings')
 const debug = require('debug')('user:controller')
+const linkify = require('linkifyjs')
 
 const userController = {
 
@@ -79,14 +80,22 @@ const userController = {
     if (!settingsController.settings.allow_registration) { return res.sendStatus(404) }
     const n_users = await User.count()
     try {
+      req.body.recover_code = crypto.randomBytes(16).toString('hex')
+
       // the first registered user will be an active admin
       if (n_users === 0) {
         req.body.is_active = req.body.is_admin = true
-      } else {
-        req.body.is_active = false
+        const user = await User.create(req.body)
+        return res.json(user)
       }
 
-      req.body.recover_code = crypto.randomBytes(16).toString('hex')
+      req.body.is_active = false
+
+      // check email
+      if (!linkify.test(req.body.email, 'email')) {
+        return res.status(404).json('Invalid email')
+      }
+
       debug('Register user ', req.body.email)
       const user = await User.create(req.body)
       debug(`Sending registration email to ${user.email}`)

@@ -101,7 +101,8 @@
   "register": {
     "description": "I movimenti hanno bisogno di organizzarsi e autofinanziarsi. <br/>Questo è un dono per voi, usatelo solo per eventi non commerciali e ovviamente antifascisti, antisessisti, antirazzisti. \n      <br/>Prima di poter pubblicare <strong>dobbiamo approvare l'account</strong>, considera che <strong>dietro questo sito ci sono delle persone</strong> di\n      carne e sangue, scrivici quindi due righe per farci capire che eventi vorresti pubblicare.",
     "error": "Errore: ",
-    "complete": "Confermeremo la registrazione quanto prima."
+    "complete": "Confermeremo la registrazione quanto prima.",
+    "first_user": "Amministratore creato e attivo"
   },
   "event": {
     "anon": "Anonimo",

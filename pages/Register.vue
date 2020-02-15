@@ -21,6 +21,7 @@
 import { mapState } from 'vuex'
 import { Message } from 'element-ui'
 import get from 'lodash/get'
+import linkify from 'linkifyjs'
 
 export default {
   name: 'Register',
@@ -46,19 +47,21 @@ export default {
     this.$refs.email.focus()
   },
   methods: {
-    close () {
-      this.$router.replace('/')
-    },
     async register () {
-      this.loading = true
       try {
-        await this.$axios.$post('/user/register', this.user)
+        if (!linkify.test(this.user.email, 'email')) {
+          throw new Error('Invalid email')
+        }
+        this.loading = true
+        const user = await this.$axios.$post('/user/register', this.user)
+        // this is the first user registered
+        const first_user = user && user.is_admin && user.is_active
         Message({
           showClose: true,
-          message: this.$t('register.complete'),
+          message: first_user ? this.$t('register.first_user') : this.$t('register.complete'),
           type: 'success'
         })
-        this.close()
+        this.$router.replace('/')
       } catch (e) {
         const error = get(e, 'response.data.errors[0].message', String(e))
         Message({
