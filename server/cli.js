@@ -145,7 +145,7 @@ async function setupQuestionnaire (is_docker, db) {
   }
   questions.push({
     name: 'admin.email',
-    message: 'Admin email (a first user with this username will be created, also used as sender address)',
+    message: 'Admin email',
     default: options => {
       const baseurl = new url.URL(options.baseurl)
       return (
