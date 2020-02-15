@@ -21,7 +21,6 @@
 import { mapState } from 'vuex'
 import { Message } from 'element-ui'
 import get from 'lodash/get'
-import linkify from 'linkifyjs'
 
 export default {
   name: 'Register',
@@ -49,9 +48,6 @@ export default {
   methods: {
     async register () {
       try {
-        if (!linkify.test(this.user.email, 'email')) {
-          throw new Error('Invalid email')
-        }
         this.loading = true
         const user = await this.$axios.$post('/user/register', this.user)
         // this is the first user registered
