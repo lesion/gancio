@@ -54,6 +54,12 @@ module.exports = {
     // add default notification
     consola.info('Add default notification')
 
+    // await db.announcement.create({
+    //   visible: true,
+    //   title: 'Welcome to Gancio',
+    //   announcement: 'TODO: HTML First presentation post'
+    // })
+
     // send confirmed event to mastodon
     await db.notification.create({ action: 'Create', type: 'ap', filters: { is_visible: true } })
     await db.notification.create({ action: 'Update', type: 'ap', filters: { is_visible: true } })

@@ -1,6 +1,5 @@
 import moment from 'moment-timezone'
 import intersection from 'lodash/intersection'
-import find from 'lodash/find'
 
 export const state = () => ({
   locale: '',
@@ -26,7 +25,8 @@ export const state = () => ({
     show_past_events: false,
     show_recurrent_events: false,
     show_pinned_event: false
-  }
+  },
+  announcements: []
 })
 
 export const getters = {
@@ -136,6 +136,9 @@ export const mutations = {
   },
   setPast (state, in_past) {
     state.in_past = in_past
+  },
+  setAnnouncements (state, announcements) {
+    state.announcements = announcements
   }
 }
 
@@ -146,6 +149,7 @@ export const actions = {
     commit('setSettings', req.settings)
 
     commit('setEvents', req.events)
+    commit('setAnnouncements', req.announcements)
     commit('update', req.meta)
 
     // apply settings
@@ -160,6 +164,10 @@ export const actions = {
     const events = await this.$axios.$get(`/event?${query}`)
     commit('setEvents', events)
     commit('showPastEvents', in_past)
+  },
+  async updateAnnouncements ({ commit }) {
+    const announcements = await this.$axios.$get('/announcements')
+    commit('setAnnouncements', announcements)
   },
   async updateMeta ({ commit }) {
     const { tags, places } = await this.$axios.$get('/event/meta')
@@ -176,6 +184,9 @@ export const actions = {
     if (event.user) {
       commit('updateEvent', event)
     }
+  },
+  setAnnouncements ({ commit }, announcements) {
+    commit('setAnnouncements', announcements)
   },
   delEvent ({ commit }, eventId) {
     commit('delEvent', eventId)

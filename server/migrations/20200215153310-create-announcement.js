@@ -7,11 +7,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      announce: {
+      title: Sequelize.STRING,
+      announcement: {
         type: Sequelize.STRING
-      },
-      until: {
-        type: Sequelize.DATE
       },
       visible: Sequelize.BOOLEAN,
       createdAt: {

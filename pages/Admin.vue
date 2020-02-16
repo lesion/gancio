@@ -58,6 +58,13 @@
             span.ml-1 {{$t('common.moderation')}}
           Moderation
 
+        //- ANNOUNCEMENTS
+        el-tab-pane.pt-1
+          template(slot='label')
+            v-icon(name='bullhorn')
+            span.ml-1 {{$t('common.announcements')}}
+          Announcement
+
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -67,10 +74,11 @@ import Places from '../components/admin/Places'
 import Settings from '../components/admin/Settings'
 import Federation from '../components/admin/Federation'
 import Moderation from '../components/admin/Moderation'
+import Announcement from '../components/admin/Announcement'
 
 export default {
   name: 'Admin',
-  components: { Users, Places, Settings, Federation, Moderation },
+  components: { Users, Places, Settings, Federation, Moderation, Announcement },
   middleware: ['auth'],
   data () {
     return {

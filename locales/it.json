@@ -76,7 +76,9 @@
     "pause": "Pausa",
     "start": "Avvia",
     "fediverse": "Fediverso",
-    "skip": "Salta"
+    "skip": "Salta",
+    "delete": "Elimina",
+    "announcements": "Annunci"
   },
   "login": {
     "description": "Entrando puoi pubblicare nuovi eventi.",
@@ -176,7 +178,10 @@
     "filter_users": "Filtra utenti",
     "instance_name": "Nome istanza",
     "favicon": "Logo",
-    "user_block_confirm": "Sicura di voler bloccare l'utente?"
+    "user_block_confirm": "Sicura di voler bloccare l'utente?",
+    "delete_announcement_confirm": "Sicura di voler eliminare l'annuncio?",
+    "announcement_remove_ok": "Annuncio rimosso",
+    "announcement_description": "In questa sezione puoi inserire annunci che rimarranno in homepage"
   },
   "auth": {
     "not_confirmed": "Non abbiamo ancora confermato questa mail...",

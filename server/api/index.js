@@ -11,6 +11,7 @@ const instanceController = require('./controller/instance')
 const apUserController = require('./controller/ap_user')
 const resourceController = require('./controller/resource')
 const oauthController = require('./controller/oauth')
+const announceController = require('./controller/announce')
 
 const storage = require('./storage')
 const upload = multer({ storage })
@@ -125,6 +126,12 @@ api.post('/instances/toggle_user_block', isAdmin, apUserController.toggleBlock)
 api.put('/resources/:resource_id', isAdmin, resourceController.hide)
 api.delete('/resources/:resource_id', isAdmin, resourceController.remove)
 api.get('/resources', isAdmin, resourceController.getAll)
+
+// - ADMIN ANNOUNCEMENTS
+api.get('/announcements', isAdmin, announceController.getAll)
+api.post('/announcements', isAdmin, announceController.add)
+api.put('/announcements/:announce_id', isAdmin, announceController.update)
+api.delete('/announcements/:announce_id', isAdmin, announceController.remove)
 
 api.get('/clients', hasPerm('oauth:read'), oauthController.getClients)
 api.get('/client/:client_id', hasPerm('oauth:read'), oauthController.getClient)

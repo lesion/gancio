@@ -9,6 +9,7 @@
         Search(past-filter recurrent-filter)
 
     #events
+      Announcement(v-for='announcement in announcements' :key='announcement.id' :announcement='announcement')
       Event(v-for='event in events' :key='event.id' :event='event')
 
 </template>
@@ -16,18 +17,19 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import Event from '@/components/Event'
+import Announcement from '@/components/Announcement'
 import Calendar from '@/components/Calendar'
 import Search from '@/components/Search'
 
 export default {
   name: 'Home',
-  components: { Calendar, Event, Search },
+  components: { Calendar, Event, Search, Announcement },
   computed: {
     events () {
       return this.in_past ? this.filteredEventsWithPast : this.filteredEvents
     },
     ...mapGetters(['filteredEvents', 'filteredEventsWithPast']),
-    ...mapState(['settings', 'in_past'])
+    ...mapState(['settings', 'in_past', 'announcements'])
   },
   head () {
     return {

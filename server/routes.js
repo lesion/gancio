@@ -12,6 +12,7 @@ const { spamFilter } = require('./federation/helpers')
 const debug = require('debug')('routes')
 const exportController = require('./api/controller/export')
 const eventController = require('./api/controller/event')
+const announceController = require('./api/controller/announce')
 
 const helpers = require('./helpers')
 const { startOfMonth, startOfWeek, getUnixTime } = require('date-fns')
@@ -59,11 +60,12 @@ app.use((error, req, res, next) => {
 
 // remaining request goes to nuxt
 // first nuxt component is ./pages/index.vue (with ./layouts/default.vue)
-// prefill current events, tags, places (used in every path)
+// prefill current events, tags, places and announcements (used in every path)
 app.use(async (req, res, next) => {
   const start_datetime = getUnixTime(startOfWeek(startOfMonth(new Date())))
   req.events = await eventController._select(start_datetime, 100)
   req.meta = await eventController._getMeta()
+  req.announcements = await announceController._getVisible()
   next()
 })
 

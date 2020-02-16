@@ -1,5 +1,5 @@
 <template lang='pug'>
-  el-container#main(:class='{dark: $route.name==="index"}')
+  el-container#main(:class='{dark: $route.name==="index" || $route.name==="announcement-id"}')
     el-dialog(:visible.sync='showFollowMe')
       h4(slot='title') {{$t('common.follow_me_title')}}
       FollowMe
