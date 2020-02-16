@@ -19,7 +19,7 @@ export default ({ app, store }) => {
   // shown in mobile homepage
   Vue.filter('day', value => moment.unix(value).locale(store.state.locale).format('dddd, D MMM'))
 
-  Vue.filter('to', timestamp => moment.unix(timestamp).to())
+  Vue.filter('from', timestamp => moment.unix(timestamp).from())
   // format event start/end datetime based on page
 
   Vue.filter('recurrentDetail', event => {

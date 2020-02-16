@@ -19,7 +19,12 @@ async function main () {
   } else {
     await nuxt.ready()
   }
-  nuxt.listen()
+  try {
+    await nuxt.listen()
+  } catch (e) {
+    consola.error(e.toString())
+    return
+  }
   consola.info('Listen on %s:%d , visit me here => %s', config.server.host, config.server.port, config.baseurl)
   TaskManager.start()
 

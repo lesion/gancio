@@ -29,7 +29,7 @@
         //- info & actions
         el-col.menu(:sm='6' :xs='24')
           el-menu.menu(router)
-            time.dt-start(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")') <i class='el-icon-date'></i>  <b>{{event|when}}</b> <br/><small>{{event.start_datetime|to}}</small>
+            time.dt-start(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")') <i class='el-icon-date'></i>  <b>{{event|when}}</b> <br/><small>{{event.start_datetime|from}}</small>
             p
               i.el-icon-location-outline
               b.p-location {{event.place.name}}
