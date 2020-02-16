@@ -67,12 +67,25 @@ export default {
   data () {
     return {
       linkActive: false,
-      editor: null
+      editor: null,
+      update: false
+    }
+  },
+  watch: {
+    value () {
+      if (this.update) {
+        this.update = false
+        return
+      }
+      this.editor.setContent(this.value)
     }
   },
   mounted () {
     this.editor = new Editor({
-      onUpdate: _.debounce(({ getHTML }) => this.$emit('input', getHTML()), 300),
+      onUpdate: _.debounce(({ getHTML }) => {
+        this.update = true
+        this.$emit('input', getHTML())
+      }, 300),
       content: this.value,
       extensions: [
         new Blockquote(),
