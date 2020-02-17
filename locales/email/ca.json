@@ -1,23 +1,22 @@
 {
-  "register": {
-    "subject": "Hem rebut una soŀlicitud de registre",
-    "content": "Hem rebut una soŀlicitud de registre. Hi respondrem tan aviat com ens sigui possible."
-  },
-  "confirm": {
-    "subject": "Ja pots publicar activitats",
-    "content": "Ei, el teu compte a <a href='{{config.baseurl}}'>{{config.title}}</a> ha estat confirmat. Escriu-nos a {{config.admin}} per qualsevol dubte."
-  },
-  "user_confirm": {
-    "subject": "Ja pots publicar activitats",
-    "content": "Ei, has creat un compte a <a href='{{config.baseurl}}'>{{config.title}}</a>, oi? <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confirma-ho i tria una contrasenya</a>, sisplau. Gràcies!"
-  },
-  "recover": {
-    "subject": "Recupera la contrasenya",
-    "content": "Ep, has demanat restablir la contrasenya a {{config.title}}, oi? <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Clica aquí</a> per a continuar el procés."
-  },
-  "admin_register": {
-    "subject": "Registre nou",
-    "content": "{{user.email}} ha soŀlicitat regsitrar-se a {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Respon a la soŀlicitud <a href='{{config.baseurl}}/admin'>aquí</a>."
-  }
+    "register": {
+        "subject": "Hem rebut una soŀlicitud de registre",
+        "content": "Hem rebut una soŀlicitud de registre. Hi respondrem tan aviat com ens sigui possible.\nSalut"
+    },
+    "confirm": {
+        "subject": "Ja pots publicar activitats",
+        "content": "Ei, el teu compte a <a href='{{config.baseurl}}'>{{config.title}}</a> ha estat confirmat. Escriu-nos a {{config.admin}} per qualsevol dubte."
+    },
+    "user_confirm": {
+        "subject": "Ja pots publicar activitats",
+        "content": "Hola, que creat un compte a <a href='{{config.baseurl}}'>{{config.title}}</a>? Si és així, <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>confirma-ho i tria una contrasenya</a>, si us plau."
+    },
+    "recover": {
+        "subject": "Recupera la contrasenya",
+        "content": "Ep, has demanat restablir la contrasenya a {{config.title}}, oi? <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Clica aquí</a> per a continuar el procés"
+    },
+    "admin_register": {
+        "subject": "Registre nou",
+        "content": "{{user.email}} ha soŀlicitat regsitrar-se a {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Respon a la soŀlicitud <a href='{{config.baseurl}}/admin'>aquí</a>."
+    }
 }
-
