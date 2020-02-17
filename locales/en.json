@@ -76,7 +76,9 @@
         "pause": "Pause",
         "start": "Start",
         "fediverse": "Fediverse",
-        "skip": "Skip"
+        "skip": "Skip",
+        "delete": "Remove",
+        "announcements": "Announcements"
     },
     "login": {
         "description": "By logging in you can publish new events.",
@@ -101,7 +103,8 @@
     "register": {
         "description": "Social movements need to organize and self-finance. <br/> This is a gift for you, use it only for non-commercial and obviously anti-fascist, anti-sexist, anti-racist events.\n          <br/> Before you can publish <strong> we must approve the account </strong>, consider that <strong> behind this site there are people </strong> of\n          flesh and blood, so write us two lines to let us know what events you would like to publish.",
         "error": "Error: ",
-        "complete": "Registration has to be confirmed."
+        "complete": "Registration has to be confirmed.",
+        "first_user": "Administrator created"
     },
     "event": {
         "anon": "Anon",
@@ -177,7 +180,10 @@
         "resources": "Resources",
         "user_blocked": "User {user} blocked",
         "favicon": "Logo",
-        "user_block_confirm": "Are you sure to block this user?"
+        "user_block_confirm": "Are you sure to block this user?",
+        "delete_announcement_confirm": "Are you sure to remove the announcement?",
+        "announcement_remove_ok": "Announce removed",
+        "announcement_description": "In this section you can insert announcements that will remain on the homepage"
     },
     "auth": {
         "not_confirmed": "Not confirmed yet...",
