@@ -4,8 +4,10 @@
       //- select timezone
       client-only
         el-form-item(:label="$t('admin.select_instance_timezone')")
-          el-select(v-model='instance_timezone' filterable)
-            el-option(v-for='timezone in timezones' :key='timezone.value' :value='timezone.value')
+          el-select.mb-3(v-model='instance_timezone' filterable
+            @input.native='queryTz=$event.target.value' @change='queryTz=""'
+            default-first-option placeholder='Timezone, type to search')
+            el-option(v-for='timezone in filteredTimezones' :key='timezone.value' :value='timezone.value')
               span.float-left {{timezone.value}}
               small.float-right.text-danger {{timezone.offset}}
 
@@ -42,24 +44,19 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import moment from 'moment-timezone'
-import timezones from './timezones'
+import _ from 'lodash'
+
 export default {
   name: 'Settings',
   data ({ $store }) {
     return {
+      queryTz: '',
       title: $store.state.settings.title,
       description: $store.state.settings.description
     }
   },
   computed: {
     ...mapState(['settings']),
-    timezones () {
-      const current_timezone = moment.tz.guess()
-      return timezones
-        .filter(tz => tz !== current_timezone)
-        .concat([current_timezone])
-        .map(tz => ({ value: tz, offset: moment().tz(tz).format('z Z') }))
-    },
     ...mapState(['settings']),
     instance_timezone: {
       get () { return this.settings.instance_timezone },
@@ -80,6 +77,18 @@ export default {
     recurrent_event_visible: {
       get () { return this.settings.recurrent_event_visible },
       set (value) { this.setSetting({ key: 'recurrent_event_visible', value }) }
+    },
+    filteredTimezones () {
+      const current_timezone = moment.tz.guess()
+      const query = this.queryTz.toLowerCase()
+      const ret = _(moment.tz.names())
+        .filter(tz => tz !== current_timezone && (!query || tz.toLowerCase().includes(query)))
+        .take(10)
+        .unshift(current_timezone)
+        .map(tz => ({ value: tz, offset: moment().tz(tz).format('z Z') }))
+        .value()
+      console.error(ret)
+      return ret
     }
   },
   methods: {
