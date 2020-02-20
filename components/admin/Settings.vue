@@ -11,8 +11,9 @@
               span.float-left {{timezone.value}}
               small.float-right.text-danger {{timezone.offset}}
 
-      el-form-item(:label="$t('common.title')")
-        el-input(v-model='title' @blur='save("title", title)')
+      div.mt-4 {{$t('admin.instance_locale')}}
+      el-select(v-model='instance_locale')
+        el-option(v-for='locale in Object.keys(locales)' :key='locale' :label='locales[locale]' :value='locale')
 
       el-form-item(:label="$t('common.description')")
         el-input(v-model='description' @blur='save("description", description)')
@@ -45,6 +46,7 @@
 import { mapActions, mapState } from 'vuex'
 import moment from 'moment-timezone'
 import _ from 'lodash'
+import locales from '../../locales/esm'
 
 export default {
   name: 'Settings',
@@ -52,12 +54,16 @@ export default {
     return {
       queryTz: '',
       title: $store.state.settings.title,
-      description: $store.state.settings.description
+      description: $store.state.settings.description,
+      locales
     }
   },
   computed: {
     ...mapState(['settings']),
-    ...mapState(['settings']),
+    instance_locale: {
+      get () { return this.settings.instance_locale },
+      set (value) { this.setSetting({ key: 'instance_locale', value }) }
+    },
     instance_timezone: {
       get () { return this.settings.instance_timezone },
       set (value) { this.setSetting({ key: 'instance_timezone', value }) }
@@ -87,7 +93,6 @@ export default {
         .unshift(current_timezone)
         .map(tz => ({ value: tz, offset: moment().tz(tz).format('z Z') }))
         .value()
-      console.error(ret)
       return ret
     }
   },

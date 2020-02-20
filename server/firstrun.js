@@ -60,15 +60,15 @@ module.exports = {
     //   announcement: 'TODO: HTML First presentation post'
     // })
 
-    // send confirmed event to mastodon
+    // send confirmed events to mastodon
     await db.notification.create({ action: 'Create', type: 'ap', filters: { is_visible: true } })
     await db.notification.create({ action: 'Update', type: 'ap', filters: { is_visible: true } })
     await db.notification.create({ action: 'Delete', type: 'ap', filters: { is_visible: true } })
 
-    // send anon event to administrator
+    // send anon events to admin
     await db.notification.create({ action: 'Create', type: 'admin_email', filters: { is_visible: false } })
 
-    // TODO
+    // TODO email's notifications
     // await db.notification.create({ action: 'Create', type: 'email', filters: { is_visible: true } })
 
     // close db connection

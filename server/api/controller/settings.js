@@ -11,6 +11,7 @@ const generateKeyPair = util.promisify(crypto.generateKeyPair)
 
 const defaultSettings = {
   instance_timezone: 'Europe/Rome',
+  instance_locale: 'en',
   instance_name: config.title.toLowerCase().replace(/ /g, ''),
   allow_registration: true,
   allow_anon_event: true,

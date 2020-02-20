@@ -2,12 +2,13 @@ const Email = require('email-templates')
 const path = require('path')
 const moment = require('moment-timezone')
 const config = require('config')
-const settings = require('./controller/settings')
+const settingsController = require('./controller/settings')
 const debug = require('debug')('email')
 const { Task, TaskManager } = require('../taskManager')
+const locales = require('../../locales')
 
 const mail = {
-  send (addresses, template, locals, locale) {
+  send (addresses, template, locals, locale = settingsController.settings.instance_locale) {
     const task = new Task({
       name: 'MAIL',
       removable: true,
@@ -17,8 +18,8 @@ const mail = {
     TaskManager.add(task)
   },
 
-  _send (addresses, template, locales, locale) {
-    debug(`Send ${template} email to ${addresses}`)
+  _send (addresses, template, locals, locale) {
+    debug(`Send ${template} email to ${addresses} with locale ${locale}`)
     const email = new Email({
       views: { root: path.join(__dirname, '..', 'emails') },
       htmlToText: true,
@@ -38,12 +39,13 @@ const mail = {
         objectNotation: true,
         syncFiles: false,
         updateFiles: false,
-        defaultLocale: settings.locale,
-        locale: settings.locale,
-        locales: ['it', 'es', 'en', 'ca']
+        defaultLocale: settingsController.settings.instance_locale || 'en',
+        locale,
+        locales: Object.keys(locales)
       },
       transport: config.smtp
     })
+
     const msg = {
       template,
       message: {
@@ -51,10 +53,10 @@ const mail = {
         bcc: config.admin_email
       },
       locals: {
-        ...locales,
+        ...locals,
         locale,
         config: { title: config.title, baseurl: config.baseurl, description: config.description, admin_email: config.admin_email },
-        datetime: datetime => moment.unix(datetime).format('ddd, D MMMM HH:mm')
+        datetime: datetime => moment.unix(datetime).locale(locale).format('ddd, D MMMM HH:mm')
       }
     }
     return email.send(msg)

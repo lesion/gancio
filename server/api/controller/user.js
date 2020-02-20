@@ -100,7 +100,7 @@ const userController = {
       const user = await User.create(req.body)
       debug(`Sending registration email to ${user.email}`)
       mail.send(user.email, 'register', { user, config }, req.settings.locale)
-      mail.send(config.admin_email, 'admin_register', { user, config }, req.settings.locale)
+      mail.send(config.admin_email, 'admin_register', { user, config })
       res.sendStatus(200)
     } catch (e) {
       res.status(404).json(e)

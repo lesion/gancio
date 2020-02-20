@@ -181,7 +181,8 @@
     "user_block_confirm": "Sicura di voler bloccare l'utente?",
     "delete_announcement_confirm": "Sicura di voler eliminare l'annuncio?",
     "announcement_remove_ok": "Annuncio rimosso",
-    "announcement_description": "In questa sezione puoi inserire annunci che rimarranno in homepage"
+    "announcement_description": "In questa sezione puoi inserire annunci che rimarranno in homepage",
+    "instance_locale": "Lingua di default",
   },
   "auth": {
     "not_confirmed": "Non abbiamo ancora confermato questa mail...",

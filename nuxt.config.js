@@ -34,12 +34,12 @@ module.exports = {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    '@/plugins/i18n.js',
     '@/plugins/element-ui', // UI library -> https://element.eleme.io/#/en-US/
     '@/plugins/filters', // text filters, datetime, etc.
     '@/plugins/vue-awesome', // icon
     '@/plugins/axios', // axios baseurl configuration
-    { src: '@/plugins/v-calendar', ssr: false }, // calendar, fix ssr
-    '@/plugins/i18n.js'
+    { src: '@/plugins/v-calendar', ssr: false } // calendar, fix ssr
   ],
 
   render: {

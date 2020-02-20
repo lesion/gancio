@@ -9,6 +9,7 @@ const { JSDOM } = require('jsdom')
 const { window } = new JSDOM('<!DOCTYPE html>')
 const domPurify = DOMPurify(window)
 const URL = require('url')
+const locales = require('../locales')
 
 domPurify.addHook('beforeSanitizeElements', node => {
   if (node.hasAttribute && node.hasAttribute('href')) {
@@ -52,8 +53,7 @@ module.exports = {
 
     // set locale and user locale
     const acceptedLanguages = req.headers['accept-language']
-    const supportedLanguages = ['en', 'it', 'es', 'ca']
-    acceptLanguage.languages(supportedLanguages)
+    acceptLanguage.languages(Object.keys(locales))
     req.settings.locale = acceptLanguage.get(acceptedLanguages)
     req.settings.user_locale = settingsController.user_locale[req.settings.locale]
     moment.locale(req.settings.locale)

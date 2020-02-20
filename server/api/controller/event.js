@@ -272,12 +272,9 @@ const eventController = {
       // return created event to the client
       res.json(event)
 
-      // send notification (mastodon/email)
-      // only if user is authenticated
-      if (req.user && !event.recurrent) {
-        const notifier = require('../../notifier')
-        notifier.notifyEvent('Create', event.id)
-      }
+      // send notifications (mastodon / email)
+      const notifier = require('../../notifier')
+      notifier.notifyEvent('Create', event.id)
     } catch (e) {
       res.sendStatus(400)
       debug(e)

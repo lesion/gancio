@@ -15,10 +15,11 @@ const notifier = {
     debug('Send %s notification %s', notification.type, notification.action)
     let p
     switch (notification.type) {
-      case 'mail':
-        return mail.send(notification.email, 'event', { event, config, notification })
+      // case 'mail': TODO: locale?
+      //   return mail.send(notification.email, 'event', { event, notification })
       case 'admin_email':
-        p = mail.send([config.smtp.auth.user, config.admin_email], 'event', { event, to_confirm: !event.is_visible, config, notification })
+        p = mail.send(config.admin_email, 'event',
+          { event, to_confirm: !event.is_visible, notification })
         promises.push(p)
         break
       case 'ap':

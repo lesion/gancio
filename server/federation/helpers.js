@@ -80,7 +80,9 @@ const Helpers = {
         to: recipients[sharedInbox],
         cc: ['https://www.w3.org/ns/activitystreams#Public', `${config.baseurl}/federation/u/${settingsController.settings.instance_name}/followers`],
         actor: `${config.baseurl}/federation/u/${settingsController.settings.instance_name}`,
-        object: event.toNoteAP(settingsController.settings.instance_name, recipients[sharedInbox])
+        object: event.toNoteAP(settingsController.settings.instance_name,
+          settingsController.settings.instance_locale,
+          recipients[sharedInbox])
       }
       body['@context'] = [
         'https://www.w3.org/ns/activitystreams',

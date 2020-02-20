@@ -7,17 +7,9 @@ import {
   Container, Footer, Timeline, TimelineItem, Menu, MenuItem, Carousel, CarouselItem
 } from 'element-ui'
 import locale from 'element-ui/lib/locale'
-// import '../assets/style.scss'
-
-const locales = {
-  it: require('element-ui/lib/locale/lang/it'),
-  en: require('element-ui/lib/locale/lang/en'),
-  es: require('element-ui/lib/locale/lang/es'),
-  ca: require('element-ui/lib/locale/lang/ca')
-}
 
 export default ({ app, store }) => {
-  locale.use(locales[store.state.locale])
+  locale.use(require(`element-ui/lib/locale/lang/${store.state.locale}`))
   Vue.use(Button)
   Vue.use(Carousel)
   Vue.use(CarouselItem)

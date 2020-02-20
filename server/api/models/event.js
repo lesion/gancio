@@ -1,5 +1,6 @@
 const config = require('config')
 const moment = require('moment-timezone')
+const settingsController = require('../controller/settings')
 // const debug = require('debug')('event:modals')
 
 module.exports = (sequelize, DataTypes) => {
@@ -39,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     Event.belongsTo(models.event, { as: 'parent' })
   }
 
-  Event.prototype.toNoteAP = function (username, follower = []) {
+  Event.prototype.toNoteAP = function (username, locale, follower = []) {
     const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
     const tag_links = tags.map(t => {
       return `<a href='/tags/${t}' class='mention hashtag status-link' rel='tag'><span>#${t}</span></a>`
@@ -47,8 +48,8 @@ module.exports = (sequelize, DataTypes) => {
 
     const content = `<a href='${config.baseurl}/event/${this.id}'>${this.title}</a><br/>
     📍 ${this.place.name}<br/>
-    📅 ${moment.unix(this.start_datetime).format('dddd, D MMMM (HH:mm)')}<br/><br/>
-      ${this.description.length > 300 ? this.description.substr(0, 300) + '...' : this.description}<br/>
+    📅 ${moment.unix(this.start_datetime).locale(locale).format('dddd, D MMMM (HH:mm)')}<br/><br/>
+      ${this.description.length > 500 ? this.description.substr(0, 500) + '...' : this.description}<br/>
       ${tag_links} <br/>`
 
     const attachment = []
