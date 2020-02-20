@@ -5,7 +5,8 @@ const fediverseHelpers = require('./federation/helpers')
 
 const {
   event: Event, notification: Notification, event_notification: EventNotification,
-  user: User, place: Place, tag: Tag, ap_user: APUser } = require('./api/models')
+  user: User, place: Place, tag: Tag
+} = require('./api/models')
 const eventController = require('./api/controller/event')
 
 const notifier = {

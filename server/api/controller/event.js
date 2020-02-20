@@ -202,7 +202,7 @@ const eventController = {
   async delNotification (req, res) {
     const remove_code = req.params.code
     try {
-      const notification = await Notification.findOne({ where: { remove_code: { [Op.eq]: remove_code } } })
+      const notification = await Notification.findOne({ where: { remove_code } })
       await notification.destroy()
     } catch (e) {
       return res.sendStatus(404)
