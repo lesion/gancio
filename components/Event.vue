@@ -1,7 +1,7 @@
 <template lang="pug">
   .card.event.h-event.mt-1.text-white(body-style='padding: 0px;')
     nuxt-link(:to='`/event/${event.id}`')
-      img(v-if='showImage && event.image_path' :src='`/media/thumb/${event.image_path}`')
+      el-image(v-if='showImage && event.image_path' lazy-load :src='`/media/thumb/${event.image_path}`')
       .float-right
         i.text-danger.el-icon-refresh(v-if='event.parentId')
         .badge.text-info(v-if='settings.enable_resources && event.resources && event.resources.length') {{event.resources.length}}
