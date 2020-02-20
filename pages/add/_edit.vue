@@ -30,9 +30,7 @@
         span {{$t('common.where')}}
       p(v-html="$t('event.where_description')")
       el-autocomplete(v-model='event.place.name' @blur='selectPlace($event.target.value)'
-        highlight-first-item
-        :fetch-suggestions='filterPlaces' @select='selectPlace')
-
+        highlight-first-item :fetch-suggestions='filterPlaces' @select='selectPlace')
       div {{$t("common.address")}}
       el-input.mb-3(ref='address' v-model='event.place.address' :disabled='disableAddress')
 

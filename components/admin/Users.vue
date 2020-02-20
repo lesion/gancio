@@ -15,11 +15,11 @@ div
 
   //- USERS LIST
   el-table(:data='paginatedUsers' small)
-    el-table-column(label='Email' width='250')
+    el-table-column(label='Email' width='220')
       template(slot-scope='data')
         el-popover(trigger='hover' :content='data.row.description' width='400')
           span(slot='reference') {{data.row.email}}
-    el-table-column(:label="$t('common.actions')" width='350')
+    el-table-column(:label="$t('common.actions')")
       template(slot-scope='data')
         div(v-if='data.row.id!==$auth.user.id')
           el-button-group
@@ -34,7 +34,6 @@ div
               @click='delete_user(data.row)') {{$t('admin.delete_user')}}
         div(v-else)
           span {{$t('common.me')}}
-    el-table-column
   client-only
     el-pagination(:page-size='perPage' :currentPage.sync='userPage' v-if='perPage<users_.length' :total='users_.length')
 

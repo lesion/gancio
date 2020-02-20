@@ -36,9 +36,6 @@ export default {
 #footer {
   a {
     font-size: 1.1em;
-    &:hover {
-      border-bottom: 1px solid yellow;
-    }
   }
 }
 </style>

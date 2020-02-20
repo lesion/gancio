@@ -11,7 +11,7 @@
           el-table-column(label='Name' width='100')
             template(slot-scope='data')
               span(slot='reference') {{data.row.name}}
-          el-table-column(label='Users' width='60')
+          el-table-column(:label="$t('common.users')" width='70')
             template(slot-scope='data')
               span(slot='reference') {{data.row.users}}
           el-table-column(:label="$t('common.actions')" width='120')
@@ -29,7 +29,7 @@
         client-only
           el-pagination(v-if='users.length>perPage' :page-size='perPage' :currentPage.sync='instancePage' :total='users.length')
         el-table(:data='paginatedSelectedUsers' small)
-          el-table-column(label='User' width='150')
+          el-table-column(:label="$t('common.user')" width='150')
             template(slot-scope='data')
               span(slot='reference')
                 a(:href='data.row.object.id' target='_blank') {{data.row.object.name}}

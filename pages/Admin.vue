@@ -1,69 +1,69 @@
 <template lang="pug">
-    el-main
+  el-main
 
-      el-tabs(v-model='tab')
+    el-tabs(v-model='tab')
 
-        //- SETTINGS
-        el-tab-pane.pt-1
-          template(slot='label')
-            v-icon(name='cog')
-            span  {{$t('common.settings')}}
-          Settings
+      //- SETTINGS
+      el-tab-pane.pt-1
+        template(slot='label')
+          v-icon(name='cog')
+          span.hidden-xs-only  {{$t('common.settings')}}
+        Settings
 
-        //- USERS
-        el-tab-pane.pt-1
-          template(slot='label')
-            v-icon(name='users')
-            span.ml-1 {{$t('common.users')}}
-            el-badge(v-show='unconfirmedUsers.length>0' :value='unconfirmedUsers.length')
-          Users(:users='users')
+      //- USERS
+      el-tab-pane.pt-1
+        template(slot='label')
+          v-icon(name='users')
+          span.hidden-xs-only.ml-1 {{$t('common.users')}}
+          el-badge(v-show='unconfirmedUsers.length>0' :value='unconfirmedUsers.length')
+        Users(:users='users')
 
-        //- PLACES
-        el-tab-pane.pt-1
-          template(slot='label')
-            v-icon(name='map-marker-alt')
-            span.ml-1 {{$t('common.places')}}
-          Places
+      //- PLACES
+      el-tab-pane.pt-1
+        template(slot='label')
+          v-icon(name='map-marker-alt')
+          span.hidden-xs-only.ml-1 {{$t('common.places')}}
+        Places
 
-        //- EVENTS
-        el-tab-pane.pt-1
-          template(slot='label')
-            v-icon(name='calendar')
-            span.ml-1 {{$t('common.events')}}
-            el-badge(v-show='events.length>0' :value='events.length')
-          p {{$t('admin.event_confirm_description')}}
-          el-table(:data='paginatedEvents' small primary-key='id' v-loading='loading')
-            el-table-column(:label='$t("common.name")' width='300')
-              template(slot-scope='data') {{data.row.title}}
-            el-table-column(:label='$t("common.where")' width='250')
-              template(slot-scope='data') {{data.row.place.name}}
-            el-table-column(:label='$t("common.confirm")' width='250')
-              template(slot-scope='data')
-                el-button(type='primary' @click='confirm(data.row.id)' size='mini') {{$t('common.confirm')}}
-                el-button(type='success' @click='preview(data.row.id)' size='mini') {{$t('common.preview')}}
-          client-only
-            el-pagination(:page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
+      //- EVENTS
+      el-tab-pane.pt-1
+        template(slot='label')
+          v-icon(name='calendar')
+          span.hidden-xs-only.ml-1 {{$t('common.events')}}
+          el-badge(v-show='events.length>0' :value='events.length')
+        p {{$t('admin.event_confirm_description')}}
+        el-table(:data='paginatedEvents' small primary-key='id' v-loading='loading')
+          el-table-column(:label='$t("common.name")' width='300')
+            template(slot-scope='data') {{data.row.title}}
+          el-table-column(:label='$t("common.where")' width='250')
+            template(slot-scope='data') {{data.row.place.name}}
+          el-table-column(:label='$t("common.confirm")' width='250')
+            template(slot-scope='data')
+              el-button(type='primary' @click='confirm(data.row.id)' size='mini') {{$t('common.confirm')}}
+              el-button(type='success' @click='preview(data.row.id)' size='mini') {{$t('common.preview')}}
+        client-only
+          el-pagination(:page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
 
-        //- FEDERATION
-        el-tab-pane.pt-1
-          template(slot='label')
-            v-icon(name='network-wired')
-            span.ml-1 {{$t('common.federation')}}
-          Federation
+      //- ANNOUNCEMENTS
+      el-tab-pane.pt-1
+        template(slot='label')
+          v-icon(name='bullhorn')
+          span.hidden-xs-only.ml-1 {{$t('common.announcements')}}
+        Announcement
 
-        //- MODERATION
-        el-tab-pane.pt-1(v-if='settings.enable_federation')
-          template(slot='label')
-            v-icon(name='vector-square')
-            span.ml-1 {{$t('common.moderation')}}
-          Moderation
+      //- FEDERATION
+      el-tab-pane.pt-1
+        template(slot='label')
+          v-icon(name='network-wired')
+          span.hidden-xs-only.ml-1 {{$t('common.federation')}}
+        Federation
 
-        //- ANNOUNCEMENTS
-        el-tab-pane.pt-1
-          template(slot='label')
-            v-icon(name='bullhorn')
-            span.ml-1 {{$t('common.announcements')}}
-          Announcement
+      //- MODERATION
+      el-tab-pane.pt-1(v-if='settings.enable_federation')
+        template(slot='label')
+          v-icon(name='vector-square')
+          span.hidden-xs-only.ml-1 {{$t('common.moderation')}}
+        Moderation
 
 </template>
 <script>
