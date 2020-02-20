@@ -51,7 +51,7 @@
       client-only
         #picker.mx-auto
           v-date-picker.mb-2.mt-3(
-            :mode='event.type === "multidate" ? "range" : event.type === "recurrent" ? "multiple" : "single"'
+            :mode='event.type === "multidate" ? "range" : "single"'
             :attributes='attributes'
             v-model='date'
             :locale='$i18n.locale'
