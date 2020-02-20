@@ -1,45 +1,41 @@
 <template lang="pug">
-  div
-    el-form(label-width="400px")
+  el-main
       //- select timezone
-      client-only
-        el-form-item(:label="$t('admin.select_instance_timezone')")
-          el-select.mb-3(v-model='instance_timezone' filterable
-            @input.native='queryTz=$event.target.value' @change='queryTz=""'
-            default-first-option placeholder='Timezone, type to search')
-            el-option(v-for='timezone in filteredTimezones' :key='timezone.value' :value='timezone.value')
-              span.float-left {{timezone.value}}
-              small.float-right.text-danger {{timezone.offset}}
+      div {{$t('admin.select_instance_timezone')}}
+      el-select(v-model='instance_timezone' filterable
+        @input.native='queryTz=$event.target.value' @change='queryTz=""'
+        default-first-option placeholder='Timezone, type to search')
+        el-option(v-for='timezone in filteredTimezones' :key='timezone.value' :value='timezone.value')
+          span.float-left {{timezone.value}}
+          small.float-right.text-danger {{timezone.offset}}
 
       div.mt-4 {{$t('admin.instance_locale')}}
       el-select(v-model='instance_locale')
         el-option(v-for='locale in Object.keys(locales)' :key='locale' :label='locales[locale]' :value='locale')
 
-      el-form-item(:label="$t('common.description')")
-        el-input(v-model='description' @blur='save("description", description)')
+      div.mt-4 {{$t('common.title')}}
+      el-input(v-model='title' @blur='save("title", title)')
 
-      //- allow open registration
-      el-form-item(:label="$t('admin.allow_registration_description')")
-        el-switch(name='reg' v-model='allow_registration')
+      div.mt-4 {{$t('common.description')}}
+      el-input(v-model='description' @blur='save("description", description)')
 
-      el-form-item(:label="$t('admin.favicon')")
-        el-upload(ref='upload' :action='`${settings.baseurl}/api/settings/favicon`'
-            :limit='1'
-            name='favicon'
-            accept='image/*'
-            :multiple='false')
-          el-button(slot='trigger' size='small' type='primary') select file
-          .el-upload__tip(slot='tip') jpg/png files with a size less than 500kb
+      div.mt-4 {{$t('admin.favicon')}}
+      el-upload(ref='upload' :action='`${settings.baseurl}/api/settings/favicon`'
+        :limit='1'
+        name='favicon'
+        accept='image/*'
+        :multiple='false')
+        el-button(slot='trigger' size='small' type='primary') select file
+        .el-upload__tip(slot='tip') jpg/png files with a size less than 500kb
 
-      //- allow anon event
-      el-form-item(:label="$t('admin.allow_anon_event')")
-        el-switch(v-model='allow_anon_event')
+      el-switch.d-block.mt-4(v-model='allow_registration'
+        :active-text="$t('admin.allow_registration_description')")
+      el-switch.d-block.mt-4(v-model='allow_anon_event' :active-text="$t('admin.allow_anon_event')")
 
-      el-form-item(:label="$t('admin.allow_recurrent_event')")
-        el-switch(v-model='allow_recurrent_event')
+      el-switch.d-block.mt-4(v-model='allow_recurrent_event' :active-text="$t('admin.allow_recurrent_event')")
 
-      el-form-item(v-show='allow_recurrent_event' :label="$t('admin.recurrent_event_visible')")
-        el-switch(v-model='recurrent_event_visible')
+      el-switch.d-block.mt-4(v-if='allow_recurrent_event'
+        v-model='recurrent_event_visible' :active-text="$t('admin.recurrent_event_visible')")
 
 </template>
 <script>
