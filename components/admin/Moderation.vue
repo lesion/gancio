@@ -64,7 +64,7 @@
                 el-dropdown-item(v-if='!data.row.hidden' icon='el-icon-remove' @click.native='hideResource(data.row, true)') {{$t('admin.hide_resource')}}
                 el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(data.row, false)') {{$t('admin.show_resource')}}
                 el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(data.row)') {{$t('admin.delete_resource')}}
-                el-dropdown-item(icon='el-icon-lock' @click.native='blockUser(data.row)') {{$t('admin.block_user')}}
+                el-dropdown-item(icon='el-icon-lock' @click.native='toggleUserBlock(data.row.ap_user)') {{$t('admin.block_user')}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
@@ -129,15 +129,17 @@ export default {
       await this.$axios.$put(`/resources/${resource.id}`, { hidden })
       resource.hidden = hidden
     },
-    async blockUser (resource) {
+    async toggleUserBlock (ap_user) {
       try {
-        await MessageBox.confirm(this.$t('admin.user_block_confirm'), {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'error'
-        })
-        await this.$axios.post('/instances/toggle_user_block', { ap_id: resource.ap_user.ap_id })
-        Message({ message: this.$t('admin.user_blocked', { user: resource.ap_user.ap_id }), type: 'success', showClose: true })
+        if (!ap_user.blocked) {
+          await MessageBox.confirm(this.$t('admin.user_block_confirm'), {
+            confirmButtonText: this.$t('common.ok'),
+            cancelButtonText: this.$t('common.cancel'),
+            type: 'error'
+          })
+        }
+        await this.$axios.post('/instances/toggle_user_block', { ap_id: ap_user.ap_id })
+        ap_user.blocked = !ap_user.blocked
       } catch (e) { }
     },
     async deleteResource (resource) {
