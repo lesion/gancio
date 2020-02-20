@@ -1,11 +1,17 @@
 const { event: Event, resource: Resource, ap_user: APUser } = require('../api/models')
 const debug = require('debug')('fediverse:resource')
 const helpers = require('../helpers')
+const linkifyHtml = require('linkifyjs/html')
 
 module.exports = {
 
   // create a resource from AP Note
   async create (req, res) {
+    if (!req.settings.enable_resource) {
+      debug('Ignore resource as it is disabled in settings')
+      return
+    }
+
     const body = req.body
 
     // search for related event
@@ -31,9 +37,7 @@ module.exports = {
 
     // TODO should probably map links here
     // clean resource
-    body.object.content = helpers.sanitizeHTML(body.object.content, {
-      nonTextTags: ['style', 'script', 'textarea', 'noscript']
-    })
+    body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content))
 
     await Resource.create({
       activitypub_id: body.object.id,
