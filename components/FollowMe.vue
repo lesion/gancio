@@ -41,6 +41,9 @@ export default {
   },
   methods: {
     getInstanceInfo () {
+      if (!this.instance_hostname) {
+        return
+      }
       const instance_url = `https://${this.instance_hostname}/api/v1/instance`
       this.$axios.$get(instance_url)
         .then(ret => {
