@@ -9,7 +9,7 @@
         Search(past-filter recurrent-filter)
 
     #events
-      Announcement(v-for='announcement in announcements' :key='announcement.id' :announcement='announcement')
+      Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
       Event(v-for='event in events' :key='event.id' :event='event')
 
 </template>
