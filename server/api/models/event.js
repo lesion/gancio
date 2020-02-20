@@ -1,7 +1,5 @@
 const config = require('config')
 const moment = require('moment-timezone')
-const settingsController = require('../controller/settings')
-// const debug = require('debug')('event:modals')
 
 module.exports = (sequelize, DataTypes) => {
   const Event = sequelize.define('event', {
@@ -52,16 +50,16 @@ module.exports = (sequelize, DataTypes) => {
       ${this.description.length > 500 ? this.description.substr(0, 500) + '...' : this.description}<br/>
       ${tag_links} <br/>`
 
-    const attachment = []
-    if (this.image_path) {
-      attachment.push({
-        type: 'Document',
-        mediaType: 'image/jpeg',
-        url: `${config.baseurl}/media/${this.image_path}`,
-        name: null,
-        blurHash: null
-      })
-    }
+    // const attachment = []
+    // if (this.image_path) {
+    //   attachment.push({
+    //     type: 'Document',
+    //     mediaType: 'image/jpeg',
+    //     url: `${config.baseurl}/media/${this.image_path}`,
+    //     name: null,
+    //     blurHash: null
+    //   })
+    // }
 
     return {
       id: `${config.baseurl}/federation/m/${this.id}`,

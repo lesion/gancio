@@ -91,7 +91,7 @@ module.exports = {
     if (!name) { return res.status(400).send('Bad request.') }
     if (name !== req.settings.instance_name) { return res.status(404).send(`No record found for ${name}`) }
 
-    const events = await Event.findAll( { include: [Tag, Place] })
+    const events = await Event.findAll({ include: [Tag, Place] })
 
     debug('Inside outbox, should return all events from this user')
 
