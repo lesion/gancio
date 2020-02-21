@@ -110,6 +110,7 @@ module.exports = {
         cacheGroups: {
           vendor: {
             test: /[\\/]node_modules[\\/]/,
+            enforce: true,
             name (module) {
               // get the name. E.g. node_modules/packageName/not/this/part.js
               // or node_modules/packageName
