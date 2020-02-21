@@ -183,7 +183,8 @@
         "user_block_confirm": "Are you sure to block this user?",
         "delete_announcement_confirm": "Are you sure to remove the announcement?",
         "announcement_remove_ok": "Announce removed",
-        "announcement_description": "In this section you can insert announcements that will remain on the homepage"
+        "announcement_description": "In this section you can insert announcements that will remain on the homepage",
+        "instance_locale": "Default language"
     },
     "auth": {
         "not_confirmed": "Not confirmed yet...",
