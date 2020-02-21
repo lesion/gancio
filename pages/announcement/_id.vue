@@ -3,7 +3,8 @@
     el-header.text-white
       h3 <i style='color: red' class='el-icon-info'/> {{announcement.title}}
 
-    pre.mt-4(v-html='announcement.announcement')
+    el-main
+      pre.mt-4(v-html='announcement.announcement')
 
 </template>
 <script>
