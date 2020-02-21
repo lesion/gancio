@@ -1,26 +1,20 @@
 <template lang="pug">
-  div
-    el-form(label-width='200px')
-      el-form-item(:label="$t('admin.enable_federation')")
-        el-popover(:content="$t('admin.enable_federation_help')" placement='right' trigger='hover')
-          span(slot='reference')
-            el-switch(v-model='enable_federation')
+  el-main
+    el-switch.d-block(v-model='enable_federation' :active-text="$t('admin.enable_federation')")
+    small.text-secondary {{$t('admin.enable_federation_help')}}
 
-      el-form-item(v-show='enable_federation' :label="$t('admin.enable_resources')")
-        el-popover(:content="$t('admin.enable_resources_help')" placement='right' trigger='hover')
-          span(slot='reference')
-            el-switch(v-model='enable_resources')
+    template(v-if='enable_federation')
 
-      el-form-item(v-show='enable_federation' :label="$t('admin.hide_boost_bookmark')")
-        el-popover(:content="$t('admin.hide_boost_bookmark_help')" placement='right' trigger='hover')
-          span(slot='reference')
-            el-switch(v-model='hide_boosts')
+      el-switch.d-block.mt-4(v-model='enable_resources' :active-text="$t('admin.enable_resources')")
+      small.text-secondary {{$t('admin.enable_resources_help')}}
 
-      el-form-item(v-show='enable_federation' :label="$t('admin.instance_name')")
-        el-popover(:content="$t('admin.instance_name_help')" placement='right' trigger='hover')
-          span(slot='reference')
-            el-input.w-25(v-model='instance_name' placeholder='Instance name')
-        p Follow this instance from <u>@{{instance_name}}@{{settings.baseurl|url2host}}</u>
+      el-switch.d-block.mt-4(v-model='hide_boosts' :active-text="$t('admin.hide_boost_bookmark')")
+      small.text-secondary {{$t('admin.hide_boost_bookmark_help')}}
+
+
+      div.mt-4 {{$t('admin.instance_name')}}
+      el-input.w-25(v-model='instance_name' placeholder='Instance name')
+      small.d-block.text-secondary {{$t('admin.instance_name_help')}} (<u>@{{instance_name}}@{{settings.baseurl|url2host}}</u>)
 
 </template>
 <script>
@@ -47,6 +41,13 @@ export default {
       set (value) { this.setSetting({ key: 'hide_boosts', value }) }
     }
   },
-  methods: mapActions(['setSetting'])
+  methods: {
+    ...mapActions(['setSetting']),
+    save (key, value) {
+      if (this.settings[key] !== value) {
+        this.setSetting({ key, value })
+      }
+    },
+  }
 }
 </script>
