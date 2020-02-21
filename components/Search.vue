@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-main
+  el-main#search
     el-switch.mt-1.mb-2.ml-2.d-block(
       v-if='recurrentFilter && settings.allow_recurrent_event'
       :active-text="$t('event.show_recurrent')"
@@ -10,7 +10,7 @@
       :active-text="$t('event.show_past')"
       v-model='showPast')
 
-    el-autocomplete.mb-1#search.inline-input(:placeholder='$t("common.filter")' prefix-icon='el-icon-search'
+    el-autocomplete.mb-1#searchInput.inline-input(:placeholder='$t("common.filter")' prefix-icon='el-icon-search'
       highlight-first-item
       v-model='search' :debounce='200'
       :fetch-suggestions='querySearch' clearable
@@ -91,27 +91,35 @@ export default {
 </script>
 <style lang='less'>
 #search {
-  border: none;
-  border-radius: 0px;
-  border-bottom: 2px solid lightgray;
-  color: white;
-  background-color: #111;
+  #searchInput {
+    border: none;
+    border-radius: 0px;
+    border-bottom: 2px solid lightgray;
+    color: white;
+    background-color: #111;
+  }
+
+  .el-switch__label {
+    color: #aaa;
+  }
+
+  .el-switch__label.is-active {
+    color: lightgreen;
+  }
+
+  .el-switch__core {
+    background-color: #555;
+    border-color: #777;
+  }
+
+  .is-checked .el-switch__core {
+    background-color: lightgreen;
+  }
+
+  #filters {
+    line-height: 2rem;
+  }
 }
 
-#filters {
-  line-height: 2rem;
-}
 
-.el-switch__label {
-  color: #aaa;
-}
-
-.el-switch__label.is-active {
-  color: lightgreen;
-}
-
-.el-switch__core {
-  background-color: #555;
-  border-color: #777;
-}
 </style>
