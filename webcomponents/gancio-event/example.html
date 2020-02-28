@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>My Non-Vue App</title>
+  </head>
+  <body>
+    <!--Load Vue-->
+    <script src="https://unpkg.com/vue"></script>
+    <!--Load the web component polyfill-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.2.0/webcomponents-loader.js"></script>
+    <!--Load your custom element-->
+    <script src="./dist/gancio-event.min.js"></script>
+    <!--Use your custom element-->
+    <gancio-event event-url='http://localhost:13120/api/event/6'></gancio-event>
+  </body>
+</html>
