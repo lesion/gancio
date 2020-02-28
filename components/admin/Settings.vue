@@ -8,16 +8,20 @@
         el-option(v-for='timezone in filteredTimezones' :key='timezone.value' :value='timezone.value')
           span.float-left {{timezone.value}}
           small.float-right.text-danger {{timezone.offset}}
+      small.d-block.text-secondary {{$t('admin.instance_timezone_description')}}
 
       div.mt-4 {{$t('admin.instance_locale')}}
       el-select(v-model='instance_locale')
         el-option(v-for='locale in Object.keys(locales)' :key='locale' :label='locales[locale]' :value='locale')
+      small.d-block.text-secondary {{$t('admin.instance_locale_description')}}
 
       div.mt-4 {{$t('common.title')}}
       el-input(v-model='title' @blur='save("title", title)')
+      small.d-block.text-secondary {{$t('admin.title_description')}}
 
       div.mt-4 {{$t('common.description')}}
       el-input(v-model='description' @blur='save("description", description)')
+      small.d-block.text-secondary {{$t('admin.description_description')}}
 
       div.mt-4 {{$t('admin.favicon')}}
       el-upload(ref='upload' :action='`${settings.baseurl}/api/settings/favicon`'

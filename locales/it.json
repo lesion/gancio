@@ -159,7 +159,8 @@
     "federation": "Federazione / ActivityPub",
     "enable_federation": "Abilita la federazione!",
     "enable_federation_help": "Sarà possibile seguire questa istanza dal fediverso",
-    "select_instance_timezone": "Seleziona la timezone",
+    "select_instance_timezone": "Fuso orario",
+    "instance_timezone_description": "Gancio è pensato per raccogliere gli eventi di un luogo specifico come ad esempio una città. Scrivendo e selezionando il fuso orario di questo luogo, tutti gli orari saranno mostrati e inseriti secondo quanto scelto.",
     "enable_resources": "Abilita risorse",
     "enable_resources_help": "Permette di aggiungere risorse all'evento dal fediverso",
     "hide_boost_bookmark": "Nasconde n. condivisioni e segnalibri",
@@ -182,7 +183,12 @@
     "delete_announcement_confirm": "Sicura di voler eliminare l'annuncio?",
     "announcement_remove_ok": "Annuncio rimosso",
     "announcement_description": "In questa sezione puoi inserire annunci che rimarranno in homepage",
-    "instance_locale": "Lingua di default"
+    "instance_locale": "Lingua di default",
+    "instance_locale_description": "La lingua utilizzata per mostare le pagine è quella preferita dall'utente. In alcuni casi però dobbiamo mostrare dei messaggi per tutti allo stesso modo (ad esempio quando pubblichiamo via ActivityPub o nell'invio di alcune mail). In questi casi useremo la lingua selezionata qui sopra.",
+    "instance_place": "Luogo indicativo dell'istanza",
+    "title_description": "Viene usato nel titolo della pagina, nell'oggetto delle email, nell'esportazione dei feed e degli ics ",
+    "description_description": "Compare nell'header accanto al titolo",
+    "instance_name_help": "Nome dell'account ActivityPub da seguire"
   },
   "auth": {
     "not_confirmed": "Non abbiamo ancora confermato questa mail...",
