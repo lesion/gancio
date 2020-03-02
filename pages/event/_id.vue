@@ -41,8 +41,7 @@
 
             el-menu-item(@click='showEmbed=true') <i class='el-icon-copy-document'></i> {{$t('common.embed')}}
 
-            //- TODO (ics of recurrent events)
-            el-menu-item(v-if='!event.recurrent')
+            el-menu-item
               a(:href='`${settings.baseurl}/api/event/${event.id}.ics`') <i class='el-icon-date'></i> {{$t('common.add_to_calendar')}}
           EventAdmin(v-if='is_mine' :event='event')
 
@@ -93,8 +92,8 @@ import EventAdmin from './eventAdmin'
 import EmbedEvent from './embedEvent'
 import FollowMe from '../../components/FollowMe'
 import { Message, MessageBox } from 'element-ui'
-
 import moment from 'moment-timezone'
+const htmlToText = require('html-to-text')
 
 export default {
   name: 'Event',
@@ -140,12 +139,12 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: this.event.description.replace('\n', '').slice(0, 1000)
+          content: this.plainDescription
         },
         {
           hid: 'og-description',
           name: 'og:description',
-          content: this.event.description.replace('\n', '').slice(0, 100)
+          content: this.plainDescription
         },
         { hid: 'og-title', property: 'og:title', content: this.event.title },
         {
@@ -176,7 +175,7 @@ export default {
         },
         {
           property: 'twitter:description',
-          content: this.event.description.replace('\n', '').slice(0, 100)
+          content: this.plainDescription
         }
       ],
       link: [
@@ -195,6 +194,9 @@ export default {
   computed: {
     ...mapGetters(['filteredEvents']),
     ...mapState(['settings']),
+    plainDescription () {
+      return htmlToText.fromString(this.event.description.replace('\n', '').slice(0, 1000))
+    },
     next () {
       let found = false
       const event = this.filteredEvents.find(e => {
