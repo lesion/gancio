@@ -11,7 +11,6 @@
       el-switch.d-block.mt-4(v-model='hide_boosts' :active-text="$t('admin.hide_boost_bookmark')")
       small.text-secondary {{$t('admin.hide_boost_bookmark_help')}}
 
-
       div.mt-4 {{$t('admin.instance_name')}}
       el-input.w-25(v-model='instance_name' placeholder='Instance name')
       small.d-block.text-secondary {{$t('admin.instance_name_help')}} (<u>@{{instance_name}}@{{settings.baseurl|url2host}}</u>)
@@ -47,7 +46,7 @@ export default {
       if (this.settings[key] !== value) {
         this.setSetting({ key, value })
       }
-    },
+    }
   }
 }
 </script>
