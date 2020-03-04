@@ -1,5 +1,22 @@
 All notable changes to this project will be documented in this file.
 
+### 0.22.0
+- add admin announcement support (fix #74)
+- each instance has a specific timezone you can choose from admin's panel
+- refactoring language management (you can choose a default instance's language):
+  usually UX language is choosen looking at Accepted-Language header but there
+  are messages not generated from an http request (eg. sending events via AP).
+  In those cases a default instance's language is choosen (default 'en').
+- use lazy loaded images
+- better mobile experience for admins
+- single day only recurring events
+- fix user block in fediverse moderation
+- filter and linkify content from fediverse
+- add a lot of help strings in admin panel
+- use html2text for event description in og: meta
+- update deps
+- fix a moment.js typo from/to issue
+- fix #73 
 
 ### 0.21.0
 - a new recurring events logic (a la taskwarrior):
