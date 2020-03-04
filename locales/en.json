@@ -161,7 +161,7 @@
         "federation": "Federation / ActivityPub",
         "enable_federation": "Enable federation",
         "enable_federation_help": "It will be possible to follow this instance from the fediverse",
-        "select_instance_timezone": "Select instance timezone",
+        "select_instance_timezone": "Timezone",
         "enable_resources": "Enable resources",
         "enable_resources_help": "Allows you to add resources to the event from the fediverse",
         "hide_boost_bookmark": "Hides boost/bookmarks",
@@ -183,7 +183,12 @@
         "user_block_confirm": "Are you sure to block this user?",
         "delete_announcement_confirm": "Are you sure to remove the announcement?",
         "announcement_remove_ok": "Announce removed",
-        "announcement_description": "In this section you can insert announcements that will remain on the homepage"
+        "announcement_description": "In this section you can insert announcements that will remain on the homepage",
+        "instance_locale": "Default language",
+        "instance_timezone_description": "Gancio is designed to collect the events of a specific place such as a city. By writing and selecting the time zone of this place, all times will be shown as chosen.",
+        "instance_locale_description": "The language used to display the pages is the language preferred by the user. However, in some cases we have to show messages for everyone in the same way (for example when we publish via ActivityPub or when sending some emails). In these cases we will use the language selected above.",
+        "title_description": "It is used in the title of the page, in the subject line of the email, in the export of feeds and ics ",
+        "description_description": "It appears in the header next to the title"
     },
     "auth": {
         "not_confirmed": "Not confirmed yet...",
