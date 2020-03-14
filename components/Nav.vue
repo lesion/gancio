@@ -15,6 +15,15 @@
         i.el-icon-share
         span.hidden-xs-only {{$t('common.share')}}
 
+      el-submenu(v-if='settings.trusted_instances && settings.trusted_instances.length' index=4)
+        template(slot='title')
+          i.el-icon-guide
+          span.hidden-xs-only {{$t('common.places')}}
+        el-menu-item(v-for='instance in settings.trusted_instances' :key='instance.name')
+          a(:href='instance.url' target='_link')
+            img(:src='`${instance.url}/favicon.ico`')
+            span.ml-1 {{instance.name}}
+
       el-menu-item(v-if='!$auth.loggedIn' index='/login')
         i.el-icon-user
         span.hidden-xs-only {{$t('common.login')}}
@@ -56,7 +65,30 @@ export default {
     logout () {
       Message({ showClose: true, message: this.$t('common.logout_ok'), type: 'success' })
       this.$auth.logout()
-    }
+    },
+    async createTrustedInstance () {
+      let url = this.instance_url
+      if (!url.match(/^https?:\/\//)) {
+        url = `https://${url}`
+      }
+      try {
+        const instance = await this.$axios.$get(`${url}/.well-known/nodeinfo/2.0`)
+        const trusted_instance = {
+          url,
+          name: instance.metadata.nodeName,
+          description: instance.metadata.nodeDescription,
+          place: instance.metadata.placeDescription
+        }
+        this.setSetting({ key: 'trusted_instances', value: this.settings.trusted_instances.concat(trusted_instance) })
+      } catch (e) {
+        console.error(e)
+        Message({
+          showClose: true,
+          type: 'error',
+          message: e
+        })
+      }
+    },
   }
 }
 </script>

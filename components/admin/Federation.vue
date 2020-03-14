@@ -12,8 +12,25 @@
       small.text-secondary {{$t('admin.hide_boost_bookmark_help')}}
 
       div.mt-4 {{$t('admin.instance_name')}}
-      el-input.w-25(v-model='instance_name' placeholder='Instance name')
+      el-input(v-model='instance_name' placeholder='Instance name')
       small.d-block.text-secondary {{$t('admin.instance_name_help')}} (<u>@{{instance_name}}@{{settings.baseurl|url2host}}</u>)
+
+      div.mt-4 {{$t('admin.trusted_instances')}}
+      el-input(v-model='instance_url')
+        el-button(slot='append' @click='createTrustedInstance') {{$t('common.send')}}
+
+      el-table(:data='settings.trusted_instances')
+        el-table-column(:label="$t('common.name')")
+          template(slot-scope='data')
+            span {{data.row.name}}
+        el-table-column(:label="$t('common.url')")
+          template(slot-scope='data')
+            span {{data.row.url}}
+        el-table-column(:label="$t('common.action')")
+          template(slot-scope='data')
+            el-button(size='mini'
+              type='danger'
+              @click='delete_instance(data.row)') {{$t('admin.delete_user')}}
 
 </template>
 <script>
@@ -21,6 +38,11 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Federation',
+  data () {
+    return {
+      instance_url: ''
+    }
+  },
   computed: {
     ...mapState(['settings']),
     instance_name: {
