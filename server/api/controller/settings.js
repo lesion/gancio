@@ -19,17 +19,12 @@ const defaultSettings = {
   recurrent_event_visible: false,
   enable_federation: true,
   enable_resources: false,
-  hide_boosts: true
+  hide_boosts: true,
+  trusted_instances: []
 }
 
 /**
  * Settings controller: store instance settings
- * Current supported settings:
- *
- * Usage:
- *   backend/fediverse/api:
- *
- *   frontend:
  */
 
 const settingsController = {
