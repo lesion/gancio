@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     Event.belongsTo(models.event, { as: 'parent' })
   }
 
-  Event.prototype.toNoteAP = function (username, locale, follower = []) {
+  Event.prototype.toAP = function (username, locale, follower = []) {
     const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
     const tag_links = tags.map(t => {
       return `<a href='/tags/${t}' class='mention hashtag status-link' rel='tag'><span>#${t}</span></a>`
@@ -50,23 +50,22 @@ module.exports = (sequelize, DataTypes) => {
       ${this.description.length > 500 ? this.description.substr(0, 500) + '...' : this.description}<br/>
       ${tag_links} <br/>`
 
-    // const attachment = []
-    // if (this.image_path) {
-    //   attachment.push({
-    //     type: 'Document',
-    //     mediaType: 'image/jpeg',
-    //     url: `${config.baseurl}/media/${this.image_path}`,
-    //     name: null,
-    //     blurHash: null
-    //   })
-    // }
+    const attachment = []
+    if (this.image_path) {
+      attachment.push({
+        type: 'Document',
+        mediaType: 'image/jpeg',
+        url: `${config.baseurl}/media/${this.image_path}`,
+        name: null,
+        blurHash: null
+      })
+    }
 
     return {
       id: `${config.baseurl}/federation/m/${this.id}`,
       url: `${config.baseurl}/federation/m/${this.id}`,
-      type: 'Note',
-      // do not send attachment, in mastodon a link preview is shown instead
-      // attachment,
+      type: 'Event',
+      attachment,
       tag: tags.map(tag => ({
         type: 'Hashtag',
         name: '#' + tag,
