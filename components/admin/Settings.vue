@@ -29,7 +29,7 @@
         name='favicon'
         accept='image/*'
         :multiple='false')
-        el-button(slot='trigger' size='small' type='primary') select file
+        el-button(slot='trigger' size='small' type='primary' plain) Select file
         .el-upload__tip(slot='tip') jpg/png files with a size less than 500kb
 
       el-switch.d-block.mt-4(v-model='allow_registration'
