@@ -78,7 +78,9 @@
     "fediverse": "Fediverso",
     "skip": "Salta",
     "delete": "Elimina",
-    "announcements": "Annunci"
+    "announcements": "Annunci",
+    "url": "Indirizzo URL",
+    "place": "Luogo"
   },
   "login": {
     "description": "Entrando puoi pubblicare nuovi eventi.",
@@ -185,10 +187,14 @@
     "announcement_description": "In questa sezione puoi inserire annunci che rimarranno in homepage",
     "instance_locale": "Lingua di default",
     "instance_locale_description": "La lingua utilizzata per mostare le pagine è quella preferita dall'utente. In alcuni casi però dobbiamo mostrare dei messaggi per tutti allo stesso modo (ad esempio quando pubblichiamo via ActivityPub o nell'invio di alcune mail). In questi casi useremo la lingua selezionata qui sopra.",
-    "instance_place": "Luogo indicativo dell'istanza",
+    "instance_place": "Luogo indicativo di questa istanza",
     "title_description": "Viene usato nel titolo della pagina, nell'oggetto delle email, nell'esportazione dei feed e degli ics ",
     "description_description": "Compare nell'header accanto al titolo",
-    "instance_name_help": "Nome dell'account ActivityPub da seguire"
+    "instance_name_help": "Nome dell'account ActivityPub da seguire",
+    "enable_trusted_instances": "Abilita istanze amiche",
+    "trusted_instances_help": "Le istanze amiche compariranno nella barra di navigazione in cima alla pagina",
+    "add_trusted_instance": "Aggiungi un istanza amica",
+    "instance_place_help": "Verrà mostrata questa stringa nel menù delle altre istanze amiche"
   },
   "auth": {
     "not_confirmed": "Non abbiamo ancora confermato questa mail...",

@@ -55,7 +55,8 @@ router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
   const ret = {
     metadata: {
       nodeDescription: req.settings.description,
-      nodeName: req.settings.title
+      nodeName: req.settings.title,
+      nodeLabel: req.settings.instance_place
     },
     openRegistrations: settingsController.settings.allow_registration,
     protocols: ['activitypub'],
@@ -109,8 +110,8 @@ router.get('/x-nodeinfo2', async (req, res) => {
 router.get('/nodeinfo', (req, res) => {
   const ret = {
     links: [
-      { href: `${req.settings.baseurl}/.well-known/nodeinfo/2.0`, rel: `http://nodeinfo.diaspora.software/ns/schema/2.0` },
-      { href: `${req.settings.baseurl}/.well-known/nodeinfo/2.1`, rel: `http://nodeinfo.diaspora.software/ns/schema/2.1` }
+      { href: `${req.settings.baseurl}/.well-known/nodeinfo/2.0`, rel: 'http://nodeinfo.diaspora.software/ns/schema/2.0' },
+      { href: `${req.settings.baseurl}/.well-known/nodeinfo/2.1`, rel: 'http://nodeinfo.diaspora.software/ns/schema/2.1' }
     ]
   }
   res.json(ret)

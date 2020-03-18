@@ -13,6 +13,7 @@ const defaultSettings = {
   instance_timezone: 'Europe/Rome',
   instance_locale: 'en',
   instance_name: config.title.toLowerCase().replace(/ /g, ''),
+  instance_place: '',
   allow_registration: true,
   allow_anon_event: true,
   allow_recurrent_event: false,
@@ -20,6 +21,7 @@ const defaultSettings = {
   enable_federation: true,
   enable_resources: false,
   hide_boosts: true,
+  enable_trusted_instances: true,
   trusted_instances: []
 }
 
