@@ -54,7 +54,7 @@
     ".nuxt/"
   ],
   "dependencies": {
-    "@nuxtjs/auth": "^4.8.5",
+    "@nuxtjs/auth": "^4.9.0",
     "@nuxtjs/axios": "^5.9.5",
     "accept-language": "^3.0.18",
     "axios": "^0.19.2",
@@ -63,11 +63,11 @@
     "bootstrap": "^4.4.1",
     "config": "^3.3.0",
     "consola": "^2.11.3",
-    "cookie-parser": "^1.4.4",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "cross-env": "^7.0.2",
     "date-fns": "^2.11.0",
-    "dayjs": "^1.8.22",
+    "dayjs": "^1.8.23",
     "dompurify": "^2.0.8",
     "element-ui": "^2.13.0",
     "email-templates": "^7.0.4",
@@ -100,7 +100,7 @@
     "vue-awesome": "^4.0.0",
     "vue-clipboard2": "^0.3.1",
     "vue-i18n": "^8.15.5",
-    "yargs": "^15.3.0"
+    "yargs": "^15.3.1"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.2",
