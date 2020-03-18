@@ -15,14 +15,14 @@
         i.el-icon-share
         span.hidden-xs-only {{$t('common.share')}}
 
-      el-submenu(v-if='settings.trusted_instances && settings.trusted_instances.length' index=4)
+      el-submenu(v-if='settings.enable_trusted_instances && settings.trusted_instances && settings.trusted_instances.length' index=4)
         template(slot='title')
           i.el-icon-guide
           span.hidden-xs-only {{$t('common.places')}}
         el-menu-item(v-for='instance in settings.trusted_instances' :key='instance.name')
           a(:href='instance.url' target='_link')
-            img(:src='`${instance.url}/favicon.ico`')
-            span.ml-1 {{instance.name}}
+            img.mr-1(:src='`${instance.url}/favicon.ico`' style='height: 25px;')
+            span.ml-1 {{instance.label || instance.name}}
 
       el-menu-item(v-if='!$auth.loggedIn' index='/login')
         i.el-icon-user

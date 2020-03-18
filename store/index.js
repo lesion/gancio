@@ -16,7 +16,9 @@ export const state = () => ({
     recurrent_event_visible: false,
     enable_federation: false,
     enable_resources: false,
-    hide_boosts: true
+    hide_boosts: true,
+    enable_trusted_instances: true,
+    trusted_instances: []
   },
   in_past: false,
   filters: {
