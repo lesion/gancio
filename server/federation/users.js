@@ -4,6 +4,7 @@ const debug = require('debug')('fediverse:user')
 
 module.exports = {
   get (req, res) {
+    if (req.accepts('html')) { return res.redirect(301, '/') }
     const name = req.params.name
     if (!name) { return res.status(400).send('Bad request.') }
     // const user = await User.findOne({ where: { username: name } })
@@ -36,7 +37,7 @@ module.exports = {
       icon: {
         type: 'Image',
         mediaType: 'image/png',
-        url: config.baseurl + '/gancio.png'
+        url: config.baseurl + '/favicon.ico'
       },
       publicKey: {
         id: `${config.baseurl}/federation/u/${name}#main-key`,
