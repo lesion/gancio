@@ -1,1 +1,24 @@
-{}
+{
+    "common": {
+        "add_event": "Dodaj wydarzenie",
+        "next": "Dalej",
+        "export": "Eksportuj",
+        "send": "Wyślij",
+        "where": "Gdzie",
+        "address": "Adres",
+        "when": "Kiedy",
+        "what": "Co",
+        "media": "Media",
+        "login": "Login",
+        "email": "E-mail",
+        "password": "Hasło",
+        "register": "Rejestracja",
+        "description": "Opis",
+        "remove": "Usuń",
+        "hide": "Ukryj",
+        "search": "Szukaj",
+        "edit": "Edytuj",
+        "info": "Informacje",
+        "confirm": "Potwierdź"
+    }
+}
