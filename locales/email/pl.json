@@ -1,1 +1,22 @@
-{}
+{
+    "register": {
+        "subject": "Otrzymano prośbę o rejestrację",
+        "content": "Otrzymaliśmy prośbę o rejestrację. Zostanie ona zatwierdzona tak szybko jak to możliwe."
+    },
+    "confirm": {
+        "subject": "Możesz teraz zacząć tworzenie wydarzeń",
+        "content": "Cześć, Twoje konto na<a href='{{config.baseurl}}'>{{config.title}}</a> zostaąło zatwierdzone. Napisz do nas na {{config.admin_email}} jeżeli potrzebujesz jakichś informacji."
+    },
+    "user_confirm": {
+        "subject": "Możesz teraz zacząć tworzenie wydarzeń",
+        "content": "Cześć, Twoje konto na <a href='{{config.baseurl}}'>{{config.title}}</a> zostało utworzone. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Zatwierdź je i wybierz hasło.</a>."
+    },
+    "recover": {
+        "subject": "Odzyskiwanie hasła",
+        "content": "Cześć, poprosiłeś(-aś) o odzyskanie hasła na {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Wejdź tutaj</a> aby potwierdzić"
+    },
+    "admin_register": {
+        "subject": "Nowa rejestracja",
+        "content": "{{user.email}} poprosił(a) o rejestrację na {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Zatwierdź ją <a href='{{config.baseurl}}/admin'>tutaj</a>."
+    }
+}
