@@ -2,5 +2,6 @@ module.exports = {
   it: 'Italiano',
   en: 'English',
   es: 'Español',
-  ca: 'Català'
+  ca: 'Català',
+  pl: 'Polski'
 }
