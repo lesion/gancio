@@ -32,8 +32,8 @@ export default ({ app, store }) => {
       recurrent = app.i18n.tc(`event.recurrent_${frequency}_${type}`, days.length, { days: d })
     }
     return recurrent
-
   })
+
   Vue.filter('when', (event) => {
     const start = moment.unix(event.start_datetime)
     const end = moment.unix(event.end_datetime)
