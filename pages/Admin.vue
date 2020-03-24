@@ -42,7 +42,7 @@
               el-button(type='primary' @click='confirm(data.row.id)' size='mini') {{$t('common.confirm')}}
               el-button(type='success' @click='preview(data.row.id)' size='mini') {{$t('common.preview')}}
         client-only
-          el-pagination(:page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
+          el-pagination(v-if='events.length>perPage' :page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
 
       //- ANNOUNCEMENTS
       el-tab-pane.pt-1

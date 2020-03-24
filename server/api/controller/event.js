@@ -176,7 +176,8 @@ const eventController = {
     const events = await Event.findAll({
       where: {
         parentId: null,
-        is_visible: false
+        is_visible: false,
+        start_datetime: { [Op.gt]: moment.unix() }
       },
       order: [['start_datetime', 'ASC']],
       include: [Tag, Place]
