@@ -240,12 +240,13 @@ const eventController = {
 
       const event = await Event.create(eventDetails)
 
+      // TOFIX: check if place is specified
       // create place if needed
       const place = await Place.findOrCreate({
         where: { name: body.place_name },
         defaults: { address: body.place_address }
-      })
-        .spread((place, created) => place)
+      }).spread((place, created) => place)
+
       await event.setPlace(place)
       event.place = place
 
