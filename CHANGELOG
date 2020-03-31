@@ -1,7 +1,10 @@
 All notable changes to this project will be documented in this file.
 
 ### Unreleased
-- Send AP Event Object instead of Note
+- send AP Event Object instead of Note
+- show only future unconfirmed events in admin panel
+- new polish locale
+- add trusted instances (an additional menu is shown)
 
 ### 0.22.0
 - add admin announcement support (fix #74)
