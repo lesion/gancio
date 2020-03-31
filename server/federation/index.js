@@ -33,7 +33,7 @@ router.get('/m/:event_id', async (req, res) => {
 
   const event = await Event.findByPk(req.params.event_id, { include: [User, Tag, Place] })
   if (!event) { return res.status(404).send('Not found') }
-  return res.json(event.toNoteAP(event.user.username, req.settings.locale))
+  return res.json(event.toAP(event.user.username, req.settings.locale))
 })
 
 // get any message coming from federation
@@ -72,6 +72,8 @@ router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
       if (b.object.type === 'Note') {
         debug('Create a resource!')
         await Resources.create(req, res)
+      } else if (b.object.type === 'Event') {
+        debug('Event type is coming!!')
       } else {
         // await Resources.create(req, res)
         debug('Create with unsupported Object or not a reply => %s ', b.object.type)
@@ -80,9 +82,16 @@ router.post('/u/:name/inbox', Helpers.verifySignature, async (req, res) => {
   }
 })
 
+function redirect_on_html_accepted (req, res, next) {
+  if (req.accepts('html')) {
+    return res.redirect(settingsController.settings.baseurl)
+  }
+  return next()
+}
+
 router.get('/u/:name/outbox', Users.outbox)
 router.get('/u/:name/followers', Users.followers)
-router.get('/u/:name', Users.get)
+router.get('/u/:name', redirect_on_html_accepted, Users.get)
 
 // Handle 404
 router.use((req, res) => {

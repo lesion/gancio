@@ -116,7 +116,7 @@ module.exports = {
       type: 'OrderedCollectionPage',
       totalItems: events.length,
       partOf: `${config.baseurl}/federation/u/${name}/outbox`,
-      orderedItems: events.map(e => ({ ...e.toNoteAP(name, req.settings.locale), actor: `${config.baseurl}/federation/u/${name}` }))
+      orderedItems: events.map(e => ({ ...e.toAP(name, req.settings.locale), actor: `${config.baseurl}/federation/u/${name}` }))
       //   user.events.map(e => ({
       //   id: `${config.baseurl}/federation/m/${e.id}#create`,
       //   type: 'Create',

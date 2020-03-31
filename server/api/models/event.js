@@ -1,5 +1,6 @@
 const config = require('config')
 const moment = require('moment-timezone')
+const htmlToText = require('html-to-text')
 
 module.exports = (sequelize, DataTypes) => {
   const Event = sequelize.define('event', {
@@ -38,35 +39,36 @@ module.exports = (sequelize, DataTypes) => {
     Event.belongsTo(models.event, { as: 'parent' })
   }
 
-  Event.prototype.toNoteAP = function (username, locale, follower = []) {
+  Event.prototype.toAP = function (username, locale, follower = []) {
     const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
-    const tag_links = tags.map(t => {
-      return `<a href='/tags/${t}' class='mention hashtag status-link' rel='tag'><span>#${t}</span></a>`
-    }).join(' ')
 
-    const content = `<a href='${config.baseurl}/event/${this.id}'>${this.title}</a><br/>
-    📍 ${this.place.name}<br/>
-    📅 ${moment.unix(this.start_datetime).locale(locale).format('dddd, D MMMM (HH:mm)')}<br/><br/>
-      ${this.description.length > 500 ? this.description.substr(0, 500) + '...' : this.description}<br/>
-      ${tag_links} <br/>`
+    const plainDescription = htmlToText.fromString(this.description.replace('\n', '').slice(0, 1000))
+    const summary = `
+    📍 ${this.place.name}
+    📅 ${moment.unix(this.start_datetime).locale(locale).format('dddd, D MMMM (HH:mm)')}
 
-    // const attachment = []
-    // if (this.image_path) {
-    //   attachment.push({
-    //     type: 'Document',
-    //     mediaType: 'image/jpeg',
-    //     url: `${config.baseurl}/media/${this.image_path}`,
-    //     name: null,
-    //     blurHash: null
-    //   })
-    // }
+      ${plainDescription}
+
+      ${tags.map(t => `#${t}`)}
+
+    `
+
+    const attachment = []
+    if (this.image_path) {
+      attachment.push({
+        type: 'Document',
+        mediaType: 'image/jpeg',
+        url: `${config.baseurl}/media/${this.image_path}`,
+        name: null,
+        blurHash: null
+      })
+    }
 
     return {
       id: `${config.baseurl}/federation/m/${this.id}`,
-      url: `${config.baseurl}/federation/m/${this.id}`,
-      type: 'Note',
-      // do not send attachment, in mastodon a link preview is shown instead
-      // attachment,
+      url: `${config.baseurl}/event/${this.id}`,
+      type: 'Event',
+      attachment,
       tag: tags.map(tag => ({
         type: 'Hashtag',
         name: '#' + tag,
@@ -76,8 +78,8 @@ module.exports = (sequelize, DataTypes) => {
       attributedTo: `${config.baseurl}/federation/u/${username}`,
       to: follower || [],
       cc: ['https://www.w3.org/ns/activitystreams#Public', `${config.baseurl}/federation/u/${username}/followers`],
-      content,
-      summary: null,
+      name: this.title,
+      summary,
       sensitive: false
     }
   }
