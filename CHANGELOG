@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file.
 
+### Unreleased
+- Send AP Event Object instead of Note
+
 ### 0.22.0
 - add admin announcement support (fix #74)
 - each instance has a specific timezone you can choose from admin's panel
