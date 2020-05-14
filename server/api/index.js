@@ -86,8 +86,7 @@ api.put('/place', isAdmin, eventController.updatePlace)
  * @param {array} [recurrent.days] - array of days
  * @param {image} [image] - Image
  */
-api.post('/event', upload.single('image'), eventController.add)
-
+api.post('/event', hasPerm('event:write'), upload.single('image'), eventController.add)
 api.put('/event', hasPerm('event:write'), upload.single('image'), eventController.update)
 
 // remove event

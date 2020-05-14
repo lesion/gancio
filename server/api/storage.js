@@ -45,7 +45,7 @@ const DiskStorage = {
       .pipe(outStream)
       .on('error', err)
 
-    outStream.on('finish', function () {
+    outStream.on('finish', () => {
       cb(null, {
         destination: config.upload_path,
         filename,

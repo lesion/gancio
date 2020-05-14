@@ -236,6 +236,8 @@ const eventController = {
 
       if (req.file) {
         eventDetails.image_path = req.file.filename
+      } else if (body.image_url) {
+        eventDetails.image_path = await helpers.getImageFromURL(body.image_url)
       }
 
       const event = await Event.create(eventDetails)
@@ -289,6 +291,7 @@ const eventController = {
     }
     const body = req.body
     const event = await Event.findByPk(body.id)
+    if (!event) return res.sendStatus(404)
     if (!req.user.is_admin && event.userId !== req.user.id) {
       return res.sendStatus(403)
     }
@@ -316,6 +319,8 @@ const eventController = {
         }
       }
       eventDetails.image_path = req.file.filename
+    } else if (body.image_url) {
+      eventDetails.image_path = await helpers.getImageFromURL(body.image_url)
     }
 
     await event.update(eventDetails)
