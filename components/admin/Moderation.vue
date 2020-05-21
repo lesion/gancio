@@ -68,7 +68,7 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-import { Message, MessageBox } from 'element-ui'
+import { MessageBox } from 'element-ui'
 
 export default {
   name: 'Moderation',
@@ -142,15 +142,17 @@ export default {
         ap_user.blocked = !ap_user.blocked
       } catch (e) { }
     },
-    async deleteResource (resource) {
-      await MessageBox.confirm(this.$t('admin.delete_resource_confirm'),
+    deleteResource (resource) {
+      MessageBox.confirm(this.$t('admin.delete_resource_confirm'),
         this.$t('common.confirm'), {
           confirmButtonText: this.$t('common.ok'),
           cancelButtonText: this.$t('common.cancel'),
           type: 'error'
-        })
-      await this.$axios.delete(`/resources/${resource.id}`)
-      this.resources = this.resources.filter(r => r.id !== resource.id)
+        }
+      ).then(() => {
+        this.$axios.delete(`/resources/${resource.id}`)
+        this.resources = this.resources.filter(r => r.id !== resource.id)
+      })
     },
     async toggleBlock (instance) {
       await this.$axios.post('/instances/toggle_block', { instance: instance.domain, blocked: !instance.blocked })
