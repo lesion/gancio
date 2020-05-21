@@ -46,7 +46,8 @@ export default {
     },
     keywords () {
       const tags = this.tags.filter(t => !this.filters.tags.includes(t.tag)).map(t => ({ type: 'tag', label: t.tag, weigth: t.weigth, id: t.tag }))
-      const places = this.places.filter(p => !this.filters.places.includes(p.id)).map(p => ({ type: 'place', label: p.name, weigth: p.weigth, id: p.id }))
+      const places = this.places.filter(p => !this.filters.places.includes(p.id))
+        .map(p => ({ type: 'place', label: p.name, weigth: p.weigth, id: p.id }))
       const keywords = tags.concat(places).sort((a, b) => b.weigth - a.weigth)
       return keywords
     },

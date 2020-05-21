@@ -4,6 +4,25 @@ defined( 'ABSPATH' ) or die( 'Nope, not accessing this' );
 // eventorganizer / triggered after an event has been updated
 // http://codex.wp-event-organiser.com/hook-eventorganiser_save_event.html
 add_action('eventorganiser_save_event', 'wpgancio_save_event', 15);
+add_action('wp_trash_post', 'delete_post', 15);
+
+function delete_post ($post_id) {
+  $post = get_post($post_id);
+  $instance_url = get_option('wpgancio_instance_url');
+
+  if ($post->post_type == 'event') {
+    $gancio_id = get_post_meta($post_id, 'gancio_id', TRUE);
+    if ($gancio_id) {
+      $body['id'] = $gancio_id;
+      $http = _wp_http_get_object();
+      $response = $http->request( "${instance_url}/api/event/${gancio_id}", array(
+        'method' => 'DELETE',
+        'headers' => array (
+          'Authorization' => 'Bearer ' . get_option('wpgancio_token')
+        )));
+    }
+  }
+}
 
 function wpgancio_save_event ($post_id) {
   $event = get_post( $post_id );
@@ -22,15 +41,14 @@ function wpgancio_save_event ($post_id) {
   $venue_id = eo_get_venue($post_id);
   $place_name = eo_get_venue_name($venue_id);
   $place_address = eo_get_venue_address($venue_id);
-  $options = get_option('wpgancio_options');
-  $instance_url = $options['wpgancio_field_url'];
+  $instance_url = get_option('wpgancio_instance_url');
 
   $body = array (
     'title' => $event->post_title,
     'description' => $event->post_content,
     'start_datetime' => intval($date),
     'place_name' => $place_name,
-    'place_address' => $place_address,
+    'place_address' => "${place_address['address']}${place_address['city']}"
   );
 
   // add image if specified
@@ -60,7 +78,6 @@ function wpgancio_save_event ($post_id) {
     echo "<div class='error notice'><p>${error_message}</p></div>";
     return;
   }
-
   $data = json_decode(wp_remote_retrieve_body($response));
   update_post_meta($post_id, 'gancio_id', $data->id);
 }

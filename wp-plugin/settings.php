@@ -1,28 +1,40 @@
 <?php
 defined( 'ABSPATH' ) or die( 'Nope, not accessing this' );
-
+// https://codex.wordpress.org/Settings_API
 
 // Fires as an admin screen or script is being initialized. Register out settings
 add_action( 'admin_init', 'wpgancio_settings_init' );
 function wpgancio_settings_init() {
-  register_setting( 'wpgancio', 'wpgancio_options' );
 
   // register a new settings page
   add_settings_section('wpgancio_settings', __('Settings'), FALSE, 'wpgancio');
 
   // register a new field in the 'wpgancio_settings' section
-  add_settings_field('wpgancio_field_url', __( 'Instance URL', 'wpgancio' ),
-    'wpgancio_field_url_cb', 'wpgancio',
-    'wpgancio_settings', [ 'label_for' => 'wpgancio_field_url' ] );
+  add_settings_field('wpgancio_instance_url', __( 'Instance URL', 'wpgancio' ),
+    'wpgancio_instance_url_cb', 'wpgancio',
+    'wpgancio_settings');
+
+  register_setting( 'wpgancio', 'wpgancio_instance_url', 'wpgancio_instance_url_validate' );
 }
 
-add_action( 'update_option_wpgancio_options', 'wpgancio_update_options', 15, 2);
+add_action( 'update_option_wpgancio_instance_url', 'wpgancio_update_options', 15, 2);
+function wpgancio_update_options ($old_value, $instance_url) {
+  $redirect_uri = get_site_url(null, '/wp-admin/options-general.php?page=wpgancio' );
+  $query = join('&', array(
+    'response_type=code',
+    'redirect_uri=' . esc_html($redirect_uri),
+    'scope=event:write',
+    'client_id=' . get_option('wpgancio_client_id'),
+  ));
+
+  wp_redirect("${instance_url}/authorize?${query}");
+  exit;
+}
 
 // Fires before the administration menu loads in the admin, add our options page
 add_action( 'admin_menu', 'wpgancio_options_page' );
 
-function wpgancio_update_options ($old_value, $new_value) {
-  $instance_url = $new_value['wpgancio_field_url'];
+function wpgancio_instance_url_validate ($instance_url) {
   $redirect_uri = get_site_url(null, '/wp-admin/options-general.php?page=wpgancio' );
 
   // create this WP instance as a new client in selected gancio instance
@@ -43,29 +55,18 @@ function wpgancio_update_options ($old_value, $new_value) {
     $data = json_decode( wp_remote_retrieve_body($response), true);
     update_option('wpgancio_client_secret', $data['client_secret']);
     update_option('wpgancio_client_id', $data['client_id']);
-    $query = join('&', array(
-      'response_type=code',
-      'redirect_uri=' . esc_html($redirect_uri),
-      'scope=event:write',
-      'client_id=' . get_option('wpgancio_client_id'),
-      'state=antani'
-    ));
-
-    wp_redirect("${instance_url}/authorize?${query}");
-    exit;
+    return $instance_url;
   }
-};
-
-
+}
 
 function wpgancio_options_page() {
   // add top level menu page
   add_options_page(
-  'Gancio',
-  'Gancio',
-  'manage_options',
-  'wpgancio',
-  'wpgancio_options_page_html'
+    'Gancio',
+    'Gancio',
+    'manage_options',
+    'wpgancio',
+    'wpgancio_options_page_html'
   );
 }
 
@@ -76,16 +77,15 @@ function wpgancio_options_page() {
 // the "label_for" key value is used for the "for" attribute of the <label>.
 // the "class" key value is used for the "class" attribute of the <tr> containing the field.
 // you can add custom key value pairs to be used inside your callbacks.
-
-function wpgancio_field_url_cb( $args ) {
+function wpgancio_instance_url_cb( $args ) {
   // get the value of the setting we've registered with register_setting()
-  $options = get_option( 'wpgancio_options' );
+  $instance_url = get_option( 'wpgancio_instance_url' );
   // output the field
   ?>
 
-  <input id="<?php echo esc_attr( $args['label_for'] ); ?>"
-    value="<?php echo $options[ $args['label_for'] ]; ?>"
-    name="wpgancio_options[<?php echo esc_attr( $args['label_for'] ); ?>]">
+  <input id="wpgancio_instance_url"
+    value="<?php echo esc_attr($instance_url); ?>"
+    name="wpgancio_instance_url">
 
   <p class="description">
     <?php esc_html_e( 'Insert your gancio instance URL', 'wpgancio' ); ?>
@@ -109,16 +109,15 @@ function wpgancio_options_page_html() {
   $code = $_GET['code'];
   if ( $code ) {
     update_option('wpgancio_code', $code);
-    $options = get_option( 'wpgancio_options' );
-    $instance_url = $options['wpgancio_field_url'];
+    $instance_url = get_option( 'wpgancio_instance_url' );
+
     $response = wp_remote_post($instance_url . "/oauth/token", array(
       'body' => array(
         'client_id' => get_option('wpgancio_client_id'),
         'client_secret' => get_option('wpgancio_client_secret'),
         'scope' => 'event:write',
         'grant_type' => 'authorization_code',
-        'code' => $code,
-        'state' => 'antani'
+        'code' => $code
       )));
     if ( is_wp_error( $response ) ) {
       add_settings_error('wpgancio_messages', 'wpgancio_messages', $response->get_error_message());
@@ -130,7 +129,7 @@ function wpgancio_options_page_html() {
       $data = json_decode( wp_remote_retrieve_body($response), true);
       update_option('wpgancio_token', $data['access_token']);
       update_option('wpgancio_refresh', $data['refresh_token']);
-      add_settings_error('wpgancio_messages', 'wpgancio_messages', 'TUTTO REGO MATCH!', 'success');
+      add_settings_error('wpgancio_messages', 'wpgancio_messages', 'Association completed!', 'success');
       settings_errors( 'wpgancio_messages' );
     }
   }
