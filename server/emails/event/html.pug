@@ -8,7 +8,7 @@ block content
     <center>
       <img style="height: 89vh; margin: 0 auto;" src="#{config.baseurl}/media/#{event.image_path}" />
     </center>
-  p #{event.description}
+  p !{event.description}
 
   each tag in event.tags
     span ##{tag.tag} 
