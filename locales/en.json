@@ -78,7 +78,9 @@
         "fediverse": "Fediverse",
         "skip": "Skip",
         "delete": "Remove",
-        "announcements": "Announcements"
+        "announcements": "Announcements",
+        "url": "URL",
+        "place": "Place"
     },
     "login": {
         "description": "By logging in you can publish new events.",
@@ -190,7 +192,11 @@
         "title_description": "It is used in the title of the page, in the subject line of the email, in the export of feeds and ics ",
         "description_description": "It appears in the header next to the title",
         "instance_place": "Indicative place of this instance",
-        "instance_name_help": "ActivityPub's account to follow"
+        "instance_name_help": "ActivityPub's account to follow",
+        "enable_trusted_instances": "Enable friendly instances",
+        "trusted_instances_help": "Friendly instances list will be shown in header",
+        "add_trusted_instance": "Add a friendly instance",
+        "instance_place_help": "The label to show in other's instances"
     },
     "auth": {
         "not_confirmed": "Not confirmed yet...",
