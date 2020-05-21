@@ -46,7 +46,7 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import axios from 'axios'
 
 export default {
@@ -81,9 +81,7 @@ export default {
     ...mapActions(['setSetting']),
     async createTrustedInstance () {
       try {
-        const instance = await axios
-          .get(`${this.instance_url}/.well-known/nodeinfo/2.1`)
-        console.error(instance)
+        const instance = await axios.get(`${this.instance_url}/.well-known/nodeinfo/2.1`)
         this.setSetting({
           key: 'trusted_instances',
           value: this.settings.trusted_instances.concat({
@@ -101,10 +99,18 @@ export default {
         })
       }
     },
-    async deleteInstance (instance) {
-      await this.setSetting({
-        key: 'trusted_instances',
-        value: this.settings.trusted_instances.filter(i => i.url !== instance.url)
+    deleteInstance (instance) {
+      MessageBox.confirm(this.$t('admin.delete_trusted_instance_confirm'),
+        this.$t('common.confirm'), {
+          confirmButtonText: this.$t('common.ok'),
+          cancelButtonText: this.$t('common.cancel'),
+          type: 'error'
+        }
+      ).then(() => {
+        this.setSetting({
+          key: 'trusted_instances',
+          value: this.settings.trusted_instances.filter(i => i.url !== instance.url)
+        })
       })
     },
     save (key, value) {
