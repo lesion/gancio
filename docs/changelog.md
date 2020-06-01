@@ -8,6 +8,7 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+- filter and linkify content from fediverse
 ### 0.21.0
 - a new recurring events logic (a la taskwarrior):
   - each occurrence of a recurring event could be personalized.
