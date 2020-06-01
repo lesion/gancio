@@ -74,9 +74,6 @@ module.exports = {
         maxAge: 60 * 60 * 24 * 30 * 12 * 5
       }
     },
-    redirect: {
-      login: '../login'
-    },
     strategies: {
       local: {
         endpoints: {

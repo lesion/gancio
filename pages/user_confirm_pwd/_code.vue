@@ -18,9 +18,6 @@ import { Message } from 'element-ui'
 
 export default {
   name: 'Recover',
-  data () {
-    return { new_password: '' }
-  },
   async asyncData ({ params, $axios }) {
     const code = params.code
     try {
@@ -30,10 +27,13 @@ export default {
       return { valid: false }
     }
   },
+  data () {
+    return { new_password: '' }
+  },
   methods: {
     async change_password () {
       try {
-        const res = await this.$axios.$post('/user/recover_password', { recover_code: this.code, password: this.new_password })
+        await this.$axios.$post('/user/recover_password', { recover_code: this.code, password: this.new_password })
         Message({
           showClose: true,
           type: 'success',
