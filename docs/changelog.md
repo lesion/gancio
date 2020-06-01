@@ -8,7 +8,38 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+
+### 0.23.0
+- send AP Event Object instead of Note
+- show only future unconfirmed events in admin panel
+- new polish locale
+- add friendly instances (an additional menu is shown)
+- use user's logo not project's logo in federation
+- start WPGancio plugin
+- support media upload via url (API only)
+- confirm before remove a resource
+- confirm before remove a friendly instance
+- event description supports some html tag
+- fix redirect after login
+
+### 0.22.0
+- add admin announcement support (fix #74)
+- each instance has a specific timezone you can choose from admin's panel
+- refactoring language management (you can choose a default instance's language):
+  usually UX language is choosen looking at Accepted-Language header but there
+  are messages not generated from an http request (eg. sending events via AP).
+  In those cases a default instance's language is choosen (default 'en').
+- use lazy loaded images
+- better mobile experience for admins
+- single day only recurring events
+- fix user block in fediverse moderation
 - filter and linkify content from fediverse
+- add a lot of help strings in admin panel
+- use html2text for event description in og: meta
+- update deps
+- fix a moment.js typo from/to issue
+- fix #73 
+
 ### 0.21.0
 - a new recurring events logic (a la taskwarrior):
   - each occurrence of a recurring event could be personalized.
