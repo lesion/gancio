@@ -68,7 +68,6 @@ export default {
         await this.$auth.loginWith('local', { data })
         this.loading = false
         Message({ message: this.$t('login.ok'), showClose: true, type: 'success' })
-        this.$router.replace('/')
       } catch (e) {
         Message({ message: this.$t('login.error'), showClose: true, type: 'error' })
         this.loading = false
