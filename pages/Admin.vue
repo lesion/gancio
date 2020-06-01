@@ -80,6 +80,16 @@ export default {
   name: 'Admin',
   components: { Users, Places, Settings, Federation, Moderation, Announcement },
   middleware: ['auth'],
+  async asyncData ({ $axios, params, store }) {
+    try {
+      const users = await $axios.$get('/users')
+      const events = await $axios.$get('/event/unconfirmed')
+      return { users, events }
+    } catch (e) {
+      console.error(e)
+      return { users: [], events: [] }
+    }
+  },
   data () {
     return {
       perPage: 10,
@@ -93,15 +103,6 @@ export default {
   },
   head () {
     return { title: `${this.settings.title} - ${this.$t('common.admin')}` }
-  },
-  async asyncData ({ $axios, params, store }) {
-    try {
-      const users = await $axios.$get('/users')
-      const events = await $axios.$get('/event/unconfirmed')
-      return { users, events }
-    } catch (e) {
-      console.error(e)
-    }
   },
   computed: {
     ...mapState(['settings']),

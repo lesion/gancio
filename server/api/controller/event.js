@@ -151,6 +151,7 @@ const eventController = {
       const notifier = require('../../notifier')
       notifier.notifyEvent('Create', event.id)
     } catch (e) {
+      debug(e)
       res.sendStatus(404)
     }
   },
@@ -167,22 +168,28 @@ const eventController = {
       await event.update({ is_visible: false })
       res.sendStatus(200)
     } catch (e) {
+      debug(e)
       res.sendStatus(404)
     }
   },
 
   /** get all unconfirmed events */
   async getUnconfirmed (req, res) {
-    const events = await Event.findAll({
-      where: {
-        parentId: null,
-        is_visible: false,
-        start_datetime: { [Op.gt]: moment.unix() }
-      },
-      order: [['start_datetime', 'ASC']],
-      include: [Tag, Place]
-    })
-    res.json(events)
+    try {
+      const events = await Event.findAll({
+        where: {
+          parentId: null,
+          is_visible: false,
+          start_datetime: { [Op.gt]: moment().unix() }
+        },
+        order: [['start_datetime', 'ASC']],
+        include: [{ model: Tag, required: false }, Place]
+      })
+      res.json(events)
+    } catch (e) {
+      debug(e)
+      res.sendStatus(400)
+    }
   },
 
   async addNotification (req, res) {
@@ -280,8 +287,8 @@ const eventController = {
       const notifier = require('../../notifier')
       notifier.notifyEvent('Create', event.id)
     } catch (e) {
-      res.sendStatus(400)
       debug(e)
+      res.sendStatus(400)
     }
   },
 
@@ -331,7 +338,7 @@ const eventController = {
         defaults: { address: body.place_address }
       }).spread((place, created) => place)
     } catch (e) {
-      console.log('error', e)
+      debug(e)
     }
     await event.setPlace(place)
     await event.setTags([])
@@ -376,7 +383,7 @@ const eventController = {
     }
   },
 
-  async _select (start = moment.unix(), limit = 100) {
+  async _select (start = moment().unix(), limit = 100) {
     const where = {
       // confirmed event only
       recurrent: null,
