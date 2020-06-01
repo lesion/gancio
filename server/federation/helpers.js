@@ -114,6 +114,10 @@ const Helpers = {
         }
         return res.data
       })
+      .catch(e => {
+        debug(e)
+        return false
+      })
 
     if (fedi_user) {
       fedi_user = await APUser.create({ ap_id: URL, object: fedi_user })
