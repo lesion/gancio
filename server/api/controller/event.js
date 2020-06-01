@@ -291,7 +291,7 @@ const eventController = {
     }
     const body = req.body
     const event = await Event.findByPk(body.id)
-    if (!event) return res.sendStatus(404)
+    if (!event) { return res.sendStatus(404) }
     if (!req.user.is_admin && event.userId !== req.user.id) {
       return res.sendStatus(403)
     }
