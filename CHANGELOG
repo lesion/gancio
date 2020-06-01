@@ -1,10 +1,17 @@
 All notable changes to this project will be documented in this file.
 
-### Unreleased
+### 0.23.0
 - send AP Event Object instead of Note
 - show only future unconfirmed events in admin panel
 - new polish locale
-- add trusted instances (an additional menu is shown)
+- add friendly instances (an additional menu is shown)
+- use user's logo not project's logo in federation
+- start WPGancio plugin
+- support media upload via url (API only)
+- confirm before remove a resource
+- confirm before remove a friendly instance
+- event description supports some html tag
+- fix redirect after login
 
 ### 0.22.0
 - add admin announcement support (fix #74)
