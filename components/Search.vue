@@ -23,7 +23,7 @@
       el-button.mr-1.bg-dark(type='text' round plain v-for='t in filters.tags' size='mini'
         :key='t' @click='removeTag(t)') {{t}}
       el-button.mr-1.bg-dark.text-warning(type='text' round plain v-for='p in selectedPlaces' size='mini'
-        :key='p' @click='removePlace(p.id)') {{p.name}}
+        :key='p.id' @click='removePlace(p.id)') {{p.name}}
 </template>
 
 <script>

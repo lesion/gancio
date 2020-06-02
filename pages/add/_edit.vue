@@ -52,7 +52,7 @@
       client-only
         #picker.mx-auto
           v-date-picker.mb-2.mt-3(
-            :mode='event.type === "multidate" ? "range" : "single"'
+            :mode='datePickerMode'
             :attributes='attributes'
             v-model='date'
             :locale='$i18n.locale'
@@ -173,6 +173,14 @@ export default {
   },
   computed: {
     ...mapState(['tags', 'places', 'events', 'settings']),
+    datePickerMode () {
+      const modeMap = {
+        multidate: 'range',
+        normal: 'single',
+        recurrent: 'multiple'
+      }
+      return modeMap[this.event.type]
+    },
     whenPatterns () {
       const dates = this.date
       if (!dates || !dates.length) { return '' }
