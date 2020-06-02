@@ -196,7 +196,8 @@
         "enable_trusted_instances": "Enable friendly instances",
         "trusted_instances_help": "Friendly instances list will be shown in header",
         "add_trusted_instance": "Add a friendly instance",
-        "instance_place_help": "The label to show in other's instances"
+        "instance_place_help": "The label to show in other's instances",
+        "delete_trusted_instance_confirm": "Do you really want to delete this item from the friend instances menu?"
     },
     "auth": {
         "not_confirmed": "Not confirmed yet...",
