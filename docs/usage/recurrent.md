@@ -21,7 +21,7 @@ can choose to show them by default in admin panel.
 
 ## Add a recurrent event
 
-Same as adding a normal event, but you can choose choose the details of
+Same as adding a normal event, but you can choose the details of
 event recurrence. Choose a frequency first:
 
 

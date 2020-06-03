@@ -3,15 +3,6 @@
   padding: 4px;
 }
 
-.navigation-list-item a {
-  color: #7253ed;
-}
-
-.navigation-list-item a:hover {
-  color: black;
-}
-
-
 html, body {
   font-family: sans-serif;
 }
