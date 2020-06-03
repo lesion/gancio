@@ -91,6 +91,7 @@ const eventController = {
     const is_admin = req.user && req.user.is_admin
     const id = Number(req.params.event_id)
     let event
+
     try {
       event = await Event.findByPk(id, {
         attributes: {
@@ -113,8 +114,36 @@ const eventController = {
     } catch (e) {
       return res.sendStatus(400)
     }
+
+    if (!event) {
+      return res.sendStatus(400)
+    }
+
+    // get prev and next event
+    const next = await Event.findOne({
+      attributes: ['id'],
+      where: {
+        is_visible: true,
+        parentId: null,
+        start_datetime: { [Op.gt]: event.start_datetime }
+      },
+      order: [['start_datetime', 'ASC']]
+    })
+
+    const prev = await Event.findOne({
+      attributes: ['id'],
+      where: {
+        is_visible: true,
+        parentId: null,
+        start_datetime: { [Op.lt]: event.start_datetime }
+      },
+      order: [['start_datetime', 'DESC']]
+    })
+
     if (event && (event.is_visible || is_admin)) {
       event = event.get()
+      event.next = next && next.id
+      event.prev = prev && prev.id
       event.tags = event.tags.map(t => t.tag)
       if (format === 'json') {
         res.json(event)

@@ -115,11 +115,12 @@ const Helpers = {
         return res.data
       })
       .catch(e => {
-        debug(e)
+        debug(`[ERR] ${URL}: ${e}`)
         return false
       })
 
     if (fedi_user) {
+      debug(`Create a new AP User => ${URL}`)
       fedi_user = await APUser.create({ ap_id: URL, object: fedi_user })
     }
     return fedi_user
@@ -136,6 +137,7 @@ const Helpers = {
       if (instance) { return instance }
     }
 
+    // TODO: is this a standard? don't think so
     instance = await axios.get(`${instance_url}/api/v1/instance`, { headers: { Accept: 'application/json' } })
       .then(res => res.data)
       .then(instance => {
@@ -169,7 +171,7 @@ const Helpers = {
     }
 
     // little hack -> https://github.com/joyent/node-http-signature/pull/83
-    req.headers.authorization = 'Signature ' + req.headers.signature
+    // req.headers.authorization = 'Signature ' + req.headers.signature
 
     req.fedi_user = user
 

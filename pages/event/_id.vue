@@ -2,13 +2,13 @@
   el-container#eventDetail.h-event
     el-header
 
-      span.title.p-summary.p-name {{event.title}}
+      .title {{event.title}}
 
       #arrow
-        nuxt-link.mr-1(:to='`/event/${prev}`')
-          el-button(circle plain size='small' icon='el-icon-arrow-left' :disabled='!prev')
-        nuxt-link(:to='`/event/${next}`')
-          el-button(circle plain size='small' :disabled='!next' icon='el-icon-arrow-right')
+        nuxt-link.mr-1(:to='`/event/${event.prev}`')
+          el-button(circle plain size='small' icon='el-icon-arrow-left' :disabled='!event.prev')
+        nuxt-link(:to='`/event/${event.next}`')
+          el-button(circle plain size='small' :disabled='!event.next' icon='el-icon-arrow-right')
 
     el-main
       el-dialog.embedDialog(:visible.sync='showEmbed')
@@ -87,7 +87,7 @@
 
 </template>
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import EventAdmin from './eventAdmin'
 import EmbedEvent from './embedEvent'
 import FollowMe from '../../components/FollowMe'
@@ -192,41 +192,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['filteredEvents']),
     ...mapState(['settings']),
     plainDescription () {
       return htmlToText.fromString(this.event.description.replace('\n', '').slice(0, 1000))
-    },
-    next () {
-      let found = false
-      const event = this.filteredEvents.find(e => {
-        if (found) {
-          return e
-        }
-        found =
-          e.start_datetime === this.event.start_datetime &&
-          e.id === this.event.id
-      })
-      if (!event) {
-        return false
-      }
-      return event.id
-    },
-    prev () {
-      let event = false
-      this.filteredEvents.find(e => {
-        if (
-          e.start_datetime === this.event.start_datetime &&
-          e.id === this.event.id
-        ) {
-          return true
-        }
-        event = e
-      })
-      if (!event) {
-        return false
-      }
-      return event.id
     },
     imgPath () {
       return '/media/' + this.event.image_path
