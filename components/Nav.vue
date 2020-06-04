@@ -1,5 +1,5 @@
 <template lang="pug">
-  div#nav
+  el-header#header
     nuxt-link#logo(:to='$route.name==="index"?"/about":"/"')
       img(src='/favicon.ico')
       span.ml-1.hidden-xs-only {{settings.title}}
@@ -88,34 +88,37 @@ export default {
           message: e
         })
       }
-    },
+    }
   }
 }
 </script>
 
 <style lang='less'>
-
-#logo {
-  img {
-    max-height: 60px;
+#header {
+  display: inline;
+  #logo {
+    img {
+      max-height: 60px;
+    }
+    float: left;
+    line-height: 60px;
+    color: white;
+    font-size: 1.5em;
+    font-weight: 600;
+    text-decoration: none;
+    small {
+      font-size: 0.5em;
+    }
   }
-  line-height: 60px;
-  float: left;
-  color: white;
-  font-size: 1.5em;
-  font-weight: 600;
-  text-decoration: none;
-  small {
-    font-size: 0.5em;
-  }
-}
 
-#menu {
-  float: right;
-  border-bottom: none;
-
-  .el-menu-item {
-    padding: 0px 15px;
+  #menu {
+    position: absolute;
+    right: 10px;
+    top: 0px;
+    border-bottom: none;
+    .el-menu-item {
+      padding: 0px 15px;
+    }
   }
 }
 
