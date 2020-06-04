@@ -5,8 +5,7 @@
       FollowMe
 
     el-backtop
-    el-header#header
-      Nav
+    Nav
     #content
       nuxt
     el-footer.mt-1#footer
