@@ -310,11 +310,13 @@ export default {
   }
 
   .el-header {
+    height: 4em;
     position: sticky;
-    padding-top: 1em;
+    padding-top: .4em;
     top: 0px;
     border-bottom: 1px solid lightgray;
     z-index: 1;
+    overflow: hidden;
   }
 
   .embedDialog {
@@ -359,13 +361,13 @@ export default {
   }
 
   .title {
-    max-width: 80%;
-    max-height: 0.1rem;
-    overflow: hidden;
+    display: table-cell;
+    padding-right: 3em;
+    height: 2.1em;
     font-size: 1.6rem;
     color: #404246;
     line-height: 1;
-    padding-right: 40px;
+    vertical-align: middle;
   }
 
   pre {
@@ -444,8 +446,9 @@ export default {
     }
 
     .title {
-      font-size: 1em;
-      font-weight: bold;
+      font-size: 1.1em;
+      line-height: 1.4em;
+      color: black;
     }
   }
 }
