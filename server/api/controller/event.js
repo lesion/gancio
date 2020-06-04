@@ -84,8 +84,6 @@ const eventController = {
     res.json(place)
   },
 
-  // TODO retrieve next/prev event also
-  // select id, start_datetime, title from events where start_datetime > (select start_datetime from events where id=89) order by start_datetime limit 20;
   async get (req, res) {
     const format = req.params.format || 'json'
     const is_admin = req.user && req.user.is_admin
@@ -160,7 +158,7 @@ const eventController = {
   },
 
   /** confirm an anonymous event
-   * and send its relative notifications
+   * and send related notifications
    */
   async confirm (req, res) {
     const id = Number(req.params.event_id)
@@ -523,7 +521,6 @@ const eventController = {
 
   /**
    * Create instances of recurrent events
-   * @param {Number} start_datetime
    */
   async _createRecurrent (start_datetime = moment().unix()) {
     // select recurrent events
