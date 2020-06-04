@@ -4,6 +4,8 @@
       el-col(:span='12')
         el-divider {{$t('common.instances')}}
         el-input(v-model='instancesFilter' :placeholder="$t('admin.filter_instances')")
+        client-only
+          el-pagination(v-if='instances.length>perPage' :page-size='perPage' :currentPage.sync='instancePage' :total='instances.length')
         el-table(:data='paginatedInstances' small @row-click='instanceSelected')
           el-table-column(label='Domain' width='180')
             template(slot-scope='data')
@@ -20,14 +22,12 @@
                 el-button(size='mini'
                   :type='data.row.blocked?"danger":"warning"'
                   @click='toggleBlock(data.row)') {{data.row.blocked?$t('admin.unblock'):$t('admin.block')}}
-        client-only
-          el-pagination(v-if='instances.length>perPage' :page-size='perPage' :currentPage.sync='instancePage' :total='instances.length')
 
       el-col.float-right(:span='11' align='right')
         el-divider {{$t('common.users')}}
         el-input(v-model='usersFilter' :placeholder="$t('admin.filter_users')")
         client-only
-          el-pagination(v-if='users.length>perPage' :page-size='perPage' :currentPage.sync='instancePage' :total='users.length')
+          el-pagination(v-if='users.length>perPage' :page-size='perPage' :currentPage.sync='userPage' :total='users.length')
         el-table(:data='paginatedSelectedUsers' small)
           el-table-column(:label="$t('common.user')" width='150')
             template(slot-scope='data')
@@ -76,13 +76,13 @@ export default {
     return {
       perPage: 10,
       instancePage: 1,
-      userPage: 1,
+      instancesFilter: '',
+      instances: [],
+      resources: [],
       resourcePage: 1,
       usersFilter: '',
-      instancesFilter: '',
       users: [],
-      resources: [],
-      instances: []
+      userPage: 1
     }
   },
   computed: {
@@ -103,7 +103,10 @@ export default {
     filteredInstances () {
       if (!this.instancesFilter) { return this.instances }
       const instancesFilter = this.instancesFilter.toLowerCase()
-      return this.instances.filter(instance => instance.name.includes(instancesFilter) || instance.domain.includes(instancesFilter))
+      return this.instances.filter(instance =>
+        (instance.name && instance.name.includes(instancesFilter)) ||
+        (instance.domain && instance.domain.includes(instancesFilter))
+      )
     },
     paginatedSelectedUsers () {
       return this.filteredUsers.slice((this.userPage - 1) * this.perPage,
