@@ -99,8 +99,8 @@ export default {
       return `<iframe style='border: 0px; width: 100%;' src="${this.settings.baseurl}/embed/list?${params.join('&')}"></iframe>`
     },
     link () {
-      const tags = this.filters.tags.map(t => t.id).join(',')
-      const places = this.filters.places.map(p => p.id).join(',')
+      const tags = this.filters.tags.join(',')
+      const places = this.filters.places.join(',')
       let query = ''
       if (tags || places) {
         query = '?'

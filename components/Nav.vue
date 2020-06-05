@@ -42,7 +42,7 @@
           i.el-icon-switch-button
           span  {{$t('common.logout')}}
 
-      el-menu-item(type='text' v-clipboard:copy='`${settings.baseurl}/feed/rss`' v-clipboard:success='copyLink')
+      el-menu-item(type='text' v-clipboard:copy='feedLink' v-clipboard:success='copyLink')
         v-icon(color='orange' name='rss')
 
 </template>
@@ -53,10 +53,26 @@ import { mapState } from 'vuex'
 export default {
   name: 'Nav',
   computed: {
+    ...mapState(['filters', 'settings']),
+    feedLink () {
+      const tags = this.filters.tags.join(',')
+      const places = this.filters.places.join(',')
+      let query = ''
+      if (tags || places) {
+        query = '?'
+        if (tags) {
+          query += 'tags=' + tags
+          if (places) { query += '&places=' + places }
+        } else {
+          query += 'places=' + places
+        }
+      }
+
+      return `${this.settings.baseurl}/feed/rss${query}`
+    },
     could_add () {
       return (this.$auth.loggedIn || this.settings.allow_anon_event)
     },
-    ...mapState(['filters', 'settings'])
   },
   methods: {
     copyLink () {
