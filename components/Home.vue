@@ -1,7 +1,7 @@
 <template lang="pug">
   section#home
 
-    .row.m-0.mt-1
+    #calbar.row.mt-1
       .col-xl-7.col-lg-7.col-sm-6.col-xs-12.p-0
         client-only
           Calendar
@@ -50,7 +50,13 @@ export default {
 }
 </script>
 <style lang='less'>
+#calbar {
+  max-width: 1000px;
+  margin: 0 auto;
+}
 #events {
+  max-width: 1600px;
+  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
