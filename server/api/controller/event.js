@@ -122,7 +122,7 @@ const eventController = {
       attributes: ['id'],
       where: {
         is_visible: true,
-        parentId: null,
+        recurrent: null,
         start_datetime: { [Op.gt]: event.start_datetime }
       },
       order: [['start_datetime', 'ASC']]
@@ -132,7 +132,7 @@ const eventController = {
       attributes: ['id'],
       where: {
         is_visible: true,
-        parentId: null,
+        recurrent: null,
         start_datetime: { [Op.lt]: event.start_datetime }
       },
       order: [['start_datetime', 'DESC']]
