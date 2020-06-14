@@ -7,6 +7,7 @@ module.exports = {
     if (req.accepts('html')) { return res.redirect(301, '/') }
     const name = req.params.name
     if (!name) { return res.status(400).send('Bad request.') }
+
     // const user = await User.findOne({ where: { username: name } })
     if (name !== req.settings.instance_name) { return res.status(404).send(`No record found for ${name}`) }
     const ret = {
@@ -26,7 +27,7 @@ module.exports = {
       name,
       preferredUsername: name,
       inbox: `${config.baseurl}/federation/u/${name}/inbox`,
-      // outbox: `${config.baseurl}/federation/u/${name}/outbox`,
+      outbox: `${config.baseurl}/federation/u/${name}/outbox`,
       // followers: `${config.baseurl}/federation/u/${name}/followers`,
       discoverable: true,
       attachment: [{

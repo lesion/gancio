@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
     if (this.image_path) {
       attachment.push({
         type: 'Document',
-        mediaType: 'image/jpeg',
+        mediaType: 'image/webp',
         url: `${config.baseurl}/media/${this.image_path}`,
         name: null,
         blurHash: null
@@ -66,8 +66,14 @@ module.exports = (sequelize, DataTypes) => {
 
     return {
       id: `${config.baseurl}/federation/m/${this.id}`,
+      name: this.title,
       url: `${config.baseurl}/event/${this.id}`,
       type: 'Event',
+      startTime: moment.unix(this.start_datetime).locale(locale).format(),
+      endTime: moment.unix(this.end_datetime).locale(locale).format(),
+      location: {
+        name: this.place.name
+      },
       attachment,
       tag: tags.map(tag => ({
         type: 'Hashtag',
@@ -78,7 +84,6 @@ module.exports = (sequelize, DataTypes) => {
       attributedTo: `${config.baseurl}/federation/u/${username}`,
       to: follower || [],
       cc: ['https://www.w3.org/ns/activitystreams#Public', `${config.baseurl}/federation/u/${username}/followers`],
-      name: this.title,
       summary,
       sensitive: false
     }
