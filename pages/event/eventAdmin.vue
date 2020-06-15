@@ -6,7 +6,7 @@ div
     el-menu-item
       div(v-if='event.is_visible' @click='toggle(false)') <i class='el-icon-open'/> {{$t(`common.${event.parentId?'skip':'hide'}`)}}
       div(v-else @click='toggle(false)') <i class='el-icon-turn-off'/> {{$t('common.confirm')}}
-    el-menu-item(@click='$router.replace(`/add/${event.id}`)') <i class='el-icon-edit'/> {{$t('common.edit')}}
+    el-menu-item(@click='$router.push(`/add/${event.id}`)') <i class='el-icon-edit'/> {{$t('common.edit')}}
     el-menu-item(v-if='!event.parentId' @click='remove(false)') <i class='el-icon-delete'/> {{$t('common.remove')}}
 
     template(v-if='event.parentId')
@@ -16,7 +16,7 @@ div
         small  {{event|recurrentDetail}}<br/>
       el-menu-item(v-if='event.parent.is_visible' @click='toggle(true)') <i class='el-icon-video-pause'/> {{$t('common.pause')}}
       el-menu-item(v-else @click='toggle(true)') <i class='el-icon-video-play'/> {{$t('common.start')}}
-      el-menu-item(@click='$router.replace(`/add/${event.parentId}`)') <i class='el-icon-edit'/> {{$t('common.edit')}}
+      el-menu-item(@click='$router.push(`/add/${event.parentId}`)') <i class='el-icon-edit'/> {{$t('common.edit')}}
       el-menu-item(@click='remove(true)') <i class='el-icon-delete'/> {{$t('common.remove')}}
 </template>
 <script>
