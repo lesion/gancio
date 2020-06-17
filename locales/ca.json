@@ -78,7 +78,9 @@
         "fediverse": "Fedivers",
         "skip": "Salta",
         "delete": "Esborra",
-        "announcements": "Anuncis"
+        "announcements": "Anuncis",
+        "url": "Adreça URL",
+        "place": "Lloc"
     },
     "login": {
         "description": "Amb la sessió iniciada pots afegir activitats noves",
@@ -161,7 +163,7 @@
         "federation": "Federació / ActivityPub",
         "enable_federation": "Activa la federació",
         "enable_federation_help": "Aquesta instància es podrà seguir des del Fedivers",
-        "select_instance_timezone": "Tria la zona horària",
+        "select_instance_timezone": "Fus horari",
         "enable_resources": "Habilita els recursos",
         "enable_resources_help": "Et permet afegir a l'activitat recursos des del Fedivers",
         "hide_boost_bookmark": "Amaga el nombre de retuts i preferits",
@@ -183,7 +185,19 @@
         "user_block_confirm": "Segur/a que vols bloquejar l'usuària?",
         "delete_announcement_confirm": "Segur/a que vols esborrar l'anunci?",
         "announcement_remove_ok": "S'ha esborrat l'anunci",
-        "announcement_description": "En aquesta secció pots afegir anuncis que romandran a la pàgina principal"
+        "announcement_description": "En aquesta secció pots afegir anuncis que romandran a la pàgina principal",
+        "instance_locale": "Llengua predeterminada",
+        "instance_timezone_description": "El Gancio està pensat per aglutinar les activitats d'un lloc específic, com una ciutat, i per tant, dins una sola zona horària. Les dates i hores de totes les activitats es mostraran segons el fus horari que escriguis i seleccionis.",
+        "instance_locale_description": "La llengua amb què es mostren les pàgines és la preferida per la usuària. Ara bé, en alguns casos, hem de mostrar missatges per tothom en la mateixa llengua (per exemple, quan publiquem via ActivityPub o en alguns correus). En aquests casos, es farà servir la llengua predeterminada.",
+        "instance_place": "Lloc indicatiu d'aquesta instància",
+        "title_description": "Es fa servir al títol de la pàgina, a l'assumpte dels correus i en els formats exportats de feed i ics ",
+        "description_description": "Apareix a la capçalera al costat del títol",
+        "instance_name_help": "Nom del compte ActivityPub per a seguir",
+        "enable_trusted_instances": "Mostra les instàncies amigues",
+        "trusted_instances_help": "Les instàncies amigues apareixen en la capçalera, a la barra de navegació superior",
+        "add_trusted_instance": "Afegeix una instància amiga",
+        "instance_place_help": "L'etiqueta per mostrar al menú de les altres instàncies amigues",
+        "delete_trusted_instance_confirm": "Segur que vols eliminar aquest element del menú d'instàncies amigues?"
     },
     "auth": {
         "not_confirmed": "Encara no s'ha confirmat",

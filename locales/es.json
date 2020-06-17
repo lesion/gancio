@@ -9,7 +9,7 @@
         "when": "Cuando",
         "what": "Cosa",
         "media": "Media",
-        "login": "Entrá",
+        "login": "Ingresar",
         "email": "Email",
         "password": "Contraseña",
         "register": "Regístrate",
@@ -51,14 +51,44 @@
         "password_updated": "Contraseña actualizada!",
         "comments": "ningún comentario|un comentario|{n} comentarios",
         "copy_link": "Copiar Enlace",
-        "send_via_mail": "Enviar correo electrónico "
+        "send_via_mail": "Enviar correo electrónico",
+        "resources": "Recursos",
+        "n_resources": "no hay recurso|un rescurso|{n} recursos",
+        "activate_user": "Confirmado",
+        "displayname": "Nombre enseñado",
+        "federation": "Federación",
+        "set_password": "Confirma la contraseña",
+        "add_to_calendar": "Añadir al calendario",
+        "instances": "Instancias",
+        "copied": "Copiado",
+        "embed": "Incorporar",
+        "embed_title": "Publica este evento en tu página web",
+        "embed_help": "Copiando el siguiente código en tu página web el evento será incluido como puedes ver aquí al lado",
+        "feed": "Feed",
+        "feed_url_copied": "Copiada feed url, pegala en tu lector de feeds",
+        "follow_me_title": "Sigue las actualizaciones en el fediverso",
+        "follow": "Sigue",
+        "moderation": "Moderación",
+        "user": "Usuario",
+        "authorize": "Autoriza",
+        "title": "Título",
+        "filter": "Filtra",
+        "event": "Evento",
+        "pause": "Pausa",
+        "start": "Inicio",
+        "fediverse": "Fediverso",
+        "skip": "Saltar",
+        "delete": "Eliminar",
+        "announcements": "Anuncios",
+        "url": "Dirección URL",
+        "place": "Lugar"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
-        "check_email": "Ravisa tu casilla de correo (también el spam o correo no deseado)",
+        "check_email": "Revisa tu casilla de correo (también el spam o correo no deseado)",
         "not_registered": "¿No estás registrado/a?",
         "forgot_password": "¿Olvidaste la contraseña?",
-        "error": "Error: ",
+        "error": "Error durante el ingreso, comprueba tus datos.",
         "insert_email": "Ingresa tu email",
         "ok": "Todo bien"
     },
@@ -76,7 +106,8 @@
     "register": {
         "description": "Los movimientos sociales necesitan organizarse y autofinanciarse. <br/> Este es un regalo para ustedes, úsenlo solamente para eventos con fines no comerciales y obviamente antifascistas, antisexistas y antirracistas.\n<br/> Antes de que puedas publicar <strong> debemos aprobar la cuenta </strong>. Como imaginarás, <strong> detrás de este sitio hay personas </strong> de carne y hueso, por esto te pedimos escribir algo para hacernos saber que tipos de eventos te gustaría publicar.",
         "error": "Error: ",
-        "complete": "Confirmaremos el registro lo antes posible."
+        "complete": "Confirmaremos el registro lo antes posible.",
+        "first_user": "Administrador creado y activado"
     },
     "event": {
         "anon": "Anónimo",
@@ -110,7 +141,12 @@
         "due": "a las",
         "from": "Desde las",
         "image_too_big": "La imagén es demasiado grande! Tamaño máx 4M",
-        "interact_with_me_at": "Sígueme en el fediverso en"
+        "interact_with_me_at": "Sígueme en el fediverso en",
+        "show_recurrent": "Eventos recurrientes",
+        "show_past": "eventos pasados",
+        "follow_me_description": "Entre las diversas formas de mantenerse al día con los eventos publicados aquí en {title},\n      puedes seguir la cuenta <u>{account}</u> desde el fediverso, por ejemplo, a través de un mastodon, y posiblemente añadir recursos a un evento desde allí.<br/><br/>\n      Si nunca has oído hablar del mastodon y el fediverso te sugerimos que leas <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>este artículo</a>.<br/><br/> Introduce tu instancia abajo (por ejemplo mastodon.cisti.org o mastodon.bida.im)",
+        "interact_with_me": "Sigueme en el fediverso",
+        "remove_recurrent_confirmation": "Estás segura de querer eliminar este evento recurriente?\n\nLos eventos pasados serán mantenidos, pero no se crearán eventos nuevos."
     },
     "admin": {
         "place_description": "En el caso de que un lugar sea incorrecto o cambie de dirección, podés cambiarlo. <br/> En este caso hay que tener en cuenta que todos los eventos asociados con ese lugar cambiarán de dirección (¡incluso los pasados!)",
@@ -126,7 +162,43 @@
         "allow_recurrent_event": "Habilitar eventos fijos",
         "recurrent_event_visible": "Eventos fijos visibles por defecto",
         "federation": "Federación / ActivityPub",
-        "enable_federation": "Habilita la federación!"
+        "enable_federation": "Habilita la federación!",
+        "enable_federation_help": "Será posible seguir esta instancia desde el fediverso",
+        "select_instance_timezone": "Uso horario",
+        "enable_resources": "Habilitar recursos",
+        "enable_resources_help": "Te permite añadir recursos al evento desde el fediverso",
+        "hide_boost_bookmark": "Oculta el número de acciones y marcadores",
+        "hide_boost_bookmark_help": "Oculta los pequeños iconos que muestran el número de impulsos y marcadores que vienen del fediverso",
+        "block": "Bloquear",
+        "unblock": "Desbloquear",
+        "user_add_help": "Enviaremos un correo electrónico al nuevo usuario con instrucciones para confirmar la suscripción y elegir una contraseña.",
+        "instance_name": "Nombre de la instancia",
+        "show_resource": "Mostrar recurso",
+        "hide_resource": "Ocultar recurso",
+        "delete_resource": "Borrar recurso",
+        "delete_resource_confirm": "¿Está seguro de que quiere eliminar este recurso?",
+        "block_user": "Bloquear usuario",
+        "filter_instances": "Filtrar instancia",
+        "filter_users": "Filtrar usuarios",
+        "resources": "Recursos",
+        "user_blocked": "El usuario {usuario} ya no podrá añadir recursos",
+        "favicon": "Logo",
+        "user_block_confirm": "¿Estás seguro de que quieres bloquear al usuario?",
+        "delete_announcement_confirm": "¿Estás seguro de que quieres borrar el anuncio?",
+        "announcement_remove_ok": "Anuncio borrado",
+        "announcement_description": "En esta sección se pueden insertar anuncios que permanecerán en la página de inicio",
+        "instance_locale": "Idioma por defecto",
+        "instance_timezone_description": "Gancio está diseñado para recoger los eventos de un lugar específico como una ciudad. Al escribir y seleccionar la zona horaria de este lugar, todos los tiempos se mostrarán e introducirán como se ha elegido.",
+        "instance_locale_description": "El idioma utilizado para mostrar las páginas es el idioma preferido por el usuario. Sin embargo, en algunos casos tenemos que mostrar los mensajes para todos de la misma manera (por ejemplo, cuando publicamos a través de ActivityPub o cuando enviamos algunos correos electrónicos). En estos casos utilizaremos el idioma seleccionado anteriormente.",
+        "instance_place": "Lugar indicativo de esta instancia",
+        "title_description": "Se utiliza en el título de la página, en la línea de asunto del correo electrónico, en la exportación de feeds y ics ",
+        "description_description": "Aparece en el encabezado junto al título",
+        "instance_name_help": "Nombre de la cuenta de ActivityPub a seguir",
+        "enable_trusted_instances": "Habilitar las solicitudes amistosas",
+        "trusted_instances_help": "Las instancias amistosas aparecerán en la barra de navegación en la parte superior de la página",
+        "add_trusted_instance": "Añade una instancia de amigo",
+        "instance_place_help": "Esta cadena se mostrará en el menú de las otras instancias amigas",
+        "delete_trusted_instance_confirm": "¿Realmente quieres borrar este elemento del menú de instancias amistosas?"
     },
     "auth": {
         "not_confirmed": "Todavía no hemos confirmado este email...",
@@ -137,7 +209,8 @@
         "password_updated": "Contraseña modificada",
         "danger_section": "Sección peligrosa",
         "remove_account": "Al presionar el siguiente botón, su usuario será eliminado. No serán eliminados los eventos que publicaste.",
-        "remove_account_confirm": "Estás por borrar definitivamente tu cuenta"
+        "remove_account_confirm": "Estás por borrar definitivamente tu cuenta",
+        "update_confirm": "¿Estás seguro de que quieres guardar los cambios?"
     },
     "error": {
         "nick_taken": "Este nickname ya está registrado",
@@ -151,5 +224,17 @@
         "5": "quinto",
         "-1": "último"
     },
-    "about": "\n  <p>\n  Gancio es un proyecto del <a href='https://autistici.org/underscore'>underscore hacklab</a> y es uno de los\n  servicios de <a href='https://cisti.org'>cisti.org</a>.</p>\n\n  <h5>¿Que es gancio?</h5>\n  <p>Gancio (se pronuncia \"gancho\") es una herramienta para compartir eventos orientado a las comunidades radicales.\n   Dentro del gancio pueden encontrar y agregar eventos.\n   Gancio, como todo <a href='https://cisti.org'> cisti.org </a> es una herramienta\n   antisexista, antirracista, antifascista y anticapitalista, así que piensen en eso cuando\n   van a publicar un evento. </p>\n\n  <h5>Ok, pero ¿que quiere decir gancio?</h5>\n  <p>\n  Literalmente sería \"enganche\", pero en realidad viene de una forma de decir que se usa en en Turín (Italia). Ahí si alguien dice: \"ehi, ci diamo un gancio alle 8?\" (\"ehi, ¿nos damos un enganche a las 8?\") quiere decir \"ehí, ¿nos vemos a las 8?\". \"Darsi un gancio\" es juntarse a una hora X en un lugar Y.</p>\n  <code>\n  <ul>\n  <li> ¿A qué hora es el <i>gancio</i> para ir a la marcha?</li>\n  <li> No se, de todos modos no puedo ir, ya tengo un <i>gancio</i> para ir a una reunión.</li>\n  </ul>\n  </code>\n\n  <h5> Contactos</h5>\n  <p>\n  ¿Escribiste una nueva interfaz para gancio? ¿Querés abrir un gancio en tu ciudad?\n  ¿Hay algo que te gustaría mejorar? Para contribuir el código fuente es libre y disponible \n  <a href='https://git.lattuga.net/cisti/gancio'>acá</a>. Ayuda y sugerencias son siempre bienvenidos, podés comunicarte con nosotros \n  enviando un mail a underscore arroba autistici.org</p>"
+    "about": "\n  <p>\n  Gancio es un proyecto del <a href='https://autistici.org/underscore'>underscore hacklab</a> y es uno de los\n  servicios de <a href='https://cisti.org'>cisti.org</a>.</p>\n\n  <h5>¿Que es gancio?</h5>\n  <p>Gancio (se pronuncia \"gancho\") es una herramienta para compartir eventos orientado a las comunidades radicales.\n   Dentro del gancio pueden encontrar y agregar eventos.\n   Gancio, como todo <a href='https://cisti.org'> cisti.org </a> es una herramienta\n   antisexista, antirracista, antifascista y anticapitalista, así que piensen en eso cuando\n   van a publicar un evento. </p>\n\n  <h5>Ok, pero ¿que quiere decir gancio?</h5>\n  <p>\n  Literalmente sería \"enganche\", pero en realidad viene de una forma de decir que se usa en en Turín (Italia). Ahí si alguien dice: \"ehi, ci diamo un gancio alle 8?\" (\"ehi, ¿nos damos un enganche a las 8?\") quiere decir \"ehí, ¿nos vemos a las 8?\". \"Darsi un gancio\" es juntarse a una hora X en un lugar Y.</p>\n  <code>\n  <ul>\n  <li> ¿A qué hora es el <i>gancio</i> para ir a la marcha?</li>\n  <li> No se, de todos modos no puedo ir, ya tengo un <i>gancio</i> para ir a una reunión.</li>\n  </ul>\n  </code>\n\n  <h5> Contactos</h5>\n  <p>\n  ¿Escribiste una nueva interfaz para gancio? ¿Querés abrir un gancio en tu ciudad?\n  ¿Hay algo que te gustaría mejorar? Para contribuir el código fuente es libre y disponible \n  <a href='https://git.lattuga.net/cisti/gancio'>acá</a>. Ayuda y sugerencias son siempre bienvenidos, podés comunicarte con nosotros \n  enviando un mail a underscore arroba autistici.org</p>",
+    "confirm": {
+        "title": "Confirmación de usuario",
+        "not_valid": "Mmmmm algo salió mal.",
+        "valid": "Su cuenta ha sido confirmada, ahora puede <a href=\"/login\">ingresar</a>."
+    },
+    "oauth": {
+        "authorization_request": "La aplicación externa <code>{app}</code> requiere permiso para realizar las siguientes tareas en <code>{instance_name}</code>:",
+        "redirected_to": "Después de la confirmación será redirigido a la dirección <code>{url}</code>",
+        "scopes": {
+            "event:write": "Publica/edita tus eventos"
+        }
+    }
 }
