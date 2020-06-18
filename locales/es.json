@@ -181,7 +181,7 @@
         "filter_instances": "Filtrar instancia",
         "filter_users": "Filtrar usuarios",
         "resources": "Recursos",
-        "user_blocked": "El usuario {user} ya no podrá añadir recursos",
+        "user_blocked": "El usuario {usuario} ya no podrá añadir recursos",
         "favicon": "Logo",
         "user_block_confirm": "¿Estás seguro de que quieres bloquear al usuario?",
         "delete_announcement_confirm": "¿Estás seguro de que quieres borrar el anuncio?",
