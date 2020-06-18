@@ -3,5 +3,6 @@ export default {
   en: 'English',
   es: 'Español',
   ca: 'Català',
-  pl: 'Polski'
+  pl: 'Polski',
+  eu: 'Euskara'
 }
