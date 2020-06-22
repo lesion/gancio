@@ -1,5 +1,5 @@
 <template lang="pug">
-  .card.announcement.event.mt-1.text-white(body-style='padding: 0px;')
+  .card.announcement.announcement.mt-1.text-white(body-style='padding: 0px;')
     nuxt-link(:to='`/announcement/${announcement.id}`')
       .title <i class='el-icon-info'/> {{announcement.title}}
 
@@ -17,7 +17,7 @@ export default {
   computed: {
     ...mapState(['announcements']),
     description () {
-      return this.announcement.announcement.slice(0, 500)
+      return this.announcement.announcement.replace(/(<br>)+/g, '<br>')
     }
   }
 }

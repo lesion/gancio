@@ -1,0 +1,61 @@
+
+.editor {
+  position: relative;
+  overflow-y: auto;
+  padding-top: 1.7em;
+  scrollbar-width: thin;
+
+  &.with-border {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  .content {
+    padding: 0px 5px 0px 5px;
+    flex: 1;
+    scrollbar-width: thin;
+    overflow-y: auto;
+  }
+
+  .menububble {
+    position: absolute;
+    display: flex;
+    overflow: hidden;
+    opacity: 0;
+    z-index: 1;
+    background: #dddddd;
+    transform: translateX(-50%);
+    border-radius: 3px;
+    padding: 0.07rem;
+    transition: opacity 0.2s, visibility 0.2s, left .2s, bottom .2s;
+    visibility: hidden;
+
+    &.is-active {
+      opacity: 1;
+      visibility: visible;
+    }
+    input {
+      padding: 0;
+      margin: 1px;
+      display: block;
+      border: 0;
+      color: #444;
+      font-size: .8em;
+      border-radius: 3px;
+      line-height: 100%;
+      transition: width .2s;
+      padding-left: 5px;
+      flex-grow: 1;
+    }
+
+    .fa-icon {
+      width: auto;
+      font-size: 10px;
+      height: 1.4em; /* or any other relative font sizes */
+      /* You would have to include the following two lines to make this work in Safari */
+      // max-width: 100%;
+      max-height: 100%;
+    }
+
+  }
+}

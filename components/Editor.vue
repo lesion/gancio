@@ -38,7 +38,7 @@
 </template>
 <script>
 import _ from 'lodash'
-import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from 'tiptap'
+import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble, Extension } from 'tiptap'
 import {
   Blockquote,
   BulletList,
@@ -101,7 +101,21 @@ export default {
         new Bold(),
         new Italic(),
         new Strike(),
-        new Underline()
+        new Underline(),
+        new class extends Extension {
+          keys () {
+            return {
+              Enter (state, dispatch, view) {
+                const { schema, doc, tr } = view.state
+
+                const hard_break = schema.nodes.hard_break
+                const transaction = tr.replaceSelectionWith(hard_break.create()).scrollIntoView()
+                view.dispatch(transaction)
+                return true
+              }
+            }
+          }
+        }()
       ]
     })
   },

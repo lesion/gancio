@@ -104,6 +104,7 @@ api.delete('/event/notification/:code', eventController.delNotification)
 
 api.get('/settings', settingsController.getAllRequest)
 api.post('/settings', isAdmin, settingsController.setRequest)
+api.get('/event/:event_id.:format?', cors, eventController.get)
 api.post('/settings/favicon', isAdmin, multer({ dest: path.resolve(config.upload_path, 'thumb/') }).single('favicon'), settingsController.setFavicon)
 
 // confirm event
