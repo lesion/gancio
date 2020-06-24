@@ -376,6 +376,10 @@ export default {
     color: #404246;
     font-size: 1em;
     font-family: inherit;
+
+    p:empty {
+      min-height: 1em;
+    }
     // font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen,
       // Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica, Arial,
       // sans-serif !important;
