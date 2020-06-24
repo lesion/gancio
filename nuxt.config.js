@@ -2,6 +2,7 @@ const conf = require('config')
 
 module.exports = {
   mode: 'universal',
+  telemetry: false,
   /*
    ** Headers of the page
    */
