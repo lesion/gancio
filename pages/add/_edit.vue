@@ -396,28 +396,26 @@ export default {
 }
 </script>
 <style style='less'>
+#edit_page
+  i {
+    font-size: 1.3em;
+  }
 
-i {
-  font-size: 1.3em;
-}
+  #picker {
+    max-width: 600px;
+  }
 
-#add_event {
-  max-width: 800px;
-}
-
-#picker {
-  max-width: 600px;
-}
-
-#edit_page .el-form-item {
+  #edit_page .el-form-item {
     display: inline-flex;
-}
+  }
 
-.el-upload,
-.el-upload-dragger {
-  overflow: hidden;
-  text-align: center;
-  margin: 0 auto;
-  max-width: 80%;
-}
+  .el-upload,
+  .el-upload-dragger {
+    overflow: hidden;
+    text-align: center;
+    margin: 0 auto;
+    max-width: 80%;
+    font-size: 2em;
+  }
+
 </style>
