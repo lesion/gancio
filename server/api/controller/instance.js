@@ -1,9 +1,7 @@
-const {
-  ap_user: APUser,
-  instance: Instance,
-  resource: Resource
-  // event: Event
-} = require('../models')
+const APUser = require('../models/ap_user')
+const Instance = require('../models/instance')
+const Resource = require('../models/resource')
+
 // const { Op } = require('sequelize')
 
 const instancesController = {

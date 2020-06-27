@@ -3,10 +3,13 @@ const config = require('config')
 const debug = require('debug')('notifier')
 const fediverseHelpers = require('./federation/helpers')
 
-const {
-  event: Event, notification: Notification, event_notification: EventNotification,
-  user: User, place: Place, tag: Tag
-} = require('./api/models')
+const Event = require('./api/models/event')
+const Notification = require('./api/models/event')
+const EventNotification = require('./api/models/event')
+const User = require('./api/models/event')
+const Place = require('./api/models/event')
+const Tag = require('./api/models/event')
+
 const eventController = require('./api/controller/event')
 
 const notifier = {

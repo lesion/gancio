@@ -1,4 +1,4 @@
-const { setting: Setting } = require('../models')
+const Setting = require('../models/setting')
 const config = require('config')
 const consola = require('consola')
 const path = require('path')

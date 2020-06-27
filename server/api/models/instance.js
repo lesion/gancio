@@ -1,19 +1,22 @@
-'use strict'
-module.exports = (sequelize, DataTypes) => {
-  const Instance = sequelize.define('instance', {
-    domain: {
-      primaryKey: true,
-      allowNull: false,
-      type: DataTypes.STRING
-    },
-    name: DataTypes.STRING,
-    blocked: DataTypes.BOOLEAN,
-    data: DataTypes.JSON
-  }, {})
 
-  Instance.associate = function (models) {
-    Instance.hasMany(models.ap_user)
-  }
+const sequelize = require('./index')
+const { Model, DataTypes } = require('sequelize')
+const APUser = require('./ap_user')
 
-  return Instance
-}
+class Instance extends Model {}
+
+Instance.init({
+  domain: {
+    primaryKey: true,
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  name: DataTypes.STRING,
+  blocked: DataTypes.BOOLEAN,
+  data: DataTypes.JSON
+}, { sequelize, modelName: 'instance' })
+
+Instance.hasMany(APUser)
+APUser.belongsTo(Instance)
+
+module.exports = Instance

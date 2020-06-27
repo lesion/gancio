@@ -32,8 +32,8 @@ async function main () {
   function shutdown () {
     TaskManager.stop()
     nuxt.close(async () => {
-      const db = require('./api/models')
-      await db.sequelize.close()
+      const sequelize = require('./api/models')
+      await sequelize.close()
       process.exit()
     })
   }

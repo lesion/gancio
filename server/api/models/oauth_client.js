@@ -1,17 +1,20 @@
 
-module.exports = (sequelize, DataTypes) => {
-  const OAuthClient = sequelize.define('oauth_client', {
-    id: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-      allowNull: false
-    },
-    name: DataTypes.STRING,
-    client_secret: DataTypes.STRING,
-    scopes: DataTypes.STRING,
-    redirectUris: DataTypes.STRING,
-    website: DataTypes.STRING
-  }, {})
+const sequelize = require('./index')
+const { Model, DataTypes } = require('sequelize')
 
-  return OAuthClient
-}
+class OAuthClient extends Model {}
+
+OAuthClient.init({
+  id: {
+    type: DataTypes.STRING,
+    primaryKey: true,
+    allowNull: false
+  },
+  name: DataTypes.STRING,
+  client_secret: DataTypes.STRING,
+  scopes: DataTypes.STRING,
+  redirectUris: DataTypes.STRING,
+  website: DataTypes.STRING
+}, { sequelize, modelName: 'oauth_client' })
+
+module.exports = OAuthClient

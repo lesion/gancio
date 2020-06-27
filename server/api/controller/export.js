@@ -1,4 +1,7 @@
-const { event: Event, place: Place, tag: Tag } = require('../models')
+const Event = require('../models/event')
+const Place = require('../models/place')
+const Tag = require('../models/tag')
+
 const { Op } = require('sequelize')
 const moment = require('moment-timezone')
 const ics = require('ics')

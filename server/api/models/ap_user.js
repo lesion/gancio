@@ -1,18 +1,16 @@
-module.exports = (sequelize, DataTypes) => {
-  const APUser = sequelize.define('ap_user', {
-    ap_id: {
-      type: DataTypes.STRING,
-      primaryKey: true
-    },
-    follower: DataTypes.BOOLEAN,
-    blocked: DataTypes.BOOLEAN,
-    object: DataTypes.JSON
-  })
+const sequelize = require('./index')
+const { Model, DataTypes } = require('sequelize')
 
-  APUser.associate = function (models) {
-    APUser.belongsTo(models.instance)
-    APUser.hasMany(models.resource)
-  }
+class APUser extends Model {}
 
-  return APUser
-}
+APUser.init({
+  ap_id: {
+    type: DataTypes.STRING,
+    primaryKey: true
+  },
+  follower: DataTypes.BOOLEAN,
+  blocked: DataTypes.BOOLEAN,
+  object: DataTypes.JSON
+}, { sequelize, modelName: 'ap_user' })
+
+module.exports = APUser

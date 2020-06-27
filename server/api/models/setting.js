@@ -13,3 +13,5 @@ Setting.init({
   value: DataTypes.JSON,
   is_secret: DataTypes.BOOLEAN
 }, { sequelize, modelName: 'setting' })
+
+module.exports = Setting

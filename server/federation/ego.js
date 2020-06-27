@@ -1,4 +1,4 @@
-const { event: Event } = require('../api/models')
+const Event = require('../api/models/event')
 const config = require('config')
 const debug = require('debug')('fediverse:ego')
 

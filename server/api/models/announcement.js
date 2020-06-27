@@ -1,9 +1,12 @@
-module.exports = (sequelize, DataTypes) => {
-  const announcement = sequelize.define('announcement', {
-    title: DataTypes.STRING,
-    announcement: DataTypes.STRING,
-    visible: DataTypes.BOOLEAN
-  }, {})
+const sequelize = require('./index')
+const { Model, DataTypes } = require('sequelize')
 
-  return announcement
-}
+class Announcement extends Model {}
+
+Announcement.init({
+  title: DataTypes.STRING,
+  announcement: DataTypes.STRING,
+  visible: DataTypes.BOOLEAN
+}, { sequelize, modelName: 'announcement' })
+
+module.exports = Announcement

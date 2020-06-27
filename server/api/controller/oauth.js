@@ -1,10 +1,12 @@
 const crypto = require('crypto')
 const { promisify } = require('util')
 const randomBytes = promisify(crypto.randomBytes)
-const {
-  oauth_client: OAuthClient, oauth_token: OAuthToken,
-  oauth_code: OAuthCode, user: User
-} = require('../models')
+
+const OAuthClient = require('../models/oauth_client')
+const OAuthToken = require('../models/oauth_token')
+const OAuthCode = require('../models/oauth_code')
+const User = require('../models/user')
+
 const debug = require('debug')('oauth')
 const moment = require('moment')
 

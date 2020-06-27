@@ -1,19 +1,23 @@
 
-module.exports = (sequelize, DataTypes) => {
-  const OAuthCode = sequelize.define('oauth_code', {
-    authorizationCode: {
-      type: DataTypes.STRING,
-      primaryKey: true
-    },
-    expiresAt: DataTypes.DATE,
-    scope: DataTypes.STRING,
-    redirect_uri: DataTypes.STRING
-  }, {})
+const sequelize = require('./index')
+const { Model, DataTypes } = require('sequelize')
 
-  OAuthCode.associate = function (models) {
-    OAuthCode.belongsTo(models.user)
-    OAuthCode.belongsTo(models.oauth_client, { as: 'client' })
-  }
+const User = require('./user')
+const OAuthClient = require('./oauth_client')
 
-  return OAuthCode
-}
+class OAuthCode extends Model {}
+
+OAuthCode.init({
+  authorizationCode: {
+    type: DataTypes.STRING,
+    primaryKey: true
+  },
+  expiresAt: DataTypes.DATE,
+  scope: DataTypes.STRING,
+  redirect_uri: DataTypes.STRING
+}, { sequelize, modelName: 'oauth_code' })
+
+OAuthCode.belongsTo(User)
+OAuthCode.belongsTo(OAuthClient, { as: 'client' })
+
+module.exports = OAuthCode

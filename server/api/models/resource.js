@@ -1,19 +1,22 @@
-module.exports = (sequelize, DataTypes) => {
-  const Resource = sequelize.define('resource', {
-    activitypub_id: {
-      type: DataTypes.STRING,
-      index: true,
-      unique: true
-    },
-    hidden: DataTypes.BOOLEAN,
-    data: DataTypes.JSON
-  }, {})
+const { Model, DataTypes } = require('sequelize')
+const sequelize = require('./index')
 
-  Resource.associate = function (models) {
-    // Resource.belongsTo(models.instance)
-    Resource.belongsTo(models.event)
-    Resource.belongsTo(models.ap_user)
-  }
+// const Event = require('./event')
+const APUser = require('./ap_user')
 
-  return Resource
-}
+class Resource extends Model {}
+
+Resource.init({
+  activitypub_id: {
+    type: DataTypes.STRING,
+    index: true,
+    unique: true
+  },
+  hidden: DataTypes.BOOLEAN,
+  data: DataTypes.JSON
+}, { sequelize, modelName: 'resource' })
+
+APUser.hasMany(Resource)
+Resource.belongsTo(APUser)
+
+module.exports = Resource

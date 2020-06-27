@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const { event: Event, user: User, resource: Resource } = require('../api/models')
+const Event = require('../api/models/event')
+const Resource = require('../api/models/resource')
+const User = require('../api/models/user')
+
 const cors = require('cors')
 const settingsController = require('../api/controller/settings')
 const version = require('../../package.json').version

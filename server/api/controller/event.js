@@ -9,14 +9,13 @@ const helpers = require('../../helpers')
 const linkifyHtml = require('linkifyjs/html')
 const Sequelize = require('sequelize')
 
-const {
-  event: Event,
-  resource: Resource,
-  tag: Tag,
-  place: Place,
-  notification: Notification,
-  ap_user: APUser
-} = require('../models')
+const Event = require('../models/event')
+const Resource = require('../models/resource')
+const Tag = require('../models/tag')
+const Place = require('../models/place')
+const Notification = require('../models/notification')
+const APUser = require('../models/ap_user')
+
 const exportController = require('./export')
 
 const debug = require('debug')('controller:event')
@@ -301,15 +300,14 @@ const eventController = {
         await event.setUser(req.user)
       }
 
+      // return created event to the client
+      res.json(event)
+
       // create recurrent instances of event if needed
       // without waiting for the task manager
       if (event.recurrent) {
         eventController._createRecurrent()
       }
-
-      // return created event to the client
-      res.json(event)
-
       // send notifications (mastodon / email)
       const notifier = require('../../notifier')
       notifier.notifyEvent('Create', event.id)

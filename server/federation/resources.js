@@ -1,4 +1,7 @@
-const { event: Event, resource: Resource, ap_user: APUser } = require('../api/models')
+const Event = require('../api/models/event')
+const Resource = require('../api/models/resource')
+const APUser = require('../api/models/ap_user')
+
 const debug = require('debug')('fediverse:resource')
 const helpers = require('../helpers')
 const linkifyHtml = require('linkifyjs/html')

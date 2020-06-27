@@ -1,4 +1,4 @@
-const { resource: Resource } = require('../models')
+const Resource = require('../models/resource')
 
 const resourceController = {
   async hide (req, res) {
