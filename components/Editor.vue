@@ -38,7 +38,7 @@
 </template>
 <script>
 import _ from 'lodash'
-import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble, Extension } from 'tiptap'
+import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from 'tiptap'
 import {
   Blockquote,
   BulletList,
