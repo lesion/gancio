@@ -92,8 +92,7 @@ const settingsController = {
         defaults: { value, is_secret }
       })
 
-      if (!created) { return setting.update({ value, is_secret }) }
-
+      if (!created) { setting.update({ value, is_secret }) }
       settingsController[is_secret ? 'secretSettings' : 'settings'][key] = value
       return true
     } catch (e) {

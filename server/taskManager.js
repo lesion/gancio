@@ -89,7 +89,7 @@ const TS = new TaskManager()
 TS.add(new Task({
   name: 'RECURRENT_EVENT',
   method: eventController._createRecurrent,
-  repeatEach: 10
+  repeatEach: 10 // check each 10 minutes
 }))
 
 // daily morning notification
