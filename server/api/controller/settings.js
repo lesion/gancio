@@ -84,12 +84,13 @@ const settingsController = {
 
   async set (key, value, is_secret = false) {
     try {
-      await Setting.findOrCreate({
+      const [setting, created] = await Setting.findOrCreate({
         where: { key },
         defaults: { value, is_secret }
-      }).spread((setting, created) => {
-        if (!created) { return setting.update({ value, is_secret }) }
       })
+
+      if (!created) { return setting.update({ value, is_secret }) }
+
       settingsController[is_secret ? 'secretSettings' : 'settings'][key] = value
       return true
     } catch (e) {
