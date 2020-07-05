@@ -16,7 +16,6 @@ const announceController = require('./controller/announce')
 const storage = require('./storage')
 const upload = multer({ storage })
 
-const path = require('path')
 const config = require('config')
 const debug = require('debug')('api')
 
@@ -105,7 +104,7 @@ api.delete('/event/notification/:code', eventController.delNotification)
 api.get('/settings', settingsController.getAllRequest)
 api.post('/settings', isAdmin, settingsController.setRequest)
 api.get('/event/:event_id.:format?', cors, eventController.get)
-api.post('/settings/favicon', isAdmin, multer({ dest: path.resolve(config.upload_path, 'thumb/') }).single('favicon'), settingsController.setFavicon)
+api.post('/settings/logo', isAdmin, multer({ dest: config.upload_path }).single('logo'), settingsController.setLogo)
 
 // confirm event
 api.get('/event/confirm/:event_id', hasPerm('event:write'), eventController.confirm)

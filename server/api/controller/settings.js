@@ -7,7 +7,10 @@ const pkg = require('../../../package.json')
 const debug = require('debug')('settings')
 const crypto = require('crypto')
 const util = require('util')
+const toIco = require('to-ico')
 const generateKeyPair = util.promisify(crypto.generateKeyPair)
+const readFile = util.promisify(fs.readFile)
+const writeFile = util.promisify(fs.writeFile)
 
 const defaultSettings = {
   instance_timezone: 'Europe/Rome',
@@ -94,7 +97,6 @@ const settingsController = {
       settingsController[is_secret ? 'secretSettings' : 'settings'][key] = value
       return true
     } catch (e) {
-      console.error(e)
       return false
     }
   },
@@ -105,11 +107,18 @@ const settingsController = {
     if (ret) { res.sendStatus(200) } else { res.sendStatus(400) }
   },
 
-  async setFavicon (req, res) {
+  async setLogo (req, res) {
     if (!req.file) {
       return res.status(400).send('Mmmmm sould not be here!')
     }
-    await settingsController.set('favicon', path.join(req.file.destination, req.file.filename))
+
+    const image = await readFile(path.join(req.file.destination, req.file.filename))
+    const favicon_path = path.resolve(config.upload_path, 'favicon.ico')
+    const favicon = await toIco([image], { sizes: [64], resize: true })
+
+    writeFile(favicon_path, favicon)
+    settingsController.set('favicon', favicon_path)
+
     res.sendStatus(200)
   },
 
