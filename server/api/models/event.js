@@ -53,12 +53,11 @@ Resource.belongsTo(Event)
 Event.hasMany(Event, { as: 'child', foreignKey: 'parentId' })
 Event.belongsTo(Event, { as: 'parent' })
 
-Event.prototype.toAP = function (username, locale, follower = []) {
+Event.prototype.toAP = function (username, locale, to = []) {
   const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
-
   const plainDescription = htmlToText.fromString(this.description.replace('\n', '').slice(0, 1000))
   const summary = `
-  📍 ${this.place.name}
+  📍 ${this.place && this.place.name}
   📅 ${moment.unix(this.start_datetime).locale(locale).format('dddd, D MMMM (HH:mm)')}
 
     ${plainDescription}
@@ -78,6 +77,8 @@ Event.prototype.toAP = function (username, locale, follower = []) {
     })
   }
 
+  to.push('https://www.w3.org/ns/activitystreams#Public')
+
   return {
     id: `${config.baseurl}/federation/m/${this.id}`,
     name: this.title,
@@ -86,7 +87,7 @@ Event.prototype.toAP = function (username, locale, follower = []) {
     startTime: moment.unix(this.start_datetime).locale(locale).format(),
     endTime: moment.unix(this.end_datetime).locale(locale).format(),
     location: {
-      name: this.place.name
+      name: this.place && this.place.name
     },
     attachment,
     tag: tags.map(tag => ({
@@ -96,10 +97,9 @@ Event.prototype.toAP = function (username, locale, follower = []) {
     })),
     published: this.createdAt,
     attributedTo: `${config.baseurl}/federation/u/${username}`,
-    to: follower || [],
-    cc: ['https://www.w3.org/ns/activitystreams#Public', `${config.baseurl}/federation/u/${username}/followers`],
-    summary,
-    sensitive: false
+    to,
+    cc: [`${config.baseurl}/federation/u/${username}/followers`],
+    summary
   }
 }
 
