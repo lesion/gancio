@@ -11,6 +11,7 @@ const toIco = require('to-ico')
 const generateKeyPair = util.promisify(crypto.generateKeyPair)
 const readFile = util.promisify(fs.readFile)
 const writeFile = util.promisify(fs.writeFile)
+const sharp = require('sharp')
 
 const defaultSettings = {
   instance_timezone: 'Europe/Rome',
@@ -106,19 +107,27 @@ const settingsController = {
     if (ret) { res.sendStatus(200) } else { res.sendStatus(400) }
   },
 
-  async setLogo (req, res) {
+  setLogo (req, res) {
     if (!req.file) {
       return res.status(400).send('Mmmmm sould not be here!')
     }
 
-    const image = await readFile(path.join(req.file.destination, req.file.filename))
-    const favicon_path = path.resolve(config.upload_path, 'favicon.ico')
-    const favicon = await toIco([image], { sizes: [64], resize: true })
+    const uploaded_path = path.join(req.file.destination, req.file.filename)
+    const logo_path = path.resolve(config.upload_path, 'favicon')
+    const favicon_path = path.resolve(config.upload_path, 'favicon')
 
-    writeFile(favicon_path, favicon)
-    settingsController.set('favicon', favicon_path)
-
-    res.sendStatus(200)
+    // convert and resize to png
+    sharp(uploaded_path)
+      .resize(400)
+      .png({ quality: 90 })
+      .toFile(logo_path + '.png', async (err, info) => {
+        console.error(err)
+        const image = await readFile(logo_path + '.png')
+        const favicon = await toIco([image], { sizes: [64], resize: true })
+        writeFile(favicon_path + '.ico', favicon)
+        settingsController.set('favicon', favicon_path)
+        res.sendStatus(200)
+      })
   },
 
   getAllRequest (req, res) {

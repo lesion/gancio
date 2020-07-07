@@ -26,15 +26,18 @@ app.use((req, res, next) => {
   next()
 })
 
-// serve favicon and static content
-app.use('/logo.png', express.static('./static/gancio.png'))
 app.use('/media/', express.static(config.upload_path))
-
 // initialize instance settings / authentication / locale
 app.use(helpers.initSettings)
+// serve favicon and static content
+app.use('/logo.png', (req, res, next) => {
+  const logo_path = req.settings.favicon || './static/gancio'
+  return express.static(logo_path + '.png')(req, res, next)
+})
+
 app.use('/favicon.ico', (req, res, next) => {
-  const favicon_path = req.settings.favicon || config.favicon || './assets/favicon.ico'
-  return express.static(path.resolve(favicon_path))(req, res, next)
+  const favicon_path = req.settings.favicon || './assets/favicon'
+  return express.static(favicon_path + '.ico')(req, res, next)
 })
 
 // rss/ics/atom feed
