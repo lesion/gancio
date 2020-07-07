@@ -42,7 +42,7 @@ module.exports = {
       icon: {
         type: 'Image',
         mediaType: 'image/png',
-        url: config.baseurl + '/favicon.ico'
+        url: config.baseurl + '/logo.png'
       },
       publicKey: {
         id: `${config.baseurl}/federation/u/${name}#main-key`,
@@ -97,7 +97,7 @@ module.exports = {
     if (!name) { return res.status(400).send('Bad request.') }
     if (name !== req.settings.instance_name) { return res.status(404).send(`No record found for ${name}`) }
 
-    const events = await Event.findAll({ include: [Tag, Place] })
+    const events = await Event.findAll({ include: [{ model: Tag, required: false }, Place] })
 
     debug('Inside outbox, should return all events from this user')
 
@@ -105,7 +105,7 @@ module.exports = {
     res.type('application/activity+json; charset=utf-8')
     if (!page) {
       return res.json({
-        '@context': ['https://www.w3.org/ns/activitystreams'],
+        '@context': 'https://www.w3.org/ns/activitystreams',
         id: `${config.baseurl}/federation/u/${name}/outbox`,
         type: 'OrderedCollection',
         totalItems: events.length,
@@ -121,16 +121,16 @@ module.exports = {
       type: 'OrderedCollectionPage',
       totalItems: events.length,
       partOf: `${config.baseurl}/federation/u/${name}/outbox`,
-      orderedItems: events.map(e => ({ ...e.toAP(name, req.settings.locale), actor: `${config.baseurl}/federation/u/${name}` }))
-      //   user.events.map(e => ({
-      //   id: `${config.baseurl}/federation/m/${e.id}#create`,
-      //   type: 'Create',
-      //   to: ['https://www.w3.org/ns/activitystreams#Public'],
-      //   cc: [`${config.baseurl}/federation/u/${user.username}/followers`],
-      //   published: e.createdAt,
-      //   actor: `${config.baseurl}/federation/u/${user.username}`,
-      //   object: e.toNoteAP(user.username)
-      // }))
+      orderedItems:
+        events.map(e => ({
+          id: `${config.baseurl}/federation/m/${e.id}#create`,
+          type: 'Create',
+          to: ['https://www.w3.org/ns/activitystreams#Public'],
+          cc: [`${config.baseurl}/federation/u/${name}/followers`],
+          published: e.createdAt,
+          actor: `${config.baseurl}/federation/u/${name}`,
+          object: e.toAP(name, req.settings.locale)
+        }))
     })
   }
 }
