@@ -305,10 +305,11 @@ const eventController = {
       // without waiting for the task manager
       if (event.recurrent) {
         eventController._createRecurrent()
+      } else {
+        // send notifications (mastodon / email)
+        const notifier = require('../../notifier')
+        notifier.notifyEvent('Create', event.id)
       }
-      // send notifications (mastodon / email)
-      const notifier = require('../../notifier')
-      notifier.notifyEvent('Create', event.id)
     } catch (e) {
       debug(e)
       res.sendStatus(400)
@@ -373,10 +374,10 @@ const eventController = {
     // without waiting for the task manager
     if (event.recurrent) {
       eventController._createRecurrent()
+    } else {
+      const notifier = require('../../notifier')
+      notifier.notifyEvent('Update', event.id)
     }
-
-    const notifier = require('../../notifier')
-    notifier.notifyEvent('Update', event.id)
   },
 
   async remove (req, res) {

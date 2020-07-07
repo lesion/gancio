@@ -7,6 +7,7 @@ const sequelize = require('./index')
 
 const Resource = require('./resource')
 const Notification = require('./notification')
+const EventNotification = require('./eventnotification')
 const Place = require('./place')
 const User = require('./user')
 const Tag = require('./tag')
@@ -43,13 +44,16 @@ Event.belongsTo(Place)
 Place.hasMany(Event)
 
 Event.belongsTo(User)
+User.hasMany(Event)
+
 Event.belongsToMany(Tag, { through: 'event_tags' })
 
-Event.belongsToMany(Notification, { through: 'event_notification' })
-Notification.belongsToMany(Event, { through: 'event_notification' })
+Event.belongsToMany(Notification, { through: EventNotification })
+Notification.belongsToMany(Event, { through: EventNotification })
 
 Event.hasMany(Resource)
 Resource.belongsTo(Event)
+
 Event.hasMany(Event, { as: 'child', foreignKey: 'parentId' })
 Event.belongsTo(Event, { as: 'parent' })
 
@@ -62,7 +66,7 @@ Event.prototype.toAP = function (username, locale, to = []) {
 
     ${plainDescription}
 
-    ${tags.map(t => `#${t}`)}
+    ${tags && tags.map(t => `#${t}`)}
 
   `
 
@@ -90,7 +94,7 @@ Event.prototype.toAP = function (username, locale, to = []) {
       name: this.place && this.place.name
     },
     attachment,
-    tag: tags.map(tag => ({
+    tag: tags && tags.map(tag => ({
       type: 'Hashtag',
       name: '#' + tag,
       href: '/tags/' + tag

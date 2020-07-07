@@ -1,7 +1,6 @@
 
 const sequelize = require('./index')
 const { Model, DataTypes } = require('sequelize')
-// const Event = require('./event')
 
 class Notification extends Model {}
 
@@ -26,7 +25,5 @@ Notification.init({
     fields: ['action', 'type']
   }]
 })
-
-// Notification.belongsToMany(Event, { through: 'event_notification' })
 
 module.exports = Notification

@@ -4,11 +4,11 @@ const debug = require('debug')('notifier')
 const fediverseHelpers = require('./federation/helpers')
 
 const Event = require('./api/models/event')
-const Notification = require('./api/models/event')
-const EventNotification = require('./api/models/event')
-const User = require('./api/models/event')
-const Place = require('./api/models/event')
-const Tag = require('./api/models/event')
+const Notification = require('./api/models/notification')
+const EventNotification = require('./api/models/eventnotification')
+const User = require('./api/models/user')
+const Place = require('./api/models/place')
+const Tag = require('./api/models/tag')
 
 const eventController = require('./api/controller/event')
 
@@ -35,7 +35,7 @@ const notifier = {
 
   async notifyEvent (action, eventId) {
     const event = await Event.findByPk(eventId, {
-      include: [Tag, Place, Notification, { model: User }]
+      include: [Tag, Place, Notification, User]
     })
 
     debug('%s -> %s', action, event.title)
@@ -47,7 +47,7 @@ const notifier = {
 
     const promises = event_notifications.map(async notification => {
       try {
-        // await notification.event_notification.update({ status: 'sending' })
+        await notification.event_notification.update({ status: 'sending' })
         await notifier.sendNotification(notification, event)
         notification.event_notification.status = 'sent'
       } catch (err) {
@@ -71,9 +71,9 @@ const notifier = {
         e.status = 'sent'
         return e.save()
       } catch (err) {
-        console.error(err)
+        debug(err)
         e.status = 'error'
-        // e.error = err
+        e.error = err
         return e.save()
       }
     })

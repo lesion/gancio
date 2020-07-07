@@ -3,8 +3,6 @@ const bcrypt = require('bcryptjs')
 const { Model, DataTypes } = require('sequelize')
 const sequelize = require('./index')
 
-// const Event = require('./event')
-
 class User extends Model {}
 
 User.init({
@@ -35,8 +33,6 @@ User.init({
     }
   }
 })
-
-// User.hasMany(Event)
 
 User.prototype.comparePassword = async function (pwd) {
   if (!this.password) { return false }
