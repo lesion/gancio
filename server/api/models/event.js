@@ -74,7 +74,7 @@ Event.prototype.toAP = function (username, locale, to = []) {
   if (this.image_path) {
     attachment.push({
       type: 'Document',
-      mediaType: 'image/webp',
+      mediaType: 'image/jpeg',
       url: `${config.baseurl}/media/${this.image_path}`,
       name: null,
       blurHash: null

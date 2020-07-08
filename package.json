@@ -50,6 +50,9 @@
     "config/",
     ".nuxt/"
   ],
+  "resolutions": {
+    "prosemirror-model": "1.10.0"
+  },
   "dependencies": {
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.11.0",
@@ -77,7 +80,7 @@
     "jsonwebtoken": "^8.5.1",
     "less": "^3.11.3",
     "linkifyjs": "^2.1.9",
-    "lodash": "^4.17.14",
+    "lodash": "^4.17.19",
     "mkdirp": "^1.0.4",
     "moment-timezone": "^0.5.31",
     "morgan": "^1.10.0",
@@ -85,7 +88,7 @@
     "nominatim-geocoder": "^0.1.4",
     "nuxt": "^2.13.3",
     "nuxt-express-module": "^0.0.11",
-    "pg": "^8.2.1",
+    "pg": "^8.2.2",
     "sequelize": "^6.3.0",
     "sequelize-cli": "^6.2.0",
     "sharp": "^0.25.4",

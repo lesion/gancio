@@ -69,14 +69,14 @@ module.exports = {
 
   async getImageFromURL (url) {
     debug(`getImageFromURL ${url}`)
-    const filename = crypto.randomBytes(16).toString('hex') + '.webp'
+    const filename = crypto.randomBytes(16).toString('hex') + '.jpg'
     const finalPath = path.resolve(config.upload_path, filename)
     const thumbPath = path.resolve(config.upload_path, 'thumb', filename)
     const outStream = fs.createWriteStream(finalPath)
     const thumbStream = fs.createWriteStream(thumbPath)
 
-    const resizer = sharp().resize(1200).webp({ quality: 95 })
-    const thumbnailer = sharp().resize(400).webp({ quality: 90 })
+    const resizer = sharp().resize(1200).jpg({ quality: 95 })
+    const thumbnailer = sharp().resize(400).jpg({ quality: 90 })
 
     const response = await axios({ method: 'GET', url, responseType: 'stream' })
 
