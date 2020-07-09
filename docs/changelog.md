@@ -8,6 +8,16 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 0.24.0
+- New Euskara language from Basque Country, thanks @hacklabkelo
+- fix feed with filters
+- cleaner homepage
+- fix next/prev recurrent events
+- fix some history navigation issue
+- fix blank lines in description
+- upgrade deps
+- better custom logo management
+- fix settings update
 
 ### 0.23.0
 - send AP Event Object instead of Note

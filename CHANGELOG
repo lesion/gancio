@@ -1,12 +1,12 @@
 All notable changes to this project will be documented in this file.
 
 ### 0.24.0
-- New Euskara language in progress from Basque Country, thanks @hacklabkelo
+- New Euskara language from Basque Countrcleaery, thanks @hacklabkelo
 - fix feed with filters
-- larger homepage
-- fix next/prev recurrent event
-- fix some history navigation
-- fix blank line in description
+- cleaner homepage
+- fix next/prev for recurrent events
+- fix some history navigation issue
+- fix blank lines in description
 - upgrade deps
 - better custom logo management
 - fix settings update
