@@ -32,6 +32,9 @@ export default {
 }
 </script>
 <style lang='less'>
+.el-backtop {
+  color: orangered;
+}
 #footer {
   a {
     font-size: 1.1em;

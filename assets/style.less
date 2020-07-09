@@ -139,6 +139,38 @@ html, body {
   max-width: 90%;
 }
 
+//TODO: refactoring
+.el-button.is-plain,
+.el-button.is-plain:focus,
+.el-button.is-plain {
+  border-color: #ff450075;
+  background-color: transparent;
+  color: orangered;
+
+  &:hover {
+    border-color: #ff450075;
+    background-color: transparent;    
+    color: orange;
+  }
+}
+
+// TODO: this should be a link
+
+.event .p-location {
+  transition: color .2s;
+  &:hover {
+    cursor: pointer;
+    color: orangered !important;
+  }
+}
+
+.el-button--text {
+  color: orangered !important;
+  &:hover {
+    color: orange !important;
+  }
+}
+
 .el-button--success.is-plain {
   color: #2c8600;
   border-color: #9de27b;

@@ -1,10 +1,10 @@
 <template lang="pug">
-  .card.announcement.announcement.mt-1.text-white(body-style='padding: 0px;')
+  .announcement.announcement.text-white(body-style='padding: 0px;')
     nuxt-link(:to='`/announcement/${announcement.id}`')
       .title <i class='el-icon-info'/> {{announcement.title}}
 
-    .card-body
-      .description(v-html='description')
+    //- .card-body
+    //-   .description(v-html='description')
 
 </template>
 <script>
@@ -24,9 +24,22 @@ export default {
 </script>
 <style lang='less'>
 .announcement {
-  .title i {
-    color: orangered;
+  padding: 2%;
+  background-color: #511;
+  margin: 1rem 0;
+  border-radius: 5px;
+  a:hover {
+    text-decoration: none;
   }
-  box-shadow: inset 0px 0px 10px 0px orangered;
+  .title {
+    font-size: 1.2em;
+    color: white;
+    transition: color .2s;
+    &:hover {
+      color: #fbd6b5;
+    }
+  }
+  border: 2px solid #ff4500ba;
+  // box-shadow: inset 0px 0px 10px 0px orangered;
 }
 </style>

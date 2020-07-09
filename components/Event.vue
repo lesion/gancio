@@ -10,17 +10,17 @@
       .p-name.p-summary.title {{event.title}}
 
     .card-body
-      div.d-flex.justify-content-between
-        //-  when
-        time.dt-start.mt-0(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  <i class='el-icon-date'/> {{event|when}}
-        //- place
-        el-button.p-location.mt-1.bg-dark.text-warning.float-right(plain size='mini' round type='text' icon='el-icon-location-outline' @click='addPlace') {{event.place.name}}
+      //- div.d-flex.justify-content-between
+      //-  when
+      time.d-block.dt-start.mt-0(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  <i class='el-icon-date'/> {{event|when}}
+      //- place
+      .p-location.mt-1.text-warning(plain size='mini' round type='text' @click='addPlace') <i class='el-icon-location-outline'/> {{event.place.name}}
 
       //- description
-      .p-description.description.mt-3(v-html='description')
+      //- .p-description.description.mt-3(v-html='description')
 
     .card-footer(v-if='event.tags.length')
-      el-button.ml-1.bg-dark(type='text' plain round size='mini' v-for='tag in event.tags' :key='tag' @click='addTag(tag)') {{tag}}
+      el-button.ml-1(type='text' plain round size='mini' v-for='tag in event.tags' :key='tag' @click='addTag(tag)') {{tag}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'

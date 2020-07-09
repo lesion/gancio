@@ -39,6 +39,7 @@ export default {
 .announcement-page {
 
   .el-header {
+    height: auto !important;
     padding-top: 1em;
     border-bottom: 1px solid lightgray;
   }

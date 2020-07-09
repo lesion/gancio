@@ -24,7 +24,7 @@
               el-icon(name='loading')
 
           pre.p-description(v-html='event.description')
-          el-button.p-category.ml-1.text-primary(plain round size='mini' v-for='tag in event.tags' :key='tag') {{tag}}
+          el-button.p-category.ml-1(type='text' plain round size='mini' v-for='tag in event.tags' :key='tag') {{tag}}
 
         //- info & actions
         el-col.menu(:sm='6' :xs='24')
@@ -310,7 +310,7 @@ export default {
   }
 
   .el-header {
-    height: 4em;
+    height: auto !important;
     position: sticky;
     padding-top: .4em;
     top: 0px;
@@ -362,7 +362,7 @@ export default {
 
   .title {
     display: table-cell;
-    padding-right: 3em;
+    padding-right: 70px;
     height: 2.1em;
     font-size: 1.6rem;
     color: #404246;
@@ -450,7 +450,7 @@ export default {
     }
 
     .title {
-      font-size: 1.1em;
+      // font-size: 1.1em;
       line-height: 1.4em;
       color: black;
     }

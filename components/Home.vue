@@ -1,15 +1,16 @@
 <template lang="pug">
   section#home
+    Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
+    #calbar.row.mt-2.mb-2
+      .col-xl-7.col-lg-7.col-sm-6.col-xs-12
 
-    #calbar.row.mt-1
-      .col-xl-7.col-lg-7.col-sm-6.col-xs-12.p-0
         client-only
           Calendar
       .col
         Search(past-filter recurrent-filter)
 
     #events
-      Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
+      //- Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
       Event(v-for='event in events' :key='event.id' :event='event')
 
 </template>
@@ -52,7 +53,7 @@ export default {
 <style lang='less'>
 #calbar {
   max-width: 1000px;
-  margin: 0 auto;
+  // margin: 0 auto;
 }
 #events {
   max-width: 1600px;
