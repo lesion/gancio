@@ -75,8 +75,8 @@ module.exports = {
     const outStream = fs.createWriteStream(finalPath)
     const thumbStream = fs.createWriteStream(thumbPath)
 
-    const resizer = sharp().resize(1200).jpg({ quality: 95 })
-    const thumbnailer = sharp().resize(400).jpg({ quality: 90 })
+    const resizer = sharp().resize(1200).jpeg({ quality: 95 })
+    const thumbnailer = sharp().resize(400).jpeg({ quality: 90 })
 
     const response = await axios({ method: 'GET', url, responseType: 'stream' })
 
