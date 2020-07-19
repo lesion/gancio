@@ -24,15 +24,17 @@
       small.d-block.text-secondary {{$t('admin.description_description')}}
 
       div.mt-4 {{$t('admin.favicon')}}
-      el-upload(ref='upload'
-        :action='`${settings.baseurl}/api/settings/logo`'
-        :on-success="forceLogoReload"
-        name='logo'
-        :show-file-list="true"
-        accept='image/png'
-        :limit='1'
-        :multiple='false')
-        el-button(slot='trigger' size='small' type='primary' plain) Select file
+        el-upload(ref='upload'
+          :action='`${settings.baseurl}/api/settings/logo`'
+          :on-success="forceLogoReload"
+          name='logo'
+          :show-file-list="true"
+          accept='image/png'
+          :limit='1'
+          :multiple='false')
+          el-button-group
+            el-button(size='small' type='primary' plain) Select file
+            el-button(size='small' type='success' plain @click='resetLogo') Reset
         .el-upload__tip(slot='tip') png files with a size less than 500kb
       el-image(:src='`${settings.baseurl}/favicon.ico?${logoKey}`')
       el-switch.d-block.mt-4(v-model='allow_registration'
@@ -105,6 +107,11 @@ export default {
     forceLogoReload () {
       this.$refs.upload.clearFiles()
       this.logoKey++
+    },
+    resetLogo (e) {
+      this.setSetting({ key: 'favicon', value: null })
+        .then(this.forceLogoReload)
+      e.stopPropagation()
     },
     save (key, value) {
       if (this.settings[key] !== value) {
