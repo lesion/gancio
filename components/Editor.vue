@@ -1,9 +1,9 @@
 <template lang='pug'>
   .editor(:class='{ "with-border": border }')
     editor-menu-bubble(:editor='editor' :keep-in-bounds='true' v-slot='{ commands, isActive, getMarkAttrs, menu }')
-      el-button-group.menububble(:class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`")
-        el-popover(trigger='hover' placement='bottom-start')
-          el-button.float-left(slot='reference' size='mini') <v-icon name='question'/>
+      v-button-group.menububble(:class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`")
+        v-popover(trigger='hover' placement='bottom-start')
+          v-btn.float-left(slot='reference' size='mini') <v-icon name='question'/>
           template
             span This editor supports inline <code>markdown</code>
             div <v-icon name='heading'/> → Title ⇒ Start a line with <code>#</code>
@@ -20,7 +20,7 @@
           <v-icon name='bold' />
         //- el-button(size='mini' :class='{ "is-active": isActive.italic() }' @click='commands.italic') <v-icon name='italic'/>
         //- el-button(size='mini' :class='{ "is-active": isActive.underline() }' @click='commands.underline') <v-icon name='underline'/>
-        el-button(size='mini' :class='{ "is-active": isActive.link() }' @click='commands.link({href: ""}); $refs.link.focus(); linkActive=true') <v-icon name='link'/>
+        v-btn(size='mini' :class='{ "is-active": isActive.link() }' @click='commands.link({href: ""}); $refs.link.focus(); linkActive=true') <v-icon name='link'/>
         input(:value='isActive.link() && getMarkAttrs("link") && getMarkAttrs("link").href || ""' ref='link' :class='{ "is-active": isActive.link() || linkActive }'
           placeholder='https://' @keypress.enter='commands.link({ href: $event.target.value})')
           //- el-button(size='mini' :class='{ "is-active": isActive.strike() }' @click='commands.strike') <v-icon name='strikethrough'/>
@@ -112,65 +112,65 @@ export default {
 </script>
 <style lang='less'>
 
-.editor {
-  position: relative;
-  overflow-y: auto;
-  padding-top: 1.7em;
-  scrollbar-width: thin;
+// .editor {
+//   position: relative;
+//   overflow-y: auto;
+//   padding-top: 1.7em;
+//   scrollbar-width: thin;
 
-  &.with-border {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
+//   &.with-border {
+//     border: 1px solid #ddd;
+//     border-radius: 5px;
+//   }
 
-  .content {
-    padding: 0px 5px 0px 5px;
-    flex: 1;
-    scrollbar-width: thin;
-    overflow-y: auto;
-  }
+//   .content {
+//     padding: 0px 5px 0px 5px;
+//     flex: 1;
+//     scrollbar-width: thin;
+//     overflow-y: auto;
+//   }
 
-  .menububble {
-    position: absolute;
-    display: flex;
-    overflow: hidden;
-    opacity: 0;
-    z-index: 1;
-    background: #dddddd;
-    transform: translateX(-50%);
-    border-radius: 3px;
-    padding: 0.07rem;
-    transition: opacity 0.2s, visibility 0.2s, left .2s, bottom .2s;
-    visibility: hidden;
+//   .menububble {
+//     position: absolute;
+//     display: flex;
+//     overflow: hidden;
+//     opacity: 0;
+//     z-index: 1;
+//     background: #dddddd;
+//     transform: translateX(-50%);
+//     border-radius: 3px;
+//     padding: 0.07rem;
+//     transition: opacity 0.2s, visibility 0.2s, left .2s, bottom .2s;
+//     visibility: hidden;
 
-    &.is-active {
-      opacity: 1;
-      visibility: visible;
-    }
-    input {
-      padding: 0;
-      margin: 1px;
-      display: block;
-      border: 0;
-      color: #444;
-      font-size: .8em;
-      border-radius: 3px;
-      line-height: 100%;
-      transition: width .2s;
-      padding-left: 5px;
-      flex-grow: 1;
-    }
+//     &.is-active {
+//       opacity: 1;
+//       visibility: visible;
+//     }
+//     input {
+//       padding: 0;
+//       margin: 1px;
+//       display: block;
+//       border: 0;
+//       color: #444;
+//       font-size: .8em;
+//       border-radius: 3px;
+//       line-height: 100%;
+//       transition: width .2s;
+//       padding-left: 5px;
+//       flex-grow: 1;
+//     }
 
-    .fa-icon {
-      width: auto;
-      font-size: 10px;
-      height: 1.4em; /* or any other relative font sizes */
-      /* You would have to include the following two lines to make this work in Safari */
-      // max-width: 100%;
-      max-height: 100%;
-    }
+//     .fa-icon {
+//       width: auto;
+//       font-size: 10px;
+//       height: 1.4em; /* or any other relative font sizes */
+//       /* You would have to include the following two lines to make this work in Safari */
+//       // max-width: 100%;
+//       max-height: 100%;
+//     }
 
-  }
-}
+//   }
+// }
 
 </style>

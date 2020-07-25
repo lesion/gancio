@@ -1,9 +1,9 @@
 <template lang="pug">
-  el-main
+  v-container
     .edit(v-if='$auth.user && $auth.user.is_admin')
       Editor(v-if='$auth.user && $auth.user.is_admin'
         v-model='about')
-      el-button.float-right(type='success' plain icon='el-icon-check'
+      v-btn.float-right(type='success' plain icon='el-icon-check'
         @click='save') {{$t('common.save')}}
     div(v-else v-html='about')
 </template>

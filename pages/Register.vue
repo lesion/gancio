@@ -1,20 +1,24 @@
 <template lang='pug'>
-  el-main
-    el-card
-      h4(slot='header').text-center <el-icon name='user'/> {{$t('common.register')}}
-      p(v-html="$t('register.description')")
-      div(v-loading='loading')
+  v-row.mt-5(align='center' justify='center')
+    v-col(cols='12' sm='10' md="6")
 
-        el-input.mb-2(ref='email' v-model='user.email' type='email' required
-          :placeholder='$t("common.email")' autocomplete='email'
-          prefix-icon='el-icon-message' name='email')
+      v-card
+        v-card-title {{$t('common.register')}}
 
-        el-input.mb-2(v-model='user.password' type="password"
-          placeholder="Password" name='password' required  prefix-icon='el-icon-lock')
+        v-card-text
 
-        el-input.mb-2(v-model='user.description' type="textarea" rows='3' :placeholder="$t('common.description')")
+          p(v-html="$t('register.description')")
+          v-text-field(ref='email' v-model='user.email' type='email' required
+            :placeholder='$t("common.email")' autocomplete='email'
+            prefix-icon='el-icon-message')
 
-        el-button(plain type="success" :disabled='disabled' @click='register') {{$t('common.send')}} <v-icon name='chevron-right'/>
+          v-text-field(v-model='user.password' type="password"
+            placeholder="Password")
+
+          v-text-field(v-model='user.description' textarea rows='3' :placeholder="$t('common.description')")
+
+        v-card-actions
+          v-btn(plain type="success" :disabled='disabled' @click='register') {{$t('common.send')}} <v-icon name='chevron-right'/>
 </template>
 
 <script>

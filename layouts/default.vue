@@ -1,5 +1,14 @@
 <template lang='pug'>
-  el-container#main(:class='{dark: $route.name==="index" || $route.name==="announcement-id"}')
+  v-app(app)
+    Snackbar
+    Nav
+    v-main(app)
+      v-scroll-x-transition(hide-on-leave)
+        nuxt
+
+    Footer
+
+  //- el-container#main(:class='{dark: $route.name==="index" || $route.name==="announcement-id"}')
     el-dialog(:visible.sync='showFollowMe')
       h4(slot='title') {{$t('common.follow_me_title')}}
       FollowMe
@@ -10,34 +19,24 @@
       nuxt
     el-footer.mt-1#footer
       #links
-        a(href='https://gancio.org') Gancio {{settings.version}}</a>
-        span  ⇒
-        a(v-if='settings.enable_federation' rel='me' :href='settings.baseurl' @click.prevent='showFollowMe=true') follow me
-        nuxt-link(to='/about') about
-        a(href='https://blog.gancio.org') blog
-        a(href='https://framagit.org/les/gancio') source
 
 </template>
 <script>
 import Nav from '~/components/Nav.vue'
-import { mapState } from 'vuex'
 import FollowMe from '../components/FollowMe'
+import Snackbar from '../components/Snackbar'
+import Footer from '../components/Footer'
 
 export default {
-  components: { Nav, FollowMe },
+  name: 'Default',
+  components: { Nav, FollowMe, Snackbar, Footer },
   data () {
     return { showFollowMe: false }
   },
-  computed: mapState(['settings'])
-}
-</script>
-<style lang='less'>
-.el-backtop {
-  color: orangered;
-}
-#footer {
-  a {
-    font-size: 1.1em;
+  watch: {
+    '$route.name' (name) {
+      this.$vuetify.theme.dark = name !== 'NewEvent'
+    }
   }
 }
-</style>
+</script>

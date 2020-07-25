@@ -1,24 +1,33 @@
 <template lang='pug'>
-  el-main
-    el-card
-      h4(slot='header').text-center <el-icon name='user'/> {{$t('common.login')}}
-      p(v-html="$t('login.description')")
-      div(v-loading='loading')
+  v-row.mt-5(align='center' justify='center')
+    v-col(cols='12' md="6" lg="5" xl="4")
 
-        el-input.mb-2(v-model='email' type='email' title='email' prefix-icon='el-icon-user'
-          :placeholder='$t("common.email")' autocomplete='email' ref='email')
+      v-card
+        v-card-title {{$t('common.login')}}
+        v-card-subtitle(v-text="$t('login.description')")
 
-        el-input.mb-1(v-model='password' @keyup.enter.native="submit"
-          prefix-icon='el-icon-lock' name='password'
-          type='password' :placeholder='$t("common.password")')
+        v-card-text
 
-        div
-          el-button.text-right(type='text' @click='forgot') {{$t('login.forgot_password')}}
+          v-text-field(v-model='email' type='email'
+            :placeholder='$t("common.email")'
+            ref='email')
 
-        el-button.mt-5.mr-1(plain type="success"
-          :disabled='disabled' @click='submit') {{$t('common.login')}}
-        nuxt-link(to='/register' v-if='settings.allow_registration')
-          el-button(type='primary' plain) {{$t('login.not_registered')}}
+          v-text-field(v-model='password'
+            type='password'
+            :placeholder='$t("common.password")')
+
+          v-card-actions
+            v-btn(color='success'
+              text
+              :disabled='disabled'
+              @click='submit') {{$t('common.login')}}
+
+            v-btn(v-if='settings.allow_registration'
+              to='/register'
+              text
+              color='orange') {{$t('login.not_registered')}}
+
+            v-btn(text @click='forgot') {{$t('login.forgot_password')}}
 </template>
 
 <script>

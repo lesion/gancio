@@ -1,69 +1,58 @@
 <template lang="pug">
-  el-main
+  v-container
 
-    el-tabs(v-model='tab')
+    v-tabs
 
       //- SETTINGS
-      el-tab-pane.pt-1
-        template(slot='label')
-          v-icon(name='cog')
-          span.hidden-xs-only  {{$t('common.settings')}}
+      v-tab {{$t('common.settings')}}
+      v-tab-item
         Settings
 
       //- USERS
-      el-tab-pane.pt-1
-        template(slot='label')
-          v-icon(name='users')
-          span.hidden-xs-only.ml-1 {{$t('common.users')}}
-          el-badge(v-show='unconfirmedUsers.length>0' :value='unconfirmedUsers.length')
+      v-tab
+        v-badge(:value='unconfirmedUsers.length' :content='unconfirmedUsers.length') {{$t('common.users')}}
+      v-tab-item
         Users(:users='users')
 
       //- PLACES
-      el-tab-pane.pt-1
-        template(slot='label')
-          v-icon(name='map-marker-alt')
-          span.hidden-xs-only.ml-1 {{$t('common.places')}}
+      v-tab {{$t('common.places')}}
+      v-tab-item
         Places
 
       //- EVENTS
-      el-tab-pane.pt-1
-        template(slot='label')
-          v-icon(name='calendar')
-          span.hidden-xs-only.ml-1 {{$t('common.events')}}
-          el-badge(v-show='events.length>0' :value='events.length')
+      v-tab
+        v-badge(:content='events.length') {{$t('common.events')}}
+      v-tab-item
         p {{$t('admin.event_confirm_description')}}
-        el-table(:data='paginatedEvents' small primary-key='id' v-loading='loading')
-          el-table-column(:label='$t("common.name")' width='300')
-            template(slot-scope='data') {{data.row.title}}
-          el-table-column(:label='$t("common.where")' width='250')
-            template(slot-scope='data') {{data.row.place.name}}
-          el-table-column(:label='$t("common.confirm")' width='250')
-            template(slot-scope='data')
-              el-button-group
-                el-button(type='primary' @click='confirm(data.row.id)' size='mini') {{$t('common.confirm')}}
-                el-button(type='success' @click='preview(data.row.id)' size='mini') {{$t('common.preview')}}
-        client-only
-          el-pagination(v-if='events.length>perPage' :page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
+        v-data-table(
+          :items='events'
+          :headers='eventHeaders'
+        )
+        //-   el-table-column(:label='$t("common.name")' width='300')
+        //-     template(slot-scope='data') {{data.row.title}}
+        //-   el-table-column(:label='$t("common.where")' width='250')
+        //-     template(slot-scope='data') {{data.row.place.name}}
+        //-   el-table-column(:label='$t("common.confirm")' width='250')
+        //-     template(slot-scope='data')
+        //-       el-button-group
+        //-         el-button(type='primary' @click='confirm(data.row.id)' size='mini') {{$t('common.confirm')}}
+        //-         el-button(type='success' @click='preview(data.row.id)' size='mini') {{$t('common.preview')}}
+        //- client-only
+        //-   el-pagination(v-if='events.length>perPage' :page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
 
       //- ANNOUNCEMENTS
-      el-tab-pane.pt-1
-        template(slot='label')
-          v-icon(name='bullhorn')
-          span.hidden-xs-only.ml-1 {{$t('common.announcements')}}
+      v-tab {{$t('common.announcements')}}
+      v-tab-item
         Announcement
 
       //- FEDERATION
-      el-tab-pane.pt-1
-        template(slot='label')
-          v-icon(name='network-wired')
-          span.hidden-xs-only.ml-1 {{$t('common.federation')}}
+      v-tab {{$t('common.federation')}}
+      v-tab-item
         Federation
 
       //- MODERATION
-      el-tab-pane.pt-1(v-if='settings.enable_federation')
-        template(slot='label')
-          v-icon(name='vector-square')
-          span.hidden-xs-only.ml-1 {{$t('common.moderation')}}
+      v-tab(v-if='settings.enable_federation') {{$t('common.moderation')}}
+      v-tab-item
         Moderation
 
 </template>
@@ -93,26 +82,14 @@ export default {
   },
   data () {
     return {
-      perPage: 10,
-      eventPage: 1,
       description: '',
-      events: [],
-      loading: false,
-      tab: '0',
-      open: true
+      events: []
     }
-  },
-  head () {
-    return { title: `${this.settings.title} - ${this.$t('common.admin')}` }
   },
   computed: {
     ...mapState(['settings']),
     unconfirmedUsers () {
       return this.users.filter(u => !u.is_active)
-    },
-    paginatedEvents () {
-      return this.events.slice((this.eventPage - 1) * this.perPage,
-        this.eventPage * this.perPage)
     }
   },
   methods: {
@@ -133,6 +110,9 @@ export default {
       } catch (e) {
       }
     }
+  },
+  head () {
+    return { title: `${this.settings.title} - ${this.$t('common.admin')}` }
   }
 }
 </script>

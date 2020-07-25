@@ -1,5 +1,5 @@
 <template lang="pug">
-  section#home
+  v-container#home(fluid)
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
     #calbar.row.mt-2.mb-2
       .col-xl-7.col-lg-7.col-sm-6.col-xs-12
@@ -10,7 +10,6 @@
         Search(past-filter recurrent-filter)
 
     #events
-      //- Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
       Event(v-for='event in events' :key='event.id' :event='event')
 
 </template>
@@ -27,6 +26,7 @@ export default {
   components: { Calendar, Event, Search, Announcement },
   computed: {
     events () {
+      console.error('dentro computed di events in HOME!')
       return this.in_past ? this.filteredEventsWithPast : this.filteredEvents
     },
     ...mapGetters(['filteredEvents', 'filteredEventsWithPast']),
@@ -51,10 +51,14 @@ export default {
 }
 </script>
 <style lang='less'>
-#calbar {
-  max-width: 1000px;
-  // margin: 0 auto;
-}
+// #calbar {
+//   max-width: 1000px;
+//   // margin: 0 auto;
+// }
+// #home {
+  // max-width: 1600px;
+// }
+
 #events {
   max-width: 1600px;
   margin: 0 auto;

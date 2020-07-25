@@ -1,44 +1,33 @@
 <template lang='pug'>
-  div
-    p(v-html="$t('admin.place_description')")
-    el-form.mb-2(inline label-width='120px')
-      el-form-item(:label="$t('common.name')")
-        el-input.mr-1(:placeholder='$t("common.name")' v-model='place.name')
-      el-form-item(:label="$t('common.address')")
-        el-input.mr-1(:placeholder='$t("common.address")' v-model='place.address')
-      el-button(variant='primary' @click='savePlace') {{$t('common.save')}}
+  v-container
+    v-subheader(v-html="$t('admin.place_description')")
+    v-form.mb-2
+      //- el-form-item(:label="$t('common.name')")
+      //-   el-input.mr-1(:placeholder='$t("common.name")' v-model='place.name')
+      v-text-field(
+        :label="$t('common.name')"
+        v-model='place.name'
+        :placeholder='$t("common.name")')
 
-    el-table(:data='paginatedPlaces' small)
-      el-table-column(:label="$t('common.name')" width='200')
-        template(slot-scope='data') {{data.row.name}}
-      el-table-column(:label="$t('common.address')" width='400')
-        template(slot-scope='data') {{data.row.address}}
-      el-table-column(:label="$t('common.actions')" width='200')
-        template(slot-scope='data')
-          el-button(size='mini'
-            type='success'
-            @click='place = data.row') {{$t('common.edit')}}
+      v-text-field(
+        :label="$t('common.address')"
+        v-model='place.address'
+        :placeholder='$t("common.address")')
 
-    client-only
-      el-pagination(v-if='places.length>perPage' :page-size='perPage' :currentPage.sync='placePage' :total='places.length')
+      v-btn(@click='savePlace') {{$t('common.save')}}
+
+    v-data-table(
+      :items='places')
 </template>
 <script>
 import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      perPage: 10,
-      placePage: 1,
       place: { name: '', address: '', id: null }
     }
   },
-  computed: {
-    ...mapState(['places']),
-    paginatedPlaces () {
-      return this.places.slice((this.placePage - 1) * this.perPage,
-        this.placePage * this.perPage)
-    }
-  },
+  computed: mapState(['places']),
   methods: {
     placeSelected (items) {
       if (items.length === 0) {
@@ -51,7 +40,7 @@ export default {
       this.place.id = item.id
     },
     async savePlace () {
-      const place = await this.$axios.$put('/place', this.place)
+      await this.$axios.$put('/place', this.place)
     }
   }
 }

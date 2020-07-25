@@ -1,51 +1,97 @@
 <template lang="pug">
-  el-container#eventDetail.h-event
-    el-header
+  v-card#eventDetail.h-event.d-inline-block-mx-auto
+    v-toolbar(prominent)
+      v-list-item(two-line)
+        v-list-item-content
+          h2(v-text='event.title')
+          v-list-item-subtitle
+            time.dt-start(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')
+            v-icon mdi-date
+            b {{event|when}}
+            small  ({{event.start_datetime|from}})
+          v-list-item-subtitle
+            i.el-icon-location-outline
+            b.p-location {{event.place.name}}
+            span  - {{event.place.address}}
 
-      .title {{event.title}}
+      v-spacer
+      v-btn.mr-1(nuxt :to='`/event/${event.prev}`' color='primary' icon :disabled='!event.prev')
+        v-icon mdi-arrow-left
+      v-btn(nuxt :to='`/event/${event.next}`' color='primary' :disabled='!event.next' icon)
+        v-icon mdi-arrow-right
+    //- h2 {{event.title}}
+    //- v-toolbar-subtitle
 
-      #arrow
-        nuxt-link.mr-1(:to='`/event/${event.prev}`')
-          el-button(circle plain size='small' icon='el-icon-arrow-left' :disabled='!event.prev')
-        nuxt-link(:to='`/event/${event.next}`')
-          el-button(circle plain size='small' :disabled='!event.next' icon='el-icon-arrow-right')
+    //- v-toolbar(prominent)
+      //- v-list-item
+        //- h3 {{event.title}}
+      //- v-row(justify='space-between')
+        v-col(cols='auto')
+          v-list-item(two-line)
+            v-list-item-content
+              v-list-item-title.headline(v-text='event.title')
+              v-list-item-subtitle
+                time.dt-start(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')
+                v-icon mdi-date
+                b {{event|when}}
+                small  ({{event.start_datetime|from}})
+              v-list-item-subtitle
+                i.el-icon-location-outline
+                b.p-location {{event.place.name}}
+                span  - {{event.place.address}}
+        v-col
+          v-btn.mr-1(nuxt :to='`/event/${event.prev}`' color='primary' icon :disabled='!event.prev')
+            v-icon mdi-arrow-left
+          v-btn(nuxt :to='`/event/${event.next}`' color='primary' :disabled='!event.next' icon)
+            v-icon mdi-arrow-right
 
-    el-main
-      el-dialog.embedDialog(:visible.sync='showEmbed')
+      template(slot='extension')
+        h2 {{event.title}}
+        //- v-list-item
+        //-   i.el-icon-location-outline
+        //-   b.p-location {{event.place.name}}
+        //-   span  - {{event.place.address}}
+        //- v-spacer
+        //- v-chip.p-category.ml-1(v-for='tag in event.tags' :key='tag' small color='secondary') {{tag}}
+
+    v-card-text
+      v-dialog.embedDialog(:visible.sync='showEmbed')
         h4(slot='title') {{$t('common.embed_title')}}
         EmbedEvent(:event='event')
 
-      el-row
-        el-col.p-2(:sm='18' :xs="24")
+      //- v-row
+        v-col(sm="10")
 
-          //- event image
-          el-image.main_image.mb-3(:src='imgPath' v-if='event.image_path' fit='contain')
-            div.loading(slot='placeholder')
-              el-icon(name='loading')
+      //- event image
+      v-img.main_image.mb-3(
+        lazy
+        :src='imgPath'
+        :lazy-src='thumbImgPath'
+        v-if='event.image_path')
 
-          pre.p-description(v-html='event.description')
-          el-button.p-category.ml-1(type='text' plain round size='mini' v-for='tag in event.tags' :key='tag') {{tag}}
+      p.p-description(v-html='event.description')
+      v-btn.p-category.ml-1(type='text' plain round size='mini' v-for='tag in event.tags' :key='tag') {{tag}}
 
         //- info & actions
-        el-col.menu(:sm='6' :xs='24')
-          el-menu.menu(router)
+        //- v-col
+          v-list
             time.dt-start(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")') <i class='el-icon-date'></i>  <b>{{event|when}}</b> <br/><small>{{event.start_datetime|from}}</small>
             p
               i.el-icon-location-outline
               b.p-location {{event.place.name}}
               span  - {{event.place.address}}
-            el-divider {{$t('common.actions')}}
-            el-menu-item(
+            v-divider {{$t('common.actions')}}
+            v-list-item(
               v-clipboard:success='copyLink'
               v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') <i class='el-icon-paperclip'></i> {{$t('common.copy_link')}}
 
-            el-menu-item(@click='showEmbed=true') <i class='el-icon-copy-document'></i> {{$t('common.embed')}}
+            v-list-item(@click='showEmbed=true') <i class='el-icon-copy-document'></i> {{$t('common.embed')}}
 
-            el-menu-item
+            v-list-item
               a(:href='`${settings.baseurl}/api/event/${event.id}.ics`') <i class='el-icon-date'></i> {{$t('common.add_to_calendar')}}
           EventAdmin(v-if='is_mine' :event='event')
 
-      hr
+      //- hr
 
       //- resources from fediverse
       #resources.mt-1(v-if='settings.enable_federation')
@@ -54,22 +100,22 @@
           small ✊ {{event.boost.length}}<br/>
 
         p.p-2
-          el-button(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
+          v-btn(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
           span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
 
-        el-dialog(:visible.sync='showFollowMe' destroy-on-close)
+        v-dialog(:visible.sync='showFollowMe' destroy-on-close)
           h4(slot='title') {{$t('common.follow_me_title')}}
           FollowMe
 
-        el-dialog.showResource#resourceDialog(:visible.sync='showResources' fullscreen
+        v-dialog.showResource#resourceDialog(:visible.sync='showResources' fullscreen
           width='95vw'
           destroy-on-close
           @keydown.native.right='$refs.carousel.next()'
           @keydown.native.left='$refs.carousel.prev()')
-          el-carousel(:interval='10000' ref='carousel' arrow='always')
-            el-carousel-item(v-for='attachment in selectedResource.data.attachment' :key='attachment.url')
-              el-image(:src='attachment.url')
-        el-card.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources' :key='resource.id' :class='{disabled: resource.hidden}')
+          v-carousel(:interval='10000' ref='carousel' arrow='always')
+            v-carousel-item(v-for='attachment in selectedResource.data.attachment' :key='attachment.url')
+              v-img(:src='attachment.url')
+        v-card.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources' :key='resource.id' :class='{disabled: resource.hidden}')
           span
             el-dropdown.mr-2(v-if='$auth.user && $auth.user.is_admin')
               el-button(circle icon='el-icon-more' size='mini')
@@ -297,163 +343,162 @@ export default {
 }
 </script>
 <style lang='less'>
-#eventDetail {
-  time {
-    margin: 0rem 0rem 0rem 1rem;
-    display: inline-block;
-  }
+// #eventDetail {
+//   time {
+//     margin: 0rem 0rem 0rem 1rem;
+//     display: inline-block;
+//   }
 
-  #arrow {
-    position: absolute;
-    top: 1em;
-    right: 1em;
-  }
+//   #arrow {
+//     position: absolute;
+//     top: 1em;
+//     right: 1em;
+//   }
 
-  .el-header {
-    height: auto !important;
-    position: sticky;
-    padding-top: .4em;
-    top: 0px;
-    border-bottom: 1px solid lightgray;
-    z-index: 1;
-    overflow: hidden;
-  }
+//   .el-header {
+//     height: auto !important;
+//     position: sticky;
+//     padding-top: .4em;
+//     top: 0px;
+//     border-bottom: 1px solid lightgray;
+//     z-index: 1;
+//     overflow: hidden;
+//   }
 
-  .embedDialog {
-    .el-dialog {
-      min-height: 500px;
-      max-width: 1000px;
-      width: 100%;
-    }
-  }
+//   .embedDialog {
+//     .el-dialog {
+//       min-height: 500px;
+//       max-width: 1000px;
+//       width: 100%;
+//     }
+//   }
 
-  .followDialog {
-    .el-dialog {
-      min-height: 300px;
-      max-width: 600px;
-      width: 100%;
-      .el-dialog__body {
-        word-break: normal !important;
-      }
-    }
-  }
+//   .followDialog {
+//     .el-dialog {
+//       min-height: 300px;
+//       max-width: 600px;
+//       width: 100%;
+//       .el-dialog__body {
+//         word-break: normal !important;
+//       }
+//     }
+//   }
 
-  .head {
-    z-index: 1;
-    position: sticky;
-    top: 0px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background-color: white;
-    border-bottom: 1px solid #e6e6e6;
-  }
+//   .head {
+//     z-index: 1;
+//     position: sticky;
+//     top: 0px;
+//     padding-top: 10px;
+//     padding-bottom: 10px;
+//     background-color: white;
+//     border-bottom: 1px solid #e6e6e6;
+//   }
 
-  .menu {
-    border-right: none;
-    background-color: transparent;
-  }
+//   .menu {
+//     border-right: none;
+//     background-color: transparent;
+//   }
 
-  div.menu {
-    border-left: 1px solid #e6e6e6;
-    p {
-      margin: 1rem 0rem 1rem 1rem;
-    }
-  }
+//   div.menu {
+//     border-left: 1px solid #e6e6e6;
+//     p {
+//       margin: 1rem 0rem 1rem 1rem;
+//     }
+//   }
 
-  .title {
-    display: table-cell;
-    padding-right: 70px;
-    height: 2.1em;
-    font-size: 1.6rem;
-    color: #404246;
-    line-height: 1;
-    vertical-align: middle;
-  }
+//   .title {
+//     display: table-cell;
+//     padding-right: 70px;
+//     height: 2.1em;
+//     font-size: 1.6rem;
+//     color: #404246;
+//     line-height: 1;
+//     vertical-align: middle;
+//   }
 
-  pre {
-    white-space: pre-line;
-    word-break: break-word;
-    color: #404246;
-    font-size: 1em;
-    font-family: inherit;
+  // pre {
+  //   white-space: pre-line;
+  //   word-break: break-word;
+  //   font-size: 1em;
+  //   font-family: inherit;
 
-    p:empty {
-      min-height: 1em;
-    }
-    // font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen,
-      // Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica, Arial,
-      // sans-serif !important;
-  }
+  //   p:empty {
+  //     min-height: 1em;
+  //   }
+  //   // font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen,
+  //     // Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica, Arial,
+  //     // sans-serif !important;
+  // }
 
-  .main_image {
-    width: 100%;
-    transition: height .100s;
-    height: auto;
+//   .main_image {
+//     width: 100%;
+//     transition: height .100s;
+//     height: auto;
 
-    img {
-      // object-fit: contain;
-      margin: 0 auto;
-      max-height: 88vh;
-    }
+//     img {
+//       // object-fit: contain;
+//       margin: 0 auto;
+//       max-height: 88vh;
+//     }
 
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 30px;
-      margin: 0 auto;
-      height: 100px;
-    }
-  }
+//     .loading {
+//       display: flex;
+//       justify-content: center;
+//       align-items: center;
+//       font-size: 30px;
+//       margin: 0 auto;
+//       height: 100px;
+//     }
+//   }
 
-  #resources {
-    img {
-      max-width: 100%;
-    }
-    .card-header {
-      border-left: 3px solid transparent;
-    }
-    .card-header:hover {
-      border-left: 3px solid #888;
-    }
-    .invisible {
-      visibility: visible !important;
-    }
-    .disabled {
-      opacity: 0.5;
-    }
-    .previewImage {
-      display: flex;
-      flex-flow: wrap;
-      justify-content: space-evenly;
-      img {
-        margin-left: 5px;
-        margin-top: 5px;
-        object-fit: cover;
-        min-height: 100px;
-        max-width: 45%;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-      }
-    }
-  }
-  .nextprev {
-    font-size: 10px;
-    margin-bottom: 5px;
-  }
-}
+//   #resources {
+//     img {
+//       max-width: 100%;
+//     }
+//     .card-header {
+//       border-left: 3px solid transparent;
+//     }
+//     .card-header:hover {
+//       border-left: 3px solid #888;
+//     }
+//     .invisible {
+//       visibility: visible !important;
+//     }
+//     .disabled {
+//       opacity: 0.5;
+//     }
+//     .previewImage {
+//       display: flex;
+//       flex-flow: wrap;
+//       justify-content: space-evenly;
+//       img {
+//         margin-left: 5px;
+//         margin-top: 5px;
+//         object-fit: cover;
+//         min-height: 100px;
+//         max-width: 45%;
+//         border-radius: 5px;
+//         border: 1px solid #ccc;
+//       }
+//     }
+//   }
+//   .nextprev {
+//     font-size: 10px;
+//     margin-bottom: 5px;
+//   }
+// }
 
-@media only screen and (max-width: 768px) {
-  #eventDetail {
-    .menu {
-      border: 0px !important;
-    }
+// @media only screen and (max-width: 768px) {
+//   #eventDetail {
+//     .menu {
+//       border: 0px !important;
+//     }
 
-    .title {
-      // font-size: 1.1em;
-      line-height: 1.4em;
-      color: black;
-    }
-  }
-}
+//     .title {
+//       // font-size: 1.1em;
+//       line-height: 1.4em;
+//       color: black;
+//     }
+//   }
+// }
 </style>

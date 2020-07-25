@@ -24,21 +24,21 @@ module.exports = {
   /*
    ** Global CSS
    */
-  css: [
-    'bootstrap/dist/css/bootstrap.min.css',
-    'element-ui/lib/theme-chalk/index.css',
-    'element-ui/lib/theme-chalk/display.css',
-    '@/assets/style.less'
-  ],
+  // css: [
+  // 'bootstrap/dist/css/bootstrap.min.css',
+  // 'element-ui/lib/theme-chalk/index.css',
+  // 'element-ui/lib/theme-chalk/display.css',
+  // '@/assets/theme/index.css'
+  // '@/assets/style.less'
+  // ],
 
   /*
    ** Plugins to load before mounting the App
    */
   plugins: [
     '@/plugins/i18n.js',
-    '@/plugins/element-ui', // UI library -> https://element.eleme.io/#/en-US/
-    '@/plugins/filters', // text filters, datetime, etc.
-    '@/plugins/vue-awesome', // icon
+    '@/plugins/filters', // text filters, datetime filters, generic transformation helpers etc.
+    '@/plugins/vue-clipboard', // vuetify
     '@/plugins/axios', // axios baseurl configuration
     { src: '@/plugins/v-calendar', ssr: false } // calendar, fix ssr
   ],
@@ -94,6 +94,13 @@ module.exports = {
     }
   },
 
+  buildModules: [
+    '@nuxtjs/vuetify'
+  ],
+  vuetify: {
+    optionsPath: './vuetify.options.js'
+    /* module options */
+  },
   /*
    ** Build configuration
    */

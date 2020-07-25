@@ -1,11 +1,12 @@
 <template lang="pug">
-  el-main
+  v-container
     p {{$t('export.intro')}}
     //- Search
-    el-tabs.mt-2(v-model='type')
+    v-tabs(v-model='type')
 
       //- TOFIX
-      //- el-tab-pane.pt-1(label='email' name='email')
+      //- v-tab.pt-1(label='email' name='email')
+      //- v-tab-item
       //-   p(v-html='$t(`export.email_description`)')
       //-   el-form(@submit.native.prevent)
       //-     //- el-switch(v-model='notification.notify_on_add' :active-text="$t('notify_on_insert')")
@@ -14,42 +15,45 @@
       //-     el-input.mt-2(v-model='notification.email' :placeholder="$t('export.insert_your_address')" ref='email')
       //-     el-button.mt-2.float-right(native-type= 'submit' type='success' @click='add_notification') {{$t('common.send')}}
 
-      el-tab-pane.pt-1(label='Feed rss' name='rss')
+      v-tab {{$t('common.feed')}}
+      v-tab-item
         span(v-html='$t(`export.feed_description`)')
-        el-input(v-model='link')
-          el-button(slot='append' plain
-          v-clipboard:copy='link' v-clipboard:success='copyLink'
-          type="primary" icon='el-icon-document' ) {{$t("common.copy")}}
+        v-text-field(v-model='link' readonly)
+          v-btn(slot='append' plain text
+          v-clipboard:copy='link'
+          v-clipboard:success='copyLink') {{$t("common.copy")}}
 
-      el-tab-pane.pt-1(v-if='settings.enable_federation' :label="$t('common.fediverse')" name='fediverse')
+      v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
+      v-tab-item
         FollowMe
 
-      el-tab-pane.pt-1(label='ics/ical' name='ics')
+      v-tab ics/ical
+      v-tab-item
         p(v-html='$t(`export.ical_description`)')
-        el-input(v-model='link')
-          el-button(slot='append' v-clipboard:copy='link' v-clipboard:success='copyLink'
-            plain type="primary" icon='el-icon-document') {{$t("common.copy")}}
+        v-text-field(v-model='link')
+          v-btn(slot='append' v-clipboard:copy='link' v-clipboard:success='copyLink') {{$t("common.copy")}}
 
-      el-tab-pane.pt-1(label='list' name='list')
+      v-tab List
+      v-tab-item
         p(v-html='$t(`export.list_description`)')
 
-        el-row
-          el-col.mr-2(:span='11')
-            el-input(v-model='list.title') Title
-          el-col.float-right(:span='12')
+        v-row
+          v-col.mr-2(:span='11')
+            v-text-field(v-model='list.title') Title
+          v-col.float-right(:span='12')
             List(
               :title='list.title'
               :events='filteredEvents')
-        el-input.mb-1(type='textarea' v-model='listScript' readonly )
-        el-button.float-right(plain v-clipboard:copy='listScript' v-clipboard:success='copyLink'
-          type='primary' icon='el-icon-document') {{$t('common.copy')}}
+        v-text-field.mb-1(type='textarea' v-model='listScript' readonly )
+        v-btn(plain v-clipboard:copy='listScript' v-clipboard:success='copyLink') {{$t('common.copy')}}
 
       //- TOFIX
-      //- el-tab-pane.pt-1(label='calendar' name='calendar')
+      //- v-tab.pt-1(label='calendar' name='calendar')
+      //- v-tab-item
       //-   p(v-html='$t(`export.calendar_description`)')
       //-   //- no-ssr
       //-     Calendar.mb-1
-      //-   el-input.mb-1(type='textarea' v-model='script')
+      //-   v-text-field.mb-1(type='textarea' v-model='script')
       //-   el-button.float-right(plain type="primary" icon='el-icon-document') Copy
 
 </template>
@@ -57,7 +61,6 @@
 import { mapState, mapGetters } from 'vuex'
 import List from '@/components/List'
 import FollowMe from '../components/FollowMe'
-import { Message } from 'element-ui'
 
 export default {
   name: 'Exports',
@@ -120,16 +123,17 @@ export default {
   },
   methods: {
     copyLink () {
-      Message({ message: this.$t('common.copied'), type: 'success', showClose: true })
+      // Message({ message: this.$t('common.copied'), type: 'success', showClose: true })
+      this.$root.$emit('message', { message: this.$t('common.feed_url_copied') })
     },
     add_notification () {
       if (!this.notification.email) {
-        Message({ message: 'Inserisci una mail', showClose: true, type: 'error' })
+        // Message({ message: 'Inserisci una mail', showClose: true, type: 'error' })
         // return this.$refs.email.focus()
       }
       // await api.addNotification({ ...this.notification, filters: this.filters})
       // this.$refs.modal.hide()
-      Message({ message: this.$t('email_notification_activated'), showClose: true, type: 'success' })
+      // Message({ message: this.$t('email_notification_activated'), showClose: true, type: 'success' })
     },
     imgPath (event) {
       return event.image_path && event.image_path
@@ -142,9 +146,3 @@ export default {
   }
 }
 </script>
-<style>
-#list {
-  max-height: 400px;
-  overflow-y: auto;
-}
-</style>

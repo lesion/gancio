@@ -1,50 +1,73 @@
 <template lang="pug">
-  el-main
+  v-container
+
       //- select timezone
-      div {{$t('admin.select_instance_timezone')}}
-      el-select(v-model='instance_timezone' filterable
-        @input.native='queryTz=$event.target.value' @change='queryTz=""'
-        default-first-option placeholder='Timezone, type to search')
-        el-option(v-for='timezone in filteredTimezones' :key='timezone.value' :value='timezone.value')
-          span.float-left {{timezone.value}}
-          small.float-right.text-danger {{timezone.offset}}
-      small.d-block.text-secondary {{$t('admin.instance_timezone_description')}}
+      v-autocomplete(v-model='instance_timezone'
+        :label="$t('admin.select_instance_timezone')"
+        :hint="$t('admin.instance_timezone_description')"
+        :items="filteredTimezones"
+        persistent-hint
+        item-text='value'
+        item-value='value'
+        placeholder='Timezone, type to search')
+        template(v-slot:item='{ item }')
+          v-list-item-content
+            v-list-item-title {{item.value}}
+            v-list-item-subtitle {{item.offset}}
 
-      div.mt-4 {{$t('admin.instance_locale')}}
-      el-select(v-model='instance_locale')
-        el-option(v-for='locale in Object.keys(locales)' :key='locale' :label='locales[locale]' :value='locale')
-      small.d-block.text-secondary {{$t('admin.instance_locale_description')}}
+      v-select.mt-5(
+        v-model='instance_locale'
+        :label="$t('admin.instance_locale')"
+        :hint="$t('admin.instance_locale_description')"
+        persistent-hint
+        item-text='locale'
+        item-value='locale'
+        :items='locales'
+      )
 
-      div.mt-4 {{$t('common.title')}}
-      el-input(v-model='title' @blur='save("title", title)')
-      small.d-block.text-secondary {{$t('admin.title_description')}}
+      v-text-field.mt-5(v-model='title'
+        :label="$t('common.title')"
+        :hint="$t('admin.title_description')"
+        @blur='save("title", title)'
+        persistent-hint
+      )
 
-      div.mt-4 {{$t('common.description')}}
-      el-input(v-model='description' @blur='save("description", description)')
-      small.d-block.text-secondary {{$t('admin.description_description')}}
+      v-text-field.mt-5(v-model='description'
+        :label="$t('common.description')"
+        :hint="$t('admin.description_description')"
+        persistent-hint
+        @blur='save("description", description)')
 
-      div.mt-4 {{$t('admin.favicon')}}
-        el-upload(ref='upload'
-          :action='`${settings.baseurl}/api/settings/logo`'
-          :on-success="forceLogoReload"
-          name='logo'
-          :show-file-list="true"
-          accept='image/png'
-          :limit='1'
-          :multiple='false')
-          el-button-group
-            el-button(size='small' type='primary' plain) Select file
-            el-button(size='small' type='success' plain @click='resetLogo') Reset
-        .el-upload__tip(slot='tip') png files with a size less than 500kb
-      el-image(:src='`${settings.baseurl}/favicon.ico?${logoKey}`')
-      el-switch.d-block.mt-4(v-model='allow_registration'
-        :active-text="$t('admin.allow_registration_description')")
-      el-switch.d-block.mt-4(v-model='allow_anon_event' :active-text="$t('admin.allow_anon_event')")
+      v-file-input.mt-5(ref='upload'
+        :label="$t('admin.favicon')"
+        :action='`${settings.baseurl}/api/settings/logo`'
+        :on-success="forceLogoReload"
+        name='logo'
+        :show-file-list="true"
+        accept='image/png'
+        :limit='1'
+        :multiple='false')
+        //- el-button-group
+          el-button(size='small' type='primary' plain) Select file
+          el-button(size='small' type='success' plain @click='resetLogo') Reset
+      v-img(:src='`${settings.baseurl}/favicon.ico?${logoKey}`')
 
-      el-switch.d-block.mt-4(v-model='allow_recurrent_event' :active-text="$t('admin.allow_recurrent_event')")
+      v-switch.mt-5(v-model='allow_registration'
+        inset
+        :label="$t('admin.allow_registration_description')")
 
-      el-switch.d-block.mt-4(v-if='allow_recurrent_event'
-        v-model='recurrent_event_visible' :active-text="$t('admin.recurrent_event_visible')")
+      v-switch.mt-4(v-model='allow_anon_event'
+        inset
+        :label="$t('admin.allow_anon_event')")
+
+      v-switch.mt-4(v-model='allow_recurrent_event'
+        inset
+        :label="$t('admin.allow_recurrent_event')")
+
+      v-switch.mt-4(v-if='allow_recurrent_event'
+        v-model='recurrent_event_visible'
+        inset
+        :label="$t('admin.recurrent_event_visible')")
 
 </template>
 <script>
@@ -57,7 +80,6 @@ export default {
   name: 'Settings',
   data ({ $store }) {
     return {
-      queryTz: '',
       title: $store.state.settings.title,
       description: $store.state.settings.description,
       locales,
@@ -92,10 +114,7 @@ export default {
     },
     filteredTimezones () {
       const current_timezone = moment.tz.guess()
-      const query = this.queryTz.toLowerCase()
       const ret = _(moment.tz.names())
-        .filter(tz => tz !== current_timezone && (!query || tz.toLowerCase().includes(query)))
-        .take(10)
         .unshift(current_timezone)
         .map(tz => ({ value: tz, offset: moment().tz(tz).format('z Z') }))
         .value()

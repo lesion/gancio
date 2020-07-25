@@ -1,23 +1,23 @@
 <template lang='pug'>
 div
-  el-divider {{$t('common.admin')}}
+  v-divider {{$t('common.admin')}}
 
-  el-menu.menu
-    el-menu-item
+  v-menu.menu
+    v-menu-item
       div(v-if='event.is_visible' @click='toggle(false)') <i class='el-icon-open'/> {{$t(`common.${event.parentId?'skip':'hide'}`)}}
       div(v-else @click='toggle(false)') <i class='el-icon-turn-off'/> {{$t('common.confirm')}}
-    el-menu-item(@click='$router.push(`/add/${event.id}`)') <i class='el-icon-edit'/> {{$t('common.edit')}}
-    el-menu-item(v-if='!event.parentId' @click='remove(false)') <i class='el-icon-delete'/> {{$t('common.remove')}}
+    v-menu-item(@click='$router.push(`/add/${event.id}`)') <i class='el-icon-edit'/> {{$t('common.edit')}}
+    v-menu-item(v-if='!event.parentId' @click='remove(false)') <i class='el-icon-delete'/> {{$t('common.remove')}}
 
     template(v-if='event.parentId')
-      el-divider {{$t('event.recurrent')}}
+      v-divider {{$t('event.recurrent')}}
       p.text-secondary
         i.el-icon-refresh
         small  {{event|recurrentDetail}}<br/>
-      el-menu-item(v-if='event.parent.is_visible' @click='toggle(true)') <i class='el-icon-video-pause'/> {{$t('common.pause')}}
-      el-menu-item(v-else @click='toggle(true)') <i class='el-icon-video-play'/> {{$t('common.start')}}
-      el-menu-item(@click='$router.push(`/add/${event.parentId}`)') <i class='el-icon-edit'/> {{$t('common.edit')}}
-      el-menu-item(@click='remove(true)') <i class='el-icon-delete'/> {{$t('common.remove')}}
+      v-menu-item(v-if='event.parent.is_visible' @click='toggle(true)') <i class='el-icon-video-pause'/> {{$t('common.pause')}}
+      v-menu-item(v-else @click='toggle(true)') <i class='el-icon-video-play'/> {{$t('common.start')}}
+      v-menu-item(@click='$router.push(`/add/${event.parentId}`)') <i class='el-icon-edit'/> {{$t('common.edit')}}
+      v-menu-item(@click='remove(true)') <i class='el-icon-delete'/> {{$t('common.remove')}}
 </template>
 <script>
 import { MessageBox } from 'element-ui'

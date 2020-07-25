@@ -1,47 +1,72 @@
 <template lang="pug">
-  el-main
-    el-switch.d-block(v-model='enable_federation' :active-text="$t('admin.enable_federation')")
-    small.text-secondary {{$t('admin.enable_federation_help')}}
+  v-container
+    v-switch(v-model='enable_federation'
+      :label="$t('admin.enable_federation')"
+      persistent-hint
+      inset
+      :hint="$t('admin.enable_federation_help')"
+    )
 
     template(v-if='enable_federation')
 
-      el-switch.d-block.mt-4(v-model='enable_resources' :active-text="$t('admin.enable_resources')")
-      small.text-secondary {{$t('admin.enable_resources_help')}}
+      v-switch.mt-4(v-model='enable_resources'
+        :label="$t('admin.enable_resources')"
+        :hint="$t('admin.enable_resources_help')"
+        persistent-hint inset)
 
-      el-switch.d-block.mt-4(v-model='hide_boosts' :active-text="$t('admin.hide_boost_bookmark')")
-      small.text-secondary {{$t('admin.hide_boost_bookmark_help')}}
+      v-switch.mt-4(v-model='hide_boosts'
+        :label="$t('admin.hide_boost_bookmark')"
+        :hint="$t('admin.hide_boost_bookmark_help')"
+        persistent-hint inset)
 
-      div.mt-4 {{$t('admin.instance_name')}}
-      el-input(v-model='instance_name' placeholder='Instance name' @blur='save("instance_name", instance_name)')
-      small.d-block.text-secondary {{$t('admin.instance_name_help')}} (<u>@{{instance_name}}@{{settings.baseurl|url2host}}</u>)
+      //- div.mt-4 {{$t('admin.instance_name')}}
+      v-text-field.mt-5(v-model='instance_name'
+        :label="$t('admin.instance_name')"
+        :hint="`${$t('admin.instance_name_help')} (@${instance_name}@${settings.baseurl|url2host})`"
+        placeholder='Instance name' persistent-hint
+        @blur='save("instance_name", instance_name)')
 
-    el-switch.d-block.mt-4(v-model='enable_trusted_instances' :active-text="$t('admin.enable_trusted_instances')")
-    small.text-secondary {{$t('admin.trusted_instances_help')}}
+    v-switch.mt-4(v-model='enable_trusted_instances'
+      :label="$t('admin.enable_trusted_instances')"
+      persistent-hint inset
+      :hint="$t('admin.trusted_instances_help')")
 
     template(v-if='enable_trusted_instances')
-      div.mt-4 {{$t('admin.instance_place')}}
-        el-input(v-model='instance_place' @blur='save("instance_place", instance_place)')
-        small.d-block.text-secondary {{$t('admin.instance_place_help')}}
+      v-text-field.mt-4(v-model='instance_place'
+        :label="$t('admin.instance_place')"
+        persistent-hint
+        :hint="$t('admin.instance_place_help')"
+        @blur='save("instance_place", instance_place)'
+      )
 
-      div.mt-4 {{$t('admin.add_trusted_instance')}}
-        el-input(v-model='instance_url' :placeholder="$t('common.url')")
-          el-button(slot='append' @click='createTrustedInstance') {{$t('common.send')}}
+      //- div.mt-4 {{$t('admin.add_trusted_instance')}}
+      v-text-field.mt-4(v-model='instance_url'
+        :full-width='false'
+        persistent-hint
+        :hint="$t('admin.add_trusted_instance')"
+        :label="$t('common.url')"
+        append-outer-icon="mdi-send"
+        @click:append-outer='createTrustedInstance'
+      )
 
-      el-table(:data='settings.trusted_instances')
-        el-table-column(:label="$t('common.name')")
-          template(slot-scope='data')
-            span {{data.row.name}}
-        el-table-column(:label="$t('common.url')")
-          template(slot-scope='data')
-            span {{data.row.url}}
-        el-table-column(:label="$t('common.place')")
-          template(slot-scope='data')
-            span {{data.row.label}}
-        el-table-column(:label="$t('common.actions')")
-          template(slot-scope='data')
-            el-button(size='mini'
-              type='danger'
-              @click='deleteInstance(data.row)') {{$t('admin.delete_user')}}
+      v-data-table.mt-4(
+        :headers='headers'
+        :items='settings.trusted_instances'
+      )
+        //- el-table-column(:label="$t('common.name')")
+        //-   template(slot-scope='data')
+        //-     span {{data.row.name}}
+        //- el-table-column(:label="$t('common.url')")
+        //-   template(slot-scope='data')
+        //-     span {{data.row.url}}
+        //- el-table-column(:label="$t('common.place')")
+        //-   template(slot-scope='data')
+        //-     span {{data.row.label}}
+        //- el-table-column(:label="$t('common.actions')")
+        //-   template(slot-scope='data')
+        //-     el-button(size='mini'
+        //-       type='danger'
+        //-       @click='deleteInstance(data.row)') {{$t('admin.delete_user')}}
 
 </template>
 <script>
@@ -51,11 +76,12 @@ import axios from 'axios'
 
 export default {
   name: 'Federation',
-  data ({ $store }) {
+  data ({ $store, $options }) {
     return {
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
-      instance_place: $store.state.settings.instance_place
+      instance_place: $store.state.settings.instance_place,
+      url2host: $options.filters.url2host
     }
   },
   computed: {
@@ -76,6 +102,9 @@ export default {
       get () { return this.settings.enable_trusted_instances },
       set (value) { this.setSetting({ key: 'enable_trusted_instances', value }) }
     }
+  },
+  mounted () {
+    console.error(this.$options.filters)
   },
   methods: {
     ...mapActions(['setSetting']),

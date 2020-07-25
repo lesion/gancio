@@ -1,52 +1,57 @@
 <template lang="pug">
-  el-main#edit_page
-    h5.text-center {{edit?$t('common.edit_event'):$t('common.add_event')}}
-    el-form(v-loading='loading')
+  v-container
+    h2.text-center {{edit?$t('common.edit_event'):$t('common.add_event')}}
+    v-form
 
       //- NOT LOGGED EVENT
       div(v-if='!$auth.loggedIn')
-        el-divider <v-icon name='user-secret'/> {{$t('event.anon')}}
+        v-divider <v-icon name='user-secret'/> {{$t('event.anon')}}
         p(v-html="$t('event.anon_description')")
 
       //- title
-      span {{$t('event.what_description')}}
-      el-input.mb-3(v-model='event.title' ref='title' autofocus)
+      v-text-field.mb-3(v-model='event.title'
+        :label="$t('event.what_description')"
+        ref='title')
 
       //- description
-      span {{$t('event.description_description')}}
-      Editor.mb-3(v-model='event.description' border no-save style='max-height: 400px;')
+      //- span {{$t('event.description_description')}}
+      //- Editor.mb-3(v-model='event.description' border no-save style='max-height: 400px;')
 
       //- tags
-      div {{$t('event.tag_description')}}
-      client-only
-        el-select.mb-3(v-model='event.tags' multiple filterable
-          @input.native='queryTags=$event.target.value' @change='queryTags=""'
-          allow-create default-first-option placeholder='Tag')
-          el-option(v-for='tag in filteredTags' :key='tag.tag' :label='tag.tag' :value='tag.tag')
+      //- div {{$t('event.tag_description')}}
+      //- client-only
+        //- v-select.m b-3(v-model='event.tags' multiple filterable
+        //-   @input.native='queryTags=$event.target.value' @change='queryTags=""'
+        //-   allow-create default-first-option placeholder='Tag')
+        //-   v-option(v-for='tag in filteredTags' :key='tag.tag' :label='tag.tag' :value='tag.tag')
 
       //- WHERE
-      el-divider
-        i.el-icon-location-outline
-        span {{$t('common.where')}}
-      p(v-html="$t('event.where_description')")
-      el-autocomplete(v-model='event.place.name' @blur='selectPlace($event.target.value)'
-        highlight-first-item :fetch-suggestions='filterPlaces' @select='selectPlace')
+      //- v-divider
+        //- i.el-icon-location-outline
+        //- span {{$t('common.where')}}
+      //- p(v-html="$t('event.where_description')")
+      v-autocomplete(v-model='event.place.name'
+        :label="$t('common.where')"
+        :items="places"
+        item-text="name"
+        item-value="id"
+        @change='selectPlace')
 
-      div {{$t("common.address")}}
-      el-input.mb-3(ref='address' v-model='event.place.address' :disabled='disableAddress')
+      //- div {{$t("common.address")}}
+      v-text-field(ref='address' :label="$t('common.address')" v-model='event.place.address' :disabled='disableAddress')
 
       //- WHEN
-      el-divider <v-icon name='clock'/> {{$t('common.when')}}
+      //- v-divider <v-icon name='clock'/> {{$t('common.when')}}
       .text-center
-        el-radio-group(v-model="event.type")
-          el-radio-button(label="normal") <v-icon name='calendar-day'/> {{$t('event.normal')}}
-          el-radio-button(label="multidate") <v-icon name='calendar-week'/> {{$t('event.multidate')}}
-          el-radio-button(v-if='settings.allow_recurrent_event' label="recurrent") <v-icon name='calendar-alt'/> {{$t('event.recurrent')}}
+        v-btn-toggle(v-model="event.type")
+          v-btn(value='normal' label="normal") <v-icon name='calendar-day'/> {{$t('event.normal')}}
+          v-btn(value='multidate' label="multidate") <v-icon name='calendar-week'/> {{$t('event.multidate')}}
+          v-btn(v-if='settings.allow_recurrent_event' value='recurrent' label="recurrent") <v-icon name='calendar-alt'/> {{$t('event.recurrent')}}
         br
         span {{$t(`event.${event.type}_description`)}}
-        el-select.ml-2(v-if='event.type==="recurrent"' v-model='event.recurrent.frequency' placeholder='Frequenza')
-          el-option(:label="$t('event.each_week')" value='1w' key='1w')
-          el-option(:label="$t('event.each_2w')" value='2w' key='2w')
+        v-select.ml-2(v-if='event.type==="recurrent"' v-model='event.recurrent.frequency' placeholder='Frequenza')
+          v-option(:label="$t('event.each_week')" value='1w' key='1w')
+          v-option(:label="$t('event.each_2w')" value='2w' key='2w')
           //- el-option(:label="$t('event.each_month')" value='1m' key='1m')
 
       client-only
@@ -57,43 +62,40 @@
             v-model='date'
             :locale='$i18n.locale'
             :from-page.sync='page'
+            is-dark
             is-inline
             is-expanded
             :min-date='event.type !== "recurrent" && new Date()')
 
       div.text-center.mb-2(v-if='event.type === "recurrent"')
         span(v-if='event.recurrent.frequency !== "1m" && event.recurrent.frequency !== "2m"') {{whenPatterns}}
-        el-radio-group(v-else v-model='event.recurrent.type')
-          el-radio-button(v-for='whenPattern in whenPatterns' :label='whenPattern.key' :key='whenPatterns.key')
+        v-radio-group(v-else v-model='event.recurrent.type')
+          v-radio-button(v-for='whenPattern in whenPatterns' :label='whenPattern.key' :key='whenPatterns.key')
             span {{whenPattern.label}}
 
       .text-center
-        el-form-item(:label="$t('event.from')" width='100')
-          el-time-select.mr-2(ref='time_start'
-            v-model="time.start"
-            :picker-options="{ start: '00:00', step: '00:30', end: '24:00'}")
-        el-form-item(:label="$t('event.due')")
-          el-time-select(v-model='time.end'
-            :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
+        v-time-picker.mr-2(
+          :label="$t('event.from')"
+          ref='time_start'
+          v-model="time.start")
+
+        v-time-picker(v-model='time.end'
+          :label="$t('event.due')")
 
       List(v-if='event.type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
 
       //- MEDIA / FLYER / POSTER
-      el-divider <v-icon name='image'/> {{$t('common.media')}}
 
-      div.mb-2 {{$t('event.media_description')}}
-      el-upload.text-center(
-        action=''
-        :limit="1"
-        :auto-upload='false'
-        drag
-        accept='image/*'
-        :on-remove='cleanFile'
-        :on-change='uploadedFile'
-        :multiple='false')
-        i.el-icon-upload
-      //- el-input(v-model='mediaUrl')
-      el-button.mt-2.float-right(@click='done' :disabled='!couldProceed') {{edit?$t('common.edit'):$t('common.send')}}
+      p {{JSON.stringify(event.image)}}
+      v-file-input(
+        :label="$t('common.media')"
+        :hint="$t('event.media_description')"
+        filled
+        prepend-icon="mdi-camera"
+        v-model='event.image'
+        persistent-hint
+        accept='image/*')
+      v-btn.mt-2.float-right(@click='done' :disabled='!couldProceed') {{edit?$t('common.edit'):$t('common.send')}}
 
 </template>
 <script>
@@ -156,7 +158,7 @@ export default {
         title: '',
         description: '',
         tags: [],
-        image: false,
+        image: {},
         recurrent: { frequency: '1w', days: [], type: 'weekday' }
       },
       page: { month, year },
@@ -264,10 +266,11 @@ export default {
         .value()
     },
     couldProceed () {
-      return (this.event.place.name.length > 0 &&
-        this.event.place.address.length > 0 &&
-        (this.date && this.time.start) &&
-          this.event.title.length > 0)
+      return true
+      // return (this.event.place.name.length > 0 &&
+    //     this.event.place.address.length > 0 &&
+    //     (this.date && this.time.start) &&
+    //       this.event.title.length > 0)
     }
   },
   mounted () {
@@ -286,7 +289,8 @@ export default {
       cb(ret)
     },
     selectPlace (p) {
-      const place = this.places.find(p => p.name === this.event.place.name)
+      console.error('sono dentro selectPlace ', p)
+      const place = this.places.find(place => place.id === p)
       if (place && place.address) {
         this.event.place.address = place.address
         this.disableAddress = true
@@ -303,16 +307,19 @@ export default {
     // },
     // },
     cleanFile () {
-      this.event.image = null
+      this.event.image = {}
     },
-    uploadedFile (file, fileList) {
-      if (file.size / 1024 / 1024 > 4) {
-        Message({ type: 'warning', showClose: true, message: this.$tc('event.image_too_big') })
-        this.fileList = []
-        return false
-      }
-      this.fileList = [{ name: file.name, url: file.url }]
-      this.event.image = file
+    uploadedFile (files) {
+      // const file = files[0]
+
+      console.error('dentro uploadedfile', arguments)
+      // if (file.size / 1024 / 1024 > 4) {
+      //   Message({ type: 'warning', showClose: true, message: this.$tc('event.image_too_big') })
+      //   this.fileList = []
+      //   return false
+      // }
+      // this.fileList = [{ name: file.name, url: file.url }]
+      // this.event.image = file
     },
     async done () {
       this.loading = true
@@ -351,7 +358,7 @@ export default {
       }
 
       if (this.event.image) {
-        formData.append('image', this.event.image.raw, this.event.image.name)
+        formData.append('image', this.event.image[0])
       }
       formData.append('title', this.event.title)
       formData.append('place_name', this.event.place.name)
@@ -396,7 +403,7 @@ export default {
 }
 </script>
 <style style='less'>
-#edit_page
+/* #edit_page
   i {
     font-size: 1.3em;
   }
@@ -416,6 +423,6 @@ export default {
     margin: 0 auto;
     max-width: 80%;
     font-size: 2em;
-  }
+  } */
 
 </style>

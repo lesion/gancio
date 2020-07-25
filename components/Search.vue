@@ -1,17 +1,17 @@
 <template lang="pug">
-  el-main#search
-    el-switch.mt-1.mb-2.ml-2.d-block(
+  v-container
+    v-switch.mt-0(
       v-if='recurrentFilter && settings.allow_recurrent_event'
-      :active-text="$t('event.show_recurrent')"
+      inset color='primary'
+      :label="$t('event.show_recurrent')"
       v-model='showRecurrent')
 
-    el-switch.mt-1.mb-2.ml-2.d-block(
-      v-if='pastFilter'
-      :active-text="$t('event.show_past')"
+    v-switch.mt-0(
+      v-if='pastFilter' inset color='primary'
+      :label="$t('event.show_past')"
       v-model='showPast')
 
-    el-autocomplete.mb-1#searchInput.inline-input(:placeholder='$t("common.filter")' prefix-icon='el-icon-search'
-      highlight-first-item
+    v-autocomplete#searchInput.mt-0(:placeholder='$t("common.filter")'
       v-model='search' :debounce='200'
       :fetch-suggestions='querySearch' clearable
       @select='addFilter')
@@ -20,9 +20,9 @@
         i.float-right.el-icon-place(v-if='item.type==="place"')
         i.float-right.el-icon-collection-tag(v-if='item.type==="tag"')
     #filters
-      el-button.mr-1.bg-dark(type='text' round plain v-for='t in filters.tags' size='mini'
+      v-vtn.mr-1.bg-dark(type='text' round plain v-for='t in filters.tags' size='mini'
         :key='t' @click='removeTag(t)') {{t}}
-      el-button.mr-1.bg-dark.text-warning(type='text' round plain v-for='p in selectedPlaces' size='mini'
+      v-btn.mr-1.bg-dark.text-warning(type='text' round plain v-for='p in selectedPlaces' size='mini'
         :key='p.id' @click='removePlace(p.id)') {{p.name}}
 </template>
 
@@ -91,36 +91,36 @@ export default {
 }
 </script>
 <style lang='less'>
-#search {
-  #searchInput {
-    border: none;
-    border-radius: 0px;
-    border-bottom: 2px solid lightgray;
-    color: white;
-    background-color: #111;
-  }
+// #search {
+//   #searchInput {
+//     border: none;
+//     border-radius: 0px;
+//     border-bottom: 2px solid lightgray;
+//     color: white;
+//     background-color: #111;
+//   }
 
-  .el-switch__label {
-    color: #aaa;
-  }
+//   .el-switch__label {
+//     color: #aaa;
+//   }
 
-  .el-switch__label.is-active {
-    color: lightgreen;
-  }
+//   .el-switch__label.is-active {
+//     color: lightgreen;
+//   }
 
-  .el-switch__core {
-    background-color: #555;
-    border-color: #777;
-  }
+//   .el-switch__core {
+//     background-color: #555;
+//     border-color: #777;
+//   }
 
-  .is-checked .el-switch__core {
-    background-color: lightgreen;
-  }
+//   .is-checked .el-switch__core {
+//     background-color: lightgreen;
+//   }
 
-  #filters {
-    line-height: 2rem;
-  }
-}
+//   #filters {
+//     line-height: 2rem;
+//   }
+// }
 
 
 </style>

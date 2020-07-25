@@ -4,39 +4,15 @@
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
-    "dev:nuxt": "cross-env NODE_ENV=development nuxt dev",
-    "dev": "cross-env DEBUG=*,-babel*,-preview-email,-i18n:debug,-email-templates,-follow-redirects,-send,-body-parser:*,-express:*,-connect:*,-sequelize:* NODE_ENV=development node server/index.js",
     "build": "nuxt build",
-    "start": "cross-env DEBUG=*,-babel*,-preview-email,-i18n:debug,-email-templates,-follow-redirects,-send,-body-parser:*,-express:*,-connect:*,-sequelize:* NODE_ENV=production node server/cli.js",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "dev": "cross-env DEBUG=*,-babel*,-preview-email,-i18n:debug,-email-templates,-follow-redirects,-send,-body-parser:*,-express:*,-connect:*,-sequelize:* NODE_ENV=development node server/index.js",
+    "dev:nuxt": "cross-env NODE_ENV=development nuxt dev",
     "doc": "cd docs && bundle exec jekyll b",
     "doc:dev": "cd docs && bundle exec jekyll s --drafts",
+    "migrate": "NODE_ENV=production sequelize db:migrate",
     "migrate:dev": "sequelize db:migrate",
-    "migrate": "NODE_ENV=production sequelize db:migrate"
-  },
-  "license": "AGPL-3.0",
-  "bugs": {
-    "email": "lesion@autistici.org",
-    "url": "https://framagit.org/les/gancio/issues"
-  },
-  "keywords": [
-    "AP",
-    "gancio",
-    "events",
-    "federation",
-    "activitypub",
-    "event",
-    "server",
-    "self-host",
-    "app"
-  ],
-  "homepage": "https://gancio.org",
-  "repository": {
-    "type": "git",
-    "url": "https://framagit.org/les/gancio"
-  },
-  "bin": {
-    "gancio": "server/cli.js"
+    "start": "cross-env DEBUG=*,-babel*,-preview-email,-i18n:debug,-email-templates,-follow-redirects,-send,-body-parser:*,-express:*,-connect:*,-sequelize:* NODE_ENV=production node server/cli.js"
   },
   "files": [
     "server/",
@@ -50,12 +26,9 @@
     "config/",
     ".nuxt/"
   ],
-  "resolutions": {
-    "prosemirror-model": "1.10.0"
-  },
   "dependencies": {
     "@nuxtjs/auth": "^4.9.1",
-    "@nuxtjs/axios": "^5.11.0",
+    "@nuxtjs/axios": "^5.12.0",
     "accept-language": "^3.0.18",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
@@ -66,19 +39,19 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "cross-env": "^7.0.2",
-    "date-fns": "^2.14.0",
-    "dayjs": "^1.8.29",
+    "date-fns": "^2.15.0",
+    "dayjs": "^1.8.30",
     "dompurify": "^2.0.11",
     "element-ui": "^2.13.2",
-    "email-templates": "^7.0.5",
+    "email-templates": "^7.1.0",
     "express": "^4.17.1",
     "express-oauth-server": "^2.0.0",
     "http-signature": "^1.3.4",
     "ics": "^2.22.1",
-    "inquirer": "^7.3.0",
-    "jsdom": "^16.2.2",
+    "inquirer": "^7.3.3",
+    "jsdom": "^16.3.0",
     "jsonwebtoken": "^8.5.1",
-    "less": "^3.11.3",
+    "less": "^3.12.2",
     "linkifyjs": "^2.1.9",
     "lodash": "^4.17.19",
     "mkdirp": "^1.0.4",
@@ -88,30 +61,30 @@
     "nominatim-geocoder": "^0.1.4",
     "nuxt": "^2.13.3",
     "nuxt-express-module": "^0.0.11",
-    "pg": "^8.2.2",
-    "sequelize": "^6.3.0",
+    "pg": "^8.3.0",
+    "sequelize": "^6.3.3",
     "sequelize-cli": "^6.2.0",
     "sharp": "^0.25.4",
     "sqlite3": "^5.0.0",
-    "tiptap": "^1.27.1",
-    "tiptap-extensions": "^1.29.1",
+    "tiptap": "^1.29.1",
+    "tiptap-extensions": "^1.31.1",
     "to-ico": "^1.1.5",
     "url": "^0.11.0",
     "v-calendar": "^1.0.8",
-    "vue-awesome": "^4.0.0",
+    "vue-awesome": "^4.1.0",
     "vue-clipboard2": "^0.3.1",
     "vue-i18n": "^8.18.2",
-    "yargs": "^15.4.0"
+    "yargs": "^15.4.1"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^3.0.0",
+    "@nuxtjs/vuetify": "^1.11.2",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.4.0",
+    "eslint": "^7.5.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-standard": ">=14.1.1",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest": "^23.17.1",
     "eslint-plugin-node": ">=11.1.0",
     "eslint-plugin-nuxt": "^1.0.0",
     "eslint-plugin-prettier": "^3.1.4",
@@ -122,6 +95,37 @@
     "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
     "pug-plain-loader": "^1.0.0",
+    "sass": "^1.19.0",
+    "sass-loader": "^9.0.2",
+    "vue-cli-plugin-vuetify": "~2.0.7",
+    "vuetify-loader": "^1.3.0",
     "webpack-cli": "^3.3.12"
+  },
+  "bin": {
+    "gancio": "server/cli.js"
+  },
+  "bugs": {
+    "email": "lesion@autistici.org",
+    "url": "https://framagit.org/les/gancio/issues"
+  },
+  "homepage": "https://gancio.org",
+  "keywords": [
+    "AP",
+    "gancio",
+    "events",
+    "federation",
+    "activitypub",
+    "event",
+    "server",
+    "self-host",
+    "app"
+  ],
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://framagit.org/les/gancio"
+  },
+  "resolutions": {
+    "prosemirror-model": "1.10.0"
   }
 }

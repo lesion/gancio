@@ -1,26 +1,22 @@
 <template lang='pug'>
-  div
-    p(v-html="$t('admin.announcement_description')")
-    br
-    el-input(v-model='announcement.title' :placeholder='$t("common.title")')
+  v-container
+    v-subheader(v-html="$t('admin.announcement_description')")
+    v-text-field(v-model='announcement.title' :placeholder='$t("common.title")')
     Editor.mt-2(v-model='announcement.announcement' border no-save style='max-height: 400px;')
-    el-button.mt-2.float-right(@click='save' type='success' plain) {{$t(`common.${editing?'save':'send'}`)}}
+    v-btn.mt-2(@click='save' type='success' plain) {{$t(`common.${editing?'save':'send'}`)}}
 
-    el-table(:data='announcements' small)
-      el-table-column(:label="$t('common.title')" width='250')
-        template(slot-scope='data')
-          span(slot='reference') {{data.row.title}}
+    v-data-table(:items='announcements')
 
-      el-table-column(:label="$t('common.actions')")
-        template(slot-scope='data')
-          el-button-group
-            el-button(size='mini' type='primary'
-              @click='edit(data.row)') {{$t('common.edit')}}
-            el-button(size='mini'
-              :type='data.row.visible?"warning":"success"'
-              @click='toggle(data.row)') {{data.row.visible?$t('common.deactivate'):$t('common.activate')}}
-            el-button(size='mini' type='danger'
-              @click='remove(data.row)') {{$t('common.delete')}}
+      //- el-table-column(:label="$t('common.actions')")
+      //-   template(slot-scope='data')
+      //-     el-button-group
+      //-       el-button(size='mini' type='primary'
+      //-         @click='edit(data.row)') {{$t('common.edit')}}
+      //-       el-button(size='mini'
+      //-         :type='data.row.visible?"warning":"success"'
+      //-         @click='toggle(data.row)') {{data.row.visible?$t('common.deactivate'):$t('common.activate')}}
+      //-       el-button(size='mini' type='danger'
+      //-         @click='remove(data.row)') {{$t('common.delete')}}
 
 </template>
 <script>
