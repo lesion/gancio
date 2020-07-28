@@ -1,18 +1,13 @@
 <template lang='pug'>
 div#list
   p(v-if='title') {{title}}
-  v-timeline
+  v-timeline(dense)
     v-timeline-item(
       v-for='event in events'
-      :key='`${event.id}_${event.start_datetime}`'
-      :timestamp='event|when'
-      placement='top' icon='el-icon-arrow-down' size='large')
-
-      div.float-right
-        small @{{event.place.name}}
-
+      :key='`${event.id}_${event.start_datetime}`')
+      div {{event|when}}
       a(:href='`/event/${event.id}`' target='_blank') {{event.title}}
-      hr
+      small.float-right @{{event.place.name}}
 </template>
 <script>
 

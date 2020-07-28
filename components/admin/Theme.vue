@@ -45,9 +45,14 @@ export default {
     primary_color: {
       get () { return this.settings['theme.primary'] },
       set (value) {
-        // this.$vuetify.theme.themes.dark.primary = value.hex
-        this.$vuetify.theme.themes.light.primary = value.hex
-        this.setSetting({ key: 'theme.primary', value: value.hex })
+        if (!value) { return }
+        if (this.settings['theme.is_dark']) {
+          this.$vuetify.theme.themes.dark.primary = value
+        } else {
+          this.$vuetify.theme.themes.light.primary = value
+        }
+        // this.$vuetify.theme.themes.light.primary = value.hex
+        // this.setSetting({ key: 'theme.primary', value: value.hex })
       }
     }
   },

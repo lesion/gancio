@@ -1,10 +1,10 @@
 <template lang="pug">
   v-card.h-event.event.mt-1
     nuxt-link(:to='`/event/${event.id}`')
-      v-img(:src="`/media/thumb/${event.image_path}`"
-        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7)"
+      v-img.align-end(:src="`/media/thumb/${event.image_path}`"
+        gradient="to bottom, rgba(255,255,255,.1), rgba(255,255,255,.9)"
         height="250" position="top top"
-        class="white--text align-end")
+        :class="settings['theme.is_dark']?'light--text':'dark--text'")
         v-card-title {{event.title}}
     //- v-list-item
       v-list-item-content

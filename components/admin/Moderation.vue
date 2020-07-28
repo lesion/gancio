@@ -42,7 +42,7 @@
 
     div
       //- el-divider {{$t('common.resources')}}
-      v-table(:data='paginatedResources' small :row-style='resourceStyle')
+      v-data-table(:data='resources')
         //- el-table-column(:label="$t('common.event')")
         //-   template(slot-scope='data')
         //-     span {{data.row.event}}
@@ -64,7 +64,6 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-import { MessageBox } from 'element-ui'
 
 export default {
   name: 'Moderation',

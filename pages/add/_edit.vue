@@ -1,9 +1,6 @@
 <template lang="pug">
   v-container
-    v-card
-      v-card-text
         h2.text-center {{edit?$t('common.edit_event'):$t('common.add_event')}}
-        p {{valid}}
         v-form(v-model='valid')
 
           //- NOT LOGGED EVENT
@@ -68,17 +65,17 @@
               //- el-option(:label="$t('event.each_month')" value='1m' key='1m')
 
             client-only
-              v-date-picker.mx-auto(
-                :mode='datePickerMode'
-                :attributes='attributes'
-                v-model='date'
-                :locale='$i18n.locale'
-                :from-page.sync='page'
-                is-dark
-                is-inline
-                is-expanded
-                :style="{width: '500px'}"
-                :min-date='event.type !== "recurrent" && new Date()')
+              .datePicker
+                v-date-picker(
+                  :mode='datePickerMode'
+                  :attributes='attributes'
+                  v-model='date'
+                  :locale='$i18n.locale'
+                  :from-page.sync='page'
+                  :is-dark="settings['theme.is_dark']"
+                  is-inline
+                  is-expanded
+                  :min-date='event.type !== "recurrent" && new Date()')
 
           div.text-center.mb-2(v-if='event.type === "recurrent"')
             span(v-if='event.recurrent.frequency !== "1m" && event.recurrent.frequency !== "2m"') {{whenPatterns}}
@@ -88,29 +85,57 @@
 
           v-row
             v-col
-              v-menu(v-model='fromDateMenu')
+              v-menu(v-model='fromDateMenu'
+                  :close-on-content-click="false"
+                  transition="slide-x-transition"
+                  ref='fromDateMenu'
+                  :return-value.sync="time.start"
+                  offset-y
+                  absolute
+                  top
+                  max-width="290px"
+                  min-width="290px")
                 template(v-slot:activator='{ on }')
                   v-text-field(
                     :label="$t('event.from')"
-                    v-on='on'
                     :value='time.start'
+                    v-on='on'
+                    clearable
                     readonly)
-                v-time-picker.mr-2(
+                v-time-picker(
+                  v-if='fromDateMenu'
                   :label="$t('event.from')"
+                  format="24hr"
                   ref='time_start'
-                  v-model="time.start")
+                  :allowed-minutes="[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]"
+                  v-model='time.start'
+                  @click:minute="$refs.fromDateMenu.save(time.start)")
 
             v-col
-              v-menu(v-model='dueDateMenu')
+              v-menu(v-model='dueDateMenu'
+                  :close-on-content-click="false"
+                  transition="slide-x-transition"
+                  ref='dueDateMenu'
+                  :return-value.sync="time.end"
+                  offset-y
+                  absolute
+                  top
+                  max-width="290px"
+                  min-width="290px")
                 template(v-slot:activator='{ on }')
                   v-text-field(
                     :label="$t('event.due')"
-                    v-on='on'
                     :value='time.end'
+                    v-on='on'
+                    clearable
                     readonly)
-                v-time-picker.mr-2(
+                v-time-picker(
+                  v-if='dueDateMenu'
                   :label="$t('event.due')"
-                  v-model="time.end")
+                  format="24hr"
+                  :allowed-minutes="[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]"
+                  v-model='time.end'
+                  @click:minute="$refs.dueDateMenu.save(time.end)")
 
           List(v-if='event.type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
 
@@ -348,17 +373,6 @@ export default {
     cleanFile () {
       this.event.image = {}
     },
-    uploadedFile (files) {
-      // const file = files[0]
-
-      // if (file.size / 1024 / 1024 > 4) {
-      //   Message({ type: 'warning', showClose: true, message: this.$tc('event.image_too_big') })
-      //   this.fileList = []
-      //   return false
-      // }
-      // this.fileList = [{ name: file.name, url: file.url }]
-      // this.event.image = file
-    },
     async done () {
       this.loading = true
       let start_datetime, end_datetime
@@ -442,6 +456,10 @@ export default {
 }
 </script>
 <style style='less'>
+.datePicker {
+  max-width: 500px !important;
+  margin: 0 auto;
+}
 /* #edit_page
   i {
     font-size: 1.3em;
