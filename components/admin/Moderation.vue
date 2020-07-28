@@ -1,70 +1,66 @@
 <template lang='pug'>
-  div
-    el-row
-      el-col(:span='12')
-        el-divider {{$t('common.instances')}}
-        el-input(v-model='instancesFilter' :placeholder="$t('admin.filter_instances')")
-        client-only
-          el-pagination(v-if='instances.length>perPage' :page-size='perPage' :currentPage.sync='instancePage' :total='instances.length')
-        el-table(:data='paginatedInstances' small @row-click='instanceSelected')
-          el-table-column(label='Domain' width='180')
-            template(slot-scope='data')
-              span(slot='reference') {{data.row.domain}}
-          el-table-column(label='Name' width='100')
-            template(slot-scope='data')
-              span(slot='reference') {{data.row.name}}
-          el-table-column(:label="$t('common.users')" width='70')
-            template(slot-scope='data')
-              span(slot='reference') {{data.row.users}}
-          el-table-column(:label="$t('common.actions')" width='120')
-            template(slot-scope='data')
-              el-button-group
-                el-button(size='mini'
-                  :type='data.row.blocked?"danger":"warning"'
-                  @click='toggleBlock(data.row)') {{data.row.blocked?$t('admin.unblock'):$t('admin.block')}}
+  v-container
+    v-row
+      v-col(:span='12')
+        //- el-divider {{$t('common.instances')}}
+        v-text-field(v-model='instancesFilter' :placeholder="$t('admin.filter_instances')")
+        v-data-table(:data='paginatedInstances' small @row-click='instanceSelected')
+          //- el-table-column(label='Domain' width='180')
+          //-   template(slot-scope='data')
+          //-     span(slot='reference') {{data.row.domain}}
+          //- el-table-column(label='Name' width='100')
+          //-   template(slot-scope='data')
+          //-     span(slot='reference') {{data.row.name}}
+          //- el-table-column(:label="$t('common.users')" width='70')
+          //-   template(slot-scope='data')
+          //-     span(slot='reference') {{data.row.users}}
+          //- el-table-column(:label="$t('common.actions')" width='120')
+          //-   template(slot-scope='data')
+          //-     el-button-group
+          //-       el-button(size='mini'
+          //-         :type='data.row.blocked?"danger":"warning"'
+          //-         @click='toggleBlock(data.row)') {{data.row.blocked?$t('admin.unblock'):$t('admin.block')}}
 
-      el-col.float-right(:span='11' align='right')
-        el-divider {{$t('common.users')}}
-        el-input(v-model='usersFilter' :placeholder="$t('admin.filter_users')")
-        client-only
-          el-pagination(v-if='users.length>perPage' :page-size='perPage' :currentPage.sync='userPage' :total='users.length')
-        el-table(:data='paginatedSelectedUsers' small)
-          el-table-column(:label="$t('common.user')" width='150')
-            template(slot-scope='data')
-              span(slot='reference')
-                a(:href='data.row.object.id' target='_blank') {{data.row.object.name}}
-                small ({{data.row.object.preferredUsername}})
-          el-table-column(:label="$t('common.resources')" width='90')
-            template(slot-scope='data')
-              span {{data.row.resources.length}}
-          el-table-column(:label="$t('common.actions')" width='200')
-            template(slot-scope='data')
-              el-button-group
-                el-button(size='mini'
-                  :type='data.row.blocked?"danger":"warning"'
-                  @click='toggleUserBlock(data.row)') {{data.row.blocked?$t('admin.unblock'):$t('admin.block')}}
+      v-col.float-right(:span='11' align='right')
+        //- el-divider {{$t('common.users')}}
+        v-text-field(v-model='usersFilter' :placeholder="$t('admin.filter_users')")
+        v-data-table(:data='paginatedSelectedUsers' small)
+          //- el-table-column(:label="$t('common.user')" width='150')
+          //-   template(slot-scope='data')
+          //-     span(slot='reference')
+          //-       a(:href='data.row.object.id' target='_blank') {{data.row.object.name}}
+          //-       small ({{data.row.object.preferredUsername}})
+          //- el-table-column(:label="$t('common.resources')" width='90')
+          //-   template(slot-scope='data')
+          //-     span {{data.row.resources.length}}
+          //- el-table-column(:label="$t('common.actions')" width='200')
+          //-   template(slot-scope='data')
+          //-     el-button-group
+          //-       el-button(size='mini'
+          //-         :type='data.row.blocked?"danger":"warning"'
+          //-         @click='toggleUserBlock(data.row)') {{data.row.blocked?$t('admin.unblock'):$t('admin.block')}}
 
     div
-      el-divider {{$t('common.resources')}}
-      el-table(:data='paginatedResources' small :row-style='resourceStyle')
-        el-table-column(:label="$t('common.event')")
-          template(slot-scope='data')
-            span {{data.row.event}}
-        el-table-column(:label="$t('common.resources')")
-          template(slot-scope='data')
-            span(:class='{disabled: data.row.hidden}' v-html='data.row.data.content')
-        el-table-column(:label="$t('common.user')" width='200')
-          template(slot-scope='data')
-            span(:class='{disabled: data.row.hidden}' v-html='data.row.data.actor')
-        el-table-column(:label="$t('common.actions')" width="150")
-          template(slot-scope='data')
-            el-dropdown
-              el-button(type="primary" icon="el-icon-arrow-down" size='mini') {{$t('common.moderation')}}
-              el-dropdown-menu(slot='dropdown')
-                el-dropdown-item(v-if='!data.row.hidden' icon='el-icon-remove' @click.native='hideResource(data.row, true)') {{$t('admin.hide_resource')}}
-                el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(data.row, false)') {{$t('admin.show_resource')}}
-                el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(data.row)') {{$t('admin.delete_resource')}}
-                el-dropdown-item(icon='el-icon-lock' @click.native='toggleUserBlock(data.row.ap_user)') {{$t('admin.block_user')}}
+      //- el-divider {{$t('common.resources')}}
+      v-table(:data='paginatedResources' small :row-style='resourceStyle')
+        //- el-table-column(:label="$t('common.event')")
+        //-   template(slot-scope='data')
+        //-     span {{data.row.event}}
+        //- el-table-column(:label="$t('common.resources')")
+        //-   template(slot-scope='data')
+        //-     span(:class='{disabled: data.row.hidden}' v-html='data.row.data.content')
+        //- el-table-column(:label="$t('common.user')" width='200')
+        //-   template(slot-scope='data')
+        //-     span(:class='{disabled: data.row.hidden}' v-html='data.row.data.actor')
+        //- el-table-column(:label="$t('common.actions')" width="150")
+        //-   template(slot-scope='data')
+        //-     el-dropdown
+        //-       el-button(type="primary" icon="el-icon-arrow-down" size='mini') {{$t('common.moderation')}}
+        //-       el-dropdown-menu(slot='dropdown')
+        //-         el-dropdown-item(v-if='!data.row.hidden' icon='el-icon-remove' @click.native='hideResource(data.row, true)') {{$t('admin.hide_resource')}}
+        //-         el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(data.row, false)') {{$t('admin.show_resource')}}
+        //-         el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(data.row)') {{$t('admin.delete_resource')}}
+        //-         el-dropdown-item(icon='el-icon-lock' @click.native='toggleUserBlock(data.row.ap_user)') {{$t('admin.block_user')}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
@@ -135,7 +131,7 @@ export default {
     async toggleUserBlock (ap_user) {
       try {
         if (!ap_user.blocked) {
-          await MessageBox.confirm(this.$t('admin.user_block_confirm'), {
+          await this.$root.$confirm(this.$t('admin.user_block_confirm'), {
             confirmButtonText: this.$t('common.ok'),
             cancelButtonText: this.$t('common.cancel'),
             type: 'error'
@@ -146,7 +142,7 @@ export default {
       } catch (e) { }
     },
     deleteResource (resource) {
-      MessageBox.confirm(this.$t('admin.delete_resource_confirm'),
+      this.$root.$confirm(this.$t('admin.delete_resource_confirm'),
         this.$t('common.confirm'), {
           confirmButtonText: this.$t('common.ok'),
           cancelButtonText: this.$t('common.cancel'),
@@ -164,8 +160,3 @@ export default {
   }
 }
 </script>
-<style lang="less">
-.instance_thumb {
-  height: 20px;
-}
-</style>

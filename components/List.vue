@@ -1,8 +1,8 @@
 <template lang='pug'>
 div#list
-  el-divider(v-if='title') {{title}}
-  el-timeline
-    el-timeline-item(
+  p(v-if='title') {{title}}
+  v-timeline
+    v-timeline-item(
       v-for='event in events'
       :key='`${event.id}_${event.start_datetime}`'
       :timestamp='event|when'

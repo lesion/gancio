@@ -2,7 +2,7 @@
   #calendar
     v-calendar(
       title-position='left'
-      is-dark
+      :is-dark="settings['theme.is_dark']"
       @update:from-page='updatePage'
       :columns="$screens({ default: 1, lg: 2 })"
       :locale='$i18n.locale'
@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     ...mapGetters(['filteredEventsWithPast']),
-    ...mapState(['tags', 'filters', 'in_past']),
+    ...mapState(['tags', 'filters', 'in_past', 'settings']),
 
     // TODO: could be better
     attributes () {

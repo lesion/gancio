@@ -1,11 +1,24 @@
 <template lang='pug'>
   v-container
     v-subheader(v-html="$t('admin.announcement_description')")
-    v-text-field(v-model='announcement.title' :placeholder='$t("common.title")')
-    Editor.mt-2(v-model='announcement.announcement' border no-save style='max-height: 400px;')
-    v-btn.mt-2(@click='save' type='success' plain) {{$t(`common.${editing?'save':'send'}`)}}
+    v-dialog(v-model='dialog' width='800')
+      v-card
+        v-card-title {{$t('common.new_user')}}
+        v-card-text
+          v-form
+            v-text-field(v-model='announcement.title' :placeholder='$t("common.title")')
+            Editor.mt-2(v-model='announcement.announcement' border no-save style='max-height: 400px;')
+            v-btn.mt-2(@click='save' type='success' plain) {{$t(`common.${editing?'save':'send'}`)}}
 
-    v-data-table(:items='announcements')
+    v-data-table(
+        :headers='headers'
+        :items='announcements')
+      template(v-slot:item.actions='{ item }')
+        v-btn(text small @click.stop='toggle(item)'
+          :color='item.visible?"warning":"success"') {{item.visible?$t('common.deactivate'):$t('common.activate')}}
+        v-btn(text small @click='edit(item)') {{$t('common.edit')}}
+        v-btn(text small @click='remove(item)'
+          color='error') {{$t('common.delete')}}
 
       //- el-table-column(:label="$t('common.actions')")
       //-   template(slot-scope='data')
@@ -20,7 +33,6 @@
 
 </template>
 <script>
-import { Message, MessageBox } from 'element-ui'
 import { mapActions } from 'vuex'
 import cloneDeep from 'lodash/cloneDeep'
 import Editor from '../Editor'
@@ -30,8 +42,13 @@ export default {
   components: { Editor, Announcement },
   data () {
     return {
+      dialog: false,
       editing: false,
       announcements: [],
+      headers: [
+        { value: 'title', text: 'Title' },
+        { value: 'actions', text: 'Actions', align: 'right' }
+      ],
       announcement: { title: '', announcement: '' }
     }
   },
@@ -44,7 +61,7 @@ export default {
       this.announcement.title = announcement.title
       this.announcement.announcement = announcement.announcement
       this.announcement.id = announcement.id
-      this.editing = true
+      this.dialog = true
     },
     async toggle (announcement) {
       try {
@@ -55,7 +72,7 @@ export default {
       } catch (e) {}
     },
     remove (announcement) {
-      MessageBox.confirm(this.$t('admin.delete_announcement_confirm'),
+      this.$root.$confirm(this.$t('admin.delete_announcement_confirm'),
         this.$t('common.confirm'), {
           confirmButtonText: this.$t('common.ok'),
           cancelButtonText: this.$t('common.cancel'),
@@ -63,9 +80,7 @@ export default {
         })
         .then(() => this.$axios.delete(`/announcements/${announcement.id}`))
         .then(() => {
-          Message({
-            showClose: true,
-            type: 'success',
+          this.$root.$message({
             message: this.$t('admin.announcement_remove_ok')
           })
           this.announcements = this.announcements.filter(a => a.id !== announcement.id)

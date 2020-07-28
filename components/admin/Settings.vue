@@ -20,8 +20,6 @@
         :label="$t('admin.instance_locale')"
         :hint="$t('admin.instance_locale_description')"
         persistent-hint
-        item-text='locale'
-        item-value='locale'
         :items='locales'
       )
 
@@ -37,20 +35,6 @@
         :hint="$t('admin.description_description')"
         persistent-hint
         @blur='save("description", description)')
-
-      v-file-input.mt-5(ref='upload'
-        :label="$t('admin.favicon')"
-        :action='`${settings.baseurl}/api/settings/logo`'
-        :on-success="forceLogoReload"
-        name='logo'
-        :show-file-list="true"
-        accept='image/png'
-        :limit='1'
-        :multiple='false')
-        //- el-button-group
-          el-button(size='small' type='primary' plain) Select file
-          el-button(size='small' type='success' plain @click='resetLogo') Reset
-      v-img(:src='`${settings.baseurl}/favicon.ico?${logoKey}`')
 
       v-switch.mt-5(v-model='allow_registration'
         inset
@@ -82,8 +66,7 @@ export default {
     return {
       title: $store.state.settings.title,
       description: $store.state.settings.description,
-      locales,
-      logoKey: 0
+      locales: Object.keys(locales).map(locale => ({ value: locale, text: locales[locale] }))
     }
   },
   computed: {
@@ -123,15 +106,6 @@ export default {
   },
   methods: {
     ...mapActions(['setSetting']),
-    forceLogoReload () {
-      this.$refs.upload.clearFiles()
-      this.logoKey++
-    },
-    resetLogo (e) {
-      this.setSetting({ key: 'favicon', value: null })
-        .then(this.forceLogoReload)
-      e.stopPropagation()
-    },
     save (key, value) {
       if (this.settings[key] !== value) {
         this.setSetting({ key, value })

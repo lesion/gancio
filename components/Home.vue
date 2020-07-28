@@ -26,7 +26,6 @@ export default {
   components: { Calendar, Event, Search, Announcement },
   computed: {
     events () {
-      console.error('dentro computed di events in HOME!')
       return this.in_past ? this.filteredEventsWithPast : this.filteredEvents
     },
     ...mapGetters(['filteredEvents', 'filteredEventsWithPast']),

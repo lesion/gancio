@@ -8,6 +8,11 @@
       v-tab-item
         Settings
 
+      //- THEME
+      v-tab {{$t('common.theme')}}
+      v-tab-item
+        Theme
+
       //- USERS
       v-tab
         v-badge(:value='unconfirmedUsers.length' :content='unconfirmedUsers.length') {{$t('common.users')}}
@@ -21,24 +26,13 @@
 
       //- EVENTS
       v-tab
-        v-badge(:content='events.length') {{$t('common.events')}}
+        v-badge(:value='events.length') {{$t('common.events')}}
       v-tab-item
-        p {{$t('admin.event_confirm_description')}}
-        v-data-table(
-          :items='events'
-          :headers='eventHeaders'
-        )
-        //-   el-table-column(:label='$t("common.name")' width='300')
-        //-     template(slot-scope='data') {{data.row.title}}
-        //-   el-table-column(:label='$t("common.where")' width='250')
-        //-     template(slot-scope='data') {{data.row.place.name}}
-        //-   el-table-column(:label='$t("common.confirm")' width='250')
-        //-     template(slot-scope='data')
-        //-       el-button-group
-        //-         el-button(type='primary' @click='confirm(data.row.id)' size='mini') {{$t('common.confirm')}}
-        //-         el-button(type='success' @click='preview(data.row.id)' size='mini') {{$t('common.preview')}}
-        //- client-only
-        //-   el-pagination(v-if='events.length>perPage' :page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
+        v-container
+          v-subheader {{$t('admin.event_confirm_description')}}
+          v-data-table(
+            :items='events'
+            :headers='eventHeaders')
 
       //- ANNOUNCEMENTS
       v-tab {{$t('common.announcements')}}
@@ -65,10 +59,11 @@ import Settings from '../components/admin/Settings'
 import Federation from '../components/admin/Federation'
 import Moderation from '../components/admin/Moderation'
 import Announcement from '../components/admin/Announcement'
+import Theme from '../components/admin/Theme'
 
 export default {
   name: 'Admin',
-  components: { Users, Places, Settings, Federation, Moderation, Announcement },
+  components: { Users, Places, Settings, Federation, Moderation, Announcement, Theme },
   middleware: ['auth'],
   async asyncData ({ $axios, params, store }) {
     try {
@@ -83,7 +78,10 @@ export default {
   data () {
     return {
       description: '',
-      events: []
+      events: [],
+      eventHeaders: [
+        { value: 'title', text: 'Title' }
+      ]
     }
   },
   computed: {

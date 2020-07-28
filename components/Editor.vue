@@ -1,7 +1,17 @@
 <template lang='pug'>
-  .editor(:class='{ "with-border": border }')
-    editor-menu-bubble(:editor='editor' :keep-in-bounds='true' v-slot='{ commands, isActive, getMarkAttrs, menu }')
-      v-button-group.menububble(:class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`")
+  .editor
+    editor-menu-bar(:editor='editor' :keep-in-bounds='true' v-slot='{ commands, isActive, getMarkAttrs, menu }')
+      v-btn-toggle(dense)
+        v-btn(icon
+          :color="isActive.bold() && 'primary' || ''"
+          @click="commands.bold")
+          v-icon mdi-format-bold
+        v-btn(icon
+          :color="isActive.underline() && 'primary' || ''"
+          @click="commands.underline")
+          v-icon mdi-format-italic
+
+      //- v-button-group.menububble(:class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`")
         v-popover(trigger='hover' placement='bottom-start')
           v-btn.float-left(slot='reference' size='mini') <v-icon name='question'/>
           template
@@ -66,6 +76,7 @@ export default {
   },
   data () {
     return {
+      options: [],
       linkActive: false,
       editor: null,
       update: false
@@ -112,11 +123,17 @@ export default {
 </script>
 <style lang='less'>
 
-// .editor {
+.editor {
+  font-family: sans-serif;
+  font-size: 1.1em;
+  scrollbar-width: thin;
+  border-color: currentColor;
+  border-style: solid;
+  border-width: 0 0 thin 0;
+}
 //   position: relative;
 //   overflow-y: auto;
 //   padding-top: 1.7em;
-//   scrollbar-width: thin;
 
 //   &.with-border {
 //     border: 1px solid #ddd;

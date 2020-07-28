@@ -7,18 +7,19 @@
         v-card-subtitle(v-text="$t('login.description')")
 
         v-card-text
+          v-form
+            v-text-field(v-model='email' type='email'
+              :rules='validators.email' autofocus
+              :placeholder='$t("common.email")'
+              ref='email')
 
-          v-text-field(v-model='email' type='email'
-            :placeholder='$t("common.email")'
-            ref='email')
-
-          v-text-field(v-model='password'
-            type='password'
-            :placeholder='$t("common.password")')
+            v-text-field(v-model='password'
+              :rules='validators.password'
+              type='password'
+              :placeholder='$t("common.password")')
 
           v-card-actions
             v-btn(color='success'
-              text
               :disabled='disabled'
               @click='submit') {{$t('common.login')}}
 
@@ -32,12 +33,13 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Message } from 'element-ui'
+import { validators } from '../plugins/helpers'
 
 export default {
   name: 'Login',
   data () {
     return {
+      validators,
       password: '',
       email: '',
       loading: false
@@ -49,20 +51,17 @@ export default {
       return !this.email || !this.password
     }
   },
-  mounted () {
-    this.$refs.email.focus()
-  },
   methods: {
     async forgot () {
       if (!this.email) {
-        Message({ message: this.$t('login.insert_email'), showClose: true, type: 'error' })
+        this.$root.$message({ message: this.$t('login.insert_email'), color: 'error' })
         this.$refs.email.focus()
         return
       }
       this.loading = true
       await this.$axios.$post('/user/recover', { email: this.email })
       this.loading = false
-      Message({ message: this.$t('login.check_email'), type: 'success' })
+      this.$root.$message({ message: this.$t('login.check_email'), color: 'success' })
     },
     async submit (e) {
       if (this.disabled) { return false }
@@ -76,9 +75,9 @@ export default {
         data.append('client_id', 'self')
         await this.$auth.loginWith('local', { data })
         this.loading = false
-        Message({ message: this.$t('login.ok'), showClose: true, type: 'success' })
+        this.$root.$message({ message: this.$t('login.ok'), color: 'success' })
       } catch (e) {
-        Message({ message: this.$t('login.error'), showClose: true, type: 'error' })
+        this.$root.$message({ message: this.$t('login.error'), color: 'error' })
         this.loading = false
         return
       }

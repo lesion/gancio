@@ -4,8 +4,7 @@
       :label="$t('admin.enable_federation')"
       persistent-hint
       inset
-      :hint="$t('admin.enable_federation_help')"
-    )
+      :hint="$t('admin.enable_federation_help')")
 
     template(v-if='enable_federation')
 
@@ -39,39 +38,29 @@
         @blur='save("instance_place", instance_place)'
       )
 
-      //- div.mt-4 {{$t('admin.add_trusted_instance')}}
-      v-text-field.mt-4(v-model='instance_url'
-        :full-width='false'
-        persistent-hint
-        :hint="$t('admin.add_trusted_instance')"
-        :label="$t('common.url')"
-        append-outer-icon="mdi-send"
-        @click:append-outer='createTrustedInstance'
-      )
+      v-dialog(v-model='dialogAddInstance' width="500px")
+        v-card
+          v-card-title {{$t('admin.add_trusted_instance')}}
+          v-card-text
+            v-text-field.mt-4(v-model='instance_url'
+              :full-width='false'
+              persistent-hint
+              :hint="$t('admin.add_trusted_instance')"
+              :label="$t('common.url')"
+              append-outer-icon="mdi-send"
+              @click:append-outer='createTrustedInstance')
 
+      v-btn(@click='dialogAddInstance = true') Add instance
       v-data-table.mt-4(
         :headers='headers'
-        :items='settings.trusted_instances'
-      )
-        //- el-table-column(:label="$t('common.name')")
-        //-   template(slot-scope='data')
-        //-     span {{data.row.name}}
-        //- el-table-column(:label="$t('common.url')")
-        //-   template(slot-scope='data')
-        //-     span {{data.row.url}}
-        //- el-table-column(:label="$t('common.place')")
-        //-   template(slot-scope='data')
-        //-     span {{data.row.label}}
-        //- el-table-column(:label="$t('common.actions')")
-        //-   template(slot-scope='data')
-        //-     el-button(size='mini'
-        //-       type='danger'
-        //-       @click='deleteInstance(data.row)') {{$t('admin.delete_user')}}
+        :items='settings.trusted_instances')
+        template(v-slot:item.actions="{item}")
+          v-btn(icon @click='deleteInstance(item)' color='error')
+            v-icon mdi-delete-forever
 
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import { Message, MessageBox } from 'element-ui'
 import axios from 'axios'
 
 export default {
@@ -81,7 +70,14 @@ export default {
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
       instance_place: $store.state.settings.instance_place,
-      url2host: $options.filters.url2host
+      url2host: $options.filters.url2host,
+      dialogAddInstance: false,
+      headers: [
+        { value: 'name', text: 'Name' },
+        { value: 'url', text: 'URL' },
+        { value: 'label', text: 'Place' },
+        { value: 'actions', text: 'Actions', align: 'right' }
+      ]
     }
   },
   computed: {
@@ -103,9 +99,6 @@ export default {
       set (value) { this.setSetting({ key: 'enable_trusted_instances', value }) }
     }
   },
-  mounted () {
-    console.error(this.$options.filters)
-  },
   methods: {
     ...mapActions(['setSetting']),
     async createTrustedInstance () {
@@ -121,25 +114,19 @@ export default {
         })
         this.instance_url = ''
       } catch (e) {
-        Message({
-          showClose: true,
+        this.$root.$message({
           type: 'error',
           message: e
         })
       }
     },
-    deleteInstance (instance) {
-      MessageBox.confirm(this.$t('admin.delete_trusted_instance_confirm'),
-        this.$t('common.confirm'), {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'error'
-        }
-      ).then(() => {
-        this.setSetting({
-          key: 'trusted_instances',
-          value: this.settings.trusted_instances.filter(i => i.url !== instance.url)
-        })
+    async deleteInstance (instance) {
+      const ret = await this.$root.$confirm(this.$t('admin.delete_trusted_instance_confirm'),
+        this.$t('common.confirm'), { type: 'error' })
+      if (!ret) { return }
+      this.setSetting({
+        key: 'trusted_instances',
+        value: this.settings.trusted_instances.filter(i => i.url !== instance.url)
       })
     },
     save (key, value) {

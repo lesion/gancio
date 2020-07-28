@@ -19,21 +19,21 @@ export default {
     return {
       icon: 'md-alert',
       color: 'primary',
-      bottom: true,
-      top: false,
+      bottom: false,
+      top: true,
       left: false,
-      right: true,
+      right: false,
       active: false,
       timeout: 5000,
       message: ''
     }
   },
   created () {
-    this.$root.$on('message', snackbar => {
+    this.$root.$message = snackbar => {
       this.active = true
       this.message = snackbar.message
       this.color = snackbar.color || 'primary'
-    })
+    }
   }
 }
 </script>

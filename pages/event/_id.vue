@@ -1,58 +1,27 @@
 <template lang="pug">
-  v-card#eventDetail.h-event.d-inline-block-mx-auto
-    v-toolbar(prominent)
+  v-card.h-event.eventDetail
+    //- .d-block
+    v-container
       v-list-item(two-line)
         v-list-item-content
-          h2(v-text='event.title')
-          v-list-item-subtitle
+          v-list-item-title
             time.dt-start(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')
             v-icon mdi-date
             b {{event|when}}
             small  ({{event.start_datetime|from}})
-          v-list-item-subtitle
+          v-list-item-title
             i.el-icon-location-outline
             b.p-location {{event.place.name}}
             span  - {{event.place.address}}
+          h2 {{event.title}}
 
-      v-spacer
-      v-btn.mr-1(nuxt :to='`/event/${event.prev}`' color='primary' icon :disabled='!event.prev')
-        v-icon mdi-arrow-left
-      v-btn(nuxt :to='`/event/${event.next}`' color='primary' :disabled='!event.next' icon)
-        v-icon mdi-arrow-right
-    //- h2 {{event.title}}
-    //- v-toolbar-subtitle
-
-    //- v-toolbar(prominent)
-      //- v-list-item
-        //- h3 {{event.title}}
-      //- v-row(justify='space-between')
-        v-col(cols='auto')
-          v-list-item(two-line)
-            v-list-item-content
-              v-list-item-title.headline(v-text='event.title')
-              v-list-item-subtitle
-                time.dt-start(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')
-                v-icon mdi-date
-                b {{event|when}}
-                small  ({{event.start_datetime|from}})
-              v-list-item-subtitle
-                i.el-icon-location-outline
-                b.p-location {{event.place.name}}
-                span  - {{event.place.address}}
-        v-col
-          v-btn.mr-1(nuxt :to='`/event/${event.prev}`' color='primary' icon :disabled='!event.prev')
-            v-icon mdi-arrow-left
-          v-btn(nuxt :to='`/event/${event.next}`' color='primary' :disabled='!event.next' icon)
-            v-icon mdi-arrow-right
-
-      template(slot='extension')
-        h2 {{event.title}}
-        //- v-list-item
-        //-   i.el-icon-location-outline
-        //-   b.p-location {{event.place.name}}
-        //-   span  - {{event.place.address}}
-        //- v-spacer
-        //- v-chip.p-category.ml-1(v-for='tag in event.tags' :key='tag' small color='secondary') {{tag}}
+      .v-btn--absolute.v-btn--right.v-btn--top
+        v-btn.mr-1(nuxt icon outlined color='primary'
+          :to='`/event/${event.prev}`' :disabled='!event.prev')
+          v-icon mdi-arrow-left
+        v-btn(nuxt bottom right outlined icon color='primary'
+          :to='`/event/${event.next}`' :disabled='!event.next')
+          v-icon mdi-arrow-right
 
     v-card-text
       v-dialog.embedDialog(:visible.sync='showEmbed')
@@ -65,31 +34,23 @@
       //- event image
       v-img.main_image.mb-3(
         lazy
+        contain
         :src='imgPath'
         :lazy-src='thumbImgPath'
         v-if='event.image_path')
 
       p.p-description(v-html='event.description')
-      v-btn.p-category.ml-1(type='text' plain round size='mini' v-for='tag in event.tags' :key='tag') {{tag}}
+      v-chip.p-category.ml-1(small v-for='tag in event.tags' color='primary' outlined :key='tag') {{tag}}
 
         //- info & actions
-        //- v-col
-          v-list
-            time.dt-start(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")') <i class='el-icon-date'></i>  <b>{{event|when}}</b> <br/><small>{{event.start_datetime|from}}</small>
-            p
-              i.el-icon-location-outline
-              b.p-location {{event.place.name}}
-              span  - {{event.place.address}}
-            v-divider {{$t('common.actions')}}
-            v-list-item(
-              v-clipboard:success='copyLink'
-              v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') <i class='el-icon-paperclip'></i> {{$t('common.copy_link')}}
+      v-btn(text color='primary'
+        v-clipboard:success='copyLink'
+        v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') {{$t('common.copy_link')}}
 
-            v-list-item(@click='showEmbed=true') <i class='el-icon-copy-document'></i> {{$t('common.embed')}}
+      v-btn(@click='showEmbed=true' text color='primary') {{$t('common.embed')}}
 
-            v-list-item
-              a(:href='`${settings.baseurl}/api/event/${event.id}.ics`') <i class='el-icon-date'></i> {{$t('common.add_to_calendar')}}
-          EventAdmin(v-if='is_mine' :event='event')
+      v-btn(:href='`${settings.baseurl}/api/event/${event.id}.ics`' text color='primary') {{$t('common.add_to_calendar')}}
+      EventAdmin(v-if='is_mine' :event='event')
 
       //- hr
 
@@ -137,7 +98,6 @@ import { mapState } from 'vuex'
 import EventAdmin from './eventAdmin'
 import EmbedEvent from './embedEvent'
 import FollowMe from '../../components/FollowMe'
-import { Message, MessageBox } from 'element-ui'
 import moment from 'moment-timezone'
 const htmlToText = require('html-to-text')
 
@@ -269,7 +229,7 @@ export default {
     },
     async remove () {
       try {
-        await MessageBox.confirm(this.$t('event.remove_confirmation'), this.$t('common.confirm'), {
+        await this.$root.$confirm(this.$t('event.remove_confirmation'), this.$t('common.confirm'), {
           confirmButtonText: this.$t('common.ok'),
           cancelButtonText: this.$t('common.cancel'),
           type: 'error'
@@ -300,18 +260,18 @@ export default {
     },
     async blockUser (resource) {
       try {
-        await MessageBox.confirm(this.$t('admin.user_block_confirm'), {
+        await this.$root.$confirm(this.$t('admin.user_block_confirm'), {
           confirmButtonText: this.$t('common.ok'),
           cancelButtonText: this.$t('common.cancel'),
           type: 'error'
         })
         await this.$axios.post('/instances/toggle_user_block', { ap_id: resource.ap_user.ap_id })
-        Message({ message: this.$t('admin.user_blocked', { user: resource.ap_user.ap_id }), type: 'success', showClose: true })
+        this.$root.$message({ message: this.$t('admin.user_blocked', { user: resource.ap_user.ap_id }), type: 'success' })
       } catch (e) { }
     },
     async deleteResource (resource) {
       try {
-        await MessageBox.confirm(this.$t('admin.delete_resource_confirm'),
+        await this.$root.$confirm(this.$t('admin.delete_resource_confirm'),
           this.$t('common.confirm'), {
             confirmButtonText: this.$t('common.ok'),
             cancelButtonText: this.$t('common.cancel'),
@@ -322,7 +282,7 @@ export default {
       } catch (e) { }
     },
     copyLink () {
-      Message({ message: this.$t('common.copied'), type: 'success', showClose: true })
+      this.$root.$message({ message: this.$t('common.copied'), type: 'success' })
     },
     // TOFIX
     resource_filter (value) {
@@ -343,7 +303,21 @@ export default {
 }
 </script>
 <style lang='less'>
-// #eventDetail {
+.eventDetail {
+  .toolbar {
+    height: auto !important;
+    padding: 1em 0;
+    box-sizing: content-box;
+  }
+
+  .main_image {
+    width: 100%;
+    transition: height .100s;
+    margin: 0 auto;
+    max-height: 83vh;
+  }
+
+}
 //   time {
 //     margin: 0rem 0rem 0rem 1rem;
 //     display: inline-block;

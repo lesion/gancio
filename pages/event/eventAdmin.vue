@@ -1,26 +1,21 @@
 <template lang='pug'>
 div
-  v-divider {{$t('common.admin')}}
+  v-btn(text color='primary' v-if='event.is_visible' @click='toggle(false)') {{$t(`common.${event.parentId?'skip':'hide'}`)}}
+  v-btn(text color='primary' v-else @click='toggle(false)') {{$t('common.confirm')}}
+  v-btn(text color='primary' @click='$router.push(`/add/${event.id}`)') {{$t('common.edit')}}
+  v-btn(text color='primary' v-if='!event.parentId' @click='remove(false)') {{$t('common.remove')}}
 
-  v-menu.menu
-    v-menu-item
-      div(v-if='event.is_visible' @click='toggle(false)') <i class='el-icon-open'/> {{$t(`common.${event.parentId?'skip':'hide'}`)}}
-      div(v-else @click='toggle(false)') <i class='el-icon-turn-off'/> {{$t('common.confirm')}}
-    v-menu-item(@click='$router.push(`/add/${event.id}`)') <i class='el-icon-edit'/> {{$t('common.edit')}}
-    v-menu-item(v-if='!event.parentId' @click='remove(false)') <i class='el-icon-delete'/> {{$t('common.remove')}}
-
-    template(v-if='event.parentId')
-      v-divider {{$t('event.recurrent')}}
-      p.text-secondary
-        i.el-icon-refresh
-        small  {{event|recurrentDetail}}<br/>
-      v-menu-item(v-if='event.parent.is_visible' @click='toggle(true)') <i class='el-icon-video-pause'/> {{$t('common.pause')}}
-      v-menu-item(v-else @click='toggle(true)') <i class='el-icon-video-play'/> {{$t('common.start')}}
-      v-menu-item(@click='$router.push(`/add/${event.parentId}`)') <i class='el-icon-edit'/> {{$t('common.edit')}}
-      v-menu-item(@click='remove(true)') <i class='el-icon-delete'/> {{$t('common.remove')}}
+  template(v-if='event.parentId')
+    v-divider {{$t('event.recurrent')}}
+    p.text-secondary
+      i.el-icon-refresh
+      small  {{event|recurrentDetail}}
+    v-btn(text color='primary' v-if='event.parent.is_visible' @click='toggle(true)') {{$t('common.pause')}}
+    v-btn(text color='primary' v-else @click='toggle(true)') {{$t('common.start')}}
+    v-btn(text color='primary' @click='$router.push(`/add/${event.parentId}`)') {{$t('common.edit')}}
+    v-btn(text color='primary' @click='remove(true)') {{$t('common.remove')}}
 </template>
 <script>
-import { MessageBox } from 'element-ui'
 import { mapActions } from 'vuex'
 
 export default {
@@ -34,19 +29,14 @@ export default {
   methods: {
     ...mapActions(['delEvent']),
     async remove (parent = false) {
-      try {
-        await MessageBox.confirm(this.$t(`event.remove_${parent ? 'recurrent_' : ''}confirmation`), this.$t('common.confirm'), {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'error'
-        })
-        const id = parent ? this.event.parentId : this.event.id
-        await this.$axios.delete(`/event/${id}`)
-        this.delEvent(Number(id))
-        this.$router.replace('/')
-      } catch (e) {
-        console.error(e)
-      }
+      const ret = await this.$root.$confirm(this.$t(`event.remove_${parent ? 'recurrent_' : ''}confirmation`), this.$t('common.confirm'), {
+        type: 'error'
+      })
+      if (!ret) { return }
+      const id = parent ? this.event.parentId : this.event.id
+      await this.$axios.delete(`/event/${id}`)
+      this.delEvent(Number(id))
+      this.$router.replace('/')
     },
     async toggle (parent = false) {
       const id = parent ? this.event.parentId : this.event.id

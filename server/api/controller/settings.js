@@ -112,20 +112,19 @@ const settingsController = {
       return res.status(400).send('Mmmmm sould not be here!')
     }
 
-    const uploaded_path = path.join(req.file.destination, req.file.filename)
-    const logo_path = path.resolve(config.upload_path, 'favicon')
-    const favicon_path = path.resolve(config.upload_path, 'favicon')
+    const uploadedPath = path.join(req.file.destination, req.file.filename)
+    const baseImgPath = path.resolve(config.upload_path, 'logo')
 
     // convert and resize to png
-    sharp(uploaded_path)
+    sharp(uploadedPath)
       .resize(400)
       .png({ quality: 90 })
-      .toFile(logo_path + '.png', async (err, info) => {
+      .toFile(baseImgPath + '.png', async (err, info) => {
         console.error(err)
-        const image = await readFile(logo_path + '.png')
+        const image = await readFile(baseImgPath + '.png')
         const favicon = await toIco([image], { sizes: [64], resize: true })
-        writeFile(favicon_path + '.ico', favicon)
-        settingsController.set('favicon', favicon_path)
+        writeFile(baseImgPath + '.ico', favicon)
+        settingsController.set('logo', baseImgPath)
         res.sendStatus(200)
       })
   },

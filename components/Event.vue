@@ -1,24 +1,31 @@
 <template lang="pug">
-  v-card.h-event.mt-1
+  v-card.h-event.event.mt-1
     nuxt-link(:to='`/event/${event.id}`')
-      v-img(:src="`/media/thumb/${event.image_path}`" height="250" position="top top" class="white--text align-end")
-    v-list-item
+      v-img(:src="`/media/thumb/${event.image_path}`"
+        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7)"
+        height="250" position="top top"
+        class="white--text align-end")
+        v-card-title {{event.title}}
+    //- v-list-item
       v-list-item-content
         v-list-item-title.headline {{ event.title }}
         v-list-item-subtitle
           time(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  <v-icon>mdi-date</v-icon> {{ event|when }}
         v-list-item-subtitle
           span <v-icon>md-location-outline</v-icon> {{event.place.name}}
-
-    //- v-card-text
-
+    v-card-text
+      time(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  <v-icon>mdi-event</v-icon> {{ event|when }}
+      div <v-icon>mdi-location-on</v-icon> {{event.place.name}}
+      //- v-btn.ml-1(type='text' plain rounded size='mini' v-for='tag in event.tags' :key='tag' @click='addTag(tag)') {{tag}} -->
     v-card-actions
-      v-btn(text color='primary' nuxt :to='`/event/${event.id}`') {{$t('common.read')}}
+      v-chip.ml-1(v-for='tag in event.tags' link :key='tag' outlined color='primary' small) {{tag}}
       v-spacer
       v-btn(icon)
         v-icon mdi-bookmark
       v-btn(icon color='yellow')
         v-icon mdi-share-variant
+      v-btn(icon color='primary' nuxt :to='`/event/${event.id}`')
+        v-icon mdi-chevron-right
 
   //- <!-- //- v-card.event.h-event.mt-1(max-width="400")
   //-   p ciao
@@ -98,14 +105,39 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.h-event {
+.event {
   width: 300px;
   max-width: 450px;
   flex-grow: 1;
   margin: .2em;
-  background-color: #202020;
-  overflow: hidden;
+  // background-color: #202020;
+  // overflow: hidden;
+  .title {
+    line-height: 1.2em;
+    max-height: 2.4em;
+    overflow: hidden;
+  }
+
+  a {
+    text-decoration: none;
+  }
+  // .title::before {
+    // content: "...";
+    // position: absolute;
+    // bottom: 0;
+  //   right: 0;
+  // }
+
+  // .title::after {
+  //   content: "";
+  //   position: absolute;
+  //   right: 0; /* note: not using bottom */
+  //   width: 1rem;
+  //   height: 1rem;
+  //   background: white;
+  // }
 }
+
   // a:hover {
   //   text-decoration: none;
   //   .title {

@@ -1,10 +1,8 @@
 <template lang="pug">
-  el-container.announcement-page.text-white
-    el-header.text-white
-      h3 <i style='color: red' class='el-icon-info'/> {{announcement.title}}
+  v-container.announcement-page.text-white
+    h3 <i style='color: red' class='el-icon-info'/> {{announcement.title}}
 
-    el-main
-      pre.mt-4(v-html='announcement.announcement')
+    p.mt-4(v-html='announcement.announcement')
 
 </template>
 <script>
@@ -36,39 +34,39 @@ export default {
 }
 </script>
 <style lang='less'>
-.announcement-page {
+// .announcement-page {
 
-  .el-header {
-    height: auto !important;
-    padding-top: 1em;
-    border-bottom: 1px solid lightgray;
-  }
+//   .el-header {
+//     height: auto !important;
+//     padding-top: 1em;
+//     border-bottom: 1px solid lightgray;
+//   }
 
-  .title {
-    max-width: 80%;
-    max-height: 0.1rem;
-    overflow: hidden;
-    font-size: 1.6rem;
-    line-height: 1;
-    padding-right: 40px;
-  }
+//   .title {
+//     max-width: 80%;
+//     max-height: 0.1rem;
+//     overflow: hidden;
+//     font-size: 1.6rem;
+//     line-height: 1;
+//     padding-right: 40px;
+//   }
 
-  pre {
-    white-space: pre-line;
-    word-break: break-word;
-    color: #aaa;
-    font-size: 1.2em;
-    font-family: inherit;
-  }
+//   pre {
+//     white-space: pre-line;
+//     word-break: break-word;
+//     color: #aaa;
+//     font-size: 1.2em;
+//     font-family: inherit;
+//   }
 
-}
+// }
 
-@media only screen and (max-width: 768px) {
-  #eventDetail {
-    .title {
-      font-size: 1em;
-      font-weight: bold;
-    }
-  }
-}
+// @media only screen and (max-width: 768px) {
+//   #eventDetail {
+//     .title {
+//       font-size: 1em;
+//       font-weight: bold;
+//     }
+//   }
+// }
 </style>
