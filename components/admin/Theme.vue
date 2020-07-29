@@ -10,9 +10,6 @@
         v-btn(small @click='resetLogo') Reset
         v-img(:src='`${settings.baseurl}/favicon.ico?${logoKey}`'
           max-width="100px" max-height="80px" contain)
-      //- el-button-group
-        el-button(size='small' type='primary' plain) Select file
-        el-button(size='small' type='success' plain @click='resetLogo') Reset
 
     v-switch.mt-5(v-model='is_dark'
       inset

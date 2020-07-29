@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-main
+  v-main
 
     p {{$auth.user.email}}
     //- el-form(action='/api/user' method='PUT' @submit.native.prevent='update_settings' inline label-width='200px')
@@ -7,9 +7,9 @@
     //-     el-input(v-model='password' type='password')
     //-   el-button(type='success' native-type='submit') {{$t('common.save')}}
 
-    el-divider {{$t('settings.danger_section')}}
+    p {{$t('settings.danger_section')}}
     p {{$t('settings.remove_account')}}
-    el-button(type='danger' @click='remove_account') {{$t('common.remove')}}
+    v-btn(color='danger' @click='remove_account') {{$t('common.remove')}}
 </template>
 <script>
 import { mapState } from 'vuex'

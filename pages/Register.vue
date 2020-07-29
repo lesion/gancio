@@ -8,7 +8,7 @@
         v-card-text
 
           p(v-html="$t('register.description')")
-          v-form(ref='form')
+          v-form(ref='form' v-model='valid')
             v-text-field(ref='email'
               v-model='user.email' type='email'
               :rules="validators.email"
@@ -23,7 +23,8 @@
               :label="$t('common.description')")
 
         v-card-actions
-          v-btn(@click='register' color='primary') {{$t('common.send')}}
+          v-spacer
+          v-btn(@click='register' :disabled='!valid' color='primary') {{$t('common.send')}}
             v-icon mdi-chevron-right
 </template>
 
@@ -38,7 +39,8 @@ export default {
     return {
       validators,
       loading: false,
-      user: {}
+      user: {},
+      valid: false
     }
   },
   // https://nuxtjs.org/api/pages-validate/

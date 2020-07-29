@@ -1,5 +1,5 @@
 <template lang='pug'>
-  el-card.mt-5
+  v-card.mt-5
     h4(slot='header')
       nuxt-link(to='/')
         img(src='/favicon.ico')
@@ -13,9 +13,9 @@
       br
       br
       a(:href='authorizeURL')
-        el-button.mr-1(plain type='success' icon='el-icon-check') {{$t('common.authorize')}}
+        v-btn.mr-1(plain color='success') {{$t('common.authorize')}}
       a(href='/')
-        el-button.mt-1(plain type='danger') {{$t('common.cancel')}}
+        v-btn.mt-1(plain color='danger') {{$t('common.cancel')}}
 </template>
 
 <script>

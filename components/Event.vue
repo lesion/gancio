@@ -1,10 +1,9 @@
 <template lang="pug">
   v-card.h-event.event.mt-1
     nuxt-link(:to='`/event/${event.id}`')
-      v-img.align-end(:src="`/media/thumb/${event.image_path}`"
-        gradient="to bottom, rgba(255,255,255,.1), rgba(255,255,255,.9)"
-        height="250" position="top top"
-        :class="settings['theme.is_dark']?'light--text':'dark--text'")
+      v-img.align-end.white--text(:src="`/media/thumb/${event.image_path}`"
+        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7)"
+        height="250" position="top top")
         v-card-title {{event.title}}
     //- v-list-item
       v-list-item-content
@@ -20,12 +19,15 @@
     v-card-actions
       v-chip.ml-1(v-for='tag in event.tags' link :key='tag' outlined color='primary' small) {{tag}}
       v-spacer
-      v-btn(icon)
-        v-icon mdi-bookmark
-      v-btn(icon color='yellow')
+      //- v-btn(icon color='yellow')
         v-icon mdi-share-variant
-      v-btn(icon color='primary' nuxt :to='`/event/${event.id}`')
-        v-icon mdi-chevron-right
+      v-menu(offset-y)
+        template(v-slot:activator="{on}")
+          v-btn(icon v-on='on' color='primary')
+            v-icon mdi-dots-vertical
+        v-list
+          v-list-item
+            v-list-item-title test
 
   //- <!-- //- v-card.event.h-event.mt-1(max-width="400")
   //-   p ciao

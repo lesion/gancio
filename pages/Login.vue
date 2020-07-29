@@ -7,7 +7,7 @@
         v-card-subtitle(v-text="$t('login.description')")
 
         v-card-text
-          v-form
+          v-form(v-model='valid' ref='form')
             v-text-field(v-model='email' type='email'
               :rules='validators.email' autofocus
               :placeholder='$t("common.email")'
@@ -19,8 +19,12 @@
               :placeholder='$t("common.password")')
 
           v-card-actions
+            v-spacer
+            v-btn(text @click='forgot' small) {{$t('login.forgot_password')}}
+
+          v-card-actions
             v-btn(color='success'
-              :disabled='disabled'
+              :disabled='!valid'
               @click='submit') {{$t('common.login')}}
 
             v-btn(v-if='settings.allow_registration'
@@ -28,7 +32,6 @@
               text
               color='orange') {{$t('login.not_registered')}}
 
-            v-btn(text @click='forgot') {{$t('login.forgot_password')}}
 </template>
 
 <script>
@@ -42,19 +45,17 @@ export default {
       validators,
       password: '',
       email: '',
-      loading: false
+      loading: false,
+      valid: false
     }
   },
   computed: {
-    ...mapState(['settings']),
-    disabled () {
-      return !this.email || !this.password
-    }
+    ...mapState(['settings'])
   },
   methods: {
     async forgot () {
       if (!this.email) {
-        this.$root.$message({ message: this.$t('login.insert_email'), color: 'error' })
+      //   this.$root.$message({ message: this.$t('login.insert_email'), color: 'error' })
         this.$refs.email.focus()
         return
       }
@@ -64,7 +65,6 @@ export default {
       this.$root.$message({ message: this.$t('login.check_email'), color: 'success' })
     },
     async submit (e) {
-      if (this.disabled) { return false }
       e.preventDefault()
       try {
         this.loading = true

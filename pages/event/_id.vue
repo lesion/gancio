@@ -64,11 +64,11 @@
           v-btn(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
           span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
 
-        v-dialog(:visible.sync='showFollowMe' destroy-on-close)
+        v-dialog(v-model='showFollowMe' destroy-on-close)
           h4(slot='title') {{$t('common.follow_me_title')}}
           FollowMe
 
-        v-dialog.showResource#resourceDialog(:visible.sync='showResources' fullscreen
+        v-dialog.showResource#resourceDialog(v-model='showResources' fullscreen
           width='95vw'
           destroy-on-close
           @keydown.native.right='$refs.carousel.next()'
@@ -78,9 +78,9 @@
               v-img(:src='attachment.url')
         v-card.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources' :key='resource.id' :class='{disabled: resource.hidden}')
           span
-            el-dropdown.mr-2(v-if='$auth.user && $auth.user.is_admin')
-              el-button(circle icon='el-icon-more' size='mini')
-              el-dropdown-menu(slot='dropdown')
+            v-dropdown.mr-2(v-if='$auth.user && $auth.user.is_admin')
+              v-btn(circle icon='el-icon-more' size='mini')
+              v-menu(slot='dropdown')
                 el-dropdown-item(v-if='!resource.hidden' icon='el-icon-remove' @click.native='hideResource(resource, true)') {{$t('admin.hide_resource')}}
                 el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(resource, false)') {{$t('admin.show_resource')}}
                 el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(resource)') {{$t('admin.delete_resource')}}
