@@ -4,7 +4,6 @@
       title-position='left'
       :is-dark="settings['theme.is_dark']"
       @update:from-page='updatePage'
-      :columns="$screens({ default: 1, lg: 2 })"
       :locale='$i18n.locale'
       :attributes='attributes'
       transition='fade'
@@ -84,7 +83,6 @@ export default {
 </script>
 
 <style>
-
 .vc-opacity-0 {
   opacity: 0.3 !important;
 }

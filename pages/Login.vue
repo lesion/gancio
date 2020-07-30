@@ -19,18 +19,23 @@
               :placeholder='$t("common.password")')
 
           v-card-actions
-            v-spacer
-            v-btn(text @click='forgot' small) {{$t('login.forgot_password')}}
+            v-btn(text
+              tabindex="1"
+              @click='forgot' small) {{$t('login.forgot_password')}}
 
           v-card-actions
-            v-btn(color='success'
-              :disabled='!valid'
-              @click='submit') {{$t('common.login')}}
+            v-spacer
 
             v-btn(v-if='settings.allow_registration'
               to='/register'
               text
+              tabindex="1"
               color='orange') {{$t('login.not_registered')}}
+
+            v-btn(color='success'
+              tabindex="0"
+              :disabled='!valid || loading' :loading='loading'
+              @click='submit') {{$t('common.login')}}
 
 </template>
 

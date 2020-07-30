@@ -80,7 +80,9 @@
     "delete": "Elimina",
     "announcements": "Annunci",
     "url": "Indirizzo URL",
-    "place": "Luogo"
+    "place": "Luogo",
+    "tags": "Tags",
+    "theme": "Tema"
   },
   "login": {
     "description": "Entrando puoi pubblicare nuovi eventi.",

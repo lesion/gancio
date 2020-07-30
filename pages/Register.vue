@@ -1,6 +1,6 @@
 <template lang='pug'>
   v-row.mt-5(align='center' justify='center')
-    v-col(cols='12' sm='10' md="6")
+    v-col(cols='12' md="6" lg="5" xl="4")
 
       v-card
         v-card-title {{$t('common.register')}}
@@ -24,7 +24,9 @@
 
         v-card-actions
           v-spacer
-          v-btn(@click='register' :disabled='!valid' color='primary') {{$t('common.send')}}
+          v-btn(@click='register'
+            :disabled='!valid || loading' :loading='loading'
+            color='primary') {{$t('common.send')}}
             v-icon mdi-chevron-right
 </template>
 
@@ -40,7 +42,7 @@ export default {
       validators,
       loading: false,
       user: {},
-      valid: false
+      valid: true
     }
   },
   // https://nuxtjs.org/api/pages-validate/
@@ -49,7 +51,7 @@ export default {
     return store.state.settings.allow_registration
   },
   computed: {
-    ...mapState(['settings']),
+    ...mapState(['settings'])
     // disabled () {
     //   if (process.server) { return false }
     //   return !this.user.password || !this.user.email || !this.user.description

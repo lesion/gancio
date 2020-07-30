@@ -11,19 +11,38 @@
       :label="$t('event.show_past')"
       v-model='showPast')
 
-    v-autocomplete#searchInput.mt-0(:placeholder='$t("common.filter")'
-      v-model='search' :debounce='200'
-      :fetch-suggestions='querySearch' clearable
-      @select='addFilter')
-      template(slot-scope='{ item }')
-        span.float-left {{ item.label }}
-        i.float-right.el-icon-place(v-if='item.type==="place"')
-        i.float-right.el-icon-collection-tag(v-if='item.type==="tag"')
-    #filters
-      v-vtn.mr-1.bg-dark(type='text' round plain v-for='t in filters.tags' size='mini'
-        :key='t' @click='removeTag(t)') {{t}}
-      v-btn.mr-1.bg-dark.text-warning(type='text' round plain v-for='p in selectedPlaces' size='mini'
-        :key='p.id' @click='removePlace(p.id)') {{p.name}}
+    p {{filter}}
+    v-autocomplete.mt-0(
+      :label='$t("common.filter")'
+      :items='keywords'
+      v-model='filter'
+      :search-input.sync='search'
+      item-text='label'
+      chips
+      multiple
+    )
+      template(v-slot:selection="data")
+        v-chip(v-bind="data.attrs"
+          :input-value="data.selected"
+          close
+          @click="data.select"
+          @click:close="remove(data.item)")
+          v-avatar(left)
+            v-icon
+            //- <v-img :src="data.item.avatar"></v-img>
+          //- </v-avatar>
+          span {{ data.item.name }}
+      template(v-slot:item='{ item }')
+        v-list-item-content
+          v-list-item-title(v-text='item.label')
+      //-   span.float-left {{ item.label }}
+      //-   i.float-right.el-icon-place(v-if='item.type==="place"')
+      //-   i.float-right.el-icon-collection-tag(v-if='item.type==="tag"')
+    //- #filters
+    //-   v-vtn.mr-1.bg-dark(type='text' round plain v-for='t in filters.tags' size='mini'
+    //-     :key='t' @click='removeTag(t)') {{t}}
+    //-   v-btn.mr-1.bg-dark.text-warning(type='text' round plain v-for='p in selectedPlaces' size='mini'
+    //-     :key='p.id' @click='removePlace(p.id)') {{p.name}}
 </template>
 
 <script>
@@ -36,14 +55,15 @@ export default {
   },
   data () {
     return {
+      filter: null,
       search: ''
     }
   },
   computed: {
     ...mapState(['tags', 'places', 'filters', 'settings']),
-    selectedPlaces () {
-      return this.places.filter(p => this.filters.places.includes(p.id))
-    },
+    // selectedPlaces () {
+    //   return this.places.filter(p => this.filters.places.includes(p.id))
+    // },
     keywords () {
       const tags = this.tags.filter(t => !this.filters.tags.includes(t.tag)).map(t => ({ type: 'tag', label: t.tag, weigth: t.weigth, id: t.tag }))
       const places = this.places.filter(p => !this.filters.places.includes(p.id))
@@ -58,10 +78,10 @@ export default {
     showRecurrent: {
       set (value) { this.showRecurrentEvents(value) },
       get () { return this.filters.show_recurrent_events }
-    },
-    filter () {
-      return this.filters.tags.concat(this.filters.places)
     }
+    // filter () {
+    //   return this.filters.tags.concat(this.filters.places)
+    // }
   },
   methods: {
     ...mapActions(['setSearchPlaces', 'setSearchTags',

@@ -108,7 +108,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .event {
-  width: 300px;
+  width: 330px;
   max-width: 450px;
   flex-grow: 1;
   margin: .2em;

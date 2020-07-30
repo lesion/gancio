@@ -5,7 +5,7 @@
     Nav
 
     v-main(app)
-      v-scroll-y-transition(hide-on-leave)
+      v-fade-transition(hide-on-leave)
         nuxt
 
     Footer
@@ -26,6 +26,7 @@ export default {
   created () {
     this.$vuetify.theme.dark = this.settings['theme.is_dark']
     this.$vuetify.theme.themes.dark.primary = this.settings['theme.primary']
+    this.$vuetify.theme.themes.light.primary = this.settings['theme.primary']
   }
 }
 </script>

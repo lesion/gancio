@@ -51,23 +51,4 @@ export default {
   #list {
     max-width: 500px;
     margin: 0 auto;
-
-    .el-timeline {
-      padding-left: 5px;
-
-      hr {
-        margin-top: 4px;
-        margin-bottom: 4px;
-      }
-    }
-
-    .el-timeline-item {
-      padding-bottom: 1px;
-    }
-
-    .el-timeline-item__timestamp {
-      margin: 0px;
-      padding: 0px;
-    }
-  }
 </style>

@@ -24,13 +24,14 @@ module.exports = {
   /*
    ** Global CSS
    */
-  // css: [
+  css: [
+    '@mdi/font/css/materialdesignicons.css'
   // 'bootstrap/dist/css/bootstrap.min.css',
   // 'element-ui/lib/theme-chalk/index.css',
   // 'element-ui/lib/theme-chalk/display.css',
   // '@/assets/theme/index.css'
   // '@/assets/style.less'
-  // ],
+  ],
 
   /*
    ** Plugins to load before mounting the App
@@ -98,6 +99,7 @@ module.exports = {
     '@nuxtjs/vuetify'
   ],
   vuetify: {
+    defaultAssets: false,
     optionsPath: './vuetify.options.js'
     /* module options */
   },

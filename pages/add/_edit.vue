@@ -151,7 +151,8 @@
 
         v-card-actions
           v-spacer
-          v-btn(@click='done' color='primary') {{edit?$t('common.edit'):$t('common.send')}}
+          v-btn(@click='done' :loading='loading' :disabled='!valid || loading'
+            color='primary') {{edit?$t('common.edit'):$t('common.send')}}
 
 </template>
 <script>

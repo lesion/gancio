@@ -2,7 +2,7 @@
   v-container#home(fluid)
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
     #calbar.row.mt-2.mb-2
-      .col-xl-7.col-lg-7.col-sm-6.col-xs-12
+      .col-xl-5.col-lg-5.col-sm-5.col-xs-12
 
         client-only
           Calendar
@@ -50,16 +50,11 @@ export default {
 }
 </script>
 <style lang='less'>
-// #calbar {
-//   max-width: 1000px;
-//   // margin: 0 auto;
-// }
-// #home {
-  // max-width: 1600px;
-// }
+#home {
+  max-width: 1400px;
+}
 
 #events {
-  max-width: 1600px;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;

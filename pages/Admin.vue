@@ -52,7 +52,6 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { Message } from 'element-ui'
 import Users from '../components/admin/Users'
 import Places from '../components/admin/Places'
 import Settings from '../components/admin/Settings'
@@ -99,9 +98,8 @@ export default {
         this.loading = true
         await this.$axios.$get(`/event/confirm/${id}`)
         this.loading = false
-        Message({
+        this.$root.$message({
           message: this.$t('event.confirmed'),
-          showClose: true,
           type: 'success'
         })
         this.events = this.events.filter(e => e.id !== id)

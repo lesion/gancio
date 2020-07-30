@@ -13,7 +13,6 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { MessageBox } from 'element-ui'
 import url from 'url'
 
 export default {
@@ -56,9 +55,7 @@ export default {
     //   })
     // },
     remove_account () {
-      MessageBox.confirm(this.$t('settings.remove_account_confirm'), this.$t('common.confirm'), {
-        confirmButtonText: this.$t('common.ok'),
-        cancelButtonText: this.$t('common.cancel'),
+      this.$root.$confirm(this.$t('settings.remove_account_confirm'), this.$t('common.confirm'), {
         type: 'error'
       }).then(() => {
         this.$axios.$delete('/user')

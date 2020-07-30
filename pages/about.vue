@@ -10,7 +10,6 @@
 <script>
 import Editor from '@/components/Editor'
 import { mapState, mapActions } from 'vuex'
-import { Message } from 'element-ui'
 
 export default {
   components: { Editor },
@@ -23,8 +22,7 @@ export default {
   methods: {
     ...mapActions(['setSetting']),
     save () {
-      Message({
-        showClose: true,
+      this.$root.$message({
         type: 'success',
         message: this.$t('common.done')
       })

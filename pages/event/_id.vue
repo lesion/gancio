@@ -24,7 +24,7 @@
           v-icon mdi-arrow-right
 
     v-card-text
-      v-dialog.embedDialog(:visible.sync='showEmbed')
+      //- v-dialog.embedDialog(:visible.sync='showEmbed')
         h4(slot='title') {{$t('common.embed_title')}}
         EmbedEvent(:event='event')
 
@@ -33,13 +33,20 @@
 
       //- event image
       v-img.main_image.mb-3(
-        lazy
         contain
+        lazy
         :src='imgPath'
         :lazy-src='thumbImgPath'
         v-if='event.image_path')
+        template(v-slot:placeholder)
+          v-row(
+            class="fill-height ma-0"
+            align="center"
+            justify="center")
+            v-progress-circular(indeterminate
+              color="grey lighten-5")
 
-      p.p-description(v-html='event.description')
+      div.p-description(v-html='event.description')
       v-chip.p-category.ml-1(small v-for='tag in event.tags' color='primary' outlined :key='tag') {{tag}}
 
         //- info & actions
@@ -304,15 +311,9 @@ export default {
 </script>
 <style lang='less'>
 .eventDetail {
-  .toolbar {
-    height: auto !important;
-    padding: 1em 0;
-    box-sizing: content-box;
-  }
-
   .main_image {
     width: 100%;
-    transition: height .100s;
+    transition: all 1s;
     margin: 0 auto;
     max-height: 83vh;
   }

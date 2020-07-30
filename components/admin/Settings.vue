@@ -1,6 +1,7 @@
 <template lang="pug">
-  v-container
-
+  v-card
+    v-card-title {{$t('common.settings')}}
+    v-card-text
       //- select timezone
       v-autocomplete(v-model='instance_timezone'
         :label="$t('admin.select_instance_timezone')"

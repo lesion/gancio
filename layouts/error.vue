@@ -1,7 +1,7 @@
 <template lang='pug'>
-  v-container.p-4.text-center#error
-    h1(v-if="error.statusCode === 404") <i class='el-icon-warning'></i> {{error.message}}
-    h1(v-else) <i name='el-icon-warning'></i> An error occurred: {{error.message}}
+  v-container.p-4.text-center
+    v-alert(v-if="error.statusCode === 404") ¯\_(ツ)_/¯ {{error.message}}
+    v-calert(v-else) <i>warning</i> An error occurred: {{error.message}}
     nuxt-link(to='/') Back to home
 </template>
 
@@ -16,10 +16,3 @@ export default {
   }
 }
 </script>
-<style lang="less">
-  #error {
-    margin-top: 20px;
-    color: orange;
-    i { color: orangered }
-  }
-</style>
