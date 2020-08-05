@@ -14,14 +14,14 @@
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import moment from 'moment-timezone'
+import dayjs from 'dayjs'
 import { take, get } from 'lodash'
 
 export default {
   name: 'Calendar',
   data () {
-    const month = moment().month() + 1
-    const year = moment().year()
+    const month = dayjs().month() + 1
+    const year = dayjs().year()
     return {
       page: { month, year }
     }
