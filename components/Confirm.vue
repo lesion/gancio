@@ -8,13 +8,11 @@
     @keydown.esc='cancel')
     v-card
       v-card-title {{ title }}
-      v-card-text.pa-4(v-show='!!message') {{ message }}
-      v-card-actions.pt-0
+      v-card-text(v-show='!!message') {{ message }}
+      v-card-actions
         v-spacer
-        v-btn(color='primary darken-1' text
-          @click='agree') {{$t('common.ok')}}
-        v-btn(color='secondary'
-          text @click='cancel') {{$t('common.cancel')}}
+        v-btn(color='error' @click='cancel') {{$t('common.cancel')}}
+        v-btn(color='primary' @click='agree') {{$t('common.ok')}}
 </template>
 
 <script>
@@ -42,7 +40,7 @@ export default {
     title: null,
     options: {
       color: 'danger',
-      width: 350,
+      width: 450,
       zIndex: 500
     }
   }),
