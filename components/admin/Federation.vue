@@ -1,77 +1,87 @@
 <template lang="pug">
   v-container
-    v-switch(v-model='enable_federation'
-      :label="$t('admin.enable_federation')"
-      persistent-hint
-      inset
-      :hint="$t('admin.enable_federation_help')")
-
-    template(v-if='enable_federation')
-
-      v-switch.mt-4(v-model='enable_resources'
-        :label="$t('admin.enable_resources')"
-        :hint="$t('admin.enable_resources_help')"
-        persistent-hint inset)
-
-      v-switch.mt-4(v-model='hide_boosts'
-        :label="$t('admin.hide_boost_bookmark')"
-        :hint="$t('admin.hide_boost_bookmark_help')"
-        persistent-hint inset)
-
-      //- div.mt-4 {{$t('admin.instance_name')}}
-      v-text-field.mt-5(v-model='instance_name'
-        :label="$t('admin.instance_name')"
-        :hint="`${$t('admin.instance_name_help')} (@${instance_name}@${settings.baseurl|url2host})`"
-        placeholder='Instance name' persistent-hint
-        @blur='save("instance_name", instance_name)')
-
-    v-switch.mt-4(v-model='enable_trusted_instances'
-      :label="$t('admin.enable_trusted_instances')"
-      persistent-hint inset
-      :hint="$t('admin.trusted_instances_help')")
-
-    template(v-if='enable_trusted_instances')
-      v-text-field.mt-4(v-model='instance_place'
-        :label="$t('admin.instance_place')"
+    v-card-title {{$t('common.federation')}}
+    v-card-text
+      v-switch(v-model='enable_federation'
+        :label="$t('admin.enable_federation')"
         persistent-hint
-        :hint="$t('admin.instance_place_help')"
-        @blur='save("instance_place", instance_place)'
-      )
+        inset
+        :hint="$t('admin.enable_federation_help')")
 
-      v-dialog(v-model='dialogAddInstance' width="500px")
-        v-card
-          v-card-title {{$t('admin.add_trusted_instance')}}
-          v-card-text
-            v-text-field.mt-4(v-model='instance_url'
-              :full-width='false'
-              persistent-hint
-              :hint="$t('admin.add_trusted_instance')"
-              :label="$t('common.url')"
-              append-outer-icon="mdi-send"
-              @click:append-outer='createTrustedInstance')
+      template(v-if='enable_federation')
 
-      v-btn(@click='dialogAddInstance = true') Add instance
-      v-data-table.mt-4(
-        :headers='headers'
-        :items='settings.trusted_instances')
-        template(v-slot:item.actions="{item}")
-          v-btn(icon @click='deleteInstance(item)' color='error')
-            v-icon mdi-delete-forever
+        v-switch.mt-4(v-model='enable_resources'
+          :label="$t('admin.enable_resources')"
+          :hint="$t('admin.enable_resources_help')"
+          persistent-hint inset)
+
+        v-switch.mt-4(v-model='hide_boosts'
+          :label="$t('admin.hide_boost_bookmark')"
+          :hint="$t('admin.hide_boost_bookmark_help')"
+          persistent-hint inset)
+
+        //- div.mt-4 {{$t('admin.instance_name')}}
+        v-text-field.mt-5(v-model='instance_name'
+          :label="$t('admin.instance_name')"
+          :hint="`${$t('admin.instance_name_help')} (@${instance_name}@${settings.baseurl|url2host})`"
+          placeholder='Instance name' persistent-hint
+          @blur='save("instance_name", instance_name)')
+
+      v-switch.mt-4(v-model='enable_trusted_instances'
+        :label="$t('admin.enable_trusted_instances')"
+        persistent-hint inset
+        :hint="$t('admin.trusted_instances_help')")
+
+      template(v-if='enable_trusted_instances')
+        v-text-field.mt-4(v-model='instance_place'
+          :label="$t('admin.instance_place')"
+          persistent-hint
+          :hint="$t('admin.instance_place_help')"
+          @blur='save("instance_place", instance_place)'
+        )
+
+        v-dialog(v-model='dialogAddInstance' width="500px")
+          v-card
+            v-card-title {{$t('admin.add_trusted_instance')}}
+            v-card-text
+              v-form(v-model='valid')
+              v-text-field.mt-4(v-model='instance_url'
+                persistent-hint
+                :rules="[validators.required('email')]"
+                :hint="$t('admin.add_trusted_instance')"
+                :label="$t('common.url')")
+            v-card-actions
+              v-spacer
+              v-btn(color='error' @click='dialogAddInstance=false') {{$t('common.cancel')}}
+              v-btn(color='primary' @click='createTrustedInstance') {{$t('common.ok')}}
+
+        v-card-actions
+          v-spacer
+          v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) Add instance
+        v-data-table(
+          :headers='headers'
+          :items='settings.trusted_instances')
+          template(v-slot:item.actions="{item}")
+            v-btn(icon @click='deleteInstance(item)' color='error')
+              v-icon mdi-delete-forever
 
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
+import { validators } from '../../plugins/helpers'
 import axios from 'axios'
 
 export default {
   name: 'Federation',
   data ({ $store, $options }) {
     return {
+      validators,
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
       instance_place: $store.state.settings.instance_place,
       url2host: $options.filters.url2host,
       dialogAddInstance: false,
+      valid: false,
       headers: [
         { value: 'name', text: 'Name' },
         { value: 'url', text: 'URL' },
@@ -121,8 +131,8 @@ export default {
       }
     },
     async deleteInstance (instance) {
-      const ret = await this.$root.$confirm(this.$t('admin.delete_trusted_instance_confirm'),
-        this.$t('common.confirm'), { type: 'error' })
+      const ret = await this.$root.$confirm(this.$t('common.confirm'),
+        this.$t('admin.delete_trusted_instance_confirm'))
       if (!ret) { return }
       this.setSetting({
         key: 'trusted_instances',
