@@ -1,35 +1,31 @@
 <template lang='pug'>
   v-container
-    v-subheader(v-html="$t('admin.announcement_description')")
+    v-card-title {{$t('common.announcements')}}
+    v-card-subtitle(v-html="$t('admin.announcement_description')")
     v-dialog(v-model='dialog' width='800')
       v-card
-        v-card-title {{$t('common.new_user')}}
+        v-card-title {{$t('admin.new_announcement')}}
         v-card-text
-          v-form
+          v-form(v-model='valid')
             v-text-field(v-model='announcement.title' :placeholder='$t("common.title")')
             Editor.mt-2(v-model='announcement.announcement' border no-save style='max-height: 400px;')
-            v-btn.mt-2(@click='save' type='success' plain) {{$t(`common.${editing?'save':'send'}`)}}
+        v-card-actions
+          v-spacer
+          v-btn(@click='save' color='primary') {{$t(`common.${editing?'save':'send'}`)}}
 
-    v-data-table(
-        :headers='headers'
-        :items='announcements')
-      template(v-slot:item.actions='{ item }')
-        v-btn(text small @click.stop='toggle(item)'
-          :color='item.visible?"warning":"success"') {{item.visible?$t('common.deactivate'):$t('common.activate')}}
-        v-btn(text small @click='edit(item)') {{$t('common.edit')}}
-        v-btn(text small @click='remove(item)'
-          color='error') {{$t('common.delete')}}
-
-      //- el-table-column(:label="$t('common.actions')")
-      //-   template(slot-scope='data')
-      //-     el-button-group
-      //-       el-button(size='mini' type='primary'
-      //-         @click='edit(data.row)') {{$t('common.edit')}}
-      //-       el-button(size='mini'
-      //-         :type='data.row.visible?"warning":"success"'
-      //-         @click='toggle(data.row)') {{data.row.visible?$t('common.deactivate'):$t('common.activate')}}
-      //-       el-button(size='mini' type='danger'
-      //-         @click='remove(data.row)') {{$t('common.delete')}}
+    v-card-actions
+      v-spacer
+      v-btn(@click='dialog=true' text color='primary') {{$t('common.add')}}
+    v-card-text
+      v-data-table(
+          :headers='headers'
+          :items='announcements')
+        template(v-slot:item.actions='{ item }')
+          v-btn(text small @click.stop='toggle(item)'
+            :color='item.visible?"warning":"success"') {{item.visible?$t('common.deactivate'):$t('common.activate')}}
+          v-btn(text small @click='edit(item)') {{$t('common.edit')}}
+          v-btn(text small @click='remove(item)'
+            color='error') {{$t('common.delete')}}
 
 </template>
 <script>
@@ -42,6 +38,7 @@ export default {
   components: { Editor, Announcement },
   data () {
     return {
+      valid: false,
       dialog: false,
       editing: false,
       announcements: [],
