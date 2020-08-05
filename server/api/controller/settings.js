@@ -26,7 +26,12 @@ const defaultSettings = {
   enable_resources: false,
   hide_boosts: true,
   enable_trusted_instances: true,
-  trusted_instances: []
+  trusted_instances: [],
+  'theme.is_dark': true,
+  'theme.primary': '#FF4500',
+  footerLinks: [
+    { href: '/about', label: 'about' }
+  ]
 }
 
 /**
