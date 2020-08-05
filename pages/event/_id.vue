@@ -10,7 +10,6 @@
             b {{event|when}}
             small  ({{event.start_datetime|from}})
           v-list-item-title
-            i.el-icon-location-outline
             b.p-location {{event.place.name}}
             span  - {{event.place.address}}
           h2 {{event.title}}

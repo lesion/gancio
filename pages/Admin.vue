@@ -1,53 +1,55 @@
 <template lang="pug">
   v-container
+    v-card
+      v-tabs
 
-    v-tabs
+        //- SETTINGS
+        v-tab {{$t('common.settings')}}
+        v-tab-item
+          Settings
 
-      //- SETTINGS
-      v-tab {{$t('common.settings')}}
-      v-tab-item
-        Settings
+        //- THEME
+        v-tab {{$t('common.theme')}}
+        v-tab-item
+          Theme
 
-      //- THEME
-      v-tab {{$t('common.theme')}}
-      v-tab-item
-        Theme
+        //- USERS
+        v-tab
+          v-badge(:value='unconfirmedUsers.length' :content='unconfirmedUsers.length') {{$t('common.users')}}
+        v-tab-item
+          Users(:users='users')
 
-      //- USERS
-      v-tab
-        v-badge(:value='unconfirmedUsers.length' :content='unconfirmedUsers.length') {{$t('common.users')}}
-      v-tab-item
-        Users(:users='users')
+        //- PLACES
+        v-tab {{$t('common.places')}}
+        v-tab-item
+          Places
 
-      //- PLACES
-      v-tab {{$t('common.places')}}
-      v-tab-item
-        Places
+        //- EVENTS
+        v-tab
+          v-badge(:value='events.length') {{$t('common.events')}}
+        v-tab-item
+          v-container
+            v-card-title {{$t('common.events')}}
+            v-card-subtitle {{$t('admin.event_confirm_description')}}
+            v-card-text
+              v-data-table(
+                :items='events'
+                :headers='eventHeaders')
 
-      //- EVENTS
-      v-tab
-        v-badge(:value='events.length') {{$t('common.events')}}
-      v-tab-item
-        v-container
-          v-subheader {{$t('admin.event_confirm_description')}}
-          v-data-table(
-            :items='events'
-            :headers='eventHeaders')
+        //- ANNOUNCEMENTS
+        v-tab {{$t('common.announcements')}}
+        v-tab-item
+          Announcement
 
-      //- ANNOUNCEMENTS
-      v-tab {{$t('common.announcements')}}
-      v-tab-item
-        Announcement
+        //- FEDERATION
+        v-tab {{$t('common.federation')}}
+        v-tab-item
+          Federation
 
-      //- FEDERATION
-      v-tab {{$t('common.federation')}}
-      v-tab-item
-        Federation
-
-      //- MODERATION
-      v-tab(v-if='settings.enable_federation') {{$t('common.moderation')}}
-      v-tab-item
-        Moderation
+        //- MODERATION
+        v-tab(v-if='settings.enable_federation') {{$t('common.moderation')}}
+        v-tab-item
+          Moderation
 
 </template>
 <script>

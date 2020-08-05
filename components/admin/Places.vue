@@ -1,6 +1,7 @@
 <template lang='pug'>
   v-container
-    v-subheader(v-html="$t('admin.place_description')")
+    v-card-title {{$t('common.places')}}
+    v-card-subtitle(v-html="$t('admin.place_description')")
 
     v-dialog
       v-form.mb-2
@@ -18,10 +19,11 @@
 
         v-btn(@click='savePlace') {{$t('common.save')}}
 
-    v-data-table(
-      @click:row='selectPlace'
-      :headers='headers'
-      :items='places')
+    v-card-text
+      v-data-table(
+        @click:row='selectPlace'
+        :headers='headers'
+        :items='places')
 </template>
 <script>
 import { mapState } from 'vuex'

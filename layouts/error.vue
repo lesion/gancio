@@ -1,7 +1,7 @@
 <template lang='pug'>
   v-container.p-4.text-center
     v-alert(v-if="error.statusCode === 404") ¯\_(ツ)_/¯ {{error.message}}
-    v-calert(v-else) <i>warning</i> An error occurred: {{error.message}}
+    v-alert(v-else type='danger') <v-icon>mdi-warning</v-icon> An error occurred: {{error.message}}
     nuxt-link(to='/') Back to home
 </template>
 

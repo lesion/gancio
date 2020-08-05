@@ -28,6 +28,7 @@
               min-width="290px")
             template(v-slot:activator='{ on }')
               v-text-field(:value='colors[i]'
+                :label='i'
                 v-on='on' clearable readonly)
             v-color-picker(light @update:color='c => updateColor(i, c)')
 
