@@ -1,6 +1,8 @@
 <template lang="pug">
-  v-container
-        h2.text-center {{edit?$t('common.edit_event'):$t('common.add_event')}}
+  v-container.container
+    v-card
+      v-card-title {{edit?$t('common.edit_event'):$t('common.add_event')}}
+      v-card-text
         v-form(v-model='valid')
 
           //- NOT LOGGED EVENT
@@ -12,38 +14,41 @@
           v-text-field.mb-3(v-model='event.title'
             :rules="[validators.required('title')]"
             :label="$t('event.what_description')"
+            autofocus
             ref='title')
 
           //- description
           //- span {{$t('event.description_description')}}
           Editor(
             v-model='event.description'
-            :label="$t('event.description')"
+            :label="$t('event.description_description')"
             style='max-height: 400px;')
 
           //- tags
           //- div {{$t('event.tag_description')}}
           //- client-only
-          v-combobox(v-model='event.tags'
-            chips multiple
-            :items="tags"
-            item-text='tag',
-            item-value='tag'
+          v-combobox.mt-3(v-model='event.tags'
+            chips small-chips multiple deletable-chips hide-no-data hide-selected
+            :delimiters="[',', ' ']"
+            :items="tags.map(t => t.tag)"
             :hints="$t('event.tag_description')"
             :label="$t('common.tags')")
-            //- v-option(v-for='tag in filteredTags' :key='tag.tag' :label='tag.tag' :value='tag.tag')
 
           //- WHERE
           //- v-divider
             //- i.el-icon-location-outline
             //- span {{$t('common.where')}}
           //- p(v-html="$t('event.where_description')")
-          v-autocomplete(v-model='event.place.name'
+          v-combobox(v-model='event.place.name'
             :label="$t('common.where')"
             :items="places"
-            item-text="name"
-            item-value="name"
+            item-text='name'
             @change='selectPlace')
+            template(v-slot:item="{ item }")
+              v-list
+                v-list-item-content
+                  v-list-item-title {{item.name}}
+                  v-list-item-subtitle {{item.address}}
 
           //- div {{$t("common.address")}}
           v-text-field(ref='address' :label="$t('common.address')" v-model='event.place.address' :disabled='disableAddress')
@@ -149,10 +154,10 @@
             persistent-hint
             accept='image/*')
 
-        v-card-actions
-          v-spacer
-          v-btn(@click='done' :loading='loading' :disabled='!valid || loading'
-            color='primary') {{edit?$t('common.edit'):$t('common.send')}}
+      v-card-actions
+        v-spacer
+        v-btn(@click='done' :loading='loading' :disabled='!valid || loading'
+          color='primary') {{edit?$t('common.edit'):$t('common.send')}}
 
 </template>
 <script>
@@ -322,40 +327,42 @@ export default {
 
       return attributes
     },
-    filteredTags () {
-      const queryTags = this.queryTags.toLowerCase()
-      return _(this.tags)
-        .filter(t => !this.event.tags.includes(t.tag))
-        .filter(t => t.tag.includes(queryTags))
-        // .pick('tag')
-        .take(5)
-        .value()
-    },
-    couldProceed () {
-      return true
+    // filteredTags () {
+    //   const queryTags = this.queryTags.toLowerCase()
+    //   return _(this.tags)
+    //     .filter(t => !this.event.tags.includes(t.tag))
+    //     .filter(t => t.tag.includes(queryTags))
+    //     // .pick('tag')
+    //     .take(5)
+    //     .value()
+    // },
+    // couldProceed () {
+      // return true
       // return (this.event.place.name.length > 0 &&
     //     this.event.place.address.length > 0 &&
     //     (this.date && this.time.start) &&
     //       this.event.title.length > 0)
-    }
+    // }
   },
-  mounted () {
-    this.$refs.title.focus()
-  },
+  // mounted () {
+  //   this.$refs.title.focus()
+  // },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
-    filterPlaces (q, cb) {
-      const query = q.toLowerCase()
-      const ret = _(this.places)
-        .filter(p => p.name.toLowerCase().includes(query))
-        .take(5)
-        .map(p => ({ value: p.name }))
-        .value()
-      ret.unshift({ value: q })
-      cb(ret)
-    },
+    // filterPlaces (q, cb) {
+    //   const query = q.toLowerCase()
+    //   const ret = _(this.places)
+    //     .filter(p => p.name.toLowerCase().includes(query))
+    //     .take(5)
+    //     .map(p => ({ value: p.name }))
+    //     .value()
+    //   ret.unshift({ value: q })
+    //   cb(ret)
+    // },
     selectPlace (p) {
+      console.error('dentro selecte place ', p)
       const place = this.places.find(place => place.id === p)
+      console.error('vediamo se ho trovato il place', place)
       if (place && place.address) {
         this.event.place.address = place.address
         this.disableAddress = true
@@ -425,7 +432,7 @@ export default {
       if (this.edit) {
         formData.append('id', this.event.id)
       }
-      if (this.event.tags) { this.event.tags.forEach(tag => formData.append('tags[]', tag)) }
+      if (this.event.tags) { this.event.tags.forEach(tag => formData.append('tags[]', tag.tag || tag)) }
       try {
         if (this.edit) {
           await this.updateEvent(formData)
@@ -460,6 +467,10 @@ export default {
 .datePicker {
   max-width: 500px !important;
   margin: 0 auto;
+}
+
+.container {
+  max-width: 1400px;
 }
 /* #edit_page
   i {
