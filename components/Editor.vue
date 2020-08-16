@@ -1,17 +1,63 @@
 <template lang='pug'>
   .editor
-    editor-menu-bar(:editor='editor' :keep-in-bounds='true' v-slot='{ commands, isActive, getMarkAttrs, menu }')
-      v-btn-toggle(dense)
-        v-btn(icon
-          :color="isActive.bold() && 'primary' || ''"
+    editor-menu-bar.menubar.is-hidden(:editor='editor'
+      :keep-in-bounds='true' v-slot='{ commands, isActive, getMarkAttrs, focused }')
+      v-btn-toggle(dense :class="{ focused }")
+        v-btn(icon text
+          :class="{ primary: isActive.bold() }"
           @click="commands.bold")
           v-icon mdi-format-bold
-        v-btn(icon
-          :color="isActive.underline() && 'primary' || ''"
+
+        v-btn(icon text
+          :class="{ primary: isActive.underline() }"
           @click="commands.underline")
+          v-icon mdi-format-underline
+
+        v-btn(icon text
+          :class="{ primary: isActive.strike() }"
+          @click="commands.strike")
+          v-icon mdi-format-strikethrough-variant
+
+        v-btn(icon text
+          :class="{ primary: isActive.italic() }"
+          @click="commands.italic")
           v-icon mdi-format-italic
 
-      //- v-button-group.menububble(:class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`")
+        v-btn(icon text
+          :class="{ primary: isActive.heading({level: 1}) }"
+          @click="commands.heading({level: 1})")
+          v-icon mdi-format-header-1
+
+        v-btn(icon text
+          :class="{ primary: isActive.heading({level: 2}) }"
+          @click="commands.heading({level: 2})")
+          v-icon mdi-format-header-2
+
+        v-btn(icon text
+          :class="{ primary: isActive.heading({level: 3}) }"
+          @click="commands.heading({level: 3})")
+          v-icon mdi-format-header-3
+
+        v-btn(icon text
+          :class="{ primary: isActive.code() }"
+          @click="commands.code")
+          v-icon mdi-code-tags
+
+        v-btn(icon text
+          :class="{ primary: isActive.blockquote() }"
+          @click="commands.blockquote")
+          v-icon mdi-format-quote-open
+
+        v-btn(icon text
+          :class="{ primary: isActive.bullet_list() }"
+          @click="commands.bullet_list")
+          v-icon mdi-format-list-bulleted
+
+        v-btn(icon text :class='{ primary: isActive.link() }'
+          @click='commands.link({href: ""}); $refs.link.focus(); linkActive=true')
+            v-icon mdi-link
+
+      //- v-btn-toggle.menububble(:class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`")
         v-popover(trigger='hover' placement='bottom-start')
           v-btn.float-left(slot='reference' size='mini') <v-icon name='question'/>
           template
@@ -44,7 +90,7 @@
         //- el-button.float-right(v-if='!noSave' size='mini' type='success' plain icon='el-icon-check'
         //-   @click='$emit("save", editor.getHTML())') {{$t('common.save')}}
 
-    editor-content.content(:editor='editor' spellcheck='false')
+    editor-content.content(:editor='editor' spellcheck='false' :style="{ 'max-height': maxHeight }")
 </template>
 <script>
 import _ from 'lodash'
@@ -72,7 +118,8 @@ export default {
   props: {
     value: { type: String, default: '' },
     border: { type: Boolean, default: false },
-    noSave: { type: Boolean, default: false }
+    noSave: { type: Boolean, default: false },
+    maxHeight: { type: String, Number, default: '' }
   },
   data () {
     return {
@@ -124,12 +171,37 @@ export default {
 <style lang='less'>
 
 .editor {
+  // max-height: auto;
+  // height: auto;
   font-family: sans-serif;
   font-size: 1.1em;
-  scrollbar-width: thin;
   border-color: currentColor;
   border-style: solid;
   border-width: 0 0 thin 0;
+  // background-color: rgba(255,255,255,0.04);
+  height: auto;
+
+  .focused {
+    opacity: 1 !important;
+  }
+  .menubar {
+    opacity: .3;
+
+    // position: absolute;
+  }
+
+  .content {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #FF4500 transparent;
+    scroll-behavior: smooth;
+    // padding-top: 30px;
+    // padding: 30px;
+  }
+  .ProseMirror {
+    padding: 15px;
+    outline: 0;
+  }
 }
 //   position: relative;
 //   overflow-y: auto;
