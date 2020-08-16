@@ -1,11 +1,14 @@
 <template lang="pug">
   v-container
-    .edit(v-if='$auth.user && $auth.user.is_admin')
-      Editor(v-if='$auth.user && $auth.user.is_admin'
-        v-model='about')
-      v-btn.float-right(color='success' plain
-        @click='save') {{$t('common.save')}}
-    div(v-else v-html='about')
+    v-card
+      v-card-title About
+      v-card-text(v-if='$auth.user && $auth.user.is_admin')
+        Editor(v-model='about')
+      v-card-text(v-else v-html='about')
+      v-card-actions
+        v-spacer
+        v-btn(color='primary' plain
+          @click='save') {{$t('common.save')}}
 </template>
 <script>
 import Editor from '@/components/Editor'
