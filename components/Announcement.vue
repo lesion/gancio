@@ -1,21 +1,6 @@
 <template lang="pug">
-  v-alert(border='left' dismissible color="deep-orange accent-2" dark close-text='antani') {{announcement.title}}
-  //- v-list-item(link nuxt :to='`/announcement/${announcement.id}`')
-  //-   v-list-item-icon
-  //-     v-icon mdi-alert
-  //-   v-list-item-content
-  //-     v-list-item-title
-  //-       h2 {{announcement.title}}
-  //-     v-list-item-subtitle(v-html='announcement.announcement')
-
-  //- v-list-item
-  //-   v-btn(nuxt :to='`/announcement/${announcement.id}`') {{announcement.title}}
-  //- .announcement.announcement.text-white(body-style='padding: 0px;')
-    nuxt-link(:to='`/announcement/${announcement.id}`')
-      .title <i class='el-icon-info'/> {{announcement.title}}
-
-    //- .card-body
-    //-   .description(v-html='description')
+  nuxt-link(:to='`/announcement/${announcement.id}`')
+    v-alert.mb-0(border='left' color="primary") {{announcement.title}}
 
 </template>
 <script>

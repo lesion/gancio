@@ -7,7 +7,7 @@
         v-card-title {{$t('admin.new_announcement')}}
         v-card-text
           v-form(v-model='valid')
-            v-text-field(v-model='announcement.title' :placeholder='$t("common.title")')
+            v-text-field(v-model='announcement.title' :label='$t("common.title")')
             Editor.mt-2(v-model='announcement.announcement' border no-save style='max-height: 400px;')
         v-card-actions
           v-spacer

@@ -1,7 +1,7 @@
 <template lang="pug">
   v-container#home(fluid)
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
-    #calbar.row.mt-2.mb-2
+    #calbar.row.mb-2
       .col-xl-5.col-lg-5.col-sm-5.col-xs-12
 
         client-only

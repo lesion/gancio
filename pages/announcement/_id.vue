@@ -1,8 +1,8 @@
 <template lang="pug">
-  v-container.announcement-page.text-white
-    h3 <i style='color: red' class='el-icon-info'/> {{announcement.title}}
-
-    p.mt-4(v-html='announcement.announcement')
+  v-container
+    v-card
+      v-card-title {{announcement.title}}
+      v-card-text(v-html='announcement.announcement')
 
 </template>
 <script>
