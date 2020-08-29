@@ -1,5 +1,5 @@
 <template lang='pug'>
-  div
+  v-card
     p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${domain}`})")
     v-text-field(v-model='instance_hostname' ref='instance')
       a(slot='append' :href='link' target='_blank')

@@ -1,11 +1,15 @@
 <template lang='pug'>
-v-row(:gutter='10')
-  v-col(:span='12' :xs='24')
-    v-alert.mb-1.mt-1(type='info' show-icon) {{$t('common.embed_help')}}
-    v-text-field(v-model='code')
-      el-button(slot='append' v-clipboard:copy='code' v-clipboard:success='copyLink'
-        plain type="primary" icon='el-icon-document') {{$t("common.copy")}}
-  v-col.mt-2(:span='12' :xs='24' v-html='code')
+v-card
+  v-card-title(v-text="$t('common.embed_title')")
+  v-card-text
+    v-row(:gutter='10')
+      v-col(:span='12' :xs='24')
+        v-alert.mb-1.mt-1(type='info' show-icon) {{$t('common.embed_help')}}
+        v-text-field(v-model='code')
+      v-col.mt-2(:span='12' :xs='24' v-html='code')
+  v-card-actions
+    v-spacer
+    v-btn(slot='append' v-clipboard:copy='code' v-clipboard:success='copyLink' color="primary") {{$t("common.copy")}}
 </template>
 <script>
 import { mapState } from 'vuex'

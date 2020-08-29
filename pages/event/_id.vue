@@ -1,6 +1,5 @@
 <template lang="pug">
   v-card.h-event.eventDetail
-    //- .d-block
     v-container
       v-list-item(two-line)
         v-list-item-content
@@ -22,81 +21,77 @@
           :to='`/event/${event.next}`' :disabled='!event.next')
           v-icon mdi-arrow-right
 
-    v-card-text
-      //- v-dialog.embedDialog(:visible.sync='showEmbed')
-        h4(slot='title') {{$t('common.embed_title')}}
-        EmbedEvent(:event='event')
+    v-container
+        v-dialog(v-model='showEmbed')
+          EmbedEvent(:event='event')
 
-      //- v-row
-        v-col(sm="10")
+        //- TOFIX: avoid reflow
+        //- event image
+        v-img.main_image.mb-3(
+          contain
+          :src='imgPath'
+          :lazy-src='thumbImgPath'
+          v-if='event.image_path')
+          //- template(v-slot:placeholder)
+            //- v-row(
+            //-   class="fill-height ma-0"
+            //-   align="center"
+            //-   justify="center")
+            //-   v-progress-circular(indeterminate
+            //-     color="grey lighten-5")
 
-      //- event image
-      v-img.main_image.mb-3(
-        contain
-        lazy
-        :src='imgPath'
-        :lazy-src='thumbImgPath'
-        v-if='event.image_path')
-        template(v-slot:placeholder)
-          v-row(
-            class="fill-height ma-0"
-            align="center"
-            justify="center")
-            v-progress-circular(indeterminate
-              color="grey lighten-5")
+        div.p-description(v-html='event.description')
+        v-chip.p-category.ml-1(small v-for='tag in event.tags' color='primary' outlined :key='tag') {{tag}}
 
-      div.p-description(v-html='event.description')
-      v-chip.p-category.ml-1(small v-for='tag in event.tags' color='primary' outlined :key='tag') {{tag}}
+          //- info & actions
+        v-btn(text color='primary'
+          v-clipboard:success='copyLink'
+          v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') {{$t('common.copy_link')}}
 
-        //- info & actions
-      v-btn(text color='primary'
-        v-clipboard:success='copyLink'
-        v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') {{$t('common.copy_link')}}
+        v-btn(@click='showEmbed=true' text color='primary') {{$t('common.embed')}}
 
-      v-btn(@click='showEmbed=true' text color='primary') {{$t('common.embed')}}
+        v-btn(:href='`${settings.baseurl}/api/event/${event.id}.ics`' text color='primary') {{$t('common.add_to_calendar')}}
+        EventAdmin(v-if='is_mine' :event='event')
 
-      v-btn(:href='`${settings.baseurl}/api/event/${event.id}.ics`' text color='primary') {{$t('common.add_to_calendar')}}
-      EventAdmin(v-if='is_mine' :event='event')
+        //- hr
 
-      //- hr
+        //- resources from fediverse
+        #resources.mt-1(v-if='settings.enable_federation')
+          div.float-right(v-if='!settings.hide_boosts')
+            small.mr-3 🔖 {{event.likes.length}}
+            small ✊ {{event.boost.length}}<br/>
 
-      //- resources from fediverse
-      #resources.mt-1(v-if='settings.enable_federation')
-        div.float-right(v-if='!settings.hide_boosts')
-          small.mr-3 🔖 {{event.likes.length}}
-          small ✊ {{event.boost.length}}<br/>
+          p.p-2
+            v-btn(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
+            span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
 
-        p.p-2
-          v-btn(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
-          span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
+          v-dialog(v-model='showFollowMe' destroy-on-close)
+            h4(slot='title') {{$t('common.follow_me_title')}}
+            FollowMe
 
-        v-dialog(v-model='showFollowMe' destroy-on-close)
-          h4(slot='title') {{$t('common.follow_me_title')}}
-          FollowMe
+          v-dialog.showResource#resourceDialog(v-model='showResources' fullscreen
+            width='95vw'
+            destroy-on-close
+            @keydown.native.right='$refs.carousel.next()'
+            @keydown.native.left='$refs.carousel.prev()')
+            v-carousel(:interval='10000' ref='carousel' arrow='always')
+              v-carousel-item(v-for='attachment in selectedResource.data.attachment' :key='attachment.url')
+                v-img(:src='attachment.url')
+          v-card.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources' :key='resource.id' :class='{disabled: resource.hidden}')
+            span
+              v-dropdown.mr-2(v-if='$auth.user && $auth.user.is_admin')
+                v-btn(circle icon='el-icon-more' size='mini')
+                v-menu(slot='dropdown')
+                  el-dropdown-item(v-if='!resource.hidden' icon='el-icon-remove' @click.native='hideResource(resource, true)') {{$t('admin.hide_resource')}}
+                  el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(resource, false)') {{$t('admin.show_resource')}}
+                  el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(resource)') {{$t('admin.delete_resource')}}
+                  el-dropdown-item(icon='el-icon-lock' @click.native='blockUser(resource)') {{$t('admin.block_user')}}
+              a(:href='resource.data.url || resource.data.context')
+                small {{resource.data.published|dateFormat('ddd, D MMMM HH:mm')}}
 
-        v-dialog.showResource#resourceDialog(v-model='showResources' fullscreen
-          width='95vw'
-          destroy-on-close
-          @keydown.native.right='$refs.carousel.next()'
-          @keydown.native.left='$refs.carousel.prev()')
-          v-carousel(:interval='10000' ref='carousel' arrow='always')
-            v-carousel-item(v-for='attachment in selectedResource.data.attachment' :key='attachment.url')
-              v-img(:src='attachment.url')
-        v-card.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources' :key='resource.id' :class='{disabled: resource.hidden}')
-          span
-            v-dropdown.mr-2(v-if='$auth.user && $auth.user.is_admin')
-              v-btn(circle icon='el-icon-more' size='mini')
-              v-menu(slot='dropdown')
-                el-dropdown-item(v-if='!resource.hidden' icon='el-icon-remove' @click.native='hideResource(resource, true)') {{$t('admin.hide_resource')}}
-                el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(resource, false)') {{$t('admin.show_resource')}}
-                el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(resource)') {{$t('admin.delete_resource')}}
-                el-dropdown-item(icon='el-icon-lock' @click.native='blockUser(resource)') {{$t('admin.block_user')}}
-            a(:href='resource.data.url || resource.data.context')
-              small {{resource.data.published|dateFormat('ddd, D MMMM HH:mm')}}
-
-          div.mt-1(v-html='resource_filter(resource.data.content)')
-          span.previewImage(@click='showResource(resource)')
-            img(v-for='img in resource.data.attachment' :src='img.url')
+            div.mt-1(v-html='resource_filter(resource.data.content)')
+            span.previewImage(@click='showResource(resource)')
+              img(v-for='img in resource.data.attachment' :src='img.url')
 
 </template>
 <script>
@@ -312,7 +307,6 @@ export default {
 .eventDetail {
   .main_image {
     width: 100%;
-    transition: all 1s;
     margin: 0 auto;
     max-height: 83vh;
   }

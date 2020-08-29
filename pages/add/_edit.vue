@@ -35,23 +35,25 @@
             :label="$t('common.tags')")
 
           //- WHERE
-          //- v-divider
-            //- i.el-icon-location-outline
-            //- span {{$t('common.where')}}
-          //- p(v-html="$t('event.where_description')")
-          v-combobox(v-model='event.place.name'
+          v-combobox.mt-2(v-model='event.place.name'
+            :rules="[validators.required('place')]"
             :label="$t('common.where')"
+            :hint="$t('event.where_description')"
+            persistent-hint
             :items="places"
             item-text='name'
-            @change='selectPlace')
+            @input='selectPlace')
             template(v-slot:item="{ item }")
               v-list
                 v-list-item-content
                   v-list-item-title {{item.name}}
                   v-list-item-subtitle {{item.address}}
 
-          //- div {{$t("common.address")}}
-          v-text-field(ref='address' :label="$t('common.address')" v-model='event.place.address' :disabled='disableAddress')
+          v-text-field.mt-3(ref='address'
+            :rules="[validators.required('address')]"
+            :label="$t('common.address')"
+            v-model='event.place.address'
+            :disabled='disableAddress')
 
           //- WHEN
           //- v-divider <v-icon name='clock'/> {{$t('common.when')}}
@@ -103,10 +105,10 @@
                 template(v-slot:activator='{ on }')
                   v-text-field(
                     :label="$t('event.from')"
+                    :rules="validators.required('from')"
                     :value='time.start'
                     v-on='on'
-                    clearable
-                    readonly)
+                    clearable)
                 v-time-picker(
                   v-if='fromDateMenu'
                   :label="$t('event.from')"
@@ -326,42 +328,16 @@ export default {
         })))
 
       return attributes
-    },
-    // filteredTags () {
-    //   const queryTags = this.queryTags.toLowerCase()
-    //   return _(this.tags)
-    //     .filter(t => !this.event.tags.includes(t.tag))
-    //     .filter(t => t.tag.includes(queryTags))
-    //     // .pick('tag')
-    //     .take(5)
-    //     .value()
-    // },
-    // couldProceed () {
-      // return true
-      // return (this.event.place.name.length > 0 &&
-    //     this.event.place.address.length > 0 &&
-    //     (this.date && this.time.start) &&
-    //       this.event.title.length > 0)
-    // }
+    }
   },
   // mounted () {
   //   this.$refs.title.focus()
   // },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
-    // filterPlaces (q, cb) {
-    //   const query = q.toLowerCase()
-    //   const ret = _(this.places)
-    //     .filter(p => p.name.toLowerCase().includes(query))
-    //     .take(5)
-    //     .map(p => ({ value: p.name }))
-    //     .value()
-    //   ret.unshift({ value: q })
-    //   cb(ret)
-    // },
     selectPlace (p) {
       console.error('dentro selecte place ', p)
-      const place = this.places.find(place => place.id === p)
+      const place = this.places.find(place => place.id === p.id)
       console.error('vediamo se ho trovato il place', place)
       if (place && place.address) {
         this.event.place.address = place.address

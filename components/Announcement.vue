@@ -1,6 +1,6 @@
 <template lang="pug">
   nuxt-link(:to='`/announcement/${announcement.id}`')
-    v-alert.mb-0(border='left' color="primary") {{announcement.title}}
+    v-alert.mb-0(border='left' type='info' color="primary" show-icon) {{announcement.title}}
 
 </template>
 <script>

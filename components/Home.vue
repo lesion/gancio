@@ -60,4 +60,8 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
 }
+
+.v-dialog {
+  width: unset !important;
+}
 </style>
