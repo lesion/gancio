@@ -163,7 +163,7 @@ const eventController = {
    */
   async confirm (req, res) {
     const id = Number(req.params.event_id)
-    const event = await Event.findByPk(id)
+    const event = await Event.findByPk(id, { include: [Place, Tag] })
     if (!event) { return res.sendStatus(404) }
     if (!req.user.is_admin && req.user.id !== event.userId) {
       return res.sendStatus(403)
@@ -171,6 +171,15 @@ const eventController = {
 
     try {
       event.is_visible = true
+
+      // confirm tag & place if needed
+      if (!event.place.confirmed) {
+        await event.place.update({ confirmed: true })
+      }
+
+      await Tag.update({ confirmed: true },
+        { where: { confirmed: false, tag: { [Op.in]: event.tags.map(t => t.tag) } } })
+
       await event.save()
 
       res.sendStatus(200)
