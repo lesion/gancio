@@ -24,6 +24,7 @@ const eventController = {
 
   async _getMeta () {
     const places = await Place.findAll({
+      where: { confirmed: true },
       order: [[Sequelize.literal('weigth'), 'DESC']],
       attributes: {
         include: [[Sequelize.fn('count', Sequelize.col('events.placeId')), 'weigth']],
@@ -34,6 +35,7 @@ const eventController = {
     })
 
     const tags = await Tag.findAll({
+      where: { confirmed: true },
       raw: true,
       order: [['weigth', 'DESC']],
       attributes: {
