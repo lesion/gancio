@@ -277,7 +277,10 @@ const eventController = {
 
       const [place] = await Place.findOrCreate({
         where: { name: body.place_name },
-        defaults: { address: body.place_address }
+        defaults: {
+          address: body.place_address,
+          confirmed: !!req.user
+        }
       })
 
       await event.setPlace(place)
@@ -285,7 +288,7 @@ const eventController = {
 
       // create/assign tags
       if (body.tags) {
-        await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
+        await Tag.bulkCreate(body.tags.map(t => ({ tag: t, confirmed: !!req.user })), { ignoreDuplicates: true })
         const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
         await Promise.all(tags.map(t => t.update({ weigth: Number(t.weigth) + 1 })))
         await event.addTags(tags)
