@@ -11,7 +11,16 @@ Tag.init({
     index: true,
     primaryKey: true
   },
-  weigth: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false }
+  weigth: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    allowNull: false
+  },
+  confirmed: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+    allowNull: false
+  }
 }, { sequelize, modelName: 'tag' })
 
 // Tag.belongsToMany(Event, { through: 'event_tags' })

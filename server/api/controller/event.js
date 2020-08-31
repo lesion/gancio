@@ -24,6 +24,7 @@ const eventController = {
 
   async _getMeta () {
     const places = await Place.findAll({
+      where: { confirmed: true },
       order: [[Sequelize.literal('weigth'), 'DESC']],
       attributes: {
         include: [[Sequelize.fn('count', Sequelize.col('events.placeId')), 'weigth']],
@@ -34,6 +35,7 @@ const eventController = {
     })
 
     const tags = await Tag.findAll({
+      where: { confirmed: true },
       raw: true,
       order: [['weigth', 'DESC']],
       attributes: {
@@ -161,7 +163,7 @@ const eventController = {
    */
   async confirm (req, res) {
     const id = Number(req.params.event_id)
-    const event = await Event.findByPk(id)
+    const event = await Event.findByPk(id, { include: [Place, Tag] })
     if (!event) { return res.sendStatus(404) }
     if (!req.user.is_admin && req.user.id !== event.userId) {
       return res.sendStatus(403)
@@ -169,6 +171,15 @@ const eventController = {
 
     try {
       event.is_visible = true
+
+      // confirm tag & place if needed
+      if (!event.place.confirmed) {
+        await event.place.update({ confirmed: true })
+      }
+
+      await Tag.update({ confirmed: true },
+        { where: { confirmed: false, tag: { [Op.in]: event.tags.map(t => t.tag) } } })
+
       await event.save()
 
       res.sendStatus(200)
@@ -277,7 +288,10 @@ const eventController = {
 
       const [place] = await Place.findOrCreate({
         where: { name: body.place_name },
-        defaults: { address: body.place_address }
+        defaults: {
+          address: body.place_address,
+          confirmed: !!req.user
+        }
       })
 
       await event.setPlace(place)
@@ -285,7 +299,7 @@ const eventController = {
 
       // create/assign tags
       if (body.tags) {
-        await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
+        await Tag.bulkCreate(body.tags.map(t => ({ tag: t, confirmed: !!req.user })), { ignoreDuplicates: true })
         const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
         await Promise.all(tags.map(t => t.update({ weigth: Number(t.weigth) + 1 })))
         await event.addTags(tags)
