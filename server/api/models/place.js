@@ -11,7 +11,12 @@ Place.init({
     index: true,
     allowNull: false
   },
-  address: DataTypes.STRING
+  address: DataTypes.STRING,
+  confirmed: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+    allowNull: false
+  }
 }, { sequelize, modelName: 'place' })
 
 // Place.hasMany(Event)
