@@ -105,7 +105,7 @@
                 template(v-slot:activator='{ on }')
                   v-text-field(
                     :label="$t('event.from')"
-                    :rules="validators.required('from')"
+                    :rules="[validators.required('from')]"
                     :value='time.start'
                     v-on='on'
                     clearable)
