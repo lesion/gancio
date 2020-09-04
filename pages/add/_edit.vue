@@ -12,7 +12,7 @@
 
           //- title
           v-text-field.mb-3(v-model='event.title'
-            :rules="[validators.required('title')]"
+            :rules="[$validators.required()]"
             :label="$t('event.what_description')"
             autofocus
             ref='title')
@@ -25,18 +25,15 @@
             style='max-height: 400px;')
 
           //- tags
-          //- div {{$t('event.tag_description')}}
-          //- client-only
           v-combobox.mt-3(v-model='event.tags'
-            chips small-chips multiple deletable-chips hide-no-data hide-selected
+            chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
             :delimiters="[',', ' ']"
             :items="tags.map(t => t.tag)"
-            :hints="$t('event.tag_description')"
             :label="$t('common.tags')")
 
           //- WHERE
           v-combobox.mt-2(v-model='event.place.name'
-            :rules="[validators.required('place')]"
+            :rules="[$validators.required()]"
             :label="$t('common.where')"
             :hint="$t('event.where_description')"
             persistent-hint
@@ -50,7 +47,7 @@
                   v-list-item-subtitle {{item.address}}
 
           v-text-field.mt-3(ref='address'
-            :rules="[validators.required('address')]"
+            :rules="[$validators.required()]"
             :label="$t('common.address')"
             v-model='event.place.address'
             :disabled='disableAddress')
@@ -63,14 +60,13 @@
               v-btn(value='multidate' label="multidate") {{$t('event.multidate')}}
               v-btn(v-if='settings.allow_recurrent_event' value='recurrent' label="recurrent") {{$t('event.recurrent')}}
 
-            p {{$t(`event.${event.type}_description`)}}
+            p {{$t(`event.${event.type}_description`)}} {{date}}
             v-select(v-if='event.type==="recurrent"'
               :items="frequencies"
               v-model='event.recurrent.frequency')
               //- v-option(:label="$t('event.each_week')" value='1w' key='1w')
               //- v-option(:label="$t('event.each_2w')" value='2w' key='2w')
               //- el-option(:label="$t('event.each_month')" value='1m' key='1m')
-
             client-only
               .datePicker
                 v-date-picker(
@@ -105,7 +101,7 @@
                 template(v-slot:activator='{ on }')
                   v-text-field(
                     :label="$t('event.from')"
-                    :rules="[validators.required('from')]"
+                    :rules="[$validators.required()]"
                     :value='time.start'
                     v-on='on'
                     clearable)
@@ -158,7 +154,7 @@
 
       v-card-actions
         v-spacer
-        v-btn(@click='done' :loading='loading' :disabled='!valid || loading'
+        v-btn(@click='done' :loading='loading' :disabled='!valid || loading || !date'
           color='primary') {{edit?$t('common.edit'):$t('common.send')}}
 
 </template>
@@ -168,7 +164,6 @@ import _ from 'lodash'
 import moment from 'moment-timezone'
 import Editor from '@/components/Editor'
 import List from '@/components/List'
-import { validators } from '../../plugins/helpers'
 
 export default {
   name: 'NewEvent',
@@ -216,7 +211,6 @@ export default {
     const month = moment().month() + 1
     const year = moment().year()
     return {
-      validators,
       valid: false,
       dueDateMenu: false,
       fromDateMenu: false,
@@ -336,10 +330,9 @@ export default {
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
     selectPlace (p) {
-      console.error('dentro selecte place ', p)
-      const place = this.places.find(place => place.id === p.id)
-      console.error('vediamo se ho trovato il place', place)
+      const place = p && this.places.find(place => place.id === p.id)
       if (place && place.address) {
+        this.event.place.name = p.name
         this.event.place.address = place.address
         this.disableAddress = true
       } else {
