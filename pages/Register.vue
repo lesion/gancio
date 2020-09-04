@@ -11,15 +11,15 @@
           v-form(ref='form' v-model='valid')
             v-text-field(ref='email'
               v-model='user.email' type='email'
-              :rules="validators.email"
+              :rules="$validators.email"
               :label='$t("common.email")' autocomplete='email')
 
             v-text-field(v-model='user.password' type="password"
-              :rules="validators.password"
+              :rules="$validators.password"
               :label="$t('common.password')")
 
             v-textarea(v-model='user.description'
-              :rules="[validators.required('description')]"
+              :rules="[$validators.required($t('common.description'))]"
               :label="$t('common.description')")
 
         v-card-actions
@@ -33,13 +33,11 @@
 <script>
 import { mapState } from 'vuex'
 import get from 'lodash/get'
-import { validators } from '../plugins/helpers'
 
 export default {
   name: 'Register',
   data () {
     return {
-      validators,
       loading: false,
       user: {},
       valid: true

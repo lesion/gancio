@@ -15,7 +15,6 @@
 
 </template>
 <script>
-import { validators } from '../../plugins/helpers'
 
 export default {
   name: 'Recover',
@@ -29,7 +28,7 @@ export default {
     }
   },
   data () {
-    return { validators, new_password: '' }
+    return { new_password: '' }
   },
   methods: {
     async change_password () {

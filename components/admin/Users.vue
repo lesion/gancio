@@ -17,7 +17,7 @@
           v-form
             v-text-field(v-model='new_user.email'
               :label="$t('common.email')"
-              :rules="[validators.required('email')]")
+              :rules="[$validators.required('email')]")
             v-switch(v-model='new_user.is_admin' :label="$t('common.admin')" inset)
           v-alert(type='info' :closable='false') {{$t('admin.user_add_help')}}
           v-card-actions
@@ -42,7 +42,6 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { validators } from '../../plugins/helpers'
 
 export default {
   name: 'Users',
@@ -51,7 +50,6 @@ export default {
   },
   data () {
     return {
-      validators,
       newUserDialog: false,
       new_user: {
         email: '',

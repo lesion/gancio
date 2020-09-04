@@ -65,7 +65,7 @@
             v-btn(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
             span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
 
-          v-dialog(v-model='showFollowMe' destroy-on-close)
+          v-dialog(v-model='showFollowMe' destroy-on-close max-width='500px')
             h4(slot='title') {{$t('common.follow_me_title')}}
             FollowMe
 
@@ -77,21 +77,30 @@
             v-carousel(:interval='10000' ref='carousel' arrow='always')
               v-carousel-item(v-for='attachment in selectedResource.data.attachment' :key='attachment.url')
                 v-img(:src='attachment.url')
-          v-card.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources' :key='resource.id' :class='{disabled: resource.hidden}')
-            span
-              v-dropdown.mr-2(v-if='$auth.user && $auth.user.is_admin')
-                v-btn(circle icon='el-icon-more' size='mini')
-                v-menu(slot='dropdown')
-                  el-dropdown-item(v-if='!resource.hidden' icon='el-icon-remove' @click.native='hideResource(resource, true)') {{$t('admin.hide_resource')}}
-                  el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(resource, false)') {{$t('admin.show_resource')}}
-                  el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(resource)') {{$t('admin.delete_resource')}}
-                  el-dropdown-item(icon='el-icon-lock' @click.native='blockUser(resource)') {{$t('admin.block_user')}}
-              a(:href='resource.data.url || resource.data.context')
-                small {{resource.data.published|dateFormat('ddd, D MMMM HH:mm')}}
+          v-list.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources' dark
+            :key='resource.id' :class='{disabled: resource.hidden}')
+            v-list-item
+              v-list-title
+                v-menu(v-if='$auth.user && $auth.user.is_admin' offset-y)
+                  template(v-slot:activator="{ on, attrs }")
+                    v-btn.mr-2(v-on='on' v-attrs='attrs' color='primary' small icon outlined)
+                      v-icon mdi-dots-vertical
+                  v-list
+                    v-list-item(v-if='!resource.hidden' @click='hideResource(resource, true)')
+                      v-list-item-title <v-icon left>mdi-eye-off</v-icon> {{$t('admin.hide_resource')}}
+                    v-list-item(v-else @click='hideResource(resource, false)')
+                      v-list-item-title <v-icon left>mdi-eye-on</v-icon> {{$t('admin.show_resource')}}
+                    v-list-item(@click='deleteResource(resource)')
+                      v-list-item-title <v-icon left>mdi-delete</v-icon> {{$t('admin.delete_resource')}}
+                    v-list-item(@click='blockUser(resource)')
+                      v-list-item-title <v-icon left>mdi-lock</v-icon> {{$t('admin.block_user')}}
 
-            div.mt-1(v-html='resource_filter(resource.data.content)')
-            span.previewImage(@click='showResource(resource)')
-              img(v-for='img in resource.data.attachment' :src='img.url')
+                a(:href='resource.data.url || resource.data.context')
+                  small {{resource.data.published|dateFormat('ddd, D MMMM HH:mm')}}
+
+                div.mt-1(v-html='resource_filter(resource.data.content)')
+                span.previewImage(@click='showResource(resource)')
+                  img(v-for='img in resource.data.attachment' :src='img.url')
 
 </template>
 <script>
@@ -228,56 +237,20 @@ export default {
       this.selectedResource = resource
       document.getElementById('resourceDialog').focus()
     },
-    async remove () {
-      try {
-        await this.$root.$confirm(this.$t('event.remove_confirmation'), this.$t('common.confirm'), {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'error'
-        })
-        await this.$axios.delete(`/user/event/${this.event.id}`)
-        this.delEvent(Number(this.event.id))
-        this.$router.replace('/')
-      } catch (e) {
-        console.error(e)
-      }
-    },
-    async toggle () {
-      try {
-        if (this.event.is_visible) {
-          await this.$axios.$get(`/event/unconfirm/${this.event.id}`)
-          this.event.is_visible = false
-        } else {
-          await this.$axios.$get(`/event/confirm/${this.event.id}`)
-          this.event.is_visible = true
-        }
-      } catch (e) {
-        console.error(e)
-      }
-    },
     async hideResource (resource, hidden) {
       await this.$axios.$put(`/resources/${resource.id}`, { hidden })
       resource.hidden = hidden
     },
     async blockUser (resource) {
       try {
-        await this.$root.$confirm(this.$t('admin.user_block_confirm'), {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'error'
-        })
+        await this.$root.$confirm(this.$t('admin.user_block_confirm'))
         await this.$axios.post('/instances/toggle_user_block', { ap_id: resource.ap_user.ap_id })
         this.$root.$message({ message: this.$t('admin.user_blocked', { user: resource.ap_user.ap_id }), type: 'success' })
       } catch (e) { }
     },
     async deleteResource (resource) {
       try {
-        await this.$root.$confirm(this.$t('admin.delete_resource_confirm'),
-          this.$t('common.confirm'), {
-            confirmButtonText: this.$t('common.ok'),
-            cancelButtonText: this.$t('common.cancel'),
-            type: 'error'
-          })
+        await this.$root.$confirm(this.$t('admin.delete_resource_confirm'))
         await this.$axios.delete(`/resources/${resource.id}`)
         this.event.resources = this.event.resources.filter(r => r.id !== resource.id)
       } catch (e) { }

@@ -38,11 +38,11 @@
           v-card-text
             v-form(v-model='valid' ref='linkModalForm')
               v-text-field(v-model='link.label'
-                :rules="[validators.required('label')]"
+                :rules="[$validators.required('label')]"
                 label='Label')
               v-text-field(v-model='link.href'
-                :rules="[validators.required('href')]"
-                label='Href')
+                :rules="[$validators.required($t('common.url'))]"
+                :label="$t('common.url')")
           v-card-actions
             v-spacer
             v-btn(link @click='linkModal=false' color='error') {{$t('common.cancel')}}
@@ -67,13 +67,11 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import { validators } from '../../plugins/helpers'
 
 export default {
   name: 'Theme',
   data () {
     return {
-      validators,
       valid: false,
       logoKey: 0,
       link: { href: '', label: '' },

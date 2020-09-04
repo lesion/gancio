@@ -1,10 +1,19 @@
 <template lang='pug'>
   v-card
-    p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${domain}`})")
-    v-text-field(v-model='instance_hostname' ref='instance')
-      a(slot='append' :href='link' target='_blank')
-        v-btn(:disabled='(!couldGo || !proceed)' plain type="primary") {{$t("common.follow")}}
-    p.mt-2 <img class='instance_thumb' :src="instance.thumbnail"/> {{instance.title}}
+    v-card-title(v-text="$t('common.follow_me_title')")
+    v-card-text
+      p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${domain}`})")
+      v-text-field(
+        :rules='[$validators.required()]'
+        :label="$t('common.url')"
+        v-model='instance_hostname')
+      p <img class='instance_thumb' :src="instance.thumbnail"/> {{instance.title}}
+    v-card-actions
+      //- a(slot='append' :href='link' target='_blank')
+      v-spacer
+      v-btn(:disabled='(!couldGo || !proceed)'
+        :loading='loading'
+        color="primary") {{$t("common.follow")}}
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -18,6 +27,7 @@ export default {
       instance_hostname: '',
       proceed: false,
       instance: {},
+      loading: false,
       get_instance_info: debounce(this.getInstanceInfo, 500)
     }
   },
@@ -29,7 +39,6 @@ export default {
       return URL.hostname
     },
     couldGo () {
-      console.error(this.instance_hostname)
       // check if is mastodon
       this.get_instance_info()
       return true

@@ -41,6 +41,7 @@ module.exports = {
     '@/plugins/filters', // text filters, datetime filters, generic transformation helpers etc.
     '@/plugins/vue-clipboard', // vuetify
     '@/plugins/axios', // axios baseurl configuration
+    '@/plugins/validators', // inject validators
     { src: '@/plugins/v-calendar', ssr: false } // calendar, fix ssr
   ],
 

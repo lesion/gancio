@@ -19,8 +19,8 @@ export default {
     return {
       icon: 'md-alert',
       color: 'primary',
-      bottom: false,
-      top: true,
+      bottom: true,
+      top: false,
       left: false,
       right: false,
       active: false,

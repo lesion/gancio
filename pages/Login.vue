@@ -9,12 +9,12 @@
         v-card-text
           v-form(v-model='valid' ref='form')
             v-text-field(v-model='email' type='email'
-              :rules='validators.email' autofocus
+              :rules='$validators.email' autofocus
               :placeholder='$t("common.email")'
               ref='email')
 
             v-text-field(v-model='password'
-              :rules='validators.password'
+              :rules='$validators.password'
               type='password'
               :placeholder='$t("common.password")')
 
@@ -41,13 +41,11 @@
 
 <script>
 import { mapState } from 'vuex'
-import { validators } from '../plugins/helpers'
 
 export default {
   name: 'Login',
   data () {
     return {
-      validators,
       password: '',
       email: '',
       loading: false,

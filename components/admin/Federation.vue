@@ -23,7 +23,7 @@
         //- div.mt-4 {{$t('admin.instance_name')}}
         v-text-field.mt-5(v-model='instance_name'
           :label="$t('admin.instance_name')"
-          :hint="`${$t('admin.instance_name_help')} (@${instance_name}@${settings.baseurl|url2host})`"
+          :hint="`${$t('admin.instance_name_help')} ${instance_ap_url}`"
           placeholder='Instance name' persistent-hint
           @blur='save("instance_name", instance_name)')
 
@@ -47,7 +47,7 @@
               v-form(v-model='valid')
               v-text-field.mt-4(v-model='instance_url'
                 persistent-hint
-                :rules="[validators.required('email')]"
+                :rules="[$validators.required()]"
                 :hint="$t('admin.add_trusted_instance')"
                 :label="$t('common.url')")
             v-card-actions
@@ -68,14 +68,12 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import { validators } from '../../plugins/helpers'
 import axios from 'axios'
 
 export default {
   name: 'Federation',
   data ({ $store, $options }) {
     return {
-      validators,
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
       instance_place: $store.state.settings.instance_place,
@@ -107,6 +105,10 @@ export default {
     enable_trusted_instances: {
       get () { return this.settings.enable_trusted_instances },
       set (value) { this.setSetting({ key: 'enable_trusted_instances', value }) }
+    },
+    instance_ap_url () {
+      const instance_url = this.settings.baseurl.match(/^https?:\/\/(.[^/:]+)/i)[1]
+      return `(@${this.instance_name}@${instance_url})`
     }
   },
   methods: {

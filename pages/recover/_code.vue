@@ -3,23 +3,20 @@
     v-col(cols='12' md="6" lg="5" xl="4")
       v-card
         v-card-title {{settings.title}} - {{$t('common.recover_password')}}
-          //- nuxt-link(to='/')
-            //- v-img(src='/logo.png')
-          //- span {{settings.title}} - {{$t('common.recover_password')}}
         v-card-text
           div(v-if='valid')
             v-text-field(type='password'
-              :rules="validators.password"
+              :rules="$validators.password"
               autofocus :placeholder='$t("common.new_password")'
               v-model='new_password')
           div(v-else) {{$t('recover.not_valid_code')}}
 
         v-card-actions
+          v-spacer
           v-btn(v-if='valid' color='primary' @click='change_password') {{$t('common.send')}}
 </template>
 <script>
 import { mapState } from 'vuex'
-import { validators } from '../../plugins/helpers'
 
 export default {
   name: 'Recover',
@@ -34,7 +31,7 @@ export default {
     }
   },
   data () {
-    return { new_password: '', validators }
+    return { new_password: '' }
   },
   computed: mapState(['settings']),
   methods: {
