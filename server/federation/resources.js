@@ -10,7 +10,7 @@ module.exports = {
 
   // create a resource from AP Note
   async create (req, res) {
-    if (!req.settings.enable_resource) {
+    if (!req.settings.enable_resources) {
       debug('Ignore resource as it is disabled in settings')
       return
     }
