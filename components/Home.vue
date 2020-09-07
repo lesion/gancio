@@ -61,7 +61,4 @@ export default {
   justify-content: center;
 }
 
-.v-dialog {
-  width: unset !important;
-}
 </style>

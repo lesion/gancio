@@ -6,24 +6,24 @@
         append-icon='mdi-magnify'
         label='Search',
         single-line hide-details)
-      v-btn(text color='primary' small @click='newUserDialog = true') <v-icon>mdi-plus-user</v-icon> {{$t('common.new_user')}}
+      v-btn(color='primary' small @click='newUserDialog = true') <v-icon>mdi-plus</v-icon> {{$t('common.new_user')}}
 
     //- ADD NEW USER
-    v-dialog(v-model='newUserDialog' width='500')
+    v-dialog(v-model='newUserDialog' :fullscreen="$vuetify.breakpoint.xsOnly")
 
       v-card
         v-card-title {{$t('common.new_user')}}
         v-card-text
-          v-form
+          v-form(v-model='valid')
             v-text-field(v-model='new_user.email'
               :label="$t('common.email')"
-              :rules="[$validators.required('email')]")
+              :rules="$validators.email")
             v-switch(v-model='new_user.is_admin' :label="$t('common.admin')" inset)
           v-alert(type='info' :closable='false') {{$t('admin.user_add_help')}}
           v-card-actions
             v-spacer
             v-btn(@click='newUserDialog=false' color='error') {{$t('common.cancel')}}
-            v-btn(@click='createUser' color='primary') {{$t('common.send')}}
+            v-btn(@click='createUser' :disabled='!valid' color='primary') {{$t('common.send')}}
 
     v-card-text
       //- USERS LIST
@@ -51,6 +51,7 @@ export default {
   data () {
     return {
       newUserDialog: false,
+      valid: false,
       new_user: {
         email: '',
         is_admin: false
@@ -66,9 +67,7 @@ export default {
   computed: mapState(['settings']),
   methods: {
     async deleteUser (user) {
-      const ret = await this.$root.$confirm(this.$t('common.confirm'),
-        this.$t('admin.delete_user_confirm'),
-        { type: 'error' })
+      const ret = await this.$root.$confirm(this.$t('common.confirm'), this.$t('admin.delete_user_confirm'))
       if (!ret) { return }
       await this.$axios.delete(`/user/${user.id}`)
       this.$root.$message({ message: this.$t('admin.user_remove_ok') })

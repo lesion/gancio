@@ -243,14 +243,16 @@ export default {
     },
     async blockUser (resource) {
       try {
-        await this.$root.$confirm(this.$t('admin.user_block_confirm'))
+        const ret = await this.$root.$confirm(this.$t('common.confirm'), this.$t('admin.user_block_confirm', { user: resource.ap_user.ap_id }))
+        if (!ret) { return }
         await this.$axios.post('/instances/toggle_user_block', { ap_id: resource.ap_user.ap_id })
         this.$root.$message({ message: this.$t('admin.user_blocked', { user: resource.ap_user.ap_id }), type: 'success' })
       } catch (e) { }
     },
     async deleteResource (resource) {
       try {
-        await this.$root.$confirm(this.$t('admin.delete_resource_confirm'))
+        const ret = await this.$root.$confirm(this.$t('common.confirm'), this.$t('admin.delete_resource_confirm'))
+        if (!ret) { return }
         await this.$axios.delete(`/resources/${resource.id}`)
         this.event.resources = this.event.resources.filter(r => r.id !== resource.id)
       } catch (e) { }

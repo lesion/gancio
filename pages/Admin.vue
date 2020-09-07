@@ -15,7 +15,7 @@
 
         //- USERS
         v-tab
-          v-badge(:value='unconfirmedUsers.length' :content='unconfirmedUsers.length') {{$t('common.users')}}
+          v-badge(:value='!!unconfirmedUsers.length' :content='unconfirmedUsers.length') {{$t('common.users')}}
         v-tab-item
           Users(:users='users')
 
@@ -26,15 +26,9 @@
 
         //- EVENTS
         v-tab
-          v-badge(:value='events.length') {{$t('common.events')}}
+          v-badge(:value='!!unconfirmedEvents.length' :content='unconfirmedEvents.length') {{$t('common.events')}}
         v-tab-item
-          v-container
-            v-card-title {{$t('common.events')}}
-            v-card-subtitle {{$t('admin.event_confirm_description')}}
-            v-card-text
-              v-data-table(
-                :items='events'
-                :headers='eventHeaders')
+          Events(:unconfirmedEvents='unconfirmedEvents')
 
         //- ANNOUNCEMENTS
         v-tab {{$t('common.announcements')}}
@@ -55,6 +49,7 @@
 <script>
 import { mapState } from 'vuex'
 import Users from '../components/admin/Users'
+import Events from '../components/admin/Events'
 import Places from '../components/admin/Places'
 import Settings from '../components/admin/Settings'
 import Federation from '../components/admin/Federation'
@@ -64,25 +59,22 @@ import Theme from '../components/admin/Theme'
 
 export default {
   name: 'Admin',
-  components: { Users, Places, Settings, Federation, Moderation, Announcement, Theme },
+  components: { Users, Events, Places, Settings, Federation, Moderation, Announcement, Theme },
   middleware: ['auth'],
   async asyncData ({ $axios, params, store }) {
     try {
       const users = await $axios.$get('/users')
-      const events = await $axios.$get('/event/unconfirmed')
-      return { users, events }
+      const unconfirmedEvents = await $axios.$get('/event/unconfirmed')
+      return { users, unconfirmedEvents }
     } catch (e) {
       console.error(e)
-      return { users: [], events: [] }
+      return { users: [], unconfirmedEvents: [] }
     }
   },
   data () {
     return {
       description: '',
-      events: [],
-      eventHeaders: [
-        { value: 'title', text: 'Title' }
-      ]
+      unconfirmedEvents: []
     }
   },
   computed: {
@@ -104,7 +96,7 @@ export default {
           message: this.$t('event.confirmed'),
           type: 'success'
         })
-        this.events = this.events.filter(e => e.id !== id)
+        this.unconfirmedEvents = this.unconfirmedEvents.filter(e => e.id !== id)
       } catch (e) {
       }
     }
