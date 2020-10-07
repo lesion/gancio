@@ -1,5 +1,5 @@
 <template lang='pug'>
-  v-card
+  v-card(color='secondary')
     v-card-title(v-text="$t('common.follow_me_title')")
     v-card-text
       p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${domain}`})")
@@ -8,12 +8,12 @@
         :label="$t('common.url')"
         v-model='instance_hostname')
       p <img class='instance_thumb' :src="instance.thumbnail"/> {{instance.title}}
+
     v-card-actions
-      //- a(slot='append' :href='link' target='_blank')
       v-spacer
+      v-btn(v-if='isDialog' color='warning' @click="$emit('close')") {{$t("common.cancel")}}
       v-btn(:disabled='(!couldGo || !proceed)'
-        :loading='loading'
-        color="primary") {{$t("common.follow")}}
+        :loading='loading' color="primary") {{$t("common.follow")}}
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -22,6 +22,9 @@ import url from 'url'
 
 export default {
   name: 'FollowMe',
+  props: [
+    { isDialog: { type: Boolean, default: false }}
+  ],
   data () {
     return {
       instance_hostname: '',
