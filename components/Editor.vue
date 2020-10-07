@@ -173,14 +173,16 @@ export default {
 .editor {
   // max-height: auto;
   // height: auto;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #FF4500 transparent;
+    scroll-behavior: smooth;  
   font-family: sans-serif;
   font-size: 1.1em;
   border-color: currentColor;
   border-style: solid;
   border-width: 0 0 thin 0;
   // background-color: rgba(255,255,255,0.04);
-  height: auto;
-
   .focused {
     opacity: 1 !important;
   }
@@ -190,14 +192,6 @@ export default {
     // position: absolute;
   }
 
-  .content {
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #FF4500 transparent;
-    scroll-behavior: smooth;
-    // padding-top: 30px;
-    // padding: 30px;
-  }
   .ProseMirror {
     padding: 15px;
     outline: 0;
