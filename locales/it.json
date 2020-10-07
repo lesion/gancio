@@ -82,7 +82,8 @@
     "url": "Indirizzo URL",
     "place": "Luogo",
     "tags": "Tags",
-    "theme": "Tema"
+    "theme": "Tema",
+    "reset": "Reset"
   },
   "login": {
     "description": "Entrando puoi pubblicare nuovi eventi.",
@@ -197,7 +198,12 @@
     "trusted_instances_help": "Le istanze amiche compariranno nella barra di navigazione in cima alla pagina",
     "add_trusted_instance": "Aggiungi un istanza amica",
     "instance_place_help": "Verrà mostrata questa stringa nel menù delle altre istanze amiche",
-    "delete_trusted_instance_confirm": "Vuoi davvero eliminare questa voce dal menù delle istanze amiche?"
+    "delete_trusted_instance_confirm": "Vuoi davvero eliminare questa voce dal menù delle istanze amiche?",
+    "is_dark": "Tema scuro",
+    "add_link": "Aggiungi link",
+    "footer_links": "Footer link",
+    "delete_footer_link_confirm": "Sicura di eliminare questo link?",
+    "edit_place": "Modifica luogo"
   },
   "auth": {
     "not_confirmed": "Non abbiamo ancora confermato questa mail...",

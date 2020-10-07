@@ -80,7 +80,10 @@
         "delete": "Remove",
         "announcements": "Announcements",
         "url": "URL",
-        "place": "Place"
+        "place": "Place",
+        "tags": "Tags",
+        "theme": "Theme",
+        "reset": "Reset"
     },
     "login": {
         "description": "By logging in you can publish new events.",
@@ -197,7 +200,12 @@
         "trusted_instances_help": "Friendly instances list will be shown in header",
         "add_trusted_instance": "Add a friendly instance",
         "instance_place_help": "The label to show in other's instances",
-        "delete_trusted_instance_confirm": "Do you really want to delete this item from the friend instances menu?"
+        "delete_trusted_instance_confirm": "Do you really want to delete this item from the friend instances menu?",
+        "is_dark": "Dark theme",
+        "add_link": "Add link",
+        "footer_links": "Footer links",
+        "delete_footer_link_confirm": "Sure to remove this link?",
+        "edit_place": "Edit place"
     },
     "auth": {
         "not_confirmed": "Not confirmed yet...",
@@ -227,6 +235,10 @@
         "4": "fourth",
         "5": "fifth",
         "-1": "last"
+    },
+    "validators": {
+        "required": "{fieldName} is required",
+        "email": "Insert a valid email"
     },
     "about": "\n  <p><a href='https://gancio.org'>Gancio</a> is a shared agenda for local communities.</p>\n  ",
     "oauth": {
