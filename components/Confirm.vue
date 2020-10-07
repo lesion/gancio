@@ -6,7 +6,7 @@
     :max-width='options.width'
     :style="{ zIndex: options.zIndex, position: 'absolute' }"
     @keydown.esc='cancel')
-    v-card
+    v-card(color='secondary')
       v-card-title {{ title }}
       v-card-text(v-show='!!message') {{ message }}
       v-card-actions
@@ -61,9 +61,9 @@ export default {
     this.$root.$confirm = this.open
   },
   methods: {
-    open (message, options) {
+    open (message, options = {}) {
       this.dialog = true
-      this.title = option.title || 'Confirm'
+      this.title = options.title || 'Confirm'
       this.message = this.$t(message, options)
       this.options = Object.assign(this.options, options)
       return new Promise((resolve, reject) => {
