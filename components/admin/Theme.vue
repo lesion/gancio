@@ -143,7 +143,7 @@ export default {
       this.linkModal = false
     },
     async removeFooterLink (item) {
-      const ret = await this.$root.$confirm(this.$t('common.confirm'), this.$t('admin.delete_footer_link_confirm'))
+      const ret = await this.$root.$confirm('admin.delete_footer_link_confirm')
       if (!ret) { return }
       const footerLinks = this.settings.footerLinks.filter(l => l.label !== item.label)
       this.setSetting({ key: 'footerLinks', value: footerLinks })

@@ -141,14 +141,14 @@ export default {
     },
     async toggleUserBlock (ap_user) {
       if (!ap_user.blocked) {
-        const ret = await this.$root.$confirm(this.$t('admin.user_block_confirm'))
+        const ret = await this.$root.$confirm('admin.user_block_confirm')
         if (!ret) { return }
       }
       await this.$axios.post('/instances/toggle_user_block', { ap_id: ap_user.ap_id })
       ap_user.blocked = !ap_user.blocked
     },
     async deleteResource (resource) {
-      const ret = await this.$root.$confirm(this.$t('admin.delete_resource_confirm'))
+      const ret = await this.$root.$confirm('admin.delete_resource_confirm')
       if (!ret) { return }
       await this.$axios.delete(`/resources/${resource.id}`)
       this.resources = this.resources.filter(r => r.id !== resource.id)

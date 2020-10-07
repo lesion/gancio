@@ -67,7 +67,7 @@
 
           v-dialog(v-model='showFollowMe' destroy-on-close max-width='500px')
             h4(slot='title') {{$t('common.follow_me_title')}}
-            FollowMe
+            FollowMe(@close='showFollowMe=false' is-dialog)
 
           v-dialog.showResource#resourceDialog(v-model='showResources' fullscreen
             width='95vw'

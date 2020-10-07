@@ -29,7 +29,7 @@ export default {
   methods: {
     ...mapActions(['delEvent']),
     async remove (parent = false) {
-      const ret = await this.$root.$confirm(this.$t('common.confirm'), this.$t(`event.remove_${parent ? 'recurrent_' : ''}confirmation`))
+      const ret = await this.$root.$confirm(`event.remove_${parent ? 'recurrent_' : ''}confirmation`)
       if (!ret) { return }
       const id = parent ? this.event.parentId : this.event.id
       await this.$axios.delete(`/event/${id}`)

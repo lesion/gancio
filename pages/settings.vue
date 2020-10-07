@@ -54,14 +54,12 @@ export default {
     //     Message({ message: e, showClose: true, type: 'warning' })
     //   })
     // },
-    remove_account () {
-      this.$root.$confirm(this.$t('settings.remove_account_confirm'), this.$t('common.confirm'), {
-        type: 'error'
-      }).then(() => {
-        this.$axios.$delete('/user')
-        this.$auth.logout()
-        this.$router.replace('/')
-      })
+    async remove_account () {
+      const ret = await this.$root.$confirm('settings.remove_account_confirm', { color: 'error' })
+      if (!ret) return
+      this.$axios.$delete('/user')
+      this.$auth.logout()
+      this.$router.replace('/')
     }
   },
   head () {
