@@ -1,7 +1,7 @@
 {
     "register": {
         "subject": "Richiesta registrazione ricevuta",
-        "content": "Abbiamo ricevuto la richiesta di registrazione. La confermeremo quanto prima.\nCiao"
+        "content": "Abbiamo ricevuto la richiesta di registrazione. La confermeremo quanto prima.\nCiao."
     },
     "confirm": {
         "subject": "Puoi iniziare a pubblicare eventi",
