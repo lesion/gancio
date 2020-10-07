@@ -2,7 +2,7 @@
   v-container
     v-card-title {{$t('common.announcements')}}
     v-card-subtitle(v-html="$t('admin.announcement_description')")
-    v-dialog(v-model='dialog' width='800')
+    v-dialog(v-model='dialog' width='800px')
       v-card
         v-card-title {{$t('admin.new_announcement')}}
         v-card-text
@@ -72,18 +72,12 @@ export default {
         this.setAnnouncements(cloneDeep(this.announcements.filter(a => a.visible)))
       } catch (e) {}
     },
-    remove (announcement) {
-      this.$root.$confirm(this.$t('admin.delete_announcement_confirm'),
-        this.$t('common.confirm'), {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'error'
-        })
-        .then(() => this.$axios.delete(`/announcements/${announcement.id}`))
+    async remove (announcement) {
+      const ret = await this.$root.$confirm('admin.delete_announcement_confirm')
+      if (!ret) return
+      this.$axios.delete(`/announcements/${announcement.id}`)
         .then(() => {
-          this.$root.$message({
-            message: this.$t('admin.announcement_remove_ok')
-          })
+          this.$root.$message('admin.announcement_remove_ok')
           this.announcements = this.announcements.filter(a => a.id !== announcement.id)
         })
     },

@@ -447,15 +447,15 @@ export default {
         this.updateMeta()
         this.$router.replace('/')
         this.loading = false
-        this.$root.$message({ type: 'success', message: this.$auth.loggedIn ? this.$t('event.added') : this.$t('event.added_anon') })
+        this.$root.$message(this.$auth.loggedIn ? 'event.added' : 'event.added_anon', { color: 'success' })
       } catch (e) {
         console.error(e.response)
         switch (e.request.status) {
           case 413:
-            this.$root.$message({ type: 'error', message: this.$t('event.image_too_big') })
+            this.$root.$message('event.image_too_big', { color: 'error' })
             break
           default:
-            this.$root.$message({ type: 'error', message: e.response.data })
+            this.$root.$message(e.response.data, { color: 'error' })
         }
         this.loading = false
       }
@@ -477,26 +477,5 @@ export default {
 .container {
   max-width: 1400px;
 }
-/* #edit_page
-  i {
-    font-size: 1.3em;
-  }
-
-  #picker {
-    max-width: 600px;
-  }
-
-  #edit_page .el-form-item {
-    display: inline-flex;
-  }
-
-  .el-upload,
-  .el-upload-dragger {
-    overflow: hidden;
-    text-align: center;
-    margin: 0 auto;
-    max-width: 80%;
-    font-size: 2em;
-  } */
 
 </style>

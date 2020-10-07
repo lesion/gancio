@@ -29,10 +29,11 @@ export default {
     }
   },
   created () {
-    this.$root.$message = snackbar => {
+    this.$root.$message = (message, opts) => {
       this.active = true
-      this.message = snackbar.message
-      this.color = snackbar.color || 'primary'
+      this.message = this.$t(message, opts)
+      this.color = opts.color || 'primary'
+      this.icon = opts.icon || 'md-alert'
     }
   }
 }

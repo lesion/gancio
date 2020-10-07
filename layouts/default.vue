@@ -32,7 +32,6 @@ export default {
 </script>
 <style lang="less">
 .v-dialog {
-  width: unset !important;
-  max-width: 600px;
+  max-width: 800px;
 }
 </style>

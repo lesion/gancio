@@ -124,15 +124,11 @@ export default {
         })
         this.instance_url = ''
       } catch (e) {
-        this.$root.$message({
-          type: 'error',
-          message: e
-        })
+        this.$root.$message(e, { color: 'error' })
       }
     },
     async deleteInstance (instance) {
-      const ret = await this.$root.$confirm(this.$t('common.confirm'),
-        this.$t('admin.delete_trusted_instance_confirm'))
+      const ret = await this.$root.$confirm('admin.delete_trusted_instance_confirm')
       if (!ret) { return }
       this.setSetting({
         key: 'trusted_instances',

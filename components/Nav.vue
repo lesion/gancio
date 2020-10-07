@@ -98,14 +98,10 @@ export default {
   },
   methods: {
     copyLink () {
-      this.$root.$message({
-        message: this.$t('common.feed_url_copied')
-      })
+      this.$root.$message('common.feed_url_copied')
     },
     logout () {
-      this.$root.$message({
-        message: this.$t('common.logout_ok')
-      })
+      this.$root.$message('common.logout_ok')
       this.$auth.logout()
     },
     async createTrustedInstance () {
@@ -123,11 +119,7 @@ export default {
         }
         this.setSetting({ key: 'trusted_instances', value: this.settings.trusted_instances.concat(trusted_instance) })
       } catch (e) {
-        console.error(e)
-        this.$root.$message({
-          type: 'error',
-          message: e
-        })
+        this.$root.$message(e, { color: 'error' })
       }
     }
   }

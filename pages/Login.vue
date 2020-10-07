@@ -65,7 +65,7 @@ export default {
       this.loading = true
       await this.$axios.$post('/user/recover', { email: this.email })
       this.loading = false
-      this.$root.$message({ message: this.$t('login.check_email'), color: 'success' })
+      this.$root.$message('login.check_email', { color: 'success' })
     },
     async submit (e) {
       e.preventDefault()
@@ -78,9 +78,9 @@ export default {
         data.append('client_id', 'self')
         await this.$auth.loginWith('local', { data })
         this.loading = false
-        this.$root.$message({ message: this.$t('login.ok'), color: 'success' })
+        this.$root.$message('login.ok',{ color: 'success' })
       } catch (e) {
-        this.$root.$message({ message: this.$t('login.error'), color: 'error' })
+        this.$root.$message('login.error',{ color: 'error' })
         this.loading = false
         return
       }

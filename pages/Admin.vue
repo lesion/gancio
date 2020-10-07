@@ -88,17 +88,11 @@ export default {
       this.$router.push(`/event/${id}`)
     },
     async confirm (id) {
-      try {
-        this.loading = true
-        await this.$axios.$get(`/event/confirm/${id}`)
-        this.loading = false
-        this.$root.$message({
-          message: this.$t('event.confirmed'),
-          type: 'success'
-        })
-        this.unconfirmedEvents = this.unconfirmedEvents.filter(e => e.id !== id)
-      } catch (e) {
-      }
+      this.loading = true
+      await this.$axios.$get(`/event/confirm/${id}`)
+      this.loading = false
+      this.$root.$message('event.confirmed', { color: 'succes' })
+      this.unconfirmedEvents = this.unconfirmedEvents.filter(e => e.id !== id)
     }
   },
   head () {

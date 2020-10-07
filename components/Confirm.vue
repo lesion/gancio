@@ -61,10 +61,10 @@ export default {
     this.$root.$confirm = this.open
   },
   methods: {
-    open (title, message, options) {
+    open (message, options) {
       this.dialog = true
-      this.title = title
-      this.message = message
+      this.title = option.title || 'Confirm'
+      this.message = this.$t(message, options)
       this.options = Object.assign(this.options, options)
       return new Promise((resolve, reject) => {
         this.resolve = resolve

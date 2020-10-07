@@ -67,10 +67,10 @@ export default {
   computed: mapState(['settings']),
   methods: {
     async deleteUser (user) {
-      const ret = await this.$root.$confirm(this.$t('common.confirm'), this.$t('admin.delete_user_confirm'))
+      const ret = await this.$root.$confirm('admin.delete_user_confirm')
       if (!ret) { return }
       await this.$axios.delete(`/user/${user.id}`)
-      this.$root.$message({ message: this.$t('admin.user_remove_ok') })
+      this.$root.$message('admin.user_remove_ok')
       this.users_ = this.users_.filter(u => u.id !== user.id)
     },
     toggle (user) {
@@ -90,16 +90,10 @@ export default {
         const user = await this.$axios.$post('/user', this.new_user)
         this.new_user = { email: '', is_admin: false }
 
-        this.$root.$message({
-          type: 'success',
-          message: this.$t('admin.user_create_ok')
-        })
+        this.$root.$message('admin.user_create_ok', { color: 'success'})
         this.users_.push(user)
       } catch (e) {
-        this.$root.$message({
-          type: 'error',
-          message: this.$t(e)
-        })
+        this.$root.$message(e, { color: 'error' })
       }
     }
   }

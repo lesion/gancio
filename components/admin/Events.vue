@@ -45,13 +45,10 @@ export default {
       } catch (e) {}
     },
     async remove (event) {
-      const ret = await this.$root.$confirm(this.$t('common.confirm'),
-        this.$t('event.remove_confirmation'))
+      const ret = await this.$root.$confirm('event.remove_confirmation')
       if (!ret) { return }
       await this.$axios.delete(`/event/${event.id}`)
-      this.$root.$message({
-        message: this.$t('admin.event_remove_ok')
-      })
+      this.$root.$message('admin.event_remove_ok')
     }
   }
 }

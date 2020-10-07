@@ -38,15 +38,10 @@ export default {
     async change_password () {
       try {
         await this.$axios.$post('/user/recover_password', { recover_code: this.code, password: this.new_password })
-        this.$root.$message({
-          message: this.$t('common.password_updated')
-        })
+        this.$root.$message('common.password_updated')
         this.$router.replace('/login')
       } catch (e) {
-        this.$root.$message({
-          type: 'warning',
-          message: e
-        })
+        this.$root.$message(e, { color: 'warning' })
       }
     }
   },

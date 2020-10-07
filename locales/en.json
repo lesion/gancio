@@ -205,7 +205,8 @@
         "add_link": "Add link",
         "footer_links": "Footer links",
         "delete_footer_link_confirm": "Sure to remove this link?",
-        "edit_place": "Edit place"
+        "edit_place": "Edit place",
+        "new_announcement": "New announcement"
     },
     "auth": {
         "not_confirmed": "Not confirmed yet...",

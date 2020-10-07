@@ -243,22 +243,22 @@ export default {
     },
     async blockUser (resource) {
       try {
-        const ret = await this.$root.$confirm(this.$t('common.confirm'), this.$t('admin.user_block_confirm', { user: resource.ap_user.ap_id }))
+        const ret = await this.$root.$confirm('admin.user_block_confirm', { user: resource.ap_user.ap_id })
         if (!ret) { return }
         await this.$axios.post('/instances/toggle_user_block', { ap_id: resource.ap_user.ap_id })
-        this.$root.$message({ message: this.$t('admin.user_blocked', { user: resource.ap_user.ap_id }), type: 'success' })
+        this.$root.$message('admin.user_blocked', { user: resource.ap_user.ap_id, color: 'success' })
       } catch (e) { }
     },
     async deleteResource (resource) {
       try {
-        const ret = await this.$root.$confirm(this.$t('common.confirm'), this.$t('admin.delete_resource_confirm'))
+        const ret = await this.$root.$confirm('admin.delete_resource_confirm')
         if (!ret) { return }
         await this.$axios.delete(`/resources/${resource.id}`)
         this.event.resources = this.event.resources.filter(r => r.id !== resource.id)
       } catch (e) { }
     },
     copyLink () {
-      this.$root.$message({ message: this.$t('common.copied'), type: 'success' })
+      this.$root.$message('common.copied', { color: 'success' })
     },
     // TOFIX
     resource_filter (value) {
@@ -285,163 +285,5 @@ export default {
     margin: 0 auto;
     max-height: 83vh;
   }
-
 }
-//   time {
-//     margin: 0rem 0rem 0rem 1rem;
-//     display: inline-block;
-//   }
-
-//   #arrow {
-//     position: absolute;
-//     top: 1em;
-//     right: 1em;
-//   }
-
-//   .el-header {
-//     height: auto !important;
-//     position: sticky;
-//     padding-top: .4em;
-//     top: 0px;
-//     border-bottom: 1px solid lightgray;
-//     z-index: 1;
-//     overflow: hidden;
-//   }
-
-//   .embedDialog {
-//     .el-dialog {
-//       min-height: 500px;
-//       max-width: 1000px;
-//       width: 100%;
-//     }
-//   }
-
-//   .followDialog {
-//     .el-dialog {
-//       min-height: 300px;
-//       max-width: 600px;
-//       width: 100%;
-//       .el-dialog__body {
-//         word-break: normal !important;
-//       }
-//     }
-//   }
-
-//   .head {
-//     z-index: 1;
-//     position: sticky;
-//     top: 0px;
-//     padding-top: 10px;
-//     padding-bottom: 10px;
-//     background-color: white;
-//     border-bottom: 1px solid #e6e6e6;
-//   }
-
-//   .menu {
-//     border-right: none;
-//     background-color: transparent;
-//   }
-
-//   div.menu {
-//     border-left: 1px solid #e6e6e6;
-//     p {
-//       margin: 1rem 0rem 1rem 1rem;
-//     }
-//   }
-
-//   .title {
-//     display: table-cell;
-//     padding-right: 70px;
-//     height: 2.1em;
-//     font-size: 1.6rem;
-//     color: #404246;
-//     line-height: 1;
-//     vertical-align: middle;
-//   }
-
-  // pre {
-  //   white-space: pre-line;
-  //   word-break: break-word;
-  //   font-size: 1em;
-  //   font-family: inherit;
-
-  //   p:empty {
-  //     min-height: 1em;
-  //   }
-  //   // font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen,
-  //     // Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica, Arial,
-  //     // sans-serif !important;
-  // }
-
-//   .main_image {
-//     width: 100%;
-//     transition: height .100s;
-//     height: auto;
-
-//     img {
-//       // object-fit: contain;
-//       margin: 0 auto;
-//       max-height: 88vh;
-//     }
-
-//     .loading {
-//       display: flex;
-//       justify-content: center;
-//       align-items: center;
-//       font-size: 30px;
-//       margin: 0 auto;
-//       height: 100px;
-//     }
-//   }
-
-//   #resources {
-//     img {
-//       max-width: 100%;
-//     }
-//     .card-header {
-//       border-left: 3px solid transparent;
-//     }
-//     .card-header:hover {
-//       border-left: 3px solid #888;
-//     }
-//     .invisible {
-//       visibility: visible !important;
-//     }
-//     .disabled {
-//       opacity: 0.5;
-//     }
-//     .previewImage {
-//       display: flex;
-//       flex-flow: wrap;
-//       justify-content: space-evenly;
-//       img {
-//         margin-left: 5px;
-//         margin-top: 5px;
-//         object-fit: cover;
-//         min-height: 100px;
-//         max-width: 45%;
-//         border-radius: 5px;
-//         border: 1px solid #ccc;
-//       }
-//     }
-//   }
-//   .nextprev {
-//     font-size: 10px;
-//     margin-bottom: 5px;
-//   }
-// }
-
-// @media only screen and (max-width: 768px) {
-//   #eventDetail {
-//     .menu {
-//       border: 0px !important;
-//     }
-
-//     .title {
-//       // font-size: 1.1em;
-//       line-height: 1.4em;
-//       color: black;
-//     }
-//   }
-// }
 </style>

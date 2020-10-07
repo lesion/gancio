@@ -67,13 +67,11 @@ export default {
         const user = await this.$axios.$post('/user/register', this.user)
         // this is the first user registered
         const first_user = user && user.is_admin && user.is_active
-        this.$root.$message({
-          message: first_user ? this.$t('register.first_user') : this.$t('register.complete')
-        })
+        this.$root.$message(first_user ? 'register.first_user': 'register.complete')
         this.$router.replace('/')
       } catch (e) {
         const error = get(e, 'response.data.errors[0].message', String(e))
-        this.$root.$message({ message: this.$t(error), color: 'error' })
+        this.$root.$message(error, { color: 'error' })
       }
       this.loading = false
     }

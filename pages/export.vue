@@ -129,8 +129,7 @@ export default {
   },
   methods: {
     copyLink () {
-      // Message({ message: this.$t('common.copied'), type: 'success', showClose: true })
-      this.$root.$message({ message: this.$t('common.feed_url_copied') })
+      this.$root.$message('common.feed_url_copied')
     },
     add_notification () {
       if (!this.notification.email) {
