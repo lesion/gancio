@@ -1,12 +1,12 @@
 <template lang="pug">
   v-container
-    v-card-title {{$t('common.users')}}
+    v-card-title {{$t('common.users')}} 
       v-spacer
       v-text-field(v-model='search'
-        append-icon='mdi-magnify'
-        label='Search',
+        append-icon='mdi-magnify' outlined rounded
+        label='Search'
         single-line hide-details)
-      v-btn(color='primary' small @click='newUserDialog = true') <v-icon>mdi-plus</v-icon> {{$t('common.new_user')}}
+      v-btn(color='primary' text @click='newUserDialog = true') <v-icon>mdi-plus</v-icon> {{$t('common.new_user')}}
 
     //- ADD NEW USER
     v-dialog(v-model='newUserDialog' :fullscreen="$vuetify.breakpoint.xsOnly")
@@ -33,7 +33,7 @@
         :search='search')
         template(v-slot:item.actions='{item}')
           v-btn(text small @click='toggle(item)'
-            :color='item.is_active?"warning":"success"') {{item.is_active?$t('common.deactivate'):$t('common.activate')}}
+            :color='item.is_active?"warning":"success"') {{item.is_active?$t('common.disable'):$t('common.enable')}}
           v-btn(text small @click='toggleAdmin(item)'
             :color='item.is_admin?"warning":"error"') {{item.is_admin?$t('common.remove_admin'):$t('common.admin')}}
           v-btn(text small @click='deleteUser(item)'
