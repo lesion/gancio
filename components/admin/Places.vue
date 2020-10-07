@@ -21,7 +21,7 @@
         v-card-actions
             v-spacer
             v-btn(@click='dialog=false' color='warning') {{$t('common.cancel')}}
-            v-btn(@click='savePlace' color='primary') {{$t('common.save')}}
+            v-btn(@click='savePlace' color='primary' :loading='loading' :disable='loading') {{$t('common.save')}}
 
     v-card-text
       v-data-table(
@@ -33,10 +33,11 @@
             v-icon mdi-pencil
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   data () {
     return {
+      loading: false,
       dialog: false,
       place: { name: '', address: '', id: null },
       headers: [
@@ -48,20 +49,18 @@ export default {
   },
   computed: mapState(['places']),
   methods: {
+    ...mapActions(['updateMeta']),
     editPlace (item) {
-      console.error(item)
-      // if (items.length === 0) {
-      //   this.place.name = this.place.address = ''
-      //   return
-      // }
-      // const item = items[0]
       this.place.name = item.name
       this.place.address = item.address
       this.place.id = item.id
       this.dialog = true
     },
     async savePlace () {
+      this.loading = true
       await this.$axios.$put('/place', this.place)
+      this.updateMeta()
+      this.loading = false
       this.dialog = false
     }
   }
