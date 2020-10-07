@@ -95,7 +95,7 @@
         "ok": "Logged in"
     },
     "recover": {
-        "not_valid_code": "Something goes wrong..."
+        "not_valid_code": "Something goes wrong"
     },
     "export": {
         "intro": "Unlike the capitalist platforms, which do everything they can to keep data and users within them, we believe that information, like people, must be free. For this you can stay updated on the events you want, without necessarily going through this site.",
@@ -130,7 +130,7 @@
         "show_past": "past too",
         "only_future": "only next events",
         "recurrent_description": "Choose the frequency and select the days",
-        "multidate_description": "It's a festival? Choose when it starts and when it ends",
+        "multidate_description": "It's a festival? Choose when it starts and when it ends.",
         "multidate": "More days",
         "normal": "Normal",
         "normal_description": "Choose the day.",
