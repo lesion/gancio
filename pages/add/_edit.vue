@@ -12,7 +12,7 @@
 
           //- title
           v-text-field.mb-3(v-model='event.title'
-            :rules="[$validators.required()]"
+            :rules="[$validators.required('common.title')]"
             :label="$t('event.what_description')"
             autofocus
             ref='title')
@@ -60,13 +60,10 @@
               v-btn(value='multidate' label="multidate") {{$t('event.multidate')}}
               v-btn(v-if='settings.allow_recurrent_event' value='recurrent' label="recurrent") {{$t('event.recurrent')}}
 
-            p {{$t(`event.${event.type}_description`)}} {{date}}
+            p {{$t(`event.${event.type}_description`)}}
             v-select(v-if='event.type==="recurrent"'
               :items="frequencies"
               v-model='event.recurrent.frequency')
-              //- v-option(:label="$t('event.each_week')" value='1w' key='1w')
-              //- v-option(:label="$t('event.each_2w')" value='2w' key='2w')
-              //- el-option(:label="$t('event.each_month')" value='1m' key='1m')
             client-only
               .datePicker
                 v-date-picker(
@@ -82,10 +79,9 @@
 
           div.text-center.mb-2(v-if='event.type === "recurrent"')
             span(v-if='event.recurrent.frequency !== "1m" && event.recurrent.frequency !== "2m"') {{whenPatterns}}
-            v-radio-group(v-else v-model='event.recurrent.type')
-              v-radio-button(v-for='whenPattern in whenPatterns' :label='whenPattern.key' :key='whenPatterns.key')
+            v-btn-toggle.mt-1(v-else v-model='event.recurrent.type' color='primary')
+              v-btn(v-for='whenPattern in whenPatterns' :value='whenPattern.key' :key='whenPatterns.key' small)
                 span {{whenPattern.label}}
-
           v-row
             v-col
               v-menu(v-model='fromDateMenu'
@@ -161,7 +157,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import _ from 'lodash'
-import moment from 'moment-timezone'
+import moment from 'dayjs'
 import Editor from '@/components/Editor'
 import List from '@/components/List'
 
@@ -221,13 +217,13 @@ export default {
         description: '',
         tags: [],
         image: {},
-        recurrent: { frequency: '1w', days: [], type: 'weekday' }
+        recurrent: { frequency: '1m', days: [], type: 'weekday_desc' }
       },
       page: { month, year },
       fileList: [],
       id: null,
       date: null,
-      time: { start: '20:00', end: null },
+      time: { start: null, end: null },
       edit: false,
       loading: false,
       mediaUrl: '',
@@ -246,25 +242,36 @@ export default {
       const modeMap = {
         multidate: 'range',
         normal: 'single',
-        recurrent: 'multiple'
+        recurrent: 'single'
       }
       return modeMap[this.event.type]
     },
     whenPatterns () {
-      const dates = this.date
-      if (!dates || !dates.length) { return '' }
+      if (!this.date) return
+      const date = moment(this.date)
 
       const freq = this.event.recurrent.frequency
-      const weekDays = _(dates).map(date => moment(date).format('dddd')).uniq().value()
+      const weekDay = date.day()
       if (freq === '1w' || freq === '2w') {
-        return this.$t(`event.recurrent_${freq}_days`, { days: weekDays.join(', ') })
+        return this.$t(`event.recurrent_${freq}_day`, { day: weekDay })
       } else if (freq === '1m' || freq === '2m') {
-        const days = _(dates).map(date => moment(date).date()).uniq().value()
-        const n = Math.floor((days[0] - 1) / 7) + 1
-        return [
-          { label: this.$tc(`event.recurrent_${freq}_days`, days.length, { days }), key: 'ordinal' },
-          { label: this.$tc(`event.recurrent_${freq}_ordinal`, days.length, { n, days: weekDays.join(', ') }), key: 'weekday' }
+        const monthDay = date.date()
+
+        const n = Math.floor((monthDay - 1) / 7) + 1
+
+        const patterns = [
+          { label: this.$t(`event.recurrent_${freq}_days`, { day: monthDay }), key: 'ordinal' },
+          { label: this.$t(`event.recurrent_${freq}_ordinal`, { n, day: weekDay }), key: 'weekday' },
         ]
+
+        // if selected day is in last week, propose also this type of selection
+        const lastWeek = date.daysInMonth()-monthDay < 7
+        if (lastWeek) {
+          patterns.push(
+            { label: this.$t(`event.recurrent_${freq}_ordinaldesc`, { n, day: weekDay }), key: 'weekday_desc' }
+          )
+        }
+        return patterns
       } else if (freq === '1d') {
         return this.$t('event.recurrent_each_day')
       }
@@ -298,19 +305,48 @@ export default {
       let attributes = []
       // attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'red' } })
 
+      const date = moment(this.date)
+      const start = date.toDate()
+      console.error(start)
+      console.error(date.day()+1)
       attributes = attributes.concat(this.events
         .filter(e => !e.multidate && (!e.parentId || this.event.type === 'recurrent'))
         .map(e => ({ key: e.id, dot: { color: this.event.type === 'recurrent' ? 'orange' : 'green' }, dates: moment.unix(e.start_datetime).toDate() })))
 
       if (this.event.type === 'recurrent' && this.date && this.date.length) {
+        let dates = {}
+        if (this.event.recurrent.frequency !== '1m') {
+          dates = {
+            weeklyInterval: this.event.recurrent.frequency === '1w' ? 1 : 2,
+            weekdays: date.day(),
+            start
+          } 
+        } else {
+          if (this.event.recurrent.type === 'ordinal') {
+            const day = date.date()
+            dates = {
+              monthlyInterval: 1,
+              start,
+              days
+            }
+          } else if (this.event.recurrent.type === 'weekday') {
+            dates = {
+              monthlyInterval: 1,
+              start,
+              days: [Math.floor((date.day() -1 /7)+1), date.day()]
+            }
+          } else {
+            dates = {
+              monthlyInterval: 1,
+              start,
+              days: [-1, date.day()]
+            }
+          }
+        }
         attributes.push({
           key: 'recurrent',
           dot: { color: 'orange' },
-          dates: {
-            weeklyInterval: this.event.recurrent.frequency === '1w' ? 1 : 2,
-            weekdays: _.map(this.date, date => moment(date).day() + 1),
-            start: new Date(this.date[0])
-          }
+          dates
         })
       }
       attributes = attributes.concat(this.events
