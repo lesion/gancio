@@ -18,7 +18,7 @@
       v-model='filter'
       :search-input.sync='search'
       item-text='label'
-      chips
+      chips rounded outlined single-line
       multiple
     )
       template(v-slot:selection="data")
