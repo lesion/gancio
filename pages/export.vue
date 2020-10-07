@@ -17,11 +17,14 @@
 
       v-tab {{$t('common.feed')}}
       v-tab-item
-        span(v-html='$t(`export.feed_description`)')
-        v-text-field(v-model='link' readonly)
-          v-btn(slot='append' plain text
-          v-clipboard:copy='link'
-          v-clipboard:success='copyLink') {{$t("common.copy")}}
+        v-card
+          v-card-text
+            p(v-html='$t(`export.feed_description`)')
+            v-text-field(v-model='link' readonly)
+              v-btn(slot='append' plain text color='primary'
+              v-clipboard:copy='link'
+              v-clipboard:success='copyLink') {{$t("common.copy")}} 
+                v-icon.ml-1 mdi-content-copy
 
       v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
       v-tab-item
@@ -29,23 +32,26 @@
 
       v-tab ics/ical
       v-tab-item
-        p(v-html='$t(`export.ical_description`)')
-        v-text-field(v-model='link')
-          v-btn(slot='append' v-clipboard:copy='link' v-clipboard:success='copyLink') {{$t("common.copy")}}
+        v-card
+          v-card-text
+            p(v-html='$t(`export.ical_description`)')
+            v-text-field(v-model='link')
+              v-btn(slot='append' v-clipboard:copy='link' v-clipboard:success='copyLink') {{$t("common.copy")}}
 
       v-tab List
       v-tab-item
-        p(v-html='$t(`export.list_description`)')
+        v-container
+          p(v-html='$t(`export.list_description`)')
 
-        v-row
-          v-col.mr-2(:span='11')
-            v-text-field(v-model='list.title') Title
-          v-col.float-right(:span='12')
-            List(
-              :title='list.title'
-              :events='filteredEvents')
-        v-text-field.mb-1(type='textarea' v-model='listScript' readonly )
-        v-btn(plain v-clipboard:copy='listScript' v-clipboard:success='copyLink') {{$t('common.copy')}}
+          v-row
+            v-col.mr-2(:span='11')
+              v-text-field(v-model='list.title') Title
+            v-col.float-right(:span='12')
+              List(
+                :title='list.title'
+                :events='filteredEvents')
+          v-text-field.mb-1(type='textarea' v-model='listScript' readonly )
+          v-btn(plain v-clipboard:copy='listScript' v-clipboard:success='copyLink') {{$t('common.copy')}}
 
       //- TOFIX
       //- v-tab.pt-1(label='calendar' name='calendar')
@@ -124,7 +130,7 @@ export default {
   methods: {
     copyLink () {
       // Message({ message: this.$t('common.copied'), type: 'success', showClose: true })
-      this.$root.$emit('message', { message: this.$t('common.feed_url_copied') })
+      this.$root.$message({ message: this.$t('common.feed_url_copied') })
     },
     add_notification () {
       if (!this.notification.email) {
