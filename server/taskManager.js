@@ -46,6 +46,7 @@ class TaskManager {
   }
 
   start (interval = 60 * 1000) {
+    debug('START')
     this.interval = interval
     this.timeout = setTimeout(this.tick.bind(this), interval)
   }
