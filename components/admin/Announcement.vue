@@ -6,26 +6,24 @@
       v-card
         v-card-title {{$t('admin.new_announcement')}}
         v-card-text
-          v-form(v-model='valid')
+          v-form(v-model='valid' ref='announcement')
             v-text-field(v-model='announcement.title' :label='$t("common.title")')
             Editor.mt-2(v-model='announcement.announcement' border no-save style='max-height: 400px;')
         v-card-actions
           v-spacer
+          v-btn(@click='dialog=false' color='error') {{$t('common.cancel')}}
           v-btn(@click='save' color='primary') {{$t(`common.${editing?'save':'send'}`)}}
 
-    v-card-actions
-      v-spacer
-      v-btn(@click='dialog=true' text color='primary') {{$t('common.add')}}
+    v-btn(@click='openDialog' text color='primary') <v-icon>mdi-plus</v-icon> {{$t('common.add')}}
     v-card-text
       v-data-table(
           :headers='headers'
           :items='announcements')
         template(v-slot:item.actions='{ item }')
           v-btn(text small @click.stop='toggle(item)'
-            :color='item.visible?"warning":"success"') {{item.visible?$t('common.deactivate'):$t('common.activate')}}
-          v-btn(text small @click='edit(item)') {{$t('common.edit')}}
-          v-btn(text small @click='remove(item)'
-            color='error') {{$t('common.delete')}}
+            :color='item.visible?"warning":"success"') {{item.visible?$t('common.disable'):$t('common.enable')}}
+          v-btn(text small @click='edit(item)' color='primary') {{$t('common.edit')}}
+          v-btn(text small @click='remove(item)' color='error') {{$t('common.delete')}}
 
 </template>
 <script>
@@ -58,7 +56,13 @@ export default {
       this.announcement.title = announcement.title
       this.announcement.announcement = announcement.announcement
       this.announcement.id = announcement.id
+      this.editing = true
       this.dialog = true
+    },
+    openDialog () {
+      this.announcement = { title: '', announcement: '' }
+      this.dialog = true
+      this.$nextTick( () => this.$refs.announcement.reset() )
     },
     async toggle (announcement) {
       try {
@@ -95,7 +99,9 @@ export default {
         }
         this.setAnnouncements(cloneDeep(this.announcements))
         this.announcement = { title: '', announcement: '' }
+        this.$refs.announcement.reset()
         this.editing = false
+        this.dialog = false
       } catch (e) {
         console.error(e)
       }
