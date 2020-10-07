@@ -13,7 +13,7 @@
     },
     "recover": {
         "subject": "Pasahitza berreskuratzea",
-        "content": "Kaixo, zure pasahitza berreskuratzea eskatu duzu {{config.title}}-n. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Hemen sakatzen du</a> egiaztatzeko"
+        "content": "Kaixo, zure pasahitza berreskuratzea eskatu duzu {{config.title}}-n. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Hemen sakatzen du</a> egiaztatzeko."
     },
     "admin_register": {
         "subject": "Erregistro berria",
