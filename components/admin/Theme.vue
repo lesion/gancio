@@ -8,7 +8,7 @@
         @change='uploadLogo'
         accept='image/*')
         template(slot='append-outer')
-          v-btn(small text @click='resetLogo') Reset
+          v-btn(color='warning' text @click='resetLogo') <v-icon>mdi-restore</v-icon> {{$t('common.reset')}}
           v-img(:src='`${settings.baseurl}/favicon.ico?${logoKey}`'
             max-width="100px" max-height="80px" contain)
 
@@ -16,52 +16,52 @@
         inset
         :label="$t('admin.is_dark')")
 
-      v-row
-        v-col(v-for='(color, i) in colors' :key='i')
-          v-menu(v-model='menu[i]'
-              :close-on-content-click="false"
-              transition="slide-x-transition"
-              offset-y
-              absolute
-              bottom
-              max-width="290px"
-              min-width="290px")
-            template(v-slot:activator='{ on }')
-              v-text-field(:value='colors[i]'
-                :label='i'
-                v-on='on' clearable readonly)
-            v-color-picker(light @update:color='c => updateColor(i, c)')
+      //- TODO choose theme colors
+      //- v-row
+      //-   v-col(v-for='(color, i) in colors' :key='i')
+      //-     v-menu(v-model='menu[i]'
+      //-         :close-on-content-click="false"
+      //-         transition="slide-x-transition"
+      //-         offset-y
+      //-         absolute
+      //-         bottom
+      //-         max-width="290px"
+      //-         min-width="290px")
+      //-       template(v-slot:activator='{ on }')
+      //-         v-btn(:color='i' small
+      //-           v-on='on') {{i}}
+      //-       v-color-picker(light @update:color='c => updateColor(i, c)')
 
       v-dialog(v-model='linkModal' width='500')
         v-card
-          v-card-title Add footer link
+          v-card-title {{$t('admin.add_footer_link')}}
           v-card-text
             v-form(v-model='valid' ref='linkModalForm')
               v-text-field(v-model='link.label'
-                :rules="[$validators.required('label')]"
+                :rules="[$validators.required('common.label')]"
                 label='Label')
               v-text-field(v-model='link.href'
-                :rules="[$validators.required($t('common.url'))]"
+                :rules="[$validators.required('common.url')]"
                 :label="$t('common.url')")
           v-card-actions
             v-spacer
             v-btn(link @click='linkModal=false' color='error') {{$t('common.cancel')}}
             v-btn(link @click='addFooterLink' color='primary' :disabled='!valid') {{$t('common.add')}}
 
-      label Footer links
+    v-card-title {{$t('admin.footer_links')}}
+    v-card-text
+      v-btn(color='primary' text @click='openLinkModal') <v-icon>mdi-plus</v-icon> {{$t('admin.add_link')}}
+      v-btn(color='warning' text @click='reset') <v-icon>mdi-restore</v-icon> {{$t('common.reset')}}
       v-list
-        v-list-item(link @click='linkModal = true')
-          v-list-item-content
-            v-list-item-title Add
-            v-list-item-subtitle a new link
         v-list-item(v-for='link in settings.footerLinks'
-          :key='`${link.label}`'
-          :to='link.href')
+          :key='`${link.label}`')
           v-list-item-content
             v-list-item-title {{link.label}}
             v-list-item-subtitle {{link.href}}
           v-list-item-action
-            v-btn(icon color='error' @click.prevent='removeFooterLink(link)')
+            v-btn.float-right(icon color='accent' @click='editFooterLink(link)')
+              v-icon mdi-pencil
+            v-btn(icon color='error' @click='removeFooterLink(link)')
               v-icon mdi-delete-forever
 
 </template>
@@ -77,7 +77,7 @@ export default {
       link: { href: '', label: '' },
       linkModal: false,
       menu: [false, false, false, false],
-      colors: { primary: '', secondary: '', tertiary: '' }
+      colors: { primary: '', secondary: '', accent: '', error: '', info: '', success: '', warning: '' }
       //   primary: {},
       //   secondary: {}
       // }
@@ -113,15 +113,8 @@ export default {
   },
   methods: {
     ...mapActions(['setSetting']),
-    color (name) {
-      return {
-        get () {
-          console.error('get ', name)
-        },
-        set (value) {
-          console.error('set ', name, value)
-        }
-      }
+    reset () {
+      this.setSetting({ key: 'footerLinks', value: [{ href: '/about', label: 'about' }] })
     },
     forceLogoReload () {
       this.$refs.upload.reset()
@@ -136,11 +129,16 @@ export default {
       this.colors[i] = v.hex
       this.$vuetify.theme.themes.dark[i] = v.hex
     },
+    openLinkModal () {
+      // this.link = { href: '', label: '' }
+      // console.error(this.$refs)
+      this.linkModal = true
+      this.$nextTick( () => this.$refs.linkModalForm.reset() )
+    },
     addFooterLink () {
       const link = Object.assign({}, this.link)
       this.setSetting({ key: 'footerLinks', value: this.settings.footerLinks.concat(link) })
       // this.link = { href: '', label: '' }
-      // this.$refs.linkModalForm.clear()
       this.$refs.linkModalForm.reset()
       this.linkModal = false
     },
@@ -149,6 +147,11 @@ export default {
       if (!ret) { return }
       const footerLinks = this.settings.footerLinks.filter(l => l.label !== item.label)
       this.setSetting({ key: 'footerLinks', value: footerLinks })
+    },
+    editFooterLink (item) {
+      this.link = { href: item.href, label: item.label }
+      this.linkModal = true
+
     },
     async uploadLogo (file) {
       const formData = new FormData()

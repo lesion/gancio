@@ -8,7 +8,7 @@
         :headers='headers')
         template(v-slot:item.actions='{ item }')
           v-btn(text small @click.stop='toggle(item)'
-            :color='item.visible?"warning":"success"') {{item.visible?$t('common.deactivate'):$t('common.activate')}}
+            :color='item.visible?"warning":"success"') {{item.visible?$t('common.disable'):$t('common.enable')}}
           v-btn(text small @click='edit(item)') {{$t('common.edit')}}
           v-btn(text small @click='remove(item)'
             color='error') {{$t('common.delete')}}
