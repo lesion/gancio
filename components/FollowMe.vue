@@ -4,14 +4,14 @@
     v-card-text
       p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${domain}`})")
       v-text-field(
-        :rules='[$validators.required()]'
+        :rules="[$validators.required('common.url')]"
         :label="$t('common.url')"
         v-model='instance_hostname')
       p <img class='instance_thumb' :src="instance.thumbnail"/> {{instance.title}}
 
     v-card-actions
       v-spacer
-      v-btn(v-if='isDialog' color='warning' @click="$emit('close')") {{$t("common.cancel")}}
+      v-btn(color='warning' @click="$emit('close')") {{$t("common.cancel")}}
       v-btn(:disabled='(!couldGo || !proceed)'
         :loading='loading' color="primary") {{$t("common.follow")}}
 </template>
