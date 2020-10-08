@@ -22,7 +22,7 @@
         v-btn(icon nuxt to='/export' v-on='on')
           v-icon mdi-share-variant
 
-    v-menu(v-if='settings.enable_trusted_instances && settings.trusted_instances && settings.trusted_instances.length'
+    //- v-menu(v-if='settings.enable_trusted_instances && settings.trusted_instances && settings.trusted_instances.length'
       offset-y bottom open-on-hover transition="slide-y-transition")
       template(v-slot:activator="{ on, attrs }")
         v-btn(icon v-bind='attrs' v-on='on')

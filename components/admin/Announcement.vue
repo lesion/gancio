@@ -3,12 +3,13 @@
     v-card-title {{$t('common.announcements')}}
     v-card-subtitle(v-html="$t('admin.announcement_description')")
     v-dialog(v-model='dialog' width='800px')
-      v-card
+      v-card(color='secondary')
         v-card-title {{$t('admin.new_announcement')}}
         v-card-text
           v-form(v-model='valid' ref='announcement')
             v-text-field(v-model='announcement.title' :label='$t("common.title")')
-            Editor.mt-2(v-model='announcement.announcement' border no-save style='max-height: 400px;')
+            Editor.mt-2(v-model='announcement.announcement' 
+              border no-save max-height='400px' :placeholder="$t('common.description')")
         v-card-actions
           v-spacer
           v-btn(@click='dialog=false' color='error') {{$t('common.cancel')}}

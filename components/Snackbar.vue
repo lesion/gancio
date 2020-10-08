@@ -18,7 +18,7 @@ export default {
   data () {
     return {
       icon: 'md-alert',
-      color: 'primary',
+      color: 'secondary',
       bottom: true,
       top: false,
       left: false,
@@ -29,10 +29,10 @@ export default {
     }
   },
   created () {
-    this.$root.$message = (message, opts) => {
+    this.$root.$message = (message, opts = {}) => {
       this.active = true
       this.message = this.$t(message, opts)
-      this.color = opts.color || 'primary'
+      this.color = opts.color || 'secondary'
       this.icon = opts.icon || 'md-alert'
     }
   }

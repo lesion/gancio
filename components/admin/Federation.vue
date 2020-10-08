@@ -41,19 +41,19 @@
         )
 
         v-dialog(v-model='dialogAddInstance' width="500px")
-          v-card
+          v-card(color='secondary')
             v-card-title {{$t('admin.add_trusted_instance')}}
             v-card-text
-              v-form(v-model='valid')
-              v-text-field.mt-4(v-model='instance_url'
-                persistent-hint
-                :rules="[$validators.required()]"
-                :hint="$t('admin.add_trusted_instance')"
-                :label="$t('common.url')")
+              v-form(v-model='valid' ref='form' lazy-validation)
+                v-text-field.mt-4(v-model='instance_url'
+                  persistent-hint
+                  :rules="[$validators.required('common.url')]"
+                  :hint="$t('admin.add_trusted_instance')"
+                  :label="$t('common.url')")
             v-card-actions
               v-spacer
               v-btn(color='error' @click='dialogAddInstance=false') {{$t('common.cancel')}}
-              v-btn(color='primary' @click='createTrustedInstance') {{$t('common.ok')}}
+              v-btn(color='primary' :disabled='!valid' @click='createTrustedInstance') {{$t('common.ok')}}
 
         v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon>mdi-plus</v-icon> Add instance
         v-data-table(
@@ -112,6 +112,7 @@ export default {
   methods: {
     ...mapActions(['setSetting']),
     async createTrustedInstance () {
+      if (!this.$refs.form.validate()) return
       try {
         const instance = await axios.get(`${this.instance_url}/.well-known/nodeinfo/2.1`)
         this.setSetting({
