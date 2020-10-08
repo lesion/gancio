@@ -2,17 +2,18 @@
   v-card.h-event.event.mt-1
     nuxt-link(:to='`/event/${event.id}`')
       v-img.align-end.white--text(:src="`/media/thumb/${event.image_path}`"
-        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7)"
+        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7), rgba(0,0,0,.9)"
         height="250" position="top top")
-        v-card-title {{event.title}}
+        v-card-title.text-h5 {{event.title}}
 
     v-card-text
-      time(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  <v-icon>mdi-event</v-icon> {{ event|when }}
-      div <v-icon>mdi-location-on</v-icon> {{event.place.name}}
+      
+      time.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  <v-icon>mdi-event</v-icon> {{ event|when }}
+      v-btn.d-block.text-h6(text color='primary' big) <v-icon>mdi-map-marker</v-icon> {{event.place.name}}
 
     v-card-actions
       v-chip.ml-1(v-for='tag in event.tags' link
-        :key='tag' outlined color='primary' small @click='addTag(tag)') {{tag}}
+        :key='tag' outlined color='primary' @click='addTag(tag)') {{tag}}
       v-spacer
 
       v-menu(offset-y)
