@@ -187,7 +187,7 @@
         "announcement_remove_ok": "Announce removed",
         "announcement_description": "In this section you can insert announcements to remain on the homepage",
         "instance_locale": "Default language",
-        "instance_timezone_description": "Gancio is designed to collect the events of a specific place, such as a city. By writing and selecting the time zone of this place, all times will be shown as chosen.",
+        "instance_timezone_description": "Gancio is designed to collect the events of a specific place, such as a city. All events in this place will be shown in the time zone chosen for it.",
         "instance_locale_description": "Preferred user language for pages. Sometimes messages must be shown in the same language for everyone (for example when publishing via ActivityPub or when sending some e-mails). In these cases the language selected above will be used.",
         "title_description": "It is used in the title of the page, in the subject of the e-mail to export RSS and ICS feeds.",
         "description_description": "Appears in the header next to the title",
