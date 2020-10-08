@@ -5,55 +5,49 @@
       v-card-text
         v-form(v-model='valid')
 
-          //- NOT LOGGED EVENT
+          //- Not logged event
           div(v-if='!$auth.loggedIn')
             v-divider <v-icon name='user-secret'/> {{$t('event.anon')}}
             p(v-html="$t('event.anon_description')")
 
-          //- title
-          v-text-field.mb-3(v-model='event.title'
+          //- Title
+          v-text-field.mb-3(
+            @change='v => event.title = v'
+            :value = 'event.title'
             :rules="[$validators.required('common.title')]"
-            :label="$t('event.what_description')"
+            :label="$t('event.what_description')" 
             autofocus
             ref='title')
 
-          //- description
-          //- span {{$t('event.description_description')}}
+          //- Description
           Editor(
             v-model='event.description'
-            :label="$t('event.description_description')"
-            style='max-height: 400px;')
+            :placeholder="$t('event.description_description')"
+            max-height='400px')
 
-          //- tags
-          v-combobox.mt-3(v-model='event.tags'
-            chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-            :delimiters="[',', ' ']"
-            :items="tags.map(t => t.tag)"
-            :label="$t('common.tags')")
-
-          //- WHERE
+          //- Where
           v-combobox.mt-2(v-model='event.place.name'
-            :rules="[$validators.required()]"
+            :rules="[$validators.required('common.where')]"
             :label="$t('common.where')"
             :hint="$t('event.where_description')"
             persistent-hint
             :items="places"
             item-text='name'
-            @input='selectPlace')
-            template(v-slot:item="{ item }")
-              v-list
-                v-list-item-content
+            @change='selectPlace')
+            //- template(v-slot:item="{ item }")
+              v-list-item(color='primary')
+                v-list-item-content(color='pink')
                   v-list-item-title {{item.name}}
                   v-list-item-subtitle {{item.address}}
 
           v-text-field.mt-3(ref='address'
-            :rules="[$validators.required()]"
+            :rules="[$validators.required('common.address')]"
             :label="$t('common.address')"
-            v-model='event.place.address'
+            @change="v => event.place.address = v"
+            :value="event.place.address"
             :disabled='disableAddress')
 
-          //- WHEN
-          //- v-divider <v-icon name='clock'/> {{$t('common.when')}}
+          //- When
           .text-center
             v-btn-toggle(v-model="event.type" color='primary')
               v-btn(value='normal' label="normal") {{$t('event.normal')}}
@@ -97,7 +91,7 @@
                 template(v-slot:activator='{ on }')
                   v-text-field(
                     :label="$t('event.from')"
-                    :rules="[$validators.required()]"
+                    :rules="[$validators.required('event.from')]"
                     :value='time.start'
                     v-on='on'
                     clearable)
@@ -147,6 +141,13 @@
             v-model='event.image'
             persistent-hint
             accept='image/*')
+
+          //- tags
+          v-combobox.mt-3(v-model='event.tags'
+            chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
+            :delimiters="[',', ' ']"
+            :items="tags.map(t => t.tag)"
+            :label="$t('common.tags')")
 
       v-card-actions
         v-spacer
@@ -228,7 +229,7 @@ export default {
       loading: false,
       mediaUrl: '',
       queryTags: '',
-      disableAddress: true,
+      disableAddress: false,
       frequencies: [
         { value: '1w', text: this.$t('event.each_week') },
         { value: '2w', text: this.$t('event.each_2w') },
@@ -360,12 +361,10 @@ export default {
       return attributes
     }
   },
-  // mounted () {
-  //   this.$refs.title.focus()
-  // },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
     selectPlace (p) {
+      console.error('sono dentro selectePlace')
       const place = p && this.places.find(place => place.id === p.id)
       if (place && place.address) {
         this.event.place.name = p.name
@@ -375,7 +374,7 @@ export default {
         this.disableAddress = false
         this.event.place.address = ''
       }
-      this.$nextTick(this.$refs.address.focus)
+      // this.$nextTick(() => this.$refs.address.focus() )
     },
     // recurrentDays () {
     //   if (this.event.type !== 'recurrent' || !this.date || !this.date.length) { return }

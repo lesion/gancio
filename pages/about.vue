@@ -25,7 +25,7 @@ export default {
   methods: {
     ...mapActions(['setSetting']),
     save () {
-      this.$root.$message('commmon.done', { color: 'success' })
+      this.$root.$message('common.ok', { color: 'success' })
       this.setSetting({ key: 'about', value: this.about })
     }
   },

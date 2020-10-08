@@ -1,15 +1,10 @@
 <template lang="pug">
-  v-main
-
-    p {{$auth.user.email}}
-    //- el-form(action='/api/user' method='PUT' @submit.native.prevent='update_settings' inline label-width='200px')
-    //-   el-form-item(:label="$t('settings.change_password')")
-    //-     el-input(v-model='password' type='password')
-    //-   el-button(type='success' native-type='submit') {{$t('common.save')}}
-
-    p {{$t('settings.danger_section')}}
-    p {{$t('settings.remove_account')}}
-    v-btn(color='danger' @click='remove_account') {{$t('common.remove')}}
+  v-container
+    v-card
+      v-card-title.text-h5 {{$auth.user.email}}
+      v-card-text
+        p {{$t('settings.remove_account')}}
+        v-btn.black--text(color='warning' @click='remove_account') {{$t('common.remove')}}
 </template>
 <script>
 import { mapState } from 'vuex'

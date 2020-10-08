@@ -1,59 +1,72 @@
 <template lang="pug">
   v-card.h-event.eventDetail
     v-container
-      v-list-item(two-line)
-        v-list-item-content
-          v-list-item-title
-            time.dt-start(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')
-            v-icon mdi-date
-            b {{event|when}}
-            small  ({{event.start_datetime|from}})
-          v-list-item-title
-            b.p-location {{event.place.name}}
-            span  - {{event.place.address}}
-          h2 {{event.title}}
 
-      .v-btn--absolute.v-btn--right.v-btn--top
-        v-btn.mr-1(nuxt icon outlined color='primary'
-          :to='`/event/${event.prev}`' :disabled='!event.prev')
-          v-icon mdi-arrow-left
-        v-btn(nuxt bottom right outlined icon color='primary'
-          :to='`/event/${event.next}`' :disabled='!event.next')
-          v-icon mdi-arrow-right
+      //- event admin controls
+      EventAdmin(v-if='is_mine' :event='event')
+
+      //- v-list-item(two-line)
+      //-   v-list-item-content
+      .text-h5.text-sm-h4
+        b {{event.title}}
+      v-row
+        v-col.col-12.col-lg-9
+          //- TOFIX: avoid reflow
+          //- event image
+          v-img.main_image.mb-3(
+            contain
+            :src='imgPath'
+            :lazy-src='thumbImgPath'
+            v-if='event.image_path')
+            //- template(v-slot:placeholder)
+              //- v-row(
+              //-   class="fill-height ma-0"
+              //-   align="center"
+              //-   justify="center")
+              //-   v-progress-circular(indeterminate
+              //-     color="grey lighten-5")
+
+        v-col.col-12.col-lg-3
+          v-card(color='secondary')
+            v-card-text.white--text
+              time.dt-start.text-h5(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')
+                v-icon mdi-calendar
+                b.ml-2 {{event|when}}
+              p.subtitle-1 {{event.start_datetime|from}}
+              
+              .text-h5
+                v-icon mdi-map-marker
+                b.p-location.ml-2 {{event.place.name}}
+              p.subtitle-1 {{event.place.address}}
+
+              //- info & actions
+            v-list
+              v-list-item(link)
+                v-list-item-content.primary--text.text-uppercase(
+                    v-clipboard:success='copyLink'
+                    v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') {{$t('common.copy_link')}}
+
+              v-list-item(link)
+                v-list-item-content.primary--text.text-uppercase(@click='showEmbed=true' text color='primary') {{$t('common.embed')}}
+
+              v-list-item(link)
+                v-list-item-content.primary--text.text-uppercase(:href='`${settings.baseurl}/api/event/${event.id}.ics`' text color='primary') {{$t('common.add_to_calendar')}}
 
     v-container
         v-dialog(v-model='showEmbed')
-          EmbedEvent(:event='event')
-
-        //- TOFIX: avoid reflow
-        //- event image
-        v-img.main_image.mb-3(
-          contain
-          :src='imgPath'
-          :lazy-src='thumbImgPath'
-          v-if='event.image_path')
-          //- template(v-slot:placeholder)
-            //- v-row(
-            //-   class="fill-height ma-0"
-            //-   align="center"
-            //-   justify="center")
-            //-   v-progress-circular(indeterminate
-            //-     color="grey lighten-5")
+          EmbedEvent(:event='event' @close='showEmbed=false')
 
         div.p-description(v-html='event.description')
         v-chip.p-category.ml-1(small v-for='tag in event.tags' color='primary' outlined :key='tag') {{tag}}
 
-          //- info & actions
-        v-btn(text color='primary'
-          v-clipboard:success='copyLink'
-          v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') {{$t('common.copy_link')}}
+        //-   //- info & actions
+        //- v-btn(text color='primary'
+        //-   v-clipboard:success='copyLink'
+        //-   v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') {{$t('common.copy_link')}}
 
-        v-btn(@click='showEmbed=true' text color='primary') {{$t('common.embed')}}
+        //- v-btn(@click='showEmbed=true' text color='primary') {{$t('common.embed')}}
 
-        v-btn(:href='`${settings.baseurl}/api/event/${event.id}.ics`' text color='primary') {{$t('common.add_to_calendar')}}
-        EventAdmin(v-if='is_mine' :event='event')
-
-        //- hr
+        //- v-btn(:href='`${settings.baseurl}/api/event/${event.id}.ics`' text color='primary') {{$t('common.add_to_calendar')}}
 
         //- resources from fediverse
         #resources.mt-1(v-if='settings.enable_federation')
@@ -61,11 +74,11 @@
             small.mr-3 🔖 {{event.likes.length}}
             small ✊ {{event.boost.length}}<br/>
 
-          p.p-2
-            v-btn(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
-            span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
+          //- p.p-2
+            //- v-btn(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
+            //- span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
 
-          v-dialog(v-model='showFollowMe' destroy-on-close max-width='500px')
+          //- v-dialog(v-model='showFollowMe' destroy-on-close max-width='500px')
             h4(slot='title') {{$t('common.follow_me_title')}}
             FollowMe(@close='showFollowMe=false' is-dialog)
 
@@ -101,6 +114,15 @@
                 div.mt-1(v-html='resource_filter(resource.data.content)')
                 span.previewImage(@click='showResource(resource)')
                   img(v-for='img in resource.data.attachment' :src='img.url')
+
+          //- Next/prev arrow
+          .text-center
+            v-btn.mr-2(nuxt icon outlined color='primary'
+              :to='`/event/${event.prev}`' :disabled='!event.prev')
+              v-icon mdi-arrow-left
+            v-btn(nuxt bottom right outlined icon color='primary'
+              :to='`/event/${event.next}`' :disabled='!event.next')
+              v-icon mdi-arrow-right
 
 </template>
 <script>
@@ -286,4 +308,5 @@ export default {
     max-height: 83vh;
   }
 }
+
 </style>

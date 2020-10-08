@@ -4,16 +4,18 @@
     v-card-subtitle(v-html="$t('admin.place_description')")
 
     v-dialog(v-model='dialog' width='600')
-      v-card
+      v-card(color='secondary')
         v-card-title {{$t('admin.edit_place')}}
         v-card-text
-          v-form
+          v-form(v-model='valid' ref='form' lazy-validation)
             v-text-field(
+              :rules="[$validators.required('common.name')]"
               :label="$t('common.name')"
               v-model='place.name'
               :placeholder='$t("common.name")')
 
             v-text-field(
+              :rules="[$validators.required('common.address')]"
               :label="$t('common.address')"
               v-model='place.address'
               :placeholder='$t("common.address")')
@@ -21,11 +23,11 @@
         v-card-actions
             v-spacer
             v-btn(@click='dialog=false' color='warning') {{$t('common.cancel')}}
-            v-btn(@click='savePlace' color='primary' :loading='loading' :disable='loading') {{$t('common.save')}}
+            v-btn(@click='savePlace' color='primary' :loading='loading'
+              :disable='!valid || loading') {{$t('common.save')}}
 
     v-card-text
       v-data-table(
-        @click:row='selectPlace'
         :headers='headers'
         :items='places')
         template(v-slot:item.actions='{item}')
@@ -39,6 +41,7 @@ export default {
     return {
       loading: false,
       dialog: false,
+      valid: false,
       place: { name: '', address: '', id: null },
       headers: [
         { value: 'name', text: 'Name' },
@@ -57,6 +60,7 @@ export default {
       this.dialog = true
     },
     async savePlace () {
+      if (!this.$refs.form.validate()) return
       this.loading = true
       await this.$axios.$put('/place', this.place)
       this.updateMeta()

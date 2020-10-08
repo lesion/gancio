@@ -7,7 +7,7 @@
         v-card-subtitle(v-text="$t('login.description')")
 
         v-card-text
-          v-form(v-model='valid' ref='form')
+          v-form(v-model='valid' ref='form' lazy-validation)
             v-text-field(v-model='email' type='email'
               :rules='$validators.email' autofocus
               :placeholder='$t("common.email")'
@@ -68,7 +68,7 @@ export default {
       this.$root.$message('login.check_email', { color: 'success' })
     },
     async submit (e) {
-      e.preventDefault()
+      if (!this.$refs.form.validate()) return
       try {
         this.loading = true
         const data = new URLSearchParams()

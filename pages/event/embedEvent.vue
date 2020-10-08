@@ -1,5 +1,5 @@
 <template lang='pug'>
-v-card
+v-card(color='secondary')
   v-card-title(v-text="$t('common.embed_title')")
   v-card-text
     v-row(:gutter='10')
@@ -9,7 +9,8 @@ v-card
       v-col.mt-2(:span='12' :xs='24' v-html='code')
   v-card-actions
     v-spacer
-    v-btn(slot='append' v-clipboard:copy='code' v-clipboard:success='copyLink' color="primary") {{$t("common.copy")}}
+    v-btn(color='warning' @click="$emit('close')") {{$t("common.cancel")}}
+    v-btn(v-clipboard:copy='code' v-clipboard:success='copyLink' color="primary") {{$t("common.copy")}}
 </template>
 <script>
 import { mapState } from 'vuex'

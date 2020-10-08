@@ -6,15 +6,16 @@
         append-icon='mdi-magnify' outlined rounded
         label='Search'
         single-line hide-details)
-      v-btn(color='primary' text @click='newUserDialog = true') <v-icon>mdi-plus</v-icon> {{$t('common.new_user')}}
+
+    v-btn(color='primary' text @click='newUserDialog = true') <v-icon>mdi-plus</v-icon> {{$t('common.new_user')}}
 
     //- ADD NEW USER
     v-dialog(v-model='newUserDialog' :fullscreen="$vuetify.breakpoint.xsOnly")
 
-      v-card
+      v-card(color='secondary')
         v-card-title {{$t('common.new_user')}}
         v-card-text
-          v-form(v-model='valid')
+          v-form(v-model='valid' ref='user_form' lazy-validation)
             v-text-field(v-model='new_user.email'
               :label="$t('common.email')"
               :rules="$validators.email")
@@ -85,6 +86,7 @@ export default {
       }
     },
     async createUser () {
+      if (!this.$refs.user_form.validate()) return
       try {
         this.loading = true
         const user = await this.$axios.$post('/user', this.new_user)
