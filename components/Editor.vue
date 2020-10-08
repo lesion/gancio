@@ -3,92 +3,59 @@
     editor-menu-bar.menubar.is-hidden(:editor='editor'
       :keep-in-bounds='true' v-slot='{ commands, isActive, getMarkAttrs, focused }')
       v-btn-toggle(dense :class="{ focused }")
-        v-btn(icon text
+        v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.bold() }"
           @click="commands.bold")
           v-icon mdi-format-bold
 
-        v-btn(icon text
+        v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.underline() }"
           @click="commands.underline")
           v-icon mdi-format-underline
 
-        v-btn(icon text
+        v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.strike() }"
           @click="commands.strike")
           v-icon mdi-format-strikethrough-variant
 
-        v-btn(icon text
+        v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.italic() }"
           @click="commands.italic")
           v-icon mdi-format-italic
 
-        v-btn(icon text
+        v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.heading({level: 1}) }"
           @click="commands.heading({level: 1})")
           v-icon mdi-format-header-1
 
-        v-btn(icon text
+        v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.heading({level: 2}) }"
           @click="commands.heading({level: 2})")
           v-icon mdi-format-header-2
 
-        v-btn(icon text
+        v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.heading({level: 3}) }"
           @click="commands.heading({level: 3})")
           v-icon mdi-format-header-3
 
-        v-btn(icon text
+        v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.code() }"
           @click="commands.code")
           v-icon mdi-code-tags
 
-        v-btn(icon text
+        v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.blockquote() }"
           @click="commands.blockquote")
           v-icon mdi-format-quote-open
 
-        v-btn(icon text
+        v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.bullet_list() }"
           @click="commands.bullet_list")
           v-icon mdi-format-list-bulleted
 
-        v-btn(icon text :class='{ primary: isActive.link() }'
+        v-btn(icon text tabindex='-1' :class='{ primary: isActive.link() }'
           @click='commands.link({href: ""}); $refs.link.focus(); linkActive=true')
             v-icon mdi-link
-
-      //- v-btn-toggle.menububble(:class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`")
-        v-popover(trigger='hover' placement='bottom-start')
-          v-btn.float-left(slot='reference' size='mini') <v-icon name='question'/>
-          template
-            span This editor supports inline <code>markdown</code>
-            div <v-icon name='heading'/> → Title ⇒ Start a line with <code>#</code>
-            div <v-icon name='bold'/> → Bold ⇒ <code>ctrl+b</code>
-            div <v-icon name='italic'/> → Italic ⇒ <code>ctrl+i</code>
-            div <v-icon name='underline'/> → Underline ⇒ <code>ctrl+u</code>
-            div <v-icon name='list-ul'/> → List ⇒ Start a line with <code>-</code>
-            div <v-icon name='list-ol'/> → Ordered List ⇒ Start a line with <code>1.</code>
-            div <v-icon name='quote-right'/> → Quote ⇒ Start a line with <code>&gt;</code>
-            div <v-icon name='code'/> → Code ⇒ Use backtick <code>`</code>
-            div <v-icon name='link'/> → Link ⇒ Select a word and fill the input
-        //- el-button(size='mini' :class='{ "is-active": isActive.heading({level:4})}' @click='commands.heading({level: 4})') <v-icon name='heading'/>
-        //- el-button(size='mini' :class='{ "is-active": isActive.bold() }' @click='commands.bold')
-          <v-icon name='bold' />
-        //- el-button(size='mini' :class='{ "is-active": isActive.italic() }' @click='commands.italic') <v-icon name='italic'/>
-        //- el-button(size='mini' :class='{ "is-active": isActive.underline() }' @click='commands.underline') <v-icon name='underline'/>
-        v-btn(size='mini' :class='{ "is-active": isActive.link() }' @click='commands.link({href: ""}); $refs.link.focus(); linkActive=true') <v-icon name='link'/>
-        input(:value='isActive.link() && getMarkAttrs("link") && getMarkAttrs("link").href || ""' ref='link' :class='{ "is-active": isActive.link() || linkActive }'
-          placeholder='https://' @keypress.enter='commands.link({ href: $event.target.value})')
-          //- el-button(size='mini' :class='{ "is-active": isActive.strike() }' @click='commands.strike') <v-icon name='strikethrough'/>
-        //- br
-        //- el-button-group
-        //-   el-button(size='mini' :class='{ "is-active": isActive.code() }' @click='commands.code') <v-icon size=16 name='code'/>
-        //-   el-button(size='mini' :class='{ "is-active": isActive.bullet_list() }' @click='commands.bullet_list') <v-icon name='list-ul'/>
-        //-   //- el-button(size='mini' :class='{ "is-active": isActive.ordered_list() }' @click='commands.ordered_list') <v-icon name='list-ol'/>
-        //-   el-button(size='mini' :class='{ "is-active": isActive.blockquote() }' @click='commands.blockquote') <v-icon name='quote-right'/>
-
-        //- el-button.float-right(v-if='!noSave' size='mini' type='success' plain icon='el-icon-check'
-        //-   @click='$emit("save", editor.getHTML())') {{$t('common.save')}}
 
     editor-content.content(:editor='editor' spellcheck='false' :style="{ 'max-height': maxHeight }")
 </template>
@@ -109,7 +76,8 @@ import {
   Link,
   History,
   Strike,
-  Underline
+  Underline,
+  Placeholder
 } from 'tiptap-extensions'
 
 export default {
@@ -119,7 +87,8 @@ export default {
     value: { type: String, default: '' },
     border: { type: Boolean, default: false },
     noSave: { type: Boolean, default: false },
-    maxHeight: { type: String, Number, default: '' }
+    maxHeight: { type: String, Number, default: '' },
+    placeholder: { type: String, default: '' }
   },
   data () {
     return {
@@ -143,7 +112,7 @@ export default {
       onUpdate: _.debounce(({ getHTML }) => {
         this.update = true
         this.$emit('input', getHTML())
-      }, 300),
+      }, 1000),
       content: this.value,
       extensions: [
         new Blockquote(),
@@ -159,7 +128,14 @@ export default {
         new Bold(),
         new Italic(),
         new Strike(),
-        new Underline()
+        new Underline(),
+        new Placeholder({
+          emptyEditorClass: 'is-editor-empty',
+          emptyNodeClass: 'is-empty',
+          emptyNodeText: this.placeholder,
+          showOnlyWhenEditable: true,
+          showOnlyCurrent: true,
+        })
       ]
     })
   },
@@ -169,7 +145,15 @@ export default {
 }
 </script>
 <style lang='less'>
-
+.editor p.is-editor-empty:first-child::before {
+  content: attr(data-empty-text);
+  float: left;
+  color: #aaa;
+  // opacity: .4;
+  pointer-events: none;
+  height: 0;
+  font-style: italic;
+}
 .editor {
   // max-height: auto;
   // height: auto;
@@ -188,7 +172,6 @@ export default {
   }
   .menubar {
     opacity: .3;
-
     // position: absolute;
   }
 
