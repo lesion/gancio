@@ -62,7 +62,7 @@
         "embed_title": "Mostra questo evento sul tuo sito web",
         "embed_help": "Copiando il seguente codice sul tuo sito web l'evento verrà incluso come qui di lato",
         "feed": "Feed",
-        "feed_url_copied": "Feed url copiato, incollalo nel tuo feed reader",
+        "feed_url_copied": "URL copiato, incollalo nel tuo feed reader",
         "follow_me_title": "Segui gli aggiornamenti dal fediverso",
         "follow": "Segui",
         "n_resources": "nessuna risorsa|una risorsa|{n} risorse",
@@ -100,13 +100,13 @@
     "export": {
         "intro": "Contrariamente alle piattaforme del capitalismo, che fanno di tutto per tenere i dati e gli utenti al loro interno, crediamo che le informazioni, come le persone, debbano essere libere. Per questo puoi rimanere aggiornata sugli eventi che vuoi, come meglio credi, senza necessariamente passare da questo sito.",
         "email_description": "Puoi ricevere via mail gli eventi che ti interessano.",
-        "insert_your_address": "Indirizzo email",
-        "feed_description": "Per seguire gli aggiornamenti da computer o smartphone senza la necessità di aprire periodicamente il sito, il metodo consigliato è quello dei Feed RSS.</p>\n\n      <p>Con i feed rss utilizzi un'apposita applicazione per ricevere aggiornamenti dai siti che più ti interessano.  È un buon metodo per seguire anche molti siti in modo molto rapido, senza necessità di creare un account o altre complicazioni.</p>\n\n<li>Se hai Android, ti consigliamo <a href=\"https://play.google.com/store/apps/details?id=net.frju.flym\">Flym</a> o Feeder</li>\n<li>Per iPhone/iPad puoi usare <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\">Feed4U</a></li>\n<li>Per il computer fisso/portatile consigliamo Brief, da installare all'interno <a href=\"https://addons.mozilla.org/it/firefox/addon/brief/\">di Firefox </a> e compatibile con tutti i principali sistemi operativi.</li>\n<br/>\nAggiungendo questo link al tuo lettore di feed, rimarrai aggiornata.",
+        "insert_your_address": "Indirizzo mail",
+        "feed_description": "Per seguire gli aggiornamenti da computer o smartphone senza la necessità di aprire periodicamente il sito, il metodo consigliato è quello dei Feed RSS.</p>\n\n      <p>Con i feed rss utilizzi un'apposita applicazione per ricevere aggiornamenti dai siti che più ti interessano.  È un buon metodo per seguire anche molti siti in modo molto rapido, senza necessità di creare un account o altre complicazioni.</p>\n\n<li>Se hai Android, ti consigliamo <a href=\"https://f-droid.org/en/packages/net.frju.flym\">Flym</a> o Feeder</li>\n<li>Per iPhone/iPad puoi usare <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\">Feed4U</a></li>\n<li>Per il computer fisso/portatile consigliamo Brief, da installare all'interno <a href=\"https://addons.mozilla.org/it/firefox/addon/brief/\">di Firefox </a> e compatibile con tutti i principali sistemi operativi.</li>\n<br/>\nAggiungendo questo link al tuo lettore di feed, rimarrai aggiornata.",
         "ical_description": "I computer e gli smartphone sono comunemente attrezzati con un'applicazione per gestire un calendario. A questi programmi solitamente è possibile far importare un calendario remoto.",
         "list_description": "Se hai un sito web e vuoi mostrare una lista di eventi, puoi usare il seguente codice"
     },
     "register": {
-        "description": "I movimenti hanno bisogno di organizzarsi e autofinanziarsi. <br/>Questo è un dono per voi, usatelo solo per eventi non commerciali e ovviamente antifascisti, antisessisti, antirazzisti. \n      <br/>Prima di poter pubblicare <strong>dobbiamo approvare l'account</strong>, considera che <strong>dietro questo sito ci sono delle persone</strong> di\n      carne e sangue, scrivici quindi due righe per farci capire che eventi vorresti pubblicare.",
+        "description": "I movimenti hanno bisogno di organizzarsi e autofinanziarsi. <br/>\nUsatelo solo per eventi non commerciali, antifascisti, antisessisti, antirazzisti. <br/>Prima di poter pubblicare <strong>dobbiamo approvare l'account</strong>, considera che <strong>dietro questo sito ci sono delle persone</strong> di carne e sangue, scrivici quindi due righe per farci capire che eventi vorresti pubblicare.",
         "error": "Errore: ",
         "complete": "Confermeremo la registrazione quanto prima.",
         "first_user": "Amministratore creato e attivo"
@@ -147,12 +147,12 @@
         "from": "Dalle",
         "image_too_big": "Immagine troppo grande! Massimo 4M",
         "interact_with_me": "Seguimi dal fediverso",
-        "follow_me_description": "Tra i vari modi di rimanere aggiornati degli eventi pubblicati qui su {title},\n      puoi seguire l'account <u>{account}</u> dal fediverso, ad esempio via mastodon, ed eventualmente aggiungere risorse ad un evento da lì.<br/><br/>\n      Se non hai mai sentito parlare di mastodon e del fediverso ti consigliamo di leggere <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>questo articolo</a>.<br/><br/> Inserisci la tua istanza qui sotto (es. mastodon.cisti.org o mastodon.bida.im)",
+        "follow_me_description": "Tra i vari modi di rimanere aggiornati degli eventi pubblicati qui su {title}, puoi seguire l'account <u>{account}</u> dal fediverso, ad esempio via mastodon, ed eventualmente aggiungere risorse ad un evento da lì.<br/><br/>\nSe non hai mai sentito parlare di mastodon e del fediverso ti consigliamo di leggere <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>questo articolo</a>.<br/><br/> Inserisci la tua istanza qui sotto (es. mastodon.cisti.org o mastodon.bida.im)",
         "only_future": "solo eventi futuri",
         "interact_with_me_at": "Seguimi nel fediverso su"
     },
     "admin": {
-        "place_description": "Nel caso in cui un luogo sia errato o cambi indirizzo, puoi modificarlo. <br/>Considera che tutti gli eventi associati a questo luogo cambieranno indirizzo (anche quelli passati!)",
+        "place_description": "Nel caso in cui un luogo sia errato o cambi indirizzo, puoi modificarlo.<br/>Considera che tutti gli eventi associati a questo luogo cambieranno indirizzo (anche quelli passati!)",
         "event_confirm_description": "Puoi confermare qui gli eventi inseriti da utenti anonimi",
         "delete_user": "Elimina",
         "remove_admin": "Rimuovi admin",
@@ -193,7 +193,7 @@
         "instance_locale": "Lingua di default",
         "instance_locale_description": "La lingua utilizzata per mostare le pagine è quella preferita dall'utente. In alcuni casi però dobbiamo mostrare dei messaggi per tutti allo stesso modo (ad esempio quando pubblichiamo via ActivityPub o nell'invio di alcune mail). In questi casi useremo la lingua selezionata qui sopra.",
         "instance_place": "Luogo indicativo di questa istanza",
-        "title_description": "Viene usato nel titolo della pagina, nell'oggetto delle email, nell'esportazione dei feed e degli ics ",
+        "title_description": "Viene usato nel titolo della pagina, nell'oggetto delle email, nell'esportazione dei feed e degli ics",
         "description_description": "Compare nell'header accanto al titolo",
         "instance_name_help": "Nome dell'account ActivityPub da seguire",
         "enable_trusted_instances": "Abilita istanze amiche",
@@ -205,10 +205,11 @@
         "add_link": "Aggiungi link",
         "footer_links": "Footer link",
         "delete_footer_link_confirm": "Sicura di eliminare questo link?",
-        "edit_place": "Modifica luogo"
+        "edit_place": "Modifica luogo",
+        "new_announcement": "Nuovo annuncio"
     },
     "auth": {
-        "not_confirmed": "Non abbiamo ancora confermato questa mail...",
+        "not_confirmed": "Non abbiamo ancora confermato questa mail…",
         "fail": "Autenticazione fallita. Sicura la password è giusta? E la mail?"
     },
     "settings": {
