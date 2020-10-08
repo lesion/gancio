@@ -1,1 +1,19 @@
-{}
+{
+    "admin_register": {
+        "content": "{{user.email}} har forespurt registrering på {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Bekreft <a href='{{config.baseurl}}/admin'>her</a>.",
+        "subject": "Nyregistrering"
+    },
+    "recover": {
+        "subject": "Passordgjenoppretting"
+    },
+    "user_confirm": {
+        "subject": "Du kan nå begynne publiseringen av hendelser"
+    },
+    "confirm": {
+        "subject": "Du kan nå begynne publiseringen av hendelser"
+    },
+    "register": {
+        "content": "Registreringsforespørsel mottatt. Den vil bekreftes så snart som mulig.",
+        "subject": "Registreringsforespørsel mottatt"
+    }
+}
