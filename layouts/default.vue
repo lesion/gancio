@@ -36,6 +36,7 @@ export default {
 //   max-height: 100%;
 // }
 .v-dialog {
+  width: 600px;
   max-width: 800px;
 }
 
