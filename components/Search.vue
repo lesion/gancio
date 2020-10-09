@@ -11,16 +11,15 @@
       :label="$t('event.show_past')"
       v-model='showPast')
 
-    p {{filter}}
     v-autocomplete.mt-0(
       :label='$t("common.filter")'
       :items='keywords'
       v-model='filter'
       :search-input.sync='search'
       item-text='label'
+      item-value='id'
       chips rounded outlined single-line
-      multiple
-    )
+      multiple)
       template(v-slot:selection="data")
         v-chip(v-bind="data.attrs"
           :input-value="data.selected"
@@ -28,21 +27,13 @@
           @click="data.select"
           @click:close="remove(data.item)")
           v-avatar(left)
-            v-icon
-            //- <v-img :src="data.item.avatar"></v-img>
-          //- </v-avatar>
-          span {{ data.item.name }}
+            v-icon {{data.item.type === 'place' ? 'mdi-map-marker' : 'mdi-tag' }}
+          span {{ data.item.label }}
       template(v-slot:item='{ item }')
-        v-list-item-content
-          v-list-item-title(v-text='item.label')
-      //-   span.float-left {{ item.label }}
-      //-   i.float-right.el-icon-place(v-if='item.type==="place"')
-      //-   i.float-right.el-icon-collection-tag(v-if='item.type==="tag"')
-    //- #filters
-    //-   v-vtn.mr-1.bg-dark(type='text' round plain v-for='t in filters.tags' size='mini'
-    //-     :key='t' @click='removeTag(t)') {{t}}
-    //-   v-btn.mr-1.bg-dark.text-warning(type='text' round plain v-for='p in selectedPlaces' size='mini'
-    //-     :key='p.id' @click='removePlace(p.id)') {{p.name}}
+          v-list-item-avatar
+            v-icon {{item.type === 'place' ? 'mdi-map-marker' : 'mdi-tag' }}
+          v-list-item-content
+            v-list-item-title(v-text='item.label')
 </template>
 
 <script>
@@ -55,11 +46,30 @@ export default {
   },
   data () {
     return {
-      filter: null,
+      tmpfilter: null,
       search: ''
     }
   },
   computed: {
+    filter: {
+      set (value) {
+        console.error('set', value)
+        this.tmpfilter = value
+      },
+      get () {
+        // console.error('dentro get')
+        // const tags = this.filters.tags.map(t => t.tag)// ({ type: 'tag', label: t.tag, weigth: t.weigth, id: t.tag }))
+        // const places = this.filters.places.map(p => p.name) //({ type: 'place', label: p.name, weigth: p.weigth, id: p.id }))
+        // const keywords = tags.concat(places).sort((a, b) => b.weigth - a.weigth)
+        // const ret = tags.concat(places)
+        // console.error(ret)
+        return this.tmpfilter
+        // const ret = this.filters.tags
+        // console.error(ret)
+        // return ret
+        // return ['ciao']
+      }
+    },
     ...mapState(['tags', 'places', 'filters', 'settings']),
     // selectedPlaces () {
     //   return this.places.filter(p => this.filters.places.includes(p.id))
