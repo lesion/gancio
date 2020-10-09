@@ -1,9 +1,15 @@
 <template lang="pug">
   v-container.container
     v-card
-      v-card-title {{edit?$t('common.edit_event'):$t('common.add_event')}}
+      v-card-title
+        h4 {{edit?$t('common.edit_event'):$t('common.add_event')}}
+        v-spacer
+        v-btn(link text color='primary' @click='openImportDialog=true') <v-icon>mdi-file-import</v-icon> {{$t('event.import_URL')}}
+      v-dialog(v-model='openImportDialog')
+        ImportDialog(@close='openImportDialog=false' @imported='eventImported')
+
       v-card-text
-        v-form(v-model='valid')
+        v-form(v-model='valid' ref='form' lazy-validation)
 
           //- Not logged event
           div(v-if='!$auth.loggedIn')
@@ -151,7 +157,7 @@
 
       v-card-actions
         v-spacer
-        v-btn(@click='done' :loading='loading' :disabled='!valid || loading || !date'
+        v-btn(@click='done' :loading='loading' :disabled='!valid || loading'
           color='primary') {{edit?$t('common.edit'):$t('common.send')}}
 
 </template>
@@ -161,10 +167,11 @@ import _ from 'lodash'
 import moment from 'dayjs'
 import Editor from '@/components/Editor'
 import List from '@/components/List'
+import ImportDialog from './ImportDialog'
 
 export default {
   name: 'NewEvent',
-  components: { List, Editor },
+  components: { List, Editor, ImportDialog },
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
@@ -211,6 +218,7 @@ export default {
       valid: false,
       dueDateMenu: false,
       fromDateMenu: false,
+      openImportDialog: false,
       event: {
         type: 'normal',
         place: { name: '', address: '' },
@@ -363,6 +371,10 @@ export default {
   },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
+    eventImported (event) {
+      console.error('sono dentro event imported', event)
+      this.event = event
+    },
     selectPlace (p) {
       console.error('sono dentro selectePlace')
       const place = p && this.places.find(place => place.id === p.id)
@@ -386,6 +398,7 @@ export default {
       this.event.image = {}
     },
     async done () {
+      if (!this.$refs.form.validate()) return
       this.loading = true
       let start_datetime, end_datetime
       const [start_hour, start_minute] = this.time.start.split(':')

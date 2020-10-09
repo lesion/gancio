@@ -8,7 +8,7 @@
       //- v-list-item(two-line)
       //-   v-list-item-content
       .text-h5.text-sm-h4
-        b {{event.title}}
+        b.p-name {{event.title}}
       v-row
         v-col.col-12.col-lg-9
           //- TOFIX: avoid reflow
@@ -34,10 +34,10 @@
                 b.ml-2 {{event|when}}
               p.subtitle-1 {{event.start_datetime|from}}
               
-              .text-h5
+              .text-h5.p-location
                 v-icon mdi-map-marker
-                b.p-location.ml-2 {{event.place.name}}
-              p.subtitle-1 {{event.place.address}}
+                b.vcard.ml-2 {{event.place.name}}
+              p.adr {{event.place.address}}
 
               //- info & actions
             v-list
@@ -56,7 +56,7 @@
         v-dialog(v-model='showEmbed')
           EmbedEvent(:event='event' @close='showEmbed=false')
 
-        div.p-description(v-html='event.description')
+        p.p-description.text-h6(v-html='event.description')
         v-chip.p-category.ml-1(small v-for='tag in event.tags' color='primary' outlined :key='tag') {{tag}}
 
         //-   //- info & actions

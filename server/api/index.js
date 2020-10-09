@@ -12,7 +12,7 @@ const apUserController = require('./controller/ap_user')
 const resourceController = require('./controller/resource')
 const oauthController = require('./controller/oauth')
 const announceController = require('./controller/announce')
-
+const helpers = require('../helpers')
 const storage = require('./storage')
 const upload = multer({ storage })
 
@@ -87,6 +87,8 @@ api.put('/place', isAdmin, eventController.updatePlace)
  */
 api.post('/event', hasPerm('event:write'), upload.single('image'), eventController.add)
 api.put('/event', hasPerm('event:write'), upload.single('image'), eventController.update)
+api.get('/event/import', helpers.importURL)
+
 
 // remove event
 api.delete('/event/:id', hasPerm('event:remove'), eventController.remove)
@@ -103,12 +105,13 @@ api.delete('/event/notification/:code', eventController.delNotification)
 
 api.get('/settings', settingsController.getAllRequest)
 api.post('/settings', isAdmin, settingsController.setRequest)
-api.get('/event/:event_id.:format?', cors, eventController.get)
 api.post('/settings/logo', isAdmin, multer({ dest: config.upload_path }).single('logo'), settingsController.setLogo)
 
 // confirm event
 api.get('/event/confirm/:event_id', hasPerm('event:write'), eventController.confirm)
 api.get('/event/unconfirm/:event_id', hasPerm('event:write'), eventController.unconfirm)
+
+// import event
 
 // get event
 api.get('/event/:event_id.:format?', cors, eventController.get)

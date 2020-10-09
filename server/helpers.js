@@ -9,6 +9,8 @@ const path = require('path')
 const sharp = require('sharp')
 const axios = require('axios')
 const crypto = require('crypto')
+const Microformats = require('microformat-node')
+const get = require('lodash/get')
 
 const DOMPurify = require('dompurify')
 const { JSDOM } = require('jsdom')
@@ -104,6 +106,35 @@ module.exports = {
 
       outStream.on('finish', () => resolve(filename))
     })
+  },
+
+  async importURL (req, res) {
+    const URL = req.query.URL
+    try {
+      const response = await axios.get(URL)
+      Microformats.get({ html: response.data, filter: ['h-event'] }, (err, data) => {
+        if (!data.items.length || !data.items[0].properties) return res.sendStatus(404)
+        const event = data.items[0].properties
+        console.error(event)
+        return res.json({
+          title: get(event, 'name[0]', ''),
+          description: get(event, 'content[0]', ''),
+          place: get(event, 'location[0].properties.name', ''),
+          address: get(event, 'location[0].properties.street-address'),
+          start: get(event, 'start[0]', ''),
+          end: get(event, 'end[0]', ''),
+          tags: get(event, 'category', []),
+          image: get(event, 'featured[0]')
+        })
+      })
+      // const event = dom.window.document.querySelected(".h-event")
+      // console.error(event)
+      // console.error(response)
+    } catch(e){
+      console.error(e)
+    }
+
+    // res.json('ok')
   }
 
 }
