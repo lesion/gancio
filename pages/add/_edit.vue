@@ -4,7 +4,8 @@
       v-card-title
         h4 {{edit?$t('common.edit_event'):$t('common.add_event')}}
         v-spacer
-        v-btn(link text color='primary' @click='openImportDialog=true') <v-icon>mdi-file-import</v-icon> {{$t('event.import_URL')}}
+        v-btn(link text color='primary' @click='openImportDialog=true') 
+          <v-icon>mdi-file-import</v-icon> {{$t('common.import')}}
       v-dialog(v-model='openImportDialog')
         ImportDialog(@close='openImportDialog=false' @imported='eventImported')
 

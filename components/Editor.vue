@@ -84,6 +84,7 @@ export default {
   name: 'Editor',
   components: { EditorContent, EditorMenuBar, EditorMenuBubble },
   props: {
+    label: { type: String, default: 'Editor' },
     value: { type: String, default: '' },
     border: { type: Boolean, default: false },
     noSave: { type: Boolean, default: false },
@@ -155,6 +156,15 @@ export default {
   font-style: italic;
 }
 .editor {
+  .label {
+    left: 0px;
+    position: absolute;
+    transition: translateY .3s, scale .3s;
+    &.focused {
+      color: orange;
+      transform: translateY(-10px) scale(0.75);
+    }
+  }
   // max-height: auto;
   // height: auto;
     overflow-y: auto;
