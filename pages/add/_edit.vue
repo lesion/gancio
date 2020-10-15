@@ -373,11 +373,9 @@ export default {
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
     eventImported (event) {
-      console.error('sono dentro event imported', event)
       this.event = event
     },
     selectPlace (p) {
-      console.error('sono dentro selectePlace')
       const place = p && this.places.find(place => place.id === p.id)
       if (place && place.address) {
         this.event.place.name = p.name
