@@ -81,7 +81,8 @@
         "delete": "Eliminar",
         "announcements": "Anuncios",
         "url": "Dirección URL",
-        "place": "Lugar"
+        "place": "Lugar",
+        "tags": "Tags"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
@@ -111,7 +112,7 @@
     },
     "event": {
         "anon": "Anónimo",
-        "anon_description": "Puedes ingresar un evento sin registrarte o iniciar sesión,\n       pero en este caso tendrás que esperar a que alguien lo lea para confirmar que\n       es un evento adecuado para este espacio, delegando esta elección. Además, no será posible modificarlo. <br/> <br/>\n       Si no te gusta, puedes <a href='/login'> iniciar sesión </a> o <a href='/register'> registrarte </a>,\n       de lo contrario, continúa y recibirás una respuesta lo antes posible.",
+        "anon_description": "Puedes ingresar un evento sin registrarte o iniciar sesión, pero en este caso tendrás que esperar a que alguien lo lea para confirmar que es un evento adecuado para este espacio,\ndelegando esta elección. Además, no será posible modificarlo. <br/> <br/>\nSi no te gusta, puedes <a href='/login'> iniciar sesión </a> o <a href='/register'> registrarte </a>,\nde lo contrario, continúa y recibirás una respuesta lo antes posible. ",
         "same_day": "Mismo día",
         "what_description": "Nombre evento",
         "description_description": "Descripción, puedes copiar y pegar",
@@ -144,9 +145,9 @@
         "interact_with_me_at": "Sígueme en el fediverso en",
         "show_recurrent": "Eventos recurrientes",
         "show_past": "eventos pasados",
-        "follow_me_description": "Entre las diversas formas de mantenerse al día con los eventos publicados aquí en {title},\n      puedes seguir la cuenta <u>{account}</u> desde el fediverso, por ejemplo, a través de un mastodon, y posiblemente añadir recursos a un evento desde allí.<br/><br/>\n      Si nunca has oído hablar del mastodon y el fediverso te sugerimos que leas <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>este artículo</a>.<br/><br/> Introduce tu instancia abajo (por ejemplo mastodon.cisti.org o mastodon.bida.im)",
+        "follow_me_description": "Entre las diversas formas de mantenerse al día con los eventos publicados aquí en {title},\npuedes seguir la cuenta <u>{account}</u> desde el fediverso, por ejemplo, a través de un Mastodon, y posiblemente añadir recursos a un evento desde allí.<br/><br/>\nSi nunca has oído hablar del Mastodon y el fediverso te sugerimos que leas <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>este artículo</a>.<br/><br/> Introduce tu instancia abajo (por ejemplo mastodon.cisti.org o mastodon.bida.im)",
         "interact_with_me": "Sigueme en el fediverso",
-        "remove_recurrent_confirmation": "Estás segura de querer eliminar este evento recurriente?\n\nLos eventos pasados serán mantenidos, pero no se crearán eventos nuevos."
+        "remove_recurrent_confirmation": "Estás segura de querer eliminar este evento recurriente?\nLos eventos pasados serán mantenidos, pero no se crearán eventos nuevos."
     },
     "admin": {
         "place_description": "En el caso de que un lugar sea incorrecto o cambie de dirección, puedes cambiarlo. <br/> En este caso hay que tener en cuenta que todos los eventos asociados con ese lugar cambiarán de dirección (¡incluso los pasados!)",
@@ -191,7 +192,7 @@
         "instance_timezone_description": "Gancio está diseñado para recoger los eventos de un lugar específico como una ciudad. Al escribir y seleccionar la zona horaria de este lugar, todos los tiempos se mostrarán e introducirán como se ha elegido.",
         "instance_locale_description": "El idioma utilizado para mostrar las páginas es el idioma preferido por el usuario. Sin embargo, en algunos casos tenemos que mostrar los mensajes para todos de la misma manera (por ejemplo, cuando publicamos a través de ActivityPub o cuando enviamos algunos correos electrónicos). En estos casos utilizaremos el idioma seleccionado anteriormente.",
         "instance_place": "Lugar indicativo de esta instancia",
-        "title_description": "Se utiliza en el título de la página, en la línea de asunto del correo electrónico, en la exportación de feeds y ics ",
+        "title_description": "Se utiliza en el título de la página, en la línea de asunto del correo electrónico, en la exportación de feeds y ics.",
         "description_description": "Aparece en el encabezado junto al título",
         "instance_name_help": "Nombre de la cuenta de ActivityPub a seguir",
         "enable_trusted_instances": "Habilitar las solicitudes amistosas",
@@ -201,12 +202,12 @@
         "delete_trusted_instance_confirm": "¿Realmente quieres borrar este elemento del menú de instancias amistosas?"
     },
     "auth": {
-        "not_confirmed": "Todavía no hemos confirmado este email...",
+        "not_confirmed": "Todavía no hemos confirmado este email…",
         "fail": "No pudimos autenticarte. ¿La contraseña es correcta? ¿Y el mail?"
     },
     "settings": {
         "change_password": "Cambia contraseña",
-        "password_updated": "Contraseña modificada",
+        "password_updated": "Contraseña modificada.",
         "danger_section": "Sección peligrosa",
         "remove_account": "Al presionar el siguiente botón, su usuario será eliminado. No serán eliminados los eventos que publicaste.",
         "remove_account_confirm": "Estás por borrar definitivamente tu cuenta",
@@ -214,7 +215,7 @@
     },
     "error": {
         "nick_taken": "Este nickname ya está registrado",
-        "email_taken": "Este correo electrónico ya está registrado"
+        "email_taken": "Este correo electrónico ya está registrado."
     },
     "ordinal": {
         "1": "primero",
