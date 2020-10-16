@@ -4,13 +4,16 @@
         "subject": "Nyregistrering"
     },
     "recover": {
-        "subject": "Passordgjenoppretting"
+        "subject": "Passordgjenoppretting",
+        "content": "Hei, du har forespurt gjenoppretting av passord på {{config.title}}.\n<a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Klikk her</a> for å bekrefte."
     },
     "user_confirm": {
-        "subject": "Du kan nå begynne publiseringen av hendelser"
+        "subject": "Du kan nå begynne publiseringen av hendelser",
+        "content": "Hei, din konto på <a href='{{config.baseurl}}'>{{config.title}}</a> har blitt opprettet. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'> Bekreft den og velg et passord</a>."
     },
     "confirm": {
-        "subject": "Du kan nå begynne publiseringen av hendelser"
+        "subject": "Du kan nå begynne publiseringen av hendelser",
+        "content": "Hei, din konto på <a href='{{config.baseurl}}'>{{config.title}}</a> har blitt bekreftet.\nSkriv til oss på {{config.admin_email}} for info."
     },
     "register": {
         "content": "Registreringsforespørsel mottatt. Den vil bekreftes så snart som mulig.",
