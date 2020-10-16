@@ -83,7 +83,8 @@
         "place": "Place",
         "tags": "Tags",
         "theme": "Theme",
-        "reset": "Reset"
+        "reset": "Reset",
+        "import": "Import"
     },
     "login": {
         "description": "By logging in you can publish new events.",
@@ -149,7 +150,9 @@
         "interact_with_me_at": "Interact with me on fediverse at",
         "follow_me_description": "One of the ways to stay up to date on events published here on {title},\nis following the account <u>{account}</u> from the fediverse, for example via mastodon, and possibly add resources to an event from there.<br/><br/>\nIf you have never heard of Mastodon and the fediverse we recommend reading <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>this article</a>.<br/><br/>Enter your instance below (e.g. mastodon.social)",
         "interact_with_me": "Follow me",
-        "remove_recurrent_confirmation": "Are you sure you want to remove this recurring event?\nPast events will be maintained, but no further events will be created."
+        "remove_recurrent_confirmation": "Are you sure you want to remove this recurring event?\nPast events will be maintained, but no further events will be created.",
+        "import_URL": "Import from URL",
+        "import_ICS": "Import from ICS"
     },
     "admin": {
         "place_description": "If you have gotten the place or address wrong, you can change it.<br/>All current and past events associated with this place will change address.",

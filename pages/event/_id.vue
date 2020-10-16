@@ -1,18 +1,19 @@
 <template lang="pug">
-  v-card.h-event.eventDetail
-    v-container
+
+  //- EVENT PAGE
+  //- gancio supports microformats (http://microformats.org/wiki/h-event)
+  v-card.h-event
+    v-card-text
 
       //- event admin controls
       EventAdmin(v-if='is_mine' :event='event')
 
-      //- v-list-item(two-line)
-      //-   v-list-item-content
+      //- Title
       .text-h5.text-sm-h4
         b.p-name {{event.title}}
+
       v-row
         v-col.col-12.col-lg-9
-          //- TOFIX: avoid reflow
-          //- event image
           v-img.main_image.mb-3(
             contain
             :src='imgPath'
@@ -39,7 +40,7 @@
                 b.vcard.ml-2 {{event.place.name}}
               p.adr {{event.place.address}}
 
-              //- info & actions
+            //- info & actions
             v-list
               v-list-item(link)
                 v-list-item-content.primary--text.text-uppercase(
@@ -49,80 +50,73 @@
               v-list-item(link)
                 v-list-item-content.primary--text.text-uppercase(@click='showEmbed=true' text color='primary') {{$t('common.embed')}}
 
-              v-list-item(link)
-                v-list-item-content.primary--text.text-uppercase(:href='`${settings.baseurl}/api/event/${event.id}.ics`' text color='primary') {{$t('common.add_to_calendar')}}
+              v-list-item(link :href='`/api/event/${event.id}.ics`')
+                v-list-item-content.primary--text.text-uppercase
+                //- v-btn(nuxt block link :href='`/api/event/${event.id}.ics`' text color='primary') {{$t('common.add_to_calendar')}}
 
-    v-container
-        v-dialog(v-model='showEmbed')
-          EmbedEvent(:event='event' @close='showEmbed=false')
 
-        p.p-description.text-h6(v-html='event.description')
-        v-chip.p-category.ml-1(small v-for='tag in event.tags' color='primary' outlined :key='tag') {{tag}}
+      .p-description.text-h6(v-html='event.description')
+      v-chip.p-category.ml-1(v-for='tag in event.tags' color='primary'
+        outlined :key='tag' v-text='tag')
 
-        //-   //- info & actions
-        //- v-btn(text color='primary'
-        //-   v-clipboard:success='copyLink'
-        //-   v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') {{$t('common.copy_link')}}
+      //- resources from fediverse
+      #resources.mt-1(v-if='settings.enable_federation')
+        div.float-right(v-if='!settings.hide_boosts')
+          small.mr-3 🔖 {{event.likes.length}}
+          small ✊ {{event.boost.length}}<br/>
 
-        //- v-btn(@click='showEmbed=true' text color='primary') {{$t('common.embed')}}
+        //- p.p-2
+          //- v-btn(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
+          //- span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
 
-        //- v-btn(:href='`${settings.baseurl}/api/event/${event.id}.ics`' text color='primary') {{$t('common.add_to_calendar')}}
+        //- v-dialog(v-model='showFollowMe' destroy-on-close max-width='500px')
+          h4(slot='title') {{$t('common.follow_me_title')}}
+          FollowMe(@close='showFollowMe=false' is-dialog)
 
-        //- resources from fediverse
-        #resources.mt-1(v-if='settings.enable_federation')
-          div.float-right(v-if='!settings.hide_boosts')
-            small.mr-3 🔖 {{event.likes.length}}
-            small ✊ {{event.boost.length}}<br/>
+        v-dialog.showResource#resourceDialog(v-model='showResources' fullscreen
+          width='95vw'
+          destroy-on-close
+          @keydown.native.right='$refs.carousel.next()'
+          @keydown.native.left='$refs.carousel.prev()')
+          v-carousel(:interval='10000' ref='carousel' arrow='always')
+            v-carousel-item(v-for='attachment in selectedResource.data.attachment' :key='attachment.url')
+              v-img(:src='attachment.url')
+        v-list.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources' dark
+          :key='resource.id' :class='{disabled: resource.hidden}')
+          v-list-item
+            v-list-title
+              v-menu(v-if='$auth.user && $auth.user.is_admin' offset-y)
+                template(v-slot:activator="{ on, attrs }")
+                  v-btn.mr-2(v-on='on' v-attrs='attrs' color='primary' small icon outlined)
+                    v-icon mdi-dots-vertical
+                v-list
+                  v-list-item(v-if='!resource.hidden' @click='hideResource(resource, true)')
+                    v-list-item-title <v-icon left>mdi-eye-off</v-icon> {{$t('admin.hide_resource')}}
+                  v-list-item(v-else @click='hideResource(resource, false)')
+                    v-list-item-title <v-icon left>mdi-eye-on</v-icon> {{$t('admin.show_resource')}}
+                  v-list-item(@click='deleteResource(resource)')
+                    v-list-item-title <v-icon left>mdi-delete</v-icon> {{$t('admin.delete_resource')}}
+                  v-list-item(@click='blockUser(resource)')
+                    v-list-item-title <v-icon left>mdi-lock</v-icon> {{$t('admin.block_user')}}
 
-          //- p.p-2
-            //- v-btn(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
-            //- span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
+              a(:href='resource.data.url || resource.data.context')
+                small {{resource.data.published|dateFormat('ddd, D MMMM HH:mm')}}
 
-          //- v-dialog(v-model='showFollowMe' destroy-on-close max-width='500px')
-            h4(slot='title') {{$t('common.follow_me_title')}}
-            FollowMe(@close='showFollowMe=false' is-dialog)
+              div.mt-1(v-html='resource_filter(resource.data.content)')
+              span.previewImage(@click='showResource(resource)')
+                img(v-for='img in resource.data.attachment' :src='img.url')
 
-          v-dialog.showResource#resourceDialog(v-model='showResources' fullscreen
-            width='95vw'
-            destroy-on-close
-            @keydown.native.right='$refs.carousel.next()'
-            @keydown.native.left='$refs.carousel.prev()')
-            v-carousel(:interval='10000' ref='carousel' arrow='always')
-              v-carousel-item(v-for='attachment in selectedResource.data.attachment' :key='attachment.url')
-                v-img(:src='attachment.url')
-          v-list.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources' dark
-            :key='resource.id' :class='{disabled: resource.hidden}')
-            v-list-item
-              v-list-title
-                v-menu(v-if='$auth.user && $auth.user.is_admin' offset-y)
-                  template(v-slot:activator="{ on, attrs }")
-                    v-btn.mr-2(v-on='on' v-attrs='attrs' color='primary' small icon outlined)
-                      v-icon mdi-dots-vertical
-                  v-list
-                    v-list-item(v-if='!resource.hidden' @click='hideResource(resource, true)')
-                      v-list-item-title <v-icon left>mdi-eye-off</v-icon> {{$t('admin.hide_resource')}}
-                    v-list-item(v-else @click='hideResource(resource, false)')
-                      v-list-item-title <v-icon left>mdi-eye-on</v-icon> {{$t('admin.show_resource')}}
-                    v-list-item(@click='deleteResource(resource)')
-                      v-list-item-title <v-icon left>mdi-delete</v-icon> {{$t('admin.delete_resource')}}
-                    v-list-item(@click='blockUser(resource)')
-                      v-list-item-title <v-icon left>mdi-lock</v-icon> {{$t('admin.block_user')}}
+      //- Next/prev arrow
+      .text-center
+        v-btn.mr-2(nuxt icon outlined color='primary'
+          :to='`/event/${event.prev}`' :disabled='!event.prev')
+          v-icon mdi-arrow-left
+        v-btn(nuxt bottom right outlined icon color='primary'
+          :to='`/event/${event.next}`' :disabled='!event.next')
+          v-icon mdi-arrow-right
 
-                a(:href='resource.data.url || resource.data.context')
-                  small {{resource.data.published|dateFormat('ddd, D MMMM HH:mm')}}
-
-                div.mt-1(v-html='resource_filter(resource.data.content)')
-                span.previewImage(@click='showResource(resource)')
-                  img(v-for='img in resource.data.attachment' :src='img.url')
-
-          //- Next/prev arrow
-          .text-center
-            v-btn.mr-2(nuxt icon outlined color='primary'
-              :to='`/event/${event.prev}`' :disabled='!event.prev')
-              v-icon mdi-arrow-left
-            v-btn(nuxt bottom right outlined icon color='primary'
-              :to='`/event/${event.next}`' :disabled='!event.next')
-              v-icon mdi-arrow-right
+      v-dialog(v-model='showEmbed')
+        EmbedEvent(:event='event' @close='showEmbed=false')
 
 </template>
 <script>

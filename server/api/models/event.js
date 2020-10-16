@@ -87,7 +87,7 @@ Event.prototype.toAP = function (username, locale, to = []) {
     id: `${config.baseurl}/federation/m/${this.id}`,
     name: this.title,
     url: `${config.baseurl}/event/${this.id}`,
-    type: 'Event',
+    type: 'Note',
     startTime: moment.unix(this.start_datetime).locale(locale).format(),
     endTime: moment.unix(this.end_datetime).locale(locale).format(),
     location: {

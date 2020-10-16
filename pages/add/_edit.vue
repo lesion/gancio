@@ -4,7 +4,8 @@
       v-card-title
         h4 {{edit?$t('common.edit_event'):$t('common.add_event')}}
         v-spacer
-        v-btn(link text color='primary' @click='openImportDialog=true') <v-icon>mdi-file-import</v-icon> {{$t('event.import_URL')}}
+        v-btn(link text color='primary' @click='openImportDialog=true') 
+          <v-icon>mdi-file-import</v-icon> {{$t('common.import')}}
       v-dialog(v-model='openImportDialog')
         ImportDialog(@close='openImportDialog=false' @imported='eventImported')
 
@@ -372,11 +373,9 @@ export default {
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
     eventImported (event) {
-      console.error('sono dentro event imported', event)
       this.event = event
     },
     selectPlace (p) {
-      console.error('sono dentro selectePlace')
       const place = p && this.places.find(place => place.id === p.id)
       if (place && place.address) {
         this.event.place.name = p.name
