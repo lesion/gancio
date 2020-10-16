@@ -1,5 +1,5 @@
 <template lang="pug">
-
+v-container
   //- EVENT PAGE
   //- gancio supports microformats (http://microformats.org/wiki/h-event)
   v-card.h-event
@@ -9,11 +9,11 @@
       EventAdmin(v-if='is_mine' :event='event')
 
       //- Title
-      .text-h5.text-sm-h4
-        b.p-name {{event.title}}
+      //- .text-h5.text-sm-h4
+      //-   b.p-name {{event.title}}
 
       v-row
-        v-col.col-12.col-lg-9
+        v-col.col-12.col-lg-8
           v-img.main_image.mb-3(
             contain
             :src='imgPath'
@@ -27,9 +27,12 @@
               //-   v-progress-circular(indeterminate
               //-     color="grey lighten-5")
 
-        v-col.col-12.col-lg-3
+        v-col.col-12.col-lg-4
           v-card(color='secondary')
             v-card-text.white--text
+              .title.text-h5
+                b.p-name {{event.title}}
+
               time.dt-start.text-h5(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')
                 v-icon mdi-calendar
                 b.ml-2 {{event|when}}
@@ -41,7 +44,23 @@
               p.adr {{event.place.address}}
 
             //- info & actions
-            v-list
+            v-toolbar
+              v-tooltip(bottom) {{$t('common.copy_link')}}
+                template(v-slot:activator="{on, attrs} ")
+                  v-btn.ml-2(large icon v-on='on' color='primary'
+                    v-clipboard:success='copyLink'
+                    v-clipboard:copy='`${settings.baseurl}/event/${event.id}`')
+                    v-icon mdi-content-copy
+              v-tooltip(bottom) {{$t('common.embed')}}
+                template(v-slot:activator="{on, attrs} ")
+                  v-btn.ml-2(large icon v-on='on' @click='showEmbed=true' color='primary')
+                    v-icon mdi-code-tags
+              v-tooltip(bottom) {{$t('common.add_to_calendar')}}
+                template(v-slot:activator="{on, attrs} ")
+                  v-btn.ml-2(large icon v-on='on' color='primary'
+                    :href='`/api/event/${event.id}.ics`')
+                    v-icon mdi-calendar-export
+            //- v-list
               v-list-item(link)
                 v-list-item-content.primary--text.text-uppercase(
                     v-clipboard:success='copyLink'
@@ -115,7 +134,7 @@
           :to='`/event/${event.next}`' :disabled='!event.next')
           v-icon mdi-arrow-right
 
-      v-dialog(v-model='showEmbed')
+      v-dialog(v-model='showEmbed' width='1000px')
         EmbedEvent(:event='event' @close='showEmbed=false')
 
 </template>
@@ -295,12 +314,15 @@ export default {
 }
 </script>
 <style lang='less'>
-.eventDetail {
-  .main_image {
-    width: 100%;
-    margin: 0 auto;
-    max-height: 83vh;
-  }
+.title {
+  margin-bottom: 25px;
+}
+.main_image {
+  width: 100%;
+  margin: 0 auto;
+  max-height: 80vh;
+  border-radius: 5px;
+  transition: max-height .2s;
 }
 
 </style>
