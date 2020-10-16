@@ -55,89 +55,62 @@
             :disabled='disableAddress')
 
           //- When
-          .text-center
-            v-btn-toggle(v-model="event.type" color='primary')
-              v-btn(value='normal' label="normal") {{$t('event.normal')}}
-              v-btn(value='multidate' label="multidate") {{$t('event.multidate')}}
-              v-btn(v-if='settings.allow_recurrent_event' value='recurrent' label="recurrent") {{$t('event.recurrent')}}
+          WhenInput(v-model='date'
+            :rules="$validators.required('common.when')")
 
-            p {{$t(`event.${event.type}_description`)}}
-            v-select(v-if='event.type==="recurrent"'
-              :items="frequencies"
-              v-model='event.recurrent.frequency')
-            client-only
-              .datePicker
-                v-date-picker(
-                  :mode='datePickerMode'
-                  :attributes='attributes'
-                  v-model='date'
-                  :locale='$i18n.locale'
-                  :from-page.sync='page'
-                  :is-dark="settings['theme.is_dark']"
-                  is-inline
-                  is-expanded
-                  :min-date='event.type !== "recurrent" && new Date()')
-
-          div.text-center.mb-2(v-if='event.type === "recurrent"')
-            span(v-if='event.recurrent.frequency !== "1m" && event.recurrent.frequency !== "2m"') {{whenPatterns}}
-            v-btn-toggle.mt-1(v-else v-model='event.recurrent.type' color='primary')
-              v-btn(v-for='whenPattern in whenPatterns' :value='whenPattern.key' :key='whenPatterns.key' small)
-                span {{whenPattern.label}}
           v-row
-            v-col
-              v-menu(v-model='fromDateMenu'
-                  :close-on-content-click="false"
-                  transition="slide-x-transition"
-                  ref='fromDateMenu'
-                  :return-value.sync="time.start"
-                  offset-y
-                  absolute
-                  top
-                  max-width="290px"
-                  min-width="290px")
-                template(v-slot:activator='{ on }')
-                  v-text-field(
+              v-col
+                v-menu(v-model='fromDateMenu'
+                    :close-on-content-click="false"
+                    transition="slide-x-transition"
+                    ref='fromDateMenu'
+                    :return-value.sync="time.start"
+                    offset-y
+                    absolute
+                    top
+                    max-width="290px"
+                    min-width="290px")
+                  template(v-slot:activator='{ on }')
+                    v-text-field(
+                      :label="$t('event.from')"
+                      :rules="[$validators.required('event.from')]"
+                      :value='time.start'
+                      v-on='on'
+                      clearable)
+                  v-time-picker(
+                    v-if='fromDateMenu'
                     :label="$t('event.from')"
-                    :rules="[$validators.required('event.from')]"
-                    :value='time.start'
-                    v-on='on'
-                    clearable)
-                v-time-picker(
-                  v-if='fromDateMenu'
-                  :label="$t('event.from')"
-                  format="24hr"
-                  ref='time_start'
-                  :allowed-minutes="[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]"
-                  v-model='time.start'
-                  @click:minute="$refs.fromDateMenu.save(time.start)")
+                    format="24hr"
+                    ref='time_start'
+                    :allowed-minutes="[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]"
+                    v-model='time.start'
+                    @click:minute="$refs.fromDateMenu.save(time.start)")
 
-            v-col
-              v-menu(v-model='dueDateMenu'
-                  :close-on-content-click="false"
-                  transition="slide-x-transition"
-                  ref='dueDateMenu'
-                  :return-value.sync="time.end"
-                  offset-y
-                  absolute
-                  top
-                  max-width="290px"
-                  min-width="290px")
-                template(v-slot:activator='{ on }')
-                  v-text-field(
+              v-col
+                v-menu(v-model='dueDateMenu'
+                    :close-on-content-click="false"
+                    transition="slide-x-transition"
+                    ref='dueDateMenu'
+                    :return-value.sync="time.end"
+                    offset-y
+                    absolute
+                    top
+                    max-width="290px"
+                    min-width="290px")
+                  template(v-slot:activator='{ on }')
+                    v-text-field(
+                      :label="$t('event.due')"
+                      :value='time.end'
+                      v-on='on'
+                      clearable
+                      readonly)
+                  v-time-picker(
+                    v-if='dueDateMenu'
                     :label="$t('event.due')"
-                    :value='time.end'
-                    v-on='on'
-                    clearable
-                    readonly)
-                v-time-picker(
-                  v-if='dueDateMenu'
-                  :label="$t('event.due')"
-                  format="24hr"
-                  :allowed-minutes="[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]"
-                  v-model='time.end'
-                  @click:minute="$refs.dueDateMenu.save(time.end)")
-
-          List(v-if='event.type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
+                    format="24hr"
+                    :allowed-minutes="[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]"
+                    v-model='time.end'
+                    @click:minute="$refs.dueDateMenu.save(time.end)")    
 
           //- MEDIA / FLYER / POSTER
 
@@ -165,14 +138,15 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import _ from 'lodash'
-import moment from 'dayjs'
+import dayjs from 'dayjs'
 import Editor from '@/components/Editor'
 import List from '@/components/List'
 import ImportDialog from './ImportDialog'
+import WhenInput from './WhenInput'
 
 export default {
   name: 'NewEvent',
-  components: { List, Editor, ImportDialog },
+  components: { List, Editor, ImportDialog, WhenInput },
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
@@ -192,18 +166,18 @@ export default {
       data.event.place.name = event.place.name
       data.event.place.address = event.place.address || ''
       if (event.multidate) {
-        data.date = { start: moment.unix(event.start_datetime).toDate(), end: moment.unix(event.end_datetime).toDate() }
+        data.date = { start: dayjs.unix(event.start_datetime).toDate(), end: dayjs.unix(event.end_datetime).toDate() }
         data.event.type = 'multidate'
       } else if (event.recurrent) {
         data.event.type = 'recurrent'
         data.event.recurrent = event.recurrent
       } else {
         data.event.type = 'normal'
-        data.date = moment.unix(event.start_datetime).toDate()
+        data.date = dayjs.unix(event.start_datetime).toDate()
       }
 
-      data.time.start = moment.unix(event.start_datetime).format('HH:mm')
-      data.time.end = moment.unix(event.end_datetime).format('HH:mm')
+      data.time.start = dayjs.unix(event.start_datetime).format('HH:mm')
+      data.time.end = dayjs.unix(event.end_datetime).format('HH:mm')
       data.event.title = event.title
       data.event.description = event.description
       data.event.id = event.id
@@ -213,8 +187,8 @@ export default {
     return {}
   },
   data () {
-    const month = moment().month() + 1
-    const year = moment().year()
+    const month = dayjs().month() + 1
+    const year = dayjs().year()
     return {
       valid: false,
       dueDateMenu: false,
@@ -232,148 +206,21 @@ export default {
       page: { month, year },
       fileList: [],
       id: null,
-      date: null,
+      date: { type: 'normal', recurrent: {} },
       time: { start: null, end: null },
       edit: false,
       loading: false,
       mediaUrl: '',
-      queryTags: '',
       disableAddress: false,
-      frequencies: [
-        { value: '1w', text: this.$t('event.each_week') },
-        { value: '2w', text: this.$t('event.each_2w') },
-        { value: '1m', text: this.$t('event.each_month') }
-      ]
     }
   },
   computed: {
     ...mapState(['tags', 'places', 'events', 'settings']),
-    datePickerMode () {
-      const modeMap = {
-        multidate: 'range',
-        normal: 'single',
-        recurrent: 'single'
-      }
-      return modeMap[this.event.type]
-    },
-    whenPatterns () {
-      if (!this.date) return
-      const date = moment(this.date)
-
-      const freq = this.event.recurrent.frequency
-      const weekDay = date.day()
-      if (freq === '1w' || freq === '2w') {
-        return this.$t(`event.recurrent_${freq}_day`, { day: weekDay })
-      } else if (freq === '1m' || freq === '2m') {
-        const monthDay = date.date()
-
-        const n = Math.floor((monthDay - 1) / 7) + 1
-
-        const patterns = [
-          { label: this.$t(`event.recurrent_${freq}_days`, { day: monthDay }), key: 'ordinal' },
-          { label: this.$t(`event.recurrent_${freq}_ordinal`, { n, day: weekDay }), key: 'weekday' },
-        ]
-
-        // if selected day is in last week, propose also this type of selection
-        const lastWeek = date.daysInMonth()-monthDay < 7
-        if (lastWeek) {
-          patterns.push(
-            { label: this.$t(`event.recurrent_${freq}_ordinaldesc`, { n, day: weekDay }), key: 'weekday_desc' }
-          )
-        }
-        return patterns
-      } else if (freq === '1d') {
-        return this.$t('event.recurrent_each_day')
-      }
-      return ''
-    },
-    todayEvents () {
-      if (this.event.type === 'multidate') {
-        if (!this.date || !this.date.start) { return }
-        const date_start = moment(this.date.start)
-        const date_end = moment(this.date.end)
-        return this.events.filter(e =>
-          !e.multidate
-            ? date_start.isSame(moment.unix(e.start_datetime), 'day') ||
-            (date_start.isBefore(moment.unix(e.start_dateime)) && date_end.isAfter(moment.unix(e.start_datetime)))
-            : date_start.isSame(moment.unix(e.start_datetime), 'day') || date_start.isSame(moment.unix(e.end_datetime)) ||
-            (date_start.isAfter(moment.unix(e.start_datetime)) && date_start.isBefore(moment.unix(e.end_datetime))))
-      } else if (this.event.type === 'recurrent') {
-        return []
-      } else {
-        const date = moment(this.date)
-        return this.events.filter(e =>
-          !e.multidate
-            ? !e.recurrent && date.isSame(moment.unix(e.start_datetime), 'day')
-            : moment.unix(e.start_datetime).isSame(date, 'day') ||
-              (moment.unix(e.start_datetime).isBefore(date) && moment.unix(e.end_datetime).isAfter(date))
-        )
-      }
-    },
-    ...mapState(['events']),
-    attributes () {
-      let attributes = []
-      // attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'red' } })
-
-      const date = moment(this.date)
-      const start = date.toDate()
-      console.error(start)
-      console.error(date.day()+1)
-      attributes = attributes.concat(this.events
-        .filter(e => !e.multidate && (!e.parentId || this.event.type === 'recurrent'))
-        .map(e => ({ key: e.id, dot: { color: this.event.type === 'recurrent' ? 'orange' : 'green' }, dates: moment.unix(e.start_datetime).toDate() })))
-
-      if (this.event.type === 'recurrent' && this.date && this.date.length) {
-        let dates = {}
-        if (this.event.recurrent.frequency !== '1m') {
-          dates = {
-            weeklyInterval: this.event.recurrent.frequency === '1w' ? 1 : 2,
-            weekdays: date.day(),
-            start
-          } 
-        } else {
-          if (this.event.recurrent.type === 'ordinal') {
-            const day = date.date()
-            dates = {
-              monthlyInterval: 1,
-              start,
-              days
-            }
-          } else if (this.event.recurrent.type === 'weekday') {
-            dates = {
-              monthlyInterval: 1,
-              start,
-              days: [Math.floor((date.day() -1 /7)+1), date.day()]
-            }
-          } else {
-            dates = {
-              monthlyInterval: 1,
-              start,
-              days: [-1, date.day()]
-            }
-          }
-        }
-        attributes.push({
-          key: 'recurrent',
-          dot: { color: 'orange' },
-          dates
-        })
-      }
-      attributes = attributes.concat(this.events
-        .filter(e => e.multidate && !e.parentId)
-        .map(e => ({
-          key: e.id,
-          highlight: {},
-          dates: { start: moment.unix(e.start_datetime).toDate(), end: moment.unix(e.end_datetime).toDate() }
-        })))
-
-      return attributes
-    }
   },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
     eventImported (event) {
-      this.event = event
+      this.event = Object.assign(this.event, event)
     },
     selectPlace (p) {
       const place = p && this.places.find(place => place.id === p.id)
@@ -390,7 +237,7 @@ export default {
     // recurrentDays () {
     //   if (this.event.type !== 'recurrent' || !this.date || !this.date.length) { return }
     //   const type = this.event.recurrent.type
-    //   if (type === 'ordinal') { return map(this.date, d => moment(d).date()) } else if (type === 'weekday') { return map(this.date, d => moment(d).day() + 1) }
+    //   if (type === 'ordinal') { return map(this.date, d => dayjs(d).date()) } else if (type === 'weekday') { return map(this.date, d => dayjs(d).day() + 1) }
     // },
     // },
     cleanFile () {
@@ -409,22 +256,22 @@ export default {
       const formData = new FormData()
 
       if (this.event.type === 'multidate') {
-        start_datetime = moment(this.date.start)
+        start_datetime = dayjs(this.date.start)
           .set('hour', start_hour).set('minute', start_minute)
-        end_datetime = moment(this.date.end)
+        end_datetime = dayjs(this.date.end)
           .set('hour', end_hour).set('minute', end_minute)
       } else if (this.event.type === 'normal') {
-        start_datetime = moment(this.date).set('hour', start_hour).set('minute', start_minute)
-        end_datetime = moment(this.date).set('hour', end_hour).set('minute', end_minute)
+        start_datetime = dayjs(this.date).set('hour', start_hour).set('minute', start_minute)
+        end_datetime = dayjs(this.date).set('hour', end_hour).set('minute', end_minute)
         if (end_hour < start_hour) {
           end_datetime = end_datetime.add(1, 'day')
         }
       } else if (this.event.type === 'recurrent') {
-        start_datetime = moment().set('hour', start_hour).set('minute', start_minute)
-        end_datetime = moment().set('hour', end_hour).set('minute', end_minute)
+        start_datetime = dayjs().set('hour', start_hour).set('minute', start_minute)
+        end_datetime = dayjs().set('hour', end_hour).set('minute', end_minute)
         const recurrent = {
           frequency: this.event.recurrent.frequency,
-          days: this.event.recurrent.type === 'ordinal' ? _.map(this.date, d => moment(d).date()) : _.map(this.date, d => moment(d).day() + 1),
+          days: this.event.recurrent.type === 'ordinal' ? _.map(this.date, d => dayjs(d).date()) : _.map(this.date, d => dayjs(d).day() + 1),
           type: this.event.recurrent.type
         }
         if (end_hour < start_hour) {

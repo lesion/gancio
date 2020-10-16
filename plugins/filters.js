@@ -9,6 +9,7 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 
 export default ({ app, store }) => {
+
   // set timezone to instance_timezone!!
   // to show local time relative to event's place
   // not where in the world I'm looking at the page from
