@@ -1,1 +1,6 @@
-{}
+{
+    "common": {
+        "next": "Suivant",
+        "add_event": "Ajouter un évènement"
+    }
+}
