@@ -12,7 +12,7 @@
       v-model='showPast')
 
     v-autocomplete.mt-0(
-      :label='$t("common.filter")'
+      :label='$t("common.search")'
       :items='keywords'
       v-model='filter'
       :search-input.sync='search'
@@ -96,6 +96,14 @@ export default {
   methods: {
     ...mapActions(['setSearchPlaces', 'setSearchTags',
       'showPastEvents', 'showRecurrentEvents', 'updateEvent']),
+    remove (item) {
+      console.error(item)
+      if (item.type === 'tag') {
+        this.removeTag(item.id)
+      } else {
+        this.removePlace(item.id)
+      }
+    },
     removeTag (tag) {
       this.setSearchTags(this.filters.tags.filter(t => t !== tag))
     },
@@ -120,37 +128,3 @@ export default {
   }
 }
 </script>
-<style lang='less'>
-// #search {
-//   #searchInput {
-//     border: none;
-//     border-radius: 0px;
-//     border-bottom: 2px solid lightgray;
-//     color: white;
-//     background-color: #111;
-//   }
-
-//   .el-switch__label {
-//     color: #aaa;
-//   }
-
-//   .el-switch__label.is-active {
-//     color: lightgreen;
-//   }
-
-//   .el-switch__core {
-//     background-color: #555;
-//     border-color: #777;
-//   }
-
-//   .is-checked .el-switch__core {
-//     background-color: lightgreen;
-//   }
-
-//   #filters {
-//     line-height: 2rem;
-//   }
-// }
-
-
-</style>
