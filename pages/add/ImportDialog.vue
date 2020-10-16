@@ -56,9 +56,7 @@ export default {
       reader.readAsText(this.file)
       reader.onload = () => {
         const data = reader.result
-        console.error(data)
         const event = ical.parse(data)
-        console.error(event)
         this.event = {
           title: event.name 
         }
@@ -79,7 +77,6 @@ export default {
         this.event = ret
         // check if contain an h-event
         this.$emit('imported', ret)
-        console.error(ret)
       } catch (e) {
         console.error(e)
         this.error = true

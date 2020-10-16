@@ -417,17 +417,30 @@ const eventController = {
     }
   },
 
-  async _select (start = moment().unix(), limit = 100) {
+  async _select ({ start, end, tags, places}) {
+
     const where = {
       // confirmed event only
       recurrent: null,
       is_visible: true,
-      start_datetime: { [Op.gt]: start }
+      start_datetime: { [Op.gt]: start },
+    }
+
+    if (end) {
+      where['end_datetime'] = { [Op.lt]: end }
+    }
+    
+    if (places) {
+      where.placeId = places.split(',')
+    }
+
+    let where_tags = {}
+    if (tags) {
+      where_tags = { where: { tag: tags.split(',') } }
     }
 
     const events = await Event.findAll({
       where,
-      limit,
       attributes: {
         exclude: ['slug', 'likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'placeId']
         // include: [[Sequelize.fn('COUNT', Sequelize.col('activitypub_id')), 'ressources']]
@@ -435,7 +448,7 @@ const eventController = {
       order: ['start_datetime', [Tag, 'weigth', 'DESC']],
       include: [
         { model: Resource, required: false, attributes: ['id'] },
-        { model: Tag, attributes: ['tag'], required: false, through: { attributes: [] } },
+        { model: Tag, attributes: ['tag'], required: tags ? true : false, ...where_tags, through: { attributes: [] } },
         { model: Place, required: false, attributes: ['id', 'name', 'address'] }
       ]
     })
@@ -451,9 +464,14 @@ const eventController = {
    * Select events based on params
    */
   async select (req, res) {
-    const start = req.query.start || moment().unix()
-    const limit = req.query.limit || 100
-    res.json(await eventController._select(start, limit))
+    const start = req.query.start
+    const end = req.query.end
+    const tags = req.query.tags
+    const places = req.query.places
+
+    res.json(await eventController._select({
+      start, end, places, tags
+    }))
   },
 
   /**

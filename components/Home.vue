@@ -10,18 +10,26 @@
         //- this is needed as v-calendar does not support SSR
         //- https://github.com/nathanreyes/v-calendar/issues/336
         client-only
-          Calendar
+          Calendar(@dayclick='dayClick' 
+            @monthchange='monthChange' :events='events')
 
       .col
-        Search
+        Search(
+          :filters='filters'
+          @update='updateFilters'
+        )
 
+    .text-h3.text-center(v-if='selectedDay') {{selectedDay|day}}
     #events
-      Event(v-for='event in events' :key='event.id' :event='event')
+      Event(v-for='event in events'
+        :key='event.id' :event='event' 
+          @tagclick='tagClick' @placeclick='placeClick')
 
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import dayjs from 'dayjs'
 import Event from '@/components/Event'
 import Announcement from '@/components/Announcement'
 import Calendar from '@/components/Calendar'
@@ -29,13 +37,66 @@ import Search from '@/components/Search'
 
 export default {
   name: 'Home',
+  data () {
+    return {
+      events: [],
+      start: null,
+      end: null,
+      filters: { tags: [], places: []},
+      selectedDay: null
+    }
+  },
   components: { Calendar, Event, Search, Announcement },
   computed: {
-    events () {
-      return this.in_past ? this.filteredEventsWithPast : this.filteredEvents
+    ...mapState(['settings', 'announcements'])
+  },
+  methods: {
+    ...mapActions(['setFilters']),
+    async updateEvents () {
+      this.events = await this.$api.getEvents({
+        start: this.start, end: this.end,
+        places: this.filters.places, tags: this.filters.tags
+      })
+      this.setFilters(this.filters)
     },
-    ...mapGetters(['filteredEvents', 'filteredEventsWithPast']),
-    ...mapState(['settings', 'in_past', 'announcements'])
+    placeClick (place_id) {
+      if (this.filters.places.includes(place_id)) {
+        this.filters.places = this.filters.places.filter(p_id => p_id !== place_id)
+      } else {
+        this.filters.places.push(place_id)
+      }
+      this.updateEvents()
+    },
+    tagClick (tag) {
+      if (this.filters.tags.includes(tag)) {
+        this.filters.tags = this.filters.tags.filter(t => t !== tag)
+      } else {
+        this.filters.tags.push(tag)
+      }
+      this.updateEvents()
+    },
+    updateFilters (filters) {
+      this.filters = filters
+      this.updateEvents()
+    },
+    monthChange (page) {
+      this.start = dayjs().year(page.year).month(page.month - 1).startOf('month').startOf('week').unix()
+      this.end = dayjs().year(page.year).month(page.month - 1).endOf('month').endOf('week').unix()
+      this.updateEvents ()
+    },
+    async dayClick (day) {
+      const datetime = day.dateTime / 1000
+      if (this.selectedDay === datetime) {
+        this.selectedDay = null
+        this.updateEvents()
+        return
+      }
+      this.selectedDay = datetime
+      this.events = await this.$api.getEvents({
+        start: this.selectedDay,
+        end: this.selectedDay+24*60*60
+      })
+    }
   },
   head () {
     return {

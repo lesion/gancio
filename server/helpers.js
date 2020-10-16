@@ -115,7 +115,6 @@ module.exports = {
       Microformats.get({ html: response.data, filter: ['h-event'] }, (err, data) => {
         if (!data.items.length || !data.items[0].properties) return res.sendStatus(404)
         const event = data.items[0].properties
-        console.error(event)
         return res.json({
           title: get(event, 'name[0]', ''),
           description: get(event, 'content[0]', ''),

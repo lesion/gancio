@@ -19,6 +19,9 @@ import { take, get } from 'lodash'
 
 export default {
   name: 'Calendar',
+  props: {
+    events: { type: Array, default: [] }
+  },
   data () {
     const month = dayjs().month() + 1
     const year = dayjs().year()
@@ -27,7 +30,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['filteredEventsWithPast']),
     ...mapState(['tags', 'filters', 'in_past', 'settings']),
 
     // TODO: could be better
@@ -48,7 +50,7 @@ export default {
         return color
       }
 
-      attributes = attributes.concat(this.filteredEventsWithPast
+      attributes = attributes.concat(this.events
         .filter(e => !e.multidate)
         .map(e => {
           return {
@@ -58,7 +60,7 @@ export default {
           }
         }))
 
-      attributes = attributes.concat(this.filteredEventsWithPast
+      attributes = attributes.concat(this.events
         .filter(e => e.multidate)
         .map(e => ({
           key: e.id,
@@ -72,11 +74,12 @@ export default {
   methods: {
     ...mapActions(['updateEvents', 'showPastEvents']),
     updatePage (page) {
-      this.updateEvents(page)
+      this.$emit('monthchange', page)
     },
     click (day) {
-      const element = document.getElementById(day.day)
-      if (element) { element.scrollIntoView() } // Even IE6 supports this
+      this.$emit('dayclick', day)
+      // const element = document.getElementById(day.day)
+      // if (element) { element.scrollIntoView() } // Even IE6 supports this
     }
   }
 }

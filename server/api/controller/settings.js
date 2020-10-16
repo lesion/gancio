@@ -125,7 +125,6 @@ const settingsController = {
       .resize(400)
       .png({ quality: 90 })
       .toFile(baseImgPath + '.png', async (err, info) => {
-        console.error(err)
         const image = await readFile(baseImgPath + '.png')
         const favicon = await toIco([image], { sizes: [64], resize: true })
         writeFile(baseImgPath + '.ico', favicon)

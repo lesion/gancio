@@ -9,11 +9,11 @@
     v-card-text
       
       time.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  <v-icon>mdi-event</v-icon> {{ event|when }}
-      v-btn.d-block.text-h6(text color='primary' big) <v-icon>mdi-map-marker</v-icon> {{event.place.name}}
+      v-btn.d-block.text-h6(text color='primary' big @click="$emit('placeclick', event.place.id)") <v-icon>mdi-map-marker</v-icon> {{event.place.name}}
 
     v-card-actions
       v-chip.ml-1(v-for='tag in event.tags' link
-        :key='tag' outlined color='primary' @click='addTag(tag)') {{tag}}
+        :key='tag' outlined color='primary' @click="$emit('tagclick',tag)") {{tag}}
       v-spacer
 
       v-menu(offset-y)
@@ -31,20 +31,9 @@ import { mapState, mapActions } from 'vuex'
 export default {
   props: {
     event: { type: Object, default: () => ({}) },
-    showTags: {
-      type: Boolean,
-      default: true
-    },
-    showImage: {
-      type: Boolean,
-      default: true
-    }
   },
   computed: {
-    ...mapState(['settings', 'filters']),
-    description () {
-      return this.event.description.replace(/(<br>)+/g, '<br>')
-    },
+    ...mapState(['settings']),
     show_footer () {
       return (this.event.tags.length || this.event.resources.length)
     }

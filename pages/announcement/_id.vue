@@ -17,7 +17,6 @@ export default {
     try {
       const id = Number(params.id)
       const announcement = store.state.announcements.find(a => a.id === id)
-      console.error(announcement)
       return { announcement }
     } catch (e) {
       error({ statusCode: 404, message: 'Announcement not found' })

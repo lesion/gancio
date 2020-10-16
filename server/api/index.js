@@ -121,7 +121,7 @@ api.get('/export/:type', cors, exportController.export)
 
 // get events in this range
 // api.get('/event/:month/:year', cors, eventController.getAll)
-api.get('/event', cors, eventController.select)
+api.get('/events', cors, eventController.select)
 
 api.get('/instances', isAdmin, instanceController.getAll)
 api.get('/instances/:instance_domain', isAdmin, instanceController.get)

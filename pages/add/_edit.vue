@@ -281,7 +281,6 @@ export default {
       }
 
       if (this.event.image) {
-        console.error(this.event.image)
         formData.append('image', this.event.image)
       }
       formData.append('title', this.event.title)
@@ -307,7 +306,6 @@ export default {
         this.loading = false
         this.$root.$message(this.$auth.loggedIn ? 'event.added' : 'event.added_anon', { color: 'success' })
       } catch (e) {
-        console.error(e.response)
         switch (e.request.status) {
           case 413:
             this.$root.$message('event.image_too_big', { color: 'error' })

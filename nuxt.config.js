@@ -41,6 +41,7 @@ module.exports = {
     '@/plugins/vue-clipboard', // vuetify
     '@/plugins/axios', // axios baseurl configuration
     '@/plugins/validators', // inject validators
+    '@/plugins/api', // api helpers
     { src: '@/plugins/v-calendar', ssr: false } // calendar, fix ssr
   ],
 

@@ -85,8 +85,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['filters', 'events', 'settings']),
-    ...mapGetters(['filteredEvents']),
+    ...mapState(['filters', 'settings']),
     domain () {
       const URL = url.parse(this.settings.baseurl)
       return URL.hostname

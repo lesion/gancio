@@ -66,8 +66,8 @@ app.use((error, req, res, next) => {
 // first nuxt component is ./pages/index.vue (with ./layouts/default.vue)
 // prefill current events, tags, places and announcements (used in every path)
 app.use(async (req, res, next) => {
-  const start_datetime = getUnixTime(startOfWeek(startOfMonth(new Date())))
-  req.events = await eventController._select(start_datetime, 100)
+  // const start_datetime = getUnixTime(startOfWeek(startOfMonth(new Date())))
+  // req.events = await eventController._select(start_datetime, 100)
   req.meta = await eventController._getMeta()
   req.announcements = await announceController._getVisible()
   next()
