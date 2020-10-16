@@ -1,13 +1,19 @@
 <template lang="pug">
   v-container#home(fluid)
+
+    //- Announcements
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
+
     #calbar.row.mb-2
       .col-xl-5.col-lg-5.col-sm-5.col-xs-12
 
+        //- this is needed as v-calendar does not support SSR
+        //- https://github.com/nathanreyes/v-calendar/issues/336
         client-only
           Calendar
+
       .col
-        Search(past-filter recurrent-filter)
+        Search
 
     #events
       Event(v-for='event in events' :key='event.id' :event='event')

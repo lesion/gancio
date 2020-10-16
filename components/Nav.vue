@@ -12,7 +12,7 @@
 
     v-spacer
 
-    v-tooltip(bottom) {{$t('common.add')}}
+    v-tooltip(bottom) {{$t('common.add_event')}}
       template(v-slot:activator='{ on }')
         v-btn(v-if='could_add' icon nuxt to='/add' v-on='on')
           v-icon mdi-calendar-plus
