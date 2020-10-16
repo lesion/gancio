@@ -148,7 +148,7 @@
         "from": "From",
         "image_too_big": "The image can't be bigger than 4 MB",
         "interact_with_me_at": "Interact with me on fediverse at",
-        "follow_me_description": "One of the ways to stay up to date on events published here on {title},\nis following the account <u>{account}</u> from the fediverse, for example via mastodon, and possibly add resources to an event from there.<br/><br/>\nIf you have never heard of Mastodon and the fediverse we recommend reading <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>this article</a>.<br/><br/>Enter your instance below (e.g. mastodon.social)",
+        "follow_me_description": "One of the ways to stay up to date on events published here on {title},\nis following the account <u>{account}</u> from the fediverse, for example via Mastodon, and possibly add resources to an event from there.<br/><br/>\nIf you have never heard of Mastodon and the fediverse we recommend reading <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>this article</a>.<br/><br/>Enter your instance below (e.g. mastodon.social)",
         "interact_with_me": "Follow me",
         "remove_recurrent_confirmation": "Are you sure you want to remove this recurring event?\nPast events will be maintained, but no further events will be created.",
         "import_URL": "Import from URL",
