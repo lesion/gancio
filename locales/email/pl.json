@@ -13,7 +13,7 @@
     },
     "recover": {
         "subject": "Odzyskiwanie hasła",
-        "content": "Cześć, poprosiłeś(-aś) o odzyskanie hasła na {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Wejdź tutaj</a> aby potwierdzić"
+        "content": "Cześć, poprosiłeś(-aś) o odzyskanie hasła na {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Wejdź tutaj</a> aby potwierdzić."
     },
     "admin_register": {
         "subject": "Nowa rejestracja",
