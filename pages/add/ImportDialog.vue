@@ -13,7 +13,7 @@
         v-file-input(
           v-model='file'
           accept=".ics"
-          :label="$t('common.ics')"
+          :label="$t('event.ics')"
           :hint="$t('event.import_ICS')"
           persistent-hint
         )

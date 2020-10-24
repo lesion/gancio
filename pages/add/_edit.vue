@@ -4,130 +4,59 @@
       v-card-title
         h4 {{edit?$t('common.edit_event'):$t('common.add_event')}}
         v-spacer
-        v-btn(link text color='primary' @click='openImportDialog=true') 
+        v-btn(link text color='primary' @click='openImportDialog=true')
           <v-icon>mdi-file-import</v-icon> {{$t('common.import')}}
       v-dialog(v-model='openImportDialog')
         ImportDialog(@close='openImportDialog=false' @imported='eventImported')
 
       v-card-text
         v-form(v-model='valid' ref='form' lazy-validation)
+          v-container
+            v-row
+              //- Not logged event
+              v-col.col-12(v-if='!$auth.loggedIn')
+                v-divider <v-icon name='user-secret'/> {{$t('event.anon')}}
+                p(v-html="$t('event.anon_description')")
 
-          //- Not logged event
-          div(v-if='!$auth.loggedIn')
-            v-divider <v-icon name='user-secret'/> {{$t('event.anon')}}
-            p(v-html="$t('event.anon_description')")
+              //- Title
+              v-text-field.col-12(
+                @change='v => event.title = v'
+                :value = 'event.title'
+                :rules="[$validators.required('common.title')]"
+                :hint="$t('event.what_description')"
+                :label="$t('common.title')"
+                autofocus
+                ref='title')
 
-          //- Title
-          v-text-field.mb-3(
-            @change='v => event.title = v'
-            :value = 'event.title'
-            :rules="[$validators.required('common.title')]"
-            :label="$t('event.what_description')" 
-            autofocus
-            ref='title')
+              //- Where
+              WhereInput.col-12(v-model='event.place')
 
-          //- Description
-          Editor(
-            v-model='event.description'
-            :placeholder="$t('event.description_description')"
-            max-height='400px')
+              //- When
+              DateInput.col-12(v-model='date')
+              HourInput.col-12(v-model='time')
 
-          //- Where
-          v-combobox.mt-2(v-model='event.place.name'
-            :rules="[$validators.required('common.where')]"
-            :label="$t('common.where')"
-            :hint="$t('event.where_description')"
-            persistent-hint
-            :items="places"
-            item-text='name'
-            @change='selectPlace')
-            //- template(v-slot:item="{ item }")
-              v-list-item(color='primary')
-                v-list-item-content(color='pink')
-                  v-list-item-title {{item.name}}
-                  v-list-item-subtitle {{item.address}}
+              //- Description
+              Editor.col-12.mb-3(
+                v-model='event.description'
+                :placeholder="$t('event.description_description')"
+                max-height='400px')
 
-          v-text-field.mt-3(ref='address'
-            :rules="[$validators.required('common.address')]"
-            :label="$t('common.address')"
-            @change="v => event.place.address = v"
-            :value="event.place.address"
-            :disabled='disableAddress')
+              //- MEDIA / FLYER / POSTER
 
-          //- When
-          WhenInput(v-model='date'
-            :rules="$validators.required('common.when')")
+              v-file-input.col-6.mt-3(
+                :label="$t('common.media')"
+                :hint="$t('event.media_description')"
+                prepend-icon="mdi-camera"
+                v-model='event.image'
+                persistent-hint
+                accept='image/*')
 
-          v-row
-              v-col
-                v-menu(v-model='fromDateMenu'
-                    :close-on-content-click="false"
-                    transition="slide-x-transition"
-                    ref='fromDateMenu'
-                    :return-value.sync="time.start"
-                    offset-y
-                    absolute
-                    top
-                    max-width="290px"
-                    min-width="290px")
-                  template(v-slot:activator='{ on }')
-                    v-text-field(
-                      :label="$t('event.from')"
-                      :rules="[$validators.required('event.from')]"
-                      :value='time.start'
-                      v-on='on'
-                      clearable)
-                  v-time-picker(
-                    v-if='fromDateMenu'
-                    :label="$t('event.from')"
-                    format="24hr"
-                    ref='time_start'
-                    :allowed-minutes="[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]"
-                    v-model='time.start'
-                    @click:minute="$refs.fromDateMenu.save(time.start)")
-
-              v-col
-                v-menu(v-model='dueDateMenu'
-                    :close-on-content-click="false"
-                    transition="slide-x-transition"
-                    ref='dueDateMenu'
-                    :return-value.sync="time.end"
-                    offset-y
-                    absolute
-                    top
-                    max-width="290px"
-                    min-width="290px")
-                  template(v-slot:activator='{ on }')
-                    v-text-field(
-                      :label="$t('event.due')"
-                      :value='time.end'
-                      v-on='on'
-                      clearable
-                      readonly)
-                  v-time-picker(
-                    v-if='dueDateMenu'
-                    :label="$t('event.due')"
-                    format="24hr"
-                    :allowed-minutes="[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]"
-                    v-model='time.end'
-                    @click:minute="$refs.dueDateMenu.save(time.end)")    
-
-          //- MEDIA / FLYER / POSTER
-
-          v-file-input(
-            :label="$t('common.media')"
-            :hint="$t('event.media_description')"
-            prepend-icon="mdi-camera"
-            v-model='event.image'
-            persistent-hint
-            accept='image/*')
-
-          //- tags
-          v-combobox.mt-3(v-model='event.tags'
-            chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-            :delimiters="[',', ' ']"
-            :items="tags.map(t => t.tag)"
-            :label="$t('common.tags')")
+              //- tags
+              v-combobox.col-6.mt-3(v-model='event.tags'
+                chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
+                :delimiters="[',', ' ']"
+                :items="tags.map(t => t.tag)"
+                :label="$t('common.tags')")
 
       v-card-actions
         v-spacer
@@ -142,11 +71,13 @@ import dayjs from 'dayjs'
 import Editor from '@/components/Editor'
 import List from '@/components/List'
 import ImportDialog from './ImportDialog'
-import WhenInput from './WhenInput'
+import DateInput from './DateInput'
+import HourInput from './HourInput'
+import WhereInput from './WhereInput'
 
 export default {
   name: 'NewEvent',
-  components: { List, Editor, ImportDialog, WhenInput },
+  components: { List, Editor, ImportDialog, WhereInput, HourInput, DateInput },
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
@@ -191,8 +122,6 @@ export default {
     const year = dayjs().year()
     return {
       valid: false,
-      dueDateMenu: false,
-      fromDateMenu: false,
       openImportDialog: false,
       event: {
         type: 'normal',
@@ -200,7 +129,7 @@ export default {
         title: '',
         description: '',
         tags: [],
-        image: {},
+        image: null,
         recurrent: { frequency: '1m', days: [], type: 'weekday_desc' }
       },
       page: { month, year },
@@ -211,28 +140,16 @@ export default {
       edit: false,
       loading: false,
       mediaUrl: '',
-      disableAddress: false,
+      disableAddress: false
     }
   },
   computed: {
-    ...mapState(['tags', 'places', 'events', 'settings']),
+    ...mapState(['tags', 'places', 'events', 'settings'])
   },
   methods: {
     ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
     eventImported (event) {
       this.event = Object.assign(this.event, event)
-    },
-    selectPlace (p) {
-      const place = p && this.places.find(place => place.id === p.id)
-      if (place && place.address) {
-        this.event.place.name = p.name
-        this.event.place.address = place.address
-        this.disableAddress = true
-      } else {
-        this.disableAddress = false
-        this.event.place.address = ''
-      }
-      // this.$nextTick(() => this.$refs.address.focus() )
     },
     // recurrentDays () {
     //   if (this.event.type !== 'recurrent' || !this.date || !this.date.length) { return }
@@ -244,7 +161,7 @@ export default {
       this.event.image = {}
     },
     async done () {
-      if (!this.$refs.form.validate()) return
+      if (!this.$refs.form.validate()) { return }
       this.loading = true
       let start_datetime, end_datetime
       const [start_hour, start_minute] = this.time.start.split(':')
@@ -325,11 +242,6 @@ export default {
 }
 </script>
 <style style='less'>
-.datePicker {
-  max-width: 500px !important;
-  margin: 0 auto;
-}
-
 .container {
   max-width: 1400px;
 }
