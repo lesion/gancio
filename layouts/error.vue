@@ -9,10 +9,10 @@
 import { mapState } from 'vuex'
 
 export default {
-  props: { error: { type: Object } },
-  computed: mapState(['settings']),
+  props: { error: { type: Object, default: () => ({ }) } },
   head () {
     return { title: `${this.settings.title} - Error` }
-  }
+  },
+  computed: mapState(['settings'])
 }
 </script>
