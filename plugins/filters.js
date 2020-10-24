@@ -4,12 +4,19 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 
+import 'dayjs/locale/it'
+import 'dayjs/locale/es'
+import 'dayjs/locale/ca'
+import 'dayjs/locale/pl'
+import 'dayjs/locale/eu'
+import 'dayjs/locale/nb'
+import 'dayjs/locale/fr'
+
 dayjs.extend(relativeTime)
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
 export default ({ app, store }) => {
-
   // set timezone to instance_timezone!!
   // to show local time relative to event's place
   // not where in the world I'm looking at the page from
