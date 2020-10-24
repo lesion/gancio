@@ -1,5 +1,5 @@
 const crypto = require('crypto')
-const moment = require('moment-timezone')
+// const moment = require('moment-timezone')
 const path = require('path')
 const config = require('config')
 const fs = require('fs')
@@ -8,6 +8,7 @@ const _ = require('lodash')
 const helpers = require('../../helpers')
 const linkifyHtml = require('linkifyjs/html')
 const Sequelize = require('sequelize')
+const dayjs = require('dayjs')
 
 const Event = require('../models/event')
 const Resource = require('../models/resource')
@@ -217,7 +218,7 @@ const eventController = {
         where: {
           parentId: null,
           is_visible: false,
-          start_datetime: { [Op.gt]: moment().unix() }
+          start_datetime: { [Op.gt]: dayjs().unix() }
         },
         order: [['start_datetime', 'ASC']],
         include: [{ model: Tag, required: false }, Place]
@@ -417,19 +418,19 @@ const eventController = {
     }
   },
 
-  async _select ({ start, end, tags, places}) {
-
+  async _select ({ start, end, tags, places }) {
+    debug('_select start: %s, end: %s, tags: %s', dayjs.unix(start), end, tags)
     const where = {
       // confirmed event only
       recurrent: null,
       is_visible: true,
-      start_datetime: { [Op.gt]: start },
+      end_datetime: { [Op.gt]: start }
     }
 
     if (end) {
-      where['end_datetime'] = { [Op.lt]: end }
+      where.end_datetime = { [Op.lt]: end }
     }
-    
+
     if (places) {
       where.placeId = places.split(',')
     }
@@ -448,7 +449,7 @@ const eventController = {
       order: ['start_datetime', [Tag, 'weigth', 'DESC']],
       include: [
         { model: Resource, required: false, attributes: ['id'] },
-        { model: Tag, attributes: ['tag'], required: tags ? true : false, ...where_tags, through: { attributes: [] } },
+        { model: Tag, attributes: ['tag'], required: !!tags, ...where_tags, through: { attributes: [] } },
         { model: Place, required: false, attributes: ['id', 'name', 'address'] }
       ]
     })
@@ -489,10 +490,10 @@ const eventController = {
     }
 
     const recurrent = e.recurrent
-    const cursor = moment()
+    const cursor = dayjs()
     // let cursor = start.startOf('week')
-    const start_date = moment.unix(e.start_datetime)
-    const duration = moment.unix(e.end_datetime).diff(start_date, 's')
+    const start_date = dayjs.unix(e.start_datetime)
+    const duration = dayjs.unix(e.end_datetime).diff(start_date, 's')
     const frequency = recurrent.frequency
     const days = recurrent.days
     const type = recurrent.type
@@ -532,7 +533,7 @@ const eventController = {
         cursor.date(d)
       } else {
         cursor.day(d - 1)
-        if (cursor.isBefore(moment())) {
+        if (cursor.isBefore(dayjs())) {
           cursor.day(d - 1 + 7)
         }
       }
@@ -547,7 +548,7 @@ const eventController = {
   /**
    * Create instances of recurrent events
    */
-  async _createRecurrent (start_datetime = moment().unix()) {
+  async _createRecurrent (start_datetime = dayjs().unix()) {
     // select recurrent events
     const events = await Event.findAll({
       where: { is_visible: true, recurrent: { [Op.ne]: null } },

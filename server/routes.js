@@ -15,7 +15,6 @@ const eventController = require('./api/controller/event')
 const announceController = require('./api/controller/announce')
 
 const helpers = require('./helpers')
-const { startOfMonth, startOfWeek, getUnixTime } = require('date-fns')
 const app = express()
 
 // ignore unimplemented ping url from fediverse

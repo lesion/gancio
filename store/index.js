@@ -1,6 +1,3 @@
-import dayjs from 'dayjs'
-import intersection from 'lodash/intersection'
-
 export const state = () => ({
   locale: '',
   user_locale: {},
@@ -81,7 +78,7 @@ export const actions = {
   async updateEvent ({ commit }, formData) {
     await this.$axios.$put('/event', formData)
   },
-  setFilters({ commit }, filters) {
+  setFilters ({ commit }, filters) {
     commit('setFilters', filters)
   },
   setAnnouncements ({ commit }, announcements) {
