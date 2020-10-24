@@ -7,7 +7,7 @@
         v-card-title.text-h5 {{event.title}}
 
     v-card-text
-      
+
       time.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  <v-icon>mdi-event</v-icon> {{ event|when }}
       v-btn.d-block.text-h6(text color='primary' big @click="$emit('placeclick', event.place.id)") <v-icon>mdi-map-marker</v-icon> {{event.place.name}}
 

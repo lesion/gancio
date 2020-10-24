@@ -7,11 +7,12 @@
     #calbar.row.mb-2
       .col-xl-5.col-lg-5.col-sm-5.col-xs-12
 
-        //- this is needed as v-calendar does not support SSR
-        //- https://github.com/nathanreyes/v-calendar/issues/336
-        client-only
-          Calendar(@dayclick='dayClick' 
-            @monthchange='monthChange' :events='events')
+        v-date-picker(
+          @update:picker-date='monthChange'
+          :locale='settings.locale'
+          :events='calendarEvents'
+          v-model='date'
+          landscape)
 
       .col
         Search(
@@ -19,10 +20,10 @@
           @update='updateFilters'
         )
 
-    .text-h3.text-center(v-if='selectedDay') {{selectedDay|day}}
+    v-chip.text-h3.text-center(v-if='selectedDay' close) {{selectedDay|day}}
     #events
       Event(v-for='event in events'
-        :key='event.id' :event='event' 
+        :key='event.id' :event='event'
           @tagclick='tagClick' @placeclick='placeClick')
 
 </template>
@@ -37,27 +38,42 @@ import Search from '@/components/Search'
 
 export default {
   name: 'Home',
+  components: { Calendar, Event, Search, Announcement },
+  async asyncData ({ params }) {
+    const events = await this.$api.getEvents({
+      start: this.start,
+      end: this.end,
+      places: this.filters.places,
+      tags: this.filters.tags
+    })
+    return { events }
+  },
   data () {
     return {
+      date: dayjs().format('YYYY-MM-DD'),
       events: [],
-      start: null,
+      start: dayjs().format('YYYY-MM-DD'),
       end: null,
-      filters: { tags: [], places: []},
+      filters: { tags: [], places: [] },
       selectedDay: null
     }
   },
-  components: { Calendar, Event, Search, Announcement },
   computed: {
-    ...mapState(['settings', 'announcements'])
+    ...mapState(['settings', 'announcements']),
+    calendarEvents () {
+      return this.events.map(e => dayjs.unix(e.start_datetime).format('YYYY-MM-DD'))
+    }
   },
   methods: {
     ...mapActions(['setFilters']),
     async updateEvents () {
       this.events = await this.$api.getEvents({
-        start: this.start, end: this.end,
-        places: this.filters.places, tags: this.filters.tags
+        start: this.start,
+        end: this.end,
+        places: this.filters.places,
+        tags: this.filters.tags
       })
-      this.setFilters(this.filters)
+      // this.setFilters(this.filters)
     },
     placeClick (place_id) {
       if (this.filters.places.includes(place_id)) {
@@ -79,10 +95,12 @@ export default {
       this.filters = filters
       this.updateEvents()
     },
-    monthChange (page) {
-      this.start = dayjs().year(page.year).month(page.month - 1).startOf('month').startOf('week').unix()
-      this.end = dayjs().year(page.year).month(page.month - 1).endOf('month').endOf('week').unix()
-      this.updateEvents ()
+    monthChange (monthYear) {
+      // return
+      const [year, month] = monthYear.split('-')
+      this.start = dayjs().year(year).month(month - 1).startOf('month').unix() // .startOf('week').unix()
+      this.end = dayjs().year(year).month(month - 1).endOf('month').unix() // .endOf('week').unix()
+      this.updateEvents()
     },
     async dayClick (day) {
       const datetime = day.dateTime / 1000
@@ -94,7 +112,7 @@ export default {
       this.selectedDay = datetime
       this.events = await this.$api.getEvents({
         start: this.selectedDay,
-        end: this.selectedDay+24*60*60
+        end: this.selectedDay + 24 * 60 * 60
       })
     }
   },
