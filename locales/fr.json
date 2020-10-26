@@ -30,7 +30,7 @@
         "copied": "Copié",
         "instances": "Instances",
         "add_to_calendar": "Ajouter au calendrier",
-        "send_via_mail": "Envoyer par e-mail",
+        "send_via_mail": "Envoyer le courriel",
         "copy_link": "Copier le lien",
         "set_password": "Définir le mot de passe",
         "federation": "Fédération",
@@ -76,7 +76,7 @@
         "description": "Description",
         "register": "S'inscrire",
         "password": "Mot de passe",
-        "email": "E-mail",
+        "email": "Courriel",
         "login": "Se connecter",
         "media": "Média",
         "what": "Quoi",
@@ -135,8 +135,8 @@
         "feed_description": "Pour rester informé depuis un ordinateur ou un smartphone sans avoir à ouvrir régulièrement ce site, utilisez les flux RSS. </p>\n\n<p> Avec les flux RSS vous utilisez une application spécifique pour recevoir les dernière actualités des sites qui vous intéressent. C'est une bonne manière de suivre plusieurs sites rapidement, sans avoir besoin de créer un compte ou autres complications. </p>\n\n<li> Si vous avez Android, nous recommandons <a href=\"https://f-droid.org/en/packages/net.frju.flym/\">Flym</a> ou Feeder </li>\n<li> Pour les iPhone/iPad vous pouvez utiliser <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\"> Feed4U </a> </li>\n<li> Pour un ordinateur de bureau ou portable nous vous recommandons Feedbro, à installer sur <a href=\"https://addons.mozilla.org/en-GB/firefox/addon/feedbroreader/\"> Firefox </a> ou <a href=\"https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa\"> Chrome </a>. </li>\n<br/>\nAjouter ce lien dans votre lecteur de flux RSS vous tiendra informé en tant réel.",
         "list_description": "Si vous avez un site Internet et que vous souhaitez afficher une liste d’événements, utilisez le code suivant",
         "ical_description": "Les ordinateurs et les smartphones sont généralement équipés d’une application de calendrier capable d’importer un calendrier distant.",
-        "insert_your_address": "Saisissez votre adresse e-mail",
-        "email_description": "Vous pouvez recevoir les événements qui vous intéressent par e-mail.",
+        "insert_your_address": "Saisissez votre adresse courriel",
+        "email_description": "Vous pouvez recevoir les évènements qui vous intéressent par courriel.",
         "intro": "Contrairement aux plates-formes non sociales qui font tout pour garder les utilisateurs et les données à leur sujet, nous croyons que l’information, tout comme les gens, doit être libre. Pour cela, vous pouvez rester informé sur les événements que vous voulez, sans nécessairement passer par ce site."
     },
     "admin": {
@@ -156,8 +156,8 @@
         "instance_name_help": "Compte ActivityPub à suivre",
         "instance_place": "Lieu indicatif de cette instance",
         "description_description": "Apparaît dans l'entête à côté du titre",
-        "title_description": "Utilisé dans le titre de la page, dans le sujet des e-mails et dans les flux RSS et ICS.",
-        "instance_locale_description": "Langue utilisateur préférée pour les pages. Parfois certains messages seront affichés dans la même langue pour tout le monde (par exemple lors de la publication via ActivityPub ou lors de l'envoi de certains e-mail). Dans ces cas la langue sélectionnée ci-dessus sera utilisée.",
+        "title_description": "Utilisé dans le titre de la page, dans le sujet des courriels et dans les flux RSS et ICS.",
+        "instance_locale_description": "Langue utilisateur préférée pour les pages. Parfois certains messages seront affichés dans la même langue pour tout le monde (par exemple lors de la publication via ActivityPub ou lors de l'envoi de certains courriels). Dans ces cas la langue sélectionnée ci-dessus sera utilisée.",
         "instance_timezone_description": "Gancio est conçu pour réunir les évènements d'un lieu spécifique, tel qu'une ville. Tous les évènements de ce lieu seront affichés dans le fuseau horaire associé.",
         "instance_locale": "Langue par défaut",
         "announcement_description": "Dans cette section vous pouvez insérer des annonces qui resteront affichées sur la page d'accueil",
@@ -175,7 +175,7 @@
         "hide_resource": "Masquer la ressource",
         "show_resource": "Afficher la ressource",
         "instance_name": "Nom de l'instance",
-        "user_add_help": "Un e-mail avec des instructions de confirmation de l'inscription et de définition d'un mot de passe sera envoyé au nouvel utilisateur",
+        "user_add_help": "Un courriel avec des instructions de confirmation de l'inscription et de définition d'un mot de passe sera envoyé au nouvel utilisateur",
         "unblock": "Débloquer",
         "block": "Bloquer",
         "hide_boost_bookmark": "Masquer les boosts/favoris",
@@ -205,7 +205,7 @@
     },
     "about": "\n  <p><a href='https://gancio.org'>Gancio</a> est un agenda partagé pour les communautés locales.</p>\n  ",
     "validators": {
-        "email": "Saisissez une adresse e-mail valide",
+        "email": "Saisissez une adresse courriel valide",
         "required": "{fieldName} est requis"
     },
     "ordinal": {
@@ -222,7 +222,7 @@
         "title": "Confirmation de l'utilisateur"
     },
     "error": {
-        "email_taken": "Cette adresse e-mail est déjà utilisée.",
+        "email_taken": "Cette adresse courriel est déjà utilisée.",
         "nick_taken": "Ce nom d'utilisateur est déjà utilisé."
     },
     "settings": {
@@ -242,11 +242,11 @@
     },
     "login": {
         "ok": "Connecté",
-        "insert_email": "Saisissez votre adresse e-mail",
+        "insert_email": "Saisissez votre adresse courriel",
         "error": "Impossible de se connecter. Veuillez vérifier vos identifiants.",
         "forgot_password": "Mot de passe oublié ?",
         "not_registered": "Pas encore inscrit ?",
-        "check_email": "Vérifiez votre boîte de réception et les spams.",
+        "check_email": "Vérifiez votre boîte de réception et les indésirables.",
         "description": "En vous connectant vous pouvez publier de nouveaux évènements."
     }
 }
