@@ -92,7 +92,7 @@
         "not_registered": "Non sei registrata?",
         "forgot_password": "Dimenticato la password?",
         "error": "Errore durante il login, controlla i dati.",
-        "insert_email": "Inserisci la mail",
+        "insert_email": "Inserisci l'indirizzo e-mail",
         "ok": "Tutto rego"
     },
     "recover": {
@@ -100,8 +100,8 @@
     },
     "export": {
         "intro": "Contrariamente alle piattaforme del capitalismo, che fanno di tutto per tenere i dati e gli utenti al loro interno, crediamo che le informazioni, come le persone, debbano essere libere. Per questo puoi rimanere aggiornata sugli eventi che vuoi, come meglio credi, senza necessariamente passare da questo sito.",
-        "email_description": "Puoi ricevere via mail gli eventi che ti interessano.",
-        "insert_your_address": "Indirizzo mail",
+        "email_description": "Puoi ricevere via posta elettronica gli eventi che ti interessano.",
+        "insert_your_address": "Indirizzo e-mail",
         "feed_description": "Per seguire gli aggiornamenti da computer o smartphone senza la necessità di aprire periodicamente il sito, il metodo consigliato è quello dei Feed RSS.</p>\n\n <p>Con i feed rss utilizzi un'apposita applicazione per ricevere aggiornamenti dai siti che più ti interessano. È un buon metodo per seguire anche molti siti in modo molto rapido, senza necessità di creare un account o altre complicazioni.</p>\n\n<li>Se hai Android, ti consigliamo <a href=\"https://f-droid.org/en/packages/net.frju.flym\">Flym</a> o Feeder</li>\n<li>Per iPhone/iPad puoi usare <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\">Feed4U</a></li>\n<li>Per il computer fisso/portatile consigliamo Brief, da installare all'interno <a href=\"https://addons.mozilla.org/it/firefox/addon/brief/\">di Firefox </a> e compatibile con tutti i principali sistemi operativi.</li>\n<br/>\nAggiungendo questo link al tuo lettore di feed, rimarrai aggiornata.",
         "ical_description": "I computer e gli smartphone sono comunemente attrezzati con un'applicazione per gestire un calendario. A questi programmi solitamente è possibile far importare un calendario remoto.",
         "list_description": "Se hai un sito web e vuoi mostrare una lista di eventi, puoi usare il seguente codice"
@@ -131,7 +131,7 @@
         "show_recurrent": "appuntamenti ricorrenti",
         "show_past": "eventi passati",
         "recurrent_description": "Scegli la frequenza e seleziona i giorni",
-        "multidate_description": "Un festival o una tre giorni? Scegli quando comincia e quando finisce.",
+        "multidate_description": "Un festival o una tre giorni? Scegli quando comincia e quando finisce",
         "multidate": "Più giorni",
         "normal": "Normale",
         "normal_description": "Scegli il giorno.",
@@ -148,7 +148,7 @@
         "from": "Dalle",
         "image_too_big": "Immagine troppo grande! Massimo 4M",
         "interact_with_me": "Seguimi dal fediverso",
-        "follow_me_description": "Tra i vari modi di rimanere aggiornati degli eventi pubblicati qui su {title}, puoi seguire l'account <u>{account}</u> dal fediverso, ad esempio via Mastodon, ed eventualmente aggiungere risorse ad un evento da lì.<br/><br/>\nSe non hai mai sentito parlare di Mastodon e del fediverso ti consigliamo di leggere <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>questo articolo</a>.<br/><br/> Inserisci la tua istanza qui sotto (es. mastodon.cisti.org o mastodon.bida.im)",
+        "follow_me_description": "Tra i vari modi di rimanere aggiornati degli eventi pubblicati qui su {title},\npuoi seguire l'account <u>{account}</u> dal fediverso, ad esempio via Mastodon, ed eventualmente aggiungere risorse ad un evento da lì.<br/><br/>\nSe non hai mai sentito parlare di Mastodon e del fediverso ti consigliamo di leggere <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>questo articolo</a>.<br/><br/> Inserisci la tua istanza qui sotto (es. mastodon.cisti.org o mastodon.bida.im)",
         "only_future": "solo eventi futuri",
         "interact_with_me_at": "Seguimi nel fediverso su",
         "import_ICS": "Importa da ICS",
@@ -156,7 +156,7 @@
         "ics": "ICS"
     },
     "admin": {
-        "place_description": "Nel caso in cui un luogo sia errato o cambi indirizzo, puoi modificarlo.<br/>Considera che tutti gli eventi associati a questo luogo cambieranno indirizzo (anche quelli passati!)",
+        "place_description": "Nel caso in cui un luogo sia errato o cambi indirizzo, puoi modificarlo.<br/>Considera che tutti gli eventi associati a questo luogo cambieranno indirizzo (anche quelli passati).",
         "event_confirm_description": "Puoi confermare qui gli eventi inseriti da utenti anonimi",
         "delete_user": "Elimina",
         "remove_admin": "Rimuovi admin",
@@ -178,7 +178,7 @@
         "hide_boost_bookmark_help": "Nasconde le piccole icone che mostrano il numero di boost e bookmarks in arrivo dal fediverso",
         "block": "Blocca",
         "unblock": "Sblocca",
-        "user_add_help": "Manderemo una email al nuovo utente con le istruzioni per confermare l'iscrizione e scegliere una password",
+        "user_add_help": "Manderemo un'e-mail al nuovo utente con le istruzioni per confermare l'iscrizione e scegliere una password",
         "resources": "Risorse",
         "hide_resource": "Nascondi risorsa",
         "show_resource": "Mostra risorsa",
@@ -195,9 +195,9 @@
         "announcement_remove_ok": "Annuncio rimosso",
         "announcement_description": "In questa sezione puoi inserire annunci che rimarranno in homepage",
         "instance_locale": "Lingua di default",
-        "instance_locale_description": "La lingua utilizzata per mostare le pagine è quella preferita dall'utente. In alcuni casi però dobbiamo mostrare dei messaggi per tutti allo stesso modo (ad esempio quando pubblichiamo via ActivityPub o nell'invio di alcune mail). In questi casi useremo la lingua selezionata qui sopra.",
+        "instance_locale_description": "La lingua utilizzata per mostare le pagine è quella preferita dall'utente. In alcuni casi però dobbiamo mostrare dei messaggi per tutti allo stesso modo (ad esempio quando pubblichiamo via ActivityPub o nell'invio di alcune e-mail). In questi casi useremo la lingua selezionata qui sopra.",
         "instance_place": "Luogo indicativo di questa istanza",
-        "title_description": "Viene usato nel titolo della pagina, nell'oggetto delle email, nell'esportazione dei feed e degli ics",
+        "title_description": "Viene usato nel titolo della pagina, nell'oggetto delle e-mail, nell'esportazione dei feed e degli ICS.",
         "description_description": "Compare nell'header accanto al titolo",
         "instance_name_help": "Nome dell'account ActivityPub da seguire",
         "enable_trusted_instances": "Abilita istanze amiche",
@@ -213,20 +213,20 @@
         "new_announcement": "Nuovo annuncio"
     },
     "auth": {
-        "not_confirmed": "Non abbiamo ancora confermato questa mail…",
-        "fail": "Autenticazione fallita. Sicura la password è giusta? E la mail?"
+        "not_confirmed": "Non ancora confermato…",
+        "fail": "Autenticazione fallita. Sicura la password è giusta? E l'e-mail?"
     },
     "settings": {
         "update_confirm": "Sicura di voler salvare le modifiche?",
         "change_password": "Cambia password",
-        "password_updated": "Password modificata",
+        "password_updated": "Password modificata.",
         "danger_section": "Sezione pericolosa",
         "remove_account": "Premendo il seguente tasto il tuo utente verrà eliminato. Gli eventi da te pubblicati invece no.",
         "remove_account_confirm": "Stai per eliminare definitivamente il tuo account"
     },
     "error": {
-        "nick_taken": "Questo nick è già presente",
-        "email_taken": "Questa email è già registrata"
+        "nick_taken": "Questo nome utente è già presente.",
+        "email_taken": "Questa e-mail è già registrata."
     },
     "confirm": {
         "title": "Conferma utente",
@@ -243,9 +243,9 @@
     },
     "validators": {
         "required": "Campo {fieldName} necessario",
-        "email": "Inserisci una email valida"
+        "email": "Inserisci un'e-mail valida"
     },
-    "about": "\n  <p>\n  <a href='https://gancio.org'>Gancio</a> e' un progetto dell'<a href='https://autistici.org/underscore'>underscore hacklab</a> e uno dei\n  servizi di <a href='https://cisti.org'>cisti.org</a>.</p>\n\n  <h5> Cos'è gancio?</h5>\n  <p>Uno strumento di condivisione di eventi per comunità radicali.\n  Dentro gancio puoi trovare e inserire eventi.\n  Gancio, come tutto <a href='https://cisti.org'>cisti.org</a> è uno strumento\n  antisessista, antirazzista, antifascista e anticapitalista, riflettici quando\n  pubblichi un evento.</p>\n  \n  <h5>Ok, ma cosa vuol dire gancio?</h5>\n  <p>\n  Se vieni a Torino e dici: \"ehi, ci diamo un gancio alle 8?\" nessuno si presenterà con i guantoni per fare a mazzate.\n  Darsi un gancio vuol dire beccarsi alle ore X in un posto Y.</p>\n  <code>\n  <ul>\n  <li> a che ora è il gancio in radio per andare al presidio?</li>\n  <li> non so ma domani non posso venire, ho gia' un gancio per caricare il bar.</li>\n  </ul>\n  </code>\n\n  <h5> Contatti</h5>\n  <p>\n  Hai scritto una nuova interfaccia per gancio? Vuoi aprire un nuovo nodo di gancio nella tua città?\n  C'è qualcosa che vorresti migliorare? Per contribuire i sorgenti sono liberi e disponibili \n  <a href='https://framagit.org/les/gancio'>qui</a>. Aiuti e suggerimenti sono sempre benvenuti, puoi scriverci\n  su underscore chicciola autistici.org</p>\n  ",
+    "about": "\n  <p> <a href='https://gancio.org'> Gancio </a> è un'agenda condivisa per le comunità locali. </p>\n  ",
     "oauth": {
         "authorization_request": "L'applicazione esterna <code>{app}</code> richiede l'autorizzazione a svolgere le sequenti attività su <code>{instance_name}</code>:",
         "redirected_to": "Dopo la conferma sarai reindirizzata all'indirizzo <code>{url}</code>",
