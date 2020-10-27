@@ -2,15 +2,11 @@
 v-container
   //- EVENT PAGE
   //- gancio supports microformats (http://microformats.org/wiki/h-event)
-  v-card.h-event
+  v-card.h-event(v-on:keyup="$router.push(`/event/${event.next}`)")
     v-card-text
 
-      //- event admin controls
+      //- admin controls
       EventAdmin(v-if='is_mine' :event='event')
-
-      //- Title
-      //- .text-h5.text-sm-h4
-      //-   b.p-name {{event.title}}
 
       v-row
         v-col.col-12.col-lg-8
@@ -37,7 +33,7 @@ v-container
                 v-icon mdi-calendar
                 b.ml-2 {{event|when}}
               p.subtitle-1 {{event.start_datetime|from}}
-              
+
               .text-h5.p-location
                 v-icon mdi-map-marker
                 b.vcard.ml-2 {{event.place.name}}
@@ -72,7 +68,6 @@ v-container
               v-list-item(link :href='`/api/event/${event.id}.ics`')
                 v-list-item-content.primary--text.text-uppercase
                 //- v-btn(nuxt block link :href='`/api/event/${event.id}.ics`' text color='primary') {{$t('common.add_to_calendar')}}
-
 
       .p-description.text-h6(v-html='event.description')
       v-chip.p-category.ml-1(v-for='tag in event.tags' color='primary'
