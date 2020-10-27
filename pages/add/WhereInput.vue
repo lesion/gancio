@@ -7,6 +7,7 @@
       :hide-no-data="!place._name"
       :search-input.sync="place._name"
       persistent-hint
+      :value="value.place"
       :items="places"
       item-text='name'
       @change='selectPlace')
@@ -19,7 +20,7 @@
       :rules="[$validators.required('common.address')]"
       :label="$t('common.address')"
       @change="changeAddress"
-      :value="place.address")
+      :value="value.address")
 
 </template>
 <script>
@@ -27,6 +28,9 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'WhereInput',
+  props: {
+    value: { type: Object, default: () => {} }
+  },
   data () {
     return {
       place: { _name: '' },

@@ -5,7 +5,7 @@
         :close-on-content-click="false"
         transition="slide-x-transition"
         ref='startTimeMenu'
-        :return-value.sync="time.start"
+        :return-value.sync="value.start"
         offset-y
         absolute
         top
@@ -15,7 +15,7 @@
           v-text-field(
             :label="$t('event.from')"
             :rules="[$validators.required('event.from')]"
-            :value='time.start'
+            :value='value.start'
             v-on='on'
             clearable)
         v-time-picker(
@@ -24,7 +24,7 @@
           format="24hr"
           ref='time_start'
           :allowed-minutes="[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]"
-          v-model='time.start'
+          v-model='value.start'
           @click:minute="selectTime('start')")
 
     v-col.col-6
@@ -41,7 +41,7 @@
         template(v-slot:activator='{ on }')
           v-text-field(
             :label="$t('event.due')"
-            :value='time.end'
+            :value='value.end'
             v-on='on'
             clearable
             readonly)
@@ -50,7 +50,7 @@
           :label="$t('event.due')"
           format="24hr"
           :allowed-minutes="[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]"
-          v-model='time.end'
+          v-model='value.end'
           @click:minute="selectTime('end')")
 
 </template>
@@ -61,7 +61,9 @@ export default {
     value: { type: Object, default: () => { } }
   },
   data () {
+    // console.error('sono dentro data ', this.value)
     return {
+      // time: { start: this.value.start, end: this.value.end },
       time: {},
       startTimeMenu: false,
       endTimeMenu: false
@@ -69,8 +71,8 @@ export default {
   },
   methods: {
     selectTime (type) {
-      this.$refs[`${type}TimeMenu`].save(this.time.end)
-      this.$emit('input', this.time)
+      this.$refs[`${type}TimeMenu`].save(this.value[type])
+      this.$emit('input', this.value)
     }
   }
 }

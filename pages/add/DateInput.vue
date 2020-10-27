@@ -1,5 +1,6 @@
 <template lang="pug">
 v-row
+    p {{value}}
     v-menu(
       v-model="datePickerMenu"
       :close-on-content-click="false"
@@ -10,7 +11,7 @@ v-row
     )
       template(v-slot:activator="{ on, attrs }")
         v-text-field.col-md-8(
-          v-model='date'
+          :value='value.date'
           :label="$t('common.when')"
           :rules="[$validators.required('common.when')]"
           prepend-icon='mdi-calendar'
@@ -19,7 +20,7 @@ v-row
           v-on="on")
       v-date-picker(
         :min='today'
-        v-model="date"
+        v-model="value.date"
         :range="type === 'multidate'"
         :locale='settings.locale'
         @input="pick")

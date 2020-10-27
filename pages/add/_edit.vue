@@ -93,22 +93,27 @@ export default {
         error({ statusCode: 404, message: 'Event not found!' })
         return {}
       }
-      data.event.recurrent = {}
+
       data.event.place.name = event.place.name
       data.event.place.address = event.place.address || ''
+      data.date = {}
       if (event.multidate) {
-        data.date = { start: dayjs.unix(event.start_datetime).toDate(), end: dayjs.unix(event.end_datetime).toDate() }
-        data.event.type = 'multidate'
+        data.date = {
+          type: 'multidate',
+          start: dayjs.unix(event.start_datetime).toDate(),
+          end: dayjs.unix(event.end_datetime).toDate()
+        }
       } else if (event.recurrent) {
-        data.event.type = 'recurrent'
-        data.event.recurrent = event.recurrent
+        data.date.type = 'recurrent'
+        data.date.recurrent = event.recurrent
       } else {
-        data.event.type = 'normal'
-        data.date = dayjs.unix(event.start_datetime).toDate()
+        data.date.type = 'normal'
+        data.date.date = dayjs.unix(event.start_datetime).format('YYYY-MM-DD')
       }
 
       data.time.start = dayjs.unix(event.start_datetime).format('HH:mm')
       data.time.end = dayjs.unix(event.end_datetime).format('HH:mm')
+
       data.event.title = event.title
       data.event.description = event.description
       data.event.id = event.id
@@ -165,6 +170,7 @@ export default {
       this.loading = true
       let start_datetime, end_datetime
       const [start_hour, start_minute] = this.time.start.split(':')
+      console.error('TIME: hour', start_hour, this.time)
       if (!this.time.end) {
         this.time.end = (Number(start_hour) + 2) + ':' + start_minute
       }
@@ -172,29 +178,30 @@ export default {
 
       const formData = new FormData()
 
-      if (this.event.type === 'multidate') {
-        start_datetime = dayjs(this.date.start)
+      if (this.date.type === 'multidate') {
+        start_datetime = dayjs(this.date.date[0])
           .set('hour', start_hour).set('minute', start_minute)
-        end_datetime = dayjs(this.date.end)
+        end_datetime = dayjs(this.date.date[1])
           .set('hour', end_hour).set('minute', end_minute)
-      } else if (this.event.type === 'normal') {
-        start_datetime = dayjs(this.date).set('hour', start_hour).set('minute', start_minute)
-        end_datetime = dayjs(this.date).set('hour', end_hour).set('minute', end_minute)
+      } else if (this.date.type === 'normal') {
+        console.error('dentro type normal', this.date.type)
+        start_datetime = dayjs(this.date.date).set('hour', start_hour).set('minute', start_minute)
+        end_datetime = dayjs(this.date.date).set('hour', end_hour).set('minute', end_minute)
         if (end_hour < start_hour) {
           end_datetime = end_datetime.add(1, 'day')
         }
-      } else if (this.event.type === 'recurrent') {
+      } else if (this.date.type === 'recurrent') {
         start_datetime = dayjs().set('hour', start_hour).set('minute', start_minute)
         end_datetime = dayjs().set('hour', end_hour).set('minute', end_minute)
-        const recurrent = {
-          frequency: this.event.recurrent.frequency,
-          days: this.event.recurrent.type === 'ordinal' ? _.map(this.date, d => dayjs(d).date()) : _.map(this.date, d => dayjs(d).day() + 1),
-          type: this.event.recurrent.type
-        }
+        // const recurrent = {
+        //   frequency: this.event.recurrent.frequency,
+        //   days: this.event.recurrent.type === 'ordinal' ? _.map(this.date, d => dayjs(d).date()) : _.map(this.date, d => dayjs(d).day() + 1),
+        //   type: this.event.recurrent.type
+        // }
         if (end_hour < start_hour) {
           end_datetime = end_datetime.add(1, 'day')
         }
-        formData.append('recurrent', JSON.stringify(recurrent))
+        formData.append('recurrent', JSON.stringify(this.date.recurrent))
       }
 
       if (this.event.image) {
