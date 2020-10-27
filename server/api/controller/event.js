@@ -424,12 +424,15 @@ const eventController = {
       // confirmed event only
       recurrent: null,
       is_visible: true,
-      end_datetime: { [Op.gt]: start }
+      [Op.or]: {
+        start_datetime: { [Op.gt]: start },
+        end_datetime: { [Op.gt]: start }
+      }
     }
 
-    if (end) {
-      where.end_datetime = { [Op.lt]: end }
-    }
+    // if (end) {
+    //   where.end_datetime = { [Op.lt]: end }
+    // }
 
     if (places) {
       where.placeId = places.split(',')
