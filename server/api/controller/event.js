@@ -421,8 +421,8 @@ const eventController = {
   async _select ({ start, end, tags, places }) {
     debug('_select start: %s, end: %s, tags: %s', dayjs.unix(start), end, tags)
     const where = {
-      // confirmed event only
       recurrent: null,
+      // confirmed event only
       is_visible: true,
       [Op.or]: {
         start_datetime: { [Op.gt]: start },
@@ -430,9 +430,9 @@ const eventController = {
       }
     }
 
-    // if (end) {
-    //   where.end_datetime = { [Op.lt]: end }
-    // }
+    if (end) {
+      where.start_datetime = { [Op.lt]: end }
+    }
 
     if (places) {
       where.placeId = places.split(',')

@@ -4,23 +4,22 @@
     //- Announcements
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
-    #calbar.row.mb-2
-      .col-xl-5.col-lg-5.col-sm-5.col-xs-12
-
+    v-row#calbarmb-2
+      .col-xl-5.col-lg-5.col-md-6.col-sm-12.col-xs-12
         v-date-picker(
           @update:picker-date='monthChange'
+          @click:date='dayChange'
           :locale='settings.locale'
           :events='calendarEvents'
-          v-model='date'
+          :value='date'
           landscape)
 
       .col
         Search(
           :filters='filters'
-          @update='updateFilters'
-        )
+          @update='updateFilters')
+        v-chip(v-if='selectedDay' close @click:close='dayChange(selectedDay)') {{selectedDay}}
 
-    v-chip.text-h3.text-center(v-if='selectedDay' close) {{selectedDay|day}}
     #events
       Event(v-for='event in events'
         :key='event.id' :event='event'
@@ -41,7 +40,7 @@ export default {
   components: { Calendar, Event, Search, Announcement },
   async asyncData ({ params }) {
     const events = await this.$api.getEvents({
-      start: this.start,
+      start: dayjs().unix(),
       end: this.end,
       places: this.filters.places,
       tags: this.filters.tags
@@ -52,7 +51,7 @@ export default {
     return {
       date: dayjs().format('YYYY-MM-DD'),
       events: [],
-      start: dayjs().format('YYYY-MM-DD'),
+      start: dayjs().unix(),
       end: null,
       filters: { tags: [], places: [] },
       selectedDay: null
@@ -96,24 +95,35 @@ export default {
       this.updateEvents()
     },
     monthChange (monthYear) {
-      // return
+      this.selectedDay = null
       const [year, month] = monthYear.split('-')
-      this.start = dayjs().year(year).month(month - 1).startOf('month').unix() // .startOf('week').unix()
-      this.end = dayjs().year(year).month(month - 1).endOf('month').unix() // .endOf('week').unix()
+
+      // check if current month is selected
+      if (month - 1 === dayjs().month()) {
+        this.start = dayjs().unix()
+        this.date = dayjs().format('YYYY-MM-DD')
+      } else {
+        this.date = ''
+        this.start = dayjs().year(year).month(month - 1).startOf('month').unix() // .startOf('week').unix()
+      }
+      // this.end = dayjs().year(year).month(month - 1).endOf('month').unix() // .endOf('week').unix()
+      this.end = null
       this.updateEvents()
     },
-    async dayClick (day) {
-      const datetime = day.dateTime / 1000
-      if (this.selectedDay === datetime) {
+    dayChange (day) {
+      if (this.selectedDay === day) {
         this.selectedDay = null
+        this.date = dayjs().format('YYYY-MM-DD')
+        this.start = dayjs().unix() // .startOf('week').unix()
+        this.end = null
         this.updateEvents()
         return
       }
-      this.selectedDay = datetime
-      this.events = await this.$api.getEvents({
-        start: this.selectedDay,
-        end: this.selectedDay + 24 * 60 * 60
-      })
+      this.start = dayjs(day).unix()
+      this.end = dayjs(day).endOf('day').unix()
+      this.date = dayjs(day).format('YYYY-MM-DD')
+      this.selectedDay = day
+      this.updateEvents()
     }
   },
   head () {
