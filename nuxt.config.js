@@ -24,12 +24,12 @@ module.exports = {
    ** Global CSS
    */
   css: [
-    '@mdi/font/css/materialdesignicons.css'
+    '@mdi/font/css/materialdesignicons.css',
+    '@/assets/style.less'
   // 'bootstrap/dist/css/bootstrap.min.css',
   // 'element-ui/lib/theme-chalk/index.css',
   // 'element-ui/lib/theme-chalk/display.css',
   // '@/assets/theme/index.css'
-  // '@/assets/style.less'
   ],
 
   /*

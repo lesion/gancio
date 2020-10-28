@@ -1,7 +1,7 @@
 <template lang='pug'>
 div
   v-btn(text color='primary' v-if='event.is_visible' @click='toggle(false)') {{$t(`common.${event.parentId?'skip':'hide'}`)}}
-  v-btn(text color='primary' v-else @click='toggle(false)') {{$t('common.confirm')}}
+  v-btn(text color='success' v-else @click='toggle(false)') {{$t('common.confirm')}}
   v-btn(text color='primary' @click='$router.push(`/add/${event.id}`)') {{$t('common.edit')}}
   v-btn(text color='primary' v-if='!event.parentId' @click='remove(false)') {{$t('common.remove')}}
 
@@ -41,7 +41,7 @@ export default {
       const is_visible = parent ? this.event.parent.is_visible : this.event.is_visible
       const method = is_visible ? 'unconfirm' : 'confirm'
       try {
-        await this.$axios.$get(`/event/${method}/${id}`)
+        await this.$axios.$put(`/event/${method}/${id}`)
         if (parent) {
           this.event.parent.is_visible = !is_visible
         } else {

@@ -66,7 +66,6 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import _ from 'lodash'
 import dayjs from 'dayjs'
 import Editor from '@/components/Editor'
 import List from '@/components/List'

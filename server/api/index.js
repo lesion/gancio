@@ -108,8 +108,8 @@ api.post('/settings', isAdmin, settingsController.setRequest)
 api.post('/settings/logo', isAdmin, multer({ dest: config.upload_path }).single('logo'), settingsController.setLogo)
 
 // confirm event
-api.get('/event/confirm/:event_id', hasPerm('event:write'), eventController.confirm)
-api.get('/event/unconfirm/:event_id', hasPerm('event:write'), eventController.unconfirm)
+api.put('/event/confirm/:event_id', hasPerm('event:write'), eventController.confirm)
+api.put('/event/unconfirm/:event_id', hasPerm('event:write'), eventController.unconfirm)
 
 // import event
 

@@ -7,7 +7,7 @@
       :hide-no-data="!place._name"
       :search-input.sync="place._name"
       persistent-hint
-      :value="value.place"
+      :value="value.name"
       :items="places"
       item-text='name'
       @change='selectPlace')
@@ -42,7 +42,6 @@ export default {
   },
   methods: {
     selectPlace (p) {
-      console.error(p)
       const place = p && this.places.find(place => place.id === p.id)
       if (place && place.address) {
         this.place.name = p.name

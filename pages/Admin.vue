@@ -28,7 +28,8 @@
         v-tab
           v-badge(:value='!!unconfirmedEvents.length' :content='unconfirmedEvents.length') {{$t('common.events')}}
         v-tab-item
-          Events(:unconfirmedEvents='unconfirmedEvents')
+          Events(:unconfirmedEvents='unconfirmedEvents'
+            @confirmed='id => { unconfirmedEvents = unconfirmedEvents.filter(e => e.id !== id)}')
 
         //- ANNOUNCEMENTS
         v-tab {{$t('common.announcements')}}
