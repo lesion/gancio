@@ -7,15 +7,14 @@
         :items='unconfirmedEvents'
         :headers='headers')
         template(v-slot:item.actions='{ item }')
-          v-btn(text small @click.stop='toggle(item)'
-            :color='item.visible?"warning":"success"') {{item.visible?$t('common.disable'):$t('common.enable')}}
-          v-btn(text small @click='edit(item)') {{$t('common.edit')}}
+          v-btn(text small @click='confirm(item)' color='success') {{$t('common.confirm')}}
+          v-btn(text small :to='`/event/${item.id}`' color='success') {{$t('common.preview')}}
+          v-btn(text small :to='`/add/${item.id}`' color='warning') {{$t('common.edit')}}
           v-btn(text small @click='remove(item)'
             color='error') {{$t('common.delete')}}
 
 </template>
 <script>
-import cloneDeep from 'lodash/cloneDeep'
 
 export default {
   props: {
@@ -36,12 +35,11 @@ export default {
     edit (event) {
       this.$router.push(`/add/${event.id}`)
     },
-    async toggle (event) {
+    async confirm (event) {
       try {
-        event.is_visible = !event.is_visible
-        await this.$axios.$put(`/event/${event.id}`, event)
-        this.events = this.events.map(a => a.id === event.id ? event : a)
-        this.setevents(cloneDeep(this.events.filter(a => a.visible)))
+        await this.$axios.$put(`/event/confirm/${event.id}`)
+        this.$emit('confirmed', event.id)
+        this.$root.$message('event.confirmed')
       } catch (e) {}
     },
     async remove (event) {
