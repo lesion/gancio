@@ -1,6 +1,5 @@
 <template lang="pug">
 v-row
-    p {{value}}
     v-menu(
       v-model="datePickerMenu"
       :close-on-content-click="false"
