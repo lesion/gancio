@@ -5,7 +5,7 @@
     },
     "confirm": {
         "subject": "Ja pots publicar activitats",
-        "content": "Ei, el teu compte a <a href='{{config.baseurl}}'>{{config.title}}</a> ha estat confirmat. Escriu-nos a {{config.admin}} per qualsevol dubte."
+        "content": "Ei, el teu compte a <a href='{{config.baseurl}}'>{{config.title}}</a> ha estat confirmat. Escriu-nos a {{config.admin_email}} per qualsevol dubte."
     },
     "user_confirm": {
         "subject": "Ja pots publicar activitats",
