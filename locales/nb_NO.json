@@ -122,7 +122,10 @@
         "added_anon": "Hendelse lagt til, men ikke bekreftet enda.",
         "added": "Hendelse lagt til",
         "media_description": "Du kan legge til et flygeblad (valgfritt)",
-        "anon_description": "Du kan legge til en hendelse uten å registrere deg eller logge inn, og den vil bli lagt ut etter at den er bekreftet å være passende. Det vil ikke være mulig å endre den.<br/><br/>\nDu kan istedenfor <a href='/login'>logge inn</a>, eller <a href='/register'>registrere deg</a>. Ellers kan du forsette for å få et svar så snart som mulig. "
+        "anon_description": "Du kan legge til en hendelse uten å registrere deg eller logge inn, og den vil bli lagt ut etter at den er bekreftet å være passende. Det vil ikke være mulig å endre den.<br/><br/>\nDu kan istedenfor <a href='/login'>logge inn</a>, eller <a href='/register'>registrere deg</a>. Ellers kan du forsette for å få et svar så snart som mulig. ",
+        "ics": "ICS",
+        "import_ICS": "Importer fra ICS",
+        "import_URL": "Importer fra nettadresse"
     },
     "register": {
         "first_user": "Administrator opprettet",
@@ -226,7 +229,8 @@
         "authorize": "Autoriser",
         "federation": "Føderasjon",
         "n_resources": "ingen ressurs|én ressurs|{n} ressurser",
-        "associate": "Tilknytt"
+        "associate": "Tilknytt",
+        "import": "Importer"
     },
     "about": "\n  <p><a href='https://gancio.org'>Gancio</a> er en delt agenda for lokale gemenskaper.</p>\n  ",
     "validators": {
