@@ -48,7 +48,7 @@
         "enable": "Habilita",
         "disable": "Deshabilita",
         "me": "Tu",
-        "password_updated": "S'ha actualitzat la contrasenya!",
+        "password_updated": "S'ha actualitzat la contrasenya.",
         "resources": "Recursos",
         "n_resources": "cap recurs|un recurs|{n} recursos",
         "activate_user": "S'ha confirmat",
@@ -80,11 +80,15 @@
         "delete": "Esborra",
         "announcements": "Anuncis",
         "url": "Adreça URL",
-        "place": "Lloc"
+        "place": "Lloc",
+        "import": "Importa",
+        "reset": "Reinicia",
+        "theme": "Tema",
+        "tags": "Etiquetes"
     },
     "login": {
-        "description": "Amb la sessió iniciada pots afegir activitats noves",
-        "check_email": "Comprova al teu correu la safata d'entrada i la de brossa",
+        "description": "Amb la sessió iniciada pots afegir activitats noves.",
+        "check_email": "Comprova al teu correu la safata d'entrada i la de brossa.",
         "not_registered": "No estàs registrat/da?",
         "forgot_password": "Has oblidat la contrasenya?",
         "error": "Error en iniciar la sessió, comprova les credencials.",
@@ -97,20 +101,20 @@
     "export": {
         "intro": "A diferència de les plataformes capitalistes, que recopilen informació de tot el que hi fem les usuàries, nosaltres creiem que la informació, tal com les persones, ha de ser lliure. Per això, pots estar al corrent de les activitats que vols sense necessitat de passar per aquest web.",
         "email_description": "Pots rebre correus sobre les activitats que t'interessin.",
-        "insert_your_address": "Introdueix la teva adreça de mail.",
+        "insert_your_address": "Introdueix la teva adreça de mail",
         "feed_description": "Per tal de seguir les actualitzacions sense haver d'entrar periòdicament aquí, et recomanem fer servir el flux RSS</p>\n\n<p>Hi ha aplicacions que agrupen i llegeixen fluxos RSS de diverses webs, blogs i aplicacions web. És una bona manera de mantenir-te informada sense haver de crear comptes a tot arreu.</p>\n\n<li>Per a Android recomanem <a href=\"https://play.google.com/store/apps/details?id=net.frju.flym\"> Flym </a> o Feeder</li>\n<li>Per a iPhone / iPad pots fer servir <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\"> Feed4U </a></li>\n<li>Per a l'ordinador recomanem Feedbro, que és una extensió de navegador disponible per a <a href=\"https://addons.mozilla.org/en-GB/firefox/addon/feedbroreader/\"> Firefox </a> i per a <a href=\"https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa\"> Chrome i Chromium</a>. Funciona en els principals sistemes operatius.</li>\n<br/>\nAfegeix aquest enllaç al teu lector de fluxos per mantenir-te al dia sense esforç.",
         "ical_description": "Els sistemes operatius d'ordinadors i mòbils solen oferir aplicacions de calendari. Algunes permeten importar calendaris remots, que van comprovant periòdicament.",
-        "list_description": "Si tens una web i vols encastar una llista d'activitats, pots fer servir el codi de sota."
+        "list_description": "Si tens una web i vols encastar una llista d'activitats, pots fer servir el codi de sota"
     },
     "register": {
-        "description": "Els moviments socials necessitem organitzar-nos i auto-finançar-nos. <br/> Aquest és un regal per vosaltres, feu-lo servir només per usos no-comercials i òbviament per activitats antifeixistes, antisexistes, i antiracistes.\n          <br/> Abans que puguis publicar, <strong> hem d'aprovar el teu compte </strong>, tingues en comtpe que <strong> darrere d'aquesta web hi ha persones </strong> de\n          carn i ossos. Ens agradaria saber quin tipus d'activitats vols publicar, ens escrius dues línies explicant-ho?",
+        "description": "Els moviments socials necessitem organitzar-nos i auto-finançar-nos. <br/> Aquest és un regal per vosaltres, feu-lo servir només per usos no-comercials i òbviament per activitats antifeixistes, antisexistes, i antiracistes.\n <br/> Abans que puguis publicar, <strong> hem d'aprovar el teu compte </strong>, tingues en comtpe que <strong> darrere d'aquesta web hi ha persones </strong> de carn i ossos. Ens agradaria saber quin tipus d'activitats vols publicar, ens escrius dues línies explicant-ho?",
         "error": "Error: ",
         "complete": "El registre ha de ser confirmat.",
         "first_user": "S'ha creat i activat un compte administrador"
     },
     "event": {
         "anon": "Anònim",
-        "anon_description": "Pots afegir activitats sense haver de crear un compte o iniciar sessió, però a canvi hauràs d'esperar que algun/a admin la llegeixi i l'aprovi,\n    confirmant que és adequada. Demana més feina humana i no podrà ser modificada.<br/><br/>\n    Pots <a href='/login'>iniciar sessió</a> o <a href='/register'>crear un compte</a>, però si ho necessites, endavant! Procurarem trigar poc.",
+        "anon_description": "Pots afegir activitats sense haver de crear un compte o iniciar sessió, però a canvi hauràs d'esperar que algun/a admin la llegeixi i l'aprovi,\n confirmant que és adequada. Demana més feina humana i no podrà ser modificada.<br/><br/>\n Pots <a href='/login'>iniciar sessió</a> o <a href='/register'>crear un compte</a>, però si ho necessites, endavant! Procurarem trigar poc. ",
         "same_day": "al mateix dia",
         "what_description": "Títol",
         "description_description": "Descripció",
@@ -144,12 +148,15 @@
         "from": "Des de les",
         "image_too_big": "La imatge és massa gran! Max 4 MB",
         "interact_with_me_at": "Interacciona amb mi a",
-        "follow_me_description": "Entre les diverses maneres d'estar al dia de les activitats que es publiquen aquí a {title},\n       pots seguir-nos al compte <u>{account}</u> des de Mastodon o altres, i afegir recursos des d'allà. <br/> <br/>\n       Si no has sentit mai  sobre «Mastodon» o «Fedivers», recomanem llegir <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'> aquest article (en anglès) </a>. <br/> <br/> Introdueix la teva instància a sota (ex: red.confederac.io o mastodont.cat)",
+        "follow_me_description": "Entre les diverses maneres d'estar al dia de les activitats que es publiquen aquí a {title},\n pots seguir-nos al compte <u>{account}</u> des de Mastodon o altres, i afegir recursos des d'allà. <br/> <br/>\nSi no has sentit mai sobre «Mastodon» o «Fedivers», recomanem mirar <a href='https://peertube.social/videos/watch/d9bd2ee9-b7a4-44e3-8d65-61badd15c6e6'> aquest vídeo (subtitulat en català)</a>. <br/> <br/> Introdueix la teva instància a sota (ex: red.confederac.io o mastodont.cat)",
         "interact_with_me": "Segueix-nos al fedivers",
-        "remove_recurrent_confirmation": "Estàs segur/a d'esborrar aquesta activitat periòdica?\n\nNo s'esborraran les ocurrències antigues, només es deixaran de crear les futures."
+        "remove_recurrent_confirmation": "Estàs segur/a d'esborrar aquesta activitat periòdica?\nNo s'esborraran les ocurrències antigues, només es deixaran de crear les futures.",
+        "ics": "ICS",
+        "import_ICS": "Importa des d'un ICS",
+        "import_URL": "Importa des d'una URL"
     },
     "admin": {
-        "place_description": "En el cas que un lloc és incorrecte o l'adreça ha de canviar, pots arreglar-ho.<br/>Tingues en compte que totes les activitats passades i futures associades amb aquest lloc també canviaran d'adreça!",
+        "place_description": "En el cas que un lloc és incorrecte o l'adreça ha de canviar, pots arreglar-ho.<br/>Tingues en compte que totes les activitats passades i futures associades amb aquest lloc també canviaran d'adreça.",
         "event_confirm_description": "Des d'aquí pots confirmar les activitats creades anònimament",
         "delete_user": "Esborra",
         "remove_admin": "Esborra admin",
@@ -190,35 +197,41 @@
         "instance_timezone_description": "El Gancio està pensat per aglutinar les activitats d'un lloc específic, com una ciutat, i per tant, dins una sola zona horària. Les dates i hores de totes les activitats es mostraran segons el fus horari que escriguis i seleccionis.",
         "instance_locale_description": "La llengua amb què es mostren les pàgines és la preferida per la usuària. Ara bé, en alguns casos, hem de mostrar missatges per tothom en la mateixa llengua (per exemple, quan publiquem via ActivityPub o en alguns correus). En aquests casos, es farà servir la llengua predeterminada.",
         "instance_place": "Lloc indicatiu d'aquesta instància",
-        "title_description": "Es fa servir al títol de la pàgina, a l'assumpte dels correus i en els formats exportats de feed i ics ",
+        "title_description": "Es fa servir al títol de la pàgina, a l'assumpte dels correus i en els formats exportats de flux RSS i ICS.",
         "description_description": "Apareix a la capçalera al costat del títol",
         "instance_name_help": "Nom del compte ActivityPub per a seguir",
         "enable_trusted_instances": "Mostra les instàncies amigues",
         "trusted_instances_help": "Les instàncies amigues apareixen en la capçalera, a la barra de navegació superior",
         "add_trusted_instance": "Afegeix una instància amiga",
         "instance_place_help": "L'etiqueta per mostrar al menú de les altres instàncies amigues",
-        "delete_trusted_instance_confirm": "Segur que vols eliminar aquest element del menú d'instàncies amigues?"
+        "delete_trusted_instance_confirm": "Segur que vols eliminar aquest element del menú d'instàncies amigues?",
+        "new_announcement": "Crea un anunci",
+        "edit_place": "Modifica el lloc",
+        "delete_footer_link_confirm": "Segur que vols esborrar aquest enllaç?",
+        "footer_links": "Enllaços del peu",
+        "add_link": "Afegeix un enllaç",
+        "is_dark": "Tema fosc"
     },
     "auth": {
-        "not_confirmed": "Encara no s'ha confirmat",
+        "not_confirmed": "Encara no s'ha confirmat…",
         "fail": "Ha fallta l'autenticació! Pots comprovar la contrasenya?"
     },
     "settings": {
         "update_confirm": "Vols desar els canvis?",
         "change_password": "Canvia la contrasenya",
-        "password_updated": "S'ha actualitzat la contrasenya",
+        "password_updated": "S'ha actualitzat la contrasenya.",
         "danger_section": "Secció perillosa",
         "remove_account": "Si cliques el botó s'esborrarà el teu compte. Les activitats que hagis publicat es quedaran.",
-        "remove_account_confirm": "Estàs a punt d'esborrar permanentment el teu compte!"
+        "remove_account_confirm": "Estàs a punt d'esborrar permanentment el teu compte"
     },
     "error": {
-        "nick_taken": "Aquest nom ja està agafat",
-        "email_taken": "Aquest mail ja s'està fent servir"
+        "nick_taken": "Aquest nom ja està agafat.",
+        "email_taken": "Aquest mail ja s'està fent servir."
     },
     "confirm": {
         "title": "Confirmació d'usuàries",
         "not_valid": "Ermmmm hi ha algun error.",
-        "valid": "S'ha confirmat el teu compte, ja pots <a href=\"/?ref=login\">iniciar sessió</a>."
+        "valid": "S'ha confirmat el teu compte, ja pots <a href=\"/?ref=login\">iniciar sessió</a>"
     },
     "ordinal": {
         "1": "primer",
@@ -235,5 +248,9 @@
         "scopes": {
             "event:write": "Publica o modifica les teves activitats"
         }
+    },
+    "validators": {
+        "email": "Escriu una adreça de correu vàlida",
+        "required": "Cal omplir el camp {fieldName} és"
     }
 }
