@@ -123,7 +123,11 @@
         "same_day": "le même jour",
         "anon_description": "Vous pouvez ajouter un évènement sans vous inscrire ni vous connecter, mais vous devrez attendre que quelqu'un le lise et\nconfirme qu'il s'agit d'un évènement conforme. Il ne sera pas possible de le modifier.<br/><br/> \nVous pouvez plutôt <a href='/login'>vous connecter</a> ou <a href='/register'>vous inscrire</a>. Sinon allez-y et obtenez une réponse au plus vite. ",
         "anon": "Anonyme",
-        "ics": "ICS"
+        "ics": "ICS",
+        "each_2w": "Une semaine sur deux",
+        "recurrent_2m_ordinal": "|Le {n} {days} du mois un mois sur|Les {n} {days} du mois un mois sur deux",
+        "recurrent_2m_days": "|Le {days} un mois sur deux|Les {jours} un mois sur deux",
+        "recurrent_2w_days": "Un {days} sur deux"
     },
     "register": {
         "description": "Les mouvements sociaux doivent s'organiser et s'autofinancer.<br/>\n<br/>Avant de pouvoir publier, <strong> le compte doit être approuvé</strong>, considérez que <strong> derrière ce site vous trouverez de vraies personnes, à qui vous pouvez écrire en deux lignes pour exprimer les évènements que vous souhaiteriez publier.",
