@@ -11,7 +11,7 @@ module.exports = {
 
       // send anon event to admin
       { action: 'Create', type: 'admin_email', filters: '{ "is_visible": false }', createdAt: new Date(), updatedAt: new Date() }
-    ]).catch(e => { console.error(e) })
+    ]).catch(e => { })
   },
 
   down: (queryInterface, Sequelize) => {
