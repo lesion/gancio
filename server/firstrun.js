@@ -75,7 +75,7 @@ module.exports = {
     // await db.notification.create({ action: 'Create', type: 'email', filters: { is_visible: true } })
 
     // close db connection
-    await db.sequelize.close()
+    await db.close()
 
     return true
   }
