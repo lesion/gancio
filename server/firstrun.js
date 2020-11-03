@@ -35,9 +35,11 @@ module.exports = {
     }
 
     const db = require('./api/models')
+    const User = require('./api/models/user')
+    const Notification = require('./api/models/notification')
     await db.authenticate()
 
-    const users = await db.user.findAll()
+    const users = await User.findAll()
     if (users.length) {
       consola.warn(' ⚠   Non empty db! Please move your current db elsewhere than retry.')
       return false
@@ -45,7 +47,7 @@ module.exports = {
 
     // create admin user
     consola.info(`Create admin with email: ${admin.email}`)
-    await db.user.create({
+    await User.create({
       email: admin.email,
       password: admin.password,
       is_admin: true,
@@ -62,12 +64,12 @@ module.exports = {
     // })
 
     // send confirmed events to mastodon
-    await db.notification.create({ action: 'Create', type: 'ap', filters: { is_visible: true } })
-    await db.notification.create({ action: 'Update', type: 'ap', filters: { is_visible: true } })
-    await db.notification.create({ action: 'Delete', type: 'ap', filters: { is_visible: true } })
+    await Notification.create({ action: 'Create', type: 'ap', filters: { is_visible: true } })
+    await Notification.create({ action: 'Update', type: 'ap', filters: { is_visible: true } })
+    await Notification.create({ action: 'Delete', type: 'ap', filters: { is_visible: true } })
 
     // send anon events to admin
-    await db.notification.create({ action: 'Create', type: 'admin_email', filters: { is_visible: false } })
+    await Notification.create({ action: 'Create', type: 'admin_email', filters: { is_visible: false } })
 
     // TODO email's notifications
     // await db.notification.create({ action: 'Create', type: 'email', filters: { is_visible: true } })
