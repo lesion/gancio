@@ -34,8 +34,9 @@ module.exports = {
       consola.warn(` ⚠️ ${e}. You can specify configuration path using '--config'`)
     }
 
-    // sync db
     const db = require('./api/models')
+    await db.authenticate()
+
     const users = await db.user.findAll()
     if (users.length) {
       consola.warn(' ⚠   Non empty db! Please move your current db elsewhere than retry.')
