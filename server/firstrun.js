@@ -64,12 +64,12 @@ module.exports = {
     // })
 
     // send confirmed events to mastodon
-    await Notification.create({ action: 'Create', type: 'ap', filters: { is_visible: true } })
-    await Notification.create({ action: 'Update', type: 'ap', filters: { is_visible: true } })
-    await Notification.create({ action: 'Delete', type: 'ap', filters: { is_visible: true } })
+    await Notification.create({ action: 'Create', type: 'ap', filters: '{ "is_visible": true }' })
+    await Notification.create({ action: 'Update', type: 'ap', filters: '{ "is_visible": true }' })
+    await Notification.create({ action: 'Delete', type: 'ap', filters: '{ "is_visible": true }' })
 
     // send anon events to admin
-    await Notification.create({ action: 'Create', type: 'admin_email', filters: { is_visible: false } })
+    await Notification.create({ action: 'Create', type: 'admin_email', filters: '{ "is_visible": false }' })
 
     // TODO email's notifications
     // await db.notification.create({ action: 'Create', type: 'email', filters: { is_visible: true } })
