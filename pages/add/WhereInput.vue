@@ -6,16 +6,18 @@
       :hint="$t('event.where_description')"
       :hide-no-data="!place._name"
       :search-input.sync="place._name"
+      prepend-icon='mdi-map-marker'
       persistent-hint
       :value="value.name"
       :items="places"
       item-text='name'
       @change='selectPlace')
       template(v-slot:no-data)
-        v-list-item
-          p Create {{place._name}}
+        v-list-item(@click='createPlace')
+          v-list-item-content Create {{place._name}}
 
     v-text-field.col-md-6(ref='address'
+      prepend-icon='mdi-map'
       :disabled='disableAddress'
       :rules="[$validators.required('common.address')]"
       :label="$t('common.address')"
@@ -42,21 +44,26 @@ export default {
   },
   methods: {
     selectPlace (p) {
-      const place = p && this.places.find(place => place.id === p.id)
-      if (place && place.address) {
+      if (typeof p === 'object') {
+        if (p === null) { return }
         this.place.name = p.name
-        this.place.address = place.address
+        this.place.address = p.address
         this.disableAddress = true
-      } else {
+      } else { // this is a new place
+        this.place.name = p
         this.disableAddress = false
         this.$refs.place.blur()
         this.$refs.address.focus()
       }
-      this.$emit('input', this.place)
+      this.$emit('input', { ...this.place })
     },
     changeAddress (v) {
       this.place.address = v
-      this.$emit('input', this.place)
+      this.$emit('input', { ...this.place })
+    },
+    createPlace (v) {
+      this.$refs.place.blur()
+      this.$refs.address.focus()
     }
   }
 }

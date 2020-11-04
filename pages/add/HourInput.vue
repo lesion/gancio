@@ -14,6 +14,7 @@
         template(v-slot:activator='{ on }')
           v-text-field(
             :label="$t('event.from')"
+            prepend-icon='mdi-clock'
             :rules="[$validators.required('event.from')]"
             :value='value.start'
             v-on='on'
@@ -40,6 +41,7 @@
           min-width="290px")
         template(v-slot:activator='{ on }')
           v-text-field(
+            prepend-icon='mdi-clock'
             :label="$t('event.due')"
             :value='value.end'
             v-on='on'
@@ -61,7 +63,6 @@ export default {
     value: { type: Object, default: () => { } }
   },
   data () {
-    // console.error('sono dentro data ', this.value)
     return {
       // time: { start: this.value.start, end: this.value.end },
       time: {},

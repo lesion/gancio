@@ -24,6 +24,7 @@
                 :value = 'event.title'
                 :rules="[$validators.required('common.title')]"
                 :hint="$t('event.what_description')"
+                prepend-icon='mdi-format-title'
                 :label="$t('common.title')"
                 autofocus
                 ref='title')
@@ -53,6 +54,7 @@
 
               //- tags
               v-combobox.col-6.mt-3(v-model='event.tags'
+                prepend-icon="mdi-tag-multiple"
                 chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
                 :delimiters="[',', ' ']"
                 :items="tags.map(t => t.tag)"
@@ -169,7 +171,6 @@ export default {
       this.loading = true
       let start_datetime, end_datetime
       const [start_hour, start_minute] = this.time.start.split(':')
-      console.error('TIME: hour', start_hour, this.time)
       if (!this.time.end) {
         this.time.end = (Number(start_hour) + 2) + ':' + start_minute
       }
@@ -183,7 +184,6 @@ export default {
         end_datetime = dayjs(this.date.date[1])
           .set('hour', end_hour).set('minute', end_minute)
       } else if (this.date.type === 'normal') {
-        console.error('dentro type normal', this.date.type)
         start_datetime = dayjs(this.date.date).set('hour', start_hour).set('minute', start_minute)
         end_datetime = dayjs(this.date.date).set('hour', end_hour).set('minute', end_minute)
         if (end_hour < start_hour) {

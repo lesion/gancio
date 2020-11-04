@@ -131,9 +131,8 @@ export default {
     },
     openLinkModal () {
       // this.link = { href: '', label: '' }
-      // console.error(this.$refs)
       this.linkModal = true
-      this.$nextTick( () => this.$refs.linkModalForm.reset() )
+      this.$nextTick(() => this.$refs.linkModalForm.reset())
     },
     addFooterLink () {
       const link = Object.assign({}, this.link)
@@ -151,7 +150,6 @@ export default {
     editFooterLink (item) {
       this.link = { href: item.href, label: item.label }
       this.linkModal = true
-
     },
     async uploadLogo (file) {
       const formData = new FormData()

@@ -25,7 +25,6 @@
       v-btn(@click='importGeneric' :loading='loading' :disabled='loading'
         color='primary') {{$t('common.import')}}
 
-
 </template>
 <script>
 import ical from 'ical.js'
@@ -51,18 +50,18 @@ export default {
         this.importURL()
       }
     },
-    async importICS() { 
+    importICS () {
       const reader = new FileReader()
       reader.readAsText(this.file)
       reader.onload = () => {
         const data = reader.result
         const event = ical.parse(data)
         this.event = {
-          title: event.name 
+          title: event.name
         }
-      }      
+      }
     },
-    async importURL() {
+    async importURL () {
       if (!this.URL) {
         this.errorMessage = this.$validators.required('common.URL')('')
         this.error = true
@@ -73,7 +72,7 @@ export default {
       this.loading = true
 
       try {
-        const ret = await this.$axios.$get('/event/import', { params: { URL: this.URL }})
+        const ret = await this.$axios.$get('/event/import', { params: { URL: this.URL } })
         this.event = ret
         // check if contain an h-event
         this.$emit('imported', ret)
