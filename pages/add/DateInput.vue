@@ -104,7 +104,6 @@ export default {
         return this.$t(`event.recurrent_${freq}_days`, { days: weekDay })
       } else if (freq === '1m' || freq === '2m') {
         const monthDay = date.format('D')
-        console.error('monthDay ', monthDay)
 
         const n = Math.floor((monthDay - 1) / 7) + 1
 

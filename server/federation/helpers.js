@@ -78,17 +78,19 @@ const Helpers = {
       const body = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
         type,
-        to: recipients[sharedInbox],
-        cc: ['https://www.w3.org/ns/activitystreams#Public', `${config.baseurl}/federation/u/${settingsController.settings.instance_name}/followers`],
+        to: ['https://www.w3.org/ns/activitystreams#Public'],
+        cc: [...recipients[sharedInbox], `${config.baseurl}/federation/u/${settingsController.settings.instance_name}/followers`],
         actor: `${config.baseurl}/federation/u/${settingsController.settings.instance_name}`,
-        object: event.toAP(settingsController.settings.instance_name,
+        object: event.toAPNote(settingsController.settings.instance_name,
           settingsController.settings.instance_locale,
           recipients[sharedInbox])
       }
       body['@context'] = [
         'https://www.w3.org/ns/activitystreams',
         'https://w3id.org/security/v1',
-        { Hashtag: 'as:Hashtag' }]
+        {
+          Hashtag: 'as:Hashtag'
+        }]
       Helpers.signAndSend(body, sharedInbox)
     }
   },

@@ -12,7 +12,6 @@ module.exports = {
     const name = req.params.name
     if (!name) { return res.status(400).send('Bad request.') }
 
-    // const user = await User.findOne({ where: { username: name } })
     if (name !== req.settings.instance_name) { return res.status(404).send(`No record found for ${name}`) }
     const ret = {
       '@context': [
@@ -74,8 +73,8 @@ module.exports = {
         id: `${config.baseurl}/federation/u/${name}/followers`,
         type: 'OrderedCollection',
         totalItems: followers.length,
-        first: `${config.baseurl}/federation/u/${name}/followers?page=true`,
-        last: `${config.baseurl}/federation/u/${name}/followers?page=true`,
+        // first: `${config.baseurl}/federation/u/${name}/followers?page=true`,
+        // last: `${config.baseurl}/federation/u/${name}/followers?page=true`,
         orderedItems: followers.map(f => f.ap_id)
       })
     }
@@ -84,7 +83,7 @@ module.exports = {
       id: `${config.baseurl}/federation/u/${name}/followers?page=${page}`,
       type: 'OrderedCollectionPage',
       totalItems: followers.length,
-      partOf: `${config.baseurl}/federation/u/${name}/followers`,
+      // partOf: `${config.baseurl}/federation/u/${name}/followers`,
       orderedItems: followers.map(f => f.ap_id)
     })
   },
@@ -92,35 +91,41 @@ module.exports = {
   async outbox (req, res) {
     // TODO
     const name = req.params.name
-    const page = req.query.page
+    // const page = req.query.page
 
     if (!name) { return res.status(400).send('Bad request.') }
     if (name !== req.settings.instance_name) { return res.status(404).send(`No record found for ${name}`) }
 
     const events = await Event.findAll({ include: [{ model: Tag, required: false }, Place] })
 
-    debug('Inside outbox, should return all events from this user')
+    debug('Inside outbox, should return all events from this user -> ', events.length)
 
     // https://www.w3.org/TR/activitypub/#outbox
     res.type('application/activity+json; charset=utf-8')
-    if (!page) {
-      return res.json({
-        '@context': 'https://www.w3.org/ns/activitystreams',
-        id: `${config.baseurl}/federation/u/${name}/outbox`,
-        type: 'OrderedCollection',
-        totalItems: events.length,
-        first: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
-        last: `${config.baseurl}/federation/u/${name}/outbox?page=true`
-      })
-    }
+    // if (!page) {
+    //   return res.json({
+    //     '@context': 'https://www.w3.org/ns/activitystreams',
+    //     id: `${config.baseurl}/federation/u/${name}/outbox`,
+    //     type: 'OrderedCollection',
+    //     totalItems: events.length,
+    //     first: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
+    //     last: `${config.baseurl}/federation/u/${name}/outbox?page=true`
+    //   })
+    // }
 
-    debug('With pagination %s', page)
+    // debug('With pagination %s', page)
     return res.json({
-      '@context': ['https://www.w3.org/ns/activitystreams', { Hashtag: 'as:Hashtag' }],
-      id: `${config.baseurl}/federation/u/${name}/outbox?page=${page}`,
+      '@context': [
+        'https://www.w3.org/ns/activitystreams',
+        'https://w3id.org/security/v1',
+        {
+          hashtag: 'as:Hashtag'
+        }
+      ],
+      id: `${config.baseurl}/federation/u/${name}/outbox`,
       type: 'OrderedCollectionPage',
       totalItems: events.length,
-      partOf: `${config.baseurl}/federation/u/${name}/outbox`,
+      // partOf: `${config.baseurl}/federation/u/${name}/outbox`,
       orderedItems:
         events.map(e => ({
           id: `${config.baseurl}/federation/m/${e.id}#create`,
@@ -129,7 +134,7 @@ module.exports = {
           cc: [`${config.baseurl}/federation/u/${name}/followers`],
           published: e.createdAt,
           actor: `${config.baseurl}/federation/u/${name}`,
-          object: e.toAP(name, req.settings.locale)
+          object: e.toAPNote(name, req.settings.locale)
         }))
     })
   }

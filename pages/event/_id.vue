@@ -138,12 +138,11 @@ import { mapState } from 'vuex'
 import EventAdmin from './eventAdmin'
 import EmbedEvent from './embedEvent'
 import FollowMe from '../../components/FollowMe'
-import moment from 'moment-timezone'
+import moment from 'dayjs'
 const htmlToText = require('html-to-text')
 
 export default {
   name: 'Event',
-  transition: null,
   components: { EventAdmin, EmbedEvent, FollowMe },
   async asyncData ({ $axios, params, error, store }) {
     try {
@@ -317,7 +316,6 @@ export default {
   margin: 0 auto;
   max-height: 80vh;
   border-radius: 5px;
-  transition: max-height .2s;
+  transition: max-height 0.2s;
 }
-
 </style>

@@ -34,8 +34,7 @@ export default ({ app, store }) => {
   // shown in mobile homepage
   Vue.filter('day', value => dayjs.unix(value).locale(store.state.locale).format('dddd, D MMM'))
 
-  Vue.filter('from', timestamp => dayjs.unix(timestamp).from())
-  // format event start/end datetime based on page
+  Vue.filter('from', timestamp => dayjs.unix(timestamp).fromNow())
 
   Vue.filter('recurrentDetail', event => {
     const { frequency, days, type } = event.parent.recurrent

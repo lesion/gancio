@@ -23,6 +23,8 @@ domPurify.addHook('beforeSanitizeElements', node => {
   if (node.hasAttribute && node.hasAttribute('href')) {
     const href = node.getAttribute('href')
     const text = node.textContent
+
+    // remove FB tracking param
     if (href.includes('fbclid=')) {
       try {
         const url = new URL.URL(href)
@@ -113,7 +115,9 @@ module.exports = {
     try {
       const response = await axios.get(URL)
       Microformats.get({ html: response.data, filter: ['h-event'] }, (err, data) => {
-        if (!data.items.length || !data.items[0].properties) return res.sendStatus(404)
+        if (err || !data.items.length || !data.items[0].properties) {
+          return res.sendStatus(404)
+        }
         const event = data.items[0].properties
         return res.json({
           title: get(event, 'name[0]', ''),
@@ -129,7 +133,7 @@ module.exports = {
       // const event = dom.window.document.querySelected(".h-event")
       // console.error(event)
       // console.error(response)
-    } catch(e){
+    } catch (e) {
       console.error(e)
     }
 

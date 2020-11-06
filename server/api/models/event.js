@@ -57,43 +57,43 @@ Resource.belongsTo(Event)
 Event.hasMany(Event, { as: 'child', foreignKey: 'parentId' })
 Event.belongsTo(Event, { as: 'parent' })
 
-Event.prototype.toAP = function (username, locale, to = []) {
+Event.prototype.toAPNote = function (username, locale, to = []) {
   const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
   const plainDescription = htmlToText.fromString(this.description.replace('\n', '').slice(0, 1000))
-  const summary = `
-  📍 ${this.place && this.place.name}
-  📅 ${moment.unix(this.start_datetime).locale(locale).format('dddd, D MMMM (HH:mm)')}
+  const content = `
+  ${this.title}<br/><br/>
+    📍 ${this.place && this.place.name}<br/>
+    📅 ${moment.unix(this.start_datetime).locale(locale).format('dddd, D MMMM (HH:mm)')}<br/><br/>
 
-    ${plainDescription}
+    ${plainDescription}<br/><br/>
+
+    <a href='${config.baseurl}/event/${this.id}'>${config.baseurl}/event/${this.id}</a><br/>
 
     ${tags && tags.map(t => `#${t}`)}
-
   `
 
-  const attachment = []
-  if (this.image_path) {
-    attachment.push({
-      type: 'Document',
-      mediaType: 'image/jpeg',
-      url: `${config.baseurl}/media/${this.image_path}`,
-      name: null,
-      blurHash: null
-    })
-  }
-
-  to.push('https://www.w3.org/ns/activitystreams#Public')
+  // const attachment = []
+  // if (this.image_path) {
+  //   attachment.push({
+  //     type: 'Document',
+  //     mediaType: 'image/jpeg',
+  //     url: `${config.baseurl}/media/${this.image_path}`,
+  //     name: null,
+  //     blurHash: null
+  //   })
+  // }
 
   return {
     id: `${config.baseurl}/federation/m/${this.id}`,
-    name: this.title,
+    // name: this.title,
     url: `${config.baseurl}/event/${this.id}`,
     type: 'Note',
-    startTime: moment.unix(this.start_datetime).locale(locale).format(),
-    endTime: moment.unix(this.end_datetime).locale(locale).format(),
-    location: {
-      name: this.place && this.place.name
-    },
-    attachment,
+    // startTime: moment.unix(this.start_datetime).locale(locale).format(),
+    // endTime: moment.unix(this.end_datetime).locale(locale).format(),
+    // location: {
+    //   name: this.place && this.place.name
+    // },
+    // attachment,
     tag: tags && tags.map(tag => ({
       type: 'Hashtag',
       name: '#' + tag,
@@ -101,9 +101,9 @@ Event.prototype.toAP = function (username, locale, to = []) {
     })),
     published: this.createdAt,
     attributedTo: `${config.baseurl}/federation/u/${username}`,
-    to,
-    cc: [`${config.baseurl}/federation/u/${username}/followers`],
-    summary
+    to: 'https://www.w3.org/ns/activitystreams#Public',
+    // cc: [`${config.baseurl}/federation/u/${username}/followers`],
+    content
   }
 }
 
