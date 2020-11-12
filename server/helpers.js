@@ -1,6 +1,6 @@
 const settingsController = require('./api/controller/settings')
 const acceptLanguage = require('accept-language')
-const moment = require('moment-timezone')
+const dayjs = require('dayjs')
 const config = require('config')
 const debug = require('debug')('helpers')
 const pkg = require('../package.json')
@@ -66,8 +66,8 @@ module.exports = {
     acceptLanguage.languages(Object.keys(locales))
     req.settings.locale = acceptLanguage.get(acceptedLanguages)
     req.settings.user_locale = settingsController.user_locale[req.settings.locale]
-    moment.locale(req.settings.locale)
-    moment.tz.setDefault(req.settings.instance_timezone)
+    dayjs.locale(req.settings.locale)
+    dayjs.tz.setDefault(req.settings.instance_timezone)
     next()
   },
 

@@ -3,11 +3,11 @@ div#list
   p(v-if='title') {{title}}
   v-timeline(dense)
     v-timeline-item(
-      v-for='event in events'
+      v-for='event in computedEvents'
       :key='`${event.id}_${event.start_datetime}`')
-      div {{event|when}}
-      a(:href='`/event/${event.id}`' target='_blank') {{event.title}}
-      small.float-right @{{event.place.name}}
+      .text-subtitle {{event|when}}
+        .text-subtitle.float-right @{{event.place.name}}
+      a.text-h5(:href='`/event/${event.id}`' target='_blank') {{event.title}}
 </template>
 <script>
 
@@ -43,6 +43,12 @@ export default {
     showDescription: {
       type: Boolean,
       default: true
+    }
+  },
+  computed: {
+    computedEvents () {
+      if (!this.maxEvents) { return this.events }
+      return this.events.slice(0, this.maxEvents)
     }
   }
 }

@@ -144,6 +144,7 @@ const htmlToText = require('html-to-text')
 export default {
   name: 'Event',
   components: { EventAdmin, EmbedEvent, FollowMe },
+  transition: null,
   async asyncData ({ $axios, params, error, store }) {
     try {
       const event = await $axios.$get(`/event/${params.id}`)

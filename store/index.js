@@ -72,20 +72,11 @@ export const actions = {
     const { tags, places } = await this.$axios.$get('/event/meta')
     commit('update', { tags, places })
   },
-  async addEvent ({ commit }, formData) {
-    await this.$axios.$post('/event', formData)
-  },
-  async updateEvent ({ commit }, formData) {
-    await this.$axios.$put('/event', formData)
-  },
   setFilters ({ commit }, filters) {
     commit('setFilters', filters)
   },
   setAnnouncements ({ commit }, announcements) {
     commit('setAnnouncements', announcements)
-  },
-  delEvent ({ commit }, eventId) {
-    commit('delEvent', eventId)
   },
   async setSetting ({ commit }, setting) {
     await this.$axios.$post('/settings', setting)

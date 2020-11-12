@@ -6,11 +6,6 @@
       :label="$t('event.show_recurrent')"
       @change="v => $emit('showrecurrent', v)")
 
-    v-switch.mt-0(
-      v-if='pastFilter' inset color='primary'
-      :label="$t('event.show_past')"
-      @change="v => $emit('showpast', v)")
-
     v-autocomplete.mt-0(
       :label='$t("common.search")'
       :items='keywords'
@@ -36,7 +31,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   name: 'Search',
   props: {
@@ -51,20 +46,20 @@ export default {
     }
   },
   computed: {
-    ...mapState(['tags', 'places', , 'settings']),
+    ...mapState(['tags', 'places', 'settings']),
     selectedFilters () {
       const tags = this.tags.filter(t => this.filters.tags.includes(t.tag)).map(t => ({ type: 'tag', label: t.tag, weigth: t.weigth, id: t.tag }))
       const places = this.places.filter(p => this.filters.places.includes(p.id))
         .map(p => ({ type: 'place', label: p.name, weigth: p.weigth, id: p.id }))
       const keywords = tags.concat(places).sort((a, b) => b.weigth - a.weigth)
-      return keywords      
+      return keywords
     },
     keywords () {
       const tags = this.tags.map(t => ({ type: 'tag', label: t.tag, weigth: t.weigth, id: t.tag }))
       const places = this.places.map(p => ({ type: 'place', label: p.name, weigth: p.weigth, id: p.id }))
       const keywords = tags.concat(places).sort((a, b) => b.weigth - a.weigth)
       return keywords
-    },
+    }
   },
   methods: {
     change (filters) {
@@ -73,7 +68,7 @@ export default {
         places: filters.filter(p => p.type === 'place').map(p => p.id)
       }
       this.$emit('update', filters)
-    },
+    }
   }
 }
 </script>

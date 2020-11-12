@@ -1,5 +1,5 @@
 <template lang='pug'>
-  v-card(color='secondary')
+  v-card(:color='isDialog ? "secondary" : null')
     v-card-title(v-text="$t('common.follow_me_title')")
     v-card-text
       p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${domain}`})")
@@ -22,9 +22,8 @@ import url from 'url'
 
 export default {
   name: 'FollowMe',
-  props: [
-    { isDialog: { type: Boolean, default: false }}
-  ],
+  props:
+    { isDialog: { type: Boolean, default: false } },
   data () {
     return {
       instance_hostname: '',
