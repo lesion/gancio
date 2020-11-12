@@ -20,11 +20,11 @@ v-row
       v-date-picker(
         :min='today'
         v-model="value.date"
-        :range="type === 'multidate'"
+        :range="value.type === 'multidate'"
         :locale='settings.locale'
         @input="pick")
 
-    v-btn-toggle.col-md-4(@change='changeType' color='primary' :value='type')
+    v-btn-toggle.col-md-4(@change='changeType' color='primary' :value='value.type')
       v-btn(value='normal') {{$t('event.normal')}}
       v-btn(value='multidate') {{$t('event.multidate')}}
       v-menu(v-if='settings.allow_recurrent_event' offset-y open-on-hover)
@@ -34,8 +34,8 @@ v-row
           v-list-item(v-for='f in frequencies' :key='f.value'
             @click='selectFrequency(f.value)') {{f.text}}
 
-    //- //- p.col-12 {{$t(`event.${type}_description`)}}
-    //- v-btn-toggle(v-if="type === 'recurrent'" v-model='recurrent.frequency' color='primary')
+    p.col-12 {{$t(`event.${value.type}_description`)}}
+    //- v-btn-toggle(v-if="type === 'recurrent'" v-model='value.recurrent.frequency' color='primary')
     //-   v-btn(v-for='f in frequencies' :value='f.value') {{f.text}}
 
     //- .datePicker
@@ -49,9 +49,9 @@ v-row
     //-     is-expanded
     //-     :min-date='type !== "recurrent" && new Date()')
 
-    div.text-center.mb-2(v-if='type === "recurrent"')
-      span(v-if='recurrent.frequency !== "1m" && recurrent.frequency !== "2m"') {{whenPatterns}}
-      v-btn-toggle.mt-1(v-else v-model='recurrent.type' color='primary')
+    div.text-center.mb-2(v-if='value.type === "recurrent"')
+      span(v-if='value.recurrent.frequency !== "1m" && value.recurrent.frequency !== "2m"') {{whenPatterns}}
+      v-btn-toggle.mt-1(v-else v-model='value.recurrent.type' color='primary')
         v-btn(v-for='whenPattern in whenPatterns' :value='whenPattern.key' :key='whenPatterns.key' small)
           span {{whenPattern.label}}
 
@@ -72,7 +72,6 @@ export default {
   },
   data () {
     return {
-      date: null,
       datePickerMenu: false,
       today: dayjs().format('YYYY-MM-DD'),
       type: 'normal',
@@ -95,10 +94,10 @@ export default {
       return modeMap[this.type]
     },
     whenPatterns () {
-      if (!this.date) { return }
-      const date = dayjs(this.date)
+      if (!this.value.date) { return }
+      const date = dayjs(this.value.date)
 
-      const freq = this.recurrent.frequency
+      const freq = this.value.recurrent.frequency
       const weekDay = date.format('dddd')
       if (freq === '1w' || freq === '2w') {
         return this.$t(`event.recurrent_${freq}_days`, { days: weekDay })
@@ -219,15 +218,13 @@ export default {
   },
   methods: {
     changeType (type) {
-      this.date = null
-      this.type = type || 'normal'
+      this.$emit('input', { type: type || 'normal', date: undefined })
     },
     selectFrequency (f) {
-      this.recurrent.frequency = f
-      this.type = 'recurrent'
+      this.$emit('input', { recurrent: { frequency: f }, date: null, type: 'recurrent' })
     },
     pick (value) {
-      if (this.type === 'normal' || this.type === 'recurrent' || this.date.length === 2) {
+      if (this.value.type === 'normal' || this.value.type === 'recurrent' || this.value.date.length === 2) {
         this.datePickerMenu = false
       }
     }

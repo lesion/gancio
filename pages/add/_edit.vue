@@ -99,10 +99,11 @@ export default {
       data.event.place.address = event.place.address || ''
       data.date = {}
       if (event.multidate) {
+        const start = dayjs.unix(event.start_datetime).format('YYYY-MM-DD')
+        const end = dayjs.unix(event.end_datetime).format('YYYY-MM-DD')
         data.date = {
           type: 'multidate',
-          start: dayjs.unix(event.start_datetime).toDate(),
-          end: dayjs.unix(event.end_datetime).toDate()
+          date: [start, end]
         }
       } else if (event.recurrent) {
         data.date.type = 'recurrent'
@@ -150,10 +151,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['tags', 'places', 'events', 'settings'])
+    ...mapState(['tags', 'places', 'settings'])
   },
   methods: {
-    ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
+    ...mapActions(['updateMeta']),
     eventImported (event) {
       this.event = Object.assign(this.event, event)
     },
@@ -179,6 +180,7 @@ export default {
       const formData = new FormData()
 
       if (this.date.type === 'multidate') {
+        console.error('sono in multidate!')
         start_datetime = dayjs(this.date.date[0])
           .set('hour', start_hour).set('minute', start_minute)
         end_datetime = dayjs(this.date.date[1])
@@ -210,7 +212,7 @@ export default {
       formData.append('place_name', this.event.place.name)
       formData.append('place_address', this.event.place.address)
       formData.append('description', this.event.description)
-      formData.append('multidate', this.event.type === 'multidate')
+      formData.append('multidate', this.date.type === 'multidate')
       formData.append('start_datetime', start_datetime.unix())
       formData.append('end_datetime', end_datetime.unix())
 
@@ -220,9 +222,9 @@ export default {
       if (this.event.tags) { this.event.tags.forEach(tag => formData.append('tags[]', tag.tag || tag)) }
       try {
         if (this.edit) {
-          await this.updateEvent(formData)
+          await this.$axios.$put('/event', formData)
         } else {
-          await this.addEvent(formData)
+          await this.$axios.$post('/event', formData)
         }
         this.updateMeta()
         this.$router.replace('/')
