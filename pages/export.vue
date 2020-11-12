@@ -72,10 +72,6 @@ export default {
   name: 'Exports',
   components: { List, FollowMe },
   async asyncData ({ $axios, params, store }) {
-    // get metadata just in case we are not coming from home
-    if (store.state.tags.length) { return }
-    const { tags, places } = await $axios.$get('/event/meta')
-    store.commit('update', { tags, places })
   },
   data () {
     return {
