@@ -42,7 +42,6 @@ module.exports = {
     '@/plugins/axios', // axios baseurl configuration
     '@/plugins/validators', // inject validators
     '@/plugins/api' // api helpers
-    // { src: '@/plugins/v-calendar', ssr: false } // calendar, fix ssr
   ],
 
   render: {

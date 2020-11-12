@@ -16,7 +16,6 @@ div
     v-btn(text color='primary' @click='remove(true)') {{$t('common.remove')}}
 </template>
 <script>
-import { mapActions } from 'vuex'
 
 export default {
   name: 'EventAdmin',
@@ -27,13 +26,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['delEvent']),
     async remove (parent = false) {
       const ret = await this.$root.$confirm(`event.remove_${parent ? 'recurrent_' : ''}confirmation`)
       if (!ret) { return }
       const id = parent ? this.event.parentId : this.event.id
       await this.$axios.delete(`/event/${id}`)
-      this.delEvent(Number(id))
       this.$router.replace('/')
     },
     async toggle (parent = false) {
