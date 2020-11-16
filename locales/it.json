@@ -202,7 +202,7 @@
         "instance_name_help": "Nome dell'account ActivityPub da seguire",
         "enable_trusted_instances": "Abilita istanze amiche",
         "trusted_instances_help": "Le istanze amiche compariranno nella barra di navigazione in cima alla pagina",
-        "add_trusted_instance": "Aggiungi un istanza amica",
+        "add_trusted_instance": "Aggiungi un'istanza amica",
         "instance_place_help": "Verrà mostrata questa stringa nel menù delle altre istanze amiche",
         "delete_trusted_instance_confirm": "Vuoi davvero eliminare questa voce dal menù delle istanze amiche?",
         "is_dark": "Tema scuro",
