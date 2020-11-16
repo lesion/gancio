@@ -112,8 +112,11 @@ export default {
   methods: {
     ...mapActions(['setSetting']),
     async createTrustedInstance () {
-      if (!this.$refs.form.validate()) return
+      if (!this.$refs.form.validate()) { return }
       try {
+        if (!this.instance_url.startsWith('http')) {
+          this.instance_url = `https://${this.instance_url}`
+        }
         const instance = await axios.get(`${this.instance_url}/.well-known/nodeinfo/2.1`)
         this.setSetting({
           key: 'trusted_instances',
@@ -123,7 +126,8 @@ export default {
             label: instance.data.metadata.nodeLabel
           })
         })
-        this.instance_url = ''
+        this.$refs.form.reset()
+        this.dialogAddInstance = false
       } catch (e) {
         this.$root.$message(e, { color: 'error' })
       }
