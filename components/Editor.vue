@@ -1,8 +1,9 @@
 <template lang='pug'>
-  .editor
+  .editor(:class='focused')
+    .label {{label}}
     editor-menu-bar.menubar.is-hidden(:editor='editor'
       :keep-in-bounds='true' v-slot='{ commands, isActive, getMarkAttrs, focused }')
-      v-btn-toggle(dense :class="{ focused }")
+      v-btn-toggle(dense)
         v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.bold() }"
           @click="commands.bold")
@@ -96,7 +97,8 @@ export default {
       options: [],
       linkActive: false,
       editor: null,
-      update: false
+      update: false,
+      focused: ''
     }
   },
   watch: {
@@ -110,6 +112,12 @@ export default {
   },
   mounted () {
     this.editor = new Editor({
+      onFocus: () => {
+        this.focused = 'editor--focused'
+      },
+      onBlur: () => {
+        this.focused = ''
+      },
       onUpdate: _.debounce(({ getHTML }) => {
         this.update = true
         this.$emit('input', getHTML())
@@ -135,7 +143,7 @@ export default {
           emptyNodeClass: 'is-empty',
           emptyNodeText: this.placeholder,
           showOnlyWhenEditable: true,
-          showOnlyCurrent: true,
+          showOnlyCurrent: true
         })
       ]
     })
@@ -146,48 +154,90 @@ export default {
 }
 </script>
 <style lang='less'>
-.editor p.is-editor-empty:first-child::before {
-  content: attr(data-empty-text);
-  float: left;
-  color: #aaa;
-  // opacity: .4;
-  pointer-events: none;
-  height: 0;
-  font-style: italic;
-}
+
 .editor {
-  .label {
-    left: 0px;
-    position: absolute;
-    transition: translateY .3s, scale .3s;
-    &.focused {
-      color: orange;
-      transform: translateY(-10px) scale(0.75);
-    }
-  }
-  // max-height: auto;
-  // height: auto;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #FF4500 transparent;
-    scroll-behavior: smooth;  
+  margin-top: 4px;
+  padding-top: 12px;
+  padding-bottom: 22px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #FF4500 transparent;
+  scroll-behavior: smooth;
   font-family: sans-serif;
   font-size: 1.1em;
-  border-color: currentColor;
-  border-style: solid;
-  border-width: 0 0 thin 0;
-  // background-color: rgba(255,255,255,0.04);
-  .focused {
-    opacity: 1 !important;
+
+  .editor p.is-editor-empty:first-child::before {
+    content: attr(data-empty-text);
+    float: left;
+    color: #aaa;
+    // opacity: .4;
+    pointer-events: none;
+    height: 0;
+    font-style: italic;
   }
+
+  .label {
+    left: 0px;
+    position: relative;
+    transform-origin: top left;
+    transition: transform .3s, scale .3s, color .3s;
+    transform: translateY(20px);
+  }
+
+  &.editor--focused {
+    .label {
+      color: #FF4500;
+      transform: translateY(0px) scale(0.75);
+    }
+
+    .menubar {
+      opacity: 1 !important;
+    }
+
+    .ProseMirror::after {
+      width : 100% !important;
+      transform: scaleX(1) !important;
+    }
+  }
+
   .menubar {
-    opacity: .3;
+    transition: opacity .5s;
+    opacity: 0;
     // position: absolute;
   }
 
+  .focused .ProseMirror::after {
+    width: 100%;
+  }
   .ProseMirror {
     padding: 15px;
     outline: 0;
+    &::before {
+      bottom: 0px;
+      content: "";
+      left: 0;
+      position: absolute;
+      transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+      width: 100%;
+      border-width: thin 0 0 0;
+      border-style: solid;
+      height: 0px;
+      border-color: rgba(255, 255, 255, 0.7);
+    }
+
+    &::after {
+      bottom: 0px;
+      content: "";
+      left: 0;
+      position: absolute;
+      height: 0px;
+      transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+      width: 100%;
+      border-width: 2px 0 0 0;
+      border-style: solid;
+      border-color: #FF4500;
+      transform: scaleX(0);
+    }
   }
 }
 //   position: relative;
