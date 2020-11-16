@@ -1,9 +1,8 @@
 <template lang="pug">
   v-container
     v-card
-      v-card-title About
       v-card-text(v-if='$auth.user && $auth.user.is_admin')
-        Editor(v-model='about')
+        Editor(v-model='about' label="About")
       v-card-text(v-else v-html='about')
       v-card-actions(v-if='$auth.user && $auth.user.is_admin')
         v-spacer
@@ -21,17 +20,17 @@ export default {
       about: $store.state.settings.about || this.$t('about')
     }
   },
+  head () {
+    return {
+      title: `${this.settings.title} - ${this.$t('common.info')}`
+    }
+  },
   computed: mapState(['settings']),
   methods: {
     ...mapActions(['setSetting']),
     save () {
       this.$root.$message('common.ok', { color: 'success' })
       this.setSetting({ key: 'about', value: this.about })
-    }
-  },
-  head () {
-    return {
-      title: `${this.settings.title} - ${this.$t('common.info')}`
     }
   }
 }
