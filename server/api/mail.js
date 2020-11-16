@@ -1,6 +1,6 @@
 const Email = require('email-templates')
 const path = require('path')
-const moment = require('moment-timezone')
+const moment = require('dayjs')
 const config = require('config')
 const settingsController = require('./controller/settings')
 const debug = require('debug')('email')

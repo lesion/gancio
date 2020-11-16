@@ -37,10 +37,11 @@ export default ({ app, store }) => {
   Vue.filter('from', timestamp => dayjs.unix(timestamp).fromNow())
 
   Vue.filter('recurrentDetail', event => {
-    const { frequency, days, type } = event.parent.recurrent
+    const parent = event.parent
+    const { frequency, days, type } = parent.recurrent
     let recurrent
     if (frequency === '1w' || frequency === '2w') {
-      recurrent = app.i18n.tc(`event.recurrent_${frequency}_days`, days.length, { days: days.map(d => dayjs().day(d - 1).format('dddd')) })
+      recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: dayjs.unix(parent.start_datetime).format('dddd') })
     } else if (frequency === '1m' || frequency === '2m') {
       const d = type === 'ordinal' ? days : days.map(d => dayjs().day(d - 1).format('dddd'))
       recurrent = app.i18n.tc(`event.recurrent_${frequency}_${type}`, days.length, { days: d })

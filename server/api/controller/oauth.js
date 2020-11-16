@@ -8,7 +8,7 @@ const OAuthCode = require('../models/oauth_code')
 const User = require('../models/user')
 
 const debug = require('debug')('oauth')
-const moment = require('moment')
+const moment = require('dayjs')
 
 async function randomString (len = 16) {
   const bytes = await randomBytes(len * 8)

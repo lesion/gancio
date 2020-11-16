@@ -1,6 +1,10 @@
 const settingsController = require('./api/controller/settings')
 const acceptLanguage = require('accept-language')
+
 const dayjs = require('dayjs')
+const timezone = require('dayjs/plugin/timezone')
+dayjs.extend(timezone)
+
 const config = require('config')
 const debug = require('debug')('helpers')
 const pkg = require('../package.json')

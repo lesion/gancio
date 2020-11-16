@@ -180,25 +180,19 @@ export default {
       const formData = new FormData()
 
       if (this.date.type === 'multidate') {
-        console.error('sono in multidate!')
         start_datetime = dayjs(this.date.date[0])
-          .set('hour', start_hour).set('minute', start_minute)
+          .hour(start_hour).minute(start_minute)
         end_datetime = dayjs(this.date.date[1])
-          .set('hour', end_hour).set('minute', end_minute)
+          .hour(end_hour).minute(end_minute)
       } else if (this.date.type === 'normal') {
-        start_datetime = dayjs(this.date.date).set('hour', start_hour).set('minute', start_minute)
-        end_datetime = dayjs(this.date.date).set('hour', end_hour).set('minute', end_minute)
+        start_datetime = dayjs(this.date.date).hour(start_hour).minute(start_minute)
+        end_datetime = dayjs(this.date.date).hour(end_hour).minute(end_minute)
         if (end_hour < start_hour) {
           end_datetime = end_datetime.add(1, 'day')
         }
       } else if (this.date.type === 'recurrent') {
-        start_datetime = dayjs().set('hour', start_hour).set('minute', start_minute)
-        end_datetime = dayjs().set('hour', end_hour).set('minute', end_minute)
-        // const recurrent = {
-        //   frequency: this.event.recurrent.frequency,
-        //   days: this.event.recurrent.type === 'ordinal' ? _.map(this.date, d => dayjs(d).date()) : _.map(this.date, d => dayjs(d).day() + 1),
-        //   type: this.event.recurrent.type
-        // }
+        start_datetime = dayjs(this.date.date).set('hour', start_hour).set('minute', start_minute)
+        end_datetime = dayjs(this.date.date).set('hour', end_hour).set('minute', end_minute)
         if (end_hour < start_hour) {
           end_datetime = end_datetime.add(1, 'day')
         }

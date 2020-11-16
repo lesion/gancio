@@ -1,5 +1,16 @@
 <template lang="pug">
 v-row
+
+    v-btn-toggle.col-md-4(@change='changeType' color='primary' :value='value.type')
+      v-btn(value='normal') {{$t('event.normal')}}
+      v-btn(value='multidate') {{$t('event.multidate')}}
+      v-menu(v-if='settings.allow_recurrent_event' offset-y open-on-hover)
+        template(v-slot:activator="{ on, attrs }")
+          v-btn(value='recurrent' v-on='on') {{$t('event.recurrent')}}
+        v-list
+          v-list-item(v-for='f in frequencies' :key='f.value'
+            @click='selectFrequency(f.value)') {{f.text}}
+
     v-menu(
       v-model="datePickerMenu"
       :close-on-content-click="false"
@@ -19,20 +30,10 @@ v-row
           v-on="on")
       v-date-picker(
         :min='today'
-        v-model="value.date"
+        :value="value.date"
         :range="value.type === 'multidate'"
         :locale='settings.locale'
         @input="pick")
-
-    v-btn-toggle.col-md-4(@change='changeType' color='primary' :value='value.type')
-      v-btn(value='normal') {{$t('event.normal')}}
-      v-btn(value='multidate') {{$t('event.multidate')}}
-      v-menu(v-if='settings.allow_recurrent_event' offset-y open-on-hover)
-        template(v-slot:activator="{ on, attrs }")
-          v-btn(value='recurrent' v-on='on') {{$t('event.recurrent')}}
-        v-list
-          v-list-item(v-for='f in frequencies' :key='f.value'
-            @click='selectFrequency(f.value)') {{f.text}}
 
     p.col-12 {{$t(`event.${value.type}_description`)}}
     //- v-btn-toggle(v-if="type === 'recurrent'" v-model='value.recurrent.frequency' color='primary')
@@ -59,7 +60,6 @@ v-row
 
 </template>
 <script>
-// import VInput from 'vuetify/es5/components/VInput'
 import dayjs from 'dayjs'
 import { mapState } from 'vuex'
 import List from '@/components/List'
@@ -223,10 +223,11 @@ export default {
     selectFrequency (f) {
       this.$emit('input', { recurrent: { frequency: f }, date: null, type: 'recurrent' })
     },
-    pick (value) {
+    pick (date) {
       if (this.value.type === 'normal' || this.value.type === 'recurrent' || this.value.date.length === 2) {
         this.datePickerMenu = false
       }
+      this.$emit('input', { date, type: this.value.type, recurrent: this.value.recurrent })
     }
   }
 }

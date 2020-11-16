@@ -3,7 +3,7 @@ const Place = require('../models/place')
 const Tag = require('../models/tag')
 
 const { Op } = require('sequelize')
-const moment = require('moment-timezone')
+const moment = require('dayjs')
 const ics = require('ics')
 
 const exportController = {

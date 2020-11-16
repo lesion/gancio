@@ -1,5 +1,4 @@
 const crypto = require('crypto')
-// const moment = require('moment-timezone')
 const path = require('path')
 const config = require('config')
 const fs = require('fs')
@@ -107,7 +106,7 @@ const eventController = {
             required: false,
             attributes: ['id', 'activitypub_id', 'data', 'hidden']
           },
-          { model: Event, required: false, as: 'parent', attributes: ['id', 'recurrent', 'is_visible'] }
+          { model: Event, required: false, as: 'parent', attributes: ['id', 'recurrent', 'is_visible', 'start_datetime'] }
         ],
         order: [[Resource, 'id', 'DESC']]
       })
@@ -493,72 +492,46 @@ const eventController = {
     }
 
     const recurrent = e.recurrent
-    const cursor = dayjs()
-    // let cursor = start.startOf('week')
+    let cursor = dayjs()
     const start_date = dayjs.unix(e.start_datetime)
     const duration = dayjs.unix(e.end_datetime).diff(start_date, 's')
     const frequency = recurrent.frequency
-    const days = recurrent.days
     const type = recurrent.type
 
-    // default frequency is '1d' => each day
-    const toAdd = { n: 1, unit: 'day' }
+    cursor = cursor.hour(start_date.hour()).minute(start_date.minute()).second(0)
 
-    // each week or 2 (search for the first specified day)
-    if (frequency === '1w' || frequency === '2w') {
-      // cursor.add(days[0] - 1, 'day')
-      if (frequency === '2w') {
-        const nWeeks = cursor.diff(e.start_datetime, 'w') % 2
-        if (!nWeeks) { cursor.add(1, 'week') }
+    // each week or 2
+    if (frequency[1] === 'w') {
+      cursor = cursor.day(start_date.day())
+      if (cursor.isBefore(dayjs())) {
+        cursor = cursos.add(7, 'day')
       }
-      toAdd.n = Number(frequency[0])
-      toAdd.unit = 'week'
-    }
-
-    cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
-
-    // each month or 2
-    if (frequency === '1m' || frequency === '2m') {
-      // find first match
-      toAdd.n = 1
-      toAdd.unit = 'month'
-      if (type === 'weekday') {
-
-      } else if (type === 'ordinal') {
-
+      if (frequency[0] === 2) {
+        cursor = cursor.add(7, 'day')
       }
-    }
-
-    // add event at specified frequency
-    // const first_event_of_week = cursor.clone()
-    days.forEach(d => {
+    } else if (frequency === '1m') {
       if (type === 'ordinal') {
-        cursor.date(d)
-      } else {
-        cursor.day(d - 1)
-        if (cursor.isBefore(dayjs())) {
-          cursor.day(d - 1 + 7)
-        }
+        cursor = cursor.date(start_date.date())
       }
-      event.start_datetime = cursor.unix()
-      event.end_datetime = event.start_datetime + duration
-      Event.create(event)
-      cursor.set('hour', start_date.hour()).set('minute', start_date.minutes())
-    })
-    // cursor = first_event_of_week.add(toAdd.n, toAdd.unit)
+    }
+
+    event.start_datetime = cursor.unix()
+    event.end_datetime = event.start_datetime + duration
+    Event.create(event)
   },
 
   /**
    * Create instances of recurrent events
    */
   async _createRecurrent (start_datetime = dayjs().unix()) {
-    // select recurrent events
+    // select recurrent events and its childs
     const events = await Event.findAll({
       where: { is_visible: true, recurrent: { [Op.ne]: null } },
       include: [{ model: Event, as: 'child', required: false, where: { start_datetime: { [Op.gte]: start_datetime } } }],
       order: ['start_datetime']
     })
 
+    // filter events that as no instance in future yet
     const creations = events
       .filter(e => e.child.length === 0)
       .map(eventController._createRecurrentOccurrence)

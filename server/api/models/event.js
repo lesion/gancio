@@ -1,5 +1,5 @@
 const config = require('config')
-const moment = require('moment-timezone')
+const moment = require('dayjs')
 const htmlToText = require('html-to-text')
 
 const { Model, DataTypes } = require('sequelize')
