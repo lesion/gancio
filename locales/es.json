@@ -48,7 +48,7 @@
         "enable": "Habilitar",
         "disable": "Deshabilita",
         "me": "Tú",
-        "password_updated": "Contraseña actualizada!",
+        "password_updated": "Contraseña actualizada.",
         "comments": "ningún comentario|un comentario|{n} comentarios",
         "copy_link": "Copiar Enlace",
         "send_via_mail": "Enviar correo electrónico",
@@ -86,7 +86,7 @@
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
-        "check_email": "Revisa tu casilla de correo (también el spam o correo no deseado)",
+        "check_email": "Revisa tu casilla de correo (también el spam o correo no deseado).",
         "not_registered": "¿No estás registrado/a?",
         "forgot_password": "¿Olvidaste la contraseña?",
         "error": "Error durante el login, comprueba los datos.",
