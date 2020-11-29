@@ -12,7 +12,7 @@
         "subject": "Vous pouvez désormais commencer à publier des évènements"
     },
     "confirm": {
-        "content": "Bonjour, votre compte sur <a href='{{config.baseurl}}'>{{config.title}}</a> a été confirmé. Écrivez-nous à {{config.admin_email}} pour toute information.",
+        "content": "Bonjour, votre compte sur <a href='{{config.baseurl}}'>{{config.title}}</a> a été confirmé. Écrivez-nous à {{config.admin_email}} pour tout renseignement.",
         "subject": "Vous pouvez désormais commencer à publier des évènements"
     },
     "register": {
