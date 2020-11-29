@@ -64,7 +64,7 @@
         "embed": "Incorporar",
         "embed_title": "Publica este evento en tu página web",
         "embed_help": "Copiando el siguiente código en tu página web, el evento será incluido como puedes ver aquí al lado",
-        "feed": "Feed",
+        "feed": "RSS Feed",
         "feed_url_copied": "Copiada feed url, pegala en tu lector de feeds",
         "follow_me_title": "Sigue las actualizaciones en el fediverso",
         "follow": "Sigue",
@@ -82,7 +82,10 @@
         "announcements": "Anuncios",
         "url": "Dirección URL",
         "place": "Lugar",
-        "tags": "Tags"
+        "tags": "Tags",
+        "import": "Importar",
+        "reset": "Reset",
+        "theme": "Tema"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
@@ -147,7 +150,11 @@
         "show_past": "eventos pasados",
         "follow_me_description": "Entre las diversas formas de mantenerse al día con los eventos publicados aquí en {title},\npuedes seguir la cuenta <u>{account}</u> desde el fediverso, por ejemplo, a través de un Mastodon, y posiblemente añadir recursos a un evento desde allí.<br/><br/>\nSi nunca has oído hablar del Mastodon y el fediverso te sugerimos que leas <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>este artículo</a>.<br/><br/> Introduce tu instancia abajo (por ejemplo mastodon.cisti.org o mastodon.bida.im)",
         "interact_with_me": "Sigueme en el fediverso",
-        "remove_recurrent_confirmation": "Estás segura de querer eliminar este evento recurriente?\nLos eventos pasados serán mantenidos, pero no se crearán eventos nuevos."
+        "remove_recurrent_confirmation": "Estás segura de querer eliminar este evento recurriente?\nLos eventos pasados serán mantenidos, pero no se crearán eventos nuevos.",
+        "ics": "ICS",
+        "import_ICS": "Importar desde ICS",
+        "import_URL": "Importar desde la URL",
+        "only_future": "solo eventos venideros"
     },
     "admin": {
         "place_description": "En el caso de que un lugar sea incorrecto o cambie de dirección, puedes cambiarlo. <br/> En este caso hay que tener en cuenta que todos los eventos asociados con ese lugar cambiarán de dirección (¡incluso los pasados!)",
@@ -199,7 +206,13 @@
         "trusted_instances_help": "Las instancias amistosas aparecerán en la barra de navegación en la parte superior de la página",
         "add_trusted_instance": "Añade una instancia de amigo",
         "instance_place_help": "Esta cadena se mostrará en el menú de las otras instancias amigas",
-        "delete_trusted_instance_confirm": "¿Realmente quieres borrar este elemento del menú de instancias amistosas?"
+        "delete_trusted_instance_confirm": "¿Realmente quieres borrar este elemento del menú de instancias amistosas?",
+        "new_announcement": "Nuevo anuncio",
+        "edit_place": "Editar lugar",
+        "delete_footer_link_confirm": "Seguro que quieres quitar este enlace?",
+        "footer_links": "Enlaces a pie de página",
+        "add_link": "Añadir enlace",
+        "is_dark": "Tema oscuro"
     },
     "auth": {
         "not_confirmed": "Todavía no hemos confirmado este email…",
@@ -233,9 +246,13 @@
     },
     "oauth": {
         "authorization_request": "La aplicación externa <code>{app}</code> requiere permiso para realizar las siguientes tareas en <code>{instance_name}</code>:",
-        "redirected_to": "Después de la confirmación será redirigido a la dirección <code>{url}</code>",
+        "redirected_to": "Después de la confirmación será redirigido a <code>{url}</code>",
         "scopes": {
             "event:write": "Publica/edita tus eventos"
         }
+    },
+    "validators": {
+        "email": "Introduce un correo electrónico valido",
+        "required": "{fieldName} es requerido"
     }
 }
