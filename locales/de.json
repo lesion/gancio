@@ -5,7 +5,7 @@
         "moderation": "Moderation",
         "follow": "Folgen",
         "feed_url_copied": "Öffne die kopierte Feed-URL in deinem RSS-Reader",
-        "feed": "RSS Feed",
+        "feed": "RSS-Feed",
         "embed_help": "Kopiere den folgenden Code in deine Webseite und die Veranstaltung wird wie hier angezeigt",
         "embed_title": "Bette diese Veranstaltung in deine Webseite ein",
         "embed": "Einbetten",
@@ -22,7 +22,7 @@
         "disable": "ausschalten",
         "enable": "einschalten",
         "cancel": "Abbrechen",
-        "ok": "Ok",
+        "ok": "OK",
         "new_user": "Neue:r Nutzer:in",
         "new_password": "Neues Passwort",
         "recover_password": "Passwort wiederherstellen",
@@ -32,7 +32,7 @@
         "edit_event": "Veranstaltung bearbeiten",
         "name": "Name",
         "share": "Teilen",
-        "logout": "Ausloggen",
+        "logout": "Abmelden",
         "preview": "Vorschau",
         "save": "Speichern",
         "activate": "Aktivieren",
@@ -53,7 +53,7 @@
         "register": "Registrieren",
         "password": "Passwort",
         "email": "E-Mail",
-        "login": "Login",
+        "login": "Anmelden",
         "media": "Dateien",
         "what": "Was",
         "when": "Wann",
@@ -62,6 +62,102 @@
         "send": "Abschicken",
         "export": "Exportieren",
         "next": "Weiter",
-        "add_event": "Veranstaltung hinzufügen"
+        "add_event": "Veranstaltung hinzufügen",
+        "import": "Importieren",
+        "reset": "Zurücksetzen",
+        "tags": "Markierung",
+        "place": "Ort",
+        "url": "URL",
+        "announcements": "Ankündigungen",
+        "delete": "Löschen",
+        "skip": "Überspringen",
+        "fediverse": "Fediverse",
+        "start": "Starten",
+        "pause": "Pausieren",
+        "event": "Veranstaltung",
+        "filter": "Filter",
+        "authorize": "Autorisieren",
+        "follow_me_title": "Folgen Sie den Aktualisierungen von Fediverse",
+        "federation": "Föderation",
+        "n_resources": "keine Ressource|eine Ressource|{n} Ressourcen",
+        "resources": "Ressourcen",
+        "info": "Infos"
+    },
+    "admin": {
+        "delete_footer_link_confirm": "Sicher, diesen Link zu entfernen?",
+        "footer_links": "Fußnotenlinks",
+        "add_link": "Link hinzufügen",
+        "is_dark": "Dunkles Design",
+        "delete_trusted_instance_confirm": "Wollen Sie dieses Element wirklich aus dem Menü der Freundinstanz löschen?",
+        "new_announcement": "Neue Ankündigung",
+        "edit_place": "Ort bearbeiten"
+    },
+    "settings": {
+        "update_confirm": "Wollen Sie Ihre Änderung speichern?",
+        "password_updated": "Passwort geändert.",
+        "change_password": "Passwort ändern",
+        "remove_account_confirm": "Sie sind dabei, Ihr Konto endgültig zu löschen",
+        "remove_account": "Durch Drücken der folgenden Schaltfläche wird Ihr Benutzerkonto gelöscht. Von Ihnen veröffentlichte Ereignisse werden nicht veröffentlicht.",
+        "danger_section": "Gefährlicher Abschnitt"
+    },
+    "auth": {
+        "fail": "Konnte sich nicht anmelden. Sind Sie sicher, dass das Passwort korrekt ist?",
+        "not_confirmed": "Noch nicht bestätigt …"
+    },
+    "error": {
+        "email_taken": "Diese E-Mail-Adresse wird schon verwendet.",
+        "nick_taken": "Dieser Benutzername wird bereits verwendet."
+    },
+    "confirm": {
+        "title": "Benutzerbestätigung",
+        "valid": "Ihr Konto ist bestätigt; Sie können sich jetzt <a href=\"/login\">anmelden</a>",
+        "not_valid": "Etwas ist schief gelaufen."
+    },
+    "validators": {
+        "required": "{fieldName} ist erforderlich",
+        "email": "Fügen Sie eine gültige E-Mail ein"
+    },
+    "ordinal": {
+        "-1": "letzte",
+        "5": "fünfte",
+        "4": "vierte",
+        "3": "dritte",
+        "2": "zweite",
+        "1": "erste"
+    },
+    "oauth": {
+        "scopes": {
+            "event:write": "Fügen Sie Ihre Ereignisse hinzu und bearbeiten Sie sie"
+        }
+    },
+    "event": {
+        "tag_description": "Markierung",
+        "description_description": "Beschreibung",
+        "what_description": "Titel",
+        "same_day": "am selben Tag",
+        "anon": "Anonym"
+    },
+    "register": {
+        "first_user": "Administrator erstellt",
+        "complete": "Die Registrierung muss bestätigt werden.",
+        "error": "Fehler: "
+    },
+    "export": {
+        "list_description": "Wenn Sie eine Website haben und eine Liste von Ereignissen anzeigen möchten, verwenden Sie den folgenden Code",
+        "ical_description": "Computer und Smartphones sind üblicherweise mit einer Kalenderanwendung ausgestattet, mit der ein Fernkalender importiert werden kann.",
+        "insert_your_address": "Geben Sie Ihre E-Mail-Adresse ein",
+        "email_description": "Sie können interessante Ereignisse per E-Mail erhalten."
+    },
+    "recover": {
+        "not_valid_code": "Etwas ist schief gelaufen."
+    },
+    "login": {
+        "ok": "Angemeldet",
+        "insert_email": "Geben Sie Ihre E-Mail-Adresse ein",
+        "error": "Anmeldung unmöglich. Überprüfen Sie Ihre Anmeldeinformationen.",
+        "forgot_password": "Passwort vergessen?",
+        "not_registered": "Nicht registriert?",
+        "check_email": "Überprüfen Sie Ihren E-Mail-Posteingang und Spam.",
+        "description": "Durch Anmelden können Sie neue Veranstaltungen veröffentlichen."
     }
 }
