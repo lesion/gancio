@@ -81,7 +81,8 @@
         "federation": "Föderation",
         "n_resources": "keine Ressource|eine Ressource|{n} Ressourcen",
         "resources": "Ressourcen",
-        "info": "Infos"
+        "info": "Infos",
+        "theme": "Thema"
     },
     "admin": {
         "delete_footer_link_confirm": "Sicher, diesen Link zu entfernen?",
@@ -146,7 +147,9 @@
         "list_description": "Wenn Sie eine Website haben und eine Liste von Ereignissen anzeigen möchten, verwenden Sie den folgenden Code",
         "ical_description": "Computer und Smartphones sind üblicherweise mit einer Kalenderanwendung ausgestattet, mit der ein Fernkalender importiert werden kann.",
         "insert_your_address": "Geben Sie Ihre E-Mail-Adresse ein",
-        "email_description": "Sie können interessante Ereignisse per E-Mail erhalten."
+        "email_description": "Sie können interessante Ereignisse per E-Mail erhalten.",
+        "feed_description": "Um Updates auf deinem Computer oder Smartphone zu erhalten, ohne regelmäßig diese Seite zu öffnen, kannst du RSS-Feeds benutzen. </p>\n\n<p> Mit RSS-Feeds nutzt du eine spezielle App, um Updates von den Seiten, die dich interessieren, zu erhalten. Damit kannst du rasch vielen Seiten folgen, ohne einen\nAccount erstellen zu müssen und ohne sonstige Komplikationen. </p>\n\n<li> Für Android-Geräte empfehlen wir <a href=\"https://f-droid.org/en/packages/net.frju.flym/\">Flym</a> oder Feeder </li>\n<li> Auf iPhones / iPads kannst du <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\"> Feed4U </a> nutzen</li>\n<li> Auf Desktop-PCs oder Laptops empfehlen wir Feedbro, den du in <a href=\"https://addons.mozilla.org/en-GB/firefox/addon/feedbroreader/\"> Firefox </a> oder <a \nref=\"https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa\"> Chrome </a> installieren kannst. </li>\n<br/>\nIndem du diesen Link deinem RSS-Feed-Reader hinzufügst, wirst du auf dem Laufenden gehalten.",
+        "intro": "Anders als unsoziale Netzwerke, die alles unternehmen, um Nutzer und deren Daten bei sich zu (be)halten, glauben wir, dass Informationen und Leute gleichermaßen frei sein müssen. Deshalb kannst du dich über Veranstaltungen auf dem Laufenden halten, ohne zwangsläufig über diese Seite zu gehen."
     },
     "recover": {
         "not_valid_code": "Etwas ist schief gelaufen."
