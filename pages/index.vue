@@ -4,22 +4,19 @@
     //- Announcements
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
+    //- Calendar and search bar
     v-row#calbarmb-2
       .col-xl-5.col-lg-5.col-md-6.col-sm-12.col-xs-12
-        v-date-picker(
-          @update:picker-date='monthChange'
-          @click:date='dayChange'
-          :locale='settings.locale'
-          :events='calendarEvents'
-          :value='date'
-          landscape)
+        //- this is needed as v-calendar does not support SSR
+        //- https://github.com/nathanreyes/v-calendar/issues/336
+        client-only
+          Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='events')
 
       .col
-        Search(
-          :filters='filters'
-          @update='updateFilters')
+        Search(:filters='filters' @update='updateFilters')
         v-chip(v-if='selectedDay' close @click:close='dayChange(selectedDay)') {{selectedDay}}
 
+    //- Events
     #events
       Event(v-for='event in events'
         :key='event.id' :event='event'
@@ -33,10 +30,11 @@ import dayjs from 'dayjs'
 import Event from '@/components/Event'
 import Announcement from '@/components/Announcement'
 import Search from '@/components/Search'
+import Calendar from '@/components/Calendar'
 
 export default {
   name: 'Index',
-  components: { Event, Search, Announcement },
+  components: { Event, Search, Announcement, Calendar },
   async asyncData ({ params, $api }) {
     const events = await $api.getEvents({
       start: dayjs().unix()
@@ -55,9 +53,6 @@ export default {
   },
   computed: {
     ...mapState(['settings', 'announcements']),
-    calendarEvents () {
-      return this.events.map(e => dayjs.unix(e.start_datetime).format('YYYY-MM-DD'))
-    }
   },
   methods: {
     ...mapActions(['setFilters']),
@@ -90,9 +85,8 @@ export default {
       this.filters = filters
       this.updateEvents()
     },
-    monthChange (monthYear) {
+    monthChange ({ year, month }) {
       this.selectedDay = null
-      const [year, month] = monthYear.split('-')
 
       // check if current month is selected
       if (month - 1 === dayjs().month()) {
