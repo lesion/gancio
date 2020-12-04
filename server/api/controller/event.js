@@ -418,7 +418,6 @@ const eventController = {
   },
 
   async _select ({ start, end, tags, places }) {
-    debug('_select start: %s, end: %s, tags: %s', dayjs.unix(start), end, tags)
     const where = {
       recurrent: null,
       // confirmed event only
@@ -504,7 +503,7 @@ const eventController = {
     if (frequency[1] === 'w') {
       cursor = cursor.day(start_date.day())
       if (cursor.isBefore(dayjs())) {
-        cursor = cursos.add(7, 'day')
+        cursor = cursor.add(7, 'day')
       }
       if (frequency[0] === 2) {
         cursor = cursor.add(7, 'day')
