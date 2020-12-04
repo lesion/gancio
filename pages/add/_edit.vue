@@ -34,16 +34,15 @@
 
               //- When
               DateInput.col-12(v-model='date')
-              HourInput.col-12(v-model='time')
 
               //- Description
               Editor.col-12.mb-3(
+                :label="$t('event.description_description')"
                 v-model='event.description'
                 :placeholder="$t('event.description_description')"
                 max-height='400px')
 
               //- MEDIA / FLYER / POSTER
-
               v-file-input.col-6.mt-3(
                 :label="$t('common.media')"
                 :hint="$t('event.media_description')"
@@ -84,7 +83,7 @@ export default {
   },
   async asyncData ({ params, $axios, error, store }) {
     if (params.edit) {
-      const data = { time: {}, event: { place: {} } }
+      const data = { event: { place: {} } }
       data.id = params.edit
       data.edit = true
       let event
@@ -97,24 +96,11 @@ export default {
 
       data.event.place.name = event.place.name
       data.event.place.address = event.place.address || ''
-      data.date = {}
-      if (event.multidate) {
-        const start = dayjs.unix(event.start_datetime).format('YYYY-MM-DD')
-        const end = dayjs.unix(event.end_datetime).format('YYYY-MM-DD')
-        data.date = {
-          type: 'multidate',
-          date: [start, end]
-        }
-      } else if (event.recurrent) {
-        data.date.type = 'recurrent'
-        data.date.recurrent = event.recurrent
-      } else {
-        data.date.type = 'normal'
-        data.date.date = dayjs.unix(event.start_datetime).format('YYYY-MM-DD')
+      data.date = {
+        recurrent: event.recurrent,
+        from: new Date(dayjs.unix(event.start_datetime)),
+        due: new Date(dayjs.unix(event.end_datetime))
       }
-
-      data.time.start = dayjs.unix(event.start_datetime).format('HH:mm')
-      data.time.end = dayjs.unix(event.end_datetime).format('HH:mm')
 
       data.event.title = event.title
       data.event.description = event.description
@@ -131,23 +117,25 @@ export default {
       valid: false,
       openImportDialog: false,
       event: {
-        type: 'normal',
         place: { name: '', address: '' },
         title: '',
         description: '',
         tags: [],
-        image: null,
-        recurrent: { frequency: '1m', days: [], type: 'weekday_desc' }
+        image: null
       },
       page: { month, year },
       fileList: [],
       id: null,
-      date: { type: 'normal', recurrent: {} },
-      time: { start: null, end: null },
+      date: { from: 0, due: 0, recurrent: null },
       edit: false,
       loading: false,
       mediaUrl: '',
       disableAddress: false
+    }
+  },
+  head () {
+    return {
+      title: `${this.settings.title} - ${this.$t('common.add_event')}`
     }
   },
   computed: {
@@ -158,46 +146,16 @@ export default {
     eventImported (event) {
       this.event = Object.assign(this.event, event)
     },
-    // recurrentDays () {
-    //   if (this.event.type !== 'recurrent' || !this.date || !this.date.length) { return }
-    //   const type = this.event.recurrent.type
-    //   if (type === 'ordinal') { return map(this.date, d => dayjs(d).date()) } else if (type === 'weekday') { return map(this.date, d => dayjs(d).day() + 1) }
-    // },
-    // },
     cleanFile () {
       this.event.image = {}
     },
     async done () {
       if (!this.$refs.form.validate()) { return }
       this.loading = true
-      let start_datetime, end_datetime
-      const [start_hour, start_minute] = this.time.start.split(':')
-      if (!this.time.end) {
-        this.time.end = (Number(start_hour) + 2) + ':' + start_minute
-      }
-      const [end_hour, end_minute] = this.time.end.split(':')
 
       const formData = new FormData()
 
-      if (this.date.type === 'multidate') {
-        start_datetime = dayjs(this.date.date[0])
-          .hour(start_hour).minute(start_minute)
-        end_datetime = dayjs(this.date.date[1])
-          .hour(end_hour).minute(end_minute)
-      } else if (this.date.type === 'normal') {
-        start_datetime = dayjs(this.date.date).hour(start_hour).minute(start_minute)
-        end_datetime = dayjs(this.date.date).hour(end_hour).minute(end_minute)
-        if (end_hour < start_hour) {
-          end_datetime = end_datetime.add(1, 'day')
-        }
-      } else if (this.date.type === 'recurrent') {
-        start_datetime = dayjs(this.date.date).set('hour', start_hour).set('minute', start_minute)
-        end_datetime = dayjs(this.date.date).set('hour', end_hour).set('minute', end_minute)
-        if (end_hour < start_hour) {
-          end_datetime = end_datetime.add(1, 'day')
-        }
-        formData.append('recurrent', JSON.stringify(this.date.recurrent))
-      }
+      formData.append('recurrent', JSON.stringify(this.date.recurrent))
 
       if (this.event.image) {
         formData.append('image', this.event.image)
@@ -206,9 +164,9 @@ export default {
       formData.append('place_name', this.event.place.name)
       formData.append('place_address', this.event.place.address)
       formData.append('description', this.event.description)
-      formData.append('multidate', this.date.type === 'multidate')
-      formData.append('start_datetime', start_datetime.unix())
-      formData.append('end_datetime', end_datetime.unix())
+      // formData.append('multidate', this.date.type === 'multidate')
+      formData.append('start_datetime', dayjs(this.date.from).unix())
+      formData.append('end_datetime', this.date.due && dayjs(this.date.due).unix())
 
       if (this.edit) {
         formData.append('id', this.event.id)
@@ -222,7 +180,6 @@ export default {
         }
         this.updateMeta()
         this.$router.replace('/')
-        this.loading = false
         this.$root.$message(this.$auth.loggedIn ? 'event.added' : 'event.added_anon', { color: 'success' })
       } catch (e) {
         switch (e.request.status) {
@@ -234,11 +191,6 @@ export default {
         }
         this.loading = false
       }
-    }
-  },
-  head () {
-    return {
-      title: `${this.settings.title} - ${this.$t('common.add_event')}`
     }
   }
 }

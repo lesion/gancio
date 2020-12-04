@@ -1,41 +1,48 @@
 <template lang="pug">
 v-row
+  v-date-picker.col-md-6(
+    mode='dateTime'
+    :input-debounce="200"
+    :min='today'
+    :minute-increment="5"
+    is-dark
+    is-expanded
+    @input='v => change("from", v)'
+    :value="value.from"
+    :locale='$i18n.locale')
+    template(v-slot="{ inputValue, inputEvents }")
+      v-text-field(
+        :value='inputValue'
+        :label="$t('event.from')"
+        :rules="[$validators.required('common.when')]"
+        :hint="$t(`event.description`)"
+        ref='date'
+        prepend-icon='mdi-calendar'
+        persistent-hint
+        readonly
+        v-on="inputEvents")
 
-    v-btn-toggle.col-md-4(@change='changeType' color='primary' :value='value.type')
-      v-btn(value='normal') {{$t('event.normal')}}
-      v-btn(value='multidate') {{$t('event.multidate')}}
-      v-menu(v-if='settings.allow_recurrent_event' offset-y open-on-hover)
-        template(v-slot:activator="{ on, attrs }")
-          v-btn(value='recurrent' v-on='on') {{$t('event.recurrent')}}
-        v-list
-          v-list-item(v-for='f in frequencies' :key='f.value'
-            @click='selectFrequency(f.value)') {{f.text}}
+  v-date-picker.col-md-4(
+    mode='dateTime'
+    :minute-increment="5"
+    :input-debounce="200"
+    :min='today'
+    is-dark
+    is-expanded
+    @input='v => change("due", v)'
+    :value="value.due"
+    :locale='$i18n.locale')
+    template(v-slot="{ inputValue, inputEvents }")
+      v-text-field(
+        :value='inputValue'
+        :label="$t('event.from')"
+        :hint="$t(`event.description`)"
+        ref='date'
+        prepend-icon='mdi-calendar'
+        persistent-hint
+        readonly
+        v-on="inputEvents")
 
-    v-menu(
-      v-model="datePickerMenu"
-      :close-on-content-click="false"
-      :nudge-right="40"
-      transition="scale-transition"
-      offset-y
-      min-width="290px"
-    )
-      template(v-slot:activator="{ on, attrs }")
-        v-text-field.col-md-8(
-          :value='value.date'
-          :label="$t('common.when')"
-          :rules="[$validators.required('common.when')]"
-          prepend-icon='mdi-calendar'
-          readonly
-          v-bind="attrs"
-          v-on="on")
-      v-date-picker(
-        :min='today'
-        :value="value.date"
-        :range="value.type === 'multidate'"
-        :locale='settings.locale'
-        @input="pick")
-
-    p.col-12 {{$t(`event.${value.type}_description`)}}
     //- v-btn-toggle(v-if="type === 'recurrent'" v-model='value.recurrent.frequency' color='primary')
     //-   v-btn(v-for='f in frequencies' :value='f.value') {{f.text}}
 
@@ -50,11 +57,23 @@ v-row
     //-     is-expanded
     //-     :min-date='type !== "recurrent" && new Date()')
 
-    div.text-center.mb-2(v-if='value.type === "recurrent"')
-      span(v-if='value.recurrent.frequency !== "1m" && value.recurrent.frequency !== "2m"') {{whenPatterns}}
-      v-btn-toggle.mt-1(v-else v-model='value.recurrent.type' color='primary')
-        v-btn(v-for='whenPattern in whenPatterns' :value='whenPattern.key' :key='whenPatterns.key' small)
-          span {{whenPattern.label}}
+    //- v-btn-toggle.col-md-4(@change='changeType' color='primary' :value='value.type')
+    //-   v-btn(value='normal') {{$t('event.normal')}}
+    //-   v-btn(value='multidate') {{$t('event.multidate')}}
+  v-switch.col-md-2(v-model='is_recurrent' :label="$t('event.recurrent')" inset)
+  v-menu(v-if='settings.allow_recurrent_event && is_recurrent' offset-y open-on-hover)
+    template(v-slot:activator="{ on, attrs }")
+      v-btn.col-md-2.mt-2(color='primary' value='recurrent' v-on='on') {{$t('event.recurrent')}}
+    v-list
+      v-list-item-group(color='primary' v-model='frequency')
+        v-list-item(v-for='f in frequencies' :key='f.value'
+          @click='selectFrequency(f.value)') {{f.text}}
+
+    //- div.text-center.mb-2(v-if='value.type === "recurrent"')
+    //-   span(v-if='value.recurrent.frequency !== "1m" && value.recurrent.frequency !== "2m"') {{whenPatterns}}
+    //-   v-btn-toggle.mt-1(v-else v-model='value.recurrent.type' color='primary')
+    //-     v-btn(v-for='whenPattern in whenPatterns' :value='whenPattern.key' :key='whenPatterns.key' small)
+    //-       span {{whenPattern.label}}
 
     //- List(v-if='type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
 
@@ -68,14 +87,13 @@ export default {
   name: 'WhenInput',
   components: { List },
   props: {
-    value: { type: Object, default: () => ({ date: null, type: 'normal', recurrent: {} }) }
+    value: { type: Object, default: () => ({ from: null, due: null, recurrent: null }) }
   },
   data () {
     return {
-      datePickerMenu: false,
+      is_recurrent: false,
       today: dayjs().format('YYYY-MM-DD'),
-      type: 'normal',
-      recurrent: { },
+      frequency: '',
       frequencies: [
         { value: '1w', text: this.$t('event.each_week') },
         { value: '2w', text: this.$t('event.each_2w') },
@@ -85,14 +103,6 @@ export default {
   },
   computed: {
     ...mapState(['settings', 'events']),
-    datePickerMode () {
-      const modeMap = {
-        multidate: 'range',
-        normal: 'single',
-        recurrent: 'single'
-      }
-      return modeMap[this.type]
-    },
     whenPatterns () {
       if (!this.value.date) { return }
       const date = dayjs(this.value.date)
@@ -138,97 +148,28 @@ export default {
       }
       return ''
     }
-    // todayEvents () {
-    //   if (this.type === 'multidate') {
-    //     if (!this.date || !this.date.start) { return }
-    //     const date_start = dayjs(this.date.start)
-    //     const date_end = dayjs(this.date.end)
-    //     return this.events.filter(e =>
-    //       !e.multidate
-    //         ? date_start.isSame(dayjs.unix(e.start_datetime), 'day') ||
-    //         (date_start.isBefore(dayjs.unix(e.start_dateime)) && date_end.isAfter(dayjs.unix(e.start_datetime)))
-    //         : date_start.isSame(dayjs.unix(e.start_datetime), 'day') || date_start.isSame(dayjs.unix(e.end_datetime)) ||
-    //         (date_start.isAfter(dayjs.unix(e.start_datetime)) && date_start.isBefore(dayjs.unix(e.end_datetime))))
-    //   } else if (this.type === 'recurrent') {
-    //     return []
-    //   } else {
-    //     const date = dayjs(this.date)
-    //     return this.events.filter(e =>
-    //       !e.multidate
-    //         ? !e.recurrent && date.isSame(dayjs.unix(e.start_datetime), 'day')
-    //         : dayjs.unix(e.start_datetime).isSame(date, 'day') ||
-    //           (dayjs.unix(e.start_datetime).isBefore(date) && dayjs.unix(e.end_datetime).isAfter(date))
-    //     )
-    //   }
-    // },
-    // attributes () {
-    //   let attributes = []
-    //   // attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'red' } })
-
-    //   const date = dayjs(this.date)
-    //   const start = date.toDate()
-    //   attributes = attributes.concat(this.events
-    //     .filter(e => !e.multidate && (!e.parentId || this.type === 'recurrent'))
-    //     .map(e => ({ key: e.id, dot: { color: this.type === 'recurrent' ? 'orange' : 'green' }, dates: dayjs.unix(e.start_datetime).toDate() })))
-
-    //   if (this.type === 'recurrent' && this.date && this.date.length) {
-    //     let dates = {}
-    //     if (this.recurrent.frequency !== '1m') {
-    //       dates = {
-    //         weeklyInterval: this.recurrent.frequency === '1w' ? 1 : 2,
-    //         weekdays: date.day(),
-    //         start
-    //       }
-    //     } else if (this.recurrent.type === 'ordinal') {
-    //       const day = date.date()
-    //       dates = {
-    //         monthlyInterval: 1,
-    //         start,
-    //         days
-    //       }
-    //     } else if (this.recurrent.type === 'weekday') {
-    //       dates = {
-    //         monthlyInterval: 1,
-    //         start,
-    //         days: [Math.floor((date.day() - 1 / 7) + 1), date.day()]
-    //       }
-    //     } else {
-    //       dates = {
-    //         monthlyInterval: 1,
-    //         start,
-    //         days: [-1, date.day()]
-    //       }
-    //     }
-    //     attributes.push({
-    //       key: 'recurrent',
-    //       dot: { color: 'orange' },
-    //       dates
-    //     })
-    //   }
-    //   attributes = attributes.concat(this.events
-    //     .filter(e => e.multidate && !e.parentId)
-    //     .map(e => ({
-    //       key: e.id,
-    //       highlight: {},
-    //       dates: { start: dayjs.unix(e.start_datetime).toDate(), end: dayjs.unix(e.end_datetime).toDate() }
-    //     })))
-
-    //   return attributes
-    // }
   },
   methods: {
+    change (what, date) {
+      const v = this.value
+      v[what] = date
+      this.$emit('input', v)
+    },
     changeType (type) {
-      this.$emit('input', { type: type || 'normal', date: undefined })
+      this.$emit('input', { date: null, recurrent: {} })
+      if (type !== 'recurrent') {
+        this.frequency = ''
+      }
     },
     selectFrequency (f) {
-      this.$emit('input', { recurrent: { frequency: f }, date: null, type: 'recurrent' })
-    },
-    pick (date) {
-      if (this.value.type === 'normal' || this.value.type === 'recurrent' || this.value.date.length === 2) {
-        this.datePickerMenu = false
-      }
-      this.$emit('input', { date, type: this.value.type, recurrent: this.value.recurrent })
+      this.$emit('input', { recurrent: { frequency: f }, date: null })
     }
+    // pick (date) {
+    //   if (this.value.type === 'normal' || this.value.type === 'recurrent' || (this.value.date && this.value.date.length === 2)) {
+    //     this.datePickerMenu = false
+    //   }
+    //   this.$emit('input', { date, recurrent: this.value.recurrent })
+    // }
   }
 }
 </script>
