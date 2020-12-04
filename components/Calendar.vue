@@ -3,6 +3,7 @@
     v-calendar(
       title-position='left'
       :is-dark="settings['theme.is_dark']"
+      :columns="$screens({ default: 1, md: 2 })"
       @update:from-page='updatePage'
       :locale='$i18n.locale'
       :attributes='attributes'
@@ -13,7 +14,7 @@
 
 </template>
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import dayjs from 'dayjs'
 import { take, get } from 'lodash'
 
@@ -34,14 +35,13 @@ export default {
 
     // TODO: could be better
     attributes () {
-      const colors = ['green', 'orange', 'yellow', 'teal', 'indigo', 'blue', 'red', 'purple', 'pink', 'gray']
+      const colors = ['blue', 'orange', 'yellow', 'teal', 'indigo', 'green', 'red', 'purple', 'pink', 'gray']
       const tags = take(this.tags, 10).map(t => t.tag)
       let attributes = []
-      attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'green' } })
+      attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'green', fillMode: 'outline' } })
 
-      const that = this
       function getColor (event) {
-        const color = { class: event.past && !that.filters.show_past_events && !that.in_past ? 'past-event vc-rounded-full' : 'vc-rounded-full', color: 'blue' }
+        const color = { class: 'vc-rounded-full', color: 'blue', fillMode: 'outline' }
         const tag = get(event, 'tags[0]')
         if (!tag) { return color }
         const idx = tags.indexOf(tag)
