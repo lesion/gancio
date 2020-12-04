@@ -20,17 +20,26 @@
         template(v-slot:activator="{on}")
           v-btn(icon v-on='on' color='primary')
             v-icon mdi-dots-vertical
-        v-list
-          v-list-item
-            v-list-item-title test
-
+        v-list(dense)
+          v-list-item-group
+            v-list-item(v-clipboard:success='copyLink'
+                  v-clipboard:copy='`${settings.baseurl}/event/${event.id}`')
+              v-list-item-icon
+                v-icon mdi-content-copy
+              v-list-item-content
+                v-list-item-title {{$t('common.copy_link')}}
+            v-list-item(:href='`/api/event/${event.id}.ics`')
+              v-list-item-icon
+                v-icon mdi-calendar-export
+              v-list-item-content
+                v-list-item-title {{$t('common.add_to_calendar')}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
 
 export default {
   props: {
-    event: { type: Object, default: () => ({}) },
+    event: { type: Object, default: () => ({}) }
   },
   computed: {
     ...mapState(['settings']),
@@ -40,6 +49,9 @@ export default {
   },
   methods: {
     ...mapActions(['setSearchTags', 'setSearchPlaces']),
+    copyLink () {
+      this.$root.$message('common.copied', { color: 'success' })
+    },
     addTag (tag) {
       if (this.filters.tags.includes(tag)) {
         this.setSearchTags(this.filters.tags.filter(t => t !== tag))
