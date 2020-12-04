@@ -19,6 +19,8 @@
       multiple)
       template(v-slot:selection="data")
         v-chip(v-bind="data.attrs"
+          close
+          @click:close='remove(data.item)'
           :input-value="data.selected")
           v-avatar(left)
             v-icon {{data.item.type === 'place' ? 'mdi-map-marker' : 'mdi-tag' }}
@@ -62,6 +64,13 @@ export default {
     }
   },
   methods: {
+    remove (item) {
+      const filters = {
+        tags: item.type === 'tag' ? this.filters.tags.filter(f => f !== item.id) : this.filters.tags,
+        places: item.type === 'place' ? this.filters.places.filter(f => f !== item.id) : this.filters.places
+      }
+      this.$emit('update', filters)
+    },
     change (filters) {
       filters = {
         tags: filters.filter(t => t.type === 'tag').map(t => t.id),
