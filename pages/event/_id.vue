@@ -56,18 +56,6 @@ v-container
                   v-btn.ml-2(large icon v-on='on' color='primary'
                     :href='`/api/event/${event.id}.ics`')
                     v-icon mdi-calendar-export
-            //- v-list
-              v-list-item(link)
-                v-list-item-content.primary--text.text-uppercase(
-                    v-clipboard:success='copyLink'
-                    v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') {{$t('common.copy_link')}}
-
-              v-list-item(link)
-                v-list-item-content.primary--text.text-uppercase(@click='showEmbed=true' text color='primary') {{$t('common.embed')}}
-
-              v-list-item(link :href='`/api/event/${event.id}.ics`')
-                v-list-item-content.primary--text.text-uppercase
-                //- v-btn(nuxt block link :href='`/api/event/${event.id}.ics`' text color='primary') {{$t('common.add_to_calendar')}}
 
       .p-description.text-h6(v-html='event.description')
       v-chip.p-category.ml-1(v-for='tag in event.tags' color='primary'
