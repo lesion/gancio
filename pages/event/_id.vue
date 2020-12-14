@@ -249,7 +249,21 @@ export default {
       )
     }
   },
+  mounted () {
+    window.addEventListener('keydown', this.keyDown)
+  },
+  destroyed () {
+    window.removeEventListener('keydown', this.keyDown)
+  },
   methods: {
+    keyDown (ev) {
+      if (ev.key === 'ArrowRight' && this.event.next) {
+        this.$router.push(`/event/${this.event.next}`)
+      }
+      if (ev.key === 'ArrowLeft' && this.event.prev) {
+        this.$router.push(`/event/${this.event.prev}`)
+      }
+    },
     showResource (resource) {
       this.showResources = true
       this.selectedResource = resource
