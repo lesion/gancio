@@ -41,7 +41,6 @@ class Task {
 
 class TaskManager {
   constructor () {
-    this.interval = 60 * 1000
     this.tasks = []
   }
 
@@ -90,7 +89,7 @@ const TS = new TaskManager()
 TS.add(new Task({
   name: 'RECURRENT_EVENT',
   method: eventController._createRecurrent,
-  repeatEach: 10 // check each 10 minutes
+  repeatEach: 1 // check each 10 minutes
 }))
 
 // daily morning notification

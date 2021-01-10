@@ -2,6 +2,7 @@
 v-row
   v-date-picker.col-md-6(
     mode='dateTime'
+    is24hr
     :input-debounce="200"
     :min='today'
     :minute-increment="5"
@@ -15,7 +16,6 @@ v-row
         :value='inputValue'
         :label="$t('event.from')"
         :rules="[$validators.required('common.when')]"
-        :hint="$t(`event.description`)"
         ref='date'
         prepend-icon='mdi-calendar'
         persistent-hint
@@ -24,6 +24,7 @@ v-row
 
   v-date-picker.col-md-4(
     mode='dateTime'
+    is24hr
     :minute-increment="5"
     :input-debounce="200"
     :min='today'
@@ -35,8 +36,7 @@ v-row
     template(v-slot="{ inputValue, inputEvents }")
       v-text-field(
         :value='inputValue'
-        :label="$t('event.from')"
-        :hint="$t(`event.description`)"
+        :label="$t('event.due')"
         ref='date'
         prepend-icon='mdi-calendar'
         persistent-hint
@@ -60,20 +60,19 @@ v-row
     //- v-btn-toggle.col-md-4(@change='changeType' color='primary' :value='value.type')
     //-   v-btn(value='normal') {{$t('event.normal')}}
     //-   v-btn(value='multidate') {{$t('event.multidate')}}
-  v-switch.col-md-2(v-model='is_recurrent' :label="$t('event.recurrent')" inset)
-  v-menu(v-if='settings.allow_recurrent_event && is_recurrent' offset-y open-on-hover)
-    template(v-slot:activator="{ on, attrs }")
-      v-btn.col-md-2.mt-2(color='primary' value='recurrent' v-on='on') {{$t('event.recurrent')}}
-    v-list
-      v-list-item-group(color='primary' v-model='frequency')
-        v-list-item(v-for='f in frequencies' :key='f.value'
-          @click='selectFrequency(f.value)') {{f.text}}
+  v-switch.col-md-2(:input-value='isRecurrent' :label="$t('event.recurrent')" inset @change='updateRecurrent')
+  //- v-menu(v-if='settings.allow_recurrent_event && isRecurrent' offset-y open-on-hover)
+  //-   template(v-slot:activator="{ on, attrs }")
+  //-     v-btn.col-md-2.mt-2(color='primary' value='recurrent' v-on='on') {{$t('event.recurrent')}}
+  //- v-btn-group(v-if='settings.allow_recurrent_event && isRecurrent')
+  v-btn-toggle.col-md-12(dense group text link v-if='isRecurrent' color='primary' v-model='value.recurrent.frequency')
+    v-btn(text link v-for='f in frequencies' :key='f.value' :value='f.value'
+      @click='selectFrequency(f.value)') {{f.text}}
 
-    //- div.text-center.mb-2(v-if='value.type === "recurrent"')
-    //-   span(v-if='value.recurrent.frequency !== "1m" && value.recurrent.frequency !== "2m"') {{whenPatterns}}
-    //-   v-btn-toggle.mt-1(v-else v-model='value.recurrent.type' color='primary')
-    //-     v-btn(v-for='whenPattern in whenPatterns' :value='whenPattern.key' :key='whenPatterns.key' small)
-    //-       span {{whenPattern.label}}
+  div.col-md-12(v-if='isRecurrent')
+    p(v-if='value.recurrent.frequency !== "1m" && value.recurrent.frequency !== "2m"') 🡲 {{whenPatterns}}
+    v-btn-toggle(v-else dense group v-model='value.recurrent.type' color='primary')
+      v-btn(text link v-for='whenPattern in whenPatterns' :value='whenPattern.key' :key='whenPatterns.key') {{whenPattern.label}}
 
     //- List(v-if='type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
 
@@ -91,7 +90,6 @@ export default {
   },
   data () {
     return {
-      is_recurrent: false,
       today: dayjs().format('YYYY-MM-DD'),
       frequency: '',
       frequencies: [
@@ -103,17 +101,19 @@ export default {
   },
   computed: {
     ...mapState(['settings', 'events']),
+    isRecurrent () {
+      return !!this.value.recurrent
+    },
     whenPatterns () {
-      if (!this.value.date) { return }
-      const date = dayjs(this.value.date)
+      if (!this.value.from) { return }
+      const date = dayjs(this.value.from)
 
       const freq = this.value.recurrent.frequency
       const weekDay = date.format('dddd')
       if (freq === '1w' || freq === '2w') {
-        return this.$t(`event.recurrent_${freq}_days`, { days: weekDay })
+        return this.$t(`event.recurrent_${freq}_days`, { days: weekDay }).toUpperCase()
       } else if (freq === '1m' || freq === '2m') {
         const monthDay = date.format('D')
-
         const n = Math.floor((monthDay - 1) / 7) + 1
 
         const patterns = [
@@ -150,19 +150,16 @@ export default {
     }
   },
   methods: {
+    updateRecurrent (value) {
+      this.$emit('input', { ...this.value, recurrent: value ? {} : null })
+    },
     change (what, date) {
       const v = this.value
       v[what] = date
       this.$emit('input', v)
     },
-    changeType (type) {
-      this.$emit('input', { date: null, recurrent: {} })
-      if (type !== 'recurrent') {
-        this.frequency = ''
-      }
-    },
     selectFrequency (f) {
-      this.$emit('input', { recurrent: { frequency: f }, date: null })
+      this.$emit('input', { recurrent: { frequency: f }, from: this.value.from, due: this.value.due })
     }
     // pick (date) {
     //   if (this.value.type === 'normal' || this.value.type === 'recurrent' || (this.value.date && this.value.date.length === 2)) {

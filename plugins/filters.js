@@ -38,13 +38,13 @@ export default ({ app, store }) => {
 
   Vue.filter('recurrentDetail', event => {
     const parent = event.parent
-    const { frequency, days, type } = parent.recurrent
+    const { frequency, type } = parent.recurrent
     let recurrent
     if (frequency === '1w' || frequency === '2w') {
       recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: dayjs.unix(parent.start_datetime).format('dddd') })
     } else if (frequency === '1m' || frequency === '2m') {
-      const d = type === 'ordinal' ? days : days.map(d => dayjs().day(d - 1).format('dddd'))
-      recurrent = app.i18n.tc(`event.recurrent_${frequency}_${type}`, days.length, { days: d })
+      const d = type === 'ordinal' ? dayjs.unix(parent.start_datetime).date() : dayjs.unix(parent.start_datetime).format('dddd')
+      recurrent = app.i18n.tc(`event.recurrent_${frequency}_${type}`, d)
     }
     return recurrent
   })

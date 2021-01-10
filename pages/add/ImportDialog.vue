@@ -2,7 +2,8 @@
   v-card(color='secondary')
     v-card-title {{$t('common.import')}}
     v-card-text
-      v-form(v-model='valid' ref='form' lazy-validation)
+      p(v-html="$t('event.import_description')")
+      v-form(v-model='valid' ref='form' lazy-validation @submit.prevent='importGeneric')
         v-text-field(v-model='URL'
           :label="$t('common.url')"
           :hint="$t('event.import_URL')"
@@ -18,7 +19,7 @@
           persistent-hint
         )
 
-      p {{event}}
+      p {{events}}
     v-card-actions
       v-spacer
       v-btn(@click='$emit("close")' color='warning') {{$t('common.cancel')}}
@@ -39,7 +40,7 @@ export default {
       loading: false,
       valid: false,
       URL: '',
-      event: {}
+      events: {}
     }
   },
   methods: {
@@ -54,8 +55,7 @@ export default {
       const reader = new FileReader()
       reader.readAsText(this.file)
       reader.onload = () => {
-        const data = reader.result
-        const event = ical.parse(data)
+        const event = ical.parse(reader.result)
         this.event = {
           title: event.name
         }
@@ -73,9 +73,9 @@ export default {
 
       try {
         const ret = await this.$axios.$get('/event/import', { params: { URL: this.URL } })
-        this.event = ret
+        this.events = ret
         // check if contain an h-event
-        this.$emit('imported', ret)
+        // this.$emit('imported', ret)
       } catch (e) {
         console.error(e)
         this.error = true

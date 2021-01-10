@@ -1,3 +1,4 @@
+const ical = require('ical.js')
 const settingsController = require('./api/controller/settings')
 const acceptLanguage = require('accept-language')
 
@@ -114,31 +115,56 @@ module.exports = {
     })
   },
 
+  /**
+   * Import events from url
+   * It does supports ICS and H-EVENT
+   */
   async importURL (req, res) {
     const URL = req.query.URL
     try {
       const response = await axios.get(URL)
-      Microformats.get({ html: response.data, filter: ['h-event'] }, (err, data) => {
-        if (err || !data.items.length || !data.items[0].properties) {
-          return res.sendStatus(404)
-        }
-        const event = data.items[0].properties
-        return res.json({
-          title: get(event, 'name[0]', ''),
-          description: get(event, 'content[0]', ''),
-          place: get(event, 'location[0].properties.name', ''),
-          address: get(event, 'location[0].properties.street-address'),
-          start: get(event, 'start[0]', ''),
-          end: get(event, 'end[0]', ''),
-          tags: get(event, 'category', []),
-          image: get(event, 'featured[0]')
+      const contentType = response.headers['content-type']
+
+      if (contentType.includes('text/html')) {
+        Microformats.get({ html: response.data, filter: ['h-event'] }, (err, data) => {
+          if (err || !data.items.length || !data.items[0].properties) {
+            return res.sendStatus(404)
+          }
+          const events = data.items.map(e => {
+            const props = e.properties
+            return {
+              title: get(props, 'name[0]', ''),
+              description: get(props, 'description[0]', ''),
+              place: get(props, 'location[0].properties.name', ''),
+              address: get(props, 'location[0].properties.street-address'),
+              start: get(props, 'start[0]', ''),
+              end: get(props, 'end[0]', ''),
+              tags: get(props, 'category', []),
+              image: get(props, 'featured[0]')
+            }
+          })
+          return res.json(events)
         })
-      })
+      } else if (contentType.includes('text/calendar')) {
+        const ret = ical.parse(response.data)
+        const component = new ical.Component(ret)
+        const events = component.getAllSubcomponents('vevent')
+        return res.json(events.map(e => {
+          const event = new ical.Event(e)
+          return {
+            title: get(event, 'summary', ''),
+            description: get(event, 'description', ''),
+            place: get(event, 'location', ''),
+            start: get(event, 'dtstart', ''),
+            end: get(event, 'dtend', '')
+          }
+        }))
+      }
       // const event = dom.window.document.querySelected(".h-event")
       // console.error(event)
       // console.error(response)
     } catch (e) {
-      console.error(e)
+      debug(e)
     }
 
     // res.json('ok')

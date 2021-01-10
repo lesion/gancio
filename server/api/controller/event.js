@@ -4,10 +4,11 @@ const config = require('config')
 const fs = require('fs')
 const { Op } = require('sequelize')
 const _ = require('lodash')
-const helpers = require('../../helpers')
 const linkifyHtml = require('linkifyjs/html')
 const Sequelize = require('sequelize')
 const dayjs = require('dayjs')
+const helpers = require('../../helpers')
+const settingsController = require('./settings')
 
 const Event = require('../models/event')
 const Resource = require('../models/resource')
@@ -417,19 +418,25 @@ const eventController = {
     }
   },
 
-  async _select ({ start, end, tags, places }) {
+  async _select ({ start, end, tags, places, show_recurrent }) {
     const where = {
+      // do not include parent recurrent event
       recurrent: null,
+
       // confirmed event only
       is_visible: true,
+
       [Op.or]: {
-        start_datetime: { [Op.gt]: start },
-        end_datetime: { [Op.gt]: start }
+        start_datetime: { [Op.gte]: start },
+        end_datetime: { [Op.gte]: start }
       }
     }
 
+    if (!show_recurrent) {
+      where.parentId = null
+    }
     if (end) {
-      where.start_datetime = { [Op.lt]: end }
+      where.start_datetime = { [Op.lte]: end }
     }
 
     if (places) {
@@ -470,9 +477,11 @@ const eventController = {
     const end = req.query.end
     const tags = req.query.tags
     const places = req.query.places
+    const show_recurrent = settingsController.settings.allow_recurrent_event &&
+      (typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settingsController.settings.recurrent_event_visible)
 
     res.json(await eventController._select({
-      start, end, places, tags
+      start, end, places, tags, show_recurrent
     }))
   },
 
@@ -497,20 +506,37 @@ const eventController = {
     const frequency = recurrent.frequency
     const type = recurrent.type
 
+    debug(`NOW IS ${cursor} while event is at ${start_date} (freq: ${frequency})`)
+
     cursor = cursor.hour(start_date.hour()).minute(start_date.minute()).second(0)
+    debug(`set cursor to correct date and hour => ${cursor}`)
 
     // each week or 2
     if (frequency[1] === 'w') {
       cursor = cursor.day(start_date.day())
+      debug(`Imposto il giorno della settimana ${cursor}`)
       if (cursor.isBefore(dayjs())) {
         cursor = cursor.add(7, 'day')
       }
-      if (frequency[0] === 2) {
+      if (frequency[0] === '2') {
         cursor = cursor.add(7, 'day')
       }
     } else if (frequency === '1m') {
       if (type === 'ordinal') {
         cursor = cursor.date(start_date.date())
+
+        if (cursor.isBefore(dayjs())) {
+          cursor = cursor.add(1, 'month')
+        }
+      } else { // weekday
+        const monthDay = start_date.format('D')
+        const n = Math.floor((monthDay - 1) / 7) + 1
+        cursor = cursor.startOf('month')
+        cursor = cursor.add(n, 'week')
+        cursor = cursor.day(start_date.day())
+        if (cursor.isBefore(dayjs())) {
+          cursor = cursor.add(1, 'month')
+        }
       }
     }
 
@@ -529,7 +555,6 @@ const eventController = {
       include: [{ model: Event, as: 'child', required: false, where: { start_datetime: { [Op.gte]: start_datetime } } }],
       order: ['start_datetime']
     })
-
     // filter events that as no instance in future yet
     const creations = events
       .filter(e => e.child.length === 0)

@@ -2,7 +2,7 @@
 v-container
   //- EVENT PAGE
   //- gancio supports microformats (http://microformats.org/wiki/h-event)
-  v-card.h-event(v-on:keyup="$router.push(`/event/${event.next}`)")
+  v-card.h-event
     v-card-text
 
       //- admin controls
@@ -32,7 +32,8 @@ v-container
               time.dt-start.text-h5(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')
                 v-icon mdi-calendar
                 b.ml-2 {{event|when}}
-              p.subtitle-1 {{event.start_datetime|from}}
+              div.subtitle-1 {{event.start_datetime|from}}
+                small(v-if='event.parentId')  ({{event|recurrentDetail}})
 
               .text-h5.p-location
                 v-icon mdi-map-marker

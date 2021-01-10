@@ -6,7 +6,7 @@
 
     //- Calendar and search bar
     v-row#calbarmb-2
-      .col-xl-5.col-lg-5.col-md-6.col-sm-12.col-xs-12
+      .col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12
         //- this is needed as v-calendar does not support SSR
         //- https://github.com/nathanreyes/v-calendar/issues/336
         client-only
@@ -14,12 +14,11 @@
 
       .col
         Search(:filters='filters' @update='updateFilters')
-        v-chip(v-if='selectedDay' close @click:close='dayChange(selectedDay)') {{selectedDay}}
+        v-chip(v-if='selectedDay' close @click:close='dayChange({ date: selectedDay})') {{selectedDay}}
 
     //- Events
     #events
-      Event(v-for='event in events'
-        :key='event.id' :event='event'
+      Event(v-for='(event, idx) in events' :key='event.id' :event='event' :show='idx>=firstVisibleItem && idx<=lastVisibleItem'
           @tagclick='tagClick' @placeclick='placeClick')
 
 </template>
@@ -35,33 +34,68 @@ import Calendar from '@/components/Calendar'
 export default {
   name: 'Index',
   components: { Event, Search, Announcement, Calendar },
-  async asyncData ({ params, $api }) {
+  async asyncData ({ params, $api, store }) {
     const events = await $api.getEvents({
-      start: dayjs().unix()
+      start: dayjs().unix(),
+      end: null,
+      filters: { show_recurrent: store.state.settings.allow_recurrent_event && store.state.settings.recurrent_event_visible }
     })
     return { events }
   },
-  data () {
+  data ({ $store }) {
     return {
       date: dayjs().format('YYYY-MM-DD'),
       events: [],
       start: dayjs().unix(),
       end: null,
-      filters: { tags: [], places: [] },
-      selectedDay: null
+      filters: { tags: [], places: [], show_recurrent: $store.state.settings.allow_recurrent_event && $store.state.settings.recurrent_event_visible },
+      selectedDay: null,
+      firstVisibleItem: 0,
+      lastVisibleItem: 20
     }
   },
   computed: {
-    ...mapState(['settings', 'announcements']),
+    ...mapState(['settings', 'announcements'])
+  },
+  mounted () {
+    let last_known_scroll_position = 0
+    let ticking = false
+
+    document.addEventListener('scroll', e => {
+      last_known_scroll_position = window.scrollY
+
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          this.scroll(last_known_scroll_position)
+          ticking = false
+        })
+
+        ticking = true
+      }
+    })
   },
   methods: {
     ...mapActions(['setFilters']),
+    scroll (y) {
+      const rowHeight = 370
+      const nItems = this.events.length
+      const fullHeight = document.getElementById('events').offsetHeight
+      const nRows = fullHeight / rowHeight
+      const itemPerRow = nItems / nRows
+      const visibleRows = 10
+      this.firstVisibleItem = Math.trunc(((y - 370) / rowHeight) * itemPerRow) - (5 * itemPerRow)
+      this.lastVisibleItem = this.firstVisibleItem + (visibleRows * itemPerRow)
+
+      console.error('Scrolled to ', y, ' nItems', nItems, 'fullHeight', fullHeight, ' itemPerRow', itemPerRow, ' nRow', nRows)
+      console.error('mostro dal ', this.firstVisibleItem, this.lastVisibleItem)
+    },
     async updateEvents () {
       this.events = await this.$api.getEvents({
         start: this.start,
         end: this.end,
         places: this.filters.places,
-        tags: this.filters.tags
+        tags: this.filters.tags,
+        show_recurrent: this.filters.show_recurrent
       })
       this.setFilters(this.filters)
     },
@@ -101,18 +135,17 @@ export default {
       this.updateEvents()
     },
     dayChange (day) {
-      if (this.selectedDay === day) {
+      const date = dayjs(day.date).format('YYYY-MM-DD')
+      if (this.selectedDay === date) {
         this.selectedDay = null
-        this.date = dayjs().format('YYYY-MM-DD')
         this.start = dayjs().unix() // .startOf('week').unix()
         this.end = null
         this.updateEvents()
         return
       }
-      this.start = dayjs(day).unix()
+      this.start = dayjs(date).startOf('day').unix()
       this.end = dayjs(day).endOf('day').unix()
-      this.date = dayjs(day).format('YYYY-MM-DD')
-      this.selectedDay = day
+      this.selectedDay = date
       this.updateEvents()
     }
   },

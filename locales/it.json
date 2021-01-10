@@ -61,8 +61,8 @@
         "embed": "Incorpora",
         "embed_title": "Mostra questo evento sul tuo sito web",
         "embed_help": "Copiando il seguente codice sul tuo sito web l'evento verrà incluso come qui di lato",
-        "feed": "Flusso RSS",
-        "feed_url_copied": "URL copiato, incollalo nel tuo lettore di flusso RSS",
+        "feed": "Feed RSS",
+        "feed_url_copied": "URL copiato, incollalo nel tuo lettore di Feed RSS",
         "follow_me_title": "Segui gli aggiornamenti dal fediverso",
         "follow": "Segui",
         "n_resources": "nessuna risorsa|una risorsa|{n} risorse",
@@ -122,7 +122,7 @@
         "media_description": "Puoi aggiungere un volantino (opzionale)",
         "added": "Evento aggiunto",
         "added_anon": "Evento aggiunto, verrà confermato quanto prima.",
-        "where_description": "Dov'è il gancio? Se il posto non è presente, scrivilo e <b>premi invio</b>. ",
+        "where_description": "Dov'è il gancio? Se il posto non è presente potrai crearlo. ",
         "confirmed": "Evento confermato",
         "not_found": "Evento non trovato",
         "remove_confirmation": "Sei sicuro/a di voler eliminare questo evento?",
@@ -153,7 +153,8 @@
         "interact_with_me_at": "Seguimi nel fediverso su",
         "import_ICS": "Importa da ICS",
         "import_URL": "Importa da URL",
-        "ics": "ICS"
+        "ics": "ICS",
+        "import_description": "Puoi importare eventi da altre piattaforme e da altre istanze attraverso i formati standard (ics e h-event)"
     },
     "admin": {
         "place_description": "Nel caso in cui un luogo sia errato o cambi indirizzo, puoi modificarlo.<br/>Considera che tutti gli eventi associati a questo luogo cambieranno indirizzo (anche quelli passati).",

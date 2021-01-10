@@ -29,10 +29,6 @@
                   v-clipboard:success='copyLink') {{$t("common.copy")}}
                   v-icon.ml-1 mdi-content-copy
 
-        v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
-        v-tab-item
-          FollowMe
-
         v-tab ics/ical
         v-tab-item
           v-card
@@ -62,6 +58,9 @@
                 color='primary' v-clipboard:copy='listScript' v-clipboard:success='copyLink') {{$t('common.copy')}}
                   v-icon.ml-1 mdi-content-copy
 
+      v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
+      v-tab-item(v-if='settings.enable_federation')
+        FollowMe
         //- TOFIX
         //- v-tab.pt-1(label='calendar' name='calendar')
         //- v-tab-item
@@ -125,6 +124,7 @@ export default {
       return `<iframe style='border: 0px; width: 100%;' src="${this.settings.baseurl}/embed/list?${params.join('&')}"></iframe>`
     },
     link () {
+      const typeMap = ['rss', 'ics', 'list']
       const tags = this.filters.tags.join(',')
       const places = this.filters.places.join(',')
       let query = ''
@@ -138,7 +138,7 @@ export default {
         }
       }
 
-      return `${this.settings.baseurl}/feed/${this.type}${query}`
+      return `${this.settings.baseurl}/feed/${typeMap[this.type]}${query}`
     },
     showLink () {
       return (['rss', 'ics'].includes(this.type))

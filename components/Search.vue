@@ -2,9 +2,10 @@
   v-container
     v-switch.mt-0(
       v-if='recurrentFilter && settings.allow_recurrent_event'
+      v-model='filters.show_recurrent'
       inset color='primary'
       :label="$t('event.show_recurrent')"
-      @change="v => $emit('showrecurrent', v)")
+      @change="toggleShowRecurrent")
 
     v-autocomplete.mt-0(
       :label='$t("common.search")'
@@ -37,7 +38,6 @@ import { mapState } from 'vuex'
 export default {
   name: 'Search',
   props: {
-    pastFilter: { type: Boolean, default: true },
     recurrentFilter: { type: Boolean, default: true },
     filters: { type: Object, default: () => {} }
   },
@@ -67,14 +67,24 @@ export default {
     remove (item) {
       const filters = {
         tags: item.type === 'tag' ? this.filters.tags.filter(f => f !== item.id) : this.filters.tags,
-        places: item.type === 'place' ? this.filters.places.filter(f => f !== item.id) : this.filters.places
+        places: item.type === 'place' ? this.filters.places.filter(f => f !== item.id) : this.filters.places,
+        show_recurrent: this.filters.show_recurrent
+      }
+      this.$emit('update', filters)
+    },
+    toggleShowRecurrent (v) {
+      const filters = {
+        tags: this.filters.tags,
+        places: this.filters.places,
+        show_recurrent: v
       }
       this.$emit('update', filters)
     },
     change (filters) {
       filters = {
         tags: filters.filter(t => t.type === 'tag').map(t => t.id),
-        places: filters.filter(p => p.type === 'place').map(p => p.id)
+        places: filters.filter(p => p.type === 'place').map(p => p.id),
+        show_recurrent: this.filters.show_recurrent
       }
       this.$emit('update', filters)
     }

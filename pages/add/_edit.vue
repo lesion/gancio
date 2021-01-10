@@ -23,7 +23,6 @@
                 @change='v => event.title = v'
                 :value = 'event.title'
                 :rules="[$validators.required('common.title')]"
-                :hint="$t('event.what_description')"
                 prepend-icon='mdi-format-title'
                 :label="$t('common.title')"
                 autofocus

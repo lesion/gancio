@@ -5,7 +5,7 @@ export default {
   ca: 'Català',
   pl: 'Polski',
   eu: 'Euskara',
-  nb_NO: 'Norwegian Bokmål',
+  no: 'Norwegian Bokmål',
   fr: 'Francais',
   de: 'Deutsch'
 }

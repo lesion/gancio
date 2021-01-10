@@ -22,24 +22,10 @@
         v-btn(icon nuxt to='/export' v-on='on')
           v-icon mdi-share-variant
 
-    //- v-menu(v-if='settings.enable_trusted_instances && settings.trusted_instances && settings.trusted_instances.length'
-      offset-y bottom open-on-hover transition="slide-y-transition")
-      template(v-slot:activator="{ on, attrs }")
-        v-btn(icon v-bind='attrs' v-on='on')
-          v-icon mdi-map-marker-path
-      v-list
-        v-list-item(v-for='instance in settings.trusted_instances'
-          :key='instance.name'
-          :href='instance.url'
-          two-line)
-          v-list-item-avatar
-            v-img(:src='`${instance.url}/favicon.ico`')
-          v-list-item-content
-            v-list-item-title {{instance.name}}
-            v-list-item-subtitle {{instance.label}}
-
-    v-btn(v-if='!$auth.loggedIn' icon nuxt to='/login')
-      v-icon mdi-login
+    v-tooltip(v-if='!$auth.loggedIn' bottom) {{$t('common.login')}}
+      template(v-slot:activator='{ on }')
+        v-btn(icon nuxt to='/login' v-on='on')
+          v-icon mdi-login
 
     v-menu(v-else
       offset-y bottom open-on-hover transition="slide-y-transition")

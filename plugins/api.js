@@ -21,10 +21,11 @@ export default ({ $axios, store }, inject) => {
             start: params.start,
             end: params.end,
             places: params.places && params.places.join(','),
-            tags: params.tags && params.tags.join(',')
+            tags: params.tags && params.tags.join(','),
+            show_recurrent: params.show_recurrent
           }
         })
-        return events
+        return events.map(e => Object.freeze(e))
       } catch (e) {
         console.error(e)
         return []
