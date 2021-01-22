@@ -5,9 +5,9 @@ div#list
     v-timeline-item(
       v-for='event in computedEvents'
       :key='`${event.id}_${event.start_datetime}`')
-      .text-subtitle {{event|when}}
+      .text-subtitle <v-icon small color='success' v-if='event.parentId'>mdi-repeat</v-icon> {{event|when}}
         .text-subtitle.float-right @{{event.place.name}}
-      a.text-h5(:href='`/event/${event.id}`' target='_blank') {{event.title}}
+      a.text-body-1(:href='`/event/${event.id}`' target='_blank') {{event.title}}
 </template>
 <script>
 
