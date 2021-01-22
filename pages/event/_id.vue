@@ -6,7 +6,7 @@ v-container
     v-card-text
 
       //- admin controls
-      EventAdmin(v-if='is_mine' :event='event')
+      EventAdmin.mb-1(v-if='is_mine' :event='event')
 
       v-row
         v-col.col-12.col-lg-8
@@ -26,6 +26,7 @@ v-container
         v-col.col-12.col-lg-4
           v-card(color='secondary')
             v-card-text.white--text
+              v-icon.float-right(v-if='event.parentId' color='success') mdi-repeat
               .title.text-h5
                 b.p-name {{event.title}}
 
