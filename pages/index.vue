@@ -61,15 +61,17 @@ export default {
     // this.intersecting[eventId] = isIntersecting
     // },
     ...mapActions(['setFilters']),
-    async updateEvents () {
-      this.events = await this.$api.getEvents({
+    updateEvents () {
+      return this.$api.getEvents({
         start: this.start,
         end: this.end,
         places: this.filters.places,
         tags: this.filters.tags,
         show_recurrent: this.filters.show_recurrent
+      }).then(events => {
+        this.events = events
+        this.setFilters(this.filters)
       })
-      this.setFilters(this.filters)
     },
     placeClick (place_id) {
       if (this.filters.places.includes(place_id)) {
@@ -95,7 +97,7 @@ export default {
       this.selectedDay = null
 
       // check if current month is selected
-      if (month - 1 === dayjs().month()) {
+      if (month - 1 === dayjs().month() && year === dayjs().year()) {
         this.start = dayjs().unix()
         this.date = dayjs().format('YYYY-MM-DD')
       } else {
