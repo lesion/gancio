@@ -6,7 +6,8 @@ div
   v-btn(text color='primary' v-if='!event.parentId' @click='remove(false)') {{$t('common.remove')}}
 
   template(v-if='event.parentId')
-    //- v-divider {{$t('event.recurrent')}}
+    v-divider
+    span.mr-1 <v-icon>mdi-repeat</v-icon> {{$t('event.edit_recurrent')}}
     v-btn(text color='primary' v-if='event.parent.is_visible' @click='toggle(true)') {{$t('common.pause')}}
     v-btn(text color='primary' v-else @click='toggle(true)') {{$t('common.start')}}
     v-btn(text color='primary' @click='$router.push(`/add/${event.parentId}`)') {{$t('common.edit')}}
