@@ -3,7 +3,7 @@
     v-calendar(
       title-position='left'
       :is-dark="settings['theme.is_dark']"
-      :columns="2"
+      :columns="$screens({ lg: 2 }, 1)"
       @update:from-page='updatePage'
       :locale='$i18n.locale'
       :attributes='attributes'
@@ -27,15 +27,14 @@ export default {
     const month = dayjs().month() + 1
     const year = dayjs().year()
     return {
-      page: { month, year }
+      page: { month, year },
+      attributes: []
     }
   },
-  computed: {
-    ...mapState(['tags', 'filters', 'in_past', 'settings']),
-
-    // TODO: could be better
-    attributes () {
-      return []
+  computed: mapState(['tags', 'filters', 'in_past', 'settings']),
+  methods: {
+    ...mapActions(['updateEvents', 'showPastEvents']),
+    updateAttributes () {
       const colors = ['blue', 'orange', 'yellow', 'teal', 'indigo', 'green', 'red', 'purple', 'pink', 'gray']
       const tags = take(this.tags, 10).map(t => t.tag)
       let attributes = []
@@ -69,18 +68,16 @@ export default {
           dates: { start: new Date(e.start_datetime * 1000), end: new Date(e.end_datetime * 1000) }
         })))
 
-      return attributes
-    }
-  },
-  methods: {
-    ...mapActions(['updateEvents', 'showPastEvents']),
+      this.attributes = attributes
+    },
     updatePage (page) {
-      this.$emit('monthchange', page)
+      return new Promise((resolve, reject) => {
+        this.$emit('monthchange', page)
+        this.updateAttributes()
+      })
     },
     click (day) {
       this.$emit('dayclick', day)
-      // const element = document.getElementById(day.day)
-      // if (element) { element.scrollIntoView() } // Even IE6 supports this
     }
   }
 }
