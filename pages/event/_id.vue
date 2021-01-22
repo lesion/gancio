@@ -29,13 +29,13 @@ v-container
               .title.text-h5
                 b.p-name {{event.title}}
 
-              time.dt-start.text-h5(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')
+              time.dt-start.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')
                 v-icon mdi-calendar
                 b.ml-2 {{event|when}}
               div.subtitle-1 {{event.start_datetime|from}}
                 small(v-if='event.parentId')  ({{event|recurrentDetail}})
 
-              .text-h5.p-location
+              .text-h6.p-location
                 v-icon mdi-map-marker
                 b.vcard.ml-2 {{event.place.name}}
               p.adr {{event.place.address}}
@@ -58,7 +58,7 @@ v-container
                     :href='`/api/event/${event.id}.ics`')
                     v-icon mdi-calendar-export
 
-      .p-description.text-h6(v-html='event.description')
+      .p-description.text-body-1.px-5(v-html='event.description')
       v-chip.p-category.ml-1(v-for='tag in event.tags' color='primary'
         outlined :key='tag' v-text='tag')
 
@@ -258,6 +258,7 @@ export default {
   },
   methods: {
     keyDown (ev) {
+      if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) { return }
       if (ev.key === 'ArrowRight' && this.event.next) {
         this.$router.push(`/event/${this.event.next}`)
       }

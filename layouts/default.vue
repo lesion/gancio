@@ -1,10 +1,10 @@
 <template lang='pug'>
-  v-app(app)
+  v-app
     Snackbar
     Confirm
     Nav
 
-    v-main(app)
+    v-main
       v-fade-transition(hide-on-leave)
         nuxt
 

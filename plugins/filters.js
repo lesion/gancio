@@ -70,7 +70,7 @@ export default ({ app, store }) => {
 
     // multidate
     if (event.multidate) {
-      return `${start.format('ddd, D MMMM HH:mm')} - ${end.format('ddd, D MMMM')}`
+      return `${start.format('ddd, D MMM HH:mm')} - ${end.format('ddd, D MMM')}`
     }
 
     // normal event

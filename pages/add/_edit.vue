@@ -178,8 +178,10 @@ export default {
           await this.$axios.$post('/event', formData)
         }
         this.updateMeta()
-        this.$router.replace('/')
-        this.$root.$message(this.$auth.loggedIn ? 'event.added' : 'event.added_anon', { color: 'success' })
+        this.$router.push('/')
+        this.$nextTick(() => {
+          this.$root.$message(this.$auth.loggedIn ? 'event.added' : 'event.added_anon', { color: 'success' })
+        })
       } catch (e) {
         switch (e.request.status) {
           case 413:

@@ -17,9 +17,9 @@
         v-chip(v-if='selectedDay' close @click:close='dayChange({ date: selectedDay})') {{selectedDay}}
 
     //- Events
-    #events
-      Event(v-for='(event, idx) in events' :key='event.id' :event='event' :show='idx>=firstVisibleItem && idx<=lastVisibleItem'
-          @tagclick='tagClick' @placeclick='placeClick')
+    #events.mt-1
+      //- div.event(v-for='(event, idx) in events' :key='event.id' v-intersect="(entries, observer, isIntersecting) => intersecting[event.id] = isIntersecting")
+      Event(:event='event' v-for='(event, idx) in events' :key='event.id' @tagclick='tagClick' @placeclick='placeClick')
 
 </template>
 
@@ -50,45 +50,17 @@ export default {
       end: null,
       filters: { tags: [], places: [], show_recurrent: $store.state.settings.allow_recurrent_event && $store.state.settings.recurrent_event_visible },
       selectedDay: null,
-      firstVisibleItem: 0,
-      lastVisibleItem: 20
+      // intersecting: {}
     }
   },
   computed: {
     ...mapState(['settings', 'announcements'])
   },
-  mounted () {
-    let last_known_scroll_position = 0
-    let ticking = false
-
-    document.addEventListener('scroll', e => {
-      last_known_scroll_position = window.scrollY
-
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          this.scroll(last_known_scroll_position)
-          ticking = false
-        })
-
-        ticking = true
-      }
-    })
-  },
   methods: {
+    // onIntersect (isIntersecting, eventId) {
+    // this.intersecting[eventId] = isIntersecting
+    // },
     ...mapActions(['setFilters']),
-    scroll (y) {
-      const rowHeight = 370
-      const nItems = this.events.length
-      const fullHeight = document.getElementById('events').offsetHeight
-      const nRows = fullHeight / rowHeight
-      const itemPerRow = nItems / nRows
-      const visibleRows = 10
-      this.firstVisibleItem = Math.trunc(((y - 370) / rowHeight) * itemPerRow) - (5 * itemPerRow)
-      this.lastVisibleItem = this.firstVisibleItem + (visibleRows * itemPerRow)
-
-      console.error('Scrolled to ', y, ' nItems', nItems, 'fullHeight', fullHeight, ' itemPerRow', itemPerRow, ' nRow', nRows)
-      console.error('mostro dal ', this.firstVisibleItem, this.lastVisibleItem)
-    },
     async updateEvents () {
       this.events = await this.$api.getEvents({
         start: this.start,
