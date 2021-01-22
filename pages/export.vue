@@ -1,22 +1,27 @@
 <template lang="pug">
   v-container
     p {{$t('export.intro')}}
-    Search(
-      :filters='filters'
-      @update='updateFilters')
     v-card(outlined)
+      v-card-text
+        v-row
+          v-col(cols='4')
+            v-card-title {{$t('common.filter')}}
+          v-col
+            Search(
+              :filters='filters'
+              @update='updateFilters')
       v-tabs(v-model='type')
 
         //- TOFIX
-        //- v-tab.pt-1(label='email' name='email')
-        //- v-tab-item
-        //-   p(v-html='$t(`export.email_description`)')
-        //-   el-form(@submit.native.prevent)
-        //-     //- el-switch(v-model='notification.notify_on_add' :active-text="$t('notify_on_insert')")
-        //-     //- br
-        //-     //- el-switch.mt-2(v-model='notification.send_notification' :active-text="$t('send_notification')")
-        //-     el-input.mt-2(v-model='notification.email' :placeholder="$t('export.insert_your_address')" ref='email')
-        //-     el-button.mt-2.float-right(native-type= 'submit' type='success' @click='add_notification') {{$t('common.send')}}
+        v-tab {{$t('common.email')}}
+        v-tab-item
+          v-card
+            v-card-text
+              p(v-html='$t(`export.email_description`)')
+              v-switch.mt-0(inset :label="$t('notify_on_insert')")
+              v-switch.mt-0(inset :label="$t('notify_on_morning')")
+              v-text-field(v-model='notification.email' :placeholder="$t('export.insert_your_address')" ref='email')
+                v-btn(slot='prepend' text color='primary' @click='add_notification') {{$t('common.subscribe')}} <v-icon>mdi-email</v-icon>
 
         v-tab {{$t('common.feed')}}
         v-tab-item
@@ -24,7 +29,7 @@
             v-card-text
               p(v-html='$t(`export.feed_description`)')
               v-text-field(v-model='link' readonly)
-                v-btn(slot='prepend' plain text color='primary'
+                v-btn(slot='prepend' text color='primary'
                   v-clipboard:copy='link'
                   v-clipboard:success='copyLink') {{$t("common.copy")}}
                   v-icon.ml-1 mdi-content-copy
@@ -35,28 +40,29 @@
             v-card-text
               p(v-html='$t(`export.ical_description`)')
               v-text-field(v-model='link')
-                v-btn(slot='prepend' plain text color='primary'
+                v-btn(slot='prepend' text color='primary'
                   v-clipboard:copy='link' v-clipboard:success='copyLink') {{$t("common.copy")}}
                   v-icon.ml-1 mdi-content-copy
 
         v-tab List
         v-tab-item
-          v-container
-            p(v-html='$t(`export.list_description`)')
+          v-card
+            v-card-text
+              p(v-html='$t(`export.list_description`)')
 
-            v-row
-              v-col.mr-2(:span='11')
-                v-text-field(v-model='list.title' )
-                v-text-field(v-model='list.maxEvents' type='number')
-              v-col.float-right(:span='12')
-                List(
-                  :title='list.title'
-                  :maxEvents='list.maxEvents'
-                  :events='events')
-            v-text-field.mb-1(type='textarea' v-model='listScript' readonly )
-              v-btn(slot='prepend' plain text
-                color='primary' v-clipboard:copy='listScript' v-clipboard:success='copyLink') {{$t('common.copy')}}
-                  v-icon.ml-1 mdi-content-copy
+              v-row
+                v-col.mr-2(:span='11')
+                  v-text-field(v-model='list.title' :label='$t("common.title")')
+                  v-text-field(v-model='list.maxEvents' type='number' :label='$t("common.max_events")')
+                v-col.float-right(:span='12')
+                  List(
+                    :title='list.title'
+                    :maxEvents='list.maxEvents'
+                    :events='events')
+              v-text-field.mb-1(type='textarea' v-model='listScript' readonly )
+                v-btn(slot='prepend' text
+                  color='primary' v-clipboard:copy='listScript' v-clipboard:success='copyLink') {{$t('common.copy')}}
+                    v-icon.ml-1 mdi-content-copy
 
       v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
       v-tab-item(v-if='settings.enable_federation')
@@ -83,7 +89,8 @@ export default {
   components: { List, FollowMe, Search },
   async asyncData ({ $axios, params, store, $api }) {
     const events = await $api.getEvents({
-      start: dayjs().unix()
+      start: dayjs().unix(),
+      show_recurrent: false
     })
     return { events }
   },
@@ -92,7 +99,7 @@ export default {
       type: 'rss',
       notification: { email: '' },
       list: { title: 'Gancio', maxEvents: 3 },
-      filters: { tags: [], places: [] },
+      filters: { tags: [], places: [], show_recurrent: false },
       events: []
     }
   },
@@ -145,8 +152,14 @@ export default {
     }
   },
   methods: {
-    updateFilters (filters) {
+    async updateFilters (filters) {
       this.filters = filters
+      this.events = await this.$api.getEvents({
+        start: dayjs().unix(),
+        places: this.filters.places,
+        tags: this.filters.tags,
+        show_recurrent: this.filters.show_recurrent
+      })
     },
     copyLink () {
       this.$root.$message('common.feed_url_copied')
