@@ -8,16 +8,18 @@
         v-card-text
           v-form(v-model='valid' ref='announcement')
             v-text-field(v-model='announcement.title' :label='$t("common.title")')
-            Editor.mt-2(v-model='announcement.announcement' 
+            Editor.mt-2(v-model='announcement.announcement'
               border no-save max-height='400px' :placeholder="$t('common.description')")
         v-card-actions
           v-spacer
           v-btn(@click='dialog=false' color='error') {{$t('common.cancel')}}
-          v-btn(@click='save' color='primary') {{$t(`common.${editing?'save':'send'}`)}}
+          v-btn(@click='save' color='primary' :disabled='loading' :loading='loading') {{$t(`common.${editing?'save':'send'}`)}}
 
     v-btn(@click='openDialog' text color='primary') <v-icon>mdi-plus</v-icon> {{$t('common.add')}}
     v-card-text
       v-data-table(
+          v-if='announcements.length'
+          :hide-default-footer='announcements.length<10'
           :headers='headers'
           :items='announcements')
         template(v-slot:item.actions='{ item }')
@@ -41,6 +43,7 @@ export default {
       dialog: false,
       editing: false,
       announcements: [],
+      loading: false,
       headers: [
         { value: 'title', text: 'Title' },
         { value: 'actions', text: 'Actions', align: 'right' }
@@ -63,7 +66,7 @@ export default {
     openDialog () {
       this.announcement = { title: '', announcement: '' }
       this.dialog = true
-      this.$nextTick( () => this.$refs.announcement.reset() )
+      this.$nextTick(() => this.$refs.announcement.reset())
     },
     async toggle (announcement) {
       try {
@@ -75,7 +78,7 @@ export default {
     },
     async remove (announcement) {
       const ret = await this.$root.$confirm('admin.delete_announcement_confirm')
-      if (!ret) return
+      if (!ret) { return }
       this.$axios.delete(`/announcements/${announcement.id}`)
         .then(() => {
           this.$root.$message('admin.announcement_remove_ok')
@@ -83,6 +86,7 @@ export default {
         })
     },
     async save () {
+      this.loading = true
       try {
         let announcement = null
         if (this.editing) {
@@ -100,6 +104,7 @@ export default {
       } catch (e) {
         console.error(e)
       }
+      this.loading = false
     }
   }
 }
