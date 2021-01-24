@@ -1,6 +1,6 @@
 <template lang="pug">
   v-container
-    v-card-title {{$t('common.users')}} 
+    v-card-title {{$t('common.users')}}
       v-spacer
       v-text-field(v-model='search'
         append-icon='mdi-magnify' outlined rounded
