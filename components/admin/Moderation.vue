@@ -7,6 +7,8 @@
           span {{$t('common.instances')}}
           //- v-text-field(v-model='instancesFilter' :placeholder="$t('admin.filter_instances')")
           v-data-table(:items='instances'
+            :items-per-page='5'
+            :hide-default-footer='instances.length<5'
             dense :headers='instancesHeader'
             @click:row='instanceSelected')
             //- el-table-column(label='Domain' width='180')
@@ -25,10 +27,12 @@
             //-         :type='data.row.blocked?"danger":"warning"'
             //-         @click='toggleBlock(data.row)') {{data.row.blocked?$t('admin.unblock'):$t('admin.block')}}
 
-        v-col(:span='11' align='right')
+        v-col(:span='11')
           span {{$t('common.users')}}
           //- v-text-field(v-model='usersFilter' :placeholder="$t('admin.filter_users')")
           v-data-table(:items='users'
+            :items-per-page='5'
+            :hide-default-footer='users.length<5'
             dense :headers='usersHeader')
             template(v-slot:item.username="{item}")
               a(:href='item.ap_id') {{item.object.preferredUsername}}
@@ -48,26 +52,28 @@
             //-         @click='toggleUserBlock(data.row)') {{data.row.blocked?$t('admin.unblock'):$t('admin.block')}}
 
       div
-        span {{$t('common.resources')}}
-        v-data-table(:items='resources')
-          //- el-table-column(:label="$t('common.event')")
-          //-   template(slot-scope='data')
-          //-     span {{data.row.event}}
-          //- el-table-column(:label="$t('common.resources')")
-          //-   template(slot-scope='data')
-          //-     span(:class='{disabled: data.row.hidden}' v-html='data.row.data.content')
-          //- el-table-column(:label="$t('common.user')" width='200')
-          //-   template(slot-scope='data')
-          //-     span(:class='{disabled: data.row.hidden}' v-html='data.row.data.actor')
-          //- el-table-column(:label="$t('common.actions')" width="150")
-          //-   template(slot-scope='data')
-          //-     el-dropdown
-          //-       el-button(type="primary" icon="el-icon-arrow-down" size='mini') {{$t('common.moderation')}}
-          //-       el-dropdown-menu(slot='dropdown')
-          //-         el-dropdown-item(v-if='!data.row.hidden' icon='el-icon-remove' @click.native='hideResource(data.row, true)') {{$t('admin.hide_resource')}}
-          //-         el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(data.row, false)') {{$t('admin.show_resource')}}
-          //-         el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(data.row)') {{$t('admin.delete_resource')}}
-          //-         el-dropdown-item(icon='el-icon-lock' @click.native='toggleUserBlock(data.row.ap_user)') {{$t('admin.block_user')}}
+        v-card-title {{$t('common.resources')}}
+        v-data-table(:items='resources'
+          :hide-default-footer='resources.length<10'
+        )
+        //- el-table-column(:label="$t('common.event')")
+        //-   template(slot-scope='data')
+        //-     span {{data.row.event}}
+        //- el-table-column(:label="$t('common.resources')")
+        //-   template(slot-scope='data')
+        //-     span(:class='{disabled: data.row.hidden}' v-html='data.row.data.content')
+        //- el-table-column(:label="$t('common.user')" width='200')
+        //-   template(slot-scope='data')
+        //-     span(:class='{disabled: data.row.hidden}' v-html='data.row.data.actor')
+        //- el-table-column(:label="$t('common.actions')" width="150")
+        //-   template(slot-scope='data')
+        //-     el-dropdown
+        //-       el-button(type="primary" icon="el-icon-arrow-down" size='mini') {{$t('common.moderation')}}
+        //-       el-dropdown-menu(slot='dropdown')
+        //-         el-dropdown-item(v-if='!data.row.hidden' icon='el-icon-remove' @click.native='hideResource(data.row, true)') {{$t('admin.hide_resource')}}
+        //-         el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(data.row, false)') {{$t('admin.show_resource')}}
+        //-         el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(data.row)') {{$t('admin.delete_resource')}}
+        //-         el-dropdown-item(icon='el-icon-lock' @click.native='toggleUserBlock(data.row.ap_user)') {{$t('admin.block_user')}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'

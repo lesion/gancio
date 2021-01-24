@@ -57,6 +57,8 @@
 
         v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon>mdi-plus</v-icon> Add instance
         v-data-table(
+          v-if='settings.trusted_instances.length'
+          :hide-default-footer='settings.trusted_instances.length<10'
           :headers='headers'
           :items='settings.trusted_instances')
           template(v-slot:item.actions="{item}")

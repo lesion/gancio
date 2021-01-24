@@ -31,6 +31,7 @@
       v-data-table(
         :headers='headers'
         :items='users'
+        :hide-default-footer='users.length<5'
         :search='search')
         template(v-slot:item.actions='{item}')
           v-btn(text small @click='toggle(item)'
