@@ -15,6 +15,8 @@ v-container
             :src='imgPath'
             :lazy-src='thumbImgPath'
             v-if='event.image_path')
+          .p-description.text-body-1.px-5.mt-5(v-else v-html='event.description')
+
             //- template(v-slot:placeholder)
               //- v-row(
               //-   class="fill-height ma-0"
@@ -33,13 +35,13 @@ v-container
               time.dt-start.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')
                 v-icon mdi-calendar
                 b.ml-2 {{event|when}}
-              div.subtitle-1 {{event.start_datetime|from}}
+              div.text-subtitle-1 {{event.start_datetime|from}}
                 small(v-if='event.parentId')  ({{event|recurrentDetail}})
 
               .text-h6.p-location
                 v-icon mdi-map-marker
                 b.vcard.ml-2 {{event.place.name}}
-              p.adr {{event.place.address}}
+              .text-subtitle-1.adr {{event.place.address}}
 
             //- info & actions
             v-toolbar
@@ -59,7 +61,7 @@ v-container
                     :href='`/api/event/${event.id}.ics`')
                     v-icon mdi-calendar-export
 
-      .p-description.text-body-1.px-5(v-html='event.description')
+      .p-description.text-body-1.px-5(v-if='event.image_path' v-html='event.description')
       v-chip.p-category.ml-1(v-for='tag in event.tags' color='primary'
         outlined :key='tag' v-text='tag')
 
@@ -236,11 +238,7 @@ export default {
       return '/media/' + this.event.image_path
     },
     thumbImgPath () {
-      if (this.event.image_path) {
-        return this.settings.baseurl + '/media/thumb/' + this.event.image_path
-      } else {
-        return this.settings.baseurl + '/logo.png'
-      }
+      return this.settings.baseurl + '/media/thumb/' + this.event.image_path
     },
     is_mine () {
       if (!this.$auth.user) {

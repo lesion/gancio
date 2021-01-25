@@ -40,16 +40,17 @@ export default {
       end: null,
       filters: { show_recurrent: store.state.settings.allow_recurrent_event && store.state.settings.recurrent_event_visible }
     })
-    return { events }
+    return { events, first: true }
   },
   data ({ $store }) {
     return {
+      first: true,
       date: dayjs().format('YYYY-MM-DD'),
       events: [],
       start: dayjs().unix(),
       end: null,
       filters: { tags: [], places: [], show_recurrent: $store.state.settings.allow_recurrent_event && $store.state.settings.recurrent_event_visible },
-      selectedDay: null,
+      selectedDay: null
       // intersecting: {}
     }
   },
@@ -94,6 +95,10 @@ export default {
       this.updateEvents()
     },
     monthChange ({ year, month }) {
+      if (this.first) {
+        this.first = false
+        return
+      }
       this.selectedDay = null
 
       // check if current month is selected

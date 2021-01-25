@@ -1,7 +1,7 @@
 <template lang="pug" functional>
   v-card.h-event.event
     nuxt-link(:to='`/event/${props.event.id}`')
-      v-img.align-end.white--text(:src="`/media/thumb/${props.event.image_path}`"
+      v-img.align-end.white--text(:src="`/media/thumb/${props.event.image_path || 'logo.png' }`"
         gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7), rgba(0,0,0,.9)"
         height="250" position="top top" )
         v-card-title.text-h6.p-name {{props.event.title}}

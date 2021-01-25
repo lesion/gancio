@@ -4,6 +4,7 @@
     v-card-subtitle {{$t('admin.event_confirm_description')}}
     v-card-text
       v-data-table(
+        :hide-default-footer='unconfirmedEvents.length<10'
         :items='unconfirmedEvents'
         :headers='headers')
         template(v-slot:item.actions='{ item }')

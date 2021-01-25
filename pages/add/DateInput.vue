@@ -4,7 +4,7 @@ v-row
     mode='dateTime'
     is24hr
     :input-debounce="200"
-    :min='today'
+    :min-date='new Date()'
     :minute-increment="5"
     is-dark
     is-expanded
@@ -25,9 +25,9 @@ v-row
   v-date-picker.col-md-4(
     mode='dateTime'
     is24hr
+    :min-date='new Date()'
     :minute-increment="5"
     :input-debounce="200"
-    :min='today'
     is-dark
     is-expanded
     @input='v => change("due", v)'
@@ -90,7 +90,6 @@ export default {
   },
   data () {
     return {
-      today: dayjs().format('YYYY-MM-DD'),
       frequency: '',
       frequencies: [
         { value: '1w', text: this.$t('event.each_week') },

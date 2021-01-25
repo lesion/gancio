@@ -66,16 +66,17 @@ export default {
     try {
       const users = await $axios.$get('/users')
       const unconfirmedEvents = await $axios.$get('/event/unconfirmed')
-      return { users, unconfirmedEvents }
+      return { users, unconfirmedEvents, selectedTab: 0 }
     } catch (e) {
       console.error(e)
-      return { users: [], unconfirmedEvents: [] }
+      return { users: [], unconfirmedEvents: [], selectedTab: 0 }
     }
   },
   data () {
     return {
       description: '',
-      unconfirmedEvents: []
+      unconfirmedEvents: [],
+      selectedTab: 0
     }
   },
   computed: {
