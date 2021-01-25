@@ -1,11 +1,11 @@
 <template lang="pug">
   v-container
-    p {{$t('export.intro')}}
     v-card(outlined)
       v-card-text
+        p.text-body-1 {{$t('export.intro')}}
         v-row
-          v-col(cols='4')
-            v-card-title {{$t('common.filter')}}
+          v-col(:md='2' :cols='12')
+            v-card-title.py-0 {{$t('common.filter')}}
           v-col
             Search(
               :filters='filters'
@@ -13,15 +13,15 @@
       v-tabs(v-model='type')
 
         //- TOFIX
-        v-tab {{$t('common.email')}}
-        v-tab-item
+        //- v-tab {{$t('common.email')}}
+        //- v-tab-item
           v-card
             v-card-text
               p(v-html='$t(`export.email_description`)')
               v-switch.mt-0(inset :label="$t('notify_on_insert')")
-              v-switch.mt-0(inset :label="$t('notify_on_morning')")
+              v-switch.mt-0(inset :label="$t('morning_notification')")
               v-text-field(v-model='notification.email' :placeholder="$t('export.insert_your_address')" ref='email')
-                v-btn(slot='prepend' text color='primary' @click='add_notification') {{$t('common.subscribe')}} <v-icon>mdi-email</v-icon>
+                v-btn(slot='prepend' text color='primary' @click='add_notification') {{$t('common.send')}} <v-icon>mdi-email</v-icon>
 
         v-tab {{$t('common.feed')}}
         v-tab-item
@@ -64,17 +64,17 @@
                   color='primary' v-clipboard:copy='listScript' v-clipboard:success='copyLink') {{$t('common.copy')}}
                     v-icon.ml-1 mdi-content-copy
 
-      v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
-      v-tab-item(v-if='settings.enable_federation')
-        FollowMe
-        //- TOFIX
-        //- v-tab.pt-1(label='calendar' name='calendar')
-        //- v-tab-item
-        //-   p(v-html='$t(`export.calendar_description`)')
-        //-   //- no-ssr
-        //-     Calendar.mb-1
-        //-   v-text-field.mb-1(type='textarea' v-model='script')
-        //-   el-button.float-right(plain type="primary" icon='el-icon-document') Copy
+        //- v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
+        //- v-tab-item(v-if='settings.enable_federation')
+        //-   FollowMe
+          //- TOFIX
+          //- v-tab.pt-1(label='calendar' name='calendar')
+          //- v-tab-item
+          //-   p(v-html='$t(`export.calendar_description`)')
+          //-   //- no-ssr
+          //-     Calendar.mb-1
+          //-   v-text-field.mb-1(type='textarea' v-model='script')
+          //-   el-button.float-right(plain type="primary" icon='el-icon-document') Copy
 
 </template>
 <script>
@@ -164,12 +164,13 @@ export default {
     copyLink () {
       this.$root.$message('common.feed_url_copied')
     },
-    add_notification () {
-      if (!this.notification.email) {
-        // Message({ message: 'Inserisci una mail', showClose: true, type: 'error' })
-        // return this.$refs.email.focus()
-      }
-      // await api.addNotification({ ...this.notification, filters: this.filters})
+    async add_notification () {
+      // validate()
+      // if (!this.notification.email) {
+      // Message({ message: 'Inserisci una mail', showClose: true, type: 'error' })
+      // return this.$refs.email.focus()
+      // }
+      await api.addNotification({ ...this.notification, filters: this.filters})
       // this.$refs.modal.hide()
       // Message({ message: this.$t('email_notification_activated'), showClose: true, type: 'success' })
     },
