@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container.container
+  v-container.container.px-0.px-md-3
     v-card
       v-card-title
         h4 {{edit?$t('common.edit_event'):$t('common.add_event')}}
@@ -9,13 +9,12 @@
       v-dialog(v-model='openImportDialog')
         ImportDialog(@close='openImportDialog=false' @imported='eventImported')
 
-      v-card-text
+      v-card-text.px-0.px-xs-2
         v-form(v-model='valid' ref='form' lazy-validation)
           v-container
             v-row
               //- Not logged event
               v-col.col-12(v-if='!$auth.loggedIn')
-                v-divider <v-icon name='user-secret'/> {{$t('event.anon')}}
                 p(v-html="$t('event.anon_description')")
 
               //- Title
@@ -42,7 +41,7 @@
                 max-height='400px')
 
               //- MEDIA / FLYER / POSTER
-              v-file-input.col-6.mt-3(
+              v-file-input.col-12.col-sm-6.mt-3(
                 :label="$t('common.media')"
                 :hint="$t('event.media_description')"
                 prepend-icon="mdi-camera"
@@ -51,7 +50,7 @@
                 accept='image/*')
 
               //- tags
-              v-combobox.col-6.mt-3(v-model='event.tags'
+              v-combobox.col-12.col-sm-6.mt-3(v-model='event.tags'
                 prepend-icon="mdi-tag-multiple"
                 chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
                 :delimiters="[',', ' ']"
@@ -98,7 +97,8 @@ export default {
       data.date = {
         recurrent: event.recurrent,
         from: new Date(dayjs.unix(event.start_datetime)),
-        due: new Date(dayjs.unix(event.end_datetime))
+        due: new Date(dayjs.unix(event.end_datetime)),
+        multidate: event.multidate
       }
 
       data.event.title = event.title
@@ -163,7 +163,7 @@ export default {
       formData.append('place_name', this.event.place.name)
       formData.append('place_address', this.event.place.address)
       formData.append('description', this.event.description)
-      // formData.append('multidate', this.date.type === 'multidate')
+      formData.append('multidate', !!this.date.multidate)
       formData.append('start_datetime', dayjs(this.date.from).unix())
       formData.append('end_datetime', this.date.due && dayjs(this.date.due).unix())
 
