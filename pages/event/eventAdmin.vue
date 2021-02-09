@@ -1,7 +1,7 @@
 <template lang='pug'>
 div
   v-btn(text color='primary' v-if='event.is_visible' @click='toggle(false)') {{$t(`common.${event.parentId?'skip':'hide'}`)}}
-  v-btn(text color='success' v-else @click='toggle(false)') {{$t('common.confirm')}}
+  v-btn(text color='success' v-else @click='toggle(false)') <v-icon color='yellow'>mdi-alert</v-icon> {{$t('common.confirm')}}
   v-btn(text color='primary' @click='$router.push(`/add/${event.id}`)') {{$t('common.edit')}}
   v-btn(text color='primary' v-if='!event.parentId' @click='remove(false)') {{$t('common.remove')}}
 

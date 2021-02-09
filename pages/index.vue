@@ -5,14 +5,14 @@
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
     //- Calendar and search bar
-    v-row#calbarmb-2
+    v-row
       .col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12
         //- this is needed as v-calendar does not support SSR
         //- https://github.com/nathanreyes/v-calendar/issues/336
         client-only
           Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='events')
 
-      .col
+      .col.pt-0.pt-md-2
         Search(:filters='filters' @update='updateFilters')
         v-chip(v-if='selectedDay' close @click:close='dayChange({ date: selectedDay})') {{selectedDay}}
 
