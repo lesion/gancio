@@ -1,22 +1,22 @@
 {
     "register": {
         "subject": "Richiesta registrazione ricevuta",
-        "content": "Abbiamo ricevuto la richiesta di registrazione. La confermeremo quanto prima.\nCiao."
+        "content": "Abbiamo ricevuto la richiesta di registrazione, la confermeremo quanto prima.<br/>Ciao."
     },
     "confirm": {
         "subject": "Puoi iniziare a pubblicare eventi",
-        "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}</a> è stato confermato. Scrivici a {{config.admin_email}} per qualsiasi informazione e fai a modino."
+        "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}</a> è stato confermato.<br/> Scrivici a {{config.admin_email}} per qualsiasi informazione e fai a modino."
     },
     "user_confirm": {
         "subject": "Puoi iniziare a pubblicare eventi",
-        "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}</a> è stato creato. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confermalo e scegli una password</a>."
+        "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}</a> è stato creato.<br/> <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confermalo e scegli una password</a>."
     },
     "recover": {
         "subject": "Recupero password",
-        "content": "Ciao, hai richiesto un recupero della password su {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Premi qui</a> per confermare."
+        "content": "Ciao, hai richiesto un recupero della password su {{config.title}}.<br/> <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Premi qui</a> per confermare."
     },
     "admin_register": {
         "subject": "Nuova registrazione",
-        "content": "{{user.email}} si è registrato/a a {{config.title}} scrivendo:<br/><pre>{{user.description}}</pre><br/> Puoi confermarlo <a href='{{config.baseurl}}/admin'>qui</a>."
+        "content": "{{user.email}} si è registratǝ a {{config.title}} scrivendo:<br/><pre>{{user.description}}</pre><br/> Puoi confermarlo <a href='{{config.baseurl}}/admin'>qui</a>."
     }
 }
