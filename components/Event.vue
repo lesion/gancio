@@ -6,7 +6,7 @@
         v-icon.float-right(v-if='props.event.parentId' color='success') mdi-repeat
   v-card-title.p-name.pb-0 {{props.event.title}}
 
-      //- gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7), rgba(0,0,0,.9)"
+    //- gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7), rgba(0,0,0,.9)"
     v-card-text.pb-0
       time.dt-start.subtitle-1(:datetime='props.event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  {{ props.event|when }}
       .d-none.dt-end {{props.event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
