@@ -19,7 +19,7 @@ const APUser = require('../models/ap_user')
 
 const exportController = require('./export')
 
-const debug = require('debug')('controller:event')
+const log = require('../../log')
 
 const eventController = {
 
@@ -52,7 +52,7 @@ const eventController = {
   },
 
   async getNotifications (event, action) {
-    debug('getNotifications "%s" (%s)', event.title, action)
+    log.info('getNotifications "%s" (%s)', event.title, action)
     function match (event, filters) {
       // matches if no filter specified
       if (!filters) { return true }
@@ -189,7 +189,7 @@ const eventController = {
       const notifier = require('../../notifier')
       notifier.notifyEvent('Create', event.id)
     } catch (e) {
-      debug(e)
+      log.info(e)
       res.sendStatus(404)
     }
   },
@@ -206,7 +206,7 @@ const eventController = {
       await event.update({ is_visible: false })
       res.sendStatus(200)
     } catch (e) {
-      debug(e)
+      log.info(e)
       res.sendStatus(404)
     }
   },
@@ -225,7 +225,7 @@ const eventController = {
       })
       res.json(events)
     } catch (e) {
-      debug(e)
+      log.info(e)
       res.sendStatus(400)
     }
   },
@@ -259,7 +259,7 @@ const eventController = {
   async add (req, res) {
     // req.err comes from multer streaming error
     if (req.err) {
-      debug(req.err)
+      log.info(req.err)
       return res.status(400).json(req.err.toString())
     }
 
@@ -326,7 +326,8 @@ const eventController = {
         notifier.notifyEvent('Create', event.id)
       }
     } catch (e) {
-      debug(e)
+      process.winstonLog.error(e)
+      log.info(e)
       res.sendStatus(400)
     }
   },
@@ -361,7 +362,7 @@ const eventController = {
           await fs.unlinkSync(old_path)
           await fs.unlinkSync(old_thumb_path)
         } catch (e) {
-          debug(e.toString())
+          log.info(e.toString())
         }
       }
       eventDetails.image_path = req.file.filename
@@ -406,7 +407,7 @@ const eventController = {
           fs.unlinkSync(old_thumb_path)
           fs.unlinkSync(old_path)
         } catch (e) {
-          debug(e.toString())
+          log.info(e.toString())
         }
       }
       const notifier = require('../../notifier')
@@ -506,15 +507,16 @@ const eventController = {
     const frequency = recurrent.frequency
     const type = recurrent.type
 
-    debug(`NOW IS ${cursor} while event is at ${start_date} (freq: ${frequency})`)
+    log.info(`NOW IS ${cursor} while event is at ${start_date} (freq: ${frequency})`)
 
     cursor = cursor.hour(start_date.hour()).minute(start_date.minute()).second(0)
-    debug(`set cursor to correct date and hour => ${cursor}`)
+    log.info(`set cursor to correct date and hour => ${cursor}`)
+
+    if (!frequency) { return }
 
     // each week or 2
     if (frequency[1] === 'w') {
       cursor = cursor.day(start_date.day())
-      debug(`Imposto il giorno della settimana ${cursor}`)
       if (cursor.isBefore(dayjs())) {
         cursor = cursor.add(7, 'day')
       }

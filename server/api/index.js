@@ -89,7 +89,6 @@ api.post('/event', hasPerm('event:write'), upload.single('image'), eventControll
 api.put('/event', hasPerm('event:write'), upload.single('image'), eventController.update)
 api.get('/event/import', helpers.importURL)
 
-
 // remove event
 api.delete('/event/:id', hasPerm('event:remove'), eventController.remove)
 

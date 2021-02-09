@@ -4,7 +4,6 @@ const { Nuxt, Builder } = require('nuxt')
 const nuxtConfig = require('../nuxt.config.js')
 const config = require('config')
 const consola = require('consola')
-const { TaskManager } = require('./taskManager')
 
 async function main () {
   nuxtConfig.server = config.server
@@ -23,10 +22,15 @@ async function main () {
     await nuxt.listen()
   } catch (e) {
     consola.error(e.toString())
+    process.winstonLog.error(e)
     return
   }
-  consola.info('Listen on %s:%d , visit me here => %s', config.server.host, config.server.port, config.baseurl)
+
+  const { TaskManager } = require('./taskManager')
   TaskManager.start()
+  const msg = `Listen on ${config.server.host}:${config.server.port} , visit me here => ${config.baseurl}`
+  consola.info(msg)
+  process.winstonLog.info(msg)
 
   // close connections/port/unix socket
   function shutdown () {

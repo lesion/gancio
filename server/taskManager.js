@@ -1,6 +1,11 @@
-const debug = require('debug')('TaskManager')
+const log = process.winstonLog // require('./log') // // require('debug')('TaskManager')
 const eventController = require('./api/controller/event')
 // const notifier = require('./notifier')
+
+const loopInterval = process.env.NODE_ENV === 'production' ? 15 : 1
+const minute = 60 / loopInterval
+const hour = minute * 60
+const day = hour * 24
 
 class Task {
   constructor ({ name, removable = false, repeatEach = 1, method, args = [] }) {
@@ -21,11 +26,11 @@ class Task {
     try {
       const ret = this.method.apply(this, this.args)
       if (ret && typeof ret.then === 'function') {
-        ret.catch(e => debug('TASK ERROR ', this.name, e))
+        ret.catch(e => log.error('TASK ERROR ', this.name, e))
         return ret
       }
     } catch (e) {
-      debug('TASK ERROR ', this.name, e)
+      log.error('TASK ERROR ', this.name, e)
       return Promise.resolve(false)
     }
   }
@@ -44,22 +49,22 @@ class TaskManager {
     this.tasks = []
   }
 
-  start (interval = 60 * 1000) {
-    debug('START')
+  start (interval = loopInterval) {
+    log.info(`START TASK MANAGER WITH LOOP INTERVAL OF ${interval} seconds`)
     this.interval = interval
-    this.timeout = setTimeout(this.tick.bind(this), interval)
+    this.timeout = setTimeout(this.tick.bind(this), interval * 1000)
   }
 
   stop () {
     if (this.timeout) {
-      debug('STOP')
+      log.debug('STOP TASKMANAGER')
       clearTimeout(this.timeout)
       this.timeout = false
     }
   }
 
   add (task) {
-    debug('ADD TASK ', task.name)
+    log.info(`ADD TASK ${task.name}`)
     this.tasks.push(task)
   }
 
@@ -79,7 +84,7 @@ class TaskManager {
 
   async tick () {
     await this.process()
-    this.timeout = setTimeout(this.tick.bind(this), this.interval)
+    this.timeout = setTimeout(this.tick.bind(this), this.interval * 1000)
   }
 }
 
@@ -89,7 +94,7 @@ const TS = new TaskManager()
 TS.add(new Task({
   name: 'RECURRENT_EVENT',
   method: eventController._createRecurrent,
-  repeatEach: 1 // check each 10 minutes
+  repeatEach: 10 * minute // check each 10 minutes
 }))
 
 // daily morning notification

@@ -3,12 +3,13 @@ const path = require('path')
 const moment = require('dayjs')
 const config = require('config')
 const settingsController = require('./controller/settings')
-const debug = require('debug')('email')
+const log = process.winstonLog
 const { Task, TaskManager } = require('../taskManager')
 const locales = require('../../locales')
 
 const mail = {
   send (addresses, template, locals, locale = settingsController.settings.instance_locale) {
+    log.debug('Enqueue new email ', template, locale)
     const task = new Task({
       name: 'MAIL',
       removable: true,
@@ -19,7 +20,7 @@ const mail = {
   },
 
   _send (addresses, template, locals, locale) {
-    debug(`Send ${template} email to ${addresses} with locale ${locale}`)
+    log.debug(`Send ${template} email to ${addresses} with locale ${locale}`)
     const email = new Email({
       views: { root: path.join(__dirname, '..', 'emails') },
       htmlToText: true,
@@ -61,7 +62,7 @@ const mail = {
     }
     return email.send(msg)
       .catch(e => {
-        debug('Error sending email =>', e.toString())
+        log.error('Error sending email =>', e.toString())
       })
   }
 }
