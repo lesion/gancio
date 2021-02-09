@@ -1,7 +1,9 @@
 const conf = require('config')
+const { format, transports } = require('winston')
 
 module.exports = {
   telemetry: false,
+  modern: (process.env.NODE_ENV === 'production') && 'client',
   /*
    ** Headers of the page
    */
@@ -60,8 +62,27 @@ module.exports = {
     ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }],
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    'nuxt-winston-log'
   ],
+
+  // configure nuxt-winston-log module
+  winstonLog: {
+    skipRequestMiddlewareHandler: true,
+    useDefaultLogger: false,
+    loggerOptions: {
+      transports: process.env.NODE_ENV !== 'production'
+        ? [new transports.Console(
+            { level: 'debug', format: format.combine(format.simple(), format.errors({ stack: true })) }
+          )]
+        : [new transports.File(
+            {
+              filename: 'gancio.log',
+              format: format.combine(format.simple(), format.errors({ stack: true }))
+            }
+          )]
+    }
+  },
   /*
    ** Axios module configuration
    * See https://github.com/nuxt-community/axios-module#options
