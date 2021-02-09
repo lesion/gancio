@@ -1,16 +1,16 @@
 <template lang="pug" functional>
   v-card.h-event.event
     nuxt-link(:to='`/event/${props.event.id}`')
-      v-img.align-end.white--text(:src="`/media/thumb/${props.event.image_path || 'logo.png' }`"
-        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7), rgba(0,0,0,.9)"
+      v-img.align-end(:src="`/media/thumb/${props.event.image_path || 'logo.png' }`"
         height="250" position="top top" )
-        v-card-title.text-h6.p-name {{props.event.title}}
+        v-icon.float-right(v-if='props.event.parentId' color='success') mdi-repeat
+  v-card-title.p-name.pb-0 {{props.event.title}}
 
+      //- gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7), rgba(0,0,0,.9)"
     v-card-text.pb-0
-      v-icon.float-right(v-if='props.event.parentId' color='success') mdi-repeat
-      time.dt-start(:datetime='props.event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  {{ props.event|when }}
+      time.dt-start.subtitle-1(:datetime='props.event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  {{ props.event|when }}
       .d-none.dt-end {{props.event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
-      v-btn.place.d-block.p-location(text color='primary' @click="listeners['placeclick'](props.event.place.id)") <v-icon>mdi-map-marker</v-icon> {{props.event.place.name}}
+      v-btn.place.d-block.p-location.pl-0(text color='primary' @click="listeners['placeclick'](props.event.place.id)") <v-icon>mdi-map-marker</v-icon> {{props.event.place.name}}
 
     v-card-actions
       v-chip.ml-1(v-for='tag in props.event.tags' link small
@@ -42,9 +42,6 @@ export default {
   props: {
     event: { type: Object, default: () => ({}) }
   }
-  //   copyLink () {
-  //     this.$root.$message('common.copied', { color: 'success' })
-  //   },
 }
 </script>
 <style lang="less">
@@ -53,8 +50,8 @@ export default {
   height: 380px;
   max-width: 500px;
   flex-grow: 1;
-  margin-top: .2em;
-  margin-left: .2em;
+  margin-top: .3em;
+  margin-left: .3em;
 
   .place {
     max-width: 100%;

@@ -3,10 +3,10 @@ v-container
   //- EVENT PAGE
   //- gancio supports microformats (http://microformats.org/wiki/h-event)
   v-card.h-event
-    v-card-text
-
+    v-card-actions
       //- admin controls
       EventAdmin.mb-1(v-if='is_mine' :event='event')
+    v-card-text
 
       v-row
         v-col.col-12.col-lg-8
@@ -61,7 +61,7 @@ v-container
                     :href='`/api/event/${event.id}.ics`')
                     v-icon mdi-calendar-export
 
-      .p-description.text-body-1.px-5(v-if='event.image_path' v-html='event.description')
+      .p-description.text-body-1.px-5.ma-5(v-if='event.image_path' v-html='event.description')
       v-chip.p-category.ml-1(v-for='tag in event.tags' color='primary'
         outlined :key='tag' v-text='tag')
 
