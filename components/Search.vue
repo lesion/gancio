@@ -1,15 +1,17 @@
 <template lang="pug">
-  v-container
+  v-container.pt-0.pt-md-2
     v-switch.mt-0(
       v-if='recurrentFilter && settings.allow_recurrent_event'
       v-model='filters.show_recurrent'
       inset color='primary'
+      hide-details
       :label="$t('event.show_recurrent')"
       @change="toggleShowRecurrent")
 
     v-autocomplete.mt-0(
       :label='$t("common.search")'
       :items='keywords'
+      hide-details
       @change='change'
       :value='selectedFilters'
       clearable
