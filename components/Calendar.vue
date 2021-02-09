@@ -3,7 +3,7 @@
     v-calendar(
       title-position='left'
       :is-dark="settings['theme.is_dark']"
-      :columns="$screens({ lg: 2 }, 1)"
+      :columns="$screens({ sm: 2 }, 1)"
       @update:from-page='updatePage'
       :locale='$i18n.locale'
       :attributes='attributes'
