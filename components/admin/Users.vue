@@ -15,7 +15,7 @@
       v-card(color='secondary')
         v-card-title {{$t('common.new_user')}}
         v-card-text
-          v-form(v-model='valid' ref='user_form' lazy-validation)
+          v-form(v-model='valid' ref='user_form' lazy-validation @submit.prevent='createUser')
             v-text-field(v-model='new_user.email'
               :label="$t('common.email')"
               :rules="$validators.email")
@@ -44,6 +44,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import get from 'lodash/get'
 
 export default {
   name: 'Users',
