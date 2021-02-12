@@ -96,7 +96,8 @@ export default {
         this.$root.$message('admin.user_create_ok', { color: 'success' })
         this.users_.push(user)
       } catch (e) {
-        this.$root.$message(e, { color: 'error' })
+        const err = get(e, 'response.data.errors[0].message', e)
+        this.$root.$message(this.$t(err), { color: 'error' })
       }
     }
   }
