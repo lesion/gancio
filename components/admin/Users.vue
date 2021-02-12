@@ -87,13 +87,13 @@ export default {
       }
     },
     async createUser () {
-      if (!this.$refs.user_form.validate()) return
+      if (!this.$refs.user_form.validate()) { return }
       try {
         this.loading = true
         const user = await this.$axios.$post('/user', this.new_user)
         this.new_user = { email: '', is_admin: false }
 
-        this.$root.$message('admin.user_create_ok', { color: 'success'})
+        this.$root.$message('admin.user_create_ok', { color: 'success' })
         this.users_.push(user)
       } catch (e) {
         this.$root.$message(e, { color: 'error' })
