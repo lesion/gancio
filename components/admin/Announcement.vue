@@ -6,7 +6,7 @@
       v-card(color='secondary')
         v-card-title {{$t('admin.new_announcement')}}
         v-card-text
-          v-form(v-model='valid' ref='announcement')
+          v-form(v-model='valid' ref='announcement' @submit.prevent='save')
             v-text-field(v-model='announcement.title' :label='$t("common.title")')
             Editor.mt-2(v-model='announcement.announcement'
               border no-save max-height='400px' :placeholder="$t('common.description')")
