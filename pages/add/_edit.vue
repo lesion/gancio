@@ -98,7 +98,9 @@ export default {
         recurrent: event.recurrent,
         from: new Date(dayjs.unix(event.start_datetime)),
         due: new Date(dayjs.unix(event.end_datetime)),
-        multidate: event.multidate
+        multidate: event.multidate,
+        fromHour: true,
+        dueHour: true
       }
 
       data.event.title = event.title
@@ -180,7 +182,7 @@ export default {
         this.updateMeta()
         this.$router.push('/')
         this.$nextTick(() => {
-          this.$root.$message(this.$auth.loggedIn ? 'event.added' : 'event.added_anon', { color: 'success' })
+          this.$root.$message(this.$auth.loggedIn ? (this.edit ? 'event.saved' : 'event.added') : 'event.added_anon', { color: 'success' })
         })
       } catch (e) {
         switch (e.request.status) {
