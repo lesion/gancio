@@ -1,5 +1,5 @@
 <template lang="pug">
-.when {{value}}
+.when
   .text-center
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-model='type' color='primary' @change='type => change("type", type)')
       v-btn(value='normal' label="normal") {{$t('event.normal')}}
@@ -12,19 +12,22 @@
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-if='type === "recurrent"' color='primary' :value='value.recurrent.frequency' @change='fq => change("frequency", fq)')
       v-btn(v-for='f in frequencies' :key='f.value' :value='f.value') {{f.text}}
 
+    p {{value}}
     client-only
       .datePicker.mt-3
-        v-date-picker(
-          :value='fromDate'
-          @input="date => change('date', date)"
-          :is-range='type === "multidate"'
-          :attributes='attributes'
-          :locale='$i18n.locale'
-          :from-page.sync='page'
-          :is-dark="settings['theme.is_dark']"
-          is-inline
-          is-expanded
-          :min-date='type !== "recurrent" && new Date()')
+        v-input(:value='fromDate'
+            :rules="[$validators.required('common.when')]")
+          v-date-picker(
+            :value='fromDate'
+            @input="date => change('date', date)"
+            :is-range='type === "multidate"'
+            :attributes='attributes'
+            :locale='$i18n.locale'
+            :from-page.sync='page'
+            :is-dark="settings['theme.is_dark']"
+            is-inline
+            is-expanded
+            :min-date='type !== "recurrent" && new Date()')
 
   div.text-center.mb-2(v-if='type === "recurrent"')
     span(v-if='value.recurrent.frequency !== "1m" && value.recurrent.frequency !== "2m"') {{whenPatterns}}
@@ -33,11 +36,12 @@
 
   v-row.mt-3.col-md-6.mx-auto
     v-col.col-12.col-sm-6
-      v-select(dense :label="$t('event.from')" :value='fromHour'
+      v-select(dense :label="$t('event.from')" :value='fromHour' clearable
+        :rules="[$validators.required('event.from')]"
         :items='hourList' @change='hr => change("fromHour", hr)')
 
     v-col.col-12.col-sm-6
-      v-select(dense :label="$t('event.due')" :value='dueHour'
+      v-select(dense :label="$t('event.due')" :value='dueHour' clearable
         :items='hourList' @change='hr => change("dueHour", hr)')
 
   //- div.col-md-12(v-if='isRecurrent')
@@ -78,20 +82,17 @@ export default {
   computed: {
     ...mapState(['settings', 'events']),
     fromDate () {
-      console.error('davvero in fromdate', this.value)
       if (this.value.multidate) {
-        console.error(this.value)
-        console.error('son qui dentro!')
-        return ({ start: this.value.from, end: this.value.due })
+        return ({ start: dayjs(this.value.from).toDate(), end: dayjs(this.value.due).toDate() })
       }
-      return dayjs(this.value.from || 0).toDate()
+      return this.value.from ? dayjs(this.value.from).toDate() : null
     },
 
     fromHour () {
-      return dayjs(this.value.from || 0).format('HH:mm')
+      return this.value.from && this.value.fromHour ? dayjs(this.value.from).format('HH:mm') : null
     },
     dueHour () {
-      return dayjs(this.value.due || 0).format('HH:mm')
+      return this.value.due && this.value.dueHour ? dayjs(this.value.due).format('HH:mm') : null
     },
     hourList () {
       const hourList = []
@@ -183,26 +184,50 @@ export default {
       } else if (what === 'frequency') {
         this.$emit('input', { ...this.value, recurrent: { ...this.value.recurrent, frequency: value } })
       } else if (what === 'fromHour') {
-        const [hour, minute] = value.split(':')
-        const from = dayjs(this.value.from).hour(hour).minute(minute)
-        this.$emit('input', { ...this.value, from })
-      } else if (what === 'dueHour') {
-        const [hour, minute] = value.split(':')
-        const fromHour = dayjs(this.value.from).hour()
-
-        // add a day
-        let due = dayjs(this.value.due)
-        if (fromHour > Number(hour)) {
-          due = due.add(1, 'day')
+        if (value) {
+          const [hour, minute] = value.split(':')
+          const from = dayjs(this.value.from).hour(hour).minute(minute)
+          this.$emit('input', { ...this.value, from, fromHour: true })
+        } else {
+          this.$emit('input', { ...this.value, fromHour: false })
         }
-        due = due.hour(hour).minute(minute)
-        this.$emit('input', { ...this.value, due })
+      } else if (what === 'dueHour') {
+        if (value) {
+          const [hour, minute] = value.split(':')
+          const fromHour = dayjs(this.value.from).hour()
+
+          // add a day
+          let due = dayjs(this.value.due)
+          if (fromHour > Number(hour) && !this.value.multidate) {
+            due = due.add(1, 'day')
+          }
+          due = due.hour(hour).minute(minute)
+          this.$emit('input', { ...this.value, due, dueHour: true })
+        } else {
+          this.$emit('input', { ...this.value, dueHour: false })
+        }
       } else if (what === 'date') {
         console.error('dentro what date', value)
         if (this.value.multidate) {
-          this.$emit('input', { ...this.value, from: value.start, due: value.end })
+          let from = value.start
+          let due = value.end
+          if (this.value.fromHour) {
+            from = dayjs(value.start).hour(dayjs(this.value.from).hour())
+          }
+          if (this.value.dueHour) {
+            due = dayjs(value.end).hour(dayjs(this.value.due).hour())
+          }
+          this.$emit('input', { ...this.value, from, due })
         } else {
-          this.$emit('input', { ...this.value, from: value, due: value })
+          let from = value
+          let due = value
+          if (this.value.fromHour) {
+            from = dayjs(value).hour(dayjs(this.value.from).hour())
+          }
+          if (this.value.dueHour) {
+            due = dayjs(value).hour(dayjs(this.value.due).hour())
+          }
+          this.$emit('input', { ...this.value, from, due })
         }
       }
     },
@@ -214,12 +239,6 @@ export default {
     selectFrequency (f) {
       this.$emit('input', { recurrent: { frequency: f }, from: this.value.from, due: this.value.due })
     }
-    // pick (date) {
-    //   if (this.value.type === 'normal' || this.value.type === 'recurrent' || (this.value.date && this.value.date.length === 2)) {
-    //     this.datePickerMenu = false
-    //   }
-    //   this.$emit('input', { date, recurrent: this.value.recurrent })
-    // }
   }
 }
 </script>
