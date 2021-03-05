@@ -10,9 +10,6 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'Announcement',
-  data () {
-    return { announcement: { title: '' } }
-  },
   asyncData ({ $axios, params, error, store }) {
     try {
       const id = Number(params.id)
@@ -21,6 +18,9 @@ export default {
     } catch (e) {
       error({ statusCode: 404, message: 'Announcement not found' })
     }
+  },
+  data () {
+    return { announcement: { title: '' } }
   },
   computed: mapState(['announcements']),
   methods: {
