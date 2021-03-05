@@ -43,6 +43,11 @@ v-container
                 b.vcard.ml-2 {{event.place.name}}
               .text-subtitle-1.adr {{event.place.address}}
 
+            //- tags, hashtags
+            v-toolbar(v-if='event.tags.length').darken-4.grey
+              v-chip.p-category.ml-1.mt-3(v-for='tag in event.tags' color='primary'
+                outlined :key='tag' v-text='tag')
+
             //- info & actions
             v-toolbar
               v-tooltip(bottom) {{$t('common.copy_link')}}
@@ -62,8 +67,6 @@ v-container
                     v-icon mdi-calendar-export
 
       .p-description.text-body-1.px-5.ma-5(v-if='event.image_path' v-html='event.description')
-      v-chip.p-category.ml-1(v-for='tag in event.tags' color='primary'
-        outlined :key='tag' v-text='tag')
 
       //- resources from fediverse
       #resources.mt-1(v-if='settings.enable_federation')
@@ -113,7 +116,7 @@ v-container
                 img(v-for='img in resource.data.attachment' :src='img.url')
 
       //- Next/prev arrow
-      .text-center
+      .text-center.mt-5.mb-5
         v-btn.mr-2(nuxt icon outlined color='primary'
           :to='`/event/${event.prev}`' :disabled='!event.prev')
           v-icon mdi-arrow-left
@@ -136,7 +139,6 @@ const htmlToText = require('html-to-text')
 export default {
   name: 'Event',
   components: { EventAdmin, EmbedEvent, FollowMe },
-  transition: null,
   async asyncData ({ $axios, params, error, store }) {
     try {
       const event = await $axios.$get(`/event/${params.id}`)
@@ -147,6 +149,7 @@ export default {
   },
   data () {
     return {
+      event: {},
       showEmbed: false,
       showFollowMe: false,
       showResources: false,
@@ -259,10 +262,10 @@ export default {
     keyDown (ev) {
       if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) { return }
       if (ev.key === 'ArrowRight' && this.event.next) {
-        this.$router.push(`/event/${this.event.next}`)
+        this.$router.replace(`/event/${this.event.next}`)
       }
       if (ev.key === 'ArrowLeft' && this.event.prev) {
-        this.$router.push(`/event/${this.event.prev}`)
+        this.$router.replace(`/event/${this.event.prev}`)
       }
     },
     showResource (resource) {
