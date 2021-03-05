@@ -10,14 +10,14 @@
       .d-none.dt-end {{props.event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
       a.place.d-block.p-location.pl-0(text color='primary' @click="listeners['placeclick'](props.event.place.id)") <v-icon>mdi-map-marker</v-icon> {{props.event.place.name}}
 
-    v-card-actions.actions
+    v-card-actions.actions.justify-space-between
       .tags
         v-chip.ml-1(v-for='tag in props.event.tags' small
           :key='tag' outlined color='primary' @click="listeners['tagclick'](tag)") {{tag}}
 
       v-menu(offset-y)
         template(v-slot:activator="{on}")
-          v-btn(icon v-on='on' color='primary')
+          v-btn.align-self-end(icon v-on='on' color='primary')
             v-icon mdi-dots-vertical
         v-list(dense)
           v-list-item-group
@@ -61,7 +61,7 @@ export default {
 
   .title {
     display: block;
-    max-height: 2.8em;
+    max-height: 4.2em;
     overflow: hidden;
     margin: 0.5rem 1rem 0.5rem 1rem;
     color: white;

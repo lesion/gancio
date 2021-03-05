@@ -44,7 +44,7 @@ v-container
               .text-subtitle-1.adr {{event.place.address}}
 
             //- tags, hashtags
-            v-toolbar(v-if='event.tags.length').darken-4.grey
+            v-card-text(v-if='event.tags.length').darken-4.grey
               v-chip.p-category.ml-1.mt-3(v-for='tag in event.tags' color='primary'
                 outlined :key='tag' v-text='tag')
 
