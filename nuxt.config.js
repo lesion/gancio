@@ -21,12 +21,18 @@ module.exports = {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: 'orange', height: '5px' },
+  loading: '~/components/Loading.vue',
+  // loading: {
+  //   name: 'circle',
+  //   color: '#3B8070',
+  //   background: 'white'
+  // },
   /*
    ** Global CSS
    */
   css: [
     '@mdi/font/css/materialdesignicons.css',
+    // '@fontsource/roboto',
     '@/assets/style.less'
   // 'bootstrap/dist/css/bootstrap.min.css',
   // 'element-ui/lib/theme-chalk/index.css',
@@ -59,30 +65,29 @@ module.exports = {
    ** Nuxt.js modules
    */
   modules: [
-    ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }],
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    'nuxt-winston-log'
+    ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }]
   ],
 
   // configure nuxt-winston-log module
-  winstonLog: {
-    skipRequestMiddlewareHandler: true,
-    useDefaultLogger: false,
-    loggerOptions: {
-      transports: process.env.NODE_ENV !== 'production'
-        ? [new transports.Console(
-            { level: 'debug', format: format.combine(format.simple(), format.errors({ stack: true })) }
-          )]
-        : [new transports.File(
-            {
-              filename: 'gancio.log',
-              format: format.combine(format.simple(), format.errors({ stack: true }))
-            }
-          )]
-    }
-  },
+  // winstonLog: {
+  //   skipRequestMiddlewareHandler: true,
+  //   useDefaultLogger: false,
+  //   loggerOptions: {
+  //     transports: process.env.NODE_ENV !== 'production'
+  //       ? [new transports.Console(
+  //           { level: 'debug', format: format.combine(format.colorize(), format.simple(), format.errors({ stack: true })) }
+  //         )]
+  //       : [new transports.File(
+  //           {
+  //             filename: 'gancio.log',
+  //             format: format.combine(format.simple(), format.errors({ stack: true }))
+  //           }
+  //         )]
+  //   }
+  // },
   /*
    ** Axios module configuration
    * See https://github.com/nuxt-community/axios-module#options
