@@ -2,7 +2,8 @@
   v-container#home(fluid)
 
     //- Announcements
-    Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
+    #announcements.mr-1
+      Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
     //- Calendar and search bar
     v-row
@@ -54,9 +55,23 @@ export default {
       // intersecting: {}
     }
   },
-  computed: {
-    ...mapState(['settings', 'announcements'])
+  head () {
+    return {
+      title: this.settings.title,
+      meta: [
+        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+        { hid: 'description', name: 'description', content: this.settings.description },
+        { hid: 'og-description', name: 'og:description', content: this.settings.description },
+        { hid: 'og-title', property: 'og:title', content: this.settings.title },
+        { hid: 'og-url', property: 'og:url', content: this.settings.baseurl },
+        { property: 'og:image', content: this.settings.baseurl + '/favicon.ico' }
+      ],
+      link: [
+        { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' }
+      ]
+    }
   },
+  computed: mapState(['settings', 'announcements']),
   methods: {
     // onIntersect (isIntersecting, eventId) {
     // this.intersecting[eventId] = isIntersecting
@@ -72,6 +87,7 @@ export default {
       }).then(events => {
         this.events = events
         this.setFilters(this.filters)
+        this.$nuxt.$loading.finish()
       })
     },
     placeClick (place_id) {
@@ -99,6 +115,7 @@ export default {
         this.first = false
         return
       }
+      this.$nuxt.$loading.start()
       this.selectedDay = null
 
       // check if current month is selected
@@ -127,28 +144,14 @@ export default {
       this.selectedDay = date
       this.updateEvents()
     }
-  },
-  head () {
-    return {
-      title: this.settings.title,
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description', name: 'description', content: this.settings.description },
-        { hid: 'og-description', name: 'og:description', content: this.settings.description },
-        { hid: 'og-title', property: 'og:title', content: this.settings.title },
-        { hid: 'og-url', property: 'og:url', content: this.settings.baseurl },
-        { property: 'og:image', content: this.settings.baseurl + '/favicon.ico' }
-      ],
-      link: [
-        { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' }
-      ]
-    }
   }
 }
 </script>
 <style lang='less'>
 #home {
   max-width: 1400px;
+  padding-right: 0px;
+  overflow: hidden;
 }
 
 #events {
