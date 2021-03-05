@@ -12,7 +12,6 @@
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-if='type === "recurrent"' color='primary' :value='value.recurrent.frequency' @change='fq => change("frequency", fq)')
       v-btn(v-for='f in frequencies' :key='f.value' :value='f.value') {{f.text}}
 
-    p {{value}}
     client-only
       .datePicker.mt-3
         v-input(:value='fromDate'
