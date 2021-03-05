@@ -1,6 +1,6 @@
 const mail = require('./api/mail')
 const config = require('config')
-const debug = require('debug')('notifier')
+const log = require('./log')
 const fediverseHelpers = require('./federation/helpers')
 
 const Event = require('./api/models/event')
@@ -16,7 +16,7 @@ const notifier = {
 
   sendNotification (notification, event) {
     const promises = []
-    debug('Send %s notification %s', notification.type, notification.action)
+    log.debug(`Send ${notification.type} notification ${notification.action}`)
     let p
     switch (notification.type) {
       // case 'mail': TODO: locale?
@@ -38,7 +38,7 @@ const notifier = {
       include: [Tag, Place, Notification, User]
     })
 
-    debug('%s -> %s', action, event.title)
+    log.debug(action, event.title)
 
     // insert notifications
     const notifications = await eventController.getNotifications(event, action)
@@ -51,7 +51,7 @@ const notifier = {
         await notifier.sendNotification(notification, event)
         notification.event_notification.status = 'sent'
       } catch (err) {
-        debug(err)
+        log.error(err)
         notification.event_notification.status = 'error'
       }
       return notification.event_notification.save()
@@ -71,7 +71,7 @@ const notifier = {
         e.status = 'sent'
         return e.save()
       } catch (err) {
-        debug(err)
+        log.error(err)
         e.status = 'error'
         e.error = err
         return e.save()
