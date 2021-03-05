@@ -1,21 +1,19 @@
 <template lang="pug" functional>
   v-card.h-event.event
     nuxt-link(:to='`/event/${props.event.id}`')
-      v-img.align-end(:src="`/media/thumb/${props.event.image_path || 'logo.png' }`"
-        height="250" position="top top" )
-        v-icon.float-right(v-if='props.event.parentId' color='success') mdi-repeat
-  v-card-title.p-name.pb-0 {{props.event.title}}
+      img(:src="`/media/thumb/${props.event.image_path || 'logo.png' }`")
+      v-icon.float-right.mr-1(v-if='props.event.parentId' color='success') mdi-repeat
+      .title.p-name {{props.event.title}}
 
-    //- gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7), rgba(0,0,0,.9)"
-    v-card-text.pb-0
+    v-card-text.body
       time.dt-start.subtitle-1(:datetime='props.event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  {{ props.event|when }}
       .d-none.dt-end {{props.event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
-      v-btn.place.d-block.p-location.pl-0(text color='primary' @click="listeners['placeclick'](props.event.place.id)") <v-icon>mdi-map-marker</v-icon> {{props.event.place.name}}
+      a.place.d-block.p-location.pl-0(text color='primary' @click="listeners['placeclick'](props.event.place.id)") <v-icon>mdi-map-marker</v-icon> {{props.event.place.name}}
 
-    v-card-actions
-      v-chip.ml-1(v-for='tag in props.event.tags' link small
-        :key='tag' outlined color='primary' @click="listeners['tagclick'](tag)") {{tag}}
-      v-spacer
+    v-card-actions.actions
+      .tags
+        v-chip.ml-1(v-for='tag in props.event.tags' small
+          :key='tag' outlined color='primary' @click="listeners['tagclick'](tag)") {{tag}}
 
       v-menu(offset-y)
         template(v-slot:activator="{on}")
@@ -46,12 +44,58 @@ export default {
 </script>
 <style lang="less">
 .event {
+  display: flex;
+  position: relative;
+  flex-direction: column;
   width: 330px;
-  height: 380px;
   max-width: 500px;
+  transition: all .5s;
   flex-grow: 1;
-  margin-top: .3em;
-  margin-left: .3em;
+  margin-top: .4em;
+  margin-right: .4em;
+  overflow: hidden;
+
+  &:hover img {
+    transform: scale(1.02);
+  }
+
+  .title {
+    display: block;
+    max-height: 2.8em;
+    overflow: hidden;
+    margin: 0.5rem 1rem 0.5rem 1rem;
+    color: white;
+    border-bottom: 1px solid #333;
+    font-size: 1.2em !important;
+    line-height: 1.4em;
+    font-weight: 700;
+  }
+
+  .body {
+    flex: 1 1 auto;
+  }
+
+  // .actions {
+  //   justify-content: flex-end;
+  //   overflow: hidden;
+  //   align-content: flex-end;
+  //   text-align: right;
+  //   .tags {
+  //     order: 0;
+  //     flex-grow: 1;
+  //     align-self:center;
+  //     max-height: 1.6em;
+  //     overflow: hidden;
+  //   }
+  // }
+
+  img {
+    transition: transform .2s ease;
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    object-position: top;
+  }
 
   .place {
     max-width: 100%;
