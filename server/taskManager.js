@@ -1,4 +1,4 @@
-const log = process.winstonLog // require('./log') // // require('debug')('TaskManager')
+const log = require('./log')
 const eventController = require('./api/controller/event')
 // const notifier = require('./notifier')
 
@@ -47,6 +47,8 @@ class Task {
 class TaskManager {
   constructor () {
     this.tasks = []
+    this.interval = 1
+    this.timeout = null
   }
 
   start (interval = loopInterval) {
@@ -64,7 +66,7 @@ class TaskManager {
   }
 
   add (task) {
-    log.info(`ADD TASK ${task.name}`)
+    log.debug(`[TASK] Add ${task.name} (${task.repeatEach * this.interval} seconds)`)
     this.tasks.push(task)
   }
 

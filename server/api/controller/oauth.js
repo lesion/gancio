@@ -7,8 +7,8 @@ const OAuthToken = require('../models/oauth_token')
 const OAuthCode = require('../models/oauth_code')
 const User = require('../models/user')
 
-const debug = require('debug')('oauth')
-const moment = require('dayjs')
+const log = require('../../log')
+const dayjs = require('dayjs')
 
 async function randomString (len = 16) {
   const bytes = await randomBytes(len * 8)
@@ -42,7 +42,7 @@ const oauthController = {
       delete client.id
       res.json(client)
     } catch (e) {
-      debug(e)
+      log.error(e)
       res.status(400).json(e)
     }
   },
@@ -136,14 +136,14 @@ const oauthController = {
     async saveAuthorizationCode (code, client, user) {
       code.userId = user.id
       code.clientId = client.id
-      code.expiresAt = moment(code.expiresAt).toDate()
+      code.expiresAt = dayjs(code.expiresAt).toDate()
       const ret = await OAuthCode.create(code)
       return ret
     },
 
     // TODO
     verifyScope (token, scope) {
-      debug('VERIFY SCOPE ', scope)
+      log.debug('VERIFY SCOPE ', scope)
       if (token.user.is_admin) {
         return true
       } else {

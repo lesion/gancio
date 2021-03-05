@@ -4,7 +4,6 @@ const consola = require('consola')
 const path = require('path')
 const fs = require('fs')
 const pkg = require('../../../package.json')
-const debug = require('debug')('settings')
 const crypto = require('crypto')
 const util = require('util')
 const toIco = require('to-ico')
@@ -12,6 +11,7 @@ const generateKeyPair = util.promisify(crypto.generateKeyPair)
 const readFile = util.promisify(fs.readFile)
 const writeFile = util.promisify(fs.writeFile)
 const sharp = require('sharp')
+const log = require('../../log')
 
 const defaultSettings = {
   instance_timezone: 'Europe/Rome',
@@ -61,7 +61,7 @@ const settingsController = {
 
       // add pub/priv instance key if needed
       if (!settingsController.settings.publicKey) {
-        debug('Instance priv/pub key not found')
+        log.debug('Instance priv/pub key not found')
         const { publicKey, privateKey } = await generateKeyPair('rsa', {
           modulusLength: 4096,
           publicKeyEncoding: {
@@ -92,6 +92,7 @@ const settingsController = {
   },
 
   async set (key, value, is_secret = false) {
+    log.debug(`SET ${key} ${value}`)
     try {
       const [setting, created] = await Setting.findOrCreate({
         where: { key },
@@ -101,7 +102,7 @@ const settingsController = {
       settingsController[is_secret ? 'secretSettings' : 'settings'][key] = value
       return true
     } catch (e) {
-      debug(e)
+      log.error(e)
       return false
     }
   },
@@ -125,6 +126,9 @@ const settingsController = {
       .resize(400)
       .png({ quality: 90 })
       .toFile(baseImgPath + '.png', async (err, info) => {
+        if (err) {
+          log.error(err)
+        }
         const image = await readFile(baseImgPath + '.png')
         const favicon = await toIco([image], { sizes: [64], resize: true })
         writeFile(baseImgPath + '.ico', favicon)

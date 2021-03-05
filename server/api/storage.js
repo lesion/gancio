@@ -3,13 +3,13 @@ const path = require('path')
 const crypto = require('crypto')
 const mkdirp = require('mkdirp')
 const sharp = require('sharp')
-const debug = require('debug')('storage')
+const log = require('../log')
 const config = require('config')
 
 try {
   mkdirp.sync(config.upload_path + '/thumb')
 } catch (e) {
-  debug.warn(e)
+  log.error(e)
 }
 
 const DiskStorage = {
@@ -25,10 +25,11 @@ const DiskStorage = {
     let onError = false
     const err = e => {
       if (onError) {
+        log.error(err)
         return
       }
       onError = true
-      debug(e)
+      log.error(e)
       req.err = e
       cb(null)
     }

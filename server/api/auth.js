@@ -1,4 +1,4 @@
-const debug = require('debug')('auth')
+const log = require('../log')
 const oauth = require('./oauth')
 const get = require('lodash/get')
 
@@ -40,14 +40,13 @@ const Auth = {
   // TODO
   hasPerm (scope) {
     return (req, res, next) => {
-      debug(scope, req.path)
+      log.debug(scope, req.path)
       oauth.oauthServer.authenticate({ scope })(req, res, () => {
-        debug('has perm')
+        log.debug('has perm')
         next()
       })
     }
   }
-
 }
 
 module.exports = Auth

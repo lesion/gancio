@@ -3,7 +3,7 @@ const path = require('path')
 const moment = require('dayjs')
 const config = require('config')
 const settingsController = require('./controller/settings')
-const log = process.winstonLog
+const log = require('../log')
 const { Task, TaskManager } = require('../taskManager')
 const locales = require('../../locales')
 
@@ -62,7 +62,8 @@ const mail = {
     }
     return email.send(msg)
       .catch(e => {
-        log.error('Error sending email =>', e.toString())
+        log.error('Error sending email =>')
+        log.error(e)
       })
   }
 }

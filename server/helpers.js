@@ -7,7 +7,7 @@ const timezone = require('dayjs/plugin/timezone')
 dayjs.extend(timezone)
 
 const config = require('config')
-const debug = require('debug')('helpers')
+const log = require('./log')
 const pkg = require('../package.json')
 const fs = require('fs')
 const path = require('path')
@@ -77,7 +77,7 @@ module.exports = {
   },
 
   async getImageFromURL (url) {
-    debug(`getImageFromURL ${url}`)
+    log.debug(`getImageFromURL ${url}`)
     const filename = crypto.randomBytes(16).toString('hex') + '.jpg'
     const finalPath = path.resolve(config.upload_path, filename)
     const thumbPath = path.resolve(config.upload_path, 'thumb', filename)
@@ -164,7 +164,7 @@ module.exports = {
       // console.error(event)
       // console.error(response)
     } catch (e) {
-      debug(e)
+      log.error(e)
     }
 
     // res.json('ok')

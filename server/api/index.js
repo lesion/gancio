@@ -17,7 +17,7 @@ const storage = require('./storage')
 const upload = multer({ storage })
 
 const config = require('config')
-const debug = require('debug')('api')
+const log = require('../log')
 
 const api = express.Router()
 api.use(express.urlencoded({ extended: false }))
@@ -144,7 +144,7 @@ api.use((req, res) => res.sendStatus(404))
 
 // Handle 500
 api.use((error, req, res, next) => {
-  debug(error)
+  log.error(error)
   res.status(500).send('500: Internal Server Error')
 })
 

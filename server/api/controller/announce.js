@@ -1,5 +1,5 @@
 const Announcement = require('../models/announcement')
-const debug = require('debug')('announcement:controller')
+const log = require('../../log')
 
 const announceController = {
   async getAll (req, res) {
@@ -17,7 +17,7 @@ const announceController = {
       announcement: req.body.announcement,
       visible: true
     }
-    debug('Create announcement ', req.body.title)
+    log.debug('Create announcement ', req.body.title)
     const announce = await Announcement.create(announcementDetail)
     res.json(announce)
   },
@@ -34,20 +34,20 @@ const announceController = {
       announce = await announce.update(announceDetails)
       res.json(announce)
     } catch (e) {
-      debug('Toggle announcement failed ', e)
+      log.debug('Toggle announcement failed ', e)
       res.sendStatus(404)
     }
   },
 
   async remove (req, res) {
-    debug('Remove announcement ', req.params.announce_id)
+    log.debug('Remove announcement ', req.params.announce_id)
     const announce_id = req.params.announce_id
     try {
       const announce = await Announcement.findByPk(announce_id)
       await announce.destroy()
       res.sendStatus(200)
     } catch (e) {
-      debug('Remove announcement failed ', e)
+      log.debug('Remove announcement failed ', e)
       res.sendStatus(404)
     }
   }

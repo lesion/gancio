@@ -52,7 +52,7 @@ const eventController = {
   },
 
   async getNotifications (event, action) {
-    log.info('getNotifications "%s" (%s)', event.title, action)
+    log.debug(`getNotifications ${event.title} ${action}`)
     function match (event, filters) {
       // matches if no filter specified
       if (!filters) { return true }
@@ -165,11 +165,16 @@ const eventController = {
   async confirm (req, res) {
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id, { include: [Place, Tag] })
-    if (!event) { return res.sendStatus(404) }
+    if (!event) {
+      log.warn(`Trying to confirm a unknown event, id: ${id}`)
+      return res.sendStatus(404)
+    }
     if (!req.user.is_admin && req.user.id !== event.userId) {
+      log.warn(`Someone unallowed is trying to confirm -> "${event.title} `)
       return res.sendStatus(403)
     }
 
+    log.info(`Event "${event.title}" confirmed`)
     try {
       event.is_visible = true
 
@@ -189,7 +194,7 @@ const eventController = {
       const notifier = require('../../notifier')
       notifier.notifyEvent('Create', event.id)
     } catch (e) {
-      log.info(e)
+      log.error(e)
       res.sendStatus(404)
     }
   },
@@ -326,8 +331,7 @@ const eventController = {
         notifier.notifyEvent('Create', event.id)
       }
     } catch (e) {
-      process.winstonLog.error(e)
-      log.info(e)
+      log.error(e)
       res.sendStatus(400)
     }
   },

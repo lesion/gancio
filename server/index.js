@@ -3,7 +3,7 @@ const { Nuxt, Builder } = require('nuxt')
 // Import and Set Nuxt.js options
 const nuxtConfig = require('../nuxt.config.js')
 const config = require('config')
-const consola = require('consola')
+const log = require('./log')
 
 async function main () {
   nuxtConfig.server = config.server
@@ -21,21 +21,20 @@ async function main () {
   try {
     await nuxt.listen()
   } catch (e) {
-    consola.error(e.toString())
-    process.winstonLog.error(e)
+    log.err(e)
     return
   }
 
   const { TaskManager } = require('./taskManager')
   TaskManager.start()
   const msg = `Listen on ${config.server.host}:${config.server.port} , visit me here => ${config.baseurl}`
-  consola.info(msg)
-  process.winstonLog.info(msg)
+  log.info(msg)
 
   // close connections/port/unix socket
   function shutdown () {
     TaskManager.stop()
     nuxt.close(async () => {
+      log.info('Closing DB')
       const sequelize = require('./api/models')
       await sequelize.close()
       process.exit()

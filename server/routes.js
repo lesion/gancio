@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser')
 const federation = require('./federation')
 const webfinger = require('./federation/webfinger')
 const { spamFilter } = require('./federation/helpers')
-const debug = require('debug')('routes')
+const log = require('./log')
 const exportController = require('./api/controller/export')
 const eventController = require('./api/controller/event')
 const announceController = require('./api/controller/announce')
@@ -26,7 +26,7 @@ app.use(spamFilter)
 app.use(metricsMiddleware)
 
 app.use((req, res, next) => {
-  debug(req.method, req.path)
+  log.debug(`${req.method} ${req.path}`)
   next()
 })
 
@@ -62,7 +62,7 @@ app.use('/oauth', oauth)
 
 // // Handle 500
 app.use((error, req, res, next) => {
-  debug('Error 500: %s', error)
+  log.error(error)
   res.status(500).send('500: Internal Server Error')
 })
 

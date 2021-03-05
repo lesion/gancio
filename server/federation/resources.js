@@ -2,7 +2,7 @@ const Event = require('../api/models/event')
 const Resource = require('../api/models/resource')
 const APUser = require('../api/models/ap_user')
 
-const debug = require('debug')('fediverse:resource')
+const log = require('../log')
 const helpers = require('../helpers')
 const linkifyHtml = require('linkifyjs/html')
 
@@ -11,7 +11,7 @@ module.exports = {
   // create a resource from AP Note
   async create (req, res) {
     if (!req.settings.enable_resources) {
-      debug('Ignore resource as it is disabled in settings')
+      log.info('Ignore resource as it is disabled in settings')
       return
     }
 
@@ -26,7 +26,7 @@ module.exports = {
     if (inReplyTo) {
       // .. to an event ?
       const match = inReplyTo && inReplyTo.match('.*/federation/m/(.*)')
-      debug('Event reply => ', inReplyTo)
+      log.info(`Event reply => ${inReplyTo}`)
       if (match) {
         event = await Event.findByPk(Number(match[1]))
       } else {
@@ -36,10 +36,14 @@ module.exports = {
       }
     }
 
-    debug('resource from %s to "%s"', req.body.actor, event && event.title)
+    if (!event) {
+      log.error('This is a direct message. Just ignore it')
+      log.error(body)
+      return res.status(404).send('Not found')
+    }
 
-    // TODO should probably map links here
-    // clean resource
+    log.debug(`resource from ${req.body.actor} to "${event.title}"`)
+
     body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content))
 
     await Resource.create({
@@ -58,15 +62,15 @@ module.exports = {
       include: [{ model: APUser, required: false, attributes: ['ap_id'] }]
     })
     if (!resource) {
-      debug('Comment %s not found', req.body.object.id)
+      log.info(`Comment ${req.body.object.id} not found`)
       return res.status(404).send('Not found')
     }
     // check if fedi_user that requested resource removal
     // is the same that created the resource at first place
-    debug(res.fedi_user.ap_id, resource.ap_user.ap_id)
+    log.debug(res.fedi_user.ap_id, resource.ap_user.ap_id)
     if (res.fedi_user.ap_id === resource.ap_user.id) {
       await resource.destroy()
-      debug('Comment %s removed!', req.body.object.id)
+      log.info(`Comment ${req.body.object.id} removed`)
       res.sendStatus(201)
     } else {
       res.sendStatus(403)

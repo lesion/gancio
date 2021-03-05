@@ -4,7 +4,7 @@ const config = require('config')
 const mail = require('../mail')
 const User = require('../models/user')
 const settingsController = require('./settings')
-const debug = require('debug')('user:controller')
+const log = require('../../log')
 const linkify = require('linkifyjs')
 
 const userController = {
@@ -96,9 +96,9 @@ const userController = {
         return res.status(404).json('Invalid email')
       }
 
-      debug('Register user ', req.body.email)
+      log.debug('Register user ', req.body.email)
       const user = await User.create(req.body)
-      debug(`Sending registration email to ${user.email}`)
+      log.debug(`Sending registration email to ${user.email}`)
       mail.send(user.email, 'register', { user, config }, req.settings.locale)
       mail.send(config.admin_email, 'admin_register', { user, config })
       res.sendStatus(200)
