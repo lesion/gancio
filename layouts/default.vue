@@ -31,10 +31,6 @@ export default {
 }
 </script>
 <style lang="less">
-// html, body {
-//   overflow: hidden;
-//   max-height: 100%;
-// }
 .v-dialog {
   width: 600px;
   max-width: 800px;
@@ -46,6 +42,6 @@ export default {
 
 .v-autocomplete__content.v-menu__content {
   scrollbar-width: thin;
-  scrollbar-color: #FF4511;
+  scrollbar-color: #FF4511 #111;
 }
 </style>

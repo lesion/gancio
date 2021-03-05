@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-card(color='secondary')
+  v-card
     v-card-title {{$t('common.import')}}
     v-card-text
       p(v-html="$t('event.import_description')")

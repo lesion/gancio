@@ -6,7 +6,7 @@
     :max-width='options.width'
     :style="{ zIndex: options.zIndex, position: 'absolute' }"
     @keydown.esc='cancel')
-    v-card(color='secondary')
+    v-card
       v-card-title {{ title }}
       v-card-text(v-show='!!message') {{ message }}
       v-card-actions

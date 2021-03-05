@@ -1,5 +1,5 @@
 <template lang='pug'>
-v-card(color='secondary')
+v-card
   v-card-title(v-text="$t('common.embed_title')")
   v-card-text
     v-row

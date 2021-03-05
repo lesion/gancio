@@ -1,5 +1,5 @@
 <template lang='pug'>
-  v-card(:color='isDialog ? "secondary" : null')
+  v-card
     v-card-title(v-text="$t('common.follow_me_title')")
     v-card-text
       p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${domain}`})")

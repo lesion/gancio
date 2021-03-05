@@ -41,7 +41,7 @@
         )
 
         v-dialog(v-model='dialogAddInstance' width="500px")
-          v-card(color='secondary')
+          v-card
             v-card-title {{$t('admin.add_trusted_instance')}}
             v-card-text
               v-form(v-model='valid' ref='form' lazy-validation)

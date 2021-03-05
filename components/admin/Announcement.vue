@@ -3,7 +3,7 @@
     v-card-title {{$t('common.announcements')}}
     v-card-subtitle(v-html="$t('admin.announcement_description')")
     v-dialog(v-model='dialog' width='800px')
-      v-card(color='secondary')
+      v-card
         v-card-title {{$t('admin.new_announcement')}}
         v-card-text
           v-form(v-model='valid' ref='announcement' @submit.prevent='save')
