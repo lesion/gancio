@@ -122,6 +122,7 @@
         "tag_description": "Etichetta",
         "media_description": "Puoi aggiungere un volantino (opzionale)",
         "added": "Evento aggiunto",
+        "saved": "Evento salvato",
         "added_anon": "Evento aggiunto, verrà confermato quanto prima.",
         "updated": "Evento aggiornato",
         "where_description": "Dov'è il gancio? Se il posto non è presente potrai crearlo. ",

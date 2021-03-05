@@ -12,6 +12,10 @@ const Place = require('./place')
 const User = require('./user')
 const Tag = require('./tag')
 
+const utc = require('dayjs/plugin/utc')
+const dayjs = require('dayjs')
+dayjs.extend(utc)
+
 class Event extends Model {}
 
 Event.init({
@@ -59,7 +63,7 @@ Event.belongsTo(Event, { as: 'parent' })
 
 Event.prototype.toAPNote = function (username, locale, to = []) {
   const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
-  const plainDescription = htmlToText.fromString(this.description.replace('\n', '').slice(0, 1000))
+  const plainDescription = htmlToText.fromString(this.description && this.description.replace('\n', '').slice(0, 1000))
   const content = `
   ${this.title}<br/><br/>
     📍 ${this.place && this.place.name}<br/>
@@ -94,16 +98,17 @@ Event.prototype.toAPNote = function (username, locale, to = []) {
     //   name: this.place && this.place.name
     // },
     // attachment,
-    tag: tags && tags.map(tag => ({
-      type: 'Hashtag',
-      name: '#' + tag,
-      href: '/tags/' + tag
-    })),
-    published: this.createdAt,
+    // tag: tags && tags.map(tag => ({
+    //   type: 'Hashtag',
+    //   name: '#' + tag,
+    //   href: '/tags/' + tag
+    // })),
+    published: dayjs(this.createdAt).utc().format(),
     attributedTo: `${config.baseurl}/federation/u/${username}`,
     to: 'https://www.w3.org/ns/activitystreams#Public',
-    // cc: [`${config.baseurl}/federation/u/${username}/followers`],
-    content
+    cc: [`${config.baseurl}/federation/u/${username}/followers`],
+    content,
+    summary: null
   }
 }
 
