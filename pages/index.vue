@@ -140,7 +140,7 @@ export default {
         return
       }
       this.start = dayjs(date).startOf('day').unix()
-      this.end = dayjs(day).endOf('day').unix()
+      this.end = dayjs(date).endOf('day').unix()
       this.selectedDay = date
       this.updateEvents()
     }
