@@ -1,18 +1,18 @@
 <template lang="pug" functional>
   v-card.h-event.event
     nuxt-link(:to='`/event/${props.event.id}`')
-      img(:src="`/media/thumb/${props.event.image_path || 'logo.png' }`")
+      v-img.img(:src="`/media/thumb/${props.event.image_path || 'logo.png' }`")
       v-icon.float-right.mr-1(v-if='props.event.parentId' color='success') mdi-repeat
       .title.p-name {{props.event.title}}
 
-    v-card-text.body
+    v-card-text.body.pt-0.pb-0
       time.dt-start.subtitle-1(:datetime='props.event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  {{ props.event|when }}
       .d-none.dt-end {{props.event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
       a.place.d-block.p-location.pl-0(text color='primary' @click="listeners['placeclick'](props.event.place.id)") <v-icon>mdi-map-marker</v-icon> {{props.event.place.name}}
 
     v-card-actions.actions.justify-space-between
       .tags
-        v-chip.ml-1(v-for='tag in props.event.tags' small
+        v-chip.ml-1.px-2(v-for='tag in props.event.tags' small
           :key='tag' outlined color='primary' @click="listeners['tagclick'](tag)") {{tag}}
 
       v-menu(offset-y)
@@ -49,26 +49,21 @@ export default {
   flex-direction: column;
   width: 330px;
   max-width: 500px;
-  transition: all .5s;
   flex-grow: 1;
   margin-top: .4em;
   margin-right: .4em;
   overflow: hidden;
 
-  &:hover img {
-    transform: scale(1.02);
-  }
-
   .title {
     display: block;
-    max-height: 4.2em;
+    max-height: 3.3em;
     overflow: hidden;
     margin: 0.5rem 1rem 0.5rem 1rem;
     color: white;
     border-bottom: 1px solid #333;
     font-size: 1.2em !important;
-    line-height: 1.4em;
-    font-weight: 700;
+    line-height: 1.1em;
+    font-weight: 500;
   }
 
   .body {
@@ -89,7 +84,7 @@ export default {
   //   }
   // }
 
-  img {
+  .img {
     transition: transform .2s ease;
     width: 100%;
     max-height: 250px;
