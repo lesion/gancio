@@ -55,8 +55,11 @@
           v-icon mdi-format-list-bulleted
 
         v-btn(icon text tabindex='-1' :class='{ primary: isActive.link() }'
-          @click='commands.link({href: ""}); $refs.link.focus(); linkActive=true')
+          @click='commands.link({href: getMarkAttrs("link") && getMarkAttrs("link").href ? "" : "https://"}); $refs.link.focus();')
             v-icon mdi-link
+        v-text-field.pt-0.ml-1(v-show='isActive.link()' ref='link' @focus='focus' @blur='blur' hide-details
+            :value='isActive.link() && getMarkAttrs("link") && getMarkAttrs("link").href || ""'
+            @keypress.enter='commands.link({ href: $event.target.value}); editor.focus()')
 
     editor-content.content(:editor='editor' spellcheck='false' :style="{ 'max-height': maxHeight }")
 </template>
@@ -97,6 +100,7 @@ export default {
       options: [],
       linkActive: false,
       editor: null,
+      blurring: false,
       update: false,
       focused: ''
     }
@@ -112,12 +116,8 @@ export default {
   },
   mounted () {
     this.editor = new Editor({
-      onFocus: () => {
-        this.focused = 'editor--focused'
-      },
-      onBlur: () => {
-        this.focused = ''
-      },
+      onFocus: () => this.focus(),
+      onBlur: () => this.blur(),
       onUpdate: _.debounce(({ getHTML }) => {
         this.update = true
         this.$emit('input', getHTML())
@@ -150,6 +150,23 @@ export default {
   },
   beforeDestroy () {
     if (this.editor) { this.editor.destroy() }
+  },
+  methods: {
+    blur () {
+      this.blurring = true
+      window.setTimeout(() => {
+        if (this.blurring) {
+          this.focused = ''
+          this.blurring = false
+        }
+      }, 200)
+    },
+    focus () {
+      this.focused = 'editor--focused'
+      this.$nextTick(() => {
+        this.blurring = false
+      })
+    }
   }
 }
 </script>
