@@ -126,8 +126,8 @@ export default {
         this.date = ''
         this.start = dayjs().year(year).month(month - 1).startOf('month').unix() // .startOf('week').unix()
       }
-      // this.end = dayjs().year(year).month(month - 1).endOf('month').unix() // .endOf('week').unix()
-      this.end = null
+      // TODO: check if calendar view is double
+      this.end = dayjs().year(year).month(month).endOf('month').unix() // .endOf('week').unix()
       this.updateEvents()
     },
     dayChange (day) {

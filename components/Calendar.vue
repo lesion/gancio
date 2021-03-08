@@ -27,14 +27,12 @@ export default {
     const month = dayjs().month() + 1
     const year = dayjs().year()
     return {
-      page: { month, year },
-      attributes: []
+      page: { month, year }
     }
   },
-  computed: mapState(['tags', 'filters', 'in_past', 'settings']),
-  methods: {
-    ...mapActions(['updateEvents', 'showPastEvents']),
-    updateAttributes () {
+  computed: {
+    ...mapState(['tags', 'filters', 'in_past', 'settings']),
+    attributes () {
       const colors = ['blue', 'orange', 'yellow', 'teal', 'indigo', 'green', 'red', 'purple', 'pink', 'gray']
       const tags = take(this.tags, 10).map(t => t.tag)
       let attributes = []
@@ -68,12 +66,14 @@ export default {
           dates: { start: new Date(e.start_datetime * 1000), end: new Date(e.end_datetime * 1000) }
         })))
 
-      this.attributes = attributes
-    },
+      return attributes
+    }
+  },
+  methods: {
+    ...mapActions(['updateEvents', 'showPastEvents']),
     updatePage (page) {
       return new Promise((resolve, reject) => {
         this.$emit('monthchange', page)
-        this.updateAttributes()
       })
     },
     click (day) {
