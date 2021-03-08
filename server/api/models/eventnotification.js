@@ -6,7 +6,7 @@ class EventNotification extends Model {}
 EventNotification.init({
   status: {
     type: DataTypes.ENUM,
-    values: ['new', 'sent', 'error'],
+    values: ['new', 'sent', 'error', 'sending'],
     defaultValue: 'new',
     index: true
   }
