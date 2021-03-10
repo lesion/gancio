@@ -48,16 +48,17 @@
   //-   v-btn-toggle(v-else dense group v-model='value.recurrent.type' color='primary')
   //-     v-btn(text link v-for='whenPattern in whenPatterns' :value='whenPattern.key' :key='whenPatterns.key') {{whenPattern.label}}
 
-  //- List(v-if='event.type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
+  List(v-if='type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
 
 </template>
 <script>
 import dayjs from 'dayjs'
 import { mapState } from 'vuex'
 import List from '@/components/List'
+import { attributesFromEvents } from '../../assets/helper'
 
 export default {
-  name: 'WhenInput',
+  name: 'DateInput',
   components: { List },
   props: {
     value: { type: Object, default: () => ({ from: null, due: null, recurrent: null }) }
@@ -71,6 +72,7 @@ export default {
       date: null,
       page: null,
       frequency: '',
+      events: [],
       frequencies: [
         { value: '1w', text: this.$t('event.each_week') },
         { value: '2w', text: this.$t('event.each_2w') },
@@ -79,7 +81,16 @@ export default {
     }
   },
   computed: {
-    ...mapState(['settings', 'events']),
+    ...mapState(['settings', 'tags']),
+    todayEvents () {
+      const start = dayjs(this.value.from).startOf('day').unix()
+      const end = dayjs(this.value.from).endOf('day').unix()
+      const events = this.events.filter(e => e.start_datetime >= start && e.start_datetime <= end)
+      return events
+    },
+    attributes () {
+      return attributesFromEvents(this.events, this.tags)
+    },
     fromDate () {
       if (this.value.multidate) {
         return ({ start: dayjs(this.value.from).toDate(), end: dayjs(this.value.due).toDate() })
@@ -104,9 +115,6 @@ export default {
     },
     isRecurrent () {
       return !!this.value.recurrent
-    },
-    attributes () {
-      return []
     },
     whenPatterns () {
       if (!this.value.from) { return }
@@ -153,7 +161,7 @@ export default {
       return ''
     }
   },
-  mounted () {
+  async mounted () {
     if (this.value.multidate) {
       this.type = 'multidate'
     } else if (this.value.recurrent) {
@@ -161,6 +169,9 @@ export default {
     } else {
       this.type = 'normal'
     }
+    this.events = await this.$api.getEvents({
+      start: dayjs().unix()
+    })
   },
   methods: {
     updateRecurrent (value) {
