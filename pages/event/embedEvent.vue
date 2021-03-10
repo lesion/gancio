@@ -22,7 +22,9 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'EmbedEvent',
-  props: ['event'],
+  props: {
+    event: { type: Object, default: () => ({})}
+  },
   computed: {
     ...mapState(['settings']),
     code () {

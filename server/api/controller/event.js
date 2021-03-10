@@ -456,7 +456,7 @@ const eventController = {
     const events = await Event.findAll({
       where,
       attributes: {
-        exclude: ['slug', 'likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'placeId']
+        exclude: ['slug', 'likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'placeId', 'description', 'resources']
         // include: [[Sequelize.fn('COUNT', Sequelize.col('activitypub_id')), 'ressources']]
       },
       order: ['start_datetime', [Tag, 'weigth', 'DESC']],
@@ -465,6 +465,8 @@ const eventController = {
         { model: Tag, attributes: ['tag'], required: !!tags, ...where_tags, through: { attributes: [] } },
         { model: Place, required: false, attributes: ['id', 'name', 'address'] }
       ]
+    }).catch(e => {
+      log.error(e)
     })
 
     return events.map(e => {
@@ -494,6 +496,7 @@ const eventController = {
    * Ensure we have the next instances of recurrent events
    */
   _createRecurrentOccurrence (e) {
+    log.debug(`Create recurrent event [${e.id}] ${e.title}"`)
     const event = {
       parentId: e.id,
       title: e.title,

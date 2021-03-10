@@ -1,7 +1,7 @@
 export const state = () => ({
   locale: '',
   user_locale: {},
-  filters: { tags: [], places: [] },
+  filters: { tags: [], places: [], show_recurrent: false },
   tags: [],
   places: [],
   settings: {
@@ -50,6 +50,7 @@ export const mutations = {
   setFilters (state, filters) {
     state.filters.tags = [...filters.tags]
     state.filters.places = [...filters.places]
+    state.filters.show_recurrent = filters.show_recurrent
   },
   setAnnouncements (state, announcements) {
     state.announcements = announcements

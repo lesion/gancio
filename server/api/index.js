@@ -110,8 +110,6 @@ api.post('/settings/logo', isAdmin, multer({ dest: config.upload_path }).single(
 api.put('/event/confirm/:event_id', hasPerm('event:write'), eventController.confirm)
 api.put('/event/unconfirm/:event_id', hasPerm('event:write'), eventController.unconfirm)
 
-// import event
-
 // get event
 api.get('/event/:event_id.:format?', cors, eventController.get)
 
@@ -119,7 +117,6 @@ api.get('/event/:event_id.:format?', cors, eventController.get)
 api.get('/export/:type', cors, exportController.export)
 
 // get events in this range
-// api.get('/event/:month/:year', cors, eventController.getAll)
 api.get('/events', cors, eventController.select)
 
 api.get('/instances', isAdmin, instanceController.getAll)
@@ -136,6 +133,7 @@ api.post('/announcements', isAdmin, announceController.add)
 api.put('/announcements/:announce_id', isAdmin, announceController.update)
 api.delete('/announcements/:announce_id', isAdmin, announceController.remove)
 
+// OAUTH
 api.get('/clients', hasPerm('oauth:read'), oauthController.getClients)
 api.get('/client/:client_id', hasPerm('oauth:read'), oauthController.getClient)
 api.post('/client', oauthController.createClient)

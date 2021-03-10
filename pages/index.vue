@@ -39,7 +39,7 @@ export default {
     const events = await $api.getEvents({
       start: dayjs().unix(),
       end: null,
-      filters: { show_recurrent: store.state.settings.allow_recurrent_event && store.state.settings.recurrent_event_visible }
+      ...store.state.filters
     })
     return { events, first: true }
   },
@@ -50,7 +50,6 @@ export default {
       events: [],
       start: dayjs().unix(),
       end: null,
-      filters: { tags: [], places: [], show_recurrent: $store.state.settings.allow_recurrent_event && $store.state.settings.recurrent_event_visible },
       selectedDay: null
       // intersecting: {}
     }
@@ -71,7 +70,7 @@ export default {
       ]
     }
   },
-  computed: mapState(['settings', 'announcements']),
+  computed: mapState(['settings', 'announcements', 'filters']),
   methods: {
     // onIntersect (isIntersecting, eventId) {
     // this.intersecting[eventId] = isIntersecting
@@ -81,33 +80,27 @@ export default {
       return this.$api.getEvents({
         start: this.start,
         end: this.end,
-        places: this.filters.places,
-        tags: this.filters.tags,
-        show_recurrent: this.filters.show_recurrent
+        ...this.filters
       }).then(events => {
         this.events = events
-        this.setFilters(this.filters)
         this.$nuxt.$loading.finish()
       })
     },
     placeClick (place_id) {
       if (this.filters.places.includes(place_id)) {
-        this.filters.places = this.filters.places.filter(p_id => p_id !== place_id)
+        this.setFilters({ ...this.filters, places: this.filters.places.filter(p_id => p_id !== place_id) })
       } else {
-        this.filters.places.push(place_id)
+        this.setFilters({ ...this.filters, places: [].concat(this.filters.places, place_id) })
       }
       this.updateEvents()
     },
     tagClick (tag) {
       if (this.filters.tags.includes(tag)) {
         this.filters.tags = this.filters.tags.filter(t => t !== tag)
+        this.setFilters({ ...this.filters, tags: this.filters.tags.filter(t => t !== tag) })
       } else {
-        this.filters.tags.push(tag)
+        this.setFilters({ ...this.filters, tags: [].concat(this.filters.tags, tag) })
       }
-      this.updateEvents()
-    },
-    updateFilters (filters) {
-      this.filters = filters
       this.updateEvents()
     },
     monthChange ({ year, month }) {
@@ -128,6 +121,10 @@ export default {
       }
       // TODO: check if calendar view is double
       this.end = dayjs().year(year).month(month).endOf('month').unix() // .endOf('week').unix()
+      this.updateEvents()
+    },
+    updateFilters (filters) {
+      this.setFilters(filters)
       this.updateEvents()
     },
     dayChange (day) {
