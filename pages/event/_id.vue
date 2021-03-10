@@ -26,8 +26,8 @@ v-container
               //-     color="grey lighten-5")
 
         v-col.col-12.col-lg-4
-          v-card(color='secondary')
-            v-card-text.white--text
+          v-card
+            v-card-text
               v-icon.float-right(v-if='event.parentId' color='success') mdi-repeat
               .title.text-h5
                 b.p-name {{event.title}}
@@ -44,7 +44,7 @@ v-container
               .text-subtitle-1.adr {{event.place.address}}
 
             //- tags, hashtags
-            v-card-text(v-if='event.tags.length').darken-4.grey
+            v-card-text(v-if='event.tags.length')
               v-chip.p-category.ml-1.mt-3(v-for='tag in event.tags' color='primary'
                 outlined :key='tag' v-text='tag')
 
