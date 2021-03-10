@@ -6,7 +6,7 @@
       .title.p-name {{props.event.title}}
 
     v-card-text.body.pt-0.pb-0
-      time.dt-start.subtitle-1(:datetime='props.event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  {{ props.event|when }}
+      time.dt-start.subtitle-1(:datetime='props.event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  <v-icon>mdi-calendar</v-icon> {{ props.event|when }}
       .d-none.dt-end {{props.event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
       a.place.d-block.p-location.pl-0(text color='primary' @click="listeners['placeclick'](props.event.place.id)") <v-icon>mdi-map-marker</v-icon> {{props.event.place.name}}
 
@@ -59,8 +59,8 @@ export default {
     max-height: 3.3em;
     overflow: hidden;
     margin: 0.5rem 1rem 0.5rem 1rem;
-    color: white;
-    border-bottom: 1px solid #333;
+    // color: white;
+    border-bottom: 1px solid rgba(4,4,4,0.2);
     font-size: 1.2em !important;
     line-height: 1.1em;
     font-weight: 500;
@@ -85,7 +85,6 @@ export default {
   // }
 
   .img {
-    transition: transform .2s ease;
     width: 100%;
     max-height: 250px;
     object-fit: cover;
