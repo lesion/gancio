@@ -20,7 +20,7 @@ const DiskStorage = {
     const outStream = fs.createWriteStream(finalPath)
     const thumbStream = fs.createWriteStream(thumbPath)
 
-    const resizer = sharp().resize(1200).jpeg({ quality: 95 })
+    const resizer = sharp().resize(1200).jpeg({ quality: 98 })
     const thumbnailer = sharp().resize(400).jpeg({ quality: 90 })
     let onError = false
     const err = e => {

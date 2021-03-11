@@ -319,9 +319,9 @@ export default {
   margin-bottom: 25px;
 }
 .main_image {
-  width: 100%;
+  // width: 100%;
   margin: 0 auto;
-  max-height: 80vh;
+  // max-height: 120vh;
   border-radius: 5px;
   transition: max-height 0.2s;
 }

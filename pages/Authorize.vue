@@ -20,8 +20,8 @@
 import { mapState } from 'vuex'
 
 export default {
-  layout: 'modal',
   name: 'Authorize',
+  layout: 'modal',
   middleware: ['auth'],
   async asyncData ({ $axios, query, error, req }) {
     const { client_id, redirect_uri, scope, response_type } = query
