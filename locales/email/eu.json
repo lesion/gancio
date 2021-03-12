@@ -1,22 +1,22 @@
 {
     "register": {
-        "subject": "Jasotako erregistroaren eskaera",
-        "content": "Erregistroaren eskaera jasotzen dugu. Gu ahal izan bezain laster egiaztatuko dugu.\n Agur"
+        "subject": "Izen-emate eskaera jaso da",
+        "content": "Zure izen-emate eskaera jaso dugu eta ahal dugun bezain laster baieztatuko dugu."
     },
     "confirm": {
-        "subject": "Ekitaldiak argitaratzen hasten zaitezke",
-        "content": "Kaixo, zure kontua <a href='{{config.baseurl}}'>{{config.title}}</a>-n egiaztatu da. Idaztea {{config.admin_email}}-rena edozein informaziotarako eta senti zaitez etxean bezala."
+        "subject": "Ekitaldiak argitaratzen hasi zaitezke",
+        "content": "Kaixo, zure <a href='{{config.baseurl}}'>{{config.title}}</a>-ko kontua baieztatua izan da. Informazio gehiago behar baduzu idatzi iezaguzu lasai asko {{config.admin_email}}-ra."
     },
     "user_confirm": {
         "subject": "Orain ekitaldiak argitaratzen hasten zaitezke",
-        "content": "Kaixo, zure kontua<a href='{{config.baseurl}}'>{{config.title}}</a>-n sortu da. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Egiaztatzen du eta pasahitza aukeratzen du.</a>."
+        "content": "Kaixo, zure <a href='{{config.baseurl}}'>{{config.title}}</a>-ko kontua berria sortu da. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Baieztatu zu zarela eta aukeratu ezazu pasahitza</a>."
     },
     "recover": {
         "subject": "Pasahitza berreskuratzea",
         "content": "Kaixo, zure pasahitza berreskuratzea eskatu duzu {{config.title}}-n. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Hemen sakatzen du</a> egiaztatzeko."
     },
     "admin_register": {
-        "subject": "Erregistro berria",
-        "content": "{{user.email}} zena ematea eskatu du {{config.title}}-n: <br/><pre>{{user.description}}</pre><br/> Egiazta ezazu <a href='{{config.baseurl}}/admin'>hemen</a>."
+        "subject": "Izen-emate berria",
+        "content": "{{user.email}}-(e)k {{config.title}}-n izena ematea eskatu du: <br/><pre>{{user.description}}</pre><br/> Baieztatu ezazu horrela dela <a href='{{config.baseurl}}/admin'>hemen</a>."
     }
 }
