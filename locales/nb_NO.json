@@ -118,14 +118,16 @@
         "recurrent_1m_days": "|På {days} i hver måned|{days} i hver måned",
         "recurrent_2w_days": "En {days} annenhver",
         "multidate_description": "Er det en festival? Velg når den starter og slutter",
-        "where_description": "Hvor finner hendelsen sted? Hvis ingensteds hen, skriv det og <b>trykk ⏎</b>. ",
+        "where_description": "Hvor finner hendelsen sted? Hvis den ikke finnes kan du opprette den.",
         "added_anon": "Hendelse lagt til, men ikke bekreftet enda.",
         "added": "Hendelse lagt til",
         "media_description": "Du kan legge til et flygeblad (valgfritt)",
         "anon_description": "Du kan legge til en hendelse uten å registrere deg eller logge inn, og den vil bli lagt ut etter at den er bekreftet å være passende. Det vil ikke være mulig å endre den.<br/><br/>\nDu kan istedenfor <a href='/login'>logge inn</a>, eller <a href='/register'>registrere deg</a>. Ellers kan du forsette for å få et svar så snart som mulig. ",
         "ics": "ICS",
         "import_ICS": "Importer fra ICS",
-        "import_URL": "Importer fra nettadresse"
+        "import_URL": "Importer fra nettadresse",
+        "edit_recurrent": "Rediger gjentagende hendelse",
+        "updated": "Handelse oppdatert"
     },
     "register": {
         "first_user": "Administrator opprettet",
@@ -141,7 +143,7 @@
         "forgot_password": "Glemt passordet?",
         "not_registered": "Ikke registrert?",
         "description": "Ved å logge inn kan du publisere nye hendelser.",
-        "error": "Kunne ikke logge inn. Sjekk din data.",
+        "error": "Kunne ikke logge inn. Sjekk dine innloggingsdetaljer.",
         "check_email": "Sjekk din e-postinnboks og søppelpost.",
         "insert_email": "Skriv inn din e-postadresse"
     },
@@ -165,7 +167,7 @@
         "follow": "Følg",
         "follow_me_title": "Følg oppdateringer fra fediverset",
         "feed_url_copied": "Informasjonskanalsnettadresse kopiert, lim den inn i din RSS-leser",
-        "feed": "Informasjonskanal-RSS",
+        "feed": "RSS-informasjonskanal",
         "embed_help": "Kopiering av følgende kode til nettsiden din vil vises som her",
         "embed_title": "Bygg inn denne hendelsen på nettsiden din",
         "embed": "Innebygg",
