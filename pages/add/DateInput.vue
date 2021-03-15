@@ -184,11 +184,15 @@ export default {
         } else if (value === 'multidate') {
           this.$emit('input', { ...this.value, recurrent: null, multidate: true })
         } else {
-          let date = this.value.from
-          if (date && date.start) {
-            date = date.start
+          let from = this.value.from
+          if (from && from.start) {
+            from = from.start
           }
-          this.$emit('input', { ...this.value, from: date, due: date, recurrent: null, multidate: false })
+          let due = this.value.due
+          if (due && due.start) {
+            due = due.start
+          }
+          this.$emit('input', { ...this.value, from, due, recurrent: null, multidate: false })
         }
       } else if (what === 'frequency') {
         this.$emit('input', { ...this.value, recurrent: { ...this.value.recurrent, frequency: value } })
@@ -216,7 +220,6 @@ export default {
           this.$emit('input', { ...this.value, dueHour: false })
         }
       } else if (what === 'date') {
-        console.error('dentro what date', value)
         if (this.value.multidate) {
           let from = value.start
           let due = value.end
