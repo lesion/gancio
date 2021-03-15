@@ -13,8 +13,8 @@ const exportController = require('./api/controller/export')
 const eventController = require('./api/controller/event')
 const announceController = require('./api/controller/announce')
 // const metricsController = require('./metrics')
-const promBundle = require('express-prom-bundle')
-const metricsMiddleware = promBundle({ includeMethod: true })
+// const promBundle = require('express-prom-bundle')
+// const metricsMiddleware = promBundle({ includeMethod: true })
 
 const helpers = require('./helpers')
 const app = express()
@@ -22,7 +22,7 @@ const app = express()
 // ignore unimplemented ping url from fediverse
 app.use(spamFilter)
 
-app.use(metricsMiddleware)
+// app.use(metricsMiddleware)
 
 app.use((req, res, next) => {
   log.debug(`${req.method} ${req.path}`)

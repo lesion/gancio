@@ -15,7 +15,7 @@ v-container
             :src='imgPath'
             :lazy-src='thumbImgPath'
             v-if='event.image_path')
-          .p-description.text-body-1.px-5.mt-5(v-else v-html='event.description')
+          .p-description.text-body-1(v-else v-html='event.description')
 
             //- template(v-slot:placeholder)
               //- v-row(
@@ -66,7 +66,7 @@ v-container
                     :href='`/api/event/${event.id}.ics`')
                     v-icon mdi-calendar-export
 
-      .p-description.text-body-1.px-5.ma-5(v-if='event.image_path' v-html='event.description')
+      .p-description.text-body-1(v-if='event.image_path' v-html='event.description')
 
       //- resources from fediverse
       #resources.mt-1(v-if='settings.enable_federation')
