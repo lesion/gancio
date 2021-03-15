@@ -133,7 +133,7 @@ export default {
         new ListItem(),
         new Code(),
         new History(),
-        new Link({ openOnClick: false }),
+        new Link({ openOnClick: false, target: '_blank' }),
         new Bold(),
         new Italic(),
         new Strike(),

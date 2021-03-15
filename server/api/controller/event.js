@@ -351,7 +351,7 @@ const eventController = {
     const eventDetails = {
       title: body.title,
       // remove html tags
-      description: helpers.sanitizeHTML(linkifyHtml(body.description)),
+      description: helpers.sanitizeHTML(linkifyHtml(body.description, { target: '_blank' })),
       multidate: body.multidate,
       start_datetime: body.start_datetime,
       end_datetime: body.end_datetime,
