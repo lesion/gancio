@@ -1,6 +1,6 @@
 {
   "name": "gancio",
-  "version": "0.24.3",
+  "version": "v1.0.2-dev",
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
