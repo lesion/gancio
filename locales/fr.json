@@ -113,7 +113,7 @@
         "remove_confirmation": "Êtes-vous sûr·e de vouloir supprimer cet évènement ?",
         "not_found": "Impossible de trouver l'évènement",
         "confirmed": "Évènement confirmé",
-        "where_description": "Où est l'évènement ? S'il n'apparaît pas, rédigez le et <b>appuyez sur ⏎</b>. ",
+        "where_description": "Où est l'évènement ? S'il n'apparaît pas, vous pouvez le créer.",
         "added_anon": "Évènement ajouté, mais il doit encore être confirmé.",
         "added": "Évènement ajouté",
         "media_description": "Vous pouvez ajouter un tract (facultatif)",
@@ -127,7 +127,9 @@
         "each_2w": "Une semaine sur deux",
         "recurrent_2m_ordinal": "|Le {n} {days} du mois un mois sur|Les {n} {days} du mois un mois sur deux",
         "recurrent_2m_days": "|Le {days} un mois sur deux|Les {jours} un mois sur deux",
-        "recurrent_2w_days": "Un {days} sur deux"
+        "recurrent_2w_days": "Un {days} sur deux",
+        "edit_recurrent": "Modifier l’évènement récurrent :",
+        "updated": "Évènement mis à jour"
     },
     "register": {
         "description": "Les mouvements sociaux doivent s'organiser et s'autofinancer.<br/>\n<br/>Avant de pouvoir publier, <strong> le compte doit être approuvé</strong>, considérez que <strong> derrière ce site vous trouverez de vraies personnes, à qui vous pouvez écrire en deux lignes pour exprimer les évènements que vous souhaiteriez publier.",
