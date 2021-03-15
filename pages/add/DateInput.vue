@@ -7,8 +7,6 @@
       v-btn(v-if='settings.allow_recurrent_event' value='recurrent' label="recurrent") {{$t('event.recurrent')}}
 
     p {{$t(`event.${type}_description`)}}
-    //- v-select.col-md-6(v-if='type==="recurrent"'
-    //-   :items="frequencies" :value='value.recurrent.frequency' @change='freq => updateRecurrent({...value.recurrent, frequency: freq})')
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-if='type === "recurrent"' color='primary' :value='value.recurrent.frequency' @change='fq => change("frequency", fq)')
       v-btn(v-for='f in frequencies' :key='f.value' :value='f.value') {{f.text}}
 
@@ -180,6 +178,7 @@ export default {
     change (what, value) {
       // change event's type
       if (what === 'type') {
+        if (typeof value === 'undefined') { this.type = 'normal' }
         if (value === 'recurrent') {
           this.$emit('input', { ...this.value, recurrent: {}, multidate: false })
         } else if (value === 'multidate') {
