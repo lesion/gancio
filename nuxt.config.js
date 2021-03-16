@@ -22,22 +22,12 @@ module.exports = {
    ** Customize the progress-bar color
    */
   loading: '~/components/Loading.vue',
-  // loading: {
-  //   name: 'circle',
-  //   color: '#3B8070',
-  //   background: 'white'
-  // },
   /*
    ** Global CSS
    */
   css: [
-    '@mdi/font/css/materialdesignicons.css',
-    // '@fontsource/roboto',
-    '@/assets/style.less'
-  // 'bootstrap/dist/css/bootstrap.min.css',
-  // 'element-ui/lib/theme-chalk/index.css',
-  // 'element-ui/lib/theme-chalk/display.css',
-  // '@/assets/theme/index.css'
+    '@/assets/style.less',
+    '@mdi/font/css/materialdesignicons.css'
   ],
 
   /*
@@ -72,22 +62,22 @@ module.exports = {
   ],
 
   // configure nuxt-winston-log module
-  // winstonLog: {
-  //   skipRequestMiddlewareHandler: true,
-  //   useDefaultLogger: false,
-  //   loggerOptions: {
-  //     transports: process.env.NODE_ENV !== 'production'
-  //       ? [new transports.Console(
-  //           { level: 'debug', format: format.combine(format.colorize(), format.simple(), format.errors({ stack: true })) }
-  //         )]
-  //       : [new transports.File(
-  //           {
-  //             filename: 'gancio.log',
-  //             format: format.combine(format.simple(), format.errors({ stack: true }))
-  //           }
-  //         )]
-  //   }
-  // },
+  winstonLog: {
+    skipRequestMiddlewareHandler: true,
+    useDefaultLogger: false,
+    loggerOptions: {
+      transports: process.env.NODE_ENV !== 'production'
+        ? [new transports.Console(
+            { level: 'debug', format: format.combine(format.colorize(), format.simple(), format.errors({ stack: true })) }
+          )]
+        : [new transports.File(
+            {
+              filename: 'logs/gancio.log',
+              format: format.combine(format.simple(), format.errors({ stack: true }))
+            }
+          )]
+    }
+  },
   /*
    ** Axios module configuration
    * See https://github.com/nuxt-community/axios-module#options
@@ -134,32 +124,7 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    optimization: {
-      minimize: true,
-      namedModules: true,
-      namedChunks: true,
-      splitChunks: {
-        name: true,
-        chunks: 'all',
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            enforce: true,
-            name (module) {
-              // get the name. E.g. node_modules/packageName/not/this/part.js
-              // or node_modules/packageName
-              const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
-              // npm package names are URL-safe, but some servers don't like @ symbols
-              return `npm.${packageName.replace('@', '')}`
-            }
-          }
-        }
-      }
-    },
-    transpile: [/^element-ui/, /^vue-awesome/, /^@nuxt/],
-    splitChunks: {
-      layouts: true
-    },
+    presets: ['@nuxt/babel-preset-app'],
     cache: true
   }
 }
