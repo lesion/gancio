@@ -1,8 +1,9 @@
- import Vue from 'vue'
- import VCalendar from 'v-calendar'
- export default () => {
-   Vue.use(VCalendar, {
-     // why is that ?!
-     firstDayOfWeek: 2
-   })
- }
+import Vue from 'vue'
+import VCalendar from 'v-calendar'
+export default () => {
+  Vue.use(VCalendar, {
+    componentPrefix: 'vc',
+    // why is that ?!
+    firstDayOfWeek: 2
+  })
+}

@@ -14,7 +14,7 @@
       .datePicker.mt-3
         v-input(:value='fromDate'
             :rules="[$validators.required('common.when')]")
-          v-date-picker(
+          vc-date-picker(
             :value='fromDate'
             @input="date => change('date', date)"
             :is-range='type === "multidate"'

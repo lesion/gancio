@@ -1,6 +1,6 @@
 <template lang="pug">
   #calendar
-    v-calendar(
+    vc-calendar(
       title-position='left'
       :is-dark="settings['theme.is_dark']"
       :columns="$screens({ sm: 2 }, 1)"
