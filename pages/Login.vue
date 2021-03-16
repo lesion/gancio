@@ -1,22 +1,22 @@
 <template lang='pug'>
   v-row.mt-5(align='center' justify='center')
     v-col(cols='12' md="6" lg="5" xl="4")
+      v-form(v-model='valid' ref='form' lazy-validation @submit.prevent='submit')
+        v-card
+          v-card-title {{$t('common.login')}}
+          v-card-subtitle(v-text="$t('login.description')")
 
-      v-card
-        v-card-title {{$t('common.login')}}
-        v-card-subtitle(v-text="$t('login.description')")
+          v-card-text
+              v-text-field(v-model='email' type='email'
+                validate-on-blur
+                :rules='$validators.email' autofocus
+                :placeholder='$t("common.email")'
+                ref='email')
 
-        v-card-text
-          v-form(v-model='valid' ref='form' lazy-validation)
-            v-text-field(v-model='email' type='email'
-              :rules='$validators.email' autofocus
-              :placeholder='$t("common.email")'
-              ref='email')
-
-            v-text-field(v-model='password'
-              :rules='$validators.password'
-              type='password'
-              :placeholder='$t("common.password")')
+              v-text-field(v-model='password'
+                :rules='$validators.password'
+                type='password'
+                :placeholder='$t("common.password")')
 
           v-card-actions
             v-btn(text
@@ -29,13 +29,11 @@
             v-btn(v-if='settings.allow_registration'
               to='/register'
               text
-              tabindex="1"
               color='orange') {{$t('login.not_registered')}}
 
             v-btn(color='success'
-              tabindex="0"
-              :disabled='!valid || loading' :loading='loading'
-              @click='submit') {{$t('common.login')}}
+              type='submit'
+              :disabled='!valid || loading' :loading='loading') {{$t('common.login')}}
 
 </template>
 
