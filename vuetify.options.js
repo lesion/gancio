@@ -4,7 +4,7 @@ export default {
     dark: true,
     themes: {
       dark: {
-        primary: '#FF4500'
+        primary: '#FF6E40'
       },
       light: {
         primary: '#FF4500'
