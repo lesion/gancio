@@ -5,7 +5,7 @@ module.exports = {
   ca: 'Català',
   pl: 'Polski',
   eu: 'Euskara',
-  no: 'Norwegian Bokmål',
+  nb: 'Norwegian Bokmål',
   fr: 'Francais',
   de: 'Deutsch'
 }
