@@ -1,4 +1,5 @@
-import { take, get } from 'lodash'
+import take from 'lodash/take'
+import get from 'lodash/get'
 
 export function attributesFromEvents (_events, _tags) {
   const colors = ['blue', 'orange', 'yellow', 'teal', 'indigo', 'green', 'red', 'purple', 'pink', 'gray']

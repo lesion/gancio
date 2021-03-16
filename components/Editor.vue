@@ -64,7 +64,7 @@
     editor-content.content(:editor='editor' spellcheck='false' :style="{ 'max-height': maxHeight }")
 </template>
 <script>
-import _ from 'lodash'
+import debounce from 'lodash/debounce'
 import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from 'tiptap'
 import {
   Blockquote,
@@ -118,7 +118,7 @@ export default {
     this.editor = new Editor({
       onFocus: () => this.focus(),
       onBlur: () => this.blur(),
-      onUpdate: _.debounce(({ getHTML }) => {
+      onUpdate: debounce(({ getHTML }) => {
         this.update = true
         this.$emit('input', getHTML())
       }, 1000),

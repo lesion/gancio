@@ -3,7 +3,7 @@ const path = require('path')
 const config = require('config')
 const fs = require('fs')
 const { Op } = require('sequelize')
-const _ = require('lodash')
+const intersection = require('lodash/intersection')
 const linkifyHtml = require('linkifyjs/html')
 const Sequelize = require('sequelize')
 const dayjs = require('dayjs')
@@ -63,7 +63,7 @@ const eventController = {
       if (!filters.tags && !filters.places) { return true }
       if (!filters.tags.length && !filters.places.length) { return true }
       if (filters.tags.length) {
-        const m = _.intersection(event.tags.map(t => t.tag), filters.tags)
+        const m = intersection(event.tags.map(t => t.tag), filters.tags)
         if (m.length > 0) { return true }
       }
       if (filters.places.length) {
