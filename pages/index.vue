@@ -144,18 +144,3 @@ export default {
   }
 }
 </script>
-<style lang='less'>
-#home {
-  max-width: 1400px;
-  padding-right: 0px;
-  overflow: hidden;
-}
-
-#events {
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-</style>

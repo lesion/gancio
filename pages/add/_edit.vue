@@ -198,9 +198,3 @@ export default {
   }
 }
 </script>
-<style style='less'>
-.container {
-  max-width: 1400px;
-}
-
-</style>
