@@ -40,7 +40,11 @@ const Helpers = {
     const privkey = settingsController.secretSettings.privateKey
     const signer = crypto.createSign('sha256')
     const d = new Date()
-    const stringToSign = `(request-target): post ${inboxUrl.pathname}\nhost: ${inboxUrl.hostname}\ndate: ${d.toUTCString()}`
+    // digest header added for Mastodon 3.2.1 compatibility
+    const digest = crypto.createHash('sha256')
+      .update(message)
+      .digest('base64')
+    const stringToSign = `(request-target): post ${inboxUrl.pathname}\nhost: ${inboxUrl.hostname}\ndate: ${d.toUTCString()}\ndigest: ${digest}`
     signer.update(stringToSign)
     signer.end()
     const signature = signer.sign(privkey)
@@ -52,15 +56,16 @@ const Helpers = {
           Host: inboxUrl.hostname,
           Date: d.toUTCString(),
           Signature: header,
+          Digest: `SHA256=${digest}`,
           'Content-Type': 'application/activity+json; charset=utf-8',
           Accept: 'application/activity+json, application/json; chartset=utf-8'
         },
         method: 'post',
-        data: JSON.stringify(message)
+        data: message
       })
       log.debug(`sign ${ret.status} => ${ret.data}`)
     } catch (e) {
-      log.error(e)
+      log.error(`Response: ${e.response.status} ${e.response.data}`)
     }
   },
 
@@ -96,7 +101,7 @@ const Helpers = {
         {
           Hashtag: 'as:Hashtag'
         }]
-      await Helpers.signAndSend(body, sharedInbox)
+      await Helpers.signAndSend(JSON.stringify(body), sharedInbox)
     }
   },
 
