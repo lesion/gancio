@@ -34,6 +34,7 @@ const Helpers = {
   },
 
   async signAndSend (message, inbox) {
+    log.debug('sign and send', inbox)
     // get the URI of the actor object and append 'inbox' to it
     const inboxUrl = new url.URL(inbox)
     const privkey = settingsController.secretSettings.privateKey
@@ -95,7 +96,7 @@ const Helpers = {
         {
           Hashtag: 'as:Hashtag'
         }]
-      Helpers.signAndSend(body, sharedInbox)
+      await Helpers.signAndSend(body, sharedInbox)
     }
   },
 
