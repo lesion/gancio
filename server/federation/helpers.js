@@ -49,7 +49,7 @@ const Helpers = {
     signer.end()
     const signature = signer.sign(privkey)
     const signature_b64 = signature.toString('base64')
-    const header = `keyId="${config.baseurl}/federation/u/${settingsController.settings.instance_name}",headers="(request-target) host date",signature="${signature_b64}"`
+    const header = `keyId="${config.baseurl}/federation/u/${settingsController.settings.instance_name}",headers="(request-target) host date digest",signature="${signature_b64}"`
     try {
       const ret = await axios(inbox, {
         headers: {
