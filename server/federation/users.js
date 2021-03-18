@@ -105,7 +105,7 @@ module.exports = {
       return res.status(404).send(`No record found for ${name}`)
     }
 
-    const events = await Event.findAll({ include: [{ model: Tag, required: false }, Place] })
+    const events = await Event.findAll({ include: [{ model: Tag, required: false }, Place], limit: 10 })
     log.debug(`${config.baseurl} Inside ${name} outbox, should return all events from this instance: ${events.length}`)
 
     // https://www.w3.org/TR/activitypub/#outbox
