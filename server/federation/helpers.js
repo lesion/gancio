@@ -34,7 +34,6 @@ const Helpers = {
   },
 
   async signAndSend (message, inbox) {
-    log.debug('sign and send', inbox)
     // get the URI of the actor object and append 'inbox' to it
     const inboxUrl = new url.URL(inbox)
     const privkey = settingsController.secretSettings.privateKey
@@ -44,26 +43,26 @@ const Helpers = {
     const digest = crypto.createHash('sha256')
       .update(message)
       .digest('base64')
-    const stringToSign = `(request-target): post ${inboxUrl.pathname}\nhost: ${inboxUrl.hostname}\ndate: ${d.toUTCString()}\ndigest: ${digest}`
+    const stringToSign = `(request-target): post ${inboxUrl.pathname}\nhost: ${inboxUrl.hostname}\ndate: ${d.toUTCString()}\ndigest: SHA-256=${digest}`
     signer.update(stringToSign)
     signer.end()
     const signature = signer.sign(privkey)
     const signature_b64 = signature.toString('base64')
-    const header = `keyId="${config.baseurl}/federation/u/${settingsController.settings.instance_name}",headers="(request-target) host date digest",signature="${signature_b64}"`
+    const header = `keyId="${config.baseurl}/federation/u/${settingsController.settings.instance_name}",algorithm="rsa-sha265",headers="(request-target) host date digest",signature="${signature_b64}"`
     try {
       const ret = await axios(inbox, {
         headers: {
           Host: inboxUrl.hostname,
           Date: d.toUTCString(),
           Signature: header,
-          Digest: `SHA256=${digest}`,
+          Digest: `SHA-256=${digest}`,
           'Content-Type': 'application/activity+json; charset=utf-8',
           Accept: 'application/activity+json, application/json; chartset=utf-8'
         },
         method: 'post',
         data: message
       })
-      log.debug(`sign ${ret.status} => ${ret.data}`)
+      log.debug(`signed ${ret.status} => ${ret.data}`)
     } catch (e) {
       log.error(`Response: ${e.response.status} ${e.response.data}`)
     }
