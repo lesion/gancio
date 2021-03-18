@@ -17,7 +17,7 @@
         v-tab
           v-badge(:value='!!unconfirmedUsers.length' :content='unconfirmedUsers.length') {{$t('common.users')}}
         v-tab-item
-          Users(:users='users')
+          Users(:users='users' @update='updateUsers')
 
         //- PLACES
         v-tab {{$t('common.places')}}
@@ -79,6 +79,9 @@ export default {
       selectedTab: 0
     }
   },
+  head () {
+    return { title: `${this.settings.title} - ${this.$t('common.admin')}` }
+  },
   computed: {
     ...mapState(['settings']),
     unconfirmedUsers () {
@@ -86,6 +89,9 @@ export default {
     }
   },
   methods: {
+    async updateUsers () {
+      this.users = await this.$axios.$get('/users')
+    },
     preview (id) {
       this.$router.push(`/event/${id}`)
     },
@@ -96,9 +102,6 @@ export default {
       this.$root.$message('event.confirmed', { color: 'succes' })
       this.unconfirmedEvents = this.unconfirmedEvents.filter(e => e.id !== id)
     }
-  },
-  head () {
-    return { title: `${this.settings.title} - ${this.$t('common.admin')}` }
   }
 }
 </script>

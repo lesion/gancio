@@ -91,14 +91,16 @@ export default {
       if (!this.$refs.user_form.validate()) { return }
       try {
         this.loading = true
-        const user = await this.$axios.$post('/user', this.new_user)
+        await this.$axios.$post('/user', this.new_user)
         this.new_user = { email: '', is_admin: false }
-
         this.$root.$message('admin.user_create_ok', { color: 'success' })
-        this.users_.push(user)
+        this.$emit('update')
+        this.loading = false
+        this.newUserDialog = false
       } catch (e) {
         const err = get(e, 'response.data.errors[0].message', e)
         this.$root.$message(this.$t(err), { color: 'error' })
+        this.loading = false
       }
     }
   }
