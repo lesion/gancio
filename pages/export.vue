@@ -31,7 +31,7 @@
               v-text-field(v-model='link' readonly)
                 v-btn(slot='prepend' text color='primary'
                   v-clipboard:copy='link'
-                  v-clipboard:success='copyLink') {{$t("common.copy")}}
+                  v-clipboard:success='copyLink.bind(this, "feed")') {{$t("common.copy")}}
                   v-icon.ml-1 mdi-content-copy
 
         v-tab ics/ical
@@ -41,7 +41,7 @@
               p(v-html='$t(`export.ical_description`)')
               v-text-field(v-model='link')
                 v-btn(slot='prepend' text color='primary'
-                  v-clipboard:copy='link' v-clipboard:success='copyLink') {{$t("common.copy")}}
+                  v-clipboard:copy='link' v-clipboard:success='copyLink.bind(this, "ical")') {{$t("common.copy")}}
                   v-icon.ml-1 mdi-content-copy
 
         v-tab List
@@ -61,7 +61,7 @@
                     :events='events')
               v-text-field.mb-1(type='textarea' v-model='listScript' readonly )
                 v-btn(slot='prepend' text
-                  color='primary' v-clipboard:copy='listScript' v-clipboard:success='copyLink') {{$t('common.copy')}}
+                  color='primary' v-clipboard:copy='listScript' v-clipboard:success='copyLink.bind(this,"list")') {{$t('common.copy')}}
                     v-icon.ml-1 mdi-content-copy
 
         //- v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
@@ -161,8 +161,12 @@ export default {
         show_recurrent: this.filters.show_recurrent
       })
     },
-    copyLink () {
-      this.$root.$message('common.feed_url_copied')
+    copyLink (type) {
+      if (type === 'feed') {
+        this.$root.$message('common.feed_url_copied')
+      } else {
+        this.$root.$message('common.copied')
+      }
     },
     async add_notification () {
       // validate()
@@ -170,7 +174,7 @@ export default {
       // Message({ message: 'Inserisci una mail', showClose: true, type: 'error' })
       // return this.$refs.email.focus()
       // }
-      await api.addNotification({ ...this.notification, filters: this.filters})
+      // await api.addNotification({ ...this.notification, filters: this.filters})
       // this.$refs.modal.hide()
       // Message({ message: this.$t('email_notification_activated'), showClose: true, type: 'success' })
     },
