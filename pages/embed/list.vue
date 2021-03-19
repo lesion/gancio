@@ -5,13 +5,8 @@
 import List from '../../components/List'
 
 export default {
-  layout: 'iframe',
   components: { List },
-  data () {
-    return {
-      title: ''
-    }
-  },
+  layout: 'iframe',
   async asyncData ({ query, $axios }) {
     const title = query.title
     const tags = query.tags

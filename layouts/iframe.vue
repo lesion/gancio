@@ -1,8 +1,9 @@
-<template>
-  <nuxt />
+<template lang='pug'>
+  v-app#iframe
+    nuxt
 </template>
 <style lang='less'>
-  html, body {
-    background-color: transparent;
+  #iframe.v-application {
+    background-color: transparent !important;
 }
 </style>

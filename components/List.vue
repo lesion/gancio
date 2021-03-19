@@ -1,13 +1,18 @@
 <template lang='pug'>
 div#list
-  p(v-if='title') {{title}}
-  v-timeline(dense)
-    v-timeline-item(
+  v-list(dense)
+    v-list-item
+      h3(v-if='title') {{title}}
+    v-list-item(
+      target='_blank'
+      :to='`/event/${event.id}`'
       v-for='event in computedEvents'
-      :key='`${event.id}_${event.start_datetime}`')
-      .text-subtitle <v-icon small color='success' v-if='event.parentId'>mdi-repeat</v-icon> {{event|when}}
-        .text-subtitle.float-right @{{event.place.name}}
-      a.text-body-1(:href='`/event/${event.id}`' target='_blank') {{event.title}}
+      :key='`${event.id}_${event.start_datetime}`' small)
+      v-list-item-content
+        v-list-item-subtitle <v-icon small color='success' v-if='event.parentId'>mdi-repeat</v-icon> {{event|when}}
+          span.primary--text.ml-1 @{{event.place.name}}
+        v-list-item-title(v-text='event.title')
+      //- a.text-body-1(:href='`/event/${event.id}`' target='_blank') {{event.title}}
 </template>
 <script>
 
@@ -57,5 +62,8 @@ export default {
   #list {
     max-width: 500px;
     margin: 0 auto;
+    .v-list-item__title {
+      white-space: normal !important;
+    }
   }
 </style>
