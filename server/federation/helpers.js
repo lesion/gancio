@@ -35,23 +35,28 @@ const Helpers = {
     const privkey = settingsController.secretSettings.privateKey
     const signer = crypto.createSign('sha256')
     const d = new Date()
-    const stringToSign = `(request-target): post ${inboxUrl.pathname}\nhost: ${inboxUrl.hostname}\ndate: ${d.toUTCString()}`
+    // digest header added for Mastodon 3.2.1 compatibility
+    const digest = crypto.createHash('sha256')
+      .update(message)
+      .digest('base64')
+    const stringToSign = `(request-target): post ${inboxUrl.pathname}\nhost: ${inboxUrl.hostname}\ndate: ${d.toUTCString()}\ndigest: SHA-256=${digest}`
     signer.update(stringToSign)
     signer.end()
     const signature = signer.sign(privkey)
     const signature_b64 = signature.toString('base64')
-    const header = `keyId="${config.baseurl}/federation/u/${settingsController.settings.instance_name}",headers="(request-target) host date",signature="${signature_b64}"`
+    const header = `keyId="${config.baseurl}/federation/u/${settingsController.settings.instance_name}",algorithm="rsa-sha256",headers="(request-target) host date digest",signature="${signature_b64}"`
     try {
       const ret = await axios(inbox, {
         headers: {
           Host: inboxUrl.hostname,
           Date: d.toUTCString(),
           Signature: header,
+          Digest: `SHA-256=${digest}`,
           'Content-Type': 'application/activity+json; charset=utf-8',
           Accept: 'application/activity+json, application/json; chartset=utf-8'
         },
         method: 'post',
-        data: JSON.stringify(message)
+        data: message
       })
       debug('sign %s => %s', ret.status, ret.data)
     } catch (e) {
@@ -88,8 +93,10 @@ const Helpers = {
       body['@context'] = [
         'https://www.w3.org/ns/activitystreams',
         'https://w3id.org/security/v1',
-        { Hashtag: 'as:Hashtag' }]
-      Helpers.signAndSend(body, sharedInbox)
+        {
+          Hashtag: 'as:Hashtag'
+        }]
+      await Helpers.signAndSend(JSON.stringify(body), sharedInbox)
     }
   },
 

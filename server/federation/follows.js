@@ -25,7 +25,7 @@ module.exports = {
       'actor': `${config.baseurl}/federation/u/${username}`,
       'object': body
     }
-    Helpers.signAndSend(message, req.fedi_user.object.inbox)
+    Helpers.signAndSend(JSON.stringify(message), req.fedi_user.object.inbox)
     res.sendStatus(200)
   },
 
