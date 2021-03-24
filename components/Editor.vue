@@ -1,5 +1,5 @@
 <template lang='pug'>
-  .editor(:class='focused')
+  .editor.grey.darken-4(:class='focused')
     .label {{label}}
     editor-menu-bar.menubar.is-hidden(:editor='editor'
       :keep-in-bounds='true' v-slot='{ commands, isActive, getMarkAttrs, focused }')
