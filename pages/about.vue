@@ -6,7 +6,7 @@
       v-card-text(v-else v-html='about')
       v-card-actions(v-if='$auth.user && $auth.user.is_admin')
         v-spacer
-        v-btn(color='primary' plain
+        v-btn(color='primary' text
           @click='save') {{$t('common.save')}}
 </template>
 <script>
