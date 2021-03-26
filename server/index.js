@@ -1,31 +1,42 @@
 const { Nuxt, Builder } = require('nuxt')
 
 // Import and Set Nuxt.js options
-const nuxt_config = require('../nuxt.config.js')
+const nuxtConfig = require('../nuxt.config.js')
 const config = require('config')
-const consola = require('consola')
+const log = require('./log')
 
 async function main () {
-  nuxt_config.server = config.server
+  nuxtConfig.server = config.server
 
   // Init Nuxt.js
-  const nuxt = new Nuxt(nuxt_config)
+  const nuxt = new Nuxt(nuxtConfig)
 
   // Build only in dev mode
-  if (nuxt_config.dev) {
+  if (nuxtConfig.dev) {
     const builder = new Builder(nuxt)
     await builder.build()
   } else {
     await nuxt.ready()
   }
-  nuxt.listen()
-  consola.info('Listen on %s:%d , visit me here => %s', config.server.host, config.server.port, config.baseurl)
+  try {
+    await nuxt.listen()
+  } catch (e) {
+    log.err(e)
+    return
+  }
+
+  const { TaskManager } = require('./taskManager')
+  TaskManager.start()
+  const msg = `Listen on ${config.server.host}:${config.server.port} , visit me here => ${config.baseurl}`
+  log.info(msg)
 
   // close connections/port/unix socket
   function shutdown () {
+    TaskManager.stop()
     nuxt.close(async () => {
-      const db = require('./api/models')
-      await db.sequelize.close()
+      log.info('Closing DB')
+      const sequelize = require('./api/models')
+      await sequelize.close()
       process.exit()
     })
   }

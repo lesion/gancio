@@ -1,22 +1,26 @@
-<template lang="pug">
-  el-dialog(:visible='true' @close="$router.push('/')" :close-on-click-modal='false')
-    template(slot='title')
-      h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link>  {{$t('common.recover_password')}}
-    div(v-if='valid')
-      el-input(type='password', :placeholder='$t("common.new_password")' v-model='new_password' prefix-icon='el-icon-lock')
-    div(v-else) {{$t('recover.not_valid_code')}}
+<template lang='pug'>
+  v-row.mt-5(align='center' justify='center')
+    v-col(cols='12' md="6" lg="5" xl="4")
+      v-card
+        v-card-title {{settings.title}} - {{$t('common.recover_password')}}
+        v-card-text
+          div(v-if='valid')
+            v-text-field(type='password'
+              :rules="$validators.password"
+              autofocus :placeholder='$t("common.new_password")'
+              v-model='new_password')
+          div(v-else) {{$t('recover.not_valid_code')}}
 
-    template(v-if='valid' slot='footer')
-      el-button(plain type="success" icon='el-icon-send', @click='change_password') {{$t('common.send')}}
+        v-card-actions
+          v-spacer
+          v-btn(v-if='valid' color='primary' @click='change_password') {{$t('common.send')}}
 </template>
 <script>
-import { Message } from 'element-ui'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Recover',
-  data () {
-    return { new_password: '' }
-  },
+  layout: 'modal',
   async asyncData ({ params, $axios }) {
     const code = params.code
     try {
@@ -26,24 +30,31 @@ export default {
       return { valid: false }
     }
   },
+  data () {
+    return { new_password: '' }
+  },
+  computed: mapState(['settings']),
   methods: {
     async change_password () {
       try {
         await this.$axios.$post('/user/recover_password', { recover_code: this.code, password: this.new_password })
-        Message({
-          showClose: true,
-          type: 'success',
-          message: this.$t('common.password_updated')
-        })
-        this.$router.replace('/?ref=login')
+        this.$root.$message('common.password_updated')
+        this.$router.replace('/login')
       } catch (e) {
-        Message({
-          showClose: true,
-          type: 'warning',
-          message: e
-        })
+        this.$root.$message(e, { color: 'warning' })
       }
     }
+  },
+  head () {
+    return { title: `${this.settings.title} - Authorize` }
   }
 }
 </script>
+<style lang='less'>
+  h4 img {
+    max-height: 40px;
+    border-radius: 20px;
+    background-color: #333;
+    border: 1px solid #333;
+  }
+</style>

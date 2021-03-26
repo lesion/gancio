@@ -1,9 +1,17 @@
 ---
 layout: default
-title: Support a new language
+title: Internationalization
 permalink: /dev/locales
 parent: Hacking
+nav_order: 7
 ---
 
-### Add a new locale
-watch [this commit](https://framagit.org/les/gancio/commit/cd95c7eb3b9e4bc4832a7b33d8d79b4fd3cbda2d)
+## Internationalization 
+
+We're using [weblate](https://hosted.weblate.org/engage/gancio/) for localization, you can use it to help us with translations.
+
+Currently supported languages:  
+
+<a href="https://hosted.weblate.org/engage/gancio/">
+<img src="https://hosted.weblate.org/widgets/gancio/-/multi-blue.svg" alt="Stato traduzione" />
+</a>

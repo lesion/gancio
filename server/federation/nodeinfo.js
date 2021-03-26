@@ -7,7 +7,7 @@ const version = require('../../package.json').version
 
 router.use(cors())
 
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
   const ret = {
     version: '1.0',
     server: {

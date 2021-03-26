@@ -1,19 +1,24 @@
+const { Model, DataTypes } = require('sequelize')
+const sequelize = require('./index')
 
-module.exports = (sequelize, DataTypes) => {
+// const Event = require('./event')
+class Place extends Model {}
 
-  const Place = sequelize.define('place', {
-    name: {
-      type: DataTypes.STRING,
-      unique: true,
-      index: true,
-      allowNull: false
-    },
-    address: DataTypes.STRING
-  }, {})
-
-  Place.associate = function (models) {
-    Place.hasMany(models.event)
+Place.init({
+  name: {
+    type: DataTypes.STRING,
+    unique: true,
+    index: true,
+    allowNull: false
+  },
+  address: DataTypes.STRING,
+  confirmed: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+    allowNull: false
   }
+}, { sequelize, modelName: 'place' })
 
-  return Place
-}
+// Place.hasMany(Event)
+
+module.exports = Place

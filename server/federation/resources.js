@@ -1,52 +1,79 @@
-const { event: Event, resource: Resource } = require('../api/models')
-const debug = require('debug')('fediverse:resource')
-const sanitize = require('sanitize-html')
+const Event = require('../api/models/event')
+const Resource = require('../api/models/resource')
+const APUser = require('../api/models/ap_user')
+
+const log = require('../log')
+const helpers = require('../helpers')
+const linkifyHtml = require('linkifyjs/html')
+
 module.exports = {
 
+  // create a resource from AP Note
   async create (req, res) {
+    if (!req.settings.enable_resources) {
+      log.info('Ignore resource as it is disabled in settings')
+      return
+    }
+
     const body = req.body
 
     // search for related event
+    let event
+
+    // it's an answer
     const inReplyTo = body.object.inReplyTo
-    const match = inReplyTo.match('.*/federation/m/(.*)')
-    if (!match || match.length < 2) {
-      debug('Resource not found %s', inReplyTo)
-      return res.status(404).send('Event not found!')
+
+    if (inReplyTo) {
+      // .. to an event ?
+      const match = inReplyTo && inReplyTo.match('.*/federation/m/(.*)')
+      log.info(`Event reply => ${inReplyTo}`)
+      if (match) {
+        event = await Event.findByPk(Number(match[1]))
+      } else {
+        // in reply to another resource...
+        const resource = await Resource.findOne({ where: { activitypub_id: inReplyTo }, include: [Event] })
+        event = resource && resource.event
+      }
     }
 
-    let event = await Event.findByPk(Number(match[1]))
-    debug('Resource coming for %s', inReplyTo)
     if (!event) {
-      // in reply to another resource...
-      const resource = await Resource.findOne({ where: { activitypub_id: inReplyTo }, include: [Event] })
-      if (!resource) { return res.status(404).send('Not found') }
-      event = resource.event
+      log.error('This is a direct message. Just ignore it')
+      log.error(body)
+      return res.status(404).send('Not found')
     }
-    debug('resource from %s to "%s"', req.body.actor, event.title)
 
-    // clean resource
-    body.object.content = sanitize(body.object.content, {
-      nonTextTags: ['span', 'style', 'script', 'textarea', 'noscript']
-    })
+    log.debug(`resource from ${req.body.actor} to "${event.title}"`)
+
+    body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content))
 
     await Resource.create({
       activitypub_id: body.object.id,
       apUserApId: req.body.actor,
       data: body.object,
-      eventId: event.id
+      eventId: event && event.id
     })
 
     res.sendStatus(201)
   },
 
   async remove (req, res) {
-    const resource = await Resource.findOne({ where: { activitypub_id: req.body.object.id } })
+    const resource = await Resource.findOne({
+      where: { activitypub_id: req.body.object.id },
+      include: [{ model: APUser, required: false, attributes: ['ap_id'] }]
+    })
     if (!resource) {
-      debug('Comment %s not found', req.body.object.id)
+      log.info(`Comment ${req.body.object.id} not found`)
       return res.status(404).send('Not found')
     }
-    await resource.destroy()
-    debug('Comment %s removed!', req.body.object.id)
-    return res.sendStatus(201)
+    // check if fedi_user that requested resource removal
+    // is the same that created the resource at first place
+    log.debug(res.fedi_user.ap_id, resource.ap_user.ap_id)
+    if (res.fedi_user.ap_id === resource.ap_user.id) {
+      await resource.destroy()
+      log.info(`Comment ${req.body.object.id} removed`)
+      res.sendStatus(201)
+    } else {
+      res.sendStatus(403)
+    }
   }
 }

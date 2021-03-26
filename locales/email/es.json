@@ -1,17 +1,25 @@
 {
-  "register":{ 
-    "subject": "Richiesta registrazione ricevuta",
-    "content": "Abbiamo ricevuto la richiesta di registrazione. La confermeremo quanto prima.\n Ciao"
-  },
-  "confirm": {
-    "subject": "Puoi iniziare a pubblicare eventi",
-    "content": "Ciao, il tuo account su <a href='{{config.baseurl}}'>{{config.title}}<a/> è stato creato. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confermalo</a>."
-  },
-  "recover": {
-    "subject": "Recupero password",
-    "content": "Ciao, hai richiesto un recupero della password su {{config.title}}."
-  },
-  "common": {
-    "press_here": "Premi qui"
-  }
+    "register": {
+        "subject": "Solicitud de registro recibida",
+        "content": "Recibimos la solicitud de registro. Lo confirmaremos tan pronto como podamos.\n Adios"
+    },
+    "confirm": {
+        "subject": "Puedes empezar a publicar eventos",
+        "content": "Hola, tu cuenta en <a href='{{config.baseurl}}'>{{config.title}}</a> ha sido confirmada. Escríbemos a {{config.admin_email}} para cualquier información y siéntete como en casa."
+    },
+    "recover": {
+        "subject": "Recuperar password",
+        "content": "Hola, has pedido recuperar tu contraseña en {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Pulsa aquí</a> para confirmar."
+    },
+    "common": {
+        "press_here": "Premi qui"
+    },
+    "user_confirm": {
+        "subject": "Ahora puedes empezar a publicar eventos",
+        "content": "Hola, tu cuenta en <a href='{{config.baseurl}}'>{{config.title}}</a> ha sido creada. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confirma y elige un password.</a>."
+    },
+    "admin_register": {
+        "subject": "Nuevo registro",
+        "content": "{{user.email}} ha pedido registrarse en {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confírmalo <a href='{{config.baseurl}}/admin'>aquí</a>."
+    }
 }

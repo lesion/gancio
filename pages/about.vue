@@ -1,19 +1,36 @@
 <template lang="pug">
-  el-main
-    h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{$t('common.info')}}
-
-    div(v-html='$t("about")')
-    hr
-    small Made with <a href='https://gancio.org'>Gancio {{settings.version}}</a>
-
+  v-container
+    v-card
+      v-card-text(v-if='$auth.user && $auth.user.is_admin')
+        Editor(v-model='about' label="About")
+      v-card-text(v-else v-html='about')
+      v-card-actions(v-if='$auth.user && $auth.user.is_admin')
+        v-spacer
+        v-btn(color='primary' text
+          @click='save') {{$t('common.save')}}
 </template>
 <script>
-import { mapState } from 'vuex'
+import Editor from '@/components/Editor'
+import { mapState, mapActions } from 'vuex'
+
 export default {
-  computed: mapState(['settings']),
+  components: { Editor },
+  data ({ $store }) {
+    return {
+      about: $store.state.settings.about || this.$t('about')
+    }
+  },
   head () {
     return {
       title: `${this.settings.title} - ${this.$t('common.info')}`
+    }
+  },
+  computed: mapState(['settings']),
+  methods: {
+    ...mapActions(['setSetting']),
+    save () {
+      this.$root.$message('common.ok', { color: 'success' })
+      this.setSetting({ key: 'about', value: this.about })
     }
   }
 }

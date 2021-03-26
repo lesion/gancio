@@ -1,33 +1,146 @@
-<template lang='pug'>
-  #home
-    Nav
-    Home
+<template lang="pug">
+  v-container#home(fluid)
+
+    //- Announcements
+    #announcements.mr-1
+      Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
+
+    //- Calendar and search bar
+    v-row
+      .col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12
+        //- this is needed as v-calendar does not support SSR
+        //- https://github.com/nathanreyes/v-calendar/issues/336
+        client-only
+          Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='events')
+
+      .col.pt-0.pt-md-2
+        Search(:filters='filters' @update='updateFilters')
+        v-chip(v-if='selectedDay' close @click:close='dayChange({ date: selectedDay})') {{selectedDay}}
+
+    //- Events
+    #events.mt-1
+      //- div.event(v-for='(event, idx) in events' :key='event.id' v-intersect="(entries, observer, isIntersecting) => intersecting[event.id] = isIntersecting")
+      Event(:event='event' v-for='(event, idx) in events' :key='event.id' @tagclick='tagClick' @placeclick='placeClick')
 
 </template>
+
 <script>
-import Home from '~/components/Home.vue'
-import Nav from '~/components/Nav.vue'
-import moment from 'moment-timezone'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import dayjs from 'dayjs'
+import Event from '@/components/Event'
+import Announcement from '@/components/Announcement'
+import Search from '@/components/Search'
+import Calendar from '@/components/Calendar'
 
 export default {
   name: 'Index',
-  computed: mapState(['settings']),
-  async fetch ({ store, $axios }) {
-    try {
-      moment.tz.setDefault(store.state.settings.instance_timezone)
-      const now = new Date()
-      const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
-      store.commit('setEvents', events)
-      const { tags, places } = await $axios.$get('/event/meta')
-      store.commit('update', { tags, places })
-    } catch (e) {
-      console.error(e)
+  components: { Event, Search, Announcement, Calendar },
+  async asyncData ({ params, $api, store }) {
+    const events = await $api.getEvents({
+      start: dayjs().unix(),
+      end: null,
+      ...store.state.filters
+    })
+    return { events, first: true }
+  },
+  data ({ $store }) {
+    return {
+      first: true,
+      date: dayjs().format('YYYY-MM-DD'),
+      events: [],
+      start: dayjs().unix(),
+      end: null,
+      selectedDay: null
+      // intersecting: {}
     }
   },
-  mounted (ctx) {
-    moment.tz.setDefault(this.settings.instance_timezone)
+  head () {
+    return {
+      title: this.settings.title,
+      meta: [
+        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+        { hid: 'description', name: 'description', content: this.settings.description },
+        { hid: 'og-description', name: 'og:description', content: this.settings.description },
+        { hid: 'og-title', property: 'og:title', content: this.settings.title },
+        { hid: 'og-url', property: 'og:url', content: this.settings.baseurl },
+        { property: 'og:image', content: this.settings.baseurl + '/favicon.ico' }
+      ],
+      link: [
+        { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' }
+      ]
+    }
   },
-  components: { Nav, Home }
+  computed: mapState(['settings', 'announcements', 'filters']),
+  methods: {
+    // onIntersect (isIntersecting, eventId) {
+    // this.intersecting[eventId] = isIntersecting
+    // },
+    ...mapActions(['setFilters']),
+    updateEvents () {
+      return this.$api.getEvents({
+        start: this.start,
+        end: this.end,
+        ...this.filters
+      }).then(events => {
+        this.events = events
+        this.$nuxt.$loading.finish()
+      })
+    },
+    placeClick (place_id) {
+      if (this.filters.places.includes(place_id)) {
+        this.setFilters({ ...this.filters, places: this.filters.places.filter(p_id => p_id !== place_id) })
+      } else {
+        this.setFilters({ ...this.filters, places: [].concat(this.filters.places, place_id) })
+      }
+      this.updateEvents()
+    },
+    tagClick (tag) {
+      if (this.filters.tags.includes(tag)) {
+        this.filters.tags = this.filters.tags.filter(t => t !== tag)
+        this.setFilters({ ...this.filters, tags: this.filters.tags.filter(t => t !== tag) })
+      } else {
+        this.setFilters({ ...this.filters, tags: [].concat(this.filters.tags, tag) })
+      }
+      this.updateEvents()
+    },
+    monthChange ({ year, month }) {
+      if (this.first) {
+        this.first = false
+        return
+      }
+      this.$nuxt.$loading.start()
+      this.selectedDay = null
+
+      // check if current month is selected
+      if (month - 1 === dayjs().month() && year === dayjs().year()) {
+        this.start = dayjs().unix()
+        this.date = dayjs().format('YYYY-MM-DD')
+      } else {
+        this.date = ''
+        this.start = dayjs().year(year).month(month - 1).startOf('month').unix() // .startOf('week').unix()
+      }
+      // TODO: check if calendar view is double
+      this.end = dayjs().year(year).month(month).endOf('month').unix() // .endOf('week').unix()
+      this.updateEvents()
+    },
+    updateFilters (filters) {
+      this.setFilters(filters)
+      this.updateEvents()
+    },
+    dayChange (day) {
+      const date = dayjs(day.date).format('YYYY-MM-DD')
+      if (this.selectedDay === date) {
+        this.selectedDay = null
+        this.start = dayjs().unix() // .startOf('week').unix()
+        this.end = null
+        this.updateEvents()
+        return
+      }
+      this.start = dayjs(date).startOf('day').unix()
+      this.end = dayjs(date).endOf('day').unix()
+      this.selectedDay = date
+      this.updateEvents()
+    }
+  }
 }
 </script>

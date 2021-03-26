@@ -29,9 +29,17 @@ git clone https://framagit.org/les/gancio
 yarn
 ```
 
-4. Hacking
+4. Run db migrations
+```bash
+./node_modules/.bin/sequelize db:migrate
+```
+
+5. Hacking
 ```bash
 yarn dev
 ```
+
+> warning "Warning"
+> You need to register a first user, this will be an active administrator!
 
 Please use the [issue board](https://framagit.org/les/gancio/-/boards) and the [forum](https://framavox.org/g/hMXTDgtJ/gancio) to discuss any modification.

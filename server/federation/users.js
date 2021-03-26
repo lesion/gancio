@@ -1,12 +1,21 @@
-const { User, Event, Place, Tag, APUser } = require('../api/models')
+const Event = require('../api/models/event')
+const Place = require('../api/models/place')
+const APUser = require('../api/models/ap_user')
+const Tag = require('../api/models/tag')
+
 const config = require('config')
-const debug = require('debug')('fediverse:user')
+const log = require('../log')
+const utc = require('dayjs/plugin/utc')
+const dayjs = require('dayjs')
+dayjs.extend(utc)
 
 module.exports = {
   get (req, res) {
+    log.debug('Get actor')
+    if (req.accepts('html')) { return res.redirect(301, '/') }
     const name = req.params.name
     if (!name) { return res.status(400).send('Bad request.') }
-    // const user = await User.findOne({ where: { username: name } })
+
     if (name !== req.settings.instance_name) { return res.status(404).send(`No record found for ${name}`) }
     const ret = {
       '@context': [
@@ -25,7 +34,7 @@ module.exports = {
       name,
       preferredUsername: name,
       inbox: `${config.baseurl}/federation/u/${name}/inbox`,
-      // outbox: `${config.baseurl}/federation/u/${name}/outbox`,
+      outbox: `${config.baseurl}/federation/u/${name}/outbox`,
       // followers: `${config.baseurl}/federation/u/${name}/followers`,
       discoverable: true,
       attachment: [{
@@ -36,7 +45,7 @@ module.exports = {
       icon: {
         type: 'Image',
         mediaType: 'image/png',
-        url: config.baseurl + '/gancio.png'
+        url: config.baseurl + '/logo.png'
       },
       publicKey: {
         id: `${config.baseurl}/federation/u/${name}#main-key`,
@@ -48,13 +57,13 @@ module.exports = {
     res.json(ret)
   },
 
-  async followers(req, res) {
-    // TODO
+  async followers (req, res) {
     const name = req.params.name
     const page = req.query.page
-    debug('Retrieve %s followers', name)
+    log.debug(`Retrieve ${name} followers`)
     if (!name) { return res.status(400).send('Bad request.') }
     if (name !== req.settings.instance_name) {
+      log.warn('No record found')
       return res.status(404).send(`No record found for ${name}`)
     }
     const followers = await APUser.findAll({ where: { follower: true } })
@@ -62,15 +71,15 @@ module.exports = {
     res.type('application/activity+json; charset=utf-8')
 
     if (!page) {
-      debug('No pagination')
+      log.debug('No pagination')
       return res.json({
         '@context': 'https://www.w3.org/ns/activitystreams',
         id: `${config.baseurl}/federation/u/${name}/followers`,
         type: 'OrderedCollection',
         totalItems: followers.length,
-        first: `${config.baseurl}/federation/u/${name}/followers?page=true`,
-        last: `${config.baseurl}/federation/u/${name}/followers?page=true`,
-        orderedItems: followers.map(f => f.ap_id)
+        first: `${config.baseurl}/federation/u/${name}/followers?page=true`
+        // last: `${config.baseurl}/federation/u/${name}/followers?page=true`,
+        // orderedItems: followers.map(f => f.ap_id)
       })
     }
     return res.json({
@@ -87,47 +96,72 @@ module.exports = {
     const name = req.params.name
     const page = req.query.page
 
-    if (!name) { return res.status(400).send('Bad request.') }
-    const user = await User.findOne({
-      include: [ { model: Event, include: [ Place, Tag ] } ],
-      where: { username: name }
-    })
+    if (!name) {
+      log.info('[AP] Bad /outbox request')
+      return res.status(400).send('Bad request.')
+    }
+    if (name !== req.settings.instance_name) {
+      log.info(`No record found for ${name}`)
+      return res.status(404).send(`No record found for ${name}`)
+    }
 
-    if (!user) { return res.status(404).send(`No record found for ${name}`) }
-
-    debug('Inside outbox, should return all events from this user')
+    const events = await Event.findAll({ include: [{ model: Tag, required: false }, Place], limit: 10 })
+    log.debug(`${config.baseurl} Inside ${name} outbox, should return all events from this instance: ${events.length}`)
 
     // https://www.w3.org/TR/activitypub/#outbox
     res.type('application/activity+json; charset=utf-8')
     if (!page) {
       return res.json({
-        '@context': ['https://www.w3.org/ns/activitystreams'],
+        '@context': 'https://www.w3.org/ns/activitystreams',
         id: `${config.baseurl}/federation/u/${name}/outbox`,
         type: 'OrderedCollection',
-        totalItems: user.events.length,
-        first: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
-        last: `${config.baseurl}/federation/u/${name}/outbox?page=true`
+        totalItems: events.length,
+        first: {
+          id: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
+          type: 'OrderedCollectionPage',
+          // totalItems: events.length,
+          partOf: `${config.baseurl}/federation/u/${name}/outbox`,
+          // prev: `${config.baseurl}/federation/u/${name}/outbox`,
+          // next: page !== 'last' && `${config.baseurl}/federation/u/${name}/outbox?page=last`,
+          orderedItems: page === 'last'
+            ? []
+            : events.map(e => ({
+              id: `${config.baseurl}/federation/m/${e.id}#create`,
+              type: 'Create',
+              to: ['https://www.w3.org/ns/activitystreams#Public'],
+              cc: [`${config.baseurl}/federation/u/${name}/followers`],
+              published: dayjs(e.createdAt).utc().format(),
+              actor: `${config.baseurl}/federation/u/${name}`,
+              object: e.toAPNote(name, req.settings.locale)
+            }))
+        }
       })
     }
-
-    debug('With pagination %s', page)
-    return res.json({
-      '@context': ['https://www.w3.org/ns/activitystreams', { Hashtag: 'as:Hashtag' }],
-      id: `${config.baseurl}/federation/u/${name}/outbox?page=${page}`,
-      type: 'OrderedCollectionPage',
-      totalItems: user.events.length,
-      partOf: `${config.baseurl}/federation/u/${name}/outbox`,
-      orderedItems: user.events.map(e => ({
-        ...e.toNoteAP(user.username), actor: `${config.baseurl}/federation/u/${user.username}` }))
-      //   user.events.map(e => ({
-      //   id: `${config.baseurl}/federation/m/${e.id}#create`,
-      //   type: 'Create',
-      //   to: ['https://www.w3.org/ns/activitystreams#Public'],
-      //   cc: [`${config.baseurl}/federation/u/${user.username}/followers`],
-      //   published: e.createdAt,
-      //   actor: `${config.baseurl}/federation/u/${user.username}`,
-      //   object: e.toNoteAP(user.username)
-      // }))
-    })
   }
 }
+
+// log.debug(`With pagination ${page}`)
+// return res.json({
+//   '@context': [
+//     'https://www.w3.org/ns/activitystreams'
+//   ],
+//   id: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
+//   type: 'OrderedCollectionPage',
+//   // totalItems: events.length,
+//   partOf: `${config.baseurl}/federation/u/${name}/outbox`,
+//   // prev: `${config.baseurl}/federation/u/${name}/outbox`,
+//   next: page !== 'last' && `${config.baseurl}/federation/u/${name}/outbox?page=last`,
+//   orderedItems: page === 'last'
+//     ? []
+//     : events.map(e => ({
+//       id: `${config.baseurl}/federation/m/${e.id}#create`,
+//       type: 'Create',
+//       to: ['https://www.w3.org/ns/activitystreams#Public'],
+//       cc: [`${config.baseurl}/federation/u/${name}/followers`],
+//       published: dayjs(e.createdAt).utc().format(),
+//       actor: `${config.baseurl}/federation/u/${name}`,
+//       object: e.toAPNote(name, req.settings.locale)
+//     }))
+// })
+// }
+// }

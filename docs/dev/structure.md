@@ -3,6 +3,7 @@ layout: default
 title: Project Structure
 permalink: /dev/structure
 parent: Hacking
+nav_order: 1
 ---
 
 ### Project structure

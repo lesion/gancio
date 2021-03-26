@@ -1,5 +1,93 @@
 All notable changes to this project will be documented in this file.
 
+### 0.24.0
+- New Euskara language from Basque Country, thanks @hacklabkelo
+- fix feed with filters
+- cleaner homepage
+- fix next/prev for recurrent events
+- fix some history navigation issue
+- fix blank lines in description
+- upgrade deps
+- better custom logo management
+- fix settings update
+
+### 0.23.0
+- send AP Event Object instead of Note
+- show only future unconfirmed events in admin panel
+- new polish locale
+- add friendly instances (an additional menu is shown)
+- use user's logo not project's logo in federation
+- start WPGancio plugin
+- support media upload via url (API only)
+- confirm before remove a resource
+- confirm before remove a friendly instance
+- event description supports some html tag
+- fix redirect after login
+
+### 0.22.0
+- add admin announcement support (fix #74)
+- each instance has a specific timezone you can choose from admin's panel
+- refactoring language management (you can choose a default instance's language):
+  usually UX language is choosen looking at Accepted-Language header but there
+  are messages not generated from an http request (eg. sending events via AP).
+  In those cases a default instance's language is choosen (default 'en').
+- use lazy loaded images
+- better mobile experience for admins
+- single day only recurring events
+- fix user block in fediverse moderation
+- filter and linkify content from fediverse
+- add a lot of help strings in admin panel
+- use html2text for event description in og: meta
+- update deps
+- fix a moment.js typo from/to issue
+- fix #73 
+
+### 0.21.0
+- a new recurring events logic (a la taskwarrior):
+  - each occurrence of a recurring event could be personalized.
+  - occurrence of recurring events are skippable.
+  - occurrence generation could be paused.
+- support `h-event` microformats! in homepage and in any single event's page
+- add a background task manager (email, recurring events creation)
+- sanitize html content coming from fediverse and event description with dompurify
+  - also remove `fbclid` params in links
+- front end search optimization
+- use oauth2 for everything, password flow for webclient, this also fix
+  some issue with authentication
+- clickable tags / places @ home (to add them as filters)
+- use a cleaner menububble for the new editor
+- add local smtp and sendmail options on configuration setup
+- check permission for resource removal request from fediverse
+- add resource from fediverse also when inReplyTo is another resource
+- automatic API documentation inclusion in docs
+- split moderation in another tab inside admin panel
+- use axios instead of fetch everywhere
+- lot of ux improvements & error handling
+- search links in event description with linkifyjs while add/edit events
+- remove text templates for emails and use html2text instead
+- fix email unique index for users!
+
+
+### 0.20.0
+  - New layout (navbar/footer/visible filters)
+  - two month calendar on large display
+  - admin could edit title, description, about, favicon & logo directly form admin panel
+  - new add event layout => https://demo.gancio.org/add
+  - new editor to describe events (bold, italic, link) supported also using copy/paste
+  - the editor also support live markdown (try using ### at line start)
+  - start oauth2 server implementation (documentation: https://gancio.org/dev/oauth)
+  - add fediverse moderation
+  - fix embedding an event via iframe
+  - images converted in .webp
+  - new catalan translation, thanks @fadelkon
+
+### 0.17.14
+- [locale] add catalan
+- [fix] fedi outbox
+
+### 0.17.12
+- [ui] add admin section on event page in mobile #63
+- [fix] remove username from users
 
 ### 0.17.11
 - [refactor] s/fed_user/ap_user

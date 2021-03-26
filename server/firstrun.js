@@ -16,7 +16,15 @@ module.exports = {
     const admin = { email: config.admin.email, password: config.admin.password }
     delete config.admin
 
-    config.smtp.secure = true
+    if (config.smtp_type === 'sendmail') {
+      config.smtp = {
+        sendmail: true,
+        newline: 'unix',
+        path: config.smtp.path
+      }
+    }
+    delete config.smtp_type
+    delete config.smtp_need_auth
     config.admin_email = admin.email
     config.db.logging = false
     consola.info(`Save configuration to ${config_path}`)
@@ -27,16 +35,18 @@ module.exports = {
     }
 
     // sync db
-    const db = require('./api/models')
-    const users = await db.user.findAll()
+    const db = require('./api/models/index')
+    const User = require('./api/models/user')
+    const Notification = require('./api/models/notification')
+    const users = await User.findAll()
     if (users.length) {
-      consola.warn(` ⚠   Non empty db! Please move your current db elsewhere than retry.`)
+      consola.warn(' ⚠   Non empty db! Please move your current db elsewhere than retry.')
       return false
     }
 
     // create admin user
-    consola.info('Create admin user', admin)
-    await db.user.create({
+    consola.info(`Create admin with email: ${admin.email}`)
+    await User.create({
       email: admin.email,
       password: admin.password,
       is_admin: true,
@@ -46,19 +56,27 @@ module.exports = {
     // add default notification
     consola.info('Add default notification')
 
-    // send confirmed event to mastodon
-    await db.notification.create({ action: 'Create', type: 'ap', filters: { is_visible: true } })
-    await db.notification.create({ action: 'Update', type: 'ap', filters: { is_visible: true } })
-    await db.notification.create({ action: 'Delete', type: 'ap', filters: { is_visible: true } })
+    // await db.announcement.create({
+    //   visible: true,
+    //   title: 'Welcome to Gancio',
+    //   announcement: 'TODO: HTML First presentation post'
+    // })
 
-    // send anon email to administrator
-    await db.notification.create({ action: 'Create', type: 'admin_email', filters: { is_visible: false } })
+    // try {
 
-    // TODO
+    //   // send confirmed events to mastodon
+    await Notification.create({ action: 'Create', type: 'ap', filters: '{ "is_visible": true }' })
+    await Notification.create({ action: 'Update', type: 'ap', filters: '{ "is_visible": true }' })
+    await Notification.create({ action: 'Delete', type: 'ap', filters: '{ "is_visible": true }' })
+    //   // send anon events to admin
+    await Notification.create({ action: 'Create', type: 'admin_email', filters: '{ "is_visible": false }' })
+    // }
+
+    // TODO email's notifications
     // await db.notification.create({ action: 'Create', type: 'email', filters: { is_visible: true } })
 
     // close db connection
-    await db.sequelize.close()
+    await db.close()
 
     return true
   }

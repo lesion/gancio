@@ -1,23 +1,28 @@
 const express = require('express')
 const router = express.Router()
-const { event: Event, user: User, resource: Resource } = require('../api/models')
+const Event = require('../api/models/event')
+const Resource = require('../api/models/resource')
+const User = require('../api/models/user')
+
 const cors = require('cors')
 const settingsController = require('../api/controller/settings')
 const version = require('../../package.json').version
 const url = require('url')
-const debug = require('debug')('webfinger')
+const log = require('../log')
 
 router.use(cors())
 router.use((req, res, next) => {
   // is federation enabled ?
-  if (req.settings.enable_federation) { return next() }
-  debug('Federation disabled')
+  if (req.settings.enable_federation) {
+    return next()
+  }
+  log.debug('Federation disabled')
   res.status(404).send('Federation disabled')
 })
 
 router.get('/webfinger', (req, res) => {
   if (!req.query || !req.query.resource || !req.query.resource.includes('acct:')) {
-    debug('Bad webfinger request => %s', req.query && req.query.resource)
+    log.debug('Bad webfinger request => ', req.query && req.query.resource)
     return res.status(400).send('Bad request. Please make sure "acct:USER@DOMAIN" is what you are sending as the "resource" query parameter.')
   }
 
@@ -25,14 +30,15 @@ router.get('/webfinger', (req, res) => {
   const domain = (new url.URL(req.settings.baseurl)).host
   const [, name, req_domain] = resource.match(/acct:(.*)@(.*)/)
   if (domain !== req_domain) {
-    debug('Bad webfinger request, requested domain "%s" instead of "%s"', req_domain, domain)
+    log.warn(`Bad webfinger request, requested domain "${req_domain}" instead of "${domain}"`)
     return res.status(400).send('Bad request. Please make sure "acct:USER@DOMAIN" is what you are sending as the "resource" query parameter.')
   }
   if (name !== req.settings.instance_name) {
-    debug('User not found: %s', name)
+    log.warn(`User not found: ${name}`)
     return res.status(404).send(`No record found for ${name}`)
   }
 
+  log.info(`webfinger ${resource} ${domain}`)
   const ret = {
     subject: `acct:${name}@${domain}`,
     links: [
@@ -55,7 +61,8 @@ router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
   const ret = {
     metadata: {
       nodeDescription: req.settings.description,
-      nodeName: req.settings.title
+      nodeName: req.settings.title,
+      nodeLabel: req.settings.instance_place
     },
     openRegistrations: settingsController.settings.allow_registration,
     protocols: ['activitypub'],
@@ -109,14 +116,15 @@ router.get('/x-nodeinfo2', async (req, res) => {
 router.get('/nodeinfo', (req, res) => {
   const ret = {
     links: [
-      { href: `${req.settings.baseurl}/.well-known/nodeinfo/2.0`, rel: `http://nodeinfo.diaspora.software/ns/schema/2.0` },
-      { href: `${req.settings.baseurl}/.well-known/nodeinfo/2.1`, rel: `http://nodeinfo.diaspora.software/ns/schema/2.1` }
+      { href: `${req.settings.baseurl}/.well-known/nodeinfo/2.0`, rel: 'http://nodeinfo.diaspora.software/ns/schema/2.0' },
+      { href: `${req.settings.baseurl}/.well-known/nodeinfo/2.1`, rel: 'http://nodeinfo.diaspora.software/ns/schema/2.1' }
     ]
   }
   res.json(ret)
 })
 
 router.use('/host-meta', (req, res) => {
+  log.debug('host-meta')
   res.type('application/xml')
   res.send(`<?xml version="1.0" encoding="UTF-8"?>
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
@@ -126,13 +134,13 @@ router.use('/host-meta', (req, res) => {
 
 // Handle 404
 router.use((req, res) => {
-  debug('404 Page not found: %s', req.path)
+  log.error('404 Page not found: ', req.path)
   res.status(404).send('404: Page not Found')
 })
 
 // Handle 500
 router.use((error, req, res, next) => {
-  debug(error)
+  log.error(error)
   res.status(500).send('500: Internal Server Error')
 })
 

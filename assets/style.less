@@ -1,116 +1,98 @@
-@home_background: #222C32;
-@background: white;
-@success: #c7ffbc;
+html, body {
+  scrollbar-width: thin;
+  overflow: auto !important;
+  scrollbar-color: #FF4511 #111;
+  font-family: sans-serif;
+}
 
-#__nuxt, #__layout {
-  height: 100%;
+li {
+  margin-left: 10px;
+}
+
+.v-dialog .theme--dark.v-card {
+  background-color: #434343;
+}
+
+.v-application .p-description.text-body-1 {
+  letter-spacing: normal !important;
 }
 
 #home {
-  background-color: @home_background;
-  min-height: 100%;
+  max-width: 1400px;
+  padding-right: 0px;
+  overflow: hidden;
 }
 
-a, a:hover {
-  text-decoration: none;
+#events {
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-html, body {
-  margin: 0px;
-  background-color: @background;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  font-family: BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Helvetica,Arial,sans-serif !important;  
-  font-size: 15px;
+.container {
+  max-width: 1400px;
 }
 
-* {
-  box-sizing: border-box;
+.v-dialog {
+  width: 600px;
+  max-width: 800px;
 }
 
-.el-form-item {
-  margin-bottom: 5px;
+.theme--dark.v-list {
+  background-color: #333;
 }
 
-.el-main {
-  max-width: 1000px;
-  border-radius: 0px;
-  margin: auto;
-  padding: 10px;
-  overflow: unset;
+.v-autocomplete__content.v-menu__content {
+  scrollbar-width: thin;
+  scrollbar-color: #FF4511 #111;
 }
 
-.el-select-dropdown {
-  max-width: 100%;
-  left: 0px;
-}
+// EVENT
+.event {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  width: 330px;
+  max-width: 500px;
+  flex-grow: 1;
+  margin-top: .4em;
+  margin-right: .4em;
+  overflow: hidden;
 
-.page-enter-active, .page-leave-active {
-  transition: opacity .2s, transform .3s;
-}
-.page-enter, .page-leave-active {
-  transition: opacity .3s, transform .2s;
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-pre {
-  font-family: BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Helvetica,Arial,sans-serif !important;
-  margin-bottom: 0px;
-  white-space: pre-line;
-  font-family: unset;
-}
-
-.el-popover {
-  word-break: normal;
-}
-
-.el-dialog {
-  z-index: 100;
-  max-width: 550px;
-  .el-dialog__body {
-    word-break: unset;
+  .title {
+    display: block;
+    max-height: 3.3em;
+    overflow: hidden;
+    margin: 0.5rem 1rem 0.5rem 1rem;
+    // color: white;
+    border-bottom: 1px solid rgba(4,4,4,0.2);
+    font-size: 1.2em !important;
+    line-height: 1.1em;
+    font-weight: 500;
   }
-  .el-dialog__headerbtn {
-    font-size: 27px;
-    top: 9px;
-    right: 10px;
-    .el-dialog__close {
-      color: red;
-      // padding: 5px;
-      // background-color: #f0f0f0;
-      // border-radius: 22px;
-      // border: 1px solid #f0f0f0;
+
+  .body {
+    flex: 1 1 auto;
+  }
+
+  .img {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .place {
+    max-width: 100%;
+    span {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
-  p {
-    font-size: 16px;
-  }
-}
-
-.el-input__icon {
-  font-size: 20px;
-}
-
-@media only screen and (max-width: 768px) {
-  .el-dialog {
-    margin-top: 0px !important;
-    border-radius: 0px;
-    width: 100%;
-  }
-  
-  html {
-    font-size: 13px;
-  }
-
-  .el-main {
-    margin-top: 0px !important;
-    border-radius: 0px;
-    padding: 5px;
-  }
-
-  .el-menu-item {
-    padding: 0px 17px;
+  a {
+    text-decoration: none;
   }
 }

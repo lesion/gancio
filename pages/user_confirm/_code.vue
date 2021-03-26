@@ -1,25 +1,23 @@
 <template lang="pug">
-  el-main
-    h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{$t('common.set_password')}}
+  v-row.mt-5(align='center' justify='center')
+    v-col(cols='12' md="6" lg="5" xl="4")
+      v-card
+        v-card-title <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{$t('common.set_password')}}
+        template(v-if='valid')
+          v-card-text(v-if='valid')
+            v-form(v-if='valid')
+              v-text-field(type='password' v-model='new_password' :label="$t('common.new_password')")
 
-    div(v-if='valid')
-      el-form
-        el-form-item {{$t('common.new_password')}}
-          el-input(type='password', v-model='new_password')
-        el-button(plain type="success" icon='el-icon-send'
-          :disabled='!new_password' @click='change_password') {{$t('common.send')}}
+          v-card-actions
+            v-btn(color="success" :disabled='!new_password' @click='change_password') {{$t('common.send')}}
 
-    div(v-else) {{$t('recover.not_valid_code')}}
+        v-card-text(v-else) {{$t('recover.not_valid_code')}}
 
 </template>
 <script>
-import { Message } from 'element-ui'
 
 export default {
   name: 'Recover',
-  data () {
-    return { new_password: '' }
-  },
   async asyncData ({ params, $axios }) {
     const code = params.code
     try {
@@ -29,22 +27,17 @@ export default {
       return { valid: false }
     }
   },
+  data () {
+    return { new_password: '' }
+  },
   methods: {
     async change_password () {
       try {
-        const res = await this.$axios.$post('/user/recover_password', { recover_code: this.code, password: this.new_password })
-        Message({
-          showClose: true,
-          type: 'success',
-          message: this.$t('common.password_updated')
-        })
-        this.$router.replace('/?ref=login')
+        await this.$axios.$post('/user/recover_password', { recover_code: this.code, password: this.new_password })
+        this.$root.$message('common.password_updated', { color: 'success' })
+        this.$router.replace('/login')
       } catch (e) {
-        Message({
-          showClose: true,
-          type: 'warning',
-          message: e
-        })
+        this.$root.$message(e, { color: 'warning' })
       }
     }
   }

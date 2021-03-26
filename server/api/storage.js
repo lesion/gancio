@@ -3,13 +3,13 @@ const path = require('path')
 const crypto = require('crypto')
 const mkdirp = require('mkdirp')
 const sharp = require('sharp')
-const consola = require('consola')
+const log = require('../log')
 const config = require('config')
 
 try {
   mkdirp.sync(config.upload_path + '/thumb')
 } catch (e) {
-  consola.error(e)
+  log.error(e)
 }
 
 const DiskStorage = {
@@ -19,15 +19,34 @@ const DiskStorage = {
     const thumbPath = path.resolve(config.upload_path, 'thumb', filename)
     const outStream = fs.createWriteStream(finalPath)
     const thumbStream = fs.createWriteStream(thumbPath)
-    const resizer = sharp().resize(1200).jpeg({ quality: 95 })
+
+    const resizer = sharp().resize(1200).jpeg({ quality: 98 })
     const thumbnailer = sharp().resize(400).jpeg({ quality: 90 })
+    let onError = false
+    const err = e => {
+      if (onError) {
+        log.error(err)
+        return
+      }
+      onError = true
+      log.error(e)
+      req.err = e
+      cb(null)
+    }
 
-    file.stream.pipe(thumbnailer).pipe(thumbStream)
-    thumbStream.on('error', e => consola.error('thumbStream error ', e))
+    file.stream
+      .pipe(thumbnailer)
+      .on('error', err)
+      .pipe(thumbStream)
+      .on('error', err)
 
-    file.stream.pipe(resizer).pipe(outStream)
-    outStream.on('error', cb)
-    outStream.on('finish', function () {
+    file.stream
+      .pipe(resizer)
+      .on('error', err)
+      .pipe(outStream)
+      .on('error', err)
+
+    outStream.on('finish', () => {
       cb(null, {
         destination: config.upload_path,
         filename,
@@ -39,8 +58,8 @@ const DiskStorage = {
   _removeFile (req, file, cb) {
     delete file.destination
     delete file.filename
+    fs.unlink(file.path, cb)
     delete file.path
-    fs.unlink(path, cb)
   }
 }
 

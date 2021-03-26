@@ -1,102 +1,46 @@
 <template lang="pug">
-    nuxt-link.embed_event(:to='`/event/${link}`' target='_blank' :class='{ withImg: event.image_path }')
+  nuxt-link.embed_event(:to='`/event/${id}`' target='_blank' :class='{ withImg: event.image_path }')
 
-      //- image
-      img.float-left(v-if='event.image_path' :src='`/media/thumb/${event.image_path}`')
-      .event-info
+    //- image
+    img.float-left(:src='`/media/thumb/${event.image_path || "logo.png"}`')
+    .event-info
+      //-  title
+      .date {{event|when}}<br/>
+      h4 {{event.title}}
 
-        //-  title
-        .date {{event|when('home')}}<br/>
-        h4 {{event.title}}
-
-        //- date / place
-        .date {{event.place.name}}<br/> {{event.place.address}}
-
+      //- date / place
+      .date {{event.place.name}}
 </template>
 <script>
-import { mapState } from 'vuex'
-import Event from '../../components/Event'
 
 export default {
-  layout: 'event_iframe',
-  components: { Event },
-  data () {
-    return {
-      loading: true
-    }
-  },
+  layout: 'iframe',
   async asyncData ({ $axios, params, error, store }) {
     try {
-      const [ id, start_datetime ] = params.event_id.split('_')
-      const event = await $axios.$get(`/event/${id}`)
-      event.start_datetime = start_datetime ? Number(start_datetime) : event.start_datetime
-      return { event, id: Number(id) }
+      const event = await $axios.$get(`/event/${params.event_id}`)
+      return { event, id: Number(params.event_id) }
     } catch (e) {
       error({ statusCode: 404, message: 'Event not found' })
     }
   },
-  computed: {
-    ...mapState(['settings']),
-    date () {
-      return new Date(this.event.start_datetime).getDate()
-    },
-    link () {
-      if (this.event.recurrent) {
-        return `${this.event.id}_${this.event.start_datetime}`
-      }
-      return this.event.id
+  data () {
+    return {
+      settings: { baseurl: '' },
+      loading: true
     }
   }
 }
 
-/**
- * <style>
-.embedded_gancio {
-  border: none;
-  width: 450px;
-  height: 220px;
-  float: left;
-}</style>
-<iframe src='http://localhost:13120/embed/1' class='embedded_gancio'></iframe>
- */
+// <iframe src='http://localhost:13120/embed/1' class='embedded_gancio'></iframe>
 </script>
 <style lang='less'>
-a {
-  transition: margin .1s;
-}
-
-a:hover {
-  transform: prospective(10) translateX(10);
-  margin-left: 5px;
-}
-
 .embed_event {
-  background-image: url('/favicon.ico');
-  background-repeat: no-repeat;
-  background-position-x: right;
-  background-position-y: bottom;
-  img {
-    width: 150px;
-    object-fit: cover;
-    object-position: top;
-    margin-right: 5px;
-    height: 100%;
-  }
-
-  .event-info {
-    height: 100%;
-    color: #eee !important;
-    display: flex;
-    flex-direction: column;
-    padding: 5px;
-
-    .date {
-      color: #999;
-    }
-  }
-
+  display: flex;
+  transition: margin .1s;
+  background: url('/favicon.ico') no-repeat right 5px bottom 5px;
+  background-size: 32px;
   background-color: #1f1f1f;
-  display: inline-block;
+  text-decoration: none;
   border: 1px solid #b1a3a3;
   margin: 0px auto;
   padding: 0px;
@@ -106,9 +50,31 @@ a:hover {
   border-radius: 10px;
   // transition: all .2s;
   margin: 0px;
-}
 
-// .embed_event:hover {
-  // transform: scale(1.03);
-// }
+  &:hover {
+    transform: prospective(10) translateX(10);
+    margin-left: 5px;
+    text-decoration: none;
+  }
+
+  .event-info {
+    height: 100%;
+    color: #eee !important;
+    flex-direction: column;
+    padding: 5px;
+
+    .date {
+      color: #999;
+    }
+  }
+
+  img {
+    width: 150px;
+    object-fit: cover;
+    object-position: top;
+    margin-right: 5px;
+    height: 100%;
+  }
+
+}
 </style>

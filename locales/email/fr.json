@@ -1,0 +1,22 @@
+{
+    "admin_register": {
+        "content": "{{user.email}} a demandé à s'inscrire sur {{config.title}} : <br/><pre>{{user.description}}</pre><br/> Confirmez la <a href='{{config.baseurl}}/admin'>ici</a>.",
+        "subject": "Nouvelle inscription"
+    },
+    "recover": {
+        "subject": "Réinitialisation du mot de passe",
+        "content": "Bonjour, vous avez demandé une réinitialisation du mot de passe sur {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Cliquez ici</a> pour confirmer."
+    },
+    "user_confirm": {
+        "content": "Bonjour, votre compte sur <a href='{{config.baseurl}}'>{{config.title}}</a> a été créé. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confirmez-le et créez un mot de passe.</a>.",
+        "subject": "Vous pouvez désormais commencer à publier des évènements"
+    },
+    "confirm": {
+        "content": "Bonjour, votre compte sur <a href='{{config.baseurl}}'>{{config.title}}</a> a été confirmé. Écrivez-nous à {{config.admin_email}} pour tout renseignement.",
+        "subject": "Vous pouvez désormais commencer à publier des évènements"
+    },
+    "register": {
+        "content": "Nous avons reçu la demande d'inscription. Nous la confirmerons au plus vite.",
+        "subject": "Demande d'inscription reçue"
+    }
+}

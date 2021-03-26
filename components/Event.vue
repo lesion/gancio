@@ -1,132 +1,46 @@
 <template lang="pug">
-  nuxt-link.event(:to='`/event/${link}`' :class='{ withImg: event.image_path }')
+  v-card.h-event.event
+    nuxt-link(:to='`/event/${event.id}`')
+      v-img.img(:src="`/media/thumb/${event.image_path || 'logo.svg' }`")
+      v-icon.float-right.mr-1(v-if='event.parentId' color='success') mdi-repeat
+      .title.p-name {{event.title}}
 
-    //- image
-    img(v-if='showImage && event.image_path' :src='`/media/thumb/${event.image_path}`')
+    v-card-text.body.pt-0.pb-0
+      time.dt-start.subtitle-1(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  <v-icon>mdi-calendar</v-icon> {{ event|when }}
+      .d-none.dt-end {{event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
+      a.place.d-block.p-location.pl-0(text color='primary' @click="$emit('placeclick', event.place.id)") <v-icon>mdi-map-marker</v-icon> {{event.place.name}}
 
-    .event-info
-      .content-info
+    v-card-actions.actions.justify-space-between
+      .tags
+        v-chip.ml-1.px-2(v-for='tag in event.tags' small
+          :key='tag' outlined color='primary' @click="$emit('tagclick', tag)") {{tag}}
 
-        //-  title
-        h2 {{event.title}}
+      v-menu(offset-y)
+        template(v-slot:activator="{on}")
+          v-btn.align-self-end(icon v-on='on' color='primary')
+            v-icon mdi-dots-vertical
+        v-list(dense)
+          v-list-item-group
+            v-list-item(v-clipboard:success="() => $root.$message('common.copied', { color: 'success' })"
+                  v-clipboard:copy='`${settings.baseurl}/event/${event.id}`')
+              v-list-item-icon
+                v-icon mdi-content-copy
+              v-list-item-content
+                v-list-item-title {{$t('common.copy_link')}}
+            v-list-item(:href='`/api/event/${event.id}.ics`')
+              v-list-item-icon
+                v-icon mdi-calendar-export
+              v-list-item-content
+                v-list-item-title {{$t('common.add_to_calendar')}}
 
-        //- date / place
-        .date
-          div <v-icon name='clock'/> {{event|when('home')}}
-          div <v-icon name='map-marker-alt' /> {{event.place.name}}
-
-      ul.tags(v-if='showTags && event.tags')
-        li(v-for='tag in event.tags' :key='tag') {{tag}}
-        li(v-if='settings.enable_federation && event.resources && event.resources.length') <u>{{$tc('common.n_resources', event.resources.length)}}</u>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   props: {
-    event: Object,
-    showTags: {
-      type: Boolean,
-      default: true
-    },
-    showImage: {
-      type: Boolean,
-      default: true
-    }
+    event: { type: Object, default: () => ({}) }
   },
-  computed: {
-    ...mapState(['settings']),
-    date () {
-      return new Date(this.event.start_datetime).getDate()
-    },
-    link () {
-      if (this.event.recurrent) {
-        return `${this.event.id}_${this.event.start_datetime}`
-      }
-      return this.event.id
-    }
-  }
+  computed: mapState(['settings'])
 }
 </script>
-<style lang='less'>
-@import '../assets/style.less';
-
-@media only screen and (min-width: 574px) {
-  .event {
-    height: 100%;
-  }
-}
-.event {
-  padding: 3px;
-  display: flex;
-  flex-direction: column;
-
-  // height: 100%;
-
-  &:hover {
-    text-decoration: none;
-  }
-
-  img {
-    width: 100%;
-    max-height: 250px;
-    object-fit: cover;
-    object-position: top;
-  }
-
-  .event-info {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: #111214;
-
-  }
-
-  .content-info {
-    padding: 0.8em 1em;
-
-    h2 {
-      color: @success;
-      font-size: 16px;
-      font-size: 1.2rem;
-      font-weight: 400;
-      margin: 0px;
-    }
-
-    p {
-      max-height: 92px;
-      overflow: hidden;
-      color: white;
-      margin: 0px;
-    }
-
-    .date {
-      font-weight: 400;
-      font-size: 1rem;
-      color: white;
-    }
-  }
-
-  .tags {
-    font-size: 15px;
-    padding: 1px;
-    margin-bottom: 0;
-    display:flex;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      background: #1B1F21;
-      display: inline-block;
-      padding: 2px 10px;
-      color: rgba(255,255,255,0.9);
-      margin: 1px;
-      text-align: center;
-      flex-grow: 1;
-    }
-
-  }
-}
-
-</style>

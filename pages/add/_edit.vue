@@ -1,170 +1,87 @@
 <template lang="pug">
-  el-main#add_event
-    h4 <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{edit?$t('common.edit_event'):$t('common.add_event')}}
-    el-form(v-loading='loading')
-      client-only
-        el-tabs.mb-2(v-model='activeTab')
+  v-container.container.px-0.px-md-3
+    v-card
+      v-card-title
+        h4 {{edit?$t('common.edit_event'):$t('common.add_event')}}
+        v-spacer
+        v-btn(link text color='primary' @click='openImportDialog=true')
+          <v-icon>mdi-file-import</v-icon> {{$t('common.import')}}
+      v-dialog(v-model='openImportDialog')
+        ImportDialog(@close='openImportDialog=false' @imported='eventImported')
 
-          //- NOT LOGGED EVENT
-          el-tab-pane(v-if='!$auth.loggedIn')
-            span(slot='label') {{$t('event.anon')}} <v-icon name='user-secret'/>
-            p(v-html="$t('event.anon_description')")
-            el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
+      v-card-text.px-0.px-xs-2
+        v-form(v-model='valid' ref='form' lazy-validation)
+          v-container
+            v-row
+              //- Not logged event
+              v-col.col-12(v-if='!$auth.loggedIn')
+                p(v-html="$t('event.anon_description')")
 
-          //- WHAT
-          el-tab-pane
-            span(slot='label') {{$t('common.what')}} <v-icon name='file-alt'/>
-            span {{$t('event.what_description')}}
-            el-input.mb-3(v-model='event.title' ref='title')
-            span {{$t('event.description_description')}}
-            el-input.mb-3(v-model='event.description' type='textarea' :rows='9')
-            span {{$t('event.tag_description')}}
-            br
-            el-select(v-model='event.tags' multiple filterable allow-create
-              default-first-option placeholder='Tag')
-              el-option(v-for='tag in tags' :key='tag'
-                :label='tag' :value='tag')
+              //- Title
+              v-text-field.col-12(
+                @change='v => event.title = v'
+                :value = 'event.title'
+                :rules="[$validators.required('common.title')]"
+                prepend-icon='mdi-format-title'
+                :label="$t('common.title')"
+                autofocus
+                ref='title')
 
-            el-button.float-right(@click.native='next' :disabled='!couldProceed') {{$t('common.next')}}
+              //- Where
+              WhereInput.col-12(v-model='event.place')
 
-          //- WHERE
-          el-tab-pane
-            span(slot='label') <v-icon name='map-marker-alt'/> {{$t('common.where')}}
-            p(v-html="$t('event.where_description')")
+              //- When
+              DateInput.col-12(v-model='date')
 
-            el-select.mb-3(v-model='event.place.name'
-              @change='placeChoosed'
-              filterable allow-create
-              default-first-option
-            )
-              el-option(v-for='place in places' :label='place.name' :value='place.name' :key='place.id')
-            div {{$t("common.address")}}
-            el-input.mb-3(ref='address' v-model='event.place.address'
-              :disabled='places_name.indexOf(event.place.name)>-1'
-              @keydown.native.enter='next')
-            el-button.float-right(@click='next' :disabled='!couldProceed') {{$t('common.next')}}
+              //- Description
+              Editor.col-12.mb-3(
+                :label="$t('event.description_description')"
+                v-model='event.description'
+                :placeholder="$t('event.description_description')"
+                max-height='400px')
 
-          //- WHEN
-          el-tab-pane
-            span(slot='label') {{$t('common.when')}} <v-icon name='clock'/>
-            .text-center
-              el-radio-group(v-model="event.type")
-                el-radio-button(label="normal") <v-icon name='calendar-day'/> {{$t('event.normal')}}
-                el-radio-button(label="multidate") <v-icon name='calendar-week'/> {{$t('event.multidate')}}
-                el-radio-button(v-if='settings.allow_recurrent_event' label="recurrent") <v-icon name='calendar-alt'/> {{$t('event.recurrent')}}
-              br
-              span {{$t(`event.${event.type}_description`)}}
-              el-select.ml-2(v-if='event.type==="recurrent"' v-model='event.recurrent.frequency' placeholder='Frequenza')
-                el-option(:label="$t('event.each_week')" value='1w' key='1w')
-                el-option(:label="$t('event.each_2w')" value='2w' key='2w')
-                //- el-option(:label="$t('event.each_month')" value='1m' key='1m')
+              //- MEDIA / FLYER / POSTER
+              v-file-input.col-12.col-sm-6.mt-3(
+                :label="$t('common.media')"
+                :hint="$t('event.media_description')"
+                prepend-icon="mdi-camera"
+                v-model='event.image'
+                persistent-hint
+                accept='image/*')
 
-            #picker.mx-auto
-              v-date-picker.mb-2.mt-3(
-                :mode='event.type === "multidate" ? "range" : event.type === "recurrent" ? "multiple" : "single"'
-                :attributes='attributes'
-                v-model='date'
-                :locale='$i18n.locale'
-                :from-page.sync='page'
-                is-inline
-                is-expanded
-                :min-date='event.type !== "recurrent" && new Date()'
-              )
+              //- tags
+              v-combobox.col-12.col-sm-6.mt-3(v-model='event.tags'
+                prepend-icon="mdi-tag-multiple"
+                chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
+                :delimiters="[',', ' ']"
+                :items="tags.map(t => t.tag)"
+                :label="$t('common.tags')")
 
-            div.text-center.mb-2(v-if='event.type === "recurrent"')
-              span(v-if='event.recurrent.frequency !== "1m" && event.recurrent.frequency !== "2m"') {{whenPatterns}}
-              el-radio-group(v-else v-model='event.recurrent.type')
-                el-radio-button(v-for='whenPattern in whenPatterns' :label='whenPattern.key' :key='whenPatterns.key')
-                  span {{whenPattern.label}}
-
-            el-form.text-center(inline)
-              el-form-item(:label="$t('event.from')")
-                el-time-select.mr-2(ref='time_start'
-                  v-model="time.start"
-                  :picker-options="{ start: '00:00', step: '00:30', end: '24:00'}")
-              el-form-item(:label="$t('event.due')")
-                el-time-select(v-model='time.end'
-                  :picker-options="{start: '00:00', step: '00:30', end: '24:00'}")
-
-            List(v-if='event.type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
-            el-button.float-right(@click='next' type='succes' :disabled='!couldProceed') {{$t('common.next')}}
-
-          //- MEDIA / FLYER / POSTER
-          el-tab-pane
-            span(slot='label') {{$t('common.media')}} <v-icon name='image'/>
-            el-upload.text-center(
-              action=''
-              :limit="1"
-              :auto-upload='false'
-              drag
-              accept='image/*'
-              :on-remove='cleanFile'
-              :on-change='uploadedFile'
-              :multiple='false'
-              :file-list="fileList"
-            )
-              i.el-icon-upload
-              div.el-upload__text {{$t('event.media_description')}}
-            el-button.float-right(@click='done' :disabled='!couldProceed') {{edit?$t('common.edit'):$t('common.send')}}
+      v-card-actions
+        v-spacer
+        v-btn(@click='done' :loading='loading' :disabled='!valid || loading'
+          color='primary') {{edit?$t('common.edit'):$t('common.send')}}
 
 </template>
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
-import uniq from 'lodash/uniq'
-import map from 'lodash/map'
-import moment from 'moment'
-
+import { mapActions, mapState } from 'vuex'
+import dayjs from 'dayjs'
+import Editor from '@/components/Editor'
 import List from '@/components/List'
-import { Message } from 'element-ui'
+import ImportDialog from './ImportDialog'
+import DateInput from './DateInput'
+import HourInput from './HourInput'
+import WhereInput from './WhereInput'
 
 export default {
-  name: 'newEvent',
-  components: { List },
+  name: 'NewEvent',
+  components: { List, Editor, ImportDialog, WhereInput, HourInput, DateInput },
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
-  head () {
-    return {
-      title: `${this.settings.title} - ${this.$t('common.add_event')}`
-    }
-  },
-  data () {
-    const month = moment().month() + 1
-    const year = moment().year()
-    return {
-      event: {
-        type: 'normal',
-        place: { name: '', address: '' },
-        title: '',
-        description: '',
-        tags: [],
-        image: false,
-        recurrent: { frequency: '1w', days: [], type: 'weekday' }
-      },
-      page: { month, year },
-      fileList: [],
-      id: null,
-      activeTab: '0',
-      date: null,
-      time: { start: '20:00', end: null },
-      edit: false,
-      loading: false
-    }
-  },
-  watch: {
-    'time.start' (value) {
-      if (!value) { return }
-      const [h, m] = value.split(':')
-      this.time.end = (Number(h) + 1) + ':' + m
-    },
-    // month selected
-    page () {
-      this.updateEvents(this.page)
-    }
-  },
   async asyncData ({ params, $axios, error, store }) {
     if (params.edit) {
-      const data = { time: {}, event: { place: {} } }
+      const data = { event: { place: {} } }
       data.id = params.edit
       data.edit = true
       let event
@@ -177,257 +94,107 @@ export default {
 
       data.event.place.name = event.place.name
       data.event.place.address = event.place.address || ''
-      if (event.multidate) {
-        data.date = { start: moment.unix(event.start_datetime), end: moment.unix(event.end_datetime) }
-        data.event.type = 'multidate'
-      } else if (event.recurrent) {
-        data.event.type = 'recurrent'
-        data.event.recurrent = JSON.parse(event.recurrent)
-      } else {
-        data.event.type = 'normal'
-        data.date = moment.unix(event.start_datetime)
+      data.date = {
+        recurrent: event.recurrent,
+        from: new Date(dayjs.unix(event.start_datetime)),
+        due: new Date(dayjs.unix(event.end_datetime)),
+        multidate: event.multidate,
+        fromHour: true,
+        dueHour: true
       }
 
-      data.time.start = moment.unix(event.start_datetime).format('HH:mm')
-      data.time.end = moment.unix(event.end_datetime).format('HH:mm')
       data.event.title = event.title
-      data.event.description = event.description.replace(/(<([^>]+)>)/ig, '')
+      data.event.description = event.description
       data.event.id = event.id
-      data.event.recurrent = {}
       data.event.tags = event.tags
       return data
     }
     return {}
   },
-  async fetch ({ store, $axios }) {
-    try {
-      const now = new Date()
-      const events = await $axios.$get(`/event/${now.getMonth()}/${now.getFullYear()}`)
-      store.commit('setEvents', events)
-      const { tags, places } = await $axios.$get('/event/meta')
-      store.commit('update', { tags, places })
-    } catch (e) {
-      console.error('Error ', e)
+  data () {
+    const month = dayjs().month() + 1
+    const year = dayjs().year()
+    return {
+      valid: false,
+      openImportDialog: false,
+      event: {
+        place: { name: '', address: '' },
+        title: '',
+        description: '',
+        tags: [],
+        image: null
+      },
+      page: { month, year },
+      fileList: [],
+      id: null,
+      date: { from: 0, due: 0, recurrent: null },
+      edit: false,
+      loading: false,
+      mediaUrl: '',
+      disableAddress: false
     }
-    moment.locale(store.state.locale)
+  },
+  head () {
+    return {
+      title: `${this.settings.title} - ${this.$t('common.add_event')}`
+    }
   },
   computed: {
-    ...mapState({
-      tags: state => state.tags.map(t => t.tag),
-      places_name: state => state.places.map(p => p.name).sort((a, b) => b.weigth - a.weigth),
-      places: state => state.places,
-      user: state => state.user,
-      events: state => state.events,
-      settings: state => state.settings
-    }),
-    whenPatterns () {
-      const dates = this.date
-      if (!dates || !dates.length) { return }
-
-      const freq = this.event.recurrent.frequency
-      const weekDays = uniq(map(dates, date => moment(date).format('dddd')))
-      if (freq === '1w' || freq === '2w') {
-        return this.$t(`event.recurrent_${freq}_days`, { days: weekDays.join(', ') })
-      } else if (freq === '1m' || freq === '2m') {
-        const days = uniq(map(dates, date => moment(date).date()))
-        const n = Math.floor((days[0] - 1) / 7) + 1
-        return [
-          { label: this.$tc(`event.recurrent_${freq}_days`, days.length, { days }), key: 'ordinal' },
-          { label: this.$tc(`event.recurrent_${freq}_ordinal`, days.length, { n: this.$t(`ordinal.${n}`), days: weekDays.join(', ') }), key: 'weekday' }
-        ]
-      } else if (freq === '1d') {
-        return this.$t('event.recurrent_each_day')
-      }
-      return
-    },
-    todayEvents () {
-      if (this.event.type === 'multidate') {
-        if (!this.date || !this.date.start) { return }
-        const date_start = moment(this.date.start)
-        const date_end = moment(this.date.end)
-        return this.events.filter(e =>
-          !e.multidate
-            ? date_start.isSame(moment.unix(e.start_datetime), 'day') ||
-            (date_start.isBefore(moment.unix(e.start_dateime)) && date_end.isAfter(moment.unix(e.start_datetime)))
-            : date_start.isSame(moment.unix(e.start_datetime), 'day') || date_start.isSame(moment.unix(e.end_datetime)) ||
-            (date_start.isAfter(moment.unix(e.start_datetime)) && date_start.isBefore(moment.unix(e.end_datetime))))
-      } else if (this.event.type === 'recurrent') {
-        return []
-      } else {
-        const date = moment(this.date)
-        return this.events.filter(e =>
-          !e.multidate
-            ? !e.recurrent && date.isSame(moment.unix(e.start_datetime), 'day')
-            : moment.unix(e.start_datetime).isSame(date, 'day') ||
-              moment.unix(e.start_datetime).isBefore(date) && moment.unix(e.end_datetime).isAfter(date)
-        )
-      }
-    },
-    ...mapGetters(['filteredEvents']),
-    // TOFIX
-    attributes () {
-      let attributes = []
-      attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'yellow' } })
-
-      attributes = attributes.concat(this.filteredEvents
-        .filter(e => !e.multidate && (!e.recurrent || this.event.type === 'recurrent'))
-        .map(e => ({ key: e.id, dot: { color: this.event.type === 'recurrent' ? 'orange' : 'green' }, dates: moment.unix(e.start_datetime).toDate() })))
-
-      attributes = attributes.concat(this.filteredEvents
-        .filter(e => e.multidate && !e.recurrent)
-        .map(e => ({ key: e.id,
-          highlight: {},
-          dates: {
-            start: moment.unix(e.start_datetime).toDate(), end: moment.unix(e.end_datetime).toDate() } })))
-
-      return attributes
-    },
-    disableAddress () {
-      return this.places_name.find(p => p.name === this.event.place.name)
-    },
-    couldProceed () {
-      const t = this.$auth.loggedIn ? -1 : 0
-      switch (Number(this.activeTab)) {
-        case 0 + t:
-          return true
-          break
-        case 1 + t:
-          return this.event.title.length > 0
-          break
-        case 2 + t:
-          return this.event.place.name.length > 0 &&
-            this.event.place.address.length > 0
-          break
-        case 3 + t:
-          if (this.date && this.time.start) { return true }
-          break
-        case 4 + t:
-          return this.event.place.name.length > 0 &&
-            this.event.place.address.length > 0 &&
-            (this.date && this.time.start) &&
-             this.event.title.length > 0
-      }
-    }
+    ...mapState(['tags', 'places', 'settings'])
   },
   methods: {
-    ...mapActions(['addEvent', 'updateEvent', 'updateMeta', 'updateEvents']),
-    recurrentDays () {
-      if (this.event.type !== 'recurrent' || !this.date || !this.date.length) { return }
-      const type = this.event.recurrent.type
-      if (type === 'ordinal') { return map(this.date, d => moment(d).date()) } else if (type === 'weekday') { return map(this.date, d => moment(d).day() + 1) }
-    },
-    next () {
-      this.activeTab = String(Number(this.activeTab) + 1)
-      if (this.activeTab === '2') {
-        this.$refs.title.focus()
-      }
-    },
-    prev () {
-      this.activeTab = String(Number(this.activeTab - 1))
-    },
-    placeChoosed () {
-      const place = this.places.find(p => p.name === this.event.place.name)
-      if (place && place.address) {
-        this.event.place.address = place.address
-      } else {
-        this.event.place.address = ''
-      }
-      this.$refs.address.focus()
+    ...mapActions(['updateMeta']),
+    eventImported (event) {
+      this.event = Object.assign(this.event, event)
     },
     cleanFile () {
-      this.event.image = null
-    },
-    uploadedFile (file, fileList) {
-      if (file.size / 1024 / 1024 > 4) {
-        Message({ type: 'warning', showClose: true, message: this.$tc('event.image_too_big') })
-        this.fileList = []
-        return false
-      }
-      this.fileList = [{ name: file.name, url: file.url }]
-      this.event.image = file
+      this.event.image = {}
     },
     async done () {
+      if (!this.$refs.form.validate()) { return }
       this.loading = true
-      let start_datetime, end_datetime
-      const [ start_hour, start_minute ] = this.time.start.split(':')
-      if (!this.time.end) {
-        this.time.end = (Number(start_hour) + 2) + ':' + start_minute
-      }
-      const [ end_hour, end_minute ] = this.time.end.split(':')
 
       const formData = new FormData()
 
-      if (this.event.type === 'multidate') {
-        start_datetime = moment(this.date.start)
-          .set('hour', start_hour).set('minute', start_minute)
-        end_datetime = moment(this.date.end)
-          .set('hour', end_hour).set('minute', end_minute)
-      } else if (this.event.type === 'normal') {
-        start_datetime = moment(this.date).set('hour', start_hour).set('minute', start_minute)
-        end_datetime = moment(this.date).set('hour', end_hour).set('minute', end_minute)
-        if (end_hour < start_hour) {
-          end_datetime = end_datetime.add(1, 'day')
-        }
-      } else if (this.event.type === 'recurrent') {
-        start_datetime = moment().set('hour', start_hour).set('minute', start_minute)
-        end_datetime = moment().set('hour', end_hour).set('minute', end_minute)
-        const recurrent = {
-          frequency: this.event.recurrent.frequency,
-          days: this.event.recurrent.type === 'ordinal' ? map(this.date, d => moment(d).date()) : map(this.date, d => moment(d).day() + 1),
-          type: this.event.recurrent.type
-        }
-        if (end_hour < start_hour) {
-          end_datetime = end_datetime.add(1, 'day')
-        }
-        formData.append('recurrent', JSON.stringify(recurrent))
-      }
+      formData.append('recurrent', JSON.stringify(this.date.recurrent))
 
       if (this.event.image) {
-        formData.append('image', this.event.image.raw, this.event.image.name)
+        formData.append('image', this.event.image)
       }
       formData.append('title', this.event.title)
       formData.append('place_name', this.event.place.name)
       formData.append('place_address', this.event.place.address)
       formData.append('description', this.event.description)
-      formData.append('multidate', this.event.type === 'multidate')
-      formData.append('start_datetime', start_datetime.unix())
-      formData.append('end_datetime', end_datetime.unix())
+      formData.append('multidate', !!this.date.multidate)
+      formData.append('start_datetime', dayjs(this.date.from).unix())
+      formData.append('end_datetime', this.date.due && dayjs(this.date.due).unix())
 
       if (this.edit) {
         formData.append('id', this.event.id)
       }
-      if (this.event.tags) { this.event.tags.forEach(tag => formData.append('tags[]', tag)) }
+      if (this.event.tags) { this.event.tags.forEach(tag => formData.append('tags[]', tag.tag || tag)) }
       try {
         if (this.edit) {
-          await this.updateEvent(formData)
+          await this.$axios.$put('/event', formData)
         } else {
-          await this.addEvent(formData)
+          await this.$axios.$post('/event', formData)
         }
         this.updateMeta()
-        this.$router.replace('/')
-        this.loading = false
-        Message({ type: 'success', showClose: true, message: this.$auth.loggedIn ? this.$t('event.added') : this.$t('event.added_anon') })
+        this.$router.push('/')
+        this.$nextTick(() => {
+          this.$root.$message(this.$auth.loggedIn ? (this.edit ? 'event.saved' : 'event.added') : 'event.added_anon', { color: 'success' })
+        })
       } catch (e) {
         switch (e.request.status) {
           case 413:
-            Message({ type: 'error', showClose: true, message: this.$t('event.image_too_big') })
+            this.$root.$message('event.image_too_big', { color: 'error' })
             break
           default:
-            Message({ type: 'error', showClose: true, message: e })
+            this.$root.$message(e.response.data, { color: 'error' })
         }
         this.loading = false
-        console.error(e)
       }
     }
   }
 }
 </script>
-<style>
-#add_event {
-  max-width: 800px;
-}
-
-#picker {
-  max-width: 400px;
-}
-</style>

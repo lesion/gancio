@@ -1,6 +1,9 @@
-const { event: Event, place: Place, tag: Tag } = require('../models')
+const Event = require('../models/event')
+const Place = require('../models/place')
+const Tag = require('../models/tag')
+
 const { Op } = require('sequelize')
-const moment = require('moment-timezone')
+const moment = require('dayjs')
 const ics = require('ics')
 
 const exportController = {
@@ -24,12 +27,14 @@ const exportController = {
 
     const events = await Event.findAll({
       order: ['start_datetime'],
+      attributes: { exclude: ['is_visible', 'recurrent', 'createdAt', 'updatedAt', 'likes', 'boost', 'slug', 'userId', 'placeId'] },
       where: {
         is_visible: true,
+        recurrent: { [Op.eq]: null },
         start_datetime: { [Op.gte]: yesterday },
         ...where
       },
-      include: [{ model: Tag, ...where_tags }, { model: Place, attributes: ['name', 'id', 'address'] }]
+      include: [{ model: Tag, required: false, ...where_tags }, { model: Place, attributes: ['name', 'id', 'address'] }]
     })
 
     switch (type) {

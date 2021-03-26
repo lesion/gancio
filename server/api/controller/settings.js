@@ -1,34 +1,41 @@
-const { setting: Setting, user: User } = require('../models')
+const Setting = require('../models/setting')
 const config = require('config')
 const consola = require('consola')
 const path = require('path')
 const fs = require('fs')
 const pkg = require('../../../package.json')
-const debug = require('debug')('settings')
 const crypto = require('crypto')
 const util = require('util')
+const toIco = require('to-ico')
 const generateKeyPair = util.promisify(crypto.generateKeyPair)
+const readFile = util.promisify(fs.readFile)
+const writeFile = util.promisify(fs.writeFile)
+const sharp = require('sharp')
+const log = require('../../log')
 
 const defaultSettings = {
   instance_timezone: 'Europe/Rome',
+  instance_locale: 'en',
   instance_name: config.title.toLowerCase().replace(/ /g, ''),
+  instance_place: '',
   allow_registration: true,
   allow_anon_event: true,
   allow_recurrent_event: false,
   recurrent_event_visible: false,
   enable_federation: true,
   enable_resources: false,
-  hide_boosts: true
+  hide_boosts: true,
+  enable_trusted_instances: true,
+  trusted_instances: [],
+  'theme.is_dark': true,
+  'theme.primary': '#FF4500',
+  footerLinks: [
+    { href: '/about', label: 'about' }
+  ]
 }
 
 /**
  * Settings controller: store instance settings
- * Current supported settings:
- *
- * Usage:
- *   backend/fediverse/api:
- *
- *   frontend:
  */
 
 const settingsController = {
@@ -54,7 +61,7 @@ const settingsController = {
 
       // add pub/priv instance key if needed
       if (!settingsController.settings.publicKey) {
-        debug('Instance priv/pub key not found')
+        log.debug('Instance priv/pub key not found')
         const { publicKey, privateKey } = await generateKeyPair('rsa', {
           modulusLength: 4096,
           publicKeyEncoding: {
@@ -85,30 +92,49 @@ const settingsController = {
   },
 
   async set (key, value, is_secret = false) {
+    log.debug(`SET ${key} ${value}`)
     try {
-      await Setting.findOrCreate({
+      const [setting, created] = await Setting.findOrCreate({
         where: { key },
         defaults: { value, is_secret }
-      }).spread((setting, created) => {
-        if (!created) { return setting.update({ value, is_secret }) }
       })
+      if (!created) { setting.update({ value, is_secret }) }
       settingsController[is_secret ? 'secretSettings' : 'settings'][key] = value
       return true
     } catch (e) {
-      console.error(e)
+      log.error(e)
       return false
     }
-  },
-
-  getUserLocale (req, res) {
-    // load user locale specified in configuration
-    res.json(settingsController.user_locale)
   },
 
   async setRequest (req, res) {
     const { key, value, is_secret } = req.body
     const ret = await settingsController.set(key, value, is_secret)
     if (ret) { res.sendStatus(200) } else { res.sendStatus(400) }
+  },
+
+  setLogo (req, res) {
+    if (!req.file) {
+      return res.status(400).send('Mmmmm sould not be here!')
+    }
+
+    const uploadedPath = path.join(req.file.destination, req.file.filename)
+    const baseImgPath = path.resolve(config.upload_path, 'logo')
+
+    // convert and resize to png
+    sharp(uploadedPath)
+      .resize(400)
+      .png({ quality: 90 })
+      .toFile(baseImgPath + '.png', async (err, info) => {
+        if (err) {
+          log.error(err)
+        }
+        const image = await readFile(baseImgPath + '.png')
+        const favicon = await toIco([image], { sizes: [64], resize: true })
+        writeFile(baseImgPath + '.ico', favicon)
+        settingsController.set('logo', baseImgPath)
+        res.sendStatus(200)
+      })
   },
 
   getAllRequest (req, res) {
@@ -124,5 +150,4 @@ const settingsController = {
   }
 }
 
-// settingsController.initialize()
 module.exports = settingsController

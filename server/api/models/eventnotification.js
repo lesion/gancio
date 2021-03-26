@@ -1,13 +1,15 @@
-'use strict'
-module.exports = (sequelize, DataTypes) => {
-  const event_notification = sequelize.define('event_notification', {
-    status: {
-      type: DataTypes.ENUM,
-      values: ['new', 'sent', 'error'],
-      defaultValue: 'new',
-      index: true
-    }
-  }, {})
+const sequelize = require('./index')
+const { Model, DataTypes } = require('sequelize')
 
-  return event_notification
-}
+class EventNotification extends Model {}
+
+EventNotification.init({
+  status: {
+    type: DataTypes.ENUM,
+    values: ['new', 'sent', 'error', 'sending'],
+    defaultValue: 'new',
+    index: true
+  }
+}, { sequelize, modelName: 'event_notification' })
+
+module.exports = EventNotification

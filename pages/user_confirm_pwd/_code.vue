@@ -14,13 +14,9 @@
 
 </template>
 <script>
-import { Message } from 'element-ui'
 
 export default {
   name: 'Recover',
-  data () {
-    return { new_password: '' }
-  },
   async asyncData ({ params, $axios }) {
     const code = params.code
     try {
@@ -30,22 +26,17 @@ export default {
       return { valid: false }
     }
   },
+  data () {
+    return { new_password: '' }
+  },
   methods: {
     async change_password () {
       try {
-        const res = await this.$axios.$post('/user/recover_password', { recover_code: this.code, password: this.new_password })
-        Message({
-          showClose: true,
-          type: 'success',
-          message: this.$t('common.password_updated')
-        })
-        this.$router.replace('/?ref=login')
+        await this.$axios.$post('/user/recover_password', { recover_code: this.code, password: this.new_password })
+        this.$root.$message('common.password_updated', { color: 'succes' })
+        this.$router.replace('/login')
       } catch (e) {
-        Message({
-          showClose: true,
-          type: 'warning',
-          message: e
-        })
+        this.$root.$message(e, { color: 'warning' })
       }
     }
   }

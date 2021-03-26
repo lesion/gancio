@@ -1,12 +1,12 @@
-const { event: Event } = require('../api/models')
+const Event = require('../api/models/event')
 const config = require('config')
-const debug = require('debug')('fediverse:ego')
+const log = require('../log')
 
 module.exports = {
   async boost (req, res) {
     const match = req.body.object.match(`${config.baseurl}/federation/m/(.*)`)
     if (!match || match.length < 2) { return res.status(404).send('Event not found!') }
-    debug('boost %s', match[1])
+    log.debug(`boost ${match[1]}`)
     const event = await Event.findByPk(Number(match[1]))
     if (!event) { return res.status(404).send('Event not found!') }
     await event.update({ boost: [...event.boost, req.body.actor] })
@@ -16,7 +16,7 @@ module.exports = {
   async unboost (req, res) {
     const match = req.body.object.match(`${config.baseurl}/federation/m/(.*)`)
     if (!match || match.length < 2) { return res.status(404).send('Event not found!') }
-    debug('unboost %s', match[1])
+    log.debug(`unboost ${match[1]}`)
     const event = await Event.findByPk(Number(match[1]))
     if (!event) { return res.status(404).send('Event not found!') }
     await event.update({ boost: event.boost.filter(actor => actor !== req.body.actor) })
@@ -26,7 +26,7 @@ module.exports = {
     const match = req.body.object.match(`${config.baseurl}/federation/m/(.*)`)
     if (!match || match.length < 2) { return res.status(404).send('Event not found!') }
     const event = await Event.findByPk(Number(match[1]))
-    debug('%s bookmark %s (%d)', req.body.actor, event.title, event.likes.length)
+    log.debug(`${req.body.actor} bookmark ${event.title} (${event.likes.length})`)
     if (!event) { return res.status(404).send('Event not found!') }
     await event.update({ likes: [...event.likes, req.body.actor] })
     res.sendStatus(201)
@@ -38,7 +38,7 @@ module.exports = {
     const match = object.object.match(`${config.baseurl}/federation/m/(.*)`)
     if (!match || match.length < 2) { return res.status(404).send('Event not found!') }
     const event = await Event.findByPk(Number(match[1]))
-    debug('%s unbookmark %s (%d)', body.actor, event.title, event.likes.length)
+    log.debug(`${body.actor} unbookmark ${event.title} (${event.likes.length})`)
     if (!event) { return res.status(404).send('Event not found!') }
     await event.update({ likes: event.likes.filter(actor => actor !== body.actor) })
     res.sendStatus(201)

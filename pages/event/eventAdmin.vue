@@ -1,42 +1,46 @@
 <template lang='pug'>
-el-menu
-  el-divider {{$t('common.admin')}}
-  el-menu-item
-    div(@click.prevents='toggle') {{$t(event.is_visible?'common.hide':'common.confirm')}}
-  el-menu-item
-    div(@click.prevent='remove') {{$t('common.remove')}}
-  el-menu-item(@click='$router.replace(`/add/${event.id}`)') {{$t('common.edit')}}
+div
+  v-btn(text color='primary' v-if='event.is_visible' @click='toggle(false)') {{$t(`common.${event.parentId?'skip':'hide'}`)}}
+  v-btn(text color='success' v-else @click='toggle(false)') <v-icon color='yellow'>mdi-alert</v-icon> {{$t('common.confirm')}}
+  v-btn(text color='primary' @click='$router.push(`/add/${event.id}`)') {{$t('common.edit')}}
+  v-btn(text color='primary' v-if='!event.parentId' @click='remove(false)') {{$t('common.remove')}}
+
+  template(v-if='event.parentId')
+    v-divider
+    span.mr-1 <v-icon>mdi-repeat</v-icon> {{$t('event.edit_recurrent')}}
+    v-btn(text color='primary' v-if='event.parent.is_visible' @click='toggle(true)') {{$t('common.pause')}}
+    v-btn(text color='primary' v-else @click='toggle(true)') {{$t('common.start')}}
+    v-btn(text color='primary' @click='$router.push(`/add/${event.parentId}`)') {{$t('common.edit')}}
+    v-btn(text color='primary' @click='remove(true)') {{$t('common.remove')}}
 </template>
 <script>
-import { MessageBox } from 'element-ui'
-import { mapActions } from 'vuex'
 
 export default {
   name: 'EventAdmin',
-  props: ['event'],
+  props: {
+    event: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   methods: {
-    ...mapActions(['delEvent']),
-    async remove () {
-      try {
-        await MessageBox.confirm(this.$t('event.remove_confirmation'), this.$t('common.confirm'), {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'error' })
-        await this.$axios.delete(`/user/event/${this.event.id}`)
-        this.delEvent(Number(this.event.id))
-        this.$router.replace('/')
-      } catch (e) {
-        console.error(e)
-      }
+    async remove (parent = false) {
+      const ret = await this.$root.$confirm(`event.remove_${parent ? 'recurrent_' : ''}confirmation`)
+      if (!ret) { return }
+      const id = parent ? this.event.parentId : this.event.id
+      await this.$axios.delete(`/event/${id}`)
+      this.$router.replace('/')
     },
-    async toggle () {
+    async toggle (parent = false) {
+      const id = parent ? this.event.parentId : this.event.id
+      const is_visible = parent ? this.event.parent.is_visible : this.event.is_visible
+      const method = is_visible ? 'unconfirm' : 'confirm'
       try {
-        if (this.event.is_visible) {
-          await this.$axios.$get(`/event/unconfirm/${this.event.id}`)
-          this.event.is_visible = false
+        await this.$axios.$put(`/event/${method}/${id}`)
+        if (parent) {
+          this.event.parent.is_visible = !is_visible
         } else {
-          await this.$axios.$get(`/event/confirm/${this.event.id}`)
-          this.event.is_visible = true
+          this.event.is_visible = !is_visible
         }
       } catch (e) {
         console.error(e)

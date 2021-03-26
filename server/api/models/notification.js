@@ -1,27 +1,29 @@
 
-module.exports = (sequelize, DataTypes) => {
-  const Notification = sequelize.define('notification', {
-    filters: DataTypes.JSON,
-    email: DataTypes.STRING,
-    remove_code: DataTypes.STRING,
-    action: {
-      type: DataTypes.ENUM,
-      values: ['Create', 'Update', 'Delete']
-    },
-    type: {
-      type: DataTypes.ENUM,
-      values: ['mail', 'admin_email', 'ap']
-    }
-  }, {
-    indexes: [{
-      unique: true,
-      fields: ['action', 'type']
-    }]
-  })
+const sequelize = require('./index')
+const { Model, DataTypes } = require('sequelize')
 
-  Notification.associate = function (models) {
-    Notification.belongsToMany(models.event, { through: 'event_notification' })
-    // associations can be defined here
+class Notification extends Model {}
+
+Notification.init({
+  filters: DataTypes.JSON,
+  email: DataTypes.STRING,
+  remove_code: DataTypes.STRING,
+  action: {
+    type: DataTypes.ENUM,
+    values: ['Create', 'Update', 'Delete']
+  },
+  type: {
+    type: DataTypes.ENUM,
+    values: ['mail', 'admin_email', 'ap']
   }
-  return Notification
-}
+},
+{
+  sequelize,
+  modelName: 'notification',
+  indexes: [{
+    unique: true,
+    fields: ['action', 'type']
+  }]
+})
+
+module.exports = Notification

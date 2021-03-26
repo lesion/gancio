@@ -1,57 +1,71 @@
 <template lang='pug'>
-  div
-    p(v-html="$t('admin.place_description')")
-    el-form.mb-2(inline label-width='120px')
-      el-form-item(:label="$t('common.name')")
-        el-input.mr-1(:placeholder='$t("common.name")' v-model='place.name')
-      el-form-item(:label="$t('common.address')")
-        el-input.mr-1(:placeholder='$t("common.address")' v-model='place.address')
-      el-button(variant='primary' @click='savePlace') {{$t('common.save')}}
+  v-container
+    v-card-title {{$t('common.places')}}
+    v-card-subtitle(v-html="$t('admin.place_description')")
 
-    el-table(:data='paginatedPlaces' small)
-      el-table-column(:label="$t('common.name')" width='200')
-        template(slot-scope='data') {{data.row.name}}
-      el-table-column(:label="$t('common.address')" width='400')
-        template(slot-scope='data') {{data.row.address}}
-      el-table-column(:label="$t('common.actions')" width='200')
-        template(slot-scope='data')
-          el-button(size='mini'
-            type='success'
-            @click='place = data.row') {{$t('common.edit')}}
+    v-dialog(v-model='dialog' width='600')
+      v-card(color='secondary')
+        v-card-title {{$t('admin.edit_place')}}
+        v-card-text
+          v-form(v-model='valid' ref='form' lazy-validation)
+            v-text-field(
+              :rules="[$validators.required('common.name')]"
+              :label="$t('common.name')"
+              v-model='place.name'
+              :placeholder='$t("common.name")')
 
-    client-only
-      el-pagination(:page-size='perPage' :currentPage.sync='placePage' :total='places.length')
+            v-text-field(
+              :rules="[$validators.required('common.address')]"
+              :label="$t('common.address')"
+              v-model='place.address'
+              :placeholder='$t("common.address")')
+
+        v-card-actions
+            v-spacer
+            v-btn(@click='dialog=false' color='warning') {{$t('common.cancel')}}
+            v-btn(@click='savePlace' color='primary' :loading='loading'
+              :disable='!valid || loading') {{$t('common.save')}}
+
+    v-card-text
+      v-data-table(
+        :headers='headers'
+        :items='places')
+        template(v-slot:item.actions='{item}')
+          v-btn(@click='editPlace(item)' color='primary' icon)
+            v-icon mdi-pencil
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
 export default {
   data () {
     return {
-      perPage: 10,
-      placePage: 0,
-      place: { name: '', address: '', id: null }
+      loading: false,
+      dialog: false,
+      valid: false,
+      place: { name: '', address: '', id: null },
+      headers: [
+        { value: 'name', text: 'Name' },
+        { value: 'address', text: 'Address' },
+        { value: 'actions', text: 'Actions', align: 'right' }
+      ]
     }
   },
-  computed: {
-    ...mapState(['places']),
-    paginatedPlaces () {
-      return this.places.slice((this.placePage - 1) * this.perPage,
-        this.placePage * this.perPage)
-    }
-  },
+  computed: mapState(['places']),
   methods: {
-    placeSelected (items) {
-      if (items.length === 0) {
-        this.place.name = this.place.address = ''
-        return
-      }
-      const item = items[0]
+    ...mapActions(['updateMeta']),
+    editPlace (item) {
       this.place.name = item.name
       this.place.address = item.address
       this.place.id = item.id
+      this.dialog = true
     },
     async savePlace () {
-      const place = await this.$axios.$put('/place', this.place)
+      if (!this.$refs.form.validate()) return
+      this.loading = true
+      await this.$axios.$put('/place', this.place)
+      this.updateMeta()
+      this.loading = false
+      this.dialog = false
     }
   }
 }

@@ -1,111 +1,162 @@
 <template lang="pug">
-  el-main#eventDetail
+v-container
+  //- EVENT PAGE
+  //- gancio supports microformats (http://microformats.org/wiki/h-event)
+  v-card.h-event
+    v-card-actions
+      //- admin controls
+      EventAdmin.mb-1(v-if='is_mine' :event='event')
+    v-card-text
 
-    .head
-      nuxt-link.mr-2(to='/')
-        img#logo(src='/favicon.ico')
+      v-row
+        v-col.col-12.col-lg-8
+          v-img.main_image.mb-3(
+            contain
+            :src='imgPath'
+            :lazy-src='thumbImgPath'
+            v-if='event.image_path')
+          .p-description.text-body-1(v-else v-html='event.description')
 
-      span.title {{event.title}}
+            //- template(v-slot:placeholder)
+              //- v-row(
+              //-   class="fill-height ma-0"
+              //-   align="center"
+              //-   justify="center")
+              //-   v-progress-circular(indeterminate
+              //-     color="grey lighten-5")
 
-      div.float-right
-        nuxt-link.mr-1(:to='`/event/${prev}`')
-          el-button(circle plain size='small' icon='el-icon-arrow-left' :disabled='!prev')
-        nuxt-link(:to='`/event/${next}`')
-          el-button(circle plain size='small' :disabled='!next' icon='el-icon-arrow-right')
+        v-col.col-12.col-lg-4
+          v-card
+            v-card-text
+              v-icon.float-right(v-if='event.parentId' color='success') mdi-repeat
+              .title.text-h5
+                b.p-name {{event.title}}
 
-    el-row
-      el-col(:md='18')
+              time.dt-start.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')
+                v-icon mdi-calendar
+                b.ml-2 {{event|when}}
+              div.text-subtitle-1 {{event.start_datetime|from}}
+                small(v-if='event.parentId')  ({{event|recurrentDetail}})
 
-        //- event image
-        el-image.main_image.mb-3(:src='imgPath' v-if='event.image_path' fit='contain')
-          div.loading(slot='placeholder')
-            el-icon(name='loading')
+              .text-h6.p-location
+                v-icon mdi-map-marker
+                b.vcard.ml-2 {{event.place.name}}
+              .text-subtitle-1.adr {{event.place.address}}
 
-        //- info for mobile screen
-        div.d-block.d-lg-none
-          span <b>{{event|when}}</b>, <small>{{event|to}}</small><br/>
-          span <b>{{event.place.name}}</b> - {{event.place.address}}
-          hr
-        pre(v-html='$options.filters.linkify(event.description)')
-        el-tag.mr-1.mb-1(v-for='tag in event.tags'
-          size='mini' :key='tag') {{tag}}
+            //- tags, hashtags
+            v-card-text(v-if='event.tags.length')
+              v-chip.p-category.ml-1.mt-3(v-for='tag in event.tags' color='primary'
+                outlined :key='tag' v-text='tag')
 
-      el-dialog.embedDialog(:visible.sync='showEmbed')
-        h4(slot='title') {{$t('common.embed_title')}}
-        EmbedEvent(:event='event')
+            //- info & actions
+            v-toolbar
+              v-tooltip(bottom) {{$t('common.copy_link')}}
+                template(v-slot:activator="{on, attrs} ")
+                  v-btn.ml-2(large icon v-on='on' color='primary'
+                    v-clipboard:success='copyLink'
+                    v-clipboard:copy='`${settings.baseurl}/event/${event.id}`')
+                    v-icon mdi-content-copy
+              v-tooltip(bottom) {{$t('common.embed')}}
+                template(v-slot:activator="{on, attrs} ")
+                  v-btn.ml-2(large icon v-on='on' @click='showEmbed=true' color='primary')
+                    v-icon mdi-code-tags
+              v-tooltip(bottom) {{$t('common.add_to_calendar')}}
+                template(v-slot:activator="{on, attrs} ")
+                  v-btn.ml-2(large icon v-on='on' color='primary'
+                    :href='`/api/event/${event.id}.ics`')
+                    v-icon mdi-calendar-export
 
-      //- info & actions for desktop
-      el-col.d-none.d-lg-block(:md='6')
-        el-menu.menu.mt-2
-          p <i class='el-icon-time'></i>  <b>{{event|when}}</b> <br/><small>{{event|to}}</small>
-          p <i class='el-icon-map-location'></i>  <b>{{event.place.name}}</b> - {{event.place.address}}
-          el-divider {{$t('common.actions')}}
-          el-menu-item(
-            v-clipboard:success='copyLink'
-            v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') <i class='el-icon-paperclip'></i> {{$t('common.copy_link')}}
+      .p-description.text-body-1(v-if='event.image_path' v-html='event.description')
 
-          el-menu-item(@click='showEmbed=true') <i class='el-icon-copy-document'></i> {{$t('common.embed')}}
+      //- resources from fediverse
+      #resources.mt-1(v-if='settings.enable_federation')
+        div.float-right(v-if='!settings.hide_boosts')
+          small.mr-3 🔖 {{event.likes.length}}
+          small ✊ {{event.boost.length}}<br/>
 
-          //- TODO (ics of recurrent events)
-          el-menu-item(v-if='!event.recurrent')
-            a.d-block(:href='`${settings.baseurl}/api/event/${event.id}.ics`') <i class='el-icon-date'></i> {{$t('common.add_to_calendar')}}
-          EventAdmin(v-if='is_mine' :event='event')
+        //- p.p-2
+          //- v-btn(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
+          //- span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
 
-    hr
-    .d-block.d-lg-none
-      el-button(plain size='mini' type='primary' v-clipboard:success='copyLink'
-        v-clipboard:copy='`${settings.baseurl}/event/${event.id}`') <i class='el-icon-paperclip'></i> {{$t('common.copy_link')}}
-      a.el-button.el-button--success.el-button--mini.is-plain(role='button' plain size='mini' type='success'
-        :href='`${settings.baseurl}/api/event/${event.id}.ics`') <i class='el-icon-date'></i> {{$t('common.add_to_calendar')}}
+        //- v-dialog(v-model='showFollowMe' destroy-on-close max-width='500px')
+          h4(slot='title') {{$t('common.follow_me_title')}}
+          FollowMe(@close='showFollowMe=false' is-dialog)
 
-    //- resources from fediverse
-    #resources.mt-1(v-if='settings.enable_federation')
-      div.float-right(v-if='!settings.hide_boosts')
-        small.mr-3 🔖 {{event.likes.length}}
-        small ✊ {{event.boost.length}}<br/>
+        v-dialog.showResource#resourceDialog(v-model='showResources' fullscreen
+          width='95vw'
+          destroy-on-close
+          @keydown.native.right='$refs.carousel.next()'
+          @keydown.native.left='$refs.carousel.prev()')
+          v-carousel(:interval='10000' ref='carousel' arrow='always')
+            v-carousel-item(v-for='attachment in selectedResource.data.attachment' :key='attachment.url')
+              v-img(:src='attachment.url')
+        v-list.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources' dark
+          :key='resource.id' :class='{disabled: resource.hidden}')
+          v-list-item
+            v-list-title
+              v-menu(v-if='$auth.user && $auth.user.is_admin' offset-y)
+                template(v-slot:activator="{ on, attrs }")
+                  v-btn.mr-2(v-on='on' v-attrs='attrs' color='primary' small icon outlined)
+                    v-icon mdi-dots-vertical
+                v-list
+                  v-list-item(v-if='!resource.hidden' @click='hideResource(resource, true)')
+                    v-list-item-title <v-icon left>mdi-eye-off</v-icon> {{$t('admin.hide_resource')}}
+                  v-list-item(v-else @click='hideResource(resource, false)')
+                    v-list-item-title <v-icon left>mdi-eye-on</v-icon> {{$t('admin.show_resource')}}
+                  v-list-item(@click='deleteResource(resource)')
+                    v-list-item-title <v-icon left>mdi-delete</v-icon> {{$t('admin.delete_resource')}}
+                  v-list-item(@click='blockUser(resource)')
+                    v-list-item-title <v-icon left>mdi-lock</v-icon> {{$t('admin.block_user')}}
 
-      strong(v-if='settings.enable_resources') {{$tc('common.resources', event.resources.length)}} -
-      small {{$t('event.interact_with_me_at')}} 
-        el-button(type='text' size='mini' @click='showFollowMe=true') @{{settings.instance_name}}@{{settings.baseurl|url2host}}
+              a(:href='resource.data.url || resource.data.context')
+                small {{resource.data.published|dateFormat('ddd, D MMMM HH:mm')}}
 
-      el-dialog.followDialog(:visible.sync='showFollowMe')
-        h4(slot='title') {{$t('common.follow_me_title')}}
-        FollowMe
+              div.mt-1(v-html='resource_filter(resource.data.content)')
+              span.previewImage(@click='showResource(resource)')
+                img(v-for='img in resource.data.attachment' :src='img.url')
 
-      .card-header(v-if='settings.enable_resources' v-for='resource in event.resources' :key='resource.id' :class='{disabled: resource.hidden}')
-        a.float-right(:href='resource.data.url')
-          small {{resource.data.published|datetime}}
-        div.mt-1(v-html='resource_filter(resource.data.content)')
-        img(v-for='img in resource.data.media_attachments' :src='img.url')
-        el-dropdown
-          el-button(type="primary" icon="el-icon-arrow-down" size='mini') {{$t('common.moderation')}}
-          el-dropdown-menu(slot='dropdown')
-            el-dropdown-item(v-if='!resource.hidden' icon='el-icon-remove' @click.native='hideResource(resource, true)') {{$t('admin.hide_resource')}}
-            el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(resource, false)') {{$t('admin.show_resource')}}
-            el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(resource)') {{$t('admin.delete_resource')}}
-            el-dropdown-item(icon='el-icon-lock' @click.native='blockUser(resource)') {{$t('admin.block_user')}}
+      //- Next/prev arrow
+      .text-center.mt-5.mb-5
+        v-btn.mr-2(nuxt icon outlined color='primary'
+          :to='`/event/${event.prev}`' :disabled='!event.prev')
+          v-icon mdi-arrow-left
+        v-btn(nuxt bottom right outlined icon color='primary'
+          :to='`/event/${event.next}`' :disabled='!event.next')
+          v-icon mdi-arrow-right
+
+      v-dialog(v-model='showEmbed' width='1000px')
+        EmbedEvent(:event='event' @close='showEmbed=false')
 
 </template>
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import EventAdmin from './eventAdmin'
 import EmbedEvent from './embedEvent'
-import FollowMe from './followMe'
-import { Message, MessageBox } from 'element-ui'
-
+import FollowMe from '../../components/FollowMe'
 import moment from 'dayjs'
+const htmlToText = require('html-to-text')
 
 export default {
   name: 'Event',
-  transition: null,
   components: { EventAdmin, EmbedEvent, FollowMe },
-  data() {
-    return {
-      showEmbed: false,
-      showFollowMe: false
+  async asyncData ({ $axios, params, error, store }) {
+    try {
+      const event = await $axios.$get(`/event/${params.id}`)
+      return { event, id: Number(params.id) }
+    } catch (e) {
+      error({ statusCode: 404, message: 'Event not found' })
     }
   },
-  head() {
+  data () {
+    return {
+      event: {},
+      showEmbed: false,
+      showFollowMe: false,
+      showResources: false,
+      selectedResource: { data: { attachment: [] } }
+    }
+  },
+  head () {
     if (!this.event) {
       return {}
     }
@@ -119,7 +170,7 @@ export default {
       rel: 'alternate',
       type: 'application/rss+xml',
       title: `${this.settings.title} events  @${this.event.place.name}`,
-      href: this.settings.baseurl + `/feed/rss?places=${this.event.placeId}`
+      href: this.settings.baseurl + `/feed/rss?places=${this.event.place.id}`
     }
 
     return {
@@ -129,12 +180,12 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: this.event.description.replace('\n', '').slice(0, 1000)
+          content: this.plainDescription
         },
         {
           hid: 'og-description',
           name: 'og:description',
-          content: this.event.description.replace('\n', '').slice(0, 100)
+          content: this.plainDescription
         },
         { hid: 'og-title', property: 'og:title', content: this.event.title },
         {
@@ -165,7 +216,7 @@ export default {
         },
         {
           property: 'twitter:description',
-          content: this.event.description.replace('\n', '').slice(0, 100)
+          content: this.plainDescription
         }
       ],
       link: [
@@ -181,74 +232,18 @@ export default {
       ]
     }
   },
-  async asyncData({ $axios, params, error, store }) {
-    try {
-      const [id, start_datetime] = params.id.split('_')
-      const event = await $axios.$get(`/event/${id}`)
-      event.start_datetime = start_datetime
-        ? Number(start_datetime)
-        : event.start_datetime
-      const now = new Date()
-      const events = await $axios.$get(
-        `/event/${now.getMonth()}/${now.getFullYear()}`
-      )
-      store.commit('setEvents', events)
-      return { event, id: Number(id) }
-    } catch (e) {
-      error({ statusCode: 404, message: 'Event not found' })
-    }
-  },
   computed: {
-    ...mapGetters(['filteredEvents']),
     ...mapState(['settings']),
-    next() {
-      let found = false
-      const event = this.filteredEvents.find(e => {
-        if (found) {
-          return e
-        }
-        found =
-          e.start_datetime === this.event.start_datetime &&
-          e.id === this.event.id
-      })
-      if (!event) {
-        return false
-      }
-      if (event.recurrent) {
-        return `${event.id}_${event.start_datetime}`
-      }
-      return event.id
-    },
-    prev() {
-      let event = false
-      this.filteredEvents.find(e => {
-        if (
-          e.start_datetime === this.event.start_datetime &&
-          e.id === this.event.id
-        ) {
-          return true
-        }
-        event = e
-      })
-      if (!event) {
-        return false
-      }
-      if (event.recurrent) {
-        return `${event.id}_${event.start_datetime}`
-      }
-      return event.id
+    plainDescription () {
+      return htmlToText.fromString(this.event.description.replace('\n', '').slice(0, 1000))
     },
     imgPath () {
       return '/media/' + this.event.image_path
     },
-    thumbImgPath() {
-      if (this.event.image_path) {
-        return this.settings.baseurl + '/media/thumb/' + this.event.image_path
-      } else {
-        return this.settings.baseurl + '/logo.png'
-      }
+    thumbImgPath () {
+      return this.settings.baseurl + '/media/thumb/' + this.event.image_path
     },
-    is_mine() {
+    is_mine () {
       if (!this.$auth.user) {
         return false
       }
@@ -257,30 +252,52 @@ export default {
       )
     }
   },
+  mounted () {
+    window.addEventListener('keydown', this.keyDown)
+  },
+  destroyed () {
+    window.removeEventListener('keydown', this.keyDown)
+  },
   methods: {
+    keyDown (ev) {
+      if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) { return }
+      if (ev.key === 'ArrowRight' && this.event.next) {
+        this.$router.replace(`/event/${this.event.next}`)
+      }
+      if (ev.key === 'ArrowLeft' && this.event.prev) {
+        this.$router.replace(`/event/${this.event.prev}`)
+      }
+    },
+    showResource (resource) {
+      this.showResources = true
+      this.selectedResource = resource
+      document.getElementById('resourceDialog').focus()
+    },
     async hideResource (resource, hidden) {
       await this.$axios.$put(`/resources/${resource.id}`, { hidden })
       resource.hidden = hidden
     },
     async blockUser (resource) {
-      await this.$axios.post('/instances/toggle_user_block', { user_id: resource.apUserApId })
-      Message({ message: this.$t('admin.user_blocked', {user: resource.apUserApId}), type: 'success', showClose: true })
+      try {
+        const ret = await this.$root.$confirm('admin.user_block_confirm', { user: resource.ap_user.ap_id })
+        if (!ret) { return }
+        await this.$axios.post('/instances/toggle_user_block', { ap_id: resource.ap_user.ap_id })
+        this.$root.$message('admin.user_blocked', { user: resource.ap_user.ap_id, color: 'success' })
+      } catch (e) { }
     },
     async deleteResource (resource) {
-      MessageBox.confirm(this.$t('admin.delete_resource_confirm'),
-        this.$t('common.confirm'), {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'error'
-        }).then(async () => {
-          await this.$axios.delete(`/resources/${resource.id}`)
-          this.event.resources = this.event.resources.filter(r => r.id !== resources.id)
-        })
+      try {
+        const ret = await this.$root.$confirm('admin.delete_resource_confirm')
+        if (!ret) { return }
+        await this.$axios.delete(`/resources/${resource.id}`)
+        this.event.resources = this.event.resources.filter(r => r.id !== resource.id)
+      } catch (e) { }
     },
-    copyLink() {
-      Message({ message: this.$t('common.copied'), type: 'success', showClose: true })
+    copyLink () {
+      this.$root.$message('common.copied', { color: 'success' })
     },
-    resource_filter(value) {
+    // TOFIX
+    resource_filter (value) {
       return value.replace(
         /<a.*href="([^">]+).*>(?:.(?!<\/a>))*.<\/a>/,
         (orig, url) => {
@@ -298,111 +315,14 @@ export default {
 }
 </script>
 <style lang='less'>
-#eventDetail {
-  background-color: white;
-  margin-bottom: 30px;
-  padding-top: 0px;
-
-  .embedDialog {
-    .el-dialog {
-      min-height: 500px;
-      max-width: 1000px;
-      width: 100%;
-    }
-  }
-
-  .followDialog {
-    .el-dialog {
-      min-height: 300px;
-      max-width: 600px;
-      width: 100%;
-    }
-  }
-
-  .head {
-    z-index: 1;
-    position: sticky;
-    top: 0px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background-color: white;
-    border-bottom: 1px solid #e6e6e6;
-  }
-
-  .menu {
-    border-right: none;
-    border-left: 1px solid #e6e6e6;
-    p {
-      margin-left: 10px;
-    }
-  }
-
-  .title {
-    max-width: 80%;
-    max-height: 0.1rem;
-    overflow: hidden;
-    font-size: 1.6rem;
-    color: #404246;
-    line-height: 1;
-  }
-
-  pre {
-    color: #404246;
-    font-size: 1em;
-    font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen,
-      Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica, Arial,
-      sans-serif !important;
-  }
-
-  .main_image {
-    width: 100%;
-    transition: height .100s;
-    height: auto;
-
-    img {
-      // object-fit: contain;
-      margin: 0 auto;
-      max-height: 88vh;
-    }
-
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 30px;
-      margin: 0 auto;
-      height: 100px;
-    }
-  }
-
-  #resources {
-    img {
-      max-width: 100%;
-    }
-    .card-header {
-      border-left: 3px solid transparent;
-    }
-    .card-header:hover {
-      border-left: 3px solid #888;
-    }
-    .invisible {
-      visibility: visible !important;
-    }
-    .disabled {
-      opacity: 0.5;
-    }
-  }
-  .nextprev {
-    font-size: 10px;
-    margin-bottom: 5px;
-  }
+.title {
+  margin-bottom: 25px;
 }
-
-@media only screen and (max-width: 768px) {
-  #eventDetail {
-    .menu {
-      border: 0px;
-    }
-  }
+.main_image {
+  // width: 100%;
+  margin: 0 auto;
+  // max-height: 120vh;
+  border-radius: 5px;
+  transition: max-height 0.2s;
 }
 </style>
