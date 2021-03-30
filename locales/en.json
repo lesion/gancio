@@ -91,7 +91,7 @@
         "check_email": "Check your e-mail inbox and spam.",
         "not_registered": "Not registered?",
         "forgot_password": "Forgot your password?",
-        "error": "Could not log in. Check your credentials.",
+        "error": "Could not log in. Check your login info.",
         "insert_email": "Enter your e-mail address",
         "ok": "Logged in"
     },
