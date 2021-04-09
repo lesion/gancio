@@ -12,7 +12,6 @@ const mail = {
     log.debug('Enqueue new email ', template, locale)
     const task = new Task({
       name: 'MAIL',
-      removable: true,
       method: mail._send,
       args: [addresses, template, locals, locale]
     })

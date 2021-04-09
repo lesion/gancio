@@ -4,17 +4,17 @@ const placeHelpers = require('./helpers/place')
 const tagHelpers = require('./helpers/tag')
 // const notifier = require('./notifier')
 
-const loopInterval = process.env.NODE_ENV === 'production' ? 15 : 1
+const loopInterval = 1 // process.env.NODE_ENV === 'production' ? 1 : 1
 const minute = 60 / loopInterval
 const hour = minute * 60
 const day = hour * 24
 
 class Task {
-  constructor ({ name, removable = false, repeatEach = 1, method, args = [] }) {
+  constructor ({ name, repeat = false, repeatDelay = 1, callAtStart = false, method, args = [] }) {
     this.name = name
-    this.removable = removable
-    this.repeatEach = repeatEach
-    this.processInNTick = repeatEach
+    this.repeat = repeat
+    this.repeatDelay = repeatDelay
+    this.processInNTick = callAtStart ? 0 : repeatDelay
     this.method = method
     this.args = args
   }
@@ -24,7 +24,7 @@ class Task {
     if (this.processInNTick > 0) {
       return
     }
-    this.processInNTick = this.repeatEach
+    this.processInNTick = this.repeatDelay
     try {
       const ret = this.method.apply(this, this.args)
       if (ret && typeof ret.then === 'function') {
@@ -69,7 +69,7 @@ class TaskManager {
   }
 
   add (task) {
-    log.debug(`[TASK] Add ${task.name} (${task.repeatEach * this.interval} seconds)`)
+    log.debug(`[TASK] Add ${task.name} (${task.repeatDelay * this.interval} seconds)`)
     this.tasks.push(task)
   }
 
@@ -82,7 +82,7 @@ class TaskManager {
     const tasks = this.tasks.map(t => t.process())
 
     // remove removable tasks
-    this.tasks = this.tasks.filter(t => !t.removable)
+    this.tasks = this.tasks.filter(t => t.repeat)
 
     return Promise.all(tasks)
   }
@@ -97,9 +97,24 @@ const TS = new TaskManager()
 
 // create and clean recurrent events
 TS.add(new Task({
-  name: 'RECURRENT_EVENT',
+  name: 'CREATE_RECURRENT_EVENT',
   method: eventController._createRecurrent,
-  repeatEach: 10 * minute // check each 10 minutes
+  repeatDelay: hour / 2 // check each half an hour
+}))
+
+// remove unrelated places
+TS.add(new Task({
+  name: 'CLEAN_UNUSED_PLACES',
+  method: placeHelpers._cleanUnused,
+  repeatDelay: day,
+  callAtStart: true
+}))
+
+TS.add(new Task({
+  name: 'CLEAN_UNUSED_TAGS',
+  method: tagHelpers._cleanUnused,
+  repeatDelay: day,
+  callAtStart: true
 }))
 
 // daily morning notification
@@ -122,6 +137,7 @@ TS.add(new Task({
 //   method: places._nominatimQuery,
 //   repeatEach: 60
 // }))
+//
 
 // TS.start()
 // TS.add(new Task({ name: 'removable #1', method: daje, args: ['removable #1'], removable: true }))
