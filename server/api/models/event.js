@@ -51,6 +51,7 @@ Event.belongsTo(User)
 User.hasMany(Event)
 
 Event.belongsToMany(Tag, { through: 'event_tags' })
+Tag.belongsToMany(Event, { through: 'event_tags' })
 
 Event.belongsToMany(Notification, { through: EventNotification })
 Notification.belongsToMany(Event, { through: EventNotification })

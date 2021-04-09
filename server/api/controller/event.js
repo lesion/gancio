@@ -25,23 +25,22 @@ const eventController = {
 
   async _getMeta () {
     const places = await Place.findAll({
-      where: { confirmed: true },
       order: [[Sequelize.literal('weigth'), 'DESC']],
       attributes: {
         include: [[Sequelize.fn('count', Sequelize.col('events.placeId')), 'weigth']],
         exclude: ['createdAt', 'updatedAt']
       },
-      include: [{ model: Event, attributes: [] }],
+      include: [{ model: Event, where: { is_visible: true }, required: true, attributes: [] }],
       group: ['place.id']
     })
 
     const tags = await Tag.findAll({
-      where: { confirmed: true },
-      raw: true,
-      order: [['weigth', 'DESC']],
+      order: [[Sequelize.literal('w'), 'DESC']],
       attributes: {
-        exclude: ['createdAt', 'updatedAt']
-      }
+        include: [[Sequelize.fn('COUNT', Sequelize.col('tag.tag')), 'w']]
+      },
+      include: [{ model: Event, where: { is_visible: true }, attributes: [], through: { attributes: [] }, required: true }],
+      group: ['tag.tag']
     })
 
     return { places, tags }
@@ -178,14 +177,6 @@ const eventController = {
     try {
       event.is_visible = true
 
-      // confirm tag & place if needed
-      if (!event.place.confirmed) {
-        await event.place.update({ confirmed: true })
-      }
-
-      await Tag.update({ confirmed: true },
-        { where: { confirmed: false, tag: { [Op.in]: event.tags.map(t => t.tag) } } })
-
       await event.save()
 
       res.sendStatus(200)
@@ -295,8 +286,7 @@ const eventController = {
       const [place] = await Place.findOrCreate({
         where: { name: body.place_name },
         defaults: {
-          address: body.place_address,
-          confirmed: !!req.user
+          address: body.place_address
         }
       })
 
@@ -305,9 +295,8 @@ const eventController = {
 
       // create/assign tags
       if (body.tags) {
-        await Tag.bulkCreate(body.tags.map(t => ({ tag: t, confirmed: !!req.user })), { ignoreDuplicates: true })
+        await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
         const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
-        await Promise.all(tags.map(t => t.update({ weigth: Number(t.weigth) + 1, confirmed: true })))
         await event.addTags(tags)
         event.tags = tags
       }
@@ -456,14 +445,19 @@ const eventController = {
     const events = await Event.findAll({
       where,
       attributes: {
-        exclude: ['slug', 'likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'placeId', 'description', 'resources']
-        // include: [[Sequelize.fn('COUNT', Sequelize.col('activitypub_id')), 'ressources']]
+        exclude: ['slug', 'likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'description', 'resources']
       },
-      order: ['start_datetime', [Tag, 'weigth', 'DESC']],
+      order: ['start_datetime', Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE "tagTag" = tag) DESC')],
       include: [
         { model: Resource, required: false, attributes: ['id'] },
-        { model: Tag, attributes: ['tag'], required: !!tags, ...where_tags, through: { attributes: [] } },
-        { model: Place, required: false, attributes: ['id', 'name', 'address'] }
+        {
+          model: Tag,
+          attributes: ['tag'],
+          required: !!tags,
+          ...where_tags,
+          through: { attributes: [] }
+        },
+        { model: Place, required: true, attributes: ['id', 'name', 'address'] }
       ]
     }).catch(e => {
       log.error(e)

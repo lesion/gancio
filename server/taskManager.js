@@ -1,5 +1,7 @@
 const log = require('./log')
 const eventController = require('./api/controller/event')
+const placeHelpers = require('./helpers/place')
+const tagHelpers = require('./helpers/tag')
 // const notifier = require('./notifier')
 
 const loopInterval = process.env.NODE_ENV === 'production' ? 15 : 1
@@ -42,6 +44,7 @@ class Task {
  * - Send AP notifications
  * - Create recurrent events
  * - Sync AP federation profiles
+ * - Remove unused tags/places
  */
 
 class TaskManager {
