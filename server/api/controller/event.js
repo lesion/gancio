@@ -86,6 +86,7 @@ const eventController = {
   },
 
   async get (req, res) {
+    log.error('get')
     const format = req.params.format || 'json'
     const is_admin = req.user && req.user.is_admin
     const id = Number(req.params.event_id)
@@ -97,7 +98,7 @@ const eventController = {
           exclude: ['createdAt', 'updatedAt', 'placeId']
         },
         include: [
-          { model: Tag, required: false, attributes: ['tag', 'weigth'], through: { attributes: [] } },
+          { model: Tag, required: false, attributes: ['tag'], through: { attributes: [] } },
           { model: Place, attributes: ['name', 'address', 'id'] },
           {
             model: Resource,

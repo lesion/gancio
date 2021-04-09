@@ -99,7 +99,8 @@ const TS = new TaskManager()
 TS.add(new Task({
   name: 'CREATE_RECURRENT_EVENT',
   method: eventController._createRecurrent,
-  repeatDelay: hour / 2 // check each half an hour
+  repeatDelay: hour / 2, // check each half an hour
+  repeat: true
 }))
 
 // remove unrelated places
@@ -107,6 +108,7 @@ TS.add(new Task({
   name: 'CLEAN_UNUSED_PLACES',
   method: placeHelpers._cleanUnused,
   repeatDelay: day,
+  repeat: true,
   callAtStart: true
 }))
 
@@ -114,6 +116,7 @@ TS.add(new Task({
   name: 'CLEAN_UNUSED_TAGS',
   method: tagHelpers._cleanUnused,
   repeatDelay: day,
+  repeat: true,
   callAtStart: true
 }))
 
