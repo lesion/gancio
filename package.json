@@ -67,6 +67,7 @@
     "prom-client": "^13.1.0",
     "sequelize": "^6.6.2",
     "sequelize-cli": "^6.2.0",
+    "sequelize-slugify": "^1.5.0",
     "sharp": "^0.27.2",
     "sqlite3": "^5.0.2",
     "tiptap": "^1.32.0",

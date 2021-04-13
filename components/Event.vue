@@ -1,6 +1,6 @@
 <template lang="pug">
   v-card.h-event.event
-    nuxt-link(:to='`/event/${event.id}`')
+    nuxt-link(:to='`/event/${event.slug || event.id}`')
       v-img.img(:src="`/media/thumb/${event.image_path || 'logo.svg' }`")
       v-icon.float-right.mr-1(v-if='event.parentId' color='success') mdi-repeat
       .title.p-name {{event.title}}

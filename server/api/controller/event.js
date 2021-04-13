@@ -86,14 +86,21 @@ const eventController = {
   },
 
   async get (req, res) {
-    log.error('get')
     const format = req.params.format || 'json'
     const is_admin = req.user && req.user.is_admin
-    const id = Number(req.params.event_id)
+    const slug = req.params.event_id
+    const id = Number(req.params.event_id) || -1
+    console.error(slug)
     let event
 
     try {
-      event = await Event.findByPk(id, {
+      event = await Event.findOne({
+        where: {
+          [Op.or]: {
+            slug,
+            id
+          }
+        },
         attributes: {
           exclude: ['createdAt', 'updatedAt', 'placeId']
         },
@@ -112,6 +119,7 @@ const eventController = {
         order: [[Resource, 'id', 'DESC']]
       })
     } catch (e) {
+      console.error(e)
       return res.sendStatus(400)
     }
 
@@ -119,6 +127,7 @@ const eventController = {
       return res.sendStatus(400)
     }
 
+    console.error('diocane')
     // get prev and next event
     const next = await Event.findOne({
       attributes: ['id'],
@@ -446,7 +455,7 @@ const eventController = {
     const events = await Event.findAll({
       where,
       attributes: {
-        exclude: ['slug', 'likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'description', 'resources']
+        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'description', 'resources']
       },
       order: ['start_datetime', Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE "tagTag" = tag) DESC')],
       include: [

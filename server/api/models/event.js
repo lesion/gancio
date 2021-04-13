@@ -3,6 +3,8 @@ const moment = require('dayjs')
 const htmlToText = require('html-to-text')
 
 const { Model, DataTypes } = require('sequelize')
+const SequelizeSlugify = require('sequelize-slugify')
+
 const sequelize = require('./index')
 
 const Resource = require('./resource')
@@ -26,7 +28,11 @@ Event.init({
     autoIncrement: true
   },
   title: DataTypes.STRING,
-  slug: DataTypes.STRING,
+  slug: {
+    type: DataTypes.STRING,
+    index: true,
+    unique: true
+  },
   description: DataTypes.TEXT,
   multidate: DataTypes.BOOLEAN,
   start_datetime: {
@@ -61,6 +67,8 @@ Resource.belongsTo(Event)
 
 Event.hasMany(Event, { as: 'child', foreignKey: 'parentId' })
 Event.belongsTo(Event, { as: 'parent' })
+
+SequelizeSlugify.slugifyModel(Event, { source: ['title'] })
 
 Event.prototype.toAPNote = function (username, locale, to = []) {
   const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
