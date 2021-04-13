@@ -1,6 +1,6 @@
 const config = require('config')
 const moment = require('dayjs')
-const htmlToText = require('html-to-text')
+const { htmlToText } = require('html-to-text')
 
 const { Model, DataTypes } = require('sequelize')
 const SequelizeSlugify = require('sequelize-slugify')
@@ -72,7 +72,7 @@ SequelizeSlugify.slugifyModel(Event, { source: ['title'] })
 
 Event.prototype.toAPNote = function (username, locale, to = []) {
   const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
-  const plainDescription = htmlToText.fromString(this.description && this.description.replace('\n', '').slice(0, 1000))
+  const plainDescription = htmlToText(this.description && this.description.replace('\n', '').slice(0, 1000))
   const content = `
   ${this.title}<br/><br/>
     📍 ${this.place && this.place.name}<br/>
@@ -80,7 +80,7 @@ Event.prototype.toAPNote = function (username, locale, to = []) {
 
     ${plainDescription}<br/><br/>
 
-    <a href='${config.baseurl}/event/${this.id}'>${config.baseurl}/event/${this.id}</a><br/>
+    <a href='${config.baseurl}/event/${this.slug || this.id}'>${config.baseurl}/event/${this.slug || this.id}</a><br/>
 
     ${tags && tags.map(t => `#${t}`)}
   `

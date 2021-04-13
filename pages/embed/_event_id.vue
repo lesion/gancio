@@ -1,5 +1,5 @@
 <template lang="pug">
-  nuxt-link.embed_event(:to='`/event/${id}`' target='_blank' :class='{ withImg: event.image_path }')
+  nuxt-link.embed_event(:to='`/event/${event.slug || event.id}`' target='_blank' :class='{ withImg: event.image_path }')
 
     //- image
     img.float-left(:src='`/media/thumb/${event.image_path || "logo.png"}`')
@@ -18,7 +18,7 @@ export default {
   async asyncData ({ $axios, params, error, store }) {
     try {
       const event = await $axios.$get(`/event/${params.event_id}`)
-      return { event, id: Number(params.event_id) }
+      return { event }
     } catch (e) {
       error({ statusCode: 404, message: 'Event not found' })
     }

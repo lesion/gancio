@@ -90,7 +90,6 @@ const eventController = {
     const is_admin = req.user && req.user.is_admin
     const slug = req.params.event_id
     const id = Number(req.params.event_id) || -1
-    console.error(slug)
     let event
 
     try {
@@ -127,7 +126,6 @@ const eventController = {
       return res.sendStatus(400)
     }
 
-    console.error('diocane')
     // get prev and next event
     const next = await Event.findOne({
       attributes: ['id'],

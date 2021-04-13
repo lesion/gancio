@@ -6,7 +6,7 @@ v-card
       v-col.col-12
         v-alert.mb-1.mt-1(type='info' show-icon) {{$t('common.embed_help')}}
         v-text-field(v-model='code')
-          v-btn(slot='prepend' plain text color='primary'
+          v-btn(slot='prepend' text color='primary'
             v-clipboard:copy='code'
             v-clipboard:success='copyLink') {{$t("common.copy")}}
             v-icon.ml-1 mdi-content-copy
@@ -23,13 +23,13 @@ import { mapState } from 'vuex'
 export default {
   name: 'EmbedEvent',
   props: {
-    event: { type: Object, default: () => ({})}
+    event: { type: Object, default: () => ({}) }
   },
   computed: {
     ...mapState(['settings']),
     code () {
       const style = "style='border: 0; width: 100%; height: 215px;'"
-      const src = `${this.settings.baseurl}/embed/${this.event.id}`
+      const src = `${this.settings.baseurl}/embed/${this.event.slug || this.event.id}`
       const code = `<iframe ${style} src="${src}"></iframe>`
       return code
     }

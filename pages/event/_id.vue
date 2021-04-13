@@ -54,7 +54,7 @@ v-container
                 template(v-slot:activator="{on, attrs} ")
                   v-btn.ml-2(large icon v-on='on' color='primary'
                     v-clipboard:success='copyLink'
-                    v-clipboard:copy='`${settings.baseurl}/event/${event.id}`')
+                    v-clipboard:copy='`${settings.baseurl}/event/${event.slug || event.id}`')
                     v-icon mdi-content-copy
               v-tooltip(bottom) {{$t('common.embed')}}
                 template(v-slot:activator="{on, attrs} ")
@@ -63,7 +63,7 @@ v-container
               v-tooltip(bottom) {{$t('common.add_to_calendar')}}
                 template(v-slot:activator="{on, attrs} ")
                   v-btn.ml-2(large icon v-on='on' color='primary'
-                    :href='`/api/event/${event.id}.ics`')
+                    :href='`/api/event/${event.slug || event.id}.ics`')
                     v-icon mdi-calendar-export
 
       .p-description.text-body-1(v-if='event.image_path' v-html='event.description')
@@ -191,7 +191,7 @@ export default {
         {
           hid: 'og-url',
           property: 'og:url',
-          content: `${this.settings.baseurl}/event/${this.event.id}`
+          content: `${this.settings.baseurl}/event/${this.event.slug || this.event.id}`
         },
         { property: 'og:type', content: 'event' },
         {
