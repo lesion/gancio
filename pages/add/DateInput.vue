@@ -9,7 +9,6 @@
     p {{$t(`event.${type}_description`)}}
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-if='type === "recurrent"' color='primary' :value='value.recurrent.frequency' @change='fq => change("frequency", fq)')
       v-btn(v-for='f in frequencies' :key='f.value' :value='f.value') {{f.text}}
-
     client-only
       .datePicker.mt-3
         v-input(:value='fromDate'
@@ -34,11 +33,14 @@
   v-row.mt-3.col-md-6.mx-auto
     v-col.col-12.col-sm-6
       v-select(dense :label="$t('event.from')" :value='fromHour' clearable
+        :disabled='!value.from'
         :rules="[$validators.required('event.from')]"
         :items='hourList' @change='hr => change("fromHour", hr)')
 
     v-col.col-12.col-sm-6
-      v-select(dense :label="$t('event.due')" :value='dueHour' clearable
+      v-select(dense :label="$t('event.due')"
+        :disabled='!fromHour'
+        :value='dueHour' clearable
         :items='hourList' @change='hr => change("dueHour", hr)')
 
   //- div.col-md-12(v-if='isRecurrent')
