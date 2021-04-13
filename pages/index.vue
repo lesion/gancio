@@ -71,6 +71,13 @@ export default {
     }
   },
   computed: mapState(['settings', 'announcements', 'filters']),
+  mounted () {
+    const tags = document.location.hash.split('#').map(tag => decodeURIComponent(tag))
+    if (tags) {
+      this.setFilters({ ...this.filters, tags })
+      this.updateEvents()
+    }
+  },
   methods: {
     // onIntersect (isIntersecting, eventId) {
     // this.intersecting[eventId] = isIntersecting
@@ -95,8 +102,9 @@ export default {
       this.updateEvents()
     },
     tagClick (tag) {
+      this.$nuxt.$loading.start()
+      this.$router.push(`#${tag}`)
       if (this.filters.tags.includes(tag)) {
-        this.filters.tags = this.filters.tags.filter(t => t !== tag)
         this.setFilters({ ...this.filters, tags: this.filters.tags.filter(t => t !== tag) })
       } else {
         this.setFilters({ ...this.filters, tags: [].concat(this.filters.tags, tag) })
@@ -124,15 +132,17 @@ export default {
       this.updateEvents()
     },
     updateFilters (filters) {
+      this.$nuxt.$loading.start()
       this.setFilters(filters)
       this.updateEvents()
     },
     dayChange (day) {
+      this.$nuxt.$loading.start()
       const date = dayjs(day.date).format('YYYY-MM-DD')
       if (this.selectedDay === date) {
         this.selectedDay = null
-        this.start = dayjs().unix() // .startOf('week').unix()
-        this.end = null
+        this.start = dayjs(day.date).startOf('month').unix() // .startOf('week').unix()
+        this.end = dayjs(day.date).endOf('month').unix()
         this.updateEvents()
         return
       }
