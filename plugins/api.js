@@ -22,7 +22,7 @@ export default ({ $axios, store }, inject) => {
             end: params.end,
             places: params.places && params.places.join(','),
             tags: params.tags && params.tags.join(','),
-            show_recurrent: params.show_recurrent
+            show_recurrent: !!params.show_recurrent
           }
         })
         return events.map(e => Object.freeze(e))
