@@ -222,6 +222,10 @@ export default {
           this.$emit('input', { ...this.value, dueHour: false })
         }
       } else if (what === 'date') {
+        if (value === null) {
+          this.$emit('input', { ...this.value, from: null, fromHour: false })
+          return
+        }
         if (this.value.multidate) {
           let from = value.start
           let due = value.end
