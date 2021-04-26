@@ -21,8 +21,8 @@
 
     v-text-field.col-md-6(ref='address'
       prepend-icon='mdi-map'
-      v-show='!disableAddress'
-      :rules="[$validators.required('common.address')]"
+      :disabled='disableAddress'
+      :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
       :label="$t('common.address')"
       @change="changeAddress"
       :value="value.address")

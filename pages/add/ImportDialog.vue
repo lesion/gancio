@@ -4,22 +4,22 @@
     v-card-text
       p(v-html="$t('event.import_description')")
       v-form(v-model='valid' ref='form' lazy-validation @submit.prevent='importGeneric')
-        v-text-field(v-model='URL'
-          :label="$t('common.url')"
-          :hint="$t('event.import_URL')"
-          persistent-hint
-          :loading='loading' :error='error'
-          :error-messages='errorMessage')
+        v-row
+          v-col
+            v-text-field(v-model='URL'
+              :label="$t('common.url')"
+              :hint="$t('event.import_URL')"
+              persistent-hint
+              :loading='loading' :error='error'
+              :error-messages='errorMessage')
+          v-col
+            v-file-input(
+              v-model='file'
+              accept=".ics"
+              :label="$t('event.ics')"
+              :hint="$t('event.import_ICS')"
+              persistent-hint)
 
-        v-file-input(
-          v-model='file'
-          accept=".ics"
-          :label="$t('event.ics')"
-          :hint="$t('event.import_ICS')"
-          persistent-hint
-        )
-
-      p {{events}}
     v-card-actions
       v-spacer
       v-btn(@click='$emit("close")' color='warning') {{$t('common.cancel')}}
@@ -29,6 +29,8 @@
 </template>
 <script>
 import ical from 'ical.js'
+import get from 'lodash/get'
+import { mapState } from 'vuex'
 
 export default {
   name: 'ImportDialog',
@@ -40,9 +42,10 @@ export default {
       loading: false,
       valid: false,
       URL: '',
-      events: {}
+      event: {}
     }
   },
+  computed: mapState(['places']),
   methods: {
     importGeneric () {
       if (this.file) {
@@ -55,15 +58,24 @@ export default {
       const reader = new FileReader()
       reader.readAsText(this.file)
       reader.onload = () => {
-        const event = ical.parse(reader.result)
+        const ret = ical.parse(reader.result)
+        const component = new ical.Component(ret)
+        const events = component.getAllSubcomponents('vevent')
+        const event = new ical.Event(events[0])
         this.event = {
-          title: event.name
+          title: get(event, 'summary', ''),
+          description: get(event, 'description', ''),
+          place: { name: get(event, 'location', '') },
+          start_datetime: get(event, 'startDate', '').toUnixTime(),
+          end_datetime: get(event, 'endDate', '').toUnixTime()
         }
+
+        this.$emit('imported', this.event)
       }
     },
     async importURL () {
       if (!this.URL) {
-        this.errorMessage = this.$validators.required('common.URL')('')
+        this.errorMessage = this.$validators.required('common.url')('')
         this.error = true
         return
       }

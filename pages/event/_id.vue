@@ -1,5 +1,5 @@
 <template lang="pug">
-v-container
+v-container#event
   //- EVENT PAGE
   //- gancio supports microformats (http://microformats.org/wiki/h-event)
   v-card.h-event
@@ -15,7 +15,7 @@ v-container
             :src='imgPath'
             :lazy-src='thumbImgPath'
             v-if='event.image_path')
-          .p-description.text-body-1(v-else v-html='event.description')
+          .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-else v-html='event.description')
 
             //- template(v-slot:placeholder)
               //- v-row(
@@ -66,7 +66,7 @@ v-container
                     :href='`/api/event/${event.slug || event.id}.ics`')
                     v-icon mdi-calendar-export
 
-      .p-description.text-body-1(v-if='event.image_path' v-html='event.description')
+      .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-if='event.image_path && event.description' v-html='event.description')
 
       //- resources from fediverse
       #resources.mt-1(v-if='settings.enable_federation')

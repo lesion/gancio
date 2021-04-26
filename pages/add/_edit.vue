@@ -56,6 +56,7 @@
                 :delimiters="[',', ' ']"
                 :items="tags.map(t => t.tag)"
                 :label="$t('common.tags')")
+              v-img.col-12.col-sm-2.ml-3(v-if='mediaPreview' :src='mediaPreview')
 
       v-card-actions
         v-spacer
@@ -70,12 +71,11 @@ import Editor from '@/components/Editor'
 import List from '@/components/List'
 import ImportDialog from './ImportDialog'
 import DateInput from './DateInput'
-import HourInput from './HourInput'
 import WhereInput from './WhereInput'
 
 export default {
   name: 'NewEvent',
-  components: { List, Editor, ImportDialog, WhereInput, HourInput, DateInput },
+  components: { List, Editor, ImportDialog, WhereInput, DateInput },
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
@@ -107,6 +107,7 @@ export default {
       data.event.description = event.description
       data.event.id = event.id
       data.event.tags = event.tags
+      data.event.image_path = event.image_path
       return data
     }
     return {}
@@ -117,6 +118,7 @@ export default {
     return {
       valid: false,
       openImportDialog: false,
+      openMediaDialog: false,
       event: {
         place: { name: '', address: '' },
         title: '',
@@ -140,12 +142,27 @@ export default {
     }
   },
   computed: {
-    ...mapState(['tags', 'places', 'settings'])
+    ...mapState(['tags', 'places', 'settings']),
+    mediaPreview () {
+      if (!this.event.image && !this.event.image_path) {
+        return false
+      }
+      const url = this.event.image ? URL.createObjectURL(this.event.image) : `/media/thumb/${this.event.image_path}`
+      return url
+    }
   },
   methods: {
     ...mapActions(['updateMeta']),
     eventImported (event) {
       this.event = Object.assign(this.event, event)
+      this.date = {
+        recurrent: this.event.recurrent,
+        from: new Date(dayjs.unix(this.event.start_datetime)),
+        due: new Date(dayjs.unix(this.event.end_datetime)),
+        multidate: event.multidate,
+        fromHour: true,
+        dueHour: true
+      }
     },
     cleanFile () {
       this.event.image = {}
