@@ -11,21 +11,9 @@
             :hide-default-footer='instances.length<5'
             dense :headers='instancesHeader'
             @click:row='instanceSelected')
-            //- el-table-column(label='Domain' width='180')
-            //-   template(slot-scope='data')
-            //-     span(slot='reference') {{data.row.domain}}
-            //- el-table-column(label='Name' width='100')
-            //-   template(slot-scope='data')
-            //-     span(slot='reference') {{data.row.name}}
-            //- el-table-column(:label="$t('common.users')" width='70')
-            //-   template(slot-scope='data')
-            //-     span(slot='reference') {{data.row.users}}
-            //- el-table-column(:label="$t('common.actions')" width='120')
-            //-   template(slot-scope='data')
-            //-     el-button-group
-            //-       el-button(size='mini'
-            //-         :type='data.row.blocked?"danger":"warning"'
-            //-         @click='toggleBlock(data.row)') {{data.row.blocked?$t('admin.unblock'):$t('admin.block')}}
+            template(v-slot:item.blocked="{ item }")
+              v-icon(v-if='item.blocked') mdi-checkbox-intermediate
+              v-icon(v-else) mdi-checkbox-blank-outline
 
         v-col(:span='11')
           span {{$t('common.users')}}
@@ -34,8 +22,8 @@
             :items-per-page='5'
             :hide-default-footer='users.length<5'
             dense :headers='usersHeader')
-            template(v-slot:item.username="{item}")
-              a(:href='item.ap_id') {{item.object.preferredUsername}}
+            //- template(v-slot:item.username="{item}")
+            //-   a(:href='item.ap_id') {{item.object.preferredUsername}}
             //- el-table-column(:label="$t('common.user')" width='150')
             //-   template(slot-scope='data')
             //-     span(slot='reference')
@@ -86,12 +74,13 @@ export default {
       resources: [],
       users: [],
       usersHeader: [
-        { value: 'username', text: 'Name' }
+        { value: 'object.preferredUsername', text: 'Name' }
       ],
       instancesHeader: [
         { value: 'domain', text: 'Domain' },
         { value: 'name', text: 'Name' },
-        { value: 'users', text: 'N' }
+        { value: 'blocked', text: 'Blocked' },
+        { value: 'users', text: 'known users' }
       ],
       resourcesHeader: [
         { value: '', text: '' }
