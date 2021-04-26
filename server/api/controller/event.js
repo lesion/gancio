@@ -128,7 +128,7 @@ const eventController = {
 
     // get prev and next event
     const next = await Event.findOne({
-      attributes: ['id'],
+      attributes: ['id', 'slug'],
       where: {
         is_visible: true,
         recurrent: null,
@@ -138,7 +138,7 @@ const eventController = {
     })
 
     const prev = await Event.findOne({
-      attributes: ['id'],
+      attributes: ['id', 'slug'],
       where: {
         is_visible: true,
         recurrent: null,
@@ -149,8 +149,8 @@ const eventController = {
 
     if (event && (event.is_visible || is_admin)) {
       event = event.get()
-      event.next = next && next.id
-      event.prev = prev && prev.id
+      event.next = next && (next.slug || next.id)
+      event.prev = prev && (prev.slug || prev.id)
       event.tags = event.tags.map(t => t.tag)
       if (format === 'json') {
         res.json(event)
@@ -360,8 +360,8 @@ const eventController = {
         const old_path = path.resolve(config.upload_path, event.image_path)
         const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.image_path)
         try {
-          await fs.unlinkSync(old_path)
-          await fs.unlinkSync(old_thumb_path)
+          fs.unlinkSync(old_path)
+          fs.unlinkSync(old_thumb_path)
         } catch (e) {
           log.info(e.toString())
         }
