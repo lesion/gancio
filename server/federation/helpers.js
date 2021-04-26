@@ -27,7 +27,6 @@ const Helpers = {
     ]
     if (urlToIgnore.includes(req.path)) {
       log.debug(`Ignore noisy fediverse ${req.path}`)
-      log.debug(req)
       return res.status(404).send('Not Found')
     }
     next()
@@ -161,16 +160,17 @@ const Helpers = {
       })
       .catch(e => {
         log.error(e)
-        return false
+        return Instance.create({ name: domain, domain, blocked: false })
       })
     return instance
   },
 
   // ref: https://blog.joinmastodon.org/2018/07/how-to-make-friends-and-verify-requests/
   async verifySignature (req, res, next) {
+    // TODO: why do I need instance?
     const instance = await Helpers.getInstance(req.body.actor)
     if (!instance) {
-      log.warn(`[AP] Verify Signature: Instance not found ${req.body.actor}`)
+      log.warn(`Verify Signature: Instance not found ${req.body.actor}`)
       return res.status(401).send('Instance not found')
     }
     if (instance.blocked) {
@@ -188,10 +188,16 @@ const Helpers = {
       return res.status(401).send('User blocked')
     }
 
-    // little hack -> https://github.com/joyent/node-http-signature/pull/83
-    // req.headers.authorization = 'Signature ' + req.headers.signature
-
     req.fedi_user = user
+
+    // TODO: check Digest // cannot do this with json bodyparser
+    // const digest = crypto.createHash('sha256')
+    //   .update(req.body)
+    //   .digest('base64')
+    // if (`SHA-256=${digest}` !== req.headers.signature) {
+    //   log.warning(`Signature mismatch ${req.headers.signature} - ${digest}`)
+    //   return res.status(401).send('Signature mismatch')
+    // }
 
     // another little hack :/
     // https://github.com/joyent/node-http-signature/issues/87
