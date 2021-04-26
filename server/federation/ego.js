@@ -9,6 +9,7 @@ module.exports = {
     log.debug(`boost ${match[1]}`)
     const event = await Event.findByPk(Number(match[1]))
     if (!event) { return res.status(404).send('Event not found!') }
+    // TODO, has to be unique...
     await event.update({ boost: [...event.boost, req.body.actor] })
     res.sendStatus(201)
   },
@@ -28,6 +29,7 @@ module.exports = {
     const event = await Event.findByPk(Number(match[1]))
     log.debug(`${req.body.actor} bookmark ${event.title} (${event.likes.length})`)
     if (!event) { return res.status(404).send('Event not found!') }
+    // TODO: has to be unique
     await event.update({ likes: [...event.likes, req.body.actor] })
     res.sendStatus(201)
   },
