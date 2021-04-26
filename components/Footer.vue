@@ -2,7 +2,7 @@
   v-footer(color='secondary')
     v-btn(color='primary' text href='https://gancio.org') Gancio {{settings.version}}
     v-btn(v-for='link in settings.footerLinks'
-      :key='link.label' color='primary' text :href='link.href') {{link.label}}
+      :key='link.label' color='primary' text :to='link.href') {{link.label}}
 
     v-menu(v-if='settings.enable_trusted_instances && settings.trusted_instances && settings.trusted_instances.length'
       offset-y bottom open-on-hover transition="slide-y-transition")

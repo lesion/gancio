@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-card.h-event.event
+  v-card.h-event.event.d-flex
     nuxt-link(:to='`/event/${event.slug || event.id}`')
       v-img.img(:src="`/media/thumb/${event.image_path || 'logo.svg' }`")
       v-icon.float-right.mr-1(v-if='event.parentId' color='success') mdi-repeat

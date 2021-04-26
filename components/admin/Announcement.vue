@@ -5,10 +5,10 @@
     v-dialog(v-model='dialog' width='800px')
       v-card
         v-card-title {{$t('admin.new_announcement')}}
-        v-card-text
+        v-card-text.px-0
           v-form(v-model='valid' ref='announcement' @submit.prevent='save')
-            v-text-field(v-model='announcement.title' :label='$t("common.title")')
-            Editor.mt-2(v-model='announcement.announcement'
+            v-text-field.col-12(v-model='announcement.title' :label='$t("common.title")')
+            Editor.col-12(v-model='announcement.announcement'
               border no-save max-height='400px' :placeholder="$t('common.description')")
         v-card-actions
           v-spacer
