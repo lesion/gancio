@@ -52,6 +52,7 @@
                   v-model='event.image'
                   persistent-hint
                   accept='image/*')
+                v-img.col-12.col-sm-2.ml-3(v-if='mediaPreview' :src='mediaPreview')
 
               //- tags
               v-col(cols=12 md=6)
@@ -61,7 +62,6 @@
                   :delimiters="[',', ' ']"
                   :items="tags.map(t => t.tag)"
                   :label="$t('common.tags')")
-                v-img.col-12.col-sm-2.ml-3(v-if='mediaPreview' :src='mediaPreview')
 
       v-card-actions
         v-spacer
