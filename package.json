@@ -1,6 +1,6 @@
 {
   "name": "gancio",
-  "version": "1.0.4-dev",
+  "version": "1.0.5-dev",
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
@@ -38,7 +38,7 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
-    "date-fns": "^2.19.0",
+    "date-fns": "^2.21.1",
     "dayjs": "^1.10.4",
     "dompurify": "^2.2.7",
     "email-templates": "^8.0.3",
@@ -63,12 +63,12 @@
     "multer": "^1.4.2",
     "nuxt": "^2.15.3",
     "nuxt-express-module": "^0.0.11",
-    "pg": "^8.5.1",
+    "pg": "^8.6.0",
     "prom-client": "^13.1.0",
     "sequelize": "^6.6.2",
     "sequelize-cli": "^6.2.0",
     "sequelize-slugify": "^1.5.0",
-    "sharp": "^0.27.2",
+    "sharp": "^0.28.1",
     "sqlite3": "^5.0.2",
     "tiptap": "^1.32.0",
     "tiptap-extensions": "^1.35.0",
@@ -88,15 +88,15 @@
     "babel-eslint": "^10.1.0",
     "bufferutil": "^4.0.3",
     "canvas": "^2.7.0",
-    "eslint": "^7.22.0",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": ">=11.1.0",
     "eslint-plugin-nuxt": "^2.0.0",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-standard": "^5.0.0",
     "eslint-plugin-vue": "^7.8.0",
     "fibers": "^5.0.0",
@@ -118,13 +118,13 @@
     "vue": "^2.6.12",
     "vue-cli-plugin-vuetify": "~2.3.1",
     "vue-template-compiler": "^2.6.12",
-    "vuetify": "^2.4.8",
+    "vuetify": "^2.4.11",
     "vuetify-loader": "^1.7.1",
     "webpack": "4",
     "webpack-cli": "^4.5.0"
   },
   "resolutions": {
-    "prosemirror-model": "1.13.3"
+    "prosemirror-model": "1.14.1"
   },
   "bin": {
     "gancio": "server/cli.js"
