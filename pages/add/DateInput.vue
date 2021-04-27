@@ -1,5 +1,5 @@
 <template lang="pug">
-.when
+v-col(cols=12)
   .text-center
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-model='type' color='primary' @change='type => change("type", type)')
       v-btn(value='normal' label="normal") {{$t('event.normal')}}

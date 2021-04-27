@@ -1,31 +1,33 @@
 <template lang="pug">
   v-row
-    v-combobox.col-md-6(ref='place'
-      :rules="[$validators.required('common.where')]"
-      :label="$t('common.where')"
-      :hint="$t('event.where_description')"
-      :search-input.sync="placeName"
-      prepend-icon='mdi-map-marker'
-      persistent-hint
-      :value="value.name"
-      :items="filteredPlaces"
-      no-filter
-      item-text='name'
-      @change='selectPlace')
-      template(v-slot:item="{ item }")
-        v-list-item-content(two-line v-if='item.create')
-          v-list-item-title <v-icon color='primary'>mdi-plus</v-icon> {{item.name}}
-        v-list-item-content(two-line v-else)
-          v-list-item-title {{item.name}}
-          v-list-item-subtitle {{item.address}}
+    v-col(cols=12 md=6)
+      v-combobox(ref='place'
+        :rules="[$validators.required('common.where')]"
+        :label="$t('common.where')"
+        :hint="$t('event.where_description')"
+        :search-input.sync="placeName"
+        prepend-icon='mdi-map-marker'
+        persistent-hint
+        :value="value.name"
+        :items="filteredPlaces"
+        no-filter
+        item-text='name'
+        @change='selectPlace')
+        template(v-slot:item="{ item }")
+          v-list-item-content(two-line v-if='item.create')
+            v-list-item-title <v-icon color='primary'>mdi-plus</v-icon> {{item.name}}
+          v-list-item-content(two-line v-else)
+            v-list-item-title {{item.name}}
+            v-list-item-subtitle {{item.address}}
 
-    v-text-field.col-md-6(ref='address'
-      prepend-icon='mdi-map'
-      :disabled='disableAddress'
-      :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
-      :label="$t('common.address')"
-      @change="changeAddress"
-      :value="value.address")
+    v-col(cols=12 md=6)
+      v-text-field(ref='address'
+        prepend-icon='mdi-map'
+        :disabled='disableAddress'
+        :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
+        :label="$t('common.address')"
+        @change="changeAddress"
+        :value="value.address")
 
 </template>
 <script>

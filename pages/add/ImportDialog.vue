@@ -90,7 +90,6 @@ export default {
         // check if contain an h-event
         this.$emit('imported', ret[0])
       } catch (e) {
-        console.error(e)
         this.error = true
         this.errorMessage = String(e)
       }
