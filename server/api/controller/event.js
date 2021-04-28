@@ -118,12 +118,12 @@ const eventController = {
         order: [[Resource, 'id', 'DESC']]
       })
     } catch (e) {
-      console.error(e)
+      log.error(e)
       return res.sendStatus(400)
     }
 
     if (!event) {
-      return res.sendStatus(400)
+      return res.sendStatus(404)
     }
 
     // get prev and next event
@@ -147,6 +147,7 @@ const eventController = {
       order: [['start_datetime', 'DESC']]
     })
 
+    // TODO: also check if event is mine
     if (event && (event.is_visible || is_admin)) {
       event = event.get()
       event.next = next && (next.slug || next.id)

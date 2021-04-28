@@ -69,7 +69,7 @@ const Helpers = {
 
   async sendEvent (event, type = 'Create') {
     if (!settingsController.settings.enable_federation) {
-      log.debug('event not send, federation disabled')
+      log.info('event not send, federation disabled')
       return
     }
 
@@ -131,7 +131,7 @@ const Helpers = {
       })
 
     if (fedi_user) {
-      log.debug(`Create a new AP User => ${URL}`)
+      log.info(`Create a new AP User => ${URL}`)
       fedi_user = await APUser.create({ ap_id: URL, object: fedi_user })
     }
     return fedi_user
@@ -208,13 +208,13 @@ const Helpers = {
     // signature not valid, try without cache
     user = await Helpers.getActor(req.body.actor, instance, true)
     if (!user) {
-      log.debug(`Actor ${req.body.actor} not found`)
+      log.info(`Actor ${req.body.actor} not found`)
       return res.status(401).send('Actor not found')
     }
     if (httpSignature.verifySignature(parsed, user.object.publicKey.publicKeyPem)) { return next() }
 
     // still not valid
-    log.debug(`Invalid signature from user ${req.body.actor}`)
+    log.info(`Invalid signature from user ${req.body.actor}`)
     res.send('Request signature could not be verified', 401)
   }
 }

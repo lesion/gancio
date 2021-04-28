@@ -21,7 +21,7 @@ async function main () {
   try {
     await nuxt.listen()
   } catch (e) {
-    log.err(e)
+    log.error(e)
     return
   }
 

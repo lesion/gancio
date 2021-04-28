@@ -16,7 +16,7 @@ const notifier = {
 
   sendNotification (notification, event) {
     const promises = []
-    log.debug(`Send ${notification.type} notification ${notification.action}`)
+    log.info(`Send ${notification.type} notification ${notification.action}`)
     let p
     switch (notification.type) {
       // case 'mail': TODO: locale?

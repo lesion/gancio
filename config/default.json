@@ -6,6 +6,7 @@
     "host": "localhost",
     "port": 13120
   },
+  "loglevel": "debug",
   "db": {
     "dialect": "sqlite",
     "storage": "./db.sqlite",

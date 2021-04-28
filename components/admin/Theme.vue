@@ -117,7 +117,6 @@ export default {
       this.setSetting({ key: 'footerLinks', value: [{ href: '/about', label: 'about' }] })
     },
     forceLogoReload () {
-      this.$refs.upload.reset()
       this.logoKey++
     },
     resetLogo (e) {

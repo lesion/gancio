@@ -28,11 +28,11 @@ class Task {
     try {
       const ret = this.method.apply(this, this.args)
       if (ret && typeof ret.then === 'function') {
-        ret.catch(e => log.error('TASK ERROR ', this.name, e))
+        ret.catch(e => log.error('TASK ERROR [%s]: %s', this.name, e))
         return ret
       }
     } catch (e) {
-      log.error('TASK ERROR ', this.name, e)
+      log.error('TASK ERROR [%s]: %s ', this.name, e)
       return Promise.resolve(false)
     }
   }
@@ -62,14 +62,14 @@ class TaskManager {
 
   stop () {
     if (this.timeout) {
-      log.debug('STOP TASKMANAGER')
+      log.info('STOP TASKMANAGER')
       clearTimeout(this.timeout)
       this.timeout = false
     }
   }
 
   add (task) {
-    log.debug(`[TASK] Add ${task.name} (${task.repeatDelay * this.interval} seconds)`)
+    log.info(`[TASK] Add ${task.name} (${task.repeatDelay * this.interval} seconds)`)
     this.tasks.push(task)
   }
 

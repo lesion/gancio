@@ -282,6 +282,8 @@ If this is your first run use 'gancio setup --config <CONFIG_FILE.json>' `)
   }
   const config = require('config')
   await run_migrations(config.db)
+  consola.info(`Logging to ${path.resolve('./logs/gancio.log')} [level: ${config.loglevel}]`)
+
   require('./index')
 }
 

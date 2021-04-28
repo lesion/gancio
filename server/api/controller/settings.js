@@ -61,7 +61,7 @@ const settingsController = {
 
       // add pub/priv instance key if needed
       if (!settingsController.settings.publicKey) {
-        log.debug('Instance priv/pub key not found')
+        log.info('Instance priv/pub key not found, generating....')
         const { publicKey, privateKey } = await generateKeyPair('rsa', {
           modulusLength: 4096,
           publicKeyEncoding: {
@@ -92,7 +92,7 @@ const settingsController = {
   },
 
   async set (key, value, is_secret = false) {
-    log.debug(`SET ${key} ${value}`)
+    log.info(`SET ${key} ${value}`)
     try {
       const [setting, created] = await Setting.findOrCreate({
         where: { key },
@@ -115,7 +115,8 @@ const settingsController = {
 
   setLogo (req, res) {
     if (!req.file) {
-      return res.status(400).send('Mmmmm sould not be here!')
+      settingsController.set('logo', false)
+      return res.status(200)
     }
 
     const uploadedPath = path.join(req.file.destination, req.file.filename)
