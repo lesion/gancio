@@ -2,12 +2,10 @@
   v-container.pt-0.pt-md-2
     v-switch.mt-0(
       v-if='recurrentFilter && settings.allow_recurrent_event'
-      :value='filters.show_recurrent'
+      v-model='showRecurrent'
       inset color='primary'
       hide-details
-      :label="$t('event.show_recurrent')"
-      @change="toggleShowRecurrent")
-
+      :label="$t('event.show_recurrent')")
     v-autocomplete.mt-0(
       :label='$t("common.search")'
       :items='keywords'
@@ -51,6 +49,19 @@ export default {
   },
   computed: {
     ...mapState(['tags', 'places', 'settings']),
+    showRecurrent: {
+      get () {
+        return this.filters.show_recurrent
+      },
+      set (v) {
+        const filters = {
+          tags: this.filters.tags,
+          places: this.filters.places,
+          show_recurrent: v
+        }
+        this.$emit('update', filters)
+      }
+    },
     selectedFilters () {
       const tags = this.tags.filter(t => this.filters.tags.includes(t.tag)).map(t => ({ type: 'tag', label: t.tag, weigth: t.weigth, id: t.tag }))
       const places = this.places.filter(p => this.filters.places.includes(p.id))
@@ -71,14 +82,6 @@ export default {
         tags: item.type === 'tag' ? this.filters.tags.filter(f => f !== item.id) : this.filters.tags,
         places: item.type === 'place' ? this.filters.places.filter(f => f !== item.id) : this.filters.places,
         show_recurrent: this.filters.show_recurrent
-      }
-      this.$emit('update', filters)
-    },
-    toggleShowRecurrent (v) {
-      const filters = {
-        tags: this.filters.tags,
-        places: this.filters.places,
-        show_recurrent: v
       }
       this.$emit('update', filters)
     },
