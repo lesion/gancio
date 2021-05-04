@@ -124,9 +124,12 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    presets: ['@nuxt/babel-preset-app'],
+    presets: ['@nuxt/babel-preset-app', {
+      useBuiltIns: "usage", // or "entry"
+      corejs: 3
+    }],
     babel: {
-      plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]],
+      plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]]
     },
     cache: true
   }
