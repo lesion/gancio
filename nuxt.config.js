@@ -125,6 +125,9 @@ module.exports = {
    */
   build: {
     presets: ['@nuxt/babel-preset-app'],
+    babel: {
+      plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]],
+    },
     cache: true
   }
 }
