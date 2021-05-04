@@ -1,6 +1,6 @@
 {
   "name": "gancio",
-  "version": "1.0.5-dev",
+  "version": "1.0.6-dev",
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
@@ -40,7 +40,7 @@
     "cross-env": "^7.0.3",
     "date-fns": "^2.21.1",
     "dayjs": "^1.10.4",
-    "dompurify": "^2.2.7",
+    "dompurify": "^2.2.8",
     "email-templates": "^8.0.3",
     "express": "^4.17.1",
     "express-oauth-server": "^2.0.0",
@@ -76,7 +76,7 @@
     "url": "^0.11.0",
     "v-calendar": "2.3.0",
     "vue-clipboard2": "^0.3.1",
-    "vue-i18n": "^8.24.2",
+    "vue-i18n": "^8.24.4",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.2",
     "yargs": "^16.1.1"
