@@ -6,7 +6,7 @@ export function attributesFromEvents (_events, _tags) {
   const colors = ['blue', 'orange', 'yellow', 'teal', 'indigo', 'green', 'red', 'purple', 'pink', 'gray']
   const tags = take(_tags, 10).map(t => t.tag)
   let attributes = []
-  attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'green', fillMode: 'outline' } })
+  attributes.push({ key: 'today', dates: new Date(), bar: { color: 'green', fillMode: 'outline' } })
   const now = dayjs().unix()
 
   function getColor (event) {
