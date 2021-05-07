@@ -5,9 +5,10 @@
       v-row
         v-col(:span='12')
           span {{$t('common.instances')}}
-          //- v-text-field(v-model='instancesFilter' :placeholder="$t('admin.filter_instances')")
+          v-text-field(v-model='instancesFilter' :placeholder="$t('admin.filter_instances')")
           v-data-table(:items='instances'
             :items-per-page='5'
+            :search='instancesFilter'
             :hide-default-footer='instances.length<5'
             dense :headers='instancesHeader'
             @click:row='instanceSelected')
@@ -17,9 +18,10 @@
 
         v-col(:span='11')
           span {{$t('common.users')}}
-          //- v-text-field(v-model='usersFilter' :placeholder="$t('admin.filter_users')")
+          v-text-field(v-model='usersFilter' :placeholder="$t('admin.filter_users')")
           v-data-table(:items='users'
             :items-per-page='5'
+            :search='usersFilter'
             :hide-default-footer='users.length<5'
             dense :headers='usersHeader')
             //- template(v-slot:item.username="{item}")
@@ -84,7 +86,9 @@ export default {
       ],
       resourcesHeader: [
         { value: '', text: '' }
-      ]
+      ],
+      usersFilter: '',
+      instancesFilter: ''
     }
   },
   computed: {
