@@ -10,7 +10,7 @@ export function attributesFromEvents (_events, _tags) {
   const now = dayjs().unix()
 
   function getColor (event) {
-    const color = { class: 'vc-rounded-full', color: 'blue', fillMode: 'normal' }
+    const color = { class: 'vc-rounded-full', color: 'blue' }
     const tag = get(event, 'tags[0]')
     if (event.start_datetime < now) { color.class += ' vc-past' }
     if (!tag) { return color }
@@ -35,7 +35,7 @@ export function attributesFromEvents (_events, _tags) {
     .filter(e => e.multidate)
     .map(e => ({
       key: e.id,
-      highlight: getColor(e),
+      highlight: { start: { ...getColor(e), fillMode: 'solid' }, end: { ...getColor(e), fillMode: 'solid' } },
       dates: { start: new Date(e.start_datetime * 1000), end: new Date(e.end_datetime * 1000) }
     })))
 
