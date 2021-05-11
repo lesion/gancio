@@ -44,7 +44,12 @@ export default ({ app, store }) => {
       recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: dayjs.unix(parent.start_datetime).format('dddd') })
     } else if (frequency === '1m' || frequency === '2m') {
       const d = type === 'ordinal' ? dayjs.unix(parent.start_datetime).date() : dayjs.unix(parent.start_datetime).format('dddd')
-      recurrent = app.i18n.tc(`event.recurrent_${frequency}_${type}`, d)
+      if (type === 'ordinal') {
+        recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: d })
+      } else {
+        recurrent = app.i18n.t(`event.recurrent_${frequency}_ordinal`,
+          { n: app.i18n.t('ordinal.' + type), days: d })
+      }
     }
     return recurrent
   })

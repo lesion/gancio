@@ -496,7 +496,7 @@ const eventController = {
   },
 
   /**
-   * Ensure we have the next instances of recurrent events
+   * Ensure we have the next instance of a recurrent event
    */
   _createRecurrentOccurrence (e) {
     log.debug(`Create recurrent event [${e.id}] ${e.title}"`)
@@ -541,17 +541,24 @@ const eventController = {
           cursor = cursor.add(1, 'month')
         }
       } else { // weekday
-        const monthDay = start_date.format('D')
-        const n = Math.floor((monthDay - 1) / 7) + 1
-        cursor = cursor.startOf('month')
-        cursor = cursor.add(n, 'week')
-        cursor = cursor.day(start_date.day())
-        if (cursor.isBefore(dayjs())) {
-          cursor = cursor.add(1, 'month')
+        // get weekday
+        log.info(type)
+        // get recurrent freq details
+        if (type === -1) {
+          cursor = cursor.endOf('month')
+          cursor = cursor.subtract(1, 'week')
+          cursor = cursor.day(start_date.day())
+        } else {
+          cursor = cursor.startOf('month')
+          cursor = cursor.add(type, 'week')
+          cursor = cursor.day(start_date.day())
+          if (cursor.isBefore(dayjs())) {
+            cursor = cursor.add(1, 'month')
+          }
         }
       }
     }
-
+    log.info(cursor)
     event.start_datetime = cursor.unix()
     event.end_datetime = event.start_datetime + duration
     Event.create(event)

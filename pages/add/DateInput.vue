@@ -27,7 +27,7 @@ v-col(cols=12)
 
   div.text-center.mb-2(v-if='type === "recurrent"')
     span(v-if='value.recurrent.frequency !== "1m" && value.recurrent.frequency !== "2m"') {{whenPatterns}}
-    v-btn-toggle.mt-1.flex-column.flex-sm-row(v-else :value='value.recurrent.type' color='primary' @change='fq => change("", fq)')
+    v-btn-toggle.mt-1.flex-column.flex-sm-row(v-else :value='value.recurrent.type' color='primary' @change='fq => change("recurrentType", fq)')
       v-btn(v-for='whenPattern in whenPatterns' :value='whenPattern.key' :key='whenPatterns.key' small) {{whenPattern.label}}
 
   v-row.mt-3.col-md-6.mx-auto
@@ -133,27 +133,26 @@ export default {
           // { label: this.$tc(`event.recurrent_${freq}_ordinal`, { n, days: weekDay }), key: 'weekday' }
         ]
 
+        if (n < 5) {
+          patterns.push(
+            {
+              label: this.$t(`event.recurrent_${freq}_ordinal`, { n: this.$t(`ordinal.${n}`), days: weekDay }),
+              key: n
+            }
+          )
+        }
+
         // if selected day is in last week, propose also this type of selection
         const lastWeek = date.daysInMonth() - monthDay < 7
         if (lastWeek) {
           patterns.push(
             {
-              label: this.$t(`event.recurrent_${freq}_ordinal`,
-                { n: this.$t('ordinal.-1'), days: weekDay }),
-              key: 'weekday'
+              label: this.$t(`event.recurrent_${freq}_ordinal`, { n: this.$t('ordinal.-1'), days: weekDay }),
+              key: -1
             }
           )
         }
 
-        if (n < 5) {
-          patterns.push(
-            {
-              label: this.$t(`event.recurrent_${freq}_ordinal`,
-                { n: this.$t(`ordinal.${n}`), days: weekDay }),
-              key: 'weekday'
-            }
-          )
-        }
         return patterns
       } else if (freq === '1d') {
         return this.$t('event.recurrent_each_day')
@@ -198,6 +197,8 @@ export default {
         }
       } else if (what === 'frequency') {
         this.$emit('input', { ...this.value, recurrent: { ...this.value.recurrent, frequency: value } })
+      } else if (what === 'recurrentType') {
+        this.$emit('input', { ...this.value, recurrent: { ...this.value.recurrent, type: value } })
       } else if (what === 'fromHour') {
         if (value) {
           const [hour, minute] = value.split(':')
@@ -221,6 +222,7 @@ export default {
         } else {
           this.$emit('input', { ...this.value, dueHour: false })
         }
+      // change date in calendar (could be a range or a recurrent event...)
       } else if (what === 'date') {
         if (value === null) {
           this.$emit('input', { ...this.value, from: null, fromHour: false })
