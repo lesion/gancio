@@ -40,6 +40,7 @@ export const mutations = {
   },
   setSettings (state, settings) {
     state.settings = settings
+    state.filters.show_recurrent = settings.recurrent_event_visible
   },
   setSetting (state, setting) {
     state.settings[setting.key] = setting.value
