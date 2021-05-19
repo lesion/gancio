@@ -74,14 +74,6 @@ v-container#event
           small.mr-3 🔖 {{event.likes.length}}
           small ✊ {{event.boost.length}}<br/>
 
-        //- p.p-2
-          //- v-btn(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
-          //- span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
-
-        //- v-dialog(v-model='showFollowMe' destroy-on-close max-width='500px')
-          h4(slot='title') {{$t('common.follow_me_title')}}
-          FollowMe(@close='showFollowMe=false' is-dialog)
-
         v-dialog.showResource#resourceDialog(v-model='showResources' fullscreen
           width='95vw'
           destroy-on-close
@@ -132,13 +124,12 @@ v-container#event
 import { mapState } from 'vuex'
 import EventAdmin from './eventAdmin'
 import EmbedEvent from './embedEvent'
-import FollowMe from '../../components/FollowMe'
 import moment from 'dayjs'
 const htmlToText = require('html-to-text')
 
 export default {
   name: 'Event',
-  components: { EventAdmin, EmbedEvent, FollowMe },
+  components: { EventAdmin, EmbedEvent },
   async asyncData ({ $axios, params, error, store }) {
     try {
       const event = await $axios.$get(`/event/${params.id}`)
@@ -151,7 +142,6 @@ export default {
     return {
       event: {},
       showEmbed: false,
-      showFollowMe: false,
       showResources: false,
       selectedResource: { data: { attachment: [] } }
     }

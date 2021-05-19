@@ -64,9 +64,9 @@
                   color='primary' v-clipboard:copy='listScript' v-clipboard:success='copyLink.bind(this,"list")') {{$t('common.copy')}}
                     v-icon.ml-1 mdi-content-copy
 
-        //- v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
-        //- v-tab-item(v-if='settings.enable_federation')
-        //-   FollowMe
+        v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
+        v-tab-item(v-if='settings.enable_federation')
+          FollowMe
           //- TOFIX
           //- v-tab.pt-1(label='calendar' name='calendar')
           //- v-tab-item
