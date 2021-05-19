@@ -73,7 +73,7 @@ const userController = {
     }
 
     await user.update(req.body)
-    res.json(user)
+    res.status(200).send()
   },
 
   async register (req, res) {
