@@ -2,7 +2,7 @@ const express = require('express')
 const multer = require('multer')
 const cors = require('cors')()
 
-const { isAuth, isAdmin, hasPerm } = require('./auth')
+const { isAuth, isAdmin } = require('./auth')
 const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 const userController = require('./controller/user')
@@ -54,11 +54,11 @@ api.post('/user/register', userController.register)
 api.post('/user', isAdmin, userController.create)
 
 // update user
-api.put('/user', hasPerm('user:update'), userController.update)
+api.put('/user', isAuth, userController.update)
 
 // delete user
 api.delete('/user/:id', isAdmin, userController.remove)
-api.delete('/user', hasPerm('user:remove'), userController.remove)
+api.delete('/user', isAdmin, userController.remove)
 
 // get all users
 api.get('/users', isAdmin, userController.getAll)
@@ -85,12 +85,15 @@ api.put('/place', isAdmin, eventController.updatePlace)
  * @param {array} [recurrent.days] - array of days
  * @param {image} [image] - Image
  */
-api.post('/event', hasPerm('event:write'), upload.single('image'), eventController.add)
-api.put('/event', hasPerm('event:write'), upload.single('image'), eventController.update)
-api.get('/event/import', helpers.importURL)
+
+// allow anyone to add an event (anon event has to be confirmed, TODO: flood protection)
+api.post('/event', upload.single('image'), eventController.add)
+
+api.put('/event', isAuth, upload.single('image'), eventController.update)
+api.get('/event/import', isAuth, helpers.importURL)
 
 // remove event
-api.delete('/event/:id', hasPerm('event:remove'), eventController.remove)
+api.delete('/event/:id', isAuth, eventController.remove)
 
 // get tags/places
 api.get('/event/meta', eventController.getMeta)
@@ -107,8 +110,8 @@ api.post('/settings', isAdmin, settingsController.setRequest)
 api.post('/settings/logo', isAdmin, multer({ dest: config.upload_path }).single('logo'), settingsController.setLogo)
 
 // confirm event
-api.put('/event/confirm/:event_id', hasPerm('event:write'), eventController.confirm)
-api.put('/event/unconfirm/:event_id', hasPerm('event:write'), eventController.unconfirm)
+api.put('/event/confirm/:event_id', isAuth, eventController.confirm)
+api.put('/event/unconfirm/:event_id', isAuth, eventController.unconfirm)
 
 // get event
 api.get('/event/:event_id.:format?', cors, eventController.get)
@@ -134,8 +137,8 @@ api.put('/announcements/:announce_id', isAdmin, announceController.update)
 api.delete('/announcements/:announce_id', isAdmin, announceController.remove)
 
 // OAUTH
-api.get('/clients', hasPerm('oauth:read'), oauthController.getClients)
-api.get('/client/:client_id', hasPerm('oauth:read'), oauthController.getClient)
+api.get('/clients', isAuth, oauthController.getClients)
+api.get('/client/:client_id', isAuth, oauthController.getClient)
 api.post('/client', oauthController.createClient)
 
 api.use((req, res) => res.sendStatus(404))
