@@ -34,7 +34,7 @@
 
       v-dialog(v-model='linkModal' width='500')
         v-card
-          v-card-title {{$t('admin.add_footer_link')}}
+          v-card-title {{$t('admin.footer_links')}}
           v-card-text
             v-form(v-model='valid' ref='linkModalForm')
               v-text-field(v-model='link.label'
@@ -52,16 +52,16 @@
     v-card-text
       v-btn(color='primary' text @click='openLinkModal') <v-icon>mdi-plus</v-icon> {{$t('admin.add_link')}}
       v-btn(color='warning' text @click='reset') <v-icon>mdi-restore</v-icon> {{$t('common.reset')}}
-      v-list
+      v-list.mt-1(two-line subheader)
         v-list-item(v-for='link in settings.footerLinks'
-          :key='`${link.label}`')
+          :key='`${link.label}`' @click='editFooterLink(link)')
           v-list-item-content
             v-list-item-title {{link.label}}
             v-list-item-subtitle {{link.href}}
           v-list-item-action
-            v-btn.float-right(icon color='accent' @click='editFooterLink(link)')
-              v-icon mdi-pencil
-            v-btn(icon color='error' @click='removeFooterLink(link)')
+            //- v-btn.float-right(icon color='accent' @click='editFooterLink(link)')
+            //-   v-icon mdi-pencil
+            v-btn(icon color='error' @click.stop='removeFooterLink(link)')
               v-icon mdi-delete-forever
 
 </template>
@@ -75,9 +75,9 @@ export default {
       valid: false,
       logoKey: 0,
       link: { href: '', label: '' },
-      linkModal: false,
-      menu: [false, false, false, false],
-      colors: { primary: '', secondary: '', accent: '', error: '', info: '', success: '', warning: '' }
+      linkModal: false
+      // menu: [false, false, false, false]
+      // colors: { primary: '', secondary: '', accent: '', error: '', info: '', success: '', warning: '' }
       //   primary: {},
       //   secondary: {}
       // }
@@ -95,26 +95,31 @@ export default {
         this.setSetting({ key: 'theme.is_dark', value })
       }
     }
-    // 'colors[0]': {
-    // get () {
-    //   return this.settings['theme.colors'] || [0, 0]
-    // },
-    // set (value) {
-    //   console.error(value)
-    //     if (!value) { return }
-    //     this.setSetting({ key: 'theme.primary', value })
-    //     if (this.settings['theme.is_dark']) {
-    //       this.$vuetify.theme.themes.dark.primary = value
-    //     } else {
-    //       this.$vuetify.theme.themes.light.primary = value
-    //     }
-    // }
-    // }
+  //   'colors[0]': {
+  //     get () {
+  //       return this.settings['theme.colors'] || [0, 0]
+  //     },
+  //     set (value) {
+  //       console.error(value)
+  //       if (!value) { return }
+  //       this.setSetting({ key: 'theme.primary', value })
+  //       if (this.settings['theme.is_dark']) {
+  //         this.$vuetify.theme.themes.dark.primary = value
+  //       } else {
+  //         this.$vuetify.theme.themes.light.primary = value
+  //       }
+  //     }
+  //   }
   },
   methods: {
     ...mapActions(['setSetting']),
     reset () {
-      this.setSetting({ key: 'footerLinks', value: [{ href: '/about', label: 'about' }] })
+      this.setSetting({
+        key: 'footerLinks',
+        value: [
+          { href: '/about', label: 'about' },
+          { href: '/', label: 'home' }]
+      })
     },
     forceLogoReload () {
       this.logoKey++
