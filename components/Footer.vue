@@ -1,6 +1,6 @@
 <template lang="pug">
   v-footer(color='secondary')
-    v-btn(color='primary' text href='https://gancio.org') Gancio {{settings.version}}
+    v-btn(color='primary' text href='https://gancio.org' target='_blank') Gancio <small>{{settings.version}}</small>
     v-btn(v-for='link in settings.footerLinks'
       :key='link.label' color='primary' text :to='link.href') {{link.label}}
 
