@@ -38,19 +38,19 @@
         persistent-hint
         @blur='save("description", description)')
 
-      v-switch.mt-5(v-model='allow_registration'
+      v-switch.mt-4(v-model='allow_registration'
         inset
         :label="$t('admin.allow_registration_description')")
 
-      v-switch.mt-4(v-model='allow_anon_event'
+      v-switch.mt-1(v-model='allow_anon_event'
         inset
         :label="$t('admin.allow_anon_event')")
 
-      v-switch.mt-4(v-model='allow_recurrent_event'
+      v-switch.mt-1(v-model='allow_recurrent_event'
         inset
         :label="$t('admin.allow_recurrent_event')")
 
-      v-switch.mt-4(v-if='allow_recurrent_event'
+      v-switch.mt-1(v-if='allow_recurrent_event'
         v-model='recurrent_event_visible'
         inset
         :label="$t('admin.recurrent_event_visible')")
