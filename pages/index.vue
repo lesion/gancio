@@ -6,8 +6,8 @@
       Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
     //- Calendar and search bar
-    v-row
-      .col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12
+    v-row.pt-0.pt-sm-2
+      .col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-4.pa-sm-3
         //- this is needed as v-calendar does not support SSR
         //- https://github.com/nathanreyes/v-calendar/issues/336
         client-only
@@ -18,7 +18,7 @@
         v-chip(v-if='selectedDay' close @click:close='dayChange({ date: selectedDay})') {{selectedDay}}
 
     //- Events
-    #events.mt-1
+    #events.mb-2.mt-1.pl-1.pl-md-0
       //- div.event(v-for='(event, idx) in events' :key='event.id' v-intersect="(entries, observer, isIntersecting) => intersecting[event.id] = isIntersecting")
       Event(:event='event' v-for='(event, idx) in visibleEvents' :key='event.id' @tagclick='tagClick' @placeclick='placeClick')
 

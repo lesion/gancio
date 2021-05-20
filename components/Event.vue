@@ -10,9 +10,9 @@
       .d-none.dt-end {{event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
       a.place.d-block.p-location.pl-0(text color='primary' @click="$emit('placeclick', event.place.id)") <v-icon>mdi-map-marker</v-icon> {{event.place.name}}
 
-    v-card-actions.actions.justify-space-between
+    v-card-actions.pt-0.actions.justify-space-between
       .tags
-        v-chip.ml-1.px-2(v-for='tag in event.tags' small
+        v-chip.ml-1.mt-1(v-for='tag in event.tags.slice(0,6)' small
           :key='tag' outlined color='primary' @click="$emit('tagclick', tag)") {{tag}}
 
       v-menu(offset-y)

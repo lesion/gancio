@@ -12,9 +12,10 @@
       offset-y bottom open-on-hover transition="slide-y-transition")
       template(v-slot:activator="{ on, attrs }")
         v-btn.ml-1(v-bind='attrs' v-on='on' color='primary' text) {{$t('common.places')}}
-      v-list
+      v-list(subheaders two-lines)
         v-list-item(v-for='instance in settings.trusted_instances'
           :key='instance.name'
+          target='_blank'
           :href='instance.url'
           two-line)
           v-list-item-avatar

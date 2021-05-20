@@ -307,6 +307,8 @@ export default {
 <style lang='less'>
 .title {
   margin-bottom: 25px;
+  color: yellow;
+  font-weight: 300 !important;
 }
 .main_image {
   // width: 100%;
