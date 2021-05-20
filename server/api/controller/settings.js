@@ -93,7 +93,7 @@ const settingsController = {
   },
 
   async set (key, value, is_secret = false) {
-    log.info(`SET ${key} ${value}`)
+    log.info(`SET ${key} ${is_secret ? '*****' : value}`)
     try {
       const [setting, created] = await Setting.findOrCreate({
         where: { key },
