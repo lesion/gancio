@@ -24,7 +24,8 @@
     "locales/email/",
     "locales/",
     "store/",
-    "config/",
+    "config/default.json",
+    "config/production.js",
     ".nuxt/"
   ],
   "dependencies": {
