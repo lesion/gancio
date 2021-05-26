@@ -18,7 +18,7 @@
         v-chip(v-if='selectedDay' close @click:close='dayChange({ date: selectedDay})') {{selectedDay}}
 
     //- Events
-    #events.mb-2.mt-1.pl-1.pl-md-0
+    #events.mb-2.mt-1.pl-1.pl-sm-2
       //- div.event(v-for='(event, idx) in events' :key='event.id' v-intersect="(entries, observer, isIntersecting) => intersecting[event.id] = isIntersecting")
       Event(:event='event' v-for='(event, idx) in visibleEvents' :key='event.id' @tagclick='tagClick' @placeclick='placeClick')
 

@@ -21,8 +21,8 @@ const logger = createLogger({
     : [new DailyRotateFile({
         handleExceptions: true,
         handleRejections: true,
-        level: config.loglevel || 'info',
-        filename: './logs/gancio.%DATE%.log',
+        level: config.log_level || 'info',
+        filename: config.log_path + '/gancio.%DATE%.log',
         symlinkName: 'gancio.log',
         createSymlink: true,
         zippedArchive: true,

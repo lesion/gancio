@@ -163,6 +163,12 @@ async function setupQuestionnaire (is_docker, db) {
   })
 
   questions.push({
+    name: 'log_path',
+    message: 'Log path',
+    default: '/opt/gancio/logs'
+  })
+
+  questions.push({
     name: 'smtp_type',
     message: 'How should we send the emails ?',
     type: 'list',
@@ -228,6 +234,8 @@ async function setupQuestionnaire (is_docker, db) {
   if (is_docker) {
     answers.server = { host: '0.0.0.0', port: 13120 }
     answers.upload_path = '/opt/gancio/uploads'
+    answers.log_level = 'debug'
+    answers.log_path = '/opt/gancio/logs'
     if (db === 'sqlite') {
       answers.db = { dialect: db, storage: '/opt/gancio/db.sqlite' }
     } else {
@@ -282,7 +290,7 @@ If this is your first run use 'gancio setup --config <CONFIG_FILE.json>' `)
   }
   const config = require('config')
   await run_migrations(config.db)
-  consola.info(`Logging to ${path.resolve('./logs/gancio.log')} [level: ${config.loglevel}]`)
+  consola.info(`Logging to ${path.resolve(`${config.log_path}/gancio.log`)} [level: ${config.log_level}]`)
 
   require('./index')
 }

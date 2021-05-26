@@ -27,6 +27,8 @@ module.exports = {
     delete config.smtp_need_auth
     config.admin_email = admin.email
     config.db.logging = false
+    config.log_level = 'debug'
+    config.log_path = '/opt/gancio/logs'
     consola.info(`Save configuration to ${config_path}`)
     try {
       fs.writeFileSync(config_path, JSON.stringify(config, null, 2))
