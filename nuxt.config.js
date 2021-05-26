@@ -1,5 +1,4 @@
 const conf = require('config')
-const { format, transports } = require('winston')
 
 module.exports = {
   telemetry: false,
@@ -61,23 +60,6 @@ module.exports = {
     ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }]
   ],
 
-  // configure nuxt-winston-log module
-  winstonLog: {
-    skipRequestMiddlewareHandler: true,
-    useDefaultLogger: false,
-    loggerOptions: {
-      transports: process.env.NODE_ENV !== 'production'
-        ? [new transports.Console(
-            { level: 'debug', format: format.combine(format.colorize(), format.simple(), format.errors({ stack: true })) }
-          )]
-        : [new transports.File(
-            {
-              filename: 'logs/gancio.log',
-              format: format.combine(format.simple(), format.errors({ stack: true }))
-            }
-          )]
-    }
-  },
   /*
    ** Axios module configuration
    * See https://github.com/nuxt-community/axios-module#options
@@ -118,6 +100,7 @@ module.exports = {
   vuetify: {
     defaultAssets: false,
     optionsPath: './vuetify.options.js'
+    // treeShake: true
     /* module options */
   },
   /*
@@ -125,7 +108,7 @@ module.exports = {
    */
   build: {
     presets: ['@nuxt/babel-preset-app', {
-      useBuiltIns: "usage", // or "entry"
+      useBuiltIns: 'usage', // or "entry"
       corejs: 3
     }],
     babel: {
