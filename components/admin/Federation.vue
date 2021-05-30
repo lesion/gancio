@@ -55,7 +55,7 @@
               v-btn(color='error' @click='dialogAddInstance=false') {{$t('common.cancel')}}
               v-btn(color='primary' :disabled='!valid' @click='createTrustedInstance') {{$t('common.ok')}}
 
-        v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon>mdi-plus</v-icon> Add instance
+        v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon>mdi-plus</v-icon> {{$t('admin.add_instance')}}
         v-data-table(
           v-if='settings.trusted_instances.length'
           :hide-default-footer='settings.trusted_instances.length<10'

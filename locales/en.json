@@ -172,6 +172,7 @@
         "federation": "Federation / ActivityPub",
         "enable_federation": "Turn on federation",
         "enable_federation_help": "It will be possible to follow this instance from the fediverse",
+        "add_instance": "Add instance",
         "select_instance_timezone": "Time zone",
         "enable_resources": "Turn on resources",
         "enable_resources_help": "Allows adding resources to the event from the fediverse",

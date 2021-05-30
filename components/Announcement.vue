@@ -10,11 +10,6 @@ export default {
   props: {
     announcement: { type: Object, default: () => ({}) }
   },
-  computed: {
-    ...mapState(['announcements']),
-    description () {
-      return this.announcement.announcement.replace(/(<br>)+/g, '<br>')
-    }
-  }
+  computed: mapState(['announcements'])
 }
 </script>

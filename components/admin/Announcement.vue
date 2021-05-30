@@ -6,14 +6,16 @@
       v-card
         v-card-title {{$t('admin.new_announcement')}}
         v-card-text.px-0
-          v-form(v-model='valid' ref='announcement' @submit.prevent='save')
-            v-text-field.col-12(v-model='announcement.title' :label='$t("common.title")')
+          v-form(v-model='valid' ref='announcement' @submit.prevent='save' lazy-validation)
+            v-text-field.col-12(v-model='announcement.title'
+              :rules="[$validators.required('common.title')]"
+              :label='$t("common.title")')
             Editor.col-12(v-model='announcement.announcement'
               border no-save max-height='400px' :placeholder="$t('common.description')")
         v-card-actions
           v-spacer
           v-btn(@click='dialog=false' color='error') {{$t('common.cancel')}}
-          v-btn(@click='save' color='primary' :disabled='loading' :loading='loading') {{$t(`common.${editing?'save':'send'}`)}}
+          v-btn(@click='save' color='primary' :disabled='!valid || loading' :loading='loading') {{$t(`common.${editing?'save':'send'}`)}}
 
     v-btn(@click='openDialog' text color='primary') <v-icon>mdi-plus</v-icon> {{$t('common.add')}}
     v-card-text
@@ -86,6 +88,7 @@ export default {
         })
     },
     async save () {
+      if (!this.$refs.announcement.validate()) { return }
       this.loading = true
       try {
         let announcement = null

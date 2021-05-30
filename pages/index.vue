@@ -2,7 +2,7 @@
   v-container#home(fluid)
 
     //- Announcements
-    #announcements.mr-1
+    #announcements.mx-1.mt-1(v-if='announcements.length')
       Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
     //- Calendar and search bar
