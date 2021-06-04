@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Backup
-permalink: /backup
+permalink: /install/backup
 nav_order: 5
 parent: Install
 ---
@@ -9,7 +9,7 @@ parent: Install
 ## Backup
 
 The following commands should be valid for every setup (docker/debian/sqlite/postgres) but check your installation directory first.
-This includes database, configuration, custom user locales, images and thumbnails for every release.
+This includes database, configuration, custom user locales, logs, images and thumbnails.
 
 ```bash
 cd /opt/gancio/ # or /home/gancio or where your installation is

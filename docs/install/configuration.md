@@ -1,7 +1,6 @@
 ---
-layout: default
 title: Configuration
-permalink: /config
+permalink: /install/config
 nav_order: 6
 parent: Install
 ---

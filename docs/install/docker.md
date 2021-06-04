@@ -5,8 +5,8 @@ permalink: /install/docker
 parent: Install
 nav_order: 2
 ---
-## Table of contents
-{: .no_toc .text-delta }
+## Docker installation
+{: .no_toc }
 
 1. TOC
 {:toc}
@@ -83,14 +83,14 @@ tail -f  data/logs/gancio.log
 > error "Upgrade from a version < 1.0"
 > Since v1.0 our docker setup is changed and a new container has to be built:
 >
-> - `cd /opt/gancio`
-> - [Backup your data](/backup)
-> - Download new `Dockerfile` => `wget https://gancio.org/docker/Dockerfile`
-> - Download new `docker-compose.yml`  (modify DB to sqlite or postgres)-> `wget https://gancio.org/docker/<DB>/docker-compose.yml`
-> - Build the new container `docker-compose build`
-> - Extract your backup into `./data` => `mkdir data; tar xvzf gancio-<yourLastBackup>-backup.tgz -C data`
-> - Stop your old container `docker-compose stop`
-> - Start your new container `docker-compose up`
+> 1. `cd /opt/gancio`
+> 1. [Backup your data](/backup)
+> 1. Download new `Dockerfile` <br/> `wget https://gancio.org/docker/Dockerfile`
+> 1. Download new `docker-compose.yml`  (substitute \<DB\> to sqlite or postgres):  <br/>`wget https://gancio.org/docker/<DB>/docker-compose.yml`
+> 1. Build the new container `docker-compose build`
+> 1. Extract your backup into `./data` <br/>`mkdir data; tar xvzf gancio-<yourLastBackup>-backup.tgz -C data`
+> 1. Stop your old container `docker-compose stop`
+> 1. Start your new container `docker-compose up`
 
 
 ```bash
