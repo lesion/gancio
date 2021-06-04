@@ -1,5 +1,5 @@
 <template lang="pug">
-v-container#event
+v-container#event.pa-0.pa-sm-2
   //- EVENT PAGE
   //- gancio supports microformats (http://microformats.org/wiki/h-event)
   v-card.h-event
