@@ -55,8 +55,8 @@ module.exports = {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/auth',
+    './@nuxtjs/axios',
+    './@nuxtjs/auth',
     ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }]
   ],
 
@@ -99,10 +99,11 @@ module.exports = {
   ],
   vuetify: {
     defaultAssets: false,
-    optionsPath: './vuetify.options.js'
-    // treeShake: true
+    optionsPath: './vuetify.options.js',
+    treeShake: true
     /* module options */
   },
+
   /*
    ** Build configuration
    */

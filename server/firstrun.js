@@ -28,7 +28,6 @@ module.exports = {
     config.admin_email = admin.email
     config.db.logging = false
     config.log_level = 'debug'
-    config.log_path = '/opt/gancio/logs'
     consola.info(`Save configuration to ${config_path}`)
     try {
       fs.writeFileSync(config_path, JSON.stringify(config, null, 2))
@@ -39,7 +38,7 @@ module.exports = {
     // sync db
     const db = require('./api/models/index')
     const User = require('./api/models/user')
-    const Notification = require('./api/models/notification')
+    // const Notification = require('./api/models/notification')
     const users = await User.findAll()
     if (users.length) {
       consola.warn(' ⚠   Non empty db! Please move your current db elsewhere than retry.')
@@ -67,11 +66,11 @@ module.exports = {
     // try {
 
     //   // send confirmed events to mastodon
-    await Notification.create({ action: 'Create', type: 'ap', filters: '{ "is_visible": true }' })
-    await Notification.create({ action: 'Update', type: 'ap', filters: '{ "is_visible": true }' })
-    await Notification.create({ action: 'Delete', type: 'ap', filters: '{ "is_visible": true }' })
-    //   // send anon events to admin
-    await Notification.create({ action: 'Create', type: 'admin_email', filters: '{ "is_visible": false }' })
+    // await Notification.create({ action: 'Create', type: 'ap', filters: '{ "is_visible": true }' })
+    // await Notification.create({ action: 'Update', type: 'ap', filters: '{ "is_visible": true }' })
+    // await Notification.create({ action: 'Delete', type: 'ap', filters: '{ "is_visible": true }' })
+    // //   // send anon events to admin
+    // await Notification.create({ action: 'Create', type: 'admin_email', filters: '{ "is_visible": false }' })
     // }
 
     // TODO email's notifications
