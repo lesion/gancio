@@ -19,7 +19,7 @@ apt-get update && apt-get install yarn
 
 1. Install Gancio
 ```bash
-yarn global add --silent https://gancio.org/latest.tgz 2> /dev/null
+yarn global add --silent {{site.url}}{% link /latest.tgz %} 2> /dev/null
 ```
 
 1. Setup with postgreSQL __(optional as you can choose sqlite)__
@@ -64,6 +64,6 @@ sudo pm2 startup -u gancio
 
 ## Upgrade
 ```bash
-sudo yarn global add --silent https://gancio.org/latest.tgz  2> /dev/null
+sudo yarn global add --silent {{site.url}}{% link /latest.tgz %}  2> /dev/null
 sudo service pm2 restart
 ```

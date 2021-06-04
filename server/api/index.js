@@ -71,7 +71,7 @@ api.put('/place', isAdmin, eventController.updatePlace)
  * @category Event
  * @name /event
  * @type POST
- * @info `Content-Type` has to be `multipart/form-data` 'cause support image upload
+ * @info `Content-Type` has to be `multipart/form-data` to support image upload
  * @param {string} title - event's title
  * @param {string} description - event's description (html accepted and sanitized)
  * @param {string} place_name - the name of the place

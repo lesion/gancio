@@ -26,8 +26,8 @@ cd /opt/gancio
 <div class='code-example bg-grey-lt-100' markdown="1">
 1. **Download docker-compose.yml and Dockerfile**
 ```bash
-wget https://gancio.org/docker/Dockerfile
-wget https://gancio.org/docker/sqlite/docker-compose.yml
+wget {{site.url}}{% link /docker/Dockerfile %}
+wget {{site.url}}{% link /docker/sqlite/docker-compose.yml %}
 ```
 
 
@@ -43,8 +43,8 @@ docker-compose run --rm gancio gancio setup --docker --db=sqlite
 
 1. **Download docker-compose.yml and Dockerfile**
 ```bash
-wget https://gancio.org/docker/Dockerfile
-wget https://gancio.org/docker/postgres/docker-compose.yml
+wget {{site.url}}{% link /docker/Dockerfile %}
+wget {{site.url}}{% link /docker/postgres/docker-compose.yml %}
 ```
 
 1. Build docker image and launch interactive setup
@@ -71,22 +71,22 @@ tail -f  data/logs/gancio.log
 
 1. Point your web browser to [http://localhost:13120](http://localhost:13120) or where you specified during setup and enjoy :tada:
 
-1. Edit `data/config.json` and restart the container on your needs, see [Configuration](/config) for more details.
+1. Edit `data/config.json` and restart the container on your needs, see [Configuration]({% link install/configuration.md %}) for more details.
 
 ## Upgrade
 
 > warning "Backup your data"
 > Backup your data is generally a good thing to do and this is especially true before upgrading.
-> Don't be lazy and [backup](/backup) your data!
+> Don't be lazy and [backup]({% link install/backup.md %}) your data!
 
 
 > error "Upgrade from a version < 1.0"
 > Since v1.0 our docker setup is changed and a new container has to be built:
 >
 > 1. `cd /opt/gancio`
-> 1. [Backup your data](/backup)
-> 1. Download new `Dockerfile` <br/> `wget https://gancio.org/docker/Dockerfile`
-> 1. Download new `docker-compose.yml`  (substitute \<DB\> to sqlite or postgres):  <br/>`wget https://gancio.org/docker/<DB>/docker-compose.yml`
+> 1. [Backup your data]({% link install/backup.md %})
+> 1. Download new `Dockerfile` <br/> `wget {{site.url}}{% link /docker/Dockerfile %}`
+> 1. Download new `docker-compose.yml`  (substitute `sqlite` to `postgres` in case):  <br/>`wget {{site.url}}{% link /docker/sqlite/docker-compose.yml %}`
 > 1. Build the new container `docker-compose build`
 > 1. Extract your backup into `./data` <br/>`mkdir data; tar xvzf gancio-<yourLastBackup>-backup.tgz -C data`
 > 1. Stop your old container `docker-compose stop`
