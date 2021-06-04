@@ -7,7 +7,7 @@
     "port": 13120
   },
   "log_level": "debug",
-  "log_path": "/opt/gancio/logs",
+  "log_path": "./logs",
   "db": {
     "dialect": "sqlite",
     "storage": "./db.sqlite",
