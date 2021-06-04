@@ -17,16 +17,17 @@ services:
         - 5432:5432
   gancio:
     build: .
-    image: node:latest
-    environment:
-      - DEBUG=*,-babel,-follow-redirects,-send,-body-parser:*,-express:*,-connect:*,-sequelize:*
-    container_name: gancio
     restart: always
-    command: gancio start --docker --db=postgres
+    image: node:buster
+    user: node
+    container_name: gancio
+    environment:
+      - PATH=$PATH:/home/node/.yarn/bin
+      - GANCIO_DATA=/home/node/data
+    command: gancio start --docker
     volumes:
-      - ./config.json:/opt/gancio/config.json
-      - ./uploads:/opt/gancio/uploads
+      - ./data:/home/node/data
+    ports:
+      - "127.0.0.1:13120:13120"
     depends_on:
         - db
-    ports:
-      - 127.0.0.1:13120:13120
