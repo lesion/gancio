@@ -21,7 +21,7 @@ The title will be in rss feed, in html head and in emails:
 
 `"title": "Gancio"`
 
-![title](assets/title.png)
+![title](../assets/title.png)
 
 - ### Description
 `"description": "a shared agenda for local communities"`

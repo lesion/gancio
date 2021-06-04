@@ -16,6 +16,11 @@ $svg-warning-color: "f0ad4e";
 $svg-error-color: "d9534f";
 $svg-citation-color: "495057";
 
+.nav-list .nav-list-item {
+  font-size: 18px !important;
+  padding: 4px 0px 0px 0px !important;
+}
+
 .premonition {
   display: grid;
   grid-template-columns: 43px auto;
