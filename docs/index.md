@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Home
 nav_order: 1
 description: "Gancio is a shared agenda for local communities."

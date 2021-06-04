@@ -2,7 +2,8 @@
 layout: default
 title: Configuration
 permalink: /config
-nav_order: 3
+nav_order: 6
+parent: Install
 ---
 
 ## Configuration

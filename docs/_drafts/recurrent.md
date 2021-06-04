@@ -34,11 +34,11 @@ and use the calendar to select one or more days.
 
 ## How does it work
 
-Behind the scene, gancio ensures that at least the next three occurrences
-of the event are always created. It creates that single events by copying
+Behind the scene, gancio ensures that at least the next occurrence
+of the event are created. It creates that single event by copying
 the properties of the parent event, so if you modify the parent
 event's title, or the day of the week, each newly created occurrence will took
-the new title and the new selected day. Old occurrences will be preserved.
+the new title and the new selected day while old occurrences will be preserved.
 
 You can edit a specific event occurrence with more details, a different
 poster/flyer, a different title/description or decide to completely hide it.

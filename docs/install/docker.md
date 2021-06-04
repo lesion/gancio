@@ -3,6 +3,7 @@ layout: default
 title: Docker
 permalink: /install/docker
 parent: Install
+nav_order: 2
 ---
 ## Table of contents
 {: .no_toc .text-delta }
@@ -11,15 +12,15 @@ parent: Install
 {:toc}
 
 ## Initial setup
-**You do not need to clone the full repo as we distribute gancio via npm.**  
-A Dockerfile and a docker-compose.yml are the only files needed.
 
-- __Create a directory where everything related to gancio is stored (db, images, config)__
+> info "Clone not needed"
+> You do not need to clone the full repo, a `Dockerfile` and a `docker-compose.yml` are enough.
+
+- __Create a directory where everything related to gancio is stored__
 ```bash
-mkdir /opt/gancio
+mkdir -p /opt/gancio/data
 cd /opt/gancio
 ```
-<small>note that you can choose a different directory.</small>
 
 ## Use sqlite
 <div class='code-example bg-grey-lt-100' markdown="1">
@@ -29,13 +30,8 @@ wget https://gancio.org/docker/Dockerfile
 wget https://gancio.org/docker/sqlite/docker-compose.yml
 ```
 
-1. Create an empty db and config (**this is needed**)
-```
-touch config.json db.sqlite
-mkdir user_locale
-```
 
-1. Build docker image and launch interactive setup in one step
+1. Build docker image and launch interactive setup
 ```
 docker-compose build
 docker-compose run --rm gancio gancio setup --docker --db=sqlite
@@ -51,13 +47,7 @@ wget https://gancio.org/docker/Dockerfile
 wget https://gancio.org/docker/postgres/docker-compose.yml
 ```
 
-1. Create an empty configuration (**this is needed**)
-```
-touch config.json
-mkdir user_locale
-```
-
-1. Build docker image and launch interactive setup in one step
+1. Build docker image and launch interactive setup
 ```
 docker-compose build
 docker-compose run --rm gancio gancio setup --docker --db=postgres
@@ -72,19 +62,36 @@ docker-compose run --rm gancio gancio setup --docker --db=postgres
 docker-compose up -d
 ```
 
-1. Look at logs with
+1. Look at logs
 ```bash
-docker-compose logs
+tail -f  data/logs/gancio.log
 ```
 
 1. [Setup nginx as a proxy](/install/nginx)
 
 1. Point your web browser to [http://localhost:13120](http://localhost:13120) or where you specified during setup and enjoy :tada:
 
-1. You can edit `config.json` file and restart the container on your needs, see [Configuration](/config) for more details.
-
+1. Edit `data/config.json` and restart the container on your needs, see [Configuration](/config) for more details.
 
 ## Upgrade
+
+> warning "Backup your data"
+> Backup your data is generally a good thing to do and this is especially true before upgrading.
+> Don't be lazy and [backup](/backup) your data!
+
+
+> error "Upgrade from a version < 1.0"
+> Since v1.0 our docker setup is changed and a new container has to be built:
+>
+> - `cd /opt/gancio`
+> - [Backup your data](/backup)
+> - Download new `Dockerfile` => `wget https://gancio.org/docker/Dockerfile`
+> - Download new `docker-compose.yml`  (modify DB to sqlite or postgres)-> `wget https://gancio.org/docker/<DB>/docker-compose.yml`
+> - Build the new container `docker-compose build`
+> - Extract your backup into `./data` => `mkdir data; tar xvzf gancio-<yourLastBackup>-backup.tgz -C data`
+> - Stop your old container `docker-compose stop`
+> - Start your new container `docker-compose up`
+
 
 ```bash
 cd /opt/gancio
