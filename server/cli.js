@@ -12,6 +12,7 @@ const mkdirp = require('mkdirp')
 const url = require('url')
 
 const cwd = process.cwd()
+const data_path = process.env.GANCIO_DATA || path.resolve('./')
 
 // needed by nuxt
 process.chdir(path.resolve(__dirname, '..'))
@@ -66,7 +67,7 @@ async function setupQuestionnaire (is_docker, db) {
     questions.push({
       name: 'db.storage',
       message: 'sqlite db path',
-      default: './db.sqlite',
+      default: path.resolve(data_path, 'db.sqlite'),
       filter: p => path.resolve(cwd, p),
       when: answers => answers.db.dialect === 'sqlite',
       validate: db_path =>
@@ -142,7 +143,14 @@ async function setupQuestionnaire (is_docker, db) {
         return true
       }
     })
+
+    questions.push({
+      name: 'log_path',
+      message: 'Log path',
+      default: path.resolve(data_path, 'logs')
+    })
   }
+
   questions.push({
     name: 'admin.email',
     message: 'Admin email',
@@ -160,12 +168,6 @@ async function setupQuestionnaire (is_docker, db) {
     message: 'Admin password',
     type: 'password',
     validate: notEmpty
-  })
-
-  questions.push({
-    name: 'log_path',
-    message: 'Log path',
-    default: '/opt/gancio/logs'
   })
 
   questions.push({
@@ -233,11 +235,11 @@ async function setupQuestionnaire (is_docker, db) {
   const answers = await inquirer.prompt(questions)
   if (is_docker) {
     answers.server = { host: '0.0.0.0', port: 13120 }
-    answers.upload_path = '/opt/gancio/uploads'
+    answers.upload_path = path.resolve(data_path, 'uploads')
     answers.log_level = 'debug'
-    answers.log_path = '/opt/gancio/logs'
+    answers.log_path = path.resolve(data_path, 'logs')
     if (db === 'sqlite') {
-      answers.db = { dialect: db, storage: '/opt/gancio/db.sqlite' }
+      answers.db = { dialect: db, storage: path.resolve(data_path, 'db.sqlite') }
     } else {
       answers.db = {
         dialect: db,
@@ -255,24 +257,29 @@ async function setupQuestionnaire (is_docker, db) {
 async function run_migrations (db_conf) {
   const Umzug = require('umzug')
   const Sequelize = require('sequelize')
-  const db = new Sequelize(db_conf)
-  const umzug = new Umzug({
-    storage: 'sequelize',
-    storageOptions: { sequelize: db },
-    logging: consola.info,
-    migrations: {
-      wrap: fun => {
-        return () =>
-          fun(db.queryInterface, Sequelize).catch(e => {
-            consola.error(e)
-            return false
-          })
-      },
-      path: path.resolve(__dirname, 'migrations')
-    }
-  })
-  await umzug.up()
-  return db.close()
+  try {
+    const db = new Sequelize(db_conf)
+    const umzug = new Umzug({
+      storage: 'sequelize',
+      storageOptions: { sequelize: db },
+      logging: consola.info,
+      migrations: {
+        wrap: fun => {
+          return () =>
+            fun(db.queryInterface, Sequelize).catch(e => {
+              consola.error(e)
+              return false
+            })
+        },
+        path: path.resolve(__dirname, 'migrations')
+      }
+    })
+    await umzug.up()
+    return db.close()
+  } catch (e) {
+    consola.warn(` ⚠️ Cannot connect to db, check your configuration => ${e}`)
+    process.exit(-1)
+  }
 }
 
 async function start (options) {
@@ -304,7 +311,7 @@ async function setup (options) {
     process.exit(-1)
   }
   if (options.docker) {
-    consola.info('You can edit ./config.json to modify your configuration.')
+    consola.info('You can edit ./data/config.json to modify your configuration.')
     consola.info('Start the server with "docker-compose up"')
   } else {
     consola.info(
@@ -331,7 +338,7 @@ require('yargs')
   .option('config', {
     alias: 'c',
     describe: 'Configuration file',
-    default: '/opt/gancio/config.json'
+    default: path.resolve(data_path, 'config.json')
   })
   .coerce('config', config_path => {
     const absolute_config_path = path.resolve(cwd, config_path)
