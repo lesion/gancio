@@ -30,7 +30,7 @@
 
               //- Where
               v-col(cols=12)
-                WhereInput(v-model='event.place')
+                WhereInput(ref='where' v-model='event.place')
 
               //- When
               DateInput(v-model='date')
@@ -159,8 +159,9 @@ export default {
     ...mapActions(['updateMeta']),
     eventImported (event) {
       this.event = Object.assign(this.event, event)
+      this.$refs.where.selectPlace({ name: event.place.name, create: true })
       this.date = {
-        recurrent: this.event.recurrent,
+        recurrent: this.event.recurrent || null,
         from: new Date(dayjs.unix(this.event.start_datetime)),
         due: new Date(dayjs.unix(this.event.end_datetime)),
         multidate: event.multidate,
@@ -173,7 +174,13 @@ export default {
       this.event.image = {}
     },
     async done () {
-      if (!this.$refs.form.validate()) { return }
+      if (!this.$refs.form.validate()) {
+        this.$nextTick(() => {
+          const el = document.querySelector('.v-input.error--text:first-of-type')
+          el.scrollIntoView()
+        })
+        return
+      }
       this.loading = true
 
       const formData = new FormData()
