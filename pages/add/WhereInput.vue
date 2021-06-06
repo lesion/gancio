@@ -76,10 +76,17 @@ export default {
         this.disableAddress = true
       } else { // this is a new place
         this.place.name = p.name || p
-        this.place.address = ''
-        this.disableAddress = false
-        this.$refs.place.blur()
-        this.$refs.address.focus()
+        // search for a place with the same name
+        const place = this.places.find(p => p.name === this.place.name)
+        if (place) {
+          this.place.address = place.address
+          this.disableAddress = true
+        } else {
+          this.place.address = ''
+          this.disableAddress = false
+          this.$refs.place.blur()
+          this.$refs.address.focus()
+        }
       }
       this.$emit('input', { ...this.place })
     },
