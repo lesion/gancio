@@ -20,7 +20,7 @@
     //- Events
     #events.mb-2.mt-1.pl-1.pl-sm-2
       //- div.event(v-for='(event, idx) in events' :key='event.id' v-intersect="(entries, observer, isIntersecting) => intersecting[event.id] = isIntersecting")
-      Event(:event='event' v-for='(event, idx) in visibleEvents' :key='event.id' @tagclick='tagClick' @placeclick='placeClick')
+      Event(:event='event' @destroy='destroy' v-for='(event, idx) in visibleEvents' :key='event.id' @tagclick='tagClick' @placeclick='placeClick')
 
 </template>
 
@@ -115,6 +115,9 @@ export default {
     // this.intersecting[eventId] = isIntersecting
     // },
     ...mapActions(['setFilters']),
+    destroy (id) {
+      this.events = this.events.filter(e => e.id !== id)
+    },
     updateEvents () {
       this.events = []
       return this.$api.getEvents({
