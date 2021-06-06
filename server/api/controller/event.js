@@ -544,17 +544,10 @@ const eventController = {
         // get weekday
         log.info(type)
         // get recurrent freq details
-        if (type === -1) {
-          cursor = cursor.endOf('month')
-          cursor = cursor.subtract(1, 'week')
-          cursor = cursor.day(start_date.day())
-        } else {
-          cursor = cursor.startOf('month')
-          cursor = cursor.add(type, 'week')
-          cursor = cursor.day(start_date.day())
-          if (cursor.isBefore(dayjs())) {
-            cursor = cursor.add(1, 'month')
-          }
+        cursor = helpers.getWeekdayN(cursor, type, start_date.day())
+        if (cursor.isBefore(dayjs())) {
+          cursor = cursor.add(4, 'week')
+          cursor = helpers.getWeekdayN(cursor, type, start_date.day())
         }
       }
     }

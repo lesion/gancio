@@ -135,12 +135,14 @@ module.exports = {
             return {
               title: get(props, 'name[0]', ''),
               description: get(props, 'description[0]', ''),
-              place: get(props, 'location[0].properties.name', ''),
-              address: get(props, 'location[0].properties.street-address'),
-              start: get(props, 'start[0]', ''),
-              end: get(props, 'end[0]', ''),
+              place: {
+                name: get(props, 'location[0].properties.name', '') || get(props, 'location[0]'),
+                address: get(props, 'location[0].properties.street-address')
+              },
+              start_datetime: dayjs(get(props, 'start[0]', '')).unix(),
+              end_datetime: dayjs(get(props, 'end[0]', '')).unix(),
               tags: get(props, 'category', []),
-              image: get(props, 'featured[0]')
+              image_path: get(props, 'featured[0]')
             }
           })
           return res.json(events)
@@ -160,14 +162,27 @@ module.exports = {
           }
         }))
       }
-      // const event = dom.window.document.querySelected(".h-event")
-      // console.error(event)
-      // console.error(response)
     } catch (e) {
       log.error(e)
+      res.status(400).json(e.toString)
     }
+  },
 
-    // res.json('ok')
+  getWeekdayN (date, n, weekday) {
+    let cursor
+    if (n === -1) {
+      cursor = date.endOf('month')
+      cursor = cursor.day(weekday)
+      if (cursor.month() !== date.month()) {
+        cursor = cursor.subtract(1, 'week')
+      }
+    } else {
+      cursor = date.startOf('month')
+      cursor = cursor.add(cursor.day() <= date.day() ? n - 1 : n, 'week')
+      cursor = cursor.day(weekday)
+    }
+    cursor = cursor.hour(date.hour()).minute(date.minute()).second(0)
+    log.debug(cursor)
+    return cursor
   }
-
 }
