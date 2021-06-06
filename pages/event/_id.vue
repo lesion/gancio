@@ -10,20 +10,14 @@ v-container#event.pa-0.pa-sm-2
 
       v-row
         v-col.col-12.col-lg-8
+          //- fake image to use u-featured in h-event microformat
+          img.u-featured(v-show='false' :src='`${settings.baseurl}${imgPath}`')
           v-img.main_image.mb-3(
             contain
             :src='imgPath'
             :lazy-src='thumbImgPath'
             v-if='event.image_path')
           .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-else v-html='event.description')
-
-            //- template(v-slot:placeholder)
-              //- v-row(
-              //-   class="fill-height ma-0"
-              //-   align="center"
-              //-   justify="center")
-              //-   v-progress-circular(indeterminate
-              //-     color="grey lighten-5")
 
         v-col.col-12.col-lg-4
           v-card
