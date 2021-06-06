@@ -79,6 +79,9 @@ export default {
         this.error = true
         return
       }
+      if (!this.URL.match(/^https?:\/\//)) {
+        this.URL = `https://${this.URL}`
+      }
       this.error = false
       this.errorMessage = ''
       this.loading = true
@@ -86,7 +89,6 @@ export default {
       try {
         const ret = await this.$axios.$get('/event/import', { params: { URL: this.URL } })
         this.events = ret
-
         // check if contain an h-event
         this.$emit('imported', ret[0])
       } catch (e) {
