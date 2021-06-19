@@ -27,9 +27,17 @@ const logger = createLogger({
         createSymlink: true,
         zippedArchive: true,
         maxSize: '10m',
-        maxFiles: '14d',
+        maxFiles: '10d',
         format: format.combine(format.timestamp(), format.splat(), gancioFormat)
-      })]
+      }),
+      new transports.Console(
+        {
+          handleExceptions: true,
+          handleRejections: true,
+          level: config.log_level || 'info',
+          format: format.combine(format.timestamp(), format.splat(), format.colorize(), gancioFormat)
+        }
+      )]
 })
 
 module.exports = logger
