@@ -5,8 +5,9 @@
       FollowMe(@close='showFollowMe=false' is-dialog)
 
     v-btn(color='primary' text href='https://gancio.org' target='_blank') Gancio <small>{{settings.version}}</small>
-    v-btn.ml-1(v-for='link in settings.footerLinks'
-      :key='link.label' color='primary' text :to='link.href') {{link.label}}
+    v-btn.ml-1(v-for='link in footerLinks'
+      :key='link.label' color='primary' text
+      :href='link.href' :to='link.to' :target="link.href && '_blank'") {{link.label}}
 
     v-menu(v-if='settings.enable_trusted_instances && settings.trusted_instances && settings.trusted_instances.length'
       offset-y bottom open-on-hover transition="slide-y-transition")
@@ -25,8 +26,6 @@
             v-list-item-subtitle {{instance.label}}
 
     v-btn.ml-1(v-if='settings.enable_federation' color='primary' text rel='me' @click.prevent='showFollowMe=true') {{$t('event.interact_with_me')}}
-      //- v-btn(href='https://blog.gancio.org' text) blog
-    //- v-btn(href='https://framagit.org/les/gancio' text) source
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -39,6 +38,17 @@ export default {
       showFollowMe: false
     }
   },
-  computed: mapState(['settings'])
+  computed: {
+    ...mapState(['settings']),
+    footerLinks () {
+      return this.settings.footerLinks.map(link => {
+        if (/^https?:\/\//.test(link.href)) {
+          return { href: link.href, label: link.label }
+        } else {
+          return { to: link.href, label: link.label }
+        }
+      })
+    }
+  }
 }
 </script>
