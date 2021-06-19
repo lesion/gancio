@@ -17,7 +17,7 @@ tar  -czf gancio-$(date +%Y-%m-%d-%H%M%S)-backup.tgz  \
   $(ls -d config.json uploads user_locale db.sqlite postgres data logs 2> /dev/null)
 ```
 > warning "Permission denied"
-> `postgres` directory could be with different permission or owner so you'll probably to be root or use `sudo` instead.
+> `postgres` directory could be with different permission or owner, in this case you need to be root or use `sudo` instead.
 
 > info "Automatic backup"
 > To periodically backup your data you should probably use something like [restic](https://restic.net) or [borg](https://www.borgbackup.org/)

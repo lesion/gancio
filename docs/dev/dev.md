@@ -42,4 +42,4 @@ yarn dev
 > warning "Warning"
 > You need to register a first user, this will be an active administrator!
 
-Please use the [issue board](https://framagit.org/les/gancio/-/boards) to discuss any modification.
+Please use the [issues](https://framagit.org/les/gancio/-/issues) to discuss any modification.

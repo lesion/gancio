@@ -86,7 +86,7 @@ tail -f  data/logs/gancio.log
 > 1. `cd /opt/gancio`
 > 1. [Backup your data]({% link install/backup.md %})
 > 1. Download new `Dockerfile` <br/> `wget {{site.url}}{% link /docker/Dockerfile %}`
-> 1. Download new `docker-compose.yml`  (substitute `sqlite` to `postgres` in case):  <br/>`wget {{site.url}}{% link /docker/sqlite/docker-compose.yml %}`
+> 1. Download new `docker-compose.yml`  (substitute `sqlite` with `postgres` in case):  <br/>`wget {{site.url}}{% link /docker/sqlite/docker-compose.yml %}`
 > 1. Build the new container `docker-compose build`
 > 1. Extract your backup into `./data` <br/>`mkdir data; tar xvzf gancio-<yourLastBackup>-backup.tgz -C data`
 > 1. Stop your old container `docker-compose stop`
