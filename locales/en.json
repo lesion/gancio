@@ -84,7 +84,9 @@
         "tags": "Tags",
         "theme": "Theme",
         "reset": "Reset",
-        "import": "Import"
+        "import": "Import",
+        "max_events": "N. max events",
+        "label": "Label"
     },
     "login": {
         "description": "By logging in you can publish new events.",

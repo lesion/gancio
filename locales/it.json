@@ -85,7 +85,8 @@
         "theme": "Tema",
         "reset": "Reset",
         "import": "Importa",
-        "max_events": "N. massimo eventi"
+        "max_events": "N. massimo eventi",
+        "label": "Etichetta"
     },
     "login": {
         "description": "Entrando puoi pubblicare nuovi eventi.",
@@ -156,7 +157,7 @@
         "only_future": "solo eventi futuri",
         "interact_with_me_at": "Seguimi nel fediverso su",
         "import_ICS": "Importa da ICS",
-        "import_URL": "Importa da URL",
+        "import_URL": "Importa da URL (ics o h-event)",
         "ics": "ICS",
         "import_description": "Puoi importare eventi da altre piattaforme e da altre istanze attraverso i formati standard (ics e h-event)"
     },
