@@ -6,7 +6,7 @@
       Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
     //- Calendar and search bar
-    v-row.pt-0.pt-sm-2
+    v-row.pt-0.pt-sm-2.pl-0.pl-sm-2
       .col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-4.pa-sm-3
         //- this is needed as v-calendar does not support SSR
         //- https://github.com/nathanreyes/v-calendar/issues/336

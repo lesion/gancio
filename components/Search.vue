@@ -6,7 +6,7 @@
       inset color='primary'
       hide-details
       :label="$t('event.show_recurrent')")
-    v-autocomplete.mt-0.pt-0(
+    v-autocomplete(
       :label='$t("common.search")'
       :items='keywords'
       hide-details

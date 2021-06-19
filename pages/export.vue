@@ -1,6 +1,7 @@
 <template lang="pug">
   v-container
     v-card(outlined)
+      v-card-title {{$t('common.share')}}
       v-card-text
         p.text-body-1 {{$t('export.intro')}}
         v-row
