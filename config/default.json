@@ -22,6 +22,5 @@
     "secure": true,
     "host": ""
   },
-  "admin_email": "admin",
-  "secret": "notsosecret"
+  "admin_email": "admin"
 }

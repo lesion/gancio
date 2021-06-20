@@ -9,8 +9,8 @@ module.exports = {
 
   async setup (config, config_path) {
     // generate a random salt
-    consola.info('Generate random salt')
-    config.secret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+    // consola.info('Generate random salt')
+    // config.secret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 
     // do not save admin's password in config file
     const admin = { email: config.admin.email, password: config.admin.password }

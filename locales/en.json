@@ -157,7 +157,8 @@
         "remove_recurrent_confirmation": "Are you sure you want to remove this recurring event?\nPast events will be maintained, but no further events will be created.",
         "import_URL": "Import from URL",
         "import_ICS": "Import from ICS",
-        "ics": "ICS"
+        "ics": "ICS",
+        "import_description": "You can import events from other platforms and other instances through standard formats (ics and h-event)"
     },
     "admin": {
         "place_description": "If you have gotten the place or address wrong, you can change it.<br/>All current and past events associated with this place will change address.",
