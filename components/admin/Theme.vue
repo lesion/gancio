@@ -12,9 +12,9 @@
           v-img(:src='`${settings.baseurl}/favicon.ico?${logoKey}`'
             max-width="100px" max-height="80px" contain)
 
-      v-switch.mt-5(v-model='is_dark'
-        inset
-        :label="$t('admin.is_dark')")
+      //- v-switch.mt-5(v-model='is_dark'
+      //-   inset
+      //-   :label="$t('admin.is_dark')")
 
       //- TODO choose theme colors
       //- v-row
