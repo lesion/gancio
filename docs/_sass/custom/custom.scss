@@ -21,6 +21,10 @@ $svg-citation-color: "495057";
   padding: 4px 0px 0px 0px !important;
 }
 
+.main {
+  max-width: 1200px;
+}
+
 .premonition {
   display: grid;
   grid-template-columns: 43px auto;

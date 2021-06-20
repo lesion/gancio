@@ -67,7 +67,7 @@ docker-compose up -d
 tail -f  data/logs/gancio.log
 ```
 
-1. [Setup nginx as a proxy](/install/nginx)
+1. [Setup nginx as a proxy]({% link install/nginx.md %}
 
 1. Point your web browser to [http://localhost:13120](http://localhost:13120) or where you specified during setup and enjoy :tada:
 

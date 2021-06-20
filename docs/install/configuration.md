@@ -7,8 +7,8 @@ parent: Install
 
 ## Configuration
 {: .no_toc }
-Main `gancio` configuration is done with a configuration file.
-This shoud be a `.json` or a `.js` file and could be specified using the `--config` flag.
+`gancio` configuration is done during installation process but you can change it editing the configuration file. Note that you can always re-run gancio with `--setup` flag to use the interactive setup.
+The configuration file shoud be a `.json` or a `.js` file and could be specified using the `--config` flag.
 
 - <small>eg. `gancio start --config ./config.json`</small>
 - <small>eg. `pm2 start gancio start -- --config ~/config.json`</small>
@@ -77,11 +77,6 @@ Email of administrator. Note that email from gancio comes from this email and th
 the SMTP configuration above should allow to use this address as from.
 
 
-- ### Favicon
-You could specify another favicon. This is also used as logo (top-left
-corner):   
-`"favicon": "./favicon.ico"`
-
 - ### User locale
 Probably you want to modify some text for your specific community, that's
 why we thought the `user_locale` configuration: you can specify your version of
@@ -105,8 +100,6 @@ list of strings you can override.
 <small>:warning: Note that a restart is needed when you change
 user_locale's content.</small>
 
-- ### Secret
-
 
 ## Default settings
 ```json
@@ -115,15 +108,14 @@ user_locale's content.</small>
   "description": "A shared agenda for local communities",
   "baseurl": "http://localhost:13120",
   "server": {
-    "host": "0.0.0.0",
+    "host": "127.0.0.1",
     "port": 13120
   },
   "db": {
     "dialect": "sqlite",
-    "storage": "/tmp/db.sqlite"
+    "storage": "./db.sqlite"
   },
   "upload_path": "./",
-  "favicon": "../dist/favicon.ico",
   "smtp": {
     "auth": {
       "user": "",
@@ -133,6 +125,5 @@ user_locale's content.</small>
     "host": ""
   },
   "admin_email": "",
-  "secret": "notsosecret"
 }
 ```

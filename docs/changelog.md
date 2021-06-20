@@ -13,10 +13,10 @@ This release is a complete rewrite of frontend UI and many internals, main chang
 
 - Switch UI framework from [element](https://element.eleme.io/) to [vuetify](https://vuetifyjs.com/)
 - Distribute package directly from site instead of using npm registry
-- Improve docker setup (run as user)
+- Improve docker setup (run as user, fix some data export)
 - New logging system (based on [winston](https://github.com/winstonjs/winston))
 - Slugify event URL (keeping old one valid)
-- Import events from ics and external website using h-event (microformat)
+- Import events from ics and external website using h-event (microformat) improving [`h-event`](https://microformats.org/wiki/h-event) export
 - Hide unconfirmed tags and places
 - Clean unused places and tags
 - Fix tons of issues

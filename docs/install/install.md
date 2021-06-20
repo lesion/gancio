@@ -3,10 +3,12 @@ layout: default
 title: Install
 permalink: /install
 has_children: true
-nav_order: 2
+nav_order: 3
 has_toc: false
 ---
 ## Install
+
+You can install gancio on a cheap VPS (500mb of ram will be enough)
 
 - [Install on Debian]({% link install/debian.md %})
 - [Install using docker]({% link install/docker.md %})
@@ -17,4 +19,4 @@ has_toc: false
 - [Backup]({% link install/backup.md %})
 
 
-If you wanna hack or run the current development release take a look at [Hacking & contribute](../dev)
+If you wanna hack or run the current development release take a look at [Hacking & contribute]({% link dev/dev.md %})
