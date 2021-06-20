@@ -3,7 +3,7 @@ const DailyRotateFile = require('winston-daily-rotate-file')
 const dayjs = require('dayjs')
 const config = require('config')
 
-const gancioFormat = format.printf(({ timestamp, level, message }) => {
+const gancioFormat = format.printf(({ timestamp, level, message, error }) => {
   return `${dayjs(timestamp).format('DD MMM YYYY HH:mm:ss')} ${level}: ${message}`
 })
 
@@ -15,7 +15,7 @@ const logger = createLogger({
           handleExceptions: true,
           handleRejections: true,
           level: 'debug',
-          format: format.combine(format.timestamp(), format.splat(), format.colorize(), gancioFormat)
+          format: format.combine(format.errors({ stack: true }), format.timestamp(), format.colorize(), format.splat(), gancioFormat)
         }
       )]
     : [new DailyRotateFile({

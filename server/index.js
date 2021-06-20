@@ -21,10 +21,11 @@ async function main () {
   } else {
     await nuxt.ready()
   }
+
   try {
     await nuxt.listen()
   } catch (e) {
-    log.error(e)
+    log.error({ message: e.message })
     return
   }
 
