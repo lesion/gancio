@@ -8,7 +8,7 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
-### 1.0 (beta)
+### 1.0 (alpha)
 This release is a complete rewrite of frontend UI and many internals, main changes are:
 
 - Switch UI framework from [element](https://element.eleme.io/) to [vuetify](https://vuetifyjs.com/)
