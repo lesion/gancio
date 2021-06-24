@@ -1,87 +1,90 @@
 <template lang="pug">
-div
-  //- ADD NEW USER
-  el-collapse
-    el-collapse-item
-      template(slot='title')
-        el-button(type='text' mini size='mini')  <v-icon name='plus'/> {{$t('common.new_user')}}
-      el-form(inline @submit.native.prevent='create_user')
-        el-form-item(:label="$t('common.email')")
-          el-input(v-model='new_user.email')
-        el-form-item(:label="$t('common.admin')")
-          el-switch(v-model='new_user.is_admin')
-        el-button.float-right(@click='create_user' type='success' plain) {{$t('common.send')}}
-      el-alert.mb-1(type='info' show-icon :closable='false') {{$t('admin.user_add_help')}}
+  v-container
+    v-card-title {{$t('common.users')}}
+      v-spacer
+      v-text-field(v-model='search'
+        append-icon='mdi-magnify' outlined rounded
+        label='Search'
+        single-line hide-details)
 
-  //- USERS LIST
-  el-table(:data='paginatedUsers' small)
-    el-table-column(label='Email' width='220')
-      template(slot-scope='data')
-        el-popover(trigger='hover' :content='data.row.description' width='400')
-          span(slot='reference') {{data.row.email}}
-    el-table-column(:label="$t('common.actions')")
-      template(slot-scope='data')
-        div(v-if='data.row.id!==$auth.user.id')
-          el-button-group
-            el-button(size='mini'
-              :type='data.row.is_active?"warning":"success"'
-              @click='toggle(data.row)') {{data.row.is_active?$t('common.deactivate'):$t('common.activate')}}
-            el-button(size='mini'
-              :type='data.row.is_admin?"danger":"warning"'
-              @click='toggleAdmin(data.row)') {{data.row.is_admin?$t('admin.remove_admin'):$t('common.admin')}}
-            el-button(size='mini'
-              type='danger'
-              @click='delete_user(data.row)') {{$t('admin.delete_user')}}
-        div(v-else)
-          span {{$t('common.me')}}
-  client-only
-    el-pagination(:page-size='perPage' :currentPage.sync='userPage' v-if='perPage<users_.length' :total='users_.length')
+    v-btn(color='primary' text @click='newUserDialog = true') <v-icon>mdi-plus</v-icon> {{$t('common.new_user')}}
+
+    //- ADD NEW USER
+    v-dialog(v-model='newUserDialog' :fullscreen="$vuetify.breakpoint.xsOnly")
+
+      v-card(color='secondary')
+        v-card-title {{$t('common.new_user')}}
+        v-card-text
+          v-form(v-model='valid' ref='user_form' lazy-validation @submit.prevent='createUser')
+            v-text-field(v-model='new_user.email'
+              :label="$t('common.email')"
+              :rules="$validators.email")
+            v-switch(v-model='new_user.is_admin' :label="$t('common.admin')" inset)
+          v-alert(type='info' :closable='false') {{$t('admin.user_add_help')}}
+          v-card-actions
+            v-spacer
+            v-btn(@click='newUserDialog=false' color='error') {{$t('common.cancel')}}
+            v-btn(@click='createUser' :disabled='!valid' color='primary') {{$t('common.send')}}
+
+    v-card-text
+      //- USERS LIST
+      v-data-table(
+        :headers='headers'
+        :items='users'
+        :hide-default-footer='users.length<5'
+        :search='search')
+        template(v-slot:item.is_active='{item}')
+          v-icon(v-if='item.is_active' color='success') mdi-check
+          v-icon(v-else color='warning') mdi-close
+        template(v-slot:item.actions='{item}')
+          v-btn(text small @click='toggle(item)'
+            :color='item.is_active?"warning":"success"') {{item.is_active?$t('common.disable'):$t('common.enable')}}
+          v-btn(text small @click='toggleAdmin(item)'
+            :color='item.is_admin?"warning":"error"') {{item.is_admin?$t('common.remove_admin'):$t('common.admin')}}
+          v-btn(text small @click='deleteUser(item)'
+            color='error') {{$t('admin.delete_user')}}
 
 </template>
 <script>
-import { Message, MessageBox } from 'element-ui'
 import { mapState } from 'vuex'
+import get from 'lodash/get'
 
 export default {
   name: 'Users',
-  props: ['users'],
+  props: {
+    users: { type: Array, default: () => [] }
+  },
   data () {
     return {
-      perPage: 10,
-      userPage: 1,
+      newUserDialog: false,
+      valid: false,
       new_user: {
         email: '',
         is_admin: false
       },
-      users_: this.users
+      search: '',
+      headers: [
+        { value: 'email', text: 'Email' },
+        { value: 'description', text: 'Description' },
+        { value: 'is_active', text: 'Active' },
+        { value: 'actions', text: 'Actions', align: 'right' }
+      ]
     }
   },
-  computed: {
-    ...mapState(['settings']),
-    paginatedUsers () {
-      return this.users_.slice((this.userPage - 1) * this.perPage,
-        this.userPage * this.perPage)
-    }
-  },
+  computed: mapState(['settings']),
   methods: {
-    delete_user (user) {
-      MessageBox.confirm(this.$t('admin.delete_user_confirm'),
-        this.$t('common.confirm'), {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'error'
-        })
-        .then(() => this.$axios.delete(`/user/${user.id}`))
-        .then(() => {
-          Message({
-            showClose: true,
-            type: 'success',
-            message: this.$t('admin.user_remove_ok')
-          })
-          this.users_ = this.users_.filter(u => u.id !== user.id)
-        })
+    async deleteUser (user) {
+      const ret = await this.$root.$confirm('admin.delete_user_confirm', { user: user.email })
+      if (!ret) { return }
+      await this.$axios.delete(`/user/${user.id}`)
+      this.$root.$message('admin.user_remove_ok')
+      this.users_ = this.users_.filter(u => u.id !== user.id)
     },
-    toggle (user) {
+    async toggle (user) {
+      if (user.is_active) {
+        const ret = await this.$root.$confirm('admin.disable_user_confirm', { user: user.email })
+        if (!ret) { return }
+      }
       user.is_active = !user.is_active
       this.$axios.$put('/user', user)
     },
@@ -90,26 +93,22 @@ export default {
         user.is_admin = !user.is_admin
         await this.$axios.$put('/user', user)
       } catch (e) {
-        console.error(e)
       }
     },
-    async create_user () {
+    async createUser () {
+      if (!this.$refs.user_form.validate()) { return }
       try {
         this.loading = true
-        const user = await this.$axios.$post('/user', this.new_user)
+        await this.$axios.$post('/user', this.new_user)
         this.new_user = { email: '', is_admin: false }
-        Message({
-          showClose: true,
-          type: 'success',
-          message: this.$t('admin.user_create_ok')
-        })
-        this.users_.push(user)
+        this.$root.$message('admin.user_create_ok', { color: 'success' })
+        this.$emit('update')
+        this.loading = false
+        this.newUserDialog = false
       } catch (e) {
-        Message({
-          showClose: true,
-          type: 'error',
-          message: this.$t(e)
-        })
+        const err = get(e, 'response.data.errors[0].message', e)
+        this.$root.$message(this.$t(err), { color: 'error' })
+        this.loading = false
       }
     }
   }

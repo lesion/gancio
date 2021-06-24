@@ -1,7 +1,7 @@
 ---
-layout: default
 title: Debian
 permalink: /install/debian
+nav_order: 1
 parent: Install
 ---
 
@@ -9,7 +9,7 @@ parent: Install
 
 1. Install Node.js & yarn (**from root**)
 ```bash
-curl -sL https://deb.nodesource.com/setup_12.x | bash -
+curl -sL https://deb.nodesource.com/setup_16.x | bash -
 apt-get install -y nodejs
 curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg |  apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
@@ -19,7 +19,7 @@ apt-get update && apt-get install yarn
 
 1. Install Gancio
 ```bash
-yarn global add gancio --prod
+yarn global add --silent {{site.url}}{% link /latest.tgz %} 2> /dev/null
 ```
 
 1. Setup with postgreSQL __(optional as you can choose sqlite)__
@@ -49,7 +49,7 @@ gancio start --config config.json
 ```
 1. Point your web browser to [http://localhost:13120](http://localhost:13120) or where you selected during setup.
 
-1. [Setup nginx as a proxy](/install/nginx)
+1. [Setup nginx as a proxy]({% link install/nginx.md %})
 
 1. To deploy gancio in production you should use something like **[pm2](http://pm2.keymetrics.io/)**:
 
@@ -62,8 +62,8 @@ pm2 startup # read the output!
 sudo pm2 startup -u gancio
 ```
 
-1. Upgrade
+## Upgrade
 ```bash
-sudo yarn global add gancio
+sudo yarn global add --silent {{site.url}}{% link /latest.tgz %}  2> /dev/null
 sudo service pm2 restart
 ```

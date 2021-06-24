@@ -4,7 +4,6 @@ const consola = require('consola')
 const path = require('path')
 const fs = require('fs')
 const pkg = require('../../../package.json')
-const debug = require('debug')('settings')
 const crypto = require('crypto')
 const util = require('util')
 const toIco = require('to-ico')
@@ -12,6 +11,7 @@ const generateKeyPair = util.promisify(crypto.generateKeyPair)
 const readFile = util.promisify(fs.readFile)
 const writeFile = util.promisify(fs.writeFile)
 const sharp = require('sharp')
+const log = require('../../log')
 
 const defaultSettings = {
   instance_timezone: 'Europe/Rome',
@@ -26,7 +26,13 @@ const defaultSettings = {
   enable_resources: false,
   hide_boosts: true,
   enable_trusted_instances: true,
-  trusted_instances: []
+  trusted_instances: [],
+  'theme.is_dark': true,
+  'theme.primary': '#FF4500',
+  footerLinks: [
+    { href: '/', label: 'home' },
+    { href: '/about', label: 'about' }
+  ]
 }
 
 /**
@@ -56,7 +62,7 @@ const settingsController = {
 
       // add pub/priv instance key if needed
       if (!settingsController.settings.publicKey) {
-        debug('Instance priv/pub key not found')
+        log.info('Instance priv/pub key not found, generating....')
         const { publicKey, privateKey } = await generateKeyPair('rsa', {
           modulusLength: 4096,
           publicKeyEncoding: {
@@ -87,16 +93,17 @@ const settingsController = {
   },
 
   async set (key, value, is_secret = false) {
+    log.info(`SET ${key} ${is_secret ? '*****' : value}`)
     try {
       const [setting, created] = await Setting.findOrCreate({
         where: { key },
         defaults: { value, is_secret }
       })
-
       if (!created) { setting.update({ value, is_secret }) }
       settingsController[is_secret ? 'secretSettings' : 'settings'][key] = value
       return true
     } catch (e) {
+      log.error(e)
       return false
     }
   },
@@ -109,23 +116,25 @@ const settingsController = {
 
   setLogo (req, res) {
     if (!req.file) {
-      return res.status(400).send('Mmmmm sould not be here!')
+      settingsController.set('logo', false)
+      return res.status(200)
     }
 
-    const uploaded_path = path.join(req.file.destination, req.file.filename)
-    const logo_path = path.resolve(config.upload_path, 'favicon')
-    const favicon_path = path.resolve(config.upload_path, 'favicon')
+    const uploadedPath = path.join(req.file.destination, req.file.filename)
+    const baseImgPath = path.resolve(config.upload_path, 'logo')
 
     // convert and resize to png
-    sharp(uploaded_path)
+    sharp(uploadedPath)
       .resize(400)
       .png({ quality: 90 })
-      .toFile(logo_path + '.png', async (err, info) => {
-        console.error(err)
-        const image = await readFile(logo_path + '.png')
+      .toFile(baseImgPath + '.png', async (err, info) => {
+        if (err) {
+          log.error(err)
+        }
+        const image = await readFile(baseImgPath + '.png')
         const favicon = await toIco([image], { sizes: [64], resize: true })
-        writeFile(favicon_path + '.ico', favicon)
-        settingsController.set('favicon', favicon_path)
+        writeFile(baseImgPath + '.ico', favicon)
+        settingsController.set('logo', baseImgPath)
         res.sendStatus(200)
       })
   },

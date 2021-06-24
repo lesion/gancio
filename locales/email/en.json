@@ -13,7 +13,7 @@
     },
     "recover": {
         "subject": "Password recovery",
-        "content": "Hi, you requested a password recovery on {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Click here</a> to confirm"
+        "content": "Hi, you requested a password recovery on {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Click here</a> to confirm."
     },
     "admin_register": {
         "subject": "New registration",

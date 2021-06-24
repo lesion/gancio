@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Instances
 permalink: /instances
 nav_order: 7
@@ -12,4 +11,4 @@ nav_order: 7
 - [chesefa.org](https://chesefa.org) (Naples, Italy)
 
 
-<small>Do you want your instance to appear here? [Write us](/contacts).</small>
+<small>Do you want your instance to appear here? [Write us]({% link contact.md %}).</small>

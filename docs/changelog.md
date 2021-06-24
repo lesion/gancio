@@ -8,6 +8,19 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.0 (beta)
+This release is a complete rewrite of frontend UI and many internals, main changes are:
+
+- Switch UI framework from [element](https://element.eleme.io/) to [vuetify](https://vuetifyjs.com/)
+- Distribute package directly from site instead of using npm registry
+- Improve docker setup (run as user, fix some data export)
+- New logging system (based on [winston](https://github.com/winstonjs/winston))
+- Slugify event URL (keeping old one valid)
+- Import events from ics and external website using h-event (microformat) improving [`h-event`](https://microformats.org/wiki/h-event) export
+- Hide unconfirmed tags and places
+- Clean unused places and tags
+- Fix tons of issues
+
 ### 0.24.0
 - New Euskara language from Basque Country, thanks @hacklabkelo
 - fix feed with filters

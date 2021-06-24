@@ -1,61 +1,93 @@
 <template lang="pug">
-  el-main
-    el-switch.d-block(v-model='enable_federation' :active-text="$t('admin.enable_federation')")
-    small.text-secondary {{$t('admin.enable_federation_help')}}
+  v-container
+    v-card-title {{$t('common.federation')}}
+    v-card-text
+      v-switch(v-model='enable_federation'
+        :label="$t('admin.enable_federation')"
+        persistent-hint
+        inset
+        :hint="$t('admin.enable_federation_help')")
 
-    template(v-if='enable_federation')
+      template(v-if='enable_federation')
 
-      el-switch.d-block.mt-4(v-model='enable_resources' :active-text="$t('admin.enable_resources')")
-      small.text-secondary {{$t('admin.enable_resources_help')}}
+        v-switch.mt-4(v-model='enable_resources'
+          :label="$t('admin.enable_resources')"
+          :hint="$t('admin.enable_resources_help')"
+          persistent-hint inset)
 
-      el-switch.d-block.mt-4(v-model='hide_boosts' :active-text="$t('admin.hide_boost_bookmark')")
-      small.text-secondary {{$t('admin.hide_boost_bookmark_help')}}
+        v-switch.mt-4(v-model='hide_boosts'
+          :label="$t('admin.hide_boost_bookmark')"
+          :hint="$t('admin.hide_boost_bookmark_help')"
+          persistent-hint inset)
 
-      div.mt-4 {{$t('admin.instance_name')}}
-      el-input(v-model='instance_name' placeholder='Instance name' @blur='save("instance_name", instance_name)')
-      small.d-block.text-secondary {{$t('admin.instance_name_help')}} (<u>@{{instance_name}}@{{settings.baseurl|url2host}}</u>)
+        //- div.mt-4 {{$t('admin.instance_name')}}
+        v-text-field.mt-5(v-model='instance_name'
+          :label="$t('admin.instance_name')"
+          :hint="`${$t('admin.instance_name_help')} ${instance_ap_url}`"
+          placeholder='Instance name' persistent-hint
+          @blur='save("instance_name", instance_name)')
 
-    el-switch.d-block.mt-4(v-model='enable_trusted_instances' :active-text="$t('admin.enable_trusted_instances')")
-    small.text-secondary {{$t('admin.trusted_instances_help')}}
+      v-switch.mt-4(v-model='enable_trusted_instances'
+        :label="$t('admin.enable_trusted_instances')"
+        persistent-hint inset
+        :hint="$t('admin.trusted_instances_help')")
 
-    template(v-if='enable_trusted_instances')
-      div.mt-4 {{$t('admin.instance_place')}}
-        el-input(v-model='instance_place' @blur='save("instance_place", instance_place)')
-        small.d-block.text-secondary {{$t('admin.instance_place_help')}}
+      template(v-if='enable_trusted_instances')
+        v-text-field.mt-4(v-model='instance_place'
+          :label="$t('admin.instance_place')"
+          persistent-hint
+          :hint="$t('admin.instance_place_help')"
+          @blur='save("instance_place", instance_place)'
+        )
 
-      div.mt-4 {{$t('admin.add_trusted_instance')}}
-        el-input(v-model='instance_url' :placeholder="$t('common.url')")
-          el-button(slot='append' @click='createTrustedInstance') {{$t('common.send')}}
+        v-dialog(v-model='dialogAddInstance' width="500px")
+          v-card
+            v-card-title {{$t('admin.add_trusted_instance')}}
+            v-card-text
+              v-form(v-model='valid' @submit.prevent='createTrustedInstance' ref='form' lazy-validation)
+                v-text-field.mt-4(v-model='instance_url'
+                  persistent-hint
+                  :rules="[$validators.required('common.url')]"
+                  :loading='loading'
+                  :hint="$t('admin.add_trusted_instance')"
+                  :label="$t('common.url')")
+            v-card-actions
+              v-spacer
+              v-btn(color='error' @click='dialogAddInstance=false') {{$t('common.cancel')}}
+              v-btn(color='primary' :disabled='!valid || loading' :loading='loading' @click='createTrustedInstance') {{$t('common.ok')}}
 
-      el-table(:data='settings.trusted_instances')
-        el-table-column(:label="$t('common.name')")
-          template(slot-scope='data')
-            span {{data.row.name}}
-        el-table-column(:label="$t('common.url')")
-          template(slot-scope='data')
-            span {{data.row.url}}
-        el-table-column(:label="$t('common.place')")
-          template(slot-scope='data')
-            span {{data.row.label}}
-        el-table-column(:label="$t('common.actions')")
-          template(slot-scope='data')
-            el-button(size='mini'
-              type='danger'
-              @click='deleteInstance(data.row)') {{$t('admin.delete_user')}}
+        v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon>mdi-plus</v-icon> {{$t('admin.add_instance')}}
+        v-data-table(
+          v-if='settings.trusted_instances.length'
+          :hide-default-footer='settings.trusted_instances.length<10'
+          :headers='headers'
+          :items='settings.trusted_instances')
+          template(v-slot:item.actions="{item}")
+            v-btn(icon @click='deleteInstance(item)' color='error')
+              v-icon mdi-delete-forever
 
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import { Message, MessageBox } from 'element-ui'
 import axios from 'axios'
 
 export default {
   name: 'Federation',
-  data ({ $store }) {
+  data ({ $store, $options }) {
     return {
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
-      instance_place: $store.state.settings.instance_place
+      instance_place: $store.state.settings.instance_place,
+      url2host: $options.filters.url2host,
+      dialogAddInstance: false,
+      loading: false,
+      valid: false,
+      headers: [
+        { value: 'name', text: 'Name' },
+        { value: 'url', text: 'URL' },
+        { value: 'label', text: 'Place' },
+        { value: 'actions', text: 'Actions', align: 'right' }
+      ]
     }
   },
   computed: {
@@ -75,12 +107,21 @@ export default {
     enable_trusted_instances: {
       get () { return this.settings.enable_trusted_instances },
       set (value) { this.setSetting({ key: 'enable_trusted_instances', value }) }
+    },
+    instance_ap_url () {
+      const instance_url = this.settings.baseurl.match(/^https?:\/\/(.[^/:]+)/i)[1]
+      return `(@${this.instance_name}@${instance_url})`
     }
   },
   methods: {
     ...mapActions(['setSetting']),
     async createTrustedInstance () {
+      if (!this.$refs.form.validate()) { return }
+      this.loading = true
       try {
+        if (!this.instance_url.startsWith('http')) {
+          this.instance_url = `https://${this.instance_url}`
+        }
         const instance = await axios.get(`${this.instance_url}/.well-known/nodeinfo/2.1`)
         this.setSetting({
           key: 'trusted_instances',
@@ -90,27 +131,19 @@ export default {
             label: instance.data.metadata.nodeLabel
           })
         })
-        this.instance_url = ''
+        this.$refs.form.reset()
+        this.dialogAddInstance = false
       } catch (e) {
-        Message({
-          showClose: true,
-          type: 'error',
-          message: e
-        })
+        this.$root.$message(e, { color: 'error' })
       }
+      this.loading = false
     },
-    deleteInstance (instance) {
-      MessageBox.confirm(this.$t('admin.delete_trusted_instance_confirm'),
-        this.$t('common.confirm'), {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'error'
-        }
-      ).then(() => {
-        this.setSetting({
-          key: 'trusted_instances',
-          value: this.settings.trusted_instances.filter(i => i.url !== instance.url)
-        })
+    async deleteInstance (instance) {
+      const ret = await this.$root.$confirm('admin.delete_trusted_instance_confirm')
+      if (!ret) { return }
+      this.setSetting({
+        key: 'trusted_instances',
+        value: this.settings.trusted_instances.filter(i => i.url !== instance.url)
       })
     },
     save (key, value) {

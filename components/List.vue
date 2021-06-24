@@ -1,18 +1,18 @@
 <template lang='pug'>
 div#list
-  el-divider(v-if='title') {{title}}
-  el-timeline
-    el-timeline-item(
-      v-for='event in events'
-      :key='`${event.id}_${event.start_datetime}`'
-      :timestamp='event|when'
-      placement='top' icon='el-icon-arrow-down' size='large')
-
-      div.float-right
-        small @{{event.place.name}}
-
-      a(:href='`/event/${event.id}`' target='_blank') {{event.title}}
-      hr
+  v-list(dense)
+    v-list-item
+      h3(v-if='title') {{title}}
+    v-list-item(
+      target='_blank'
+      :to='`/event/${event.slug || event.id}`'
+      v-for='event in computedEvents'
+      :key='`${event.id}_${event.start_datetime}`' small)
+      v-list-item-content
+        v-list-item-subtitle <v-icon small color='success' v-if='event.parentId'>mdi-repeat</v-icon> {{event|when}}
+          span.primary--text.ml-1 @{{event.place.name}}
+        v-list-item-title(v-text='event.title')
+      //- a.text-body-1(:href='`/event/${event.id}`' target='_blank') {{event.title}}
 </template>
 <script>
 
@@ -49,6 +49,12 @@ export default {
       type: Boolean,
       default: true
     }
+  },
+  computed: {
+    computedEvents () {
+      if (!this.maxEvents) { return this.events }
+      return this.events.slice(0, this.maxEvents)
+    }
   }
 }
 </script>
@@ -56,23 +62,8 @@ export default {
   #list {
     max-width: 500px;
     margin: 0 auto;
-
-    .el-timeline {
-      padding-left: 5px;
-
-      hr {
-        margin-top: 4px;
-        margin-bottom: 4px;
-      }
-    }
-
-    .el-timeline-item {
-      padding-bottom: 1px;
-    }
-
-    .el-timeline-item__timestamp {
-      margin: 0px;
-      padding: 0px;
+    .v-list-item__title {
+      white-space: normal !important;
     }
   }
 </style>

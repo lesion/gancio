@@ -1,8 +1,8 @@
 const conf = require('config')
 
 module.exports = {
-  mode: 'universal',
   telemetry: false,
+  modern: (process.env.NODE_ENV === 'production') && 'client',
   /*
    ** Headers of the page
    */
@@ -20,15 +20,13 @@ module.exports = {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: 'orange', height: '5px' },
+  loading: '~/components/Loading.vue',
   /*
    ** Global CSS
    */
   css: [
-    'bootstrap/dist/css/bootstrap.min.css',
-    'element-ui/lib/theme-chalk/index.css',
-    'element-ui/lib/theme-chalk/display.css',
-    '@/assets/style.less'
+    '@/assets/style.less',
+    '@mdi/font/css/materialdesignicons.css'
   ],
 
   /*
@@ -36,11 +34,12 @@ module.exports = {
    */
   plugins: [
     '@/plugins/i18n.js',
-    '@/plugins/element-ui', // UI library -> https://element.eleme.io/#/en-US/
-    '@/plugins/filters', // text filters, datetime, etc.
-    '@/plugins/vue-awesome', // icon
+    '@/plugins/filters', // text filters, datetime filters, generic transformation helpers etc.
+    '@/plugins/vue-clipboard', // vuetify
     '@/plugins/axios', // axios baseurl configuration
-    { src: '@/plugins/v-calendar', ssr: false } // calendar, fix ssr
+    '@/plugins/validators', // inject validators
+    '@/plugins/api', // api helpers
+    { src: '@/plugins/v-calendar', ssr: false } // v-calendar
   ],
 
   render: {
@@ -55,11 +54,12 @@ module.exports = {
    ** Nuxt.js modules
    */
   modules: [
-    ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }],
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    './@nuxtjs/axios',
+    './@nuxtjs/auth',
+    ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }]
   ],
+
   /*
    ** Axios module configuration
    * See https://github.com/nuxt-community/axios-module#options
@@ -94,35 +94,26 @@ module.exports = {
     }
   },
 
+  buildModules: [
+    '@nuxtjs/vuetify'
+  ],
+  vuetify: {
+    defaultAssets: false,
+    optionsPath: './vuetify.options.js',
+    treeShake: true
+    /* module options */
+  },
+
   /*
    ** Build configuration
    */
   build: {
-    optimization: {
-      minimize: true,
-      namedModules: true,
-      namedChunks: true,
-      splitChunks: {
-        name: true,
-        chunks: 'all',
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            enforce: true,
-            name (module) {
-              // get the name. E.g. node_modules/packageName/not/this/part.js
-              // or node_modules/packageName
-              const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
-              // npm package names are URL-safe, but some servers don't like @ symbols
-              return `npm.${packageName.replace('@', '')}`
-            }
-          }
-        }
-      }
-    },
-    transpile: [/^element-ui/, /^vue-awesome/, /^@nuxt/],
-    splitChunks: {
-      layouts: true
+    presets: ['@nuxt/babel-preset-app', {
+      useBuiltIns: 'usage', // or "entry"
+      corejs: 3
+    }],
+    babel: {
+      plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]]
     },
     cache: true
   }

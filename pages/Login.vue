@@ -1,29 +1,45 @@
 <template lang='pug'>
-  el-main
-    el-card
-      h4(slot='header').text-center <el-icon name='user'/> {{$t('common.login')}}
-      p(v-html="$t('login.description')")
-      div(v-loading='loading')
+  v-container
+    v-row.mt-5(align='center' justify='center')
+      v-col(cols='12' md="6" lg="5" xl="4")
+        v-form(v-model='valid' ref='form' lazy-validation @submit.prevent='submit')
+          v-card
+            v-card-title {{$t('common.login')}}
+            v-card-subtitle(v-text="$t('login.description')")
 
-        el-input.mb-2(v-model='email' type='email' title='email' prefix-icon='el-icon-user'
-          :placeholder='$t("common.email")' autocomplete='email' ref='email')
+            v-card-text
+                v-text-field(v-model='email' type='email'
+                  validate-on-blur
+                  :rules='$validators.email' autofocus
+                  :placeholder='$t("common.email")'
+                  ref='email')
 
-        el-input.mb-1(v-model='password' @keyup.enter.native="submit"
-          prefix-icon='el-icon-lock' name='password'
-          type='password' :placeholder='$t("common.password")')
+                v-text-field(v-model='password'
+                  :rules='$validators.password'
+                  type='password'
+                  :placeholder='$t("common.password")')
 
-        div
-          el-button.text-right(type='text' @click='forgot') {{$t('login.forgot_password')}}
+            v-card-actions
+              v-btn(text
+                tabindex="1"
+                @click='forgot' small) {{$t('login.forgot_password')}}
 
-        el-button.mt-5.mr-1(plain type="success"
-          :disabled='disabled' @click='submit') {{$t('common.login')}}
-        nuxt-link(to='/register' v-if='settings.allow_registration')
-          el-button(type='primary' plain) {{$t('login.not_registered')}}
+            v-card-actions
+              v-spacer
+
+              v-btn(v-if='settings.allow_registration'
+                to='/register'
+                text
+                color='orange') {{$t('login.not_registered')}}
+
+              v-btn(color='success'
+                type='submit'
+                :disabled='!valid || loading' :loading='loading') {{$t('common.login')}}
+
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { Message } from 'element-ui'
 
 export default {
   name: 'Login',
@@ -31,33 +47,27 @@ export default {
     return {
       password: '',
       email: '',
-      loading: false
+      loading: false,
+      valid: false
     }
   },
   computed: {
-    ...mapState(['settings']),
-    disabled () {
-      return !this.email || !this.password
-    }
-  },
-  mounted () {
-    this.$refs.email.focus()
+    ...mapState(['settings'])
   },
   methods: {
     async forgot () {
       if (!this.email) {
-        Message({ message: this.$t('login.insert_email'), showClose: true, type: 'error' })
+      //   this.$root.$message({ message: this.$t('login.insert_email'), color: 'error' })
         this.$refs.email.focus()
         return
       }
       this.loading = true
       await this.$axios.$post('/user/recover', { email: this.email })
       this.loading = false
-      Message({ message: this.$t('login.check_email'), type: 'success' })
+      this.$root.$message('login.check_email', { color: 'success' })
     },
     async submit (e) {
-      if (this.disabled) { return false }
-      e.preventDefault()
+      if (!this.$refs.form.validate()) return
       try {
         this.loading = true
         const data = new URLSearchParams()
@@ -67,9 +77,9 @@ export default {
         data.append('client_id', 'self')
         await this.$auth.loginWith('local', { data })
         this.loading = false
-        Message({ message: this.$t('login.ok'), showClose: true, type: 'success' })
+        this.$root.$message('login.ok',{ color: 'success' })
       } catch (e) {
-        Message({ message: this.$t('login.error'), showClose: true, type: 'error' })
+        this.$root.$message('login.error',{ color: 'error' })
         this.loading = false
         return
       }

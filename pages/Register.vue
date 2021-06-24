@@ -1,25 +1,38 @@
 <template lang='pug'>
-  el-main
-    el-card
-      h4(slot='header').text-center <el-icon name='user'/> {{$t('common.register')}}
-      p(v-html="$t('register.description')")
-      div(v-loading='loading')
+v-container
+  v-row.mt-5(align='center' justify='center')
+    v-col(cols='12' md="6" lg="5" xl="4")
 
-        el-input.mb-2(ref='email' v-model='user.email' type='email' required
-          :placeholder='$t("common.email")' autocomplete='email'
-          prefix-icon='el-icon-message' name='email')
+      v-card
+        v-card-title {{$t('common.register')}}
 
-        el-input.mb-2(v-model='user.password' type="password"
-          placeholder="Password" name='password' required  prefix-icon='el-icon-lock')
+        v-card-text
 
-        el-input.mb-2(v-model='user.description' type="textarea" rows='3' :placeholder="$t('common.description')")
+          p(v-html="$t('register.description')")
+          v-form(ref='form' v-model='valid')
+            v-text-field(ref='email'
+              v-model='user.email' type='email'
+              :rules="$validators.email"
+              :label='$t("common.email")' autocomplete='email')
 
-        el-button(plain type="success" :disabled='disabled' @click='register') {{$t('common.send')}} <v-icon name='chevron-right'/>
+            v-text-field(v-model='user.password' type="password"
+              :rules="$validators.password"
+              :label="$t('common.password')")
+
+            v-textarea(v-model='user.description'
+              :rules="[$validators.required($t('common.description'))]"
+              :label="$t('common.description')")
+
+        v-card-actions
+          v-spacer
+          v-btn(@click='register'
+            :disabled='!valid || loading' :loading='loading'
+            color='primary') {{$t('common.send')}}
+            v-icon mdi-chevron-right
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { Message } from 'element-ui'
 import get from 'lodash/get'
 
 export default {
@@ -27,7 +40,8 @@ export default {
   data () {
     return {
       loading: false,
-      user: {}
+      user: {},
+      valid: true
     }
   },
   // https://nuxtjs.org/api/pages-validate/
@@ -36,35 +50,29 @@ export default {
     return store.state.settings.allow_registration
   },
   computed: {
-    ...mapState(['settings']),
-    disabled () {
-      if (process.server) { return false }
-      return !this.user.password || !this.user.email || !this.user.description
-    }
+    ...mapState(['settings'])
+    // disabled () {
+    //   if (process.server) { return false }
+    //   return !this.user.password || !this.user.email || !this.user.description
+    // }
   },
   mounted () {
     this.$refs.email.focus()
   },
   methods: {
     async register () {
+      const valid = this.$refs.form.validate()
+      if (!valid) { return }
       try {
         this.loading = true
         const user = await this.$axios.$post('/user/register', this.user)
         // this is the first user registered
         const first_user = user && user.is_admin && user.is_active
-        Message({
-          showClose: true,
-          message: first_user ? this.$t('register.first_user') : this.$t('register.complete'),
-          type: 'success'
-        })
+        this.$root.$message(first_user ? 'register.first_user': 'register.complete')
         this.$router.replace('/')
       } catch (e) {
         const error = get(e, 'response.data.errors[0].message', String(e))
-        Message({
-          showClose: true,
-          message: this.$t(error),
-          type: 'error'
-        })
+        this.$root.$message(error, { color: 'error' })
       }
       this.loading = false
     }

@@ -17,7 +17,7 @@ title: Gancio
 email: lesion@autistici.org
 description: >- # this means to ignore newlines until "baseurl:"
         A shared agenda for local communities with AP support
-baseurl: "/" # the subpath of your site, e.g. /blog
+baseurl: "/next" # the subpath of your site, e.g. /blog
 url: "https://gancio.org" # the base hostname & protocol for your site, e.g. http://example.com
 #twitter_username: jekyllrb
 #github_username:  jekyll
@@ -29,6 +29,7 @@ plugins:
   - jekyll-feed
   - jemoji
   - premonition
+  - jekyll-default-layout
 
 search_enabled: true
 
@@ -37,11 +38,15 @@ aux_links:
     - https://blog.gancio.org
   "Source":
     - https://framagit.org/les/gancio
-  "Forum":
-    - https://socialhub.activitypub.rocks/c/software/gancio
   "Mastodon":
     - https://mastodon.cisti.org/@gancio
 
+gh_edit_link: true # show or hide edit this page link
+gh_edit_link_text: "Edit this page"
+gh_edit_repository: "https://framagit.org/les/gancio" # the github URL for your repo
+gh_edit_branch: "master/docs" # the branch that your docs is served from
+# gh_edit_source: docs # the source that your files originate from
+gh_edit_view_mode: "-/tree" # "tree" or "edit" if you want the user to jump into the editor immediately
 
 
 

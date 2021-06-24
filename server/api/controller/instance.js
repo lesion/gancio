@@ -1,12 +1,19 @@
 const APUser = require('../models/ap_user')
 const Instance = require('../models/instance')
 const Resource = require('../models/resource')
-
-// const { Op } = require('sequelize')
+const Sequelize = require('sequelize')
 
 const instancesController = {
   async getAll (req, res) {
-    const instances = await Instance.findAll({ raw: true })
+    const instances = await Instance.findAll({
+      attributes: [
+        'domain', 'name', 'data', 'blocked',
+        [Sequelize.fn('COUNT', Sequelize.col('ap_users.ap_id')), 'users']
+      ],
+      order: [[Sequelize.fn('COUNT', Sequelize.col('ap_users.ap_id')), 'DESC']],
+      group: ['instance.domain'],
+      include: [{ model: APUser, attributes: [] }]
+    })
     return res.json(instances)
   },
 

@@ -1,0 +1,166 @@
+{
+    "common": {
+        "title": "Titel",
+        "user": "Nutzer:in",
+        "moderation": "Moderation",
+        "follow": "Folgen",
+        "feed_url_copied": "Öffne die kopierte Feed-URL in deinem RSS-Reader",
+        "feed": "RSS-Feed",
+        "embed_help": "Kopiere den folgenden Code in deine Webseite und die Veranstaltung wird wie hier angezeigt",
+        "embed_title": "Bette diese Veranstaltung in deine Webseite ein",
+        "embed": "Einbetten",
+        "copied": "Kopiert",
+        "instances": "Instanzen",
+        "add_to_calendar": "Zu einem Kalender hinzufügen",
+        "send_via_mail": "E-Mail versenden",
+        "copy_link": "Link kopieren",
+        "set_password": "Passwort erstellen",
+        "displayname": "Anzeigename",
+        "activate_user": "Bestätigt",
+        "password_updated": "Passwort geändert.",
+        "me": "Du",
+        "disable": "ausschalten",
+        "enable": "einschalten",
+        "cancel": "Abbrechen",
+        "ok": "OK",
+        "new_user": "Neue:r Nutzer:in",
+        "new_password": "Neues Passwort",
+        "recover_password": "Passwort wiederherstellen",
+        "copy": "Kopieren",
+        "logout_ok": "Abgemeldet",
+        "add": "Hinzufügen",
+        "edit_event": "Veranstaltung bearbeiten",
+        "name": "Name",
+        "share": "Teilen",
+        "logout": "Abmelden",
+        "preview": "Vorschau",
+        "save": "Speichern",
+        "activate": "Aktivieren",
+        "remove_admin": "Admin entfernen",
+        "deactivate": "Deaktivieren",
+        "actions": "Aktionen",
+        "settings": "Einstellungen",
+        "places": "Orte",
+        "events": "Veranstaltungen",
+        "users": "Nutzer:innen",
+        "admin": "Admin",
+        "confirm": "Bestätigen",
+        "edit": "Bearbeiten",
+        "search": "Suchen",
+        "hide": "Verstecken",
+        "remove": "Entfernen",
+        "description": "Beschreibung",
+        "register": "Registrieren",
+        "password": "Passwort",
+        "email": "E-Mail",
+        "login": "Anmelden",
+        "media": "Dateien",
+        "what": "Was",
+        "when": "Wann",
+        "address": "Adresse",
+        "where": "Wo",
+        "send": "Abschicken",
+        "export": "Exportieren",
+        "next": "Weiter",
+        "add_event": "Veranstaltung hinzufügen",
+        "import": "Importieren",
+        "reset": "Zurücksetzen",
+        "tags": "Markierung",
+        "place": "Ort",
+        "url": "URL",
+        "announcements": "Ankündigungen",
+        "delete": "Löschen",
+        "skip": "Überspringen",
+        "fediverse": "Fediverse",
+        "start": "Starten",
+        "pause": "Pausieren",
+        "event": "Veranstaltung",
+        "filter": "Filter",
+        "authorize": "Autorisieren",
+        "follow_me_title": "Folgen Sie den Aktualisierungen von Fediverse",
+        "federation": "Föderation",
+        "n_resources": "keine Ressource|eine Ressource|{n} Ressourcen",
+        "resources": "Ressourcen",
+        "info": "Infos",
+        "theme": "Thema"
+    },
+    "admin": {
+        "delete_footer_link_confirm": "Sicher, diesen Link zu entfernen?",
+        "footer_links": "Fußnotenlinks",
+        "add_link": "Link hinzufügen",
+        "is_dark": "Dunkles Design",
+        "delete_trusted_instance_confirm": "Wollen Sie dieses Element wirklich aus dem Menü der Freundinstanz löschen?",
+        "new_announcement": "Neue Ankündigung",
+        "edit_place": "Ort bearbeiten"
+    },
+    "settings": {
+        "update_confirm": "Wollen Sie Ihre Änderung speichern?",
+        "password_updated": "Passwort geändert.",
+        "change_password": "Passwort ändern",
+        "remove_account_confirm": "Sie sind dabei, Ihr Konto endgültig zu löschen",
+        "remove_account": "Durch Drücken der folgenden Schaltfläche wird Ihr Benutzerkonto gelöscht. Von Ihnen veröffentlichte Ereignisse werden nicht veröffentlicht.",
+        "danger_section": "Gefährlicher Abschnitt"
+    },
+    "auth": {
+        "fail": "Konnte sich nicht anmelden. Sind Sie sicher, dass das Passwort korrekt ist?",
+        "not_confirmed": "Noch nicht bestätigt …"
+    },
+    "error": {
+        "email_taken": "Diese E-Mail-Adresse wird schon verwendet.",
+        "nick_taken": "Dieser Benutzername wird bereits verwendet."
+    },
+    "confirm": {
+        "title": "Benutzerbestätigung",
+        "valid": "Ihr Konto ist bestätigt; Sie können sich jetzt <a href=\"/login\">anmelden</a>",
+        "not_valid": "Etwas ist schief gelaufen."
+    },
+    "validators": {
+        "required": "{fieldName} ist erforderlich",
+        "email": "Fügen Sie eine gültige E-Mail ein"
+    },
+    "ordinal": {
+        "-1": "letzte",
+        "5": "fünfte",
+        "4": "vierte",
+        "3": "dritte",
+        "2": "zweite",
+        "1": "erste"
+    },
+    "oauth": {
+        "scopes": {
+            "event:write": "Fügen Sie Ihre Ereignisse hinzu und bearbeiten Sie sie"
+        }
+    },
+    "event": {
+        "tag_description": "Markierung",
+        "description_description": "Beschreibung",
+        "what_description": "Titel",
+        "same_day": "am selben Tag",
+        "anon": "Anonym"
+    },
+    "register": {
+        "first_user": "Administrator erstellt",
+        "complete": "Die Registrierung muss bestätigt werden.",
+        "error": "Fehler: "
+    },
+    "export": {
+        "list_description": "Wenn Sie eine Website haben und eine Liste von Ereignissen anzeigen möchten, verwenden Sie den folgenden Code",
+        "ical_description": "Computer und Smartphones sind üblicherweise mit einer Kalenderanwendung ausgestattet, mit der ein Fernkalender importiert werden kann.",
+        "insert_your_address": "Geben Sie Ihre E-Mail-Adresse ein",
+        "email_description": "Sie können interessante Ereignisse per E-Mail erhalten.",
+        "feed_description": "Um Updates auf deinem Computer oder Smartphone zu erhalten, ohne regelmäßig diese Seite zu öffnen, kannst du RSS-Feeds benutzen. </p>\n\n<p> Mit RSS-Feeds nutzt du eine spezielle App, um Updates von den Seiten, die dich interessieren, zu erhalten. Damit kannst du rasch vielen Seiten folgen, ohne einen\nAccount erstellen zu müssen und ohne sonstige Komplikationen. </p>\n\n<li> Für Android-Geräte empfehlen wir <a href=\"https://f-droid.org/en/packages/net.frju.flym/\">Flym</a> oder Feeder </li>\n<li> Auf iPhones / iPads kannst du <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\"> Feed4U </a> nutzen</li>\n<li> Auf Desktop-PCs oder Laptops empfehlen wir Feedbro, den du in <a href=\"https://addons.mozilla.org/en-GB/firefox/addon/feedbroreader/\"> Firefox </a> oder <a \nref=\"https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa\"> Chrome </a> installieren kannst. </li>\n<br/>\nIndem du diesen Link deinem RSS-Feed-Reader hinzufügst, wirst du auf dem Laufenden gehalten.",
+        "intro": "Anders als unsoziale Netzwerke, die alles unternehmen, um Nutzer und deren Daten bei sich zu (be)halten, glauben wir, dass Informationen und Leute gleichermaßen frei sein müssen. Deshalb kannst du dich über Veranstaltungen auf dem Laufenden halten, ohne zwangsläufig über diese Seite zu gehen."
+    },
+    "recover": {
+        "not_valid_code": "Etwas ist schief gelaufen."
+    },
+    "login": {
+        "ok": "Angemeldet",
+        "insert_email": "Geben Sie Ihre E-Mail-Adresse ein",
+        "error": "Anmeldung unmöglich. Überprüfen Sie Ihre Anmeldeinformationen.",
+        "forgot_password": "Passwort vergessen?",
+        "not_registered": "Nicht registriert?",
+        "check_email": "Überprüfen Sie Ihren E-Mail-Posteingang und Spam.",
+        "description": "Durch Anmelden können Sie neue Veranstaltungen veröffentlichen."
+    }
+}

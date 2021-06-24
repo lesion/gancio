@@ -3,7 +3,7 @@ const Place = require('../models/place')
 const Tag = require('../models/tag')
 
 const { Op } = require('sequelize')
-const moment = require('moment-timezone')
+const moment = require('dayjs')
 const ics = require('ics')
 
 const exportController = {
@@ -72,7 +72,7 @@ const exportController = {
         title: `[${req.settings.title}] ${e.title}`,
         description: e.description,
         location: `${e.place.name} - ${e.place.address}`,
-        url: `${req.settings.baseurl}/event/${e.id}`,
+        url: `${req.settings.baseurl}/event/${e.slug || e.id}`,
         alarms
       }
     })

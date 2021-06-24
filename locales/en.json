@@ -63,7 +63,7 @@
         "embed": "Embed",
         "embed_title": "Embed this event on your website",
         "embed_help": "Copying the following code into your website and the event will be shown like here",
-        "feed": "Feed RSS",
+        "feed": "RSS Feed",
         "feed_url_copied": "Open the copied feed URL in your RSS feed reader",
         "follow_me_title": "Follow updates from fediverse",
         "follow": "Follow",
@@ -80,14 +80,20 @@
         "delete": "Remove",
         "announcements": "Announcements",
         "url": "URL",
-        "place": "Place"
+        "place": "Place",
+        "tags": "Tags",
+        "theme": "Theme",
+        "reset": "Reset",
+        "import": "Import",
+        "max_events": "N. max events",
+        "label": "Label"
     },
     "login": {
         "description": "By logging in you can publish new events.",
         "check_email": "Check your e-mail inbox and spam.",
         "not_registered": "Not registered?",
         "forgot_password": "Forgot your password?",
-        "error": "Could not log in. Check your data.",
+        "error": "Could not log in. Check your login info.",
         "insert_email": "Enter your e-mail address",
         "ok": "Logged in"
     },
@@ -118,11 +124,13 @@
         "media_description": "You can add a flyer (optional)",
         "added": "Event added",
         "added_anon": "Event added, but has yet to be confirmed.",
-        "where_description": "Where's the event? If not present, write it and <b>press ⏎</b>. ",
+        "updated": "Event updated",
+        "where_description": "Where's the event? If not present you can create it.",
         "confirmed": "Event confirmed",
         "not_found": "Could not find event",
         "remove_confirmation": "Are you sure you want to remove this event?",
         "recurrent": "Recurring",
+        "edit_recurrent": "Edit recurring event:",
         "show_recurrent": "recurring events",
         "show_past": "also prior events",
         "only_future": "only upcoming events",
@@ -144,9 +152,13 @@
         "from": "From",
         "image_too_big": "The image can't be bigger than 4 MB",
         "interact_with_me_at": "Interact with me on fediverse at",
-        "follow_me_description": "One of the ways to stay up to date on events published here on {title},\nis following the account <u>{account}</u> from the fediverse, for example via mastodon, and possibly add resources to an event from there.<br/><br/>\nIf you have never heard of Mastodon and the fediverse we recommend reading <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>this article</a>.<br/><br/>Enter your instance below (e.g. mastodon.social)",
+        "follow_me_description": "One of the ways to stay up to date on events published here on {title},\nis following the account <u>{account}</u> from the fediverse, for example via Mastodon, and possibly add resources to an event from there.<br/><br/>\nIf you have never heard of Mastodon and the fediverse we recommend reading <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>this article</a>.<br/><br/>Enter your instance below (e.g. mastodon.social)",
         "interact_with_me": "Follow me",
-        "remove_recurrent_confirmation": "Are you sure you want to remove this recurring event?\nPast events will be maintained, but no further events will be created."
+        "remove_recurrent_confirmation": "Are you sure you want to remove this recurring event?\nPast events will be maintained, but no further events will be created.",
+        "import_URL": "Import from URL",
+        "import_ICS": "Import from ICS",
+        "ics": "ICS",
+        "import_description": "You can import events from other platforms and other instances through standard formats (ics and h-event)"
     },
     "admin": {
         "place_description": "If you have gotten the place or address wrong, you can change it.<br/>All current and past events associated with this place will change address.",
@@ -163,6 +175,7 @@
         "federation": "Federation / ActivityPub",
         "enable_federation": "Turn on federation",
         "enable_federation_help": "It will be possible to follow this instance from the fediverse",
+        "add_instance": "Add instance",
         "select_instance_timezone": "Time zone",
         "enable_resources": "Turn on resources",
         "enable_resources_help": "Allows adding resources to the event from the fediverse",
@@ -197,7 +210,13 @@
         "trusted_instances_help": "The list of friendly instances will be shown in the header",
         "add_trusted_instance": "Add a friendly instance",
         "instance_place_help": "The label to show in instances of others",
-        "delete_trusted_instance_confirm": "Do you really want to delete this item from the friend instances menu?"
+        "delete_trusted_instance_confirm": "Do you really want to delete this item from the friend instance menu?",
+        "is_dark": "Dark theme",
+        "add_link": "Add link",
+        "footer_links": "Footer links",
+        "delete_footer_link_confirm": "Sure to remove this link?",
+        "edit_place": "Edit place",
+        "new_announcement": "New announcement"
     },
     "auth": {
         "not_confirmed": "Not confirmed yet…",
@@ -227,6 +246,10 @@
         "4": "fourth",
         "5": "fifth",
         "-1": "last"
+    },
+    "validators": {
+        "required": "{fieldName} is required",
+        "email": "Insert a valid email"
     },
     "about": "\n  <p><a href='https://gancio.org'>Gancio</a> is a shared agenda for local communities.</p>\n  ",
     "oauth": {

@@ -1,43 +1,31 @@
 <template lang='pug'>
-  el-container#main(:class='{dark: $route.name==="index" || $route.name==="announcement-id"}')
-    el-dialog(:visible.sync='showFollowMe')
-      h4(slot='title') {{$t('common.follow_me_title')}}
-      FollowMe
-
-    el-backtop
+  v-app
+    Snackbar
+    Confirm
     Nav
-    #content
-      nuxt
-    el-footer.mt-1#footer
-      #links
-        a(href='https://gancio.org') Gancio {{settings.version}}</a>
-        span  ⇒
-        a(v-if='settings.enable_federation' rel='me' :href='settings.baseurl' @click.prevent='showFollowMe=true') follow me
-        nuxt-link(to='/about') about
-        a(href='https://blog.gancio.org') blog
-        a(href='https://framagit.org/les/gancio') source
+
+    v-main
+      v-fade-transition(hide-on-leave)
+        nuxt
+
+    Footer
 
 </template>
 <script>
 import Nav from '~/components/Nav.vue'
+import Snackbar from '../components/Snackbar'
+import Footer from '../components/Footer'
+import Confirm from '../components/Confirm'
 import { mapState } from 'vuex'
-import FollowMe from '../components/FollowMe'
 
 export default {
-  components: { Nav, FollowMe },
-  data () {
-    return { showFollowMe: false }
-  },
-  computed: mapState(['settings'])
-}
-</script>
-<style lang='less'>
-.el-backtop {
-  color: orangered;
-}
-#footer {
-  a {
-    font-size: 1.1em;
+  name: 'Default',
+  components: { Nav, Snackbar, Footer, Confirm },
+  computed: mapState(['settings']),
+  created () {
+    this.$vuetify.theme.dark = this.settings['theme.is_dark']
+    this.$vuetify.theme.themes.dark.primary = this.settings['theme.primary']
+    this.$vuetify.theme.themes.light.primary = this.settings['theme.primary']
   }
 }
-</style>
+</script>

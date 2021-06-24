@@ -2,7 +2,7 @@ const express = require('express')
 const multer = require('multer')
 const cors = require('cors')()
 
-const { isAuth, isAdmin, hasPerm } = require('./auth')
+const { isAuth, isAdmin } = require('./auth')
 const eventController = require('./controller/event')
 const exportController = require('./controller/export')
 const userController = require('./controller/user')
@@ -12,12 +12,12 @@ const apUserController = require('./controller/ap_user')
 const resourceController = require('./controller/resource')
 const oauthController = require('./controller/oauth')
 const announceController = require('./controller/announce')
-
+const helpers = require('../helpers')
 const storage = require('./storage')
 const upload = multer({ storage })
 
 const config = require('config')
-const debug = require('debug')('api')
+const log = require('../log')
 
 const api = express.Router()
 api.use(express.urlencoded({ extended: false }))
@@ -54,11 +54,11 @@ api.post('/user/register', userController.register)
 api.post('/user', isAdmin, userController.create)
 
 // update user
-api.put('/user', hasPerm('user:update'), userController.update)
+api.put('/user', isAuth, userController.update)
 
 // delete user
 api.delete('/user/:id', isAdmin, userController.remove)
-api.delete('/user', hasPerm('user:remove'), userController.remove)
+api.delete('/user', isAdmin, userController.remove)
 
 // get all users
 api.get('/users', isAdmin, userController.getAll)
@@ -71,7 +71,7 @@ api.put('/place', isAdmin, eventController.updatePlace)
  * @category Event
  * @name /event
  * @type POST
- * @info `Content-Type` has to be `multipart/form-data` 'cause support image upload
+ * @info `Content-Type` has to be `multipart/form-data` to support image upload
  * @param {string} title - event's title
  * @param {string} description - event's description (html accepted and sanitized)
  * @param {string} place_name - the name of the place
@@ -85,11 +85,15 @@ api.put('/place', isAdmin, eventController.updatePlace)
  * @param {array} [recurrent.days] - array of days
  * @param {image} [image] - Image
  */
-api.post('/event', hasPerm('event:write'), upload.single('image'), eventController.add)
-api.put('/event', hasPerm('event:write'), upload.single('image'), eventController.update)
+
+// allow anyone to add an event (anon event has to be confirmed, TODO: flood protection)
+api.post('/event', upload.single('image'), eventController.add)
+
+api.put('/event', isAuth, upload.single('image'), eventController.update)
+api.get('/event/import', isAuth, helpers.importURL)
 
 // remove event
-api.delete('/event/:id', hasPerm('event:remove'), eventController.remove)
+api.delete('/event/:id', isAuth, eventController.remove)
 
 // get tags/places
 api.get('/event/meta', eventController.getMeta)
@@ -103,12 +107,11 @@ api.delete('/event/notification/:code', eventController.delNotification)
 
 api.get('/settings', settingsController.getAllRequest)
 api.post('/settings', isAdmin, settingsController.setRequest)
-api.get('/event/:event_id.:format?', cors, eventController.get)
 api.post('/settings/logo', isAdmin, multer({ dest: config.upload_path }).single('logo'), settingsController.setLogo)
 
 // confirm event
-api.get('/event/confirm/:event_id', hasPerm('event:write'), eventController.confirm)
-api.get('/event/unconfirm/:event_id', hasPerm('event:write'), eventController.unconfirm)
+api.put('/event/confirm/:event_id', isAuth, eventController.confirm)
+api.put('/event/unconfirm/:event_id', isAuth, eventController.unconfirm)
 
 // get event
 api.get('/event/:event_id.:format?', cors, eventController.get)
@@ -117,8 +120,7 @@ api.get('/event/:event_id.:format?', cors, eventController.get)
 api.get('/export/:type', cors, exportController.export)
 
 // get events in this range
-// api.get('/event/:month/:year', cors, eventController.getAll)
-api.get('/event', cors, eventController.select)
+api.get('/events', cors, eventController.select)
 
 api.get('/instances', isAdmin, instanceController.getAll)
 api.get('/instances/:instance_domain', isAdmin, instanceController.get)
@@ -134,15 +136,16 @@ api.post('/announcements', isAdmin, announceController.add)
 api.put('/announcements/:announce_id', isAdmin, announceController.update)
 api.delete('/announcements/:announce_id', isAdmin, announceController.remove)
 
-api.get('/clients', hasPerm('oauth:read'), oauthController.getClients)
-api.get('/client/:client_id', hasPerm('oauth:read'), oauthController.getClient)
+// OAUTH
+api.get('/clients', isAuth, oauthController.getClients)
+api.get('/client/:client_id', isAuth, oauthController.getClient)
 api.post('/client', oauthController.createClient)
 
 api.use((req, res) => res.sendStatus(404))
 
 // Handle 500
 api.use((error, req, res, next) => {
-  debug(error)
+  log.error(error)
   res.status(500).send('500: Internal Server Error')
 })
 

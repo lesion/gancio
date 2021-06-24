@@ -1,30 +1,37 @@
 <template lang='pug'>
-  div
-    p(v-html="$t('admin.announcement_description')")
-    br
-    el-input(v-model='announcement.title' :placeholder='$t("common.title")')
-    Editor.mt-2(v-model='announcement.announcement' border no-save style='max-height: 400px;')
-    el-button.mt-2.float-right(@click='save' type='success' plain) {{$t(`common.${editing?'save':'send'}`)}}
+  v-container
+    v-card-title {{$t('common.announcements')}}
+    v-card-subtitle(v-html="$t('admin.announcement_description')")
+    v-dialog(v-model='dialog' width='800px')
+      v-card
+        v-card-title {{$t('admin.new_announcement')}}
+        v-card-text.px-0
+          v-form(v-model='valid' ref='announcement' @submit.prevent='save' lazy-validation)
+            v-text-field.col-12(v-model='announcement.title'
+              :rules="[$validators.required('common.title')]"
+              :label='$t("common.title")')
+            Editor.col-12(v-model='announcement.announcement'
+              border no-save max-height='400px' :placeholder="$t('common.description')")
+        v-card-actions
+          v-spacer
+          v-btn(@click='dialog=false' color='error') {{$t('common.cancel')}}
+          v-btn(@click='save' color='primary' :disabled='!valid || loading' :loading='loading') {{$t(`common.${editing?'save':'send'}`)}}
 
-    el-table(:data='announcements' small)
-      el-table-column(:label="$t('common.title')" width='250')
-        template(slot-scope='data')
-          span(slot='reference') {{data.row.title}}
-
-      el-table-column(:label="$t('common.actions')")
-        template(slot-scope='data')
-          el-button-group
-            el-button(size='mini' type='primary'
-              @click='edit(data.row)') {{$t('common.edit')}}
-            el-button(size='mini'
-              :type='data.row.visible?"warning":"success"'
-              @click='toggle(data.row)') {{data.row.visible?$t('common.deactivate'):$t('common.activate')}}
-            el-button(size='mini' type='danger'
-              @click='remove(data.row)') {{$t('common.delete')}}
+    v-btn(@click='openDialog' text color='primary') <v-icon>mdi-plus</v-icon> {{$t('common.add')}}
+    v-card-text
+      v-data-table(
+          v-if='announcements.length'
+          :hide-default-footer='announcements.length<10'
+          :headers='headers'
+          :items='announcements')
+        template(v-slot:item.actions='{ item }')
+          v-btn(text small @click.stop='toggle(item)'
+            :color='item.visible?"warning":"success"') {{item.visible?$t('common.disable'):$t('common.enable')}}
+          v-btn(text small @click='edit(item)' color='primary') {{$t('common.edit')}}
+          v-btn(text small @click='remove(item)' color='error') {{$t('common.delete')}}
 
 </template>
 <script>
-import { Message, MessageBox } from 'element-ui'
 import { mapActions } from 'vuex'
 import cloneDeep from 'lodash/cloneDeep'
 import Editor from '../Editor'
@@ -34,8 +41,15 @@ export default {
   components: { Editor, Announcement },
   data () {
     return {
+      valid: false,
+      dialog: false,
       editing: false,
       announcements: [],
+      loading: false,
+      headers: [
+        { value: 'title', text: 'Title' },
+        { value: 'actions', text: 'Actions', align: 'right' }
+      ],
       announcement: { title: '', announcement: '' }
     }
   },
@@ -49,6 +63,12 @@ export default {
       this.announcement.announcement = announcement.announcement
       this.announcement.id = announcement.id
       this.editing = true
+      this.dialog = true
+    },
+    openDialog () {
+      this.announcement = { title: '', announcement: '' }
+      this.dialog = true
+      this.$nextTick(() => this.$refs.announcement.reset())
     },
     async toggle (announcement) {
       try {
@@ -58,24 +78,18 @@ export default {
         this.setAnnouncements(cloneDeep(this.announcements.filter(a => a.visible)))
       } catch (e) {}
     },
-    remove (announcement) {
-      MessageBox.confirm(this.$t('admin.delete_announcement_confirm'),
-        this.$t('common.confirm'), {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'error'
-        })
-        .then(() => this.$axios.delete(`/announcements/${announcement.id}`))
+    async remove (announcement) {
+      const ret = await this.$root.$confirm('admin.delete_announcement_confirm')
+      if (!ret) { return }
+      this.$axios.delete(`/announcements/${announcement.id}`)
         .then(() => {
-          Message({
-            showClose: true,
-            type: 'success',
-            message: this.$t('admin.announcement_remove_ok')
-          })
+          this.$root.$message('admin.announcement_remove_ok')
           this.announcements = this.announcements.filter(a => a.id !== announcement.id)
         })
     },
     async save () {
+      if (!this.$refs.announcement.validate()) { return }
+      this.loading = true
       try {
         let announcement = null
         if (this.editing) {
@@ -87,10 +101,13 @@ export default {
         }
         this.setAnnouncements(cloneDeep(this.announcements))
         this.announcement = { title: '', announcement: '' }
+        this.$refs.announcement.reset()
         this.editing = false
+        this.dialog = false
       } catch (e) {
         console.error(e)
       }
+      this.loading = false
     }
   }
 }

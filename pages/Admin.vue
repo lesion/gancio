@@ -1,105 +1,82 @@
 <template lang="pug">
-  el-main
+  v-container
+    v-card
+      v-tabs(v-model='selectedTab')
 
-    el-tabs(v-model='tab')
+        //- SETTINGS
+        v-tab {{$t('common.settings')}}
+        v-tab-item
+          Settings
 
-      //- SETTINGS
-      el-tab-pane.pt-1
-        template(slot='label')
-          v-icon(name='cog')
-          span.hidden-xs-only  {{$t('common.settings')}}
-        Settings
+        //- THEME
+        v-tab {{$t('common.theme')}}
+        v-tab-item
+          Theme
 
-      //- USERS
-      el-tab-pane.pt-1
-        template(slot='label')
-          v-icon(name='users')
-          span.hidden-xs-only.ml-1 {{$t('common.users')}}
-          el-badge(v-show='unconfirmedUsers.length>0' :value='unconfirmedUsers.length')
-        Users(:users='users')
+        //- USERS
+        v-tab
+          v-badge(:value='!!unconfirmedUsers.length' :content='unconfirmedUsers.length') {{$t('common.users')}}
+        v-tab-item
+          Users(:users='users' @update='updateUsers')
 
-      //- PLACES
-      el-tab-pane.pt-1
-        template(slot='label')
-          v-icon(name='map-marker-alt')
-          span.hidden-xs-only.ml-1 {{$t('common.places')}}
-        Places
+        //- PLACES
+        v-tab {{$t('common.places')}}
+        v-tab-item
+          Places
 
-      //- EVENTS
-      el-tab-pane.pt-1
-        template(slot='label')
-          v-icon(name='calendar')
-          span.hidden-xs-only.ml-1 {{$t('common.events')}}
-          el-badge(v-show='events.length>0' :value='events.length')
-        p {{$t('admin.event_confirm_description')}}
-        el-table(:data='paginatedEvents' small primary-key='id' v-loading='loading')
-          el-table-column(:label='$t("common.name")' width='300')
-            template(slot-scope='data') {{data.row.title}}
-          el-table-column(:label='$t("common.where")' width='250')
-            template(slot-scope='data') {{data.row.place.name}}
-          el-table-column(:label='$t("common.confirm")' width='250')
-            template(slot-scope='data')
-              el-button-group
-                el-button(type='primary' @click='confirm(data.row.id)' size='mini') {{$t('common.confirm')}}
-                el-button(type='success' @click='preview(data.row.id)' size='mini') {{$t('common.preview')}}
-        client-only
-          el-pagination(v-if='events.length>perPage' :page-size='perPage' :currentPage.sync='eventPage' :total='events.length')
+        //- EVENTS
+        v-tab
+          v-badge(:value='!!unconfirmedEvents.length' :content='unconfirmedEvents.length') {{$t('common.events')}}
+        v-tab-item
+          Events(:unconfirmedEvents='unconfirmedEvents'
+            @confirmed='id => { unconfirmedEvents = unconfirmedEvents.filter(e => e.id !== id)}')
 
-      //- ANNOUNCEMENTS
-      el-tab-pane.pt-1
-        template(slot='label')
-          v-icon(name='bullhorn')
-          span.hidden-xs-only.ml-1 {{$t('common.announcements')}}
-        Announcement
+        //- ANNOUNCEMENTS
+        v-tab {{$t('common.announcements')}}
+        v-tab-item
+          Announcement
 
-      //- FEDERATION
-      el-tab-pane.pt-1
-        template(slot='label')
-          v-icon(name='network-wired')
-          span.hidden-xs-only.ml-1 {{$t('common.federation')}}
-        Federation
+        //- FEDERATION
+        v-tab {{$t('common.federation')}}
+        v-tab-item
+          Federation
 
-      //- MODERATION
-      el-tab-pane.pt-1(v-if='settings.enable_federation')
-        template(slot='label')
-          v-icon(name='vector-square')
-          span.hidden-xs-only.ml-1 {{$t('common.moderation')}}
-        Moderation
+        //- MODERATION
+        v-tab(v-if='settings.enable_federation') {{$t('common.moderation')}}
+        v-tab-item
+          Moderation
 
 </template>
 <script>
 import { mapState } from 'vuex'
-import { Message } from 'element-ui'
 import Users from '../components/admin/Users'
+import Events from '../components/admin/Events'
 import Places from '../components/admin/Places'
 import Settings from '../components/admin/Settings'
 import Federation from '../components/admin/Federation'
 import Moderation from '../components/admin/Moderation'
 import Announcement from '../components/admin/Announcement'
+import Theme from '../components/admin/Theme'
 
 export default {
   name: 'Admin',
-  components: { Users, Places, Settings, Federation, Moderation, Announcement },
+  components: { Users, Events, Places, Settings, Federation, Moderation, Announcement, Theme },
   middleware: ['auth'],
   async asyncData ({ $axios, params, store }) {
     try {
       const users = await $axios.$get('/users')
-      const events = await $axios.$get('/event/unconfirmed')
-      return { users, events }
+      const unconfirmedEvents = await $axios.$get('/event/unconfirmed')
+      return { users, unconfirmedEvents, selectedTab: 0 }
     } catch (e) {
       console.error(e)
-      return { users: [], events: [] }
+      return { users: [], unconfirmedEvents: [], selectedTab: 0 }
     }
   },
   data () {
     return {
-      perPage: 10,
-      eventPage: 1,
       description: '',
-      events: [],
-      loading: false,
-      tab: '0',
-      open: true
+      unconfirmedEvents: [],
+      selectedTab: 0
     }
   },
   head () {
@@ -109,29 +86,21 @@ export default {
     ...mapState(['settings']),
     unconfirmedUsers () {
       return this.users.filter(u => !u.is_active)
-    },
-    paginatedEvents () {
-      return this.events.slice((this.eventPage - 1) * this.perPage,
-        this.eventPage * this.perPage)
     }
   },
   methods: {
+    async updateUsers () {
+      this.users = await this.$axios.$get('/users')
+    },
     preview (id) {
       this.$router.push(`/event/${id}`)
     },
     async confirm (id) {
-      try {
-        this.loading = true
-        await this.$axios.$get(`/event/confirm/${id}`)
-        this.loading = false
-        Message({
-          message: this.$t('event.confirmed'),
-          showClose: true,
-          type: 'success'
-        })
-        this.events = this.events.filter(e => e.id !== id)
-      } catch (e) {
-      }
+      this.loading = true
+      await this.$axios.$get(`/event/confirm/${id}`)
+      this.loading = false
+      this.$root.$message('event.confirmed', { color: 'succes' })
+      this.unconfirmedEvents = this.unconfirmedEvents.filter(e => e.id !== id)
     }
   }
 }

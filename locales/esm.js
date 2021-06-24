@@ -4,5 +4,8 @@ export default {
   es: 'Español',
   ca: 'Català',
   pl: 'Polski',
-  eu: 'Euskara'
+  eu: 'Euskara',
+  nb: 'Norwegian Bokmål',
+  fr: 'Francais',
+  de: 'Deutsch'
 }

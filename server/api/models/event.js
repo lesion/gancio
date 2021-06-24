@@ -1,8 +1,10 @@
 const config = require('config')
-const moment = require('moment-timezone')
-const htmlToText = require('html-to-text')
+const moment = require('dayjs')
+const { htmlToText } = require('html-to-text')
 
 const { Model, DataTypes } = require('sequelize')
+const SequelizeSlugify = require('sequelize-slugify')
+
 const sequelize = require('./index')
 
 const Resource = require('./resource')
@@ -11,6 +13,10 @@ const EventNotification = require('./eventnotification')
 const Place = require('./place')
 const User = require('./user')
 const Tag = require('./tag')
+
+const utc = require('dayjs/plugin/utc')
+const dayjs = require('dayjs')
+dayjs.extend(utc)
 
 class Event extends Model {}
 
@@ -22,7 +28,11 @@ Event.init({
     autoIncrement: true
   },
   title: DataTypes.STRING,
-  slug: DataTypes.STRING,
+  slug: {
+    type: DataTypes.STRING,
+    index: true,
+    unique: true
+  },
   description: DataTypes.TEXT,
   multidate: DataTypes.BOOLEAN,
   start_datetime: {
@@ -47,6 +57,7 @@ Event.belongsTo(User)
 User.hasMany(Event)
 
 Event.belongsToMany(Tag, { through: 'event_tags' })
+Tag.belongsToMany(Event, { through: 'event_tags' })
 
 Event.belongsToMany(Notification, { through: EventNotification })
 Notification.belongsToMany(Event, { through: EventNotification })
@@ -57,53 +68,56 @@ Resource.belongsTo(Event)
 Event.hasMany(Event, { as: 'child', foreignKey: 'parentId' })
 Event.belongsTo(Event, { as: 'parent' })
 
-Event.prototype.toAP = function (username, locale, to = []) {
-  const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
-  const plainDescription = htmlToText.fromString(this.description.replace('\n', '').slice(0, 1000))
-  const summary = `
-  📍 ${this.place && this.place.name}
-  📅 ${moment.unix(this.start_datetime).locale(locale).format('dddd, D MMMM (HH:mm)')}
+SequelizeSlugify.slugifyModel(Event, { source: ['title'] })
 
-    ${plainDescription}
+Event.prototype.toAPNote = function (username, locale, to = []) {
+  const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
+  const plainDescription = htmlToText(this.description && this.description.replace('\n', '').slice(0, 1000))
+  const content = `
+  ${this.title}<br/><br/>
+    📍 ${this.place && this.place.name}<br/>
+    📅 ${moment.unix(this.start_datetime).locale(locale).format('dddd, D MMMM (HH:mm)')}<br/><br/>
+
+    ${plainDescription}<br/><br/>
+
+    <a href='${config.baseurl}/event/${this.slug || this.id}'>${config.baseurl}/event/${this.slug || this.id}</a><br/>
 
     ${tags && tags.map(t => `#${t}`)}
-
   `
 
-  const attachment = []
-  if (this.image_path) {
-    attachment.push({
-      type: 'Document',
-      mediaType: 'image/jpeg',
-      url: `${config.baseurl}/media/${this.image_path}`,
-      name: null,
-      blurHash: null
-    })
-  }
-
-  to.push('https://www.w3.org/ns/activitystreams#Public')
+  // const attachment = []
+  // if (this.image_path) {
+  //   attachment.push({
+  //     type: 'Document',
+  //     mediaType: 'image/jpeg',
+  //     url: `${config.baseurl}/media/${this.image_path}`,
+  //     name: null,
+  //     blurHash: null
+  //   })
+  // }
 
   return {
     id: `${config.baseurl}/federation/m/${this.id}`,
-    name: this.title,
+    // name: this.title,
     url: `${config.baseurl}/event/${this.id}`,
-    type: 'Event',
-    startTime: moment.unix(this.start_datetime).locale(locale).format(),
-    endTime: moment.unix(this.end_datetime).locale(locale).format(),
-    location: {
-      name: this.place && this.place.name
-    },
-    attachment,
-    tag: tags && tags.map(tag => ({
-      type: 'Hashtag',
-      name: '#' + tag,
-      href: '/tags/' + tag
-    })),
-    published: this.createdAt,
+    type: 'Note',
+    // startTime: moment.unix(this.start_datetime).locale(locale).format(),
+    // endTime: moment.unix(this.end_datetime).locale(locale).format(),
+    // location: {
+    //   name: this.place && this.place.name
+    // },
+    // attachment,
+    // tag: tags && tags.map(tag => ({
+    //   type: 'Hashtag',
+    //   name: '#' + tag,
+    //   href: '/tags/' + tag
+    // })),
+    published: dayjs(this.createdAt).utc().format(),
     attributedTo: `${config.baseurl}/federation/u/${username}`,
-    to,
+    to: 'https://www.w3.org/ns/activitystreams#Public',
     cc: [`${config.baseurl}/federation/u/${username}/followers`],
-    summary
+    content,
+    summary: null
   }
 }
 

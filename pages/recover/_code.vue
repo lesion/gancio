@@ -1,18 +1,21 @@
 <template lang='pug'>
-  el-card.mt-5
-    h4(slot='header')
-      nuxt-link(to='/')
-        img(src='/favicon.ico')
-      span  {{settings.title}} - {{$t('common.recover_password')}}
-    div(v-if='valid')
-      el-input(type='password', :placeholder='$t("common.new_password")' v-model='new_password' prefix-icon='el-icon-lock')
-    div(v-else) {{$t('recover.not_valid_code')}}
+  v-row.mt-5(align='center' justify='center')
+    v-col(cols='12' md="6" lg="5" xl="4")
+      v-card
+        v-card-title {{settings.title}} - {{$t('common.recover_password')}}
+        v-card-text
+          div(v-if='valid')
+            v-text-field(type='password'
+              :rules="$validators.password"
+              autofocus :placeholder='$t("common.new_password")'
+              v-model='new_password')
+          div(v-else) {{$t('recover.not_valid_code')}}
 
-    el-button.mt-2(plain v-if='valid' type="success" icon='el-icon-check'
-      @click='change_password') {{$t('common.send')}}
+        v-card-actions
+          v-spacer
+          v-btn(v-if='valid' color='primary' @click='change_password') {{$t('common.send')}}
 </template>
 <script>
-import { Message } from 'element-ui'
 import { mapState } from 'vuex'
 
 export default {
@@ -35,18 +38,10 @@ export default {
     async change_password () {
       try {
         await this.$axios.$post('/user/recover_password', { recover_code: this.code, password: this.new_password })
-        Message({
-          showClose: true,
-          type: 'success',
-          message: this.$t('common.password_updated')
-        })
+        this.$root.$message('common.password_updated')
         this.$router.replace('/login')
       } catch (e) {
-        Message({
-          showClose: true,
-          type: 'warning',
-          message: e
-        })
+        this.$root.$message(e, { color: 'warning' })
       }
     }
   },

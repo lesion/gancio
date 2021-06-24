@@ -3,11 +3,11 @@ const axios = require('axios')
 const crypto = require('crypto')
 const config = require('config')
 const httpSignature = require('http-signature')
-const debug = require('debug')('federation:helpers')
 const APUser = require('../api/models/ap_user')
 const Instance = require('../api/models/instance')
 const url = require('url')
 const settingsController = require('../api/controller/settings')
+const log = require('../log')
 
 const Helpers = {
 
@@ -25,7 +25,10 @@ const Helpers = {
       '/friendica/json',
       '/poco'
     ]
-    if (urlToIgnore.includes(req.path)) { return res.status(404).send('Not Found') }
+    if (urlToIgnore.includes(req.path)) {
+      log.debug(`Ignore noisy fediverse ${req.path}`)
+      return res.status(404).send('Not Found')
+    }
     next()
   },
 
@@ -58,15 +61,15 @@ const Helpers = {
         method: 'post',
         data: message
       })
-      debug('sign %s => %s', ret.status, ret.data)
+      log.debug(`signed ${ret.status} => ${ret.data}`)
     } catch (e) {
-      debug('ERROR ', e.toString())
+      log.error(`Response: ${e.response.status} ${e.response.data}`)
     }
   },
 
   async sendEvent (event, type = 'Create') {
     if (!settingsController.settings.enable_federation) {
-      debug('event not send, federation disabled')
+      log.info('event not send, federation disabled')
       return
     }
 
@@ -79,14 +82,14 @@ const Helpers = {
     })
 
     for (const sharedInbox in recipients) {
-      debug('Notify %s with event %s cc => %d', sharedInbox, event.title, recipients[sharedInbox].length)
+      log.debug(`Notify ${sharedInbox} with event ${event.title} cc => ${recipients[sharedInbox].length}`)
       const body = {
         id: `${config.baseurl}/federation/m/${event.id}#create`,
         type,
-        to: recipients[sharedInbox],
-        cc: ['https://www.w3.org/ns/activitystreams#Public', `${config.baseurl}/federation/u/${settingsController.settings.instance_name}/followers`],
+        to: ['https://www.w3.org/ns/activitystreams#Public'],
+        cc: [...recipients[sharedInbox], `${config.baseurl}/federation/u/${settingsController.settings.instance_name}/followers`],
         actor: `${config.baseurl}/federation/u/${settingsController.settings.instance_name}`,
-        object: event.toAP(settingsController.settings.instance_name,
+        object: event.toAPNote(settingsController.settings.instance_name,
           settingsController.settings.instance_locale,
           recipients[sharedInbox])
       }
@@ -117,18 +120,18 @@ const Helpers = {
     fedi_user = await axios.get(URL, { headers: { Accept: 'application/jrd+json, application/json' } })
       .then(res => {
         if (res.status !== 200) {
-          debug('[ERR] Actor %s => %s', URL, res.statusText)
+          log.warn(`Actor ${URL} => ${res.statusText}`)
           return false
         }
         return res.data
       })
       .catch(e => {
-        debug(`[ERR] ${URL}: ${e}`)
+        log.error(`${URL}: ${e}`)
         return false
       })
 
     if (fedi_user) {
-      debug(`Create a new AP User => ${URL}`)
+      log.info(`Create a new AP User => ${URL}`)
       fedi_user = await APUser.create({ ap_id: URL, object: fedi_user })
     }
     return fedi_user
@@ -138,7 +141,7 @@ const Helpers = {
     actor_url = new url.URL(actor_url)
     const domain = actor_url.host
     const instance_url = `${actor_url.protocol}//${actor_url.host}`
-    debug('getInstance %s', domain)
+    log.debug(`getInstance ${domain}`)
     let instance
     if (!force) {
       instance = await Instance.findByPk(domain)
@@ -156,32 +159,45 @@ const Helpers = {
         return Instance.create({ name: instance.title, domain, data, blocked: false })
       })
       .catch(e => {
-        debug(e)
-        return false
+        log.error(e)
+        return Instance.create({ name: domain, domain, blocked: false })
       })
     return instance
   },
 
   // ref: https://blog.joinmastodon.org/2018/07/how-to-make-friends-and-verify-requests/
   async verifySignature (req, res, next) {
+    // TODO: why do I need instance?
     const instance = await Helpers.getInstance(req.body.actor)
-    if (!instance) { return res.status(401).send('Instance not found') }
+    if (!instance) {
+      log.warn(`Verify Signature: Instance not found ${req.body.actor}`)
+      return res.status(401).send('Instance not found')
+    }
     if (instance.blocked) {
-      debug('Instance %s blocked', instance.domain)
+      log.warn(`Instance ${instance.domain} blocked`)
       return res.status(401).send('Instance blocked')
     }
 
     let user = await Helpers.getActor(req.body.actor, instance)
-    if (!user) { return res.status(401).send('Actor not found') }
+    if (!user) {
+      log.info(`Actor ${req.body.actor} not found`)
+      return res.status(401).send('Actor not found')
+    }
     if (user.blocked) {
-      debug('User %s blocked', user.ap_id)
+      log.info(`User ${user.ap_id} blocked`)
       return res.status(401).send('User blocked')
     }
 
-    // little hack -> https://github.com/joyent/node-http-signature/pull/83
-    // req.headers.authorization = 'Signature ' + req.headers.signature
-
     req.fedi_user = user
+
+    // TODO: check Digest // cannot do this with json bodyparser
+    // const digest = crypto.createHash('sha256')
+    //   .update(req.body)
+    //   .digest('base64')
+    // if (`SHA-256=${digest}` !== req.headers.signature) {
+    //   log.warning(`Signature mismatch ${req.headers.signature} - ${digest}`)
+    //   return res.status(401).send('Signature mismatch')
+    // }
 
     // another little hack :/
     // https://github.com/joyent/node-http-signature/issues/87
@@ -191,11 +207,14 @@ const Helpers = {
 
     // signature not valid, try without cache
     user = await Helpers.getActor(req.body.actor, instance, true)
-    if (!user) { return res.status(401).send('Actor not found') }
+    if (!user) {
+      log.info(`Actor ${req.body.actor} not found`)
+      return res.status(401).send('Actor not found')
+    }
     if (httpSignature.verifySignature(parsed, user.object.publicKey.publicKeyPem)) { return next() }
 
     // still not valid
-    debug('Invalid signature from user %s', req.body.actor)
+    log.info(`Invalid signature from user ${req.body.actor}`)
     res.send('Request signature could not be verified', 401)
   }
 }

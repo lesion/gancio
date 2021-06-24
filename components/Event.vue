@@ -1,67 +1,72 @@
 <template lang="pug">
-  .card.event.h-event.mt-1.text-white
-    nuxt-link(:to='`/event/${event.id}`')
-      el-image(v-if='showImage && event.image_path'
-        lazy :src='`/media/thumb/${event.image_path}`')
-      .float-right
-        i.text-danger.el-icon-refresh(v-if='event.parentId')
-        .badge.text-info(v-if='settings.enable_resources && event.resources && event.resources.length') {{event.resources.length}}
-      //- title
-      .p-name.p-summary.title {{event.title}}
+  v-card.h-event.event.d-flex
+    nuxt-link(:to='`/event/${event.slug || event.id}`')
+      v-img.u-featured.img(:src="`/media/thumb/${event.image_path || 'logo.svg' }`")
+      v-icon.float-right.mr-1(v-if='event.parentId' color='success') mdi-repeat
+      .title.p-name {{event.title}}
 
-    .card-body
-      //- div.d-flex.justify-content-between
-      //-  when
-      time.d-block.dt-start.mt-0(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  <i class='el-icon-date'/> {{event|when}}
-      //- place
-      .p-location.mt-1.text-warning(plain size='mini' round type='text' @click='addPlace') <i class='el-icon-location-outline'/> {{event.place.name}}
+    v-card-text.body.pt-0.pb-0
+      time.dt-start.subtitle-1(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')  <v-icon>mdi-calendar</v-icon> {{ event|when }}
+      .d-none.dt-end {{event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
+      a.place.d-block.p-location.pl-0(text color='primary' @click="$emit('placeclick', event.place.id)") <v-icon>mdi-map-marker</v-icon> {{event.place.name}}
 
-      //- description
-      //- .p-description.description.mt-3(v-html='description')
+    v-card-actions.pt-0.actions.justify-space-between
+      .tags
+        v-chip.ml-1.mt-1(v-for='tag in event.tags.slice(0,6)' small
+          :key='tag' outlined color='primary' @click="$emit('tagclick', tag)") {{tag}}
 
-    .card-footer(v-if='event.tags.length')
-      el-button.ml-1(type='text' plain round size='mini' v-for='tag in event.tags' :key='tag' @click='addTag(tag)') {{tag}}
+      v-menu(offset-y)
+        template(v-slot:activator="{on}")
+          v-btn.align-self-end(icon v-on='on' color='primary')
+            v-icon mdi-dots-vertical
+        v-list(dense)
+          v-list-item-group
+            v-list-item(v-clipboard:success="() => $root.$message('common.copied', { color: 'success' })"
+                  v-clipboard:copy='`${settings.baseurl}/event/${event.id}`')
+              v-list-item-icon
+                v-icon mdi-content-copy
+              v-list-item-content
+                v-list-item-title {{$t('common.copy_link')}}
+            v-list-item(:href='`/api/event/${event.id}.ics`')
+              v-list-item-icon
+                v-icon mdi-calendar-export
+              v-list-item-content
+                v-list-item-title {{$t('common.add_to_calendar')}}
+            v-list-item(v-if='is_mine' :to='`/add/${event.id}`')
+              v-list-item-icon
+                v-icon mdi-pencil
+              v-list-item-content
+                v-list-item-title {{$t('common.edit')}}
+            v-list-item(v-if='is_mine' @click='remove(false)')
+              v-list-item-icon
+                v-icon(color='error') mdi-delete-forever
+              v-list-item-content
+                v-list-item-title {{$t('common.remove')}}
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   props: {
-    event: { type: Object, default: () => ({}) },
-    showTags: {
-      type: Boolean,
-      default: true
-    },
-    showImage: {
-      type: Boolean,
-      default: true
-    }
+    event: { type: Object, default: () => ({}) }
   },
   computed: {
-    ...mapState(['settings', 'filters']),
-    description () {
-      return this.event.description.replace(/(<br>)+/g, '<br>')
-    },
-    show_footer () {
-      return (this.event.tags.length || this.event.resources.length)
+    ...mapState(['settings']),
+    is_mine () {
+      if (!this.$auth.user) {
+        return false
+      }
+      return (
+        this.event.userId === this.$auth.user.id || this.$auth.user.is_admin
+      )
     }
   },
   methods: {
-    ...mapActions(['setSearchTags', 'setSearchPlaces']),
-    addTag (tag) {
-      if (this.filters.tags.includes(tag)) {
-        this.setSearchTags(this.filters.tags.filter(t => t !== tag))
-      } else {
-        this.setSearchTags(this.filters.tags.concat([tag]))
-      }
-    },
-    addPlace () {
-      const place = this.event.place.id
-      if (this.filters.places.includes(place)) {
-        this.setSearchPlaces(this.filters.places.filter(p => p !== place))
-      } else {
-        this.setSearchPlaces(this.filters.places.concat(place))
-      }
+    async remove () {
+      const ret = await this.$root.$confirm('event.remove_confirmation')
+      if (!ret) { return }
+      await this.$axios.delete(`/event/${this.event.id}`)
+      this.$emit('destroy', this.event.id)
     }
   }
 }

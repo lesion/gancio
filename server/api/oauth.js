@@ -2,7 +2,7 @@ const express = require('express')
 const OAuthServer = require('express-oauth-server')
 const oauth = express.Router()
 const oauthController = require('./controller/oauth')
-const debug = require('debug')('oauth')
+const log = require('../log')
 
 const oauthServer = new OAuthServer({
   model: oauthController.model,
@@ -34,7 +34,7 @@ oauth.use((req, res) => res.sendStatus(404))
 
 oauth.use((err, req, res, next) => {
   const error_msg = err.toString()
-  debug(error_msg)
+  log.error(error_msg)
   res.status(500).send(error_msg)
 })
 

@@ -9,8 +9,8 @@ module.exports = {
 
   async setup (config, config_path) {
     // generate a random salt
-    consola.info('Generate random salt')
-    config.secret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+    // consola.info('Generate random salt')
+    // config.secret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 
     // do not save admin's password in config file
     const admin = { email: config.admin.email, password: config.admin.password }
@@ -27,6 +27,7 @@ module.exports = {
     delete config.smtp_need_auth
     config.admin_email = admin.email
     config.db.logging = false
+    config.log_level = 'debug'
     consola.info(`Save configuration to ${config_path}`)
     try {
       fs.writeFileSync(config_path, JSON.stringify(config, null, 2))
@@ -34,10 +35,10 @@ module.exports = {
       consola.warn(` ⚠️ ${e}. You can specify configuration path using '--config'`)
     }
 
-    const db = require('./api/models')
+    // sync db
+    const db = require('./api/models/index')
     const User = require('./api/models/user')
-    await db.authenticate()
-
+    // const Notification = require('./api/models/notification')
     const users = await User.findAll()
     if (users.length) {
       consola.warn(' ⚠   Non empty db! Please move your current db elsewhere than retry.')
@@ -54,7 +55,7 @@ module.exports = {
     })
 
     // add default notification
-    // consola.info('Add default notification')
+    consola.info('Add default notification')
 
     // await db.announcement.create({
     //   visible: true,
@@ -65,11 +66,11 @@ module.exports = {
     // try {
 
     //   // send confirmed events to mastodon
-    //   await Notification.create({ action: 'Create', type: 'ap', filters: '{ "is_visible": true }' })
-    //   await Notification.create({ action: 'Update', type: 'ap', filters: '{ "is_visible": true }' })
-    //   await Notification.create({ action: 'Delete', type: 'ap', filters: '{ "is_visible": true }' })
-    //   // send anon events to admin
-    //   await Notification.create({ action: 'Create', type: 'admin_email', filters: '{ "is_visible": false }' })
+    // await Notification.create({ action: 'Create', type: 'ap', filters: '{ "is_visible": true }' })
+    // await Notification.create({ action: 'Update', type: 'ap', filters: '{ "is_visible": true }' })
+    // await Notification.create({ action: 'Delete', type: 'ap', filters: '{ "is_visible": true }' })
+    // //   // send anon events to admin
+    // await Notification.create({ action: 'Create', type: 'admin_email', filters: '{ "is_visible": false }' })
     // }
 
     // TODO email's notifications

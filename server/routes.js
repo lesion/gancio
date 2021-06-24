@@ -1,4 +1,3 @@
-const path = require('path')
 const config = require('config')
 const express = require('express')
 const cors = require('cors')
@@ -9,35 +8,40 @@ const cookieParser = require('cookie-parser')
 const federation = require('./federation')
 const webfinger = require('./federation/webfinger')
 const { spamFilter } = require('./federation/helpers')
-const debug = require('debug')('routes')
+const log = require('./log')
 const exportController = require('./api/controller/export')
 const eventController = require('./api/controller/event')
 const announceController = require('./api/controller/announce')
+// const metricsController = require('./metrics')
+// const promBundle = require('express-prom-bundle')
+// const metricsMiddleware = promBundle({ includeMethod: true })
 
 const helpers = require('./helpers')
-const { startOfMonth, startOfWeek, getUnixTime } = require('date-fns')
 const app = express()
 
 // ignore unimplemented ping url from fediverse
 app.use(spamFilter)
 
+// app.use(metricsMiddleware)
+
 app.use((req, res, next) => {
-  debug(req.method, req.path)
+  log.debug(`${req.method} ${req.path}`)
   next()
 })
 
 app.use('/media/', express.static(config.upload_path))
 // initialize instance settings / authentication / locale
 app.use(helpers.initSettings)
+
 // serve favicon and static content
 app.use('/logo.png', (req, res, next) => {
-  const logo_path = req.settings.favicon || './static/gancio'
-  return express.static(logo_path + '.png')(req, res, next)
+  const logoPath = req.settings.logo || './static/gancio'
+  return express.static(logoPath + '.png')(req, res, next)
 })
 
 app.use('/favicon.ico', (req, res, next) => {
-  const favicon_path = req.settings.favicon || './assets/favicon'
-  return express.static(favicon_path + '.ico')(req, res, next)
+  const faviconPath = req.settings.logo || './assets/favicon'
+  return express.static(faviconPath + '.ico')(req, res, next)
 })
 
 // rss/ics/atom feed
@@ -57,7 +61,7 @@ app.use('/oauth', oauth)
 
 // // Handle 500
 app.use((error, req, res, next) => {
-  debug('Error 500: %s', error)
+  log.error(error)
   res.status(500).send('500: Internal Server Error')
 })
 
@@ -65,8 +69,8 @@ app.use((error, req, res, next) => {
 // first nuxt component is ./pages/index.vue (with ./layouts/default.vue)
 // prefill current events, tags, places and announcements (used in every path)
 app.use(async (req, res, next) => {
-  const start_datetime = getUnixTime(startOfWeek(startOfMonth(new Date())))
-  req.events = await eventController._select(start_datetime, 100)
+  // const start_datetime = getUnixTime(startOfWeek(startOfMonth(new Date())))
+  // req.events = await eventController._select(start_datetime, 100)
   req.meta = await eventController._getMeta()
   req.announcements = await announceController._getVisible()
   next()

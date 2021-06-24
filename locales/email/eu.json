@@ -12,8 +12,8 @@
         "content": "Kaixo, zure <a href='{{config.baseurl}}'>{{config.title}}</a>-ko kontua berria sortu da. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Baieztatu zu zarela eta aukeratu ezazu pasahitza</a>."
     },
     "recover": {
-        "subject": "Pasahitza berreskuratu",
-        "content": "Kaixo, zure pasahitza berreskuratzea eskatu duzu {{config.title}}-n. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Sakatu hemen</a> baieztatzeko"
+        "subject": "Pasahitza berreskuratzea",
+        "content": "Kaixo, zure pasahitza berreskuratzea eskatu duzu {{config.title}}-n. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Hemen sakatzen du</a> egiaztatzeko."
     },
     "admin_register": {
         "subject": "Izen-emate berria",

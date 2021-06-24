@@ -1,215 +1,119 @@
-:focus {outline:none;}
-::-moz-focus-inner {border:0;}
-
-blockquote {
-  border-left: 3px solid grey;
-  font-style: italic;
-  color: #666;
-  padding-left: 1em;
-}
-
-code {
-  font-family: sans-serif;
-  display: inline-block;
-  padding: 0 .4rem;
-  border-radius: 5px;
-  font-size: .8rem;
-  font-weight: 700;
-  background: rgba(0,0,0,.1);
-  color: #888;
-}
-
 html, body {
+  scrollbar-width: thin;
+  overflow: auto !important;
+  scrollbar-color: #FF4511 #111;
   font-family: sans-serif;
-  scroll-behavior: smooth;
-  text-rendering: optimizeSpeed;
-  background-color: #111;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #555 #111;
-  padding: 0 !important;
 }
 
-#__nuxt, #__layout {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+li {
+  margin-left: 10px;
 }
 
-#main {
-  min-height: 200px;
-  overflow: hidden;
-  scrollbar-width: thin;
-  transition: background-color .5s, opacity .5s; //, color 1s;
-  background-color: white;
-  &.dark {
-    background-color: #111;
-  }
+.v-dialog .theme--dark.v-card {
+  background-color: #434343;
 }
 
-#content {
+.v-application .p-description.text-body-1 {
+  letter-spacing: normal !important;
+}
+
+#home {
   max-width: 1400px;
-  flex-grow: 1;
-  width: 100%;
+  padding: 0px;
+  overflow: hidden;
+}
+
+#events {
   margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-#header, #footer {
-  color: white;
-  background-color: #222;
-  font-size: 18px;
-  padding: 0 15px;
+.container {
+  max-width: 1400px;
 }
 
+.v-dialog {
+  width: 600px;
+  max-width: 800px;
+}
 
-#footer {
-  a {
-    color: orangered;
-    transition: color .4s;
-    &:hover {
-      text-decoration: none;
-      color: orange;
+.theme--dark.v-list {
+  background-color: #333;
+}
+
+.v-autocomplete__content.v-menu__content {
+  scrollbar-width: thin;
+  scrollbar-color: #FF4511 #111;
+}
+
+// EVENT
+.event {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  width: 330px;
+  max-width: 500px !important;
+  flex-grow: 1;
+  margin-top: .4em;
+  margin-right: .4em;
+  transition: all .5s;
+  overflow: hidden;
+
+  .title {
+    transition: all .5s;
+    display: block;
+    max-height: 3em;
+    color: white;
+    overflow: hidden;
+    margin: 0.5rem 1rem 0.5rem 1rem;
+    font-size: 1.1em !important;
+    line-height: 1em !important;
+  }
+
+  .body {
+    flex: 1 1 auto;
+  }
+
+  .img {
+    width: 100%;
+    max-height: 250px;
+    min-height: 160px;
+    background-color: #222;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .place {
+    max-width: 100%;
+    span {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
-
-  #links a {
-    margin-left: 15px;
-  }
-  min-height: 6em;
-  padding-top: 2em;
-  font-size: 1em;
-}
-
-#header .el-menu--horizontal {
-  background-color: #222;
-  color: white;
-  .el-menu-item, .el-submenu__title {
-    color: white;
-  }
-
-  .el-submenu .el-submenu__icon-arrow {
-    margin-left: 0px;
-  }
-
-  .el-submenu .el-submenu__title {
-    padding: 0 15px;
-  }
-
-  .el-menu-item:not(.is-disabled):focus,
-  .el-menu-item.is-active,
-  .el-menu-item:not(.is-disabled):hover,
-  .el-submenu:focus > .el-submenu__title,
-  .el-submenu:hover > .el-submenu__title,
-  .el-submenu.is-active > .el-submenu__title,
-  .el-submenu.is-opened {
-    color: white;
-    background-color: #111;
-  }
-}
-
-
-.page-enter-active {
-  transition: opacity .05s;
-}
-
-.page-enter, .page-leave-active {
-  transition: opacity .3s; //, transform .3s;
-  opacity: 0;
-  // transform: translateX(30px);
-}
-
-.el-card {
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.el-menu-item {
-  height: 40px;
-  line-height: 40px;
   a {
-    color: #303133;
-    display: block;
     text-decoration: none;
-    text-overflow: ellipsis;
-    overflow: hidden;
   }
 }
 
-.el-message-box {
-  max-width: 90%;
+.v-list {
+  background-color: #333 !important;
 }
 
-//TODO: refactoring
-.el-button.is-plain,
-.el-button.is-plain:focus,
-.el-button.is-plain {
-  border-color: #ff450075;
-  background-color: transparent;
-  color: orangered;
-
-  &:hover {
-    border-color: #ff450075;
-    background-color: transparent;    
-    color: orange;
-  }
+.vc-past {
+  opacity: 0.4;
 }
 
-// TODO: this should be a link
-
-.event .p-location {
-  transition: color .2s;
-  &:hover {
-    cursor: pointer;
-    color: orangered !important;
-  }
+#event {
+  max-width: 1200px;
 }
 
-.el-button--text {
-  color: orangered !important;
-  &:hover {
-    color: orange !important;
-  }
+.tags .v-chip .v-chip__content {
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
 }
-
-.el-button--success.is-plain {
-  color: #2c8600;
-  border-color: #9de27b;
-  background-color: #f9fff6;
-}
-
-.el-button--mini, .el-button--mini.is-round {
-  padding: 6px 12px;
-  font-size: 0.8rem;
-}
-
-.bg-dark {
-  background-color: #292929 !important;
-}
-
-.el-dialog {
-  min-height: 300px;
-  max-width: 600px;
-  width: 100%;
-  .el-dialog__body {
-    word-break: normal !important;
-  }
-}
-
-.el-switch__label span {
-  position: absolute;
-}
-
-// .el-input {
-//   max-width: 350px;
-// }
-
-// @media only screen and (max-width: 768px) {
-  // .el-card {
-    // padding: 0px !important;
-    // border-radius: 0px;
-  // }
-// }
-
-
-@import './event.less';
-@import './editor.less';

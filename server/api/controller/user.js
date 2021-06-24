@@ -4,7 +4,7 @@ const config = require('config')
 const mail = require('../mail')
 const User = require('../models/user')
 const settingsController = require('./settings')
-const debug = require('debug')('user:controller')
+const log = require('../../log')
 const linkify = require('linkifyjs')
 
 const userController = {
@@ -73,7 +73,7 @@ const userController = {
     }
 
     await user.update(req.body)
-    res.json(user)
+    res.status(200).send()
   },
 
   async register (req, res) {
@@ -96,13 +96,14 @@ const userController = {
         return res.status(404).json('Invalid email')
       }
 
-      debug('Register user ', req.body.email)
+      log.info('Register user ', req.body.email)
       const user = await User.create(req.body)
-      debug(`Sending registration email to ${user.email}`)
+      log.info(`Sending registration email to ${user.email}`)
       mail.send(user.email, 'register', { user, config }, req.settings.locale)
       mail.send(config.admin_email, 'admin_register', { user, config })
       res.sendStatus(200)
     } catch (e) {
+      log.error('Registration error: "%s"', e)
       res.status(404).json(e)
     }
   },
@@ -115,6 +116,7 @@ const userController = {
       mail.send(user.email, 'user_confirm', { user, config }, req.settings.locale)
       res.json(user)
     } catch (e) {
+      log.error('User creation error: %s', e)
       res.status(404).json(e)
     }
   },
@@ -125,6 +127,7 @@ const userController = {
       user.destroy()
       res.sendStatus(200)
     } catch (e) {
+      log.error('User removal error: "%s"', e)
       res.status(404).json(e)
     }
   }

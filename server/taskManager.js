@@ -1,13 +1,20 @@
-const debug = require('debug')('TaskManager')
+const log = require('./log')
 const eventController = require('./api/controller/event')
+const placeHelpers = require('./helpers/place')
+const tagHelpers = require('./helpers/tag')
 // const notifier = require('./notifier')
 
+const loopInterval = 1 // process.env.NODE_ENV === 'production' ? 1 : 1
+const minute = 60 / loopInterval
+const hour = minute * 60
+const day = hour * 24
+
 class Task {
-  constructor ({ name, removable = false, repeatEach = 1, method, args = [] }) {
+  constructor ({ name, repeat = false, repeatDelay = 1, callAtStart = false, method, args = [] }) {
     this.name = name
-    this.removable = removable
-    this.repeatEach = repeatEach
-    this.processInNTick = repeatEach
+    this.repeat = repeat
+    this.repeatDelay = repeatDelay
+    this.processInNTick = callAtStart ? 0 : repeatDelay
     this.method = method
     this.args = args
   }
@@ -17,15 +24,15 @@ class Task {
     if (this.processInNTick > 0) {
       return
     }
-    this.processInNTick = this.repeatEach
+    this.processInNTick = this.repeatDelay
     try {
       const ret = this.method.apply(this, this.args)
       if (ret && typeof ret.then === 'function') {
-        ret.catch(e => debug('TASK ERROR ', this.name, e))
+        ret.catch(e => log.error('TASK ERROR [%s]: %s', this.name, e))
         return ret
       }
     } catch (e) {
-      debug('TASK ERROR ', this.name, e)
+      log.error('TASK ERROR [%s]: %s ', this.name, e)
       return Promise.resolve(false)
     }
   }
@@ -37,29 +44,32 @@ class Task {
  * - Send AP notifications
  * - Create recurrent events
  * - Sync AP federation profiles
+ * - Remove unused tags/places
  */
 
 class TaskManager {
   constructor () {
-    this.interval = 60 * 1000
     this.tasks = []
+    this.interval = 1
+    this.timeout = null
   }
 
-  start (interval = 60 * 1000) {
+  start (interval = loopInterval) {
+    log.info(`START TASK MANAGER WITH LOOP INTERVAL OF ${interval} seconds`)
     this.interval = interval
-    this.timeout = setTimeout(this.tick.bind(this), interval)
+    this.timeout = setTimeout(this.tick.bind(this), interval * 1000)
   }
 
   stop () {
     if (this.timeout) {
-      debug('STOP')
+      log.info('STOP TASKMANAGER')
       clearTimeout(this.timeout)
       this.timeout = false
     }
   }
 
   add (task) {
-    debug('ADD TASK ', task.name)
+    log.info(`[TASK] Add ${task.name} (${task.repeatDelay * this.interval} seconds)`)
     this.tasks.push(task)
   }
 
@@ -72,14 +82,14 @@ class TaskManager {
     const tasks = this.tasks.map(t => t.process())
 
     // remove removable tasks
-    this.tasks = this.tasks.filter(t => !t.removable)
+    this.tasks = this.tasks.filter(t => t.repeat)
 
     return Promise.all(tasks)
   }
 
   async tick () {
     await this.process()
-    this.timeout = setTimeout(this.tick.bind(this), this.interval)
+    this.timeout = setTimeout(this.tick.bind(this), this.interval * 1000)
   }
 }
 
@@ -87,9 +97,27 @@ const TS = new TaskManager()
 
 // create and clean recurrent events
 TS.add(new Task({
-  name: 'RECURRENT_EVENT',
+  name: 'CREATE_RECURRENT_EVENT',
   method: eventController._createRecurrent,
-  repeatEach: 10 // check each 10 minutes
+  repeatDelay: hour / 2, // check each half an hour
+  repeat: true
+}))
+
+// remove unrelated places
+TS.add(new Task({
+  name: 'CLEAN_UNUSED_PLACES',
+  method: placeHelpers._cleanUnused,
+  repeatDelay: day,
+  repeat: true,
+  callAtStart: true
+}))
+
+TS.add(new Task({
+  name: 'CLEAN_UNUSED_TAGS',
+  method: tagHelpers._cleanUnused,
+  repeatDelay: day,
+  repeat: true,
+  callAtStart: true
 }))
 
 // daily morning notification
@@ -112,6 +140,7 @@ TS.add(new Task({
 //   method: places._nominatimQuery,
 //   repeatEach: 60
 // }))
+//
 
 // TS.start()
 // TS.add(new Task({ name: 'removable #1', method: daje, args: ['removable #1'], removable: true }))

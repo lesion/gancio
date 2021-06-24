@@ -1,83 +1,116 @@
 <template lang="pug">
-  el-main
-    p {{$t('export.intro')}}
-    //- Search
-    el-tabs.mt-2(v-model='type')
+  v-container
+    v-card(outlined)
+      v-card-title {{$t('common.share')}}
+      v-card-text
+        p.text-body-1 {{$t('export.intro')}}
+        v-row
+          v-col(:md='2' :cols='12')
+            v-card-title.py-0 {{$t('common.filter')}}
+          v-col
+            Search(
+              :filters='filters'
+              @update='updateFilters')
+      v-tabs(v-model='type')
 
-      //- TOFIX
-      //- el-tab-pane.pt-1(label='email' name='email')
-      //-   p(v-html='$t(`export.email_description`)')
-      //-   el-form(@submit.native.prevent)
-      //-     //- el-switch(v-model='notification.notify_on_add' :active-text="$t('notify_on_insert')")
-      //-     //- br
-      //-     //- el-switch.mt-2(v-model='notification.send_notification' :active-text="$t('send_notification')")
-      //-     el-input.mt-2(v-model='notification.email' :placeholder="$t('export.insert_your_address')" ref='email')
-      //-     el-button.mt-2.float-right(native-type= 'submit' type='success' @click='add_notification') {{$t('common.send')}}
+        //- TOFIX
+        //- v-tab {{$t('common.email')}}
+        //- v-tab-item
+          v-card
+            v-card-text
+              p(v-html='$t(`export.email_description`)')
+              v-switch.mt-0(inset :label="$t('notify_on_insert')")
+              v-switch.mt-0(inset :label="$t('morning_notification')")
+              v-text-field(v-model='notification.email' :placeholder="$t('export.insert_your_address')" ref='email')
+                v-btn(slot='prepend' text color='primary' @click='add_notification') {{$t('common.send')}} <v-icon>mdi-email</v-icon>
 
-      el-tab-pane.pt-1(label='Feed rss' name='rss')
-        span(v-html='$t(`export.feed_description`)')
-        el-input(v-model='link')
-          el-button(slot='append' plain
-          v-clipboard:copy='link' v-clipboard:success='copyLink'
-          type="primary" icon='el-icon-document' ) {{$t("common.copy")}}
+        v-tab {{$t('common.feed')}}
+        v-tab-item
+          v-card
+            v-card-text
+              p(v-html='$t(`export.feed_description`)')
+              v-text-field(v-model='link' readonly)
+                v-btn(slot='prepend' text color='primary'
+                  v-clipboard:copy='link'
+                  v-clipboard:success='copyLink.bind(this, "feed")') {{$t("common.copy")}}
+                  v-icon.ml-1 mdi-content-copy
 
-      el-tab-pane.pt-1(v-if='settings.enable_federation' :label="$t('common.fediverse')" name='fediverse')
-        FollowMe
+        v-tab ics/ical
+        v-tab-item
+          v-card
+            v-card-text
+              p(v-html='$t(`export.ical_description`)')
+              v-text-field(v-model='link')
+                v-btn(slot='prepend' text color='primary'
+                  v-clipboard:copy='link' v-clipboard:success='copyLink.bind(this, "ical")') {{$t("common.copy")}}
+                  v-icon.ml-1 mdi-content-copy
 
-      el-tab-pane.pt-1(label='ics/ical' name='ics')
-        p(v-html='$t(`export.ical_description`)')
-        el-input(v-model='link')
-          el-button(slot='append' v-clipboard:copy='link' v-clipboard:success='copyLink'
-            plain type="primary" icon='el-icon-document') {{$t("common.copy")}}
+        v-tab List
+        v-tab-item
+          v-card
+            v-card-text
+              p(v-html='$t(`export.list_description`)')
 
-      el-tab-pane.pt-1(label='list' name='list')
-        p(v-html='$t(`export.list_description`)')
+              v-row
+                v-col.mr-2(:span='11')
+                  v-text-field(v-model='list.title' :label='$t("common.title")')
+                  v-text-field(v-model='list.maxEvents' type='number' :label='$t("common.max_events")')
+                v-col.float-right(:span='12')
+                  List(
+                    :title='list.title'
+                    :maxEvents='list.maxEvents'
+                    :events='events')
+              v-text-field.mb-1(type='textarea' v-model='listScript' readonly )
+                v-btn(slot='prepend' text
+                  color='primary' v-clipboard:copy='listScript' v-clipboard:success='copyLink.bind(this,"list")') {{$t('common.copy')}}
+                    v-icon.ml-1 mdi-content-copy
 
-        el-row
-          el-col.mr-2(:span='11')
-            el-input(v-model='list.title') Title
-          el-col.float-right(:span='12')
-            List(
-              :title='list.title'
-              :events='filteredEvents')
-        el-input.mb-1(type='textarea' v-model='listScript' readonly )
-        el-button.float-right(plain v-clipboard:copy='listScript' v-clipboard:success='copyLink'
-          type='primary' icon='el-icon-document') {{$t('common.copy')}}
-
-      //- TOFIX
-      //- el-tab-pane.pt-1(label='calendar' name='calendar')
-      //-   p(v-html='$t(`export.calendar_description`)')
-      //-   //- no-ssr
-      //-     Calendar.mb-1
-      //-   el-input.mb-1(type='textarea' v-model='script')
-      //-   el-button.float-right(plain type="primary" icon='el-icon-document') Copy
+        v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
+        v-tab-item(v-if='settings.enable_federation')
+          FollowMe
+          //- TOFIX
+          //- v-tab.pt-1(label='calendar' name='calendar')
+          //- v-tab-item
+          //-   p(v-html='$t(`export.calendar_description`)')
+          //-   //- no-ssr
+          //-     Calendar.mb-1
+          //-   v-text-field.mb-1(type='textarea' v-model='script')
+          //-   el-button.float-right(plain type="primary" icon='el-icon-document') Copy
 
 </template>
 <script>
-import { mapState, mapGetters } from 'vuex'
+import dayjs from 'dayjs'
+import { mapState } from 'vuex'
 import List from '@/components/List'
 import FollowMe from '../components/FollowMe'
-import { Message } from 'element-ui'
+import Search from '@/components/Search'
 
 export default {
   name: 'Exports',
-  components: { List, FollowMe },
-  async asyncData ({ $axios, params, store }) {
-    // get metadata just in case we are not coming from home
-    if (store.state.tags.length) { return }
-    const { tags, places } = await $axios.$get('/event/meta')
-    store.commit('update', { tags, places })
+  components: { List, FollowMe, Search },
+  async asyncData ({ $axios, params, store, $api }) {
+    const events = await $api.getEvents({
+      start: dayjs().unix(),
+      show_recurrent: false
+    })
+    return { events }
   },
   data () {
     return {
       type: 'rss',
       notification: { email: '' },
-      list: { title: 'Gancio' }
+      list: { title: 'Gancio', maxEvents: 3 },
+      filters: { tags: [], places: [], show_recurrent: false },
+      events: []
+    }
+  },
+  head () {
+    return {
+      title: `${this.settings.title} - ${this.$t('common.export')}`
     }
   },
   computed: {
-    ...mapState(['filters', 'events', 'settings']),
-    ...mapGetters(['filteredEvents']),
+    ...mapState(['settings']),
     domain () {
       const URL = url.parse(this.settings.baseurl)
       return URL.hostname
@@ -93,58 +126,66 @@ export default {
       }
 
       if (this.filters.tags.length) {
-        params.push(`tags=${this.filters.tags.map(t => t.id)}`)
+        params.push(`tags=${this.filters.tags.join(',')}`)
       }
 
+      if (this.filters.show_recurrent) {
+        params.push('show_recurrent=true')
+      }
       return `<iframe style='border: 0px; width: 100%;' src="${this.settings.baseurl}/embed/list?${params.join('&')}"></iframe>`
     },
     link () {
-      const tags = this.filters.tags.join(',')
-      const places = this.filters.places.join(',')
-      let query = ''
-      if (tags || places) {
-        query = '?'
-        if (tags) {
-          query += 'tags=' + tags
-          if (places) { query += '&places=' + places }
-        } else {
-          query += 'places=' + places
-        }
+      const typeMap = ['rss', 'ics', 'list']
+      const params = []
+
+      if (this.filters.tags.length) {
+        params.push(`tags=${this.filters.tags.join(',')}`)
       }
 
-      return `${this.settings.baseurl}/feed/${this.type}${query}`
+      if (this.filters.places.length) {
+        params.push(`places=${this.filters.places.join(',')}`)
+      }
+
+      if (this.filters.show_recurrent) {
+        params.push('show_recurrent=true')
+      }
+
+      return `${this.settings.baseurl}/feed/${typeMap[this.type]}?${params.join('&')}`
     },
     showLink () {
       return (['rss', 'ics'].includes(this.type))
     }
   },
   methods: {
-    copyLink () {
-      Message({ message: this.$t('common.copied'), type: 'success', showClose: true })
+    async updateFilters (filters) {
+      this.filters = filters
+      this.events = await this.$api.getEvents({
+        start: dayjs().unix(),
+        places: this.filters.places,
+        tags: this.filters.tags,
+        show_recurrent: !!this.filters.show_recurrent
+      })
     },
-    add_notification () {
-      if (!this.notification.email) {
-        Message({ message: 'Inserisci una mail', showClose: true, type: 'error' })
-        // return this.$refs.email.focus()
+    copyLink (type) {
+      if (type === 'feed') {
+        this.$root.$message('common.feed_url_copied')
+      } else {
+        this.$root.$message('common.copied')
       }
+    },
+    async add_notification () {
+      // validate()
+      // if (!this.notification.email) {
+      // Message({ message: 'Inserisci una mail', showClose: true, type: 'error' })
+      // return this.$refs.email.focus()
+      // }
       // await api.addNotification({ ...this.notification, filters: this.filters})
       // this.$refs.modal.hide()
-      Message({ message: this.$t('email_notification_activated'), showClose: true, type: 'success' })
+      // Message({ message: this.$t('email_notification_activated'), showClose: true, type: 'success' })
     },
     imgPath (event) {
       return event.image_path && event.image_path
     }
-  },
-  head () {
-    return {
-      title: `${this.settings.title} - ${this.$t('common.export')}`
-    }
   }
 }
 </script>
-<style>
-#list {
-  max-height: 400px;
-  overflow-y: auto;
-}
-</style>

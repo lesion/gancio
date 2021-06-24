@@ -48,7 +48,7 @@
         "enable": "Habilitar",
         "disable": "Deshabilita",
         "me": "Tú",
-        "password_updated": "Contraseña actualizada!",
+        "password_updated": "Contraseña actualizada.",
         "comments": "ningún comentario|un comentario|{n} comentarios",
         "copy_link": "Copiar Enlace",
         "send_via_mail": "Enviar correo electrónico",
@@ -64,7 +64,7 @@
         "embed": "Incorporar",
         "embed_title": "Publica este evento en tu página web",
         "embed_help": "Copiando el siguiente código en tu página web, el evento será incluido como puedes ver aquí al lado",
-        "feed": "Feed",
+        "feed": "RSS Feed",
         "feed_url_copied": "Copiada feed url, pegala en tu lector de feeds",
         "follow_me_title": "Sigue las actualizaciones en el fediverso",
         "follow": "Sigue",
@@ -81,11 +81,15 @@
         "delete": "Eliminar",
         "announcements": "Anuncios",
         "url": "Dirección URL",
-        "place": "Lugar"
+        "place": "Lugar",
+        "tags": "Tags",
+        "import": "Importar",
+        "reset": "Reset",
+        "theme": "Tema"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
-        "check_email": "Revisa tu casilla de correo (también el spam o correo no deseado)",
+        "check_email": "Revisa tu casilla de correo (también el spam o correo no deseado).",
         "not_registered": "¿No estás registrado/a?",
         "forgot_password": "¿Olvidaste la contraseña?",
         "error": "Error durante el login, comprueba los datos.",
@@ -96,7 +100,7 @@
         "not_valid_code": "Mmmmm algo no salió bien..."
     },
     "export": {
-        "intro": "A diferencia de las plataformas del capitalismo, que hacen todo lo posible para mantener       datos y usuarios dentro de ellas, creemos las informaciones, así como las personas, deben ser libres. Para ello, puedes mantenerte enterado sobre los eventos que te interesan como mejor te parezca, sin necesariamente tener que pasar por este sitio.",
+        "intro": "A diferencia de las plataformas del capitalismo, que hacen todo lo posible para mantener datos y usuarios dentro de ellas, creemos las informaciones, así como las personas, deben ser libres. Para ello, puedes mantenerte enterado sobre los eventos que te interesan como mejor te parezca, sin necesariamente tener que pasar por este sitio.",
         "email_description": "Puedes recibir por mail los eventos que te interesan.",
         "insert_your_address": "Casilla de correo",
         "feed_description": "Para seguir las actualizaciones desde un ordenador o teléfono inteligente sin la necesidad de abrir periódicamente el sitio, el método recomendado es usar los feeds RSS.</p>\n\n      <p>Con rss feeds, utilizás una aplicación especial para recibir actualizaciones de los sitios que más te interesan, como por ejemplo este. Es una buena manera de seguir muchos sitios muy rápidamente, sin la necesidad de crear una cuenta u otras complicaciones.</p>\n    \n      <li>Si tienes Android, te sugerimos <a href=\"https://f-droid.org/es/packages/com.nononsenseapps.feeder/\">Feeder</a> o Feeder</li>\n      <li>Para iPhone/iPad puedes usar <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\">Feed4U</a></li>\n      <li>En el caso de un ordenador aconsejamos Feedbro, se instala como plugin <a href=\"https://addons.mozilla.org/es-ES/firefox/addon/feedbroreader/\">de Firefox </a>o <a href=\"https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa\">de Chrome</a> y funciona con todos los principales sistemas.</li>\n      <br/>\n      Agregando este link a tu lector de feed, estarás siempre actualizado/a.",
@@ -111,7 +115,7 @@
     },
     "event": {
         "anon": "Anónimo",
-        "anon_description": "Puedes ingresar un evento sin registrarte o iniciar sesión,\n       pero en este caso tendrás que esperar a que alguien lo lea para confirmar que\n       es un evento adecuado para este espacio, delegando esta elección. Además, no será posible modificarlo. <br/> <br/>\n       Si no te gusta, puedes <a href='/login'> iniciar sesión </a> o <a href='/register'> registrarte </a>,\n       de lo contrario, continúa y recibirás una respuesta lo antes posible.",
+        "anon_description": "Puedes ingresar un evento sin registrarte o iniciar sesión, pero en este caso tendrás que esperar a que alguien lo lea para confirmar que es un evento adecuado para este espacio,\ndelegando esta elección. Además, no será posible modificarlo. <br/> <br/>\nSi no te gusta, puedes <a href='/login'> iniciar sesión </a> o <a href='/register'> registrarte </a>,\nde lo contrario, continúa y recibirás una respuesta lo antes posible. ",
         "same_day": "Mismo día",
         "what_description": "Nombre evento",
         "description_description": "Descripción, puedes copiar y pegar",
@@ -119,7 +123,7 @@
         "media_description": "Puedes agregar un panfleto (opcionál)",
         "added": "Evento agregado",
         "added_anon": "Evento agregado, será confirmado cuanto antes.",
-        "where_description": "¿Dónde es? Si el lugar no está, escribilo y <b>presiona enter</b>. ",
+        "where_description": "¿Dónde es? Si el lugar no está, escribilo.",
         "confirmed": "Evento confirmado",
         "not_found": "Evento no encontrado",
         "remove_confirmation": "¿Estás seguro/a de querér eliminar este evento?",
@@ -144,9 +148,13 @@
         "interact_with_me_at": "Sígueme en el fediverso en",
         "show_recurrent": "Eventos recurrientes",
         "show_past": "eventos pasados",
-        "follow_me_description": "Entre las diversas formas de mantenerse al día con los eventos publicados aquí en {title},\n      puedes seguir la cuenta <u>{account}</u> desde el fediverso, por ejemplo, a través de un mastodon, y posiblemente añadir recursos a un evento desde allí.<br/><br/>\n      Si nunca has oído hablar del mastodon y el fediverso te sugerimos que leas <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>este artículo</a>.<br/><br/> Introduce tu instancia abajo (por ejemplo mastodon.cisti.org o mastodon.bida.im)",
+        "follow_me_description": "Entre las diversas formas de mantenerse al día con los eventos publicados aquí en {title},\npuedes seguir la cuenta <u>{account}</u> desde el fediverso, por ejemplo, a través de un Mastodon, y posiblemente añadir recursos a un evento desde allí.<br/><br/>\nSi nunca has oído hablar del Mastodon y el fediverso te sugerimos que leas <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>este artículo</a>.<br/><br/> Introduce tu instancia abajo (por ejemplo mastodon.cisti.org o mastodon.bida.im)",
         "interact_with_me": "Sigueme en el fediverso",
-        "remove_recurrent_confirmation": "Estás segura de querer eliminar este evento recurriente?\n\nLos eventos pasados serán mantenidos, pero no se crearán eventos nuevos."
+        "remove_recurrent_confirmation": "Estás segura de querer eliminar este evento recurriente?\nLos eventos pasados serán mantenidos, pero no se crearán eventos nuevos.",
+        "ics": "ICS",
+        "import_ICS": "Importar desde ICS",
+        "import_URL": "Importar desde la URL",
+        "only_future": "solo eventos venideros"
     },
     "admin": {
         "place_description": "En el caso de que un lugar sea incorrecto o cambie de dirección, puedes cambiarlo. <br/> En este caso hay que tener en cuenta que todos los eventos asociados con ese lugar cambiarán de dirección (¡incluso los pasados!)",
@@ -191,22 +199,28 @@
         "instance_timezone_description": "Gancio está diseñado para recoger los eventos de un lugar específico como una ciudad. Al escribir y seleccionar la zona horaria de este lugar, todos los tiempos se mostrarán e introducirán como se ha elegido.",
         "instance_locale_description": "El idioma utilizado para mostrar las páginas es el idioma preferido por el usuario. Sin embargo, en algunos casos tenemos que mostrar los mensajes para todos de la misma manera (por ejemplo, cuando publicamos a través de ActivityPub o cuando enviamos algunos correos electrónicos). En estos casos utilizaremos el idioma seleccionado anteriormente.",
         "instance_place": "Lugar indicativo de esta instancia",
-        "title_description": "Se utiliza en el título de la página, en la línea de asunto del correo electrónico, en la exportación de feeds y ics ",
+        "title_description": "Se utiliza en el título de la página, en la línea de asunto del correo electrónico, en la exportación de feeds y ics.",
         "description_description": "Aparece en el encabezado junto al título",
         "instance_name_help": "Nombre de la cuenta de ActivityPub a seguir",
         "enable_trusted_instances": "Habilitar las solicitudes amistosas",
         "trusted_instances_help": "Las instancias amistosas aparecerán en la barra de navegación en la parte superior de la página",
         "add_trusted_instance": "Añade una instancia de amigo",
         "instance_place_help": "Esta cadena se mostrará en el menú de las otras instancias amigas",
-        "delete_trusted_instance_confirm": "¿Realmente quieres borrar este elemento del menú de instancias amistosas?"
+        "delete_trusted_instance_confirm": "¿Realmente quieres borrar este elemento del menú de instancias amistosas?",
+        "new_announcement": "Nuevo anuncio",
+        "edit_place": "Editar lugar",
+        "delete_footer_link_confirm": "Seguro que quieres quitar este enlace?",
+        "footer_links": "Enlaces a pie de página",
+        "add_link": "Añadir enlace",
+        "is_dark": "Tema oscuro"
     },
     "auth": {
-        "not_confirmed": "Todavía no hemos confirmado este email...",
+        "not_confirmed": "Todavía no hemos confirmado este email…",
         "fail": "No pudimos autenticarte. ¿La contraseña es correcta? ¿Y el mail?"
     },
     "settings": {
         "change_password": "Cambia contraseña",
-        "password_updated": "Contraseña modificada",
+        "password_updated": "Contraseña modificada.",
         "danger_section": "Sección peligrosa",
         "remove_account": "Al presionar el siguiente botón, su usuario será eliminado. No serán eliminados los eventos que publicaste.",
         "remove_account_confirm": "Estás por borrar definitivamente tu cuenta",
@@ -214,7 +228,7 @@
     },
     "error": {
         "nick_taken": "Este nickname ya está registrado",
-        "email_taken": "Este correo electrónico ya está registrado"
+        "email_taken": "Este correo electrónico ya está registrado."
     },
     "ordinal": {
         "1": "primero",
@@ -232,9 +246,13 @@
     },
     "oauth": {
         "authorization_request": "La aplicación externa <code>{app}</code> requiere permiso para realizar las siguientes tareas en <code>{instance_name}</code>:",
-        "redirected_to": "Después de la confirmación será redirigido a la dirección <code>{url}</code>",
+        "redirected_to": "Después de la confirmación será redirigido a <code>{url}</code>",
         "scopes": {
             "event:write": "Publica/edita tus eventos"
         }
+    },
+    "validators": {
+        "email": "Introduce un correo electrónico valido",
+        "required": "{fieldName} es requerido"
     }
 }

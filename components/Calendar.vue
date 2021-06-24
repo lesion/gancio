@@ -1,10 +1,10 @@
 <template lang="pug">
   #calendar
-    v-calendar(
+    vc-calendar(
       title-position='left'
-      is-dark
+      :is-dark="settings['theme.is_dark']"
+      :columns="$screens({ sm: 2 }, 1)"
       @update:from-page='updatePage'
-      :columns="$screens({ default: 1, lg: 2 })"
       :locale='$i18n.locale'
       :attributes='attributes'
       transition='fade'
@@ -14,77 +14,43 @@
 
 </template>
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
-import moment from 'moment-timezone'
-import { take, get } from 'lodash'
+import { mapState, mapActions } from 'vuex'
+import dayjs from 'dayjs'
+import { attributesFromEvents } from '../assets/helper'
 
 export default {
   name: 'Calendar',
+  props: {
+    events: { type: Array, default: () => [] }
+  },
   data () {
-    const month = moment().month() + 1
-    const year = moment().year()
+    const month = dayjs().month() + 1
+    const year = dayjs().year()
     return {
       page: { month, year }
     }
   },
   computed: {
-    ...mapGetters(['filteredEventsWithPast']),
-    ...mapState(['tags', 'filters', 'in_past']),
-
-    // TODO: could be better
+    ...mapState(['tags', 'filters', 'in_past', 'settings']),
     attributes () {
-      const colors = ['green', 'orange', 'yellow', 'teal', 'indigo', 'blue', 'red', 'purple', 'pink', 'gray']
-      const tags = take(this.tags, 10).map(t => t.tag)
-      let attributes = []
-      attributes.push({ key: 'today', dates: new Date(), highlight: { color: 'green' } })
-
-      const that = this
-      function getColor (event) {
-        const color = { class: event.past && !that.filters.show_past_events && !that.in_past ? 'past-event vc-rounded-full' : 'vc-rounded-full', color: 'blue' }
-        const tag = get(event, 'tags[0]')
-        if (!tag) { return color }
-        const idx = tags.indexOf(tag)
-        if (idx < 0) { return color }
-        color.color = colors[idx]
-        return color
-      }
-
-      attributes = attributes.concat(this.filteredEventsWithPast
-        .filter(e => !e.multidate)
-        .map(e => {
-          return {
-            key: e.id,
-            dot: getColor(e),
-            dates: new Date(e.start_datetime * 1000)
-          }
-        }))
-
-      attributes = attributes.concat(this.filteredEventsWithPast
-        .filter(e => e.multidate)
-        .map(e => ({
-          key: e.id,
-          highlight: getColor(e),
-          dates: { start: new Date(e.start_datetime * 1000), end: new Date(e.end_datetime * 1000) }
-        })))
-
-      return attributes
+      return attributesFromEvents(this.events, this.tags)
     }
   },
   methods: {
     ...mapActions(['updateEvents', 'showPastEvents']),
     updatePage (page) {
-      this.updateEvents(page)
+      return new Promise((resolve, reject) => {
+        this.$emit('monthchange', page)
+      })
     },
     click (day) {
-      const element = document.getElementById(day.day)
-      if (element) { element.scrollIntoView() } // Even IE6 supports this
+      this.$emit('dayclick', day)
     }
   }
 }
 </script>
 
 <style>
-
 .vc-opacity-0 {
   opacity: 0.3 !important;
 }

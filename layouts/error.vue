@@ -1,7 +1,7 @@
 <template lang='pug'>
-  el-main.p-4.text-center#error
-    h1(v-if="error.statusCode === 404") <i class='el-icon-warning'></i> {{error.message}}
-    h1(v-else) <i name='el-icon-warning'></i> An error occurred: {{error.message}}
+  v-container.p-4.text-center
+    v-alert(v-if="error.statusCode === 404") ¯\_(ツ)_/¯ {{error.message}}
+    v-alert(v-else type='error') <v-icon>mdi-warning</v-icon> An error occurred: {{error.message}}
     nuxt-link(to='/') Back to home
 </template>
 
@@ -9,17 +9,10 @@
 import { mapState } from 'vuex'
 
 export default {
-  props: { error: { type: Object } },
-  computed: mapState(['settings']),
+  props: { error: { type: Object, default: () => ({ }) } },
   head () {
     return { title: `${this.settings.title} - Error` }
-  }
+  },
+  computed: mapState(['settings'])
 }
 </script>
-<style lang="less">
-  #error {
-    margin-top: 20px;
-    color: orange;
-    i { color: orangered }
-  }
-</style>

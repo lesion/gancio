@@ -1,29 +1,27 @@
 <template lang='pug'>
-  el-card.mt-5
-    h4(slot='header')
-      nuxt-link(to='/')
-        img(src='/favicon.ico')
-      span  {{settings.title}} - {{$t('common.authorize')}}
-    <u>{{$auth.user.email}}</u>
-    div
-      p(v-html="$t('oauth.authorization_request', { app: client.name, instance_name: settings.title })")
-      ul
-        li(v-for="s in scope.split(' ')") {{$t(`oauth.scopes.${scope}`)}}
-      span(v-html="$t('oauth.redirected_to', {url: $route.query.redirect_uri})")
-      br
-      br
-      a(:href='authorizeURL')
-        el-button.mr-1(plain type='success' icon='el-icon-check') {{$t('common.authorize')}}
-      a(href='/')
-        el-button.mt-1(plain type='danger') {{$t('common.cancel')}}
+  v-row.mt-5(align='center' justify='center')
+    v-col(cols='12' md="6" lg="5" xl="4")
+      v-card(light)
+        v-card-title {{settings.title}} - {{$t('common.authorize')}}
+        v-card-text
+          u {{$auth.user.email}}
+          div
+            p(v-html="$t('oauth.authorization_request', { app: client.name, instance_name: settings.title })")
+            ul
+              li(v-for="s in scope.split(' ')") {{$t(`oauth.scopes.${scope}`)}}
+            span(v-html="$t('oauth.redirected_to', {url: $route.query.redirect_uri})")
+        v-card-actions
+          v-spacer
+          v-btn(color='error' to='/') {{$t('common.cancel')}}
+          v-btn(:href='authorizeURL' color='success') {{$t('common.authorize')}}
 </template>
 
 <script>
 import { mapState } from 'vuex'
 
 export default {
-  layout: 'modal',
   name: 'Authorize',
+  layout: 'modal',
   middleware: ['auth'],
   async asyncData ({ $axios, query, error, req }) {
     const { client_id, redirect_uri, scope, response_type } = query

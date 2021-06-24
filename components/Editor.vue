@@ -1,43 +1,70 @@
 <template lang='pug'>
-  .editor(:class='{ "with-border": border }')
-    editor-menu-bubble(:editor='editor' :keep-in-bounds='true' v-slot='{ commands, isActive, getMarkAttrs, menu }')
-      el-button-group.menububble(:class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`")
-        el-popover(trigger='hover' placement='bottom-start')
-          el-button.float-left(slot='reference' size='mini') <v-icon name='question'/>
-          template
-            span This editor supports inline <code>markdown</code>
-            div <v-icon name='heading'/> → Title ⇒ Start a line with <code>#</code>
-            div <v-icon name='bold'/> → Bold ⇒ <code>ctrl+b</code>
-            div <v-icon name='italic'/> → Italic ⇒ <code>ctrl+i</code>
-            div <v-icon name='underline'/> → Underline ⇒ <code>ctrl+u</code>
-            div <v-icon name='list-ul'/> → List ⇒ Start a line with <code>-</code>
-            div <v-icon name='list-ol'/> → Ordered List ⇒ Start a line with <code>1.</code>
-            div <v-icon name='quote-right'/> → Quote ⇒ Start a line with <code>&gt;</code>
-            div <v-icon name='code'/> → Code ⇒ Use backtick <code>`</code>
-            div <v-icon name='link'/> → Link ⇒ Select a word and fill the input
-        //- el-button(size='mini' :class='{ "is-active": isActive.heading({level:4})}' @click='commands.heading({level: 4})') <v-icon name='heading'/>
-        //- el-button(size='mini' :class='{ "is-active": isActive.bold() }' @click='commands.bold')
-          <v-icon name='bold' />
-        //- el-button(size='mini' :class='{ "is-active": isActive.italic() }' @click='commands.italic') <v-icon name='italic'/>
-        //- el-button(size='mini' :class='{ "is-active": isActive.underline() }' @click='commands.underline') <v-icon name='underline'/>
-        el-button(size='mini' :class='{ "is-active": isActive.link() }' @click='commands.link({href: ""}); $refs.link.focus(); linkActive=true') <v-icon name='link'/>
-        input(:value='isActive.link() && getMarkAttrs("link") && getMarkAttrs("link").href || ""' ref='link' :class='{ "is-active": isActive.link() || linkActive }'
-          placeholder='https://' @keypress.enter='commands.link({ href: $event.target.value})')
-          //- el-button(size='mini' :class='{ "is-active": isActive.strike() }' @click='commands.strike') <v-icon name='strikethrough'/>
-        //- br
-        //- el-button-group
-        //-   el-button(size='mini' :class='{ "is-active": isActive.code() }' @click='commands.code') <v-icon size=16 name='code'/>
-        //-   el-button(size='mini' :class='{ "is-active": isActive.bullet_list() }' @click='commands.bullet_list') <v-icon name='list-ul'/>
-        //-   //- el-button(size='mini' :class='{ "is-active": isActive.ordered_list() }' @click='commands.ordered_list') <v-icon name='list-ol'/>
-        //-   el-button(size='mini' :class='{ "is-active": isActive.blockquote() }' @click='commands.blockquote') <v-icon name='quote-right'/>
+  .editor.grey.darken-4(:class='focused')
+    .label {{label}}
+    editor-menu-bar.menubar.is-hidden(:editor='editor'
+      :keep-in-bounds='true' v-slot='{ commands, isActive, getMarkAttrs, focused }')
+      v-btn-toggle(dense)
+        v-btn(icon text tabindex='-1'
+          :class="{ primary: isActive.bold() }"
+          @click="commands.bold")
+          v-icon mdi-format-bold
 
-        //- el-button.float-right(v-if='!noSave' size='mini' type='success' plain icon='el-icon-check'
-        //-   @click='$emit("save", editor.getHTML())') {{$t('common.save')}}
+        v-btn(icon text tabindex='-1'
+          :class="{ primary: isActive.underline() }"
+          @click="commands.underline")
+          v-icon mdi-format-underline
 
-    editor-content.content(:editor='editor' spellcheck='false')
+        v-btn(icon text tabindex='-1'
+          :class="{ primary: isActive.strike() }"
+          @click="commands.strike")
+          v-icon mdi-format-strikethrough-variant
+
+        v-btn(icon text tabindex='-1'
+          :class="{ primary: isActive.italic() }"
+          @click="commands.italic")
+          v-icon mdi-format-italic
+
+        v-btn(icon text tabindex='-1'
+          :class="{ primary: isActive.heading({level: 1}) }"
+          @click="commands.heading({level: 1})")
+          v-icon mdi-format-header-1
+
+        v-btn(icon text tabindex='-1'
+          :class="{ primary: isActive.heading({level: 2}) }"
+          @click="commands.heading({level: 2})")
+          v-icon mdi-format-header-2
+
+        v-btn(icon text tabindex='-1'
+          :class="{ primary: isActive.heading({level: 3}) }"
+          @click="commands.heading({level: 3})")
+          v-icon mdi-format-header-3
+
+        v-btn(icon text tabindex='-1'
+          :class="{ primary: isActive.code() }"
+          @click="commands.code")
+          v-icon mdi-code-tags
+
+        v-btn(icon text tabindex='-1'
+          :class="{ primary: isActive.blockquote() }"
+          @click="commands.blockquote")
+          v-icon mdi-format-quote-open
+
+        v-btn(icon text tabindex='-1'
+          :class="{ primary: isActive.bullet_list() }"
+          @click="commands.bullet_list")
+          v-icon mdi-format-list-bulleted
+
+        v-btn(icon text tabindex='-1' :class='{ primary: isActive.link() }'
+          @click='commands.link({href: getMarkAttrs("link") && getMarkAttrs("link").href ? "" : "https://"}); $refs.link.focus();')
+            v-icon mdi-link
+        v-text-field.pt-0.ml-1(v-show='isActive.link()' ref='link' @focus='focus' @blur='blur' hide-details
+            :value='isActive.link() && getMarkAttrs("link") && getMarkAttrs("link").href || ""'
+            @keypress.enter='commands.link({ href: $event.target.value}); editor.focus()')
+
+    editor-content.content(:editor='editor' spellcheck='false' :style="{ 'max-height': maxHeight }")
 </template>
 <script>
-import _ from 'lodash'
+import debounce from 'lodash/debounce'
 import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from 'tiptap'
 import {
   Blockquote,
@@ -53,22 +80,29 @@ import {
   Link,
   History,
   Strike,
-  Underline
+  Underline,
+  Placeholder
 } from 'tiptap-extensions'
 
 export default {
   name: 'Editor',
   components: { EditorContent, EditorMenuBar, EditorMenuBubble },
   props: {
+    label: { type: String, default: 'Editor' },
     value: { type: String, default: '' },
     border: { type: Boolean, default: false },
-    noSave: { type: Boolean, default: false }
+    noSave: { type: Boolean, default: false },
+    maxHeight: { type: String, Number, default: '' },
+    placeholder: { type: String, default: '' }
   },
   data () {
     return {
+      options: [],
       linkActive: false,
       editor: null,
-      update: false
+      blurring: false,
+      update: false,
+      focused: ''
     }
   },
   watch: {
@@ -82,10 +116,12 @@ export default {
   },
   mounted () {
     this.editor = new Editor({
-      onUpdate: _.debounce(({ getHTML }) => {
+      onFocus: () => this.focus(),
+      onBlur: () => this.blur(),
+      onUpdate: debounce(({ getHTML }) => {
         this.update = true
         this.$emit('input', getHTML())
-      }, 300),
+      }, 1000),
       content: this.value,
       extensions: [
         new Blockquote(),
@@ -97,79 +133,130 @@ export default {
         new ListItem(),
         new Code(),
         new History(),
-        new Link({ openOnClick: false }),
+        new Link({ openOnClick: false, target: '_blank' }),
         new Bold(),
         new Italic(),
         new Strike(),
-        new Underline()
+        new Underline(),
+        new Placeholder({
+          emptyEditorClass: 'is-editor-empty',
+          emptyNodeClass: 'is-empty',
+          emptyNodeText: this.placeholder,
+          showOnlyWhenEditable: true,
+          showOnlyCurrent: true
+        })
       ]
     })
   },
   beforeDestroy () {
     if (this.editor) { this.editor.destroy() }
+  },
+  methods: {
+    blur () {
+      this.blurring = true
+      window.setTimeout(() => {
+        if (this.blurring) {
+          this.focused = ''
+          this.blurring = false
+        }
+      }, 200)
+    },
+    focus () {
+      this.focused = 'editor--focused'
+      this.$nextTick(() => {
+        this.blurring = false
+      })
+    }
   }
 }
 </script>
 <style lang='less'>
 
 .editor {
-  position: relative;
+  margin-top: 4px;
+  padding-top: 12px;
+  padding-bottom: 22px;
   overflow-y: auto;
-  padding-top: 1.7em;
   scrollbar-width: thin;
+  scrollbar-color: #FF4500 transparent;
+  scroll-behavior: smooth;
+  font-family: sans-serif;
+  font-size: 1.1em;
 
-  &.with-border {
-    border: 1px solid #ddd;
-    border-radius: 5px;
+  .editor p.is-editor-empty:first-child::before {
+    content: attr(data-empty-text);
+    float: left;
+    color: #aaa;
+    // opacity: .4;
+    pointer-events: none;
+    height: 0;
+    font-style: italic;
   }
 
-  .content {
-    padding: 0px 5px 0px 5px;
-    flex: 1;
-    scrollbar-width: thin;
-    overflow-y: auto;
+  .label {
+    left: 0px;
+    position: relative;
+    transform-origin: top left;
+    transition: transform .3s, scale .3s, color .3s;
+    transform: translateY(20px);
   }
 
-  .menububble {
-    position: absolute;
-    display: flex;
-    overflow: hidden;
-    opacity: 0;
-    z-index: 1;
-    background: #dddddd;
-    transform: translateX(-50%);
-    border-radius: 3px;
-    padding: 0.07rem;
-    transition: opacity 0.2s, visibility 0.2s, left .2s, bottom .2s;
-    visibility: hidden;
+  &.editor--focused {
+    .label {
+      color: #FF4500;
+      transform: translateY(0px) scale(0.75);
+    }
 
-    &.is-active {
-      opacity: 1;
+    .menubar {
       visibility: visible;
-    }
-    input {
-      padding: 0;
-      margin: 1px;
-      display: block;
-      border: 0;
-      color: #444;
-      font-size: .8em;
-      border-radius: 3px;
-      line-height: 100%;
-      transition: width .2s;
-      padding-left: 5px;
-      flex-grow: 1;
+      opacity: 1 !important;
     }
 
-    .fa-icon {
-      width: auto;
-      font-size: 10px;
-      height: 1.4em; /* or any other relative font sizes */
-      /* You would have to include the following two lines to make this work in Safari */
-      // max-width: 100%;
-      max-height: 100%;
+    .ProseMirror::after {
+      width : 100% !important;
+      transform: scaleX(1) !important;
+    }
+  }
+
+  .menubar {
+    transition: opacity .5s;
+    opacity: 0;
+    visibility: hidden;
+    // position: absolute;
+  }
+
+  .focused .ProseMirror::after {
+    width: 100%;
+  }
+  .ProseMirror {
+    padding: 15px;
+    outline: 0;
+    &::before {
+      bottom: 0px;
+      content: "";
+      left: 0;
+      position: absolute;
+      transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+      width: 100%;
+      border-width: thin 0 0 0;
+      border-style: solid;
+      height: 0px;
+      border-color: rgba(255, 255, 255, 0.7);
     }
 
+    &::after {
+      bottom: 0px;
+      content: "";
+      left: 0;
+      position: absolute;
+      height: 0px;
+      transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+      width: 100%;
+      border-width: 2px 0 0 0;
+      border-style: solid;
+      border-color: #FF4500;
+      transform: scaleX(0);
+    }
   }
 }
 
