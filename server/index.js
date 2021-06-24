@@ -9,6 +9,9 @@ async function main () {
   nuxtConfig.server = config.server
 
   // Init Nuxt.js
+  if (!nuxtConfig.dev) {
+    nuxtConfig.buildModules = []
+  }
   const nuxt = new Nuxt(nuxtConfig)
 
   // Build only in dev mode
@@ -18,10 +21,11 @@ async function main () {
   } else {
     await nuxt.ready()
   }
+
   try {
     await nuxt.listen()
   } catch (e) {
-    log.err(e)
+    log.error({ message: e.message })
     return
   }
 

@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Nginx
+title: Nginx setup
 permalink: /install/nginx
 parent: Install
 ---

@@ -85,7 +85,8 @@
         "theme": "Tema",
         "reset": "Reset",
         "import": "Importa",
-        "max_events": "N. massimo eventi"
+        "max_events": "N. massimo eventi",
+        "label": "Etichetta"
     },
     "login": {
         "description": "Entrando puoi pubblicare nuovi eventi.",
@@ -102,7 +103,7 @@
     "export": {
         "intro": "Contrariamente alle piattaforme del capitalismo, che fanno di tutto per tenere i dati e gli utenti al loro interno, crediamo che le informazioni, come le persone, debbano essere libere. Per questo puoi rimanere aggiornata sugli eventi che vuoi, come meglio credi, senza necessariamente passare da questo sito.",
         "email_description": "Puoi ricevere via posta elettronica gli eventi che ti interessano.",
-        "insert_your_address": "Indirizzo e-mail",
+        "insert_your_address": "Inserisci il tuo indirizzo e-mail",
         "feed_description": "Per seguire gli aggiornamenti da computer o smartphone senza la necessità di aprire periodicamente il sito, il metodo consigliato è quello dei Feed RSS.</p>\n\n <p>Con i feed rss utilizzi un'apposita applicazione per ricevere aggiornamenti dai siti che più ti interessano. È un buon metodo per seguire anche molti siti in modo molto rapido, senza necessità di creare un account o altre complicazioni.</p>\n\n<li>Se hai Android, ti consigliamo <a href=\"https://f-droid.org/en/packages/net.frju.flym\">Flym</a> o Feeder</li>\n<li>Per iPhone/iPad puoi usare <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\">Feed4U</a></li>\n<li>Per il computer fisso/portatile consigliamo Brief, da installare all'interno <a href=\"https://addons.mozilla.org/it/firefox/addon/brief/\">di Firefox </a> e compatibile con tutti i principali sistemi operativi.</li>\n<br/>\nAggiungendo questo link al tuo lettore di feed, rimarrai aggiornata.",
         "ical_description": "I computer e gli smartphone sono comunemente attrezzati con un'applicazione per gestire un calendario. A questi programmi solitamente è possibile far importare un calendario remoto.",
         "list_description": "Se hai un sito web e vuoi mostrare una lista di eventi, puoi usare il seguente codice"
@@ -156,7 +157,7 @@
         "only_future": "solo eventi futuri",
         "interact_with_me_at": "Seguimi nel fediverso su",
         "import_ICS": "Importa da ICS",
-        "import_URL": "Importa da URL",
+        "import_URL": "Importa da URL (ics o h-event)",
         "ics": "ICS",
         "import_description": "Puoi importare eventi da altre piattaforme e da altre istanze attraverso i formati standard (ics e h-event)"
     },
@@ -165,7 +166,8 @@
         "event_confirm_description": "Puoi confermare qui gli eventi inseriti da utenti anonimi",
         "delete_user": "Elimina",
         "remove_admin": "Rimuovi admin",
-        "delete_user_confirm": "Sei sicuro/a di rimuovere questo utente?",
+        "disable_user_confirm": "Vuoi disabilitare {user}?",
+        "delete_user_confirm": "Vuoi rimuovere {user}?",
         "user_remove_ok": "Utente eliminato",
         "user_create_ok": "Utente creato",
         "allow_registration_description": "Vuoi abilitare la registrazione?",
@@ -175,6 +177,7 @@
         "federation": "Federazione / ActivityPub",
         "enable_federation": "Abilita la federazione",
         "enable_federation_help": "Sarà possibile seguire questa istanza dal fediverso",
+        "add_instance": "Aggiungi istanza",
         "select_instance_timezone": "Fuso orario",
         "instance_timezone_description": "Gancio è pensato per raccogliere gli eventi di un luogo specifico come ad esempio una città. Scrivendo e selezionando il fuso orario di questo luogo, tutti gli orari saranno mostrati e inseriti secondo quanto scelto.",
         "enable_resources": "Abilita risorse",

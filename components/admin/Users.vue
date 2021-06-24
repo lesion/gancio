@@ -33,6 +33,9 @@
         :items='users'
         :hide-default-footer='users.length<5'
         :search='search')
+        template(v-slot:item.is_active='{item}')
+          v-icon(v-if='item.is_active' color='success') mdi-check
+          v-icon(v-else color='warning') mdi-close
         template(v-slot:item.actions='{item}')
           v-btn(text small @click='toggle(item)'
             :color='item.is_active?"warning":"success"') {{item.is_active?$t('common.disable'):$t('common.enable')}}
@@ -62,6 +65,7 @@ export default {
       search: '',
       headers: [
         { value: 'email', text: 'Email' },
+        { value: 'description', text: 'Description' },
         { value: 'is_active', text: 'Active' },
         { value: 'actions', text: 'Actions', align: 'right' }
       ]
@@ -70,13 +74,17 @@ export default {
   computed: mapState(['settings']),
   methods: {
     async deleteUser (user) {
-      const ret = await this.$root.$confirm('admin.delete_user_confirm')
+      const ret = await this.$root.$confirm('admin.delete_user_confirm', { user: user.email })
       if (!ret) { return }
       await this.$axios.delete(`/user/${user.id}`)
       this.$root.$message('admin.user_remove_ok')
       this.users_ = this.users_.filter(u => u.id !== user.id)
     },
-    toggle (user) {
+    async toggle (user) {
+      if (user.is_active) {
+        const ret = await this.$root.$confirm('admin.disable_user_confirm', { user: user.email })
+        if (!ret) { return }
+      }
       user.is_active = !user.is_active
       this.$axios.$put('/user', user)
     },

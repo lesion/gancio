@@ -84,14 +84,16 @@
         "tags": "Tags",
         "theme": "Theme",
         "reset": "Reset",
-        "import": "Import"
+        "import": "Import",
+        "max_events": "N. max events",
+        "label": "Label"
     },
     "login": {
         "description": "By logging in you can publish new events.",
         "check_email": "Check your e-mail inbox and spam.",
         "not_registered": "Not registered?",
         "forgot_password": "Forgot your password?",
-        "error": "Could not log in. Check your credentials.",
+        "error": "Could not log in. Check your login info.",
         "insert_email": "Enter your e-mail address",
         "ok": "Logged in"
     },
@@ -155,7 +157,8 @@
         "remove_recurrent_confirmation": "Are you sure you want to remove this recurring event?\nPast events will be maintained, but no further events will be created.",
         "import_URL": "Import from URL",
         "import_ICS": "Import from ICS",
-        "ics": "ICS"
+        "ics": "ICS",
+        "import_description": "You can import events from other platforms and other instances through standard formats (ics and h-event)"
     },
     "admin": {
         "place_description": "If you have gotten the place or address wrong, you can change it.<br/>All current and past events associated with this place will change address.",
@@ -172,6 +175,7 @@
         "federation": "Federation / ActivityPub",
         "enable_federation": "Turn on federation",
         "enable_federation_help": "It will be possible to follow this instance from the fediverse",
+        "add_instance": "Add instance",
         "select_instance_timezone": "Time zone",
         "enable_resources": "Turn on resources",
         "enable_resources_help": "Allows adding resources to the event from the fediverse",

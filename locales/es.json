@@ -123,7 +123,7 @@
         "media_description": "Puedes agregar un panfleto (opcionál)",
         "added": "Evento agregado",
         "added_anon": "Evento agregado, será confirmado cuanto antes.",
-        "where_description": "¿Dónde es? Si el lugar no está, escribilo y <b>presiona enter</b>. ",
+        "where_description": "¿Dónde es? Si el lugar no está, escribilo.",
         "confirmed": "Evento confirmado",
         "not_found": "Evento no encontrado",
         "remove_confirmation": "¿Estás seguro/a de querér eliminar este evento?",

@@ -1,5 +1,5 @@
 <template lang="pug">
-v-container
+v-container#event.pa-0.pa-sm-2
   //- EVENT PAGE
   //- gancio supports microformats (http://microformats.org/wiki/h-event)
   v-card.h-event
@@ -10,20 +10,14 @@ v-container
 
       v-row
         v-col.col-12.col-lg-8
+          //- fake image to use u-featured in h-event microformat
+          img.u-featured(v-show='false' :src='`${settings.baseurl}${imgPath}`')
           v-img.main_image.mb-3(
             contain
             :src='imgPath'
             :lazy-src='thumbImgPath'
             v-if='event.image_path')
-          .p-description.text-body-1(v-else v-html='event.description')
-
-            //- template(v-slot:placeholder)
-              //- v-row(
-              //-   class="fill-height ma-0"
-              //-   align="center"
-              //-   justify="center")
-              //-   v-progress-circular(indeterminate
-              //-     color="grey lighten-5")
+          .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-else v-html='event.description')
 
         v-col.col-12.col-lg-4
           v-card
@@ -54,7 +48,7 @@ v-container
                 template(v-slot:activator="{on, attrs} ")
                   v-btn.ml-2(large icon v-on='on' color='primary'
                     v-clipboard:success='copyLink'
-                    v-clipboard:copy='`${settings.baseurl}/event/${event.id}`')
+                    v-clipboard:copy='`${settings.baseurl}/event/${event.slug || event.id}`')
                     v-icon mdi-content-copy
               v-tooltip(bottom) {{$t('common.embed')}}
                 template(v-slot:activator="{on, attrs} ")
@@ -63,24 +57,16 @@ v-container
               v-tooltip(bottom) {{$t('common.add_to_calendar')}}
                 template(v-slot:activator="{on, attrs} ")
                   v-btn.ml-2(large icon v-on='on' color='primary'
-                    :href='`/api/event/${event.id}.ics`')
+                    :href='`/api/event/${event.slug || event.id}.ics`')
                     v-icon mdi-calendar-export
 
-      .p-description.text-body-1(v-if='event.image_path' v-html='event.description')
+      .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-if='event.image_path && event.description' v-html='event.description')
 
       //- resources from fediverse
       #resources.mt-1(v-if='settings.enable_federation')
         div.float-right(v-if='!settings.hide_boosts')
           small.mr-3 🔖 {{event.likes.length}}
           small ✊ {{event.boost.length}}<br/>
-
-        //- p.p-2
-          //- v-btn(type='text' @click='showFollowMe=true') {{$t('event.interact_with_me')}}
-          //- span(v-if='settings.enable_resources && event.resources.length')  -  {{$tc('common.n_resources', event.resources.length)}}
-
-        //- v-dialog(v-model='showFollowMe' destroy-on-close max-width='500px')
-          h4(slot='title') {{$t('common.follow_me_title')}}
-          FollowMe(@close='showFollowMe=false' is-dialog)
 
         v-dialog.showResource#resourceDialog(v-model='showResources' fullscreen
           width='95vw'
@@ -132,13 +118,12 @@ v-container
 import { mapState } from 'vuex'
 import EventAdmin from './eventAdmin'
 import EmbedEvent from './embedEvent'
-import FollowMe from '../../components/FollowMe'
 import moment from 'dayjs'
 const htmlToText = require('html-to-text')
 
 export default {
   name: 'Event',
-  components: { EventAdmin, EmbedEvent, FollowMe },
+  components: { EventAdmin, EmbedEvent },
   async asyncData ({ $axios, params, error, store }) {
     try {
       const event = await $axios.$get(`/event/${params.id}`)
@@ -151,7 +136,6 @@ export default {
     return {
       event: {},
       showEmbed: false,
-      showFollowMe: false,
       showResources: false,
       selectedResource: { data: { attachment: [] } }
     }
@@ -191,7 +175,7 @@ export default {
         {
           hid: 'og-url',
           property: 'og:url',
-          content: `${this.settings.baseurl}/event/${this.event.id}`
+          content: `${this.settings.baseurl}/event/${this.event.slug || this.event.id}`
         },
         { property: 'og:type', content: 'event' },
         {
@@ -317,6 +301,8 @@ export default {
 <style lang='less'>
 .title {
   margin-bottom: 25px;
+  color: yellow;
+  font-weight: 300 !important;
 }
 .main_image {
   // width: 100%;

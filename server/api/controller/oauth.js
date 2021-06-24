@@ -143,11 +143,17 @@ const oauthController = {
 
     // TODO
     verifyScope (token, scope) {
-      log.debug('VERIFY SCOPE ', scope)
-      if (token.user.is_admin) {
+      // const userScope = [
+      //   'user:remove',
+      //   'user:update',
+      //   'event:write',
+      //   'event:remove'
+      // ]
+      log.debug(`VERIFY SCOPE ${scope} ${token.user.email}`)
+      if (token.user.is_admin && token.user.is_active) {
         return true
       } else {
-        return true
+        return false
       }
     }
 

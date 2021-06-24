@@ -44,18 +44,19 @@
           v-card
             v-card-title {{$t('admin.add_trusted_instance')}}
             v-card-text
-              v-form(v-model='valid' ref='form' lazy-validation)
+              v-form(v-model='valid' @submit.prevent='createTrustedInstance' ref='form' lazy-validation)
                 v-text-field.mt-4(v-model='instance_url'
                   persistent-hint
                   :rules="[$validators.required('common.url')]"
+                  :loading='loading'
                   :hint="$t('admin.add_trusted_instance')"
                   :label="$t('common.url')")
             v-card-actions
               v-spacer
               v-btn(color='error' @click='dialogAddInstance=false') {{$t('common.cancel')}}
-              v-btn(color='primary' :disabled='!valid' @click='createTrustedInstance') {{$t('common.ok')}}
+              v-btn(color='primary' :disabled='!valid || loading' :loading='loading' @click='createTrustedInstance') {{$t('common.ok')}}
 
-        v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon>mdi-plus</v-icon> Add instance
+        v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon>mdi-plus</v-icon> {{$t('admin.add_instance')}}
         v-data-table(
           v-if='settings.trusted_instances.length'
           :hide-default-footer='settings.trusted_instances.length<10'
@@ -79,6 +80,7 @@ export default {
       instance_place: $store.state.settings.instance_place,
       url2host: $options.filters.url2host,
       dialogAddInstance: false,
+      loading: false,
       valid: false,
       headers: [
         { value: 'name', text: 'Name' },
@@ -115,6 +117,7 @@ export default {
     ...mapActions(['setSetting']),
     async createTrustedInstance () {
       if (!this.$refs.form.validate()) { return }
+      this.loading = true
       try {
         if (!this.instance_url.startsWith('http')) {
           this.instance_url = `https://${this.instance_url}`
@@ -133,6 +136,7 @@ export default {
       } catch (e) {
         this.$root.$message(e, { color: 'error' })
       }
+      this.loading = false
     },
     async deleteInstance (instance) {
       const ret = await this.$root.$confirm('admin.delete_trusted_instance_confirm')

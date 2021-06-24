@@ -25,23 +25,22 @@ const eventController = {
 
   async _getMeta () {
     const places = await Place.findAll({
-      where: { confirmed: true },
       order: [[Sequelize.literal('weigth'), 'DESC']],
       attributes: {
         include: [[Sequelize.fn('count', Sequelize.col('events.placeId')), 'weigth']],
         exclude: ['createdAt', 'updatedAt']
       },
-      include: [{ model: Event, attributes: [] }],
+      include: [{ model: Event, where: { is_visible: true }, required: true, attributes: [] }],
       group: ['place.id']
     })
 
     const tags = await Tag.findAll({
-      where: { confirmed: true },
-      raw: true,
-      order: [['weigth', 'DESC']],
+      order: [[Sequelize.literal('w'), 'DESC']],
       attributes: {
-        exclude: ['createdAt', 'updatedAt']
-      }
+        include: [[Sequelize.fn('COUNT', Sequelize.col('tag.tag')), 'w']]
+      },
+      include: [{ model: Event, where: { is_visible: true }, attributes: [], through: { attributes: [] }, required: true }],
+      group: ['tag.tag']
     })
 
     return { places, tags }
@@ -89,16 +88,23 @@ const eventController = {
   async get (req, res) {
     const format = req.params.format || 'json'
     const is_admin = req.user && req.user.is_admin
-    const id = Number(req.params.event_id)
+    const slug = req.params.event_id
+    const id = Number(req.params.event_id) || -1
     let event
 
     try {
-      event = await Event.findByPk(id, {
+      event = await Event.findOne({
+        where: {
+          [Op.or]: {
+            slug,
+            id
+          }
+        },
         attributes: {
           exclude: ['createdAt', 'updatedAt', 'placeId']
         },
         include: [
-          { model: Tag, required: false, attributes: ['tag', 'weigth'], through: { attributes: [] } },
+          { model: Tag, required: false, attributes: ['tag'], through: { attributes: [] } },
           { model: Place, attributes: ['name', 'address', 'id'] },
           {
             model: Resource,
@@ -112,16 +118,17 @@ const eventController = {
         order: [[Resource, 'id', 'DESC']]
       })
     } catch (e) {
+      log.error(e)
       return res.sendStatus(400)
     }
 
     if (!event) {
-      return res.sendStatus(400)
+      return res.sendStatus(404)
     }
 
     // get prev and next event
     const next = await Event.findOne({
-      attributes: ['id'],
+      attributes: ['id', 'slug'],
       where: {
         is_visible: true,
         recurrent: null,
@@ -131,7 +138,7 @@ const eventController = {
     })
 
     const prev = await Event.findOne({
-      attributes: ['id'],
+      attributes: ['id', 'slug'],
       where: {
         is_visible: true,
         recurrent: null,
@@ -140,10 +147,11 @@ const eventController = {
       order: [['start_datetime', 'DESC']]
     })
 
+    // TODO: also check if event is mine
     if (event && (event.is_visible || is_admin)) {
       event = event.get()
-      event.next = next && next.id
-      event.prev = prev && prev.id
+      event.next = next && (next.slug || next.id)
+      event.prev = prev && (prev.slug || prev.id)
       event.tags = event.tags.map(t => t.tag)
       if (format === 'json') {
         res.json(event)
@@ -177,14 +185,6 @@ const eventController = {
     log.info(`Event "${event.title}" confirmed`)
     try {
       event.is_visible = true
-
-      // confirm tag & place if needed
-      if (!event.place.confirmed) {
-        await event.place.update({ confirmed: true })
-      }
-
-      await Tag.update({ confirmed: true },
-        { where: { confirmed: false, tag: { [Op.in]: event.tags.map(t => t.tag) } } })
 
       await event.save()
 
@@ -295,8 +295,7 @@ const eventController = {
       const [place] = await Place.findOrCreate({
         where: { name: body.place_name },
         defaults: {
-          address: body.place_address,
-          confirmed: !!req.user
+          address: body.place_address
         }
       })
 
@@ -305,9 +304,8 @@ const eventController = {
 
       // create/assign tags
       if (body.tags) {
-        await Tag.bulkCreate(body.tags.map(t => ({ tag: t, confirmed: !!req.user })), { ignoreDuplicates: true })
+        await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
         const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
-        await Promise.all(tags.map(t => t.update({ weigth: Number(t.weigth) + 1, confirmed: true })))
         await event.addTags(tags)
         event.tags = tags
       }
@@ -363,8 +361,8 @@ const eventController = {
         const old_path = path.resolve(config.upload_path, event.image_path)
         const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.image_path)
         try {
-          await fs.unlinkSync(old_path)
-          await fs.unlinkSync(old_thumb_path)
+          fs.unlinkSync(old_path)
+          fs.unlinkSync(old_thumb_path)
         } catch (e) {
           log.info(e.toString())
         }
@@ -456,14 +454,19 @@ const eventController = {
     const events = await Event.findAll({
       where,
       attributes: {
-        exclude: ['slug', 'likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'placeId', 'description', 'resources']
-        // include: [[Sequelize.fn('COUNT', Sequelize.col('activitypub_id')), 'ressources']]
+        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'description', 'resources']
       },
-      order: ['start_datetime', [Tag, 'weigth', 'DESC']],
+      order: ['start_datetime', Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE "tagTag" = tag) DESC')],
       include: [
         { model: Resource, required: false, attributes: ['id'] },
-        { model: Tag, attributes: ['tag'], required: !!tags, ...where_tags, through: { attributes: [] } },
-        { model: Place, required: false, attributes: ['id', 'name', 'address'] }
+        {
+          model: Tag,
+          attributes: ['tag'],
+          required: !!tags,
+          ...where_tags,
+          through: { attributes: [] }
+        },
+        { model: Place, required: true, attributes: ['id', 'name', 'address'] }
       ]
     }).catch(e => {
       log.error(e)
@@ -493,7 +496,7 @@ const eventController = {
   },
 
   /**
-   * Ensure we have the next instances of recurrent events
+   * Ensure we have the next instance of a recurrent event
    */
   _createRecurrentOccurrence (e) {
     log.debug(`Create recurrent event [${e.id}] ${e.title}"`)
@@ -538,17 +541,17 @@ const eventController = {
           cursor = cursor.add(1, 'month')
         }
       } else { // weekday
-        const monthDay = start_date.format('D')
-        const n = Math.floor((monthDay - 1) / 7) + 1
-        cursor = cursor.startOf('month')
-        cursor = cursor.add(n, 'week')
-        cursor = cursor.day(start_date.day())
+        // get weekday
+        log.info(type)
+        // get recurrent freq details
+        cursor = helpers.getWeekdayN(cursor, type, start_date.day())
         if (cursor.isBefore(dayjs())) {
-          cursor = cursor.add(1, 'month')
+          cursor = cursor.add(4, 'week')
+          cursor = helpers.getWeekdayN(cursor, type, start_date.day())
         }
       }
     }
-
+    log.info(cursor)
     event.start_datetime = cursor.unix()
     event.end_datetime = event.start_datetime + duration
     Event.create(event)

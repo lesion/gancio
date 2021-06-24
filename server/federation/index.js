@@ -36,7 +36,7 @@ router.get('/m/:event_id', async (req, res) => {
 
   const event = await Event.findByPk(req.params.event_id, { include: [User, Tag, Place] })
   if (!event) { return res.status(404).send('Not found') }
-  return res.json(event.toAPNote(event.user.username, req.settings.locale))
+  return res.json(event.toAPNote(settingsController.settings.instance_name, req.settings.locale))
 })
 
 // get any message coming from federation

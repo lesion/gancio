@@ -19,7 +19,7 @@ li {
 
 #home {
   max-width: 1400px;
-  padding-right: 0px;
+  padding: 0px;
   overflow: hidden;
 }
 
@@ -54,22 +54,22 @@ li {
   position: relative;
   flex-direction: column;
   width: 330px;
-  max-width: 500px;
+  max-width: 500px !important;
   flex-grow: 1;
   margin-top: .4em;
   margin-right: .4em;
+  transition: all .5s;
   overflow: hidden;
 
   .title {
+    transition: all .5s;
     display: block;
-    max-height: 3.3em;
+    max-height: 3em;
+    color: white;
     overflow: hidden;
     margin: 0.5rem 1rem 0.5rem 1rem;
-    // color: white;
-    border-bottom: 1px solid rgba(4,4,4,0.2);
-    font-size: 1.2em !important;
-    line-height: 1.1em;
-    font-weight: 500;
+    font-size: 1.1em !important;
+    line-height: 1em !important;
   }
 
   .body {
@@ -79,6 +79,8 @@ li {
   .img {
     width: 100%;
     max-height: 250px;
+    min-height: 160px;
+    background-color: #222;
     object-fit: cover;
     object-position: top;
   }
@@ -95,4 +97,23 @@ li {
   a {
     text-decoration: none;
   }
+}
+
+.v-list {
+  background-color: #333 !important;
+}
+
+.vc-past {
+  opacity: 0.4;
+}
+
+#event {
+  max-width: 1200px;
+}
+
+.tags .v-chip .v-chip__content {
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
 }

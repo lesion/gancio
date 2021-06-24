@@ -14,6 +14,9 @@ export default {
     try {
       const id = Number(params.id)
       const announcement = store.state.announcements.find(a => a.id === id)
+      if (!announcement) {
+        error({ statusCode: 404, message: 'Announcement not found' })
+      }
       return { announcement }
     } catch (e) {
       error({ statusCode: 404, message: 'Announcement not found' })
@@ -22,50 +25,14 @@ export default {
   data () {
     return { announcement: { title: '' } }
   },
-  computed: mapState(['announcements']),
-  methods: {
-    showResource (resource) {
-      this.showResources = true
-      this.selectedResource = resource
-      document.getElementById('resourceDialog').focus()
+  head () {
+    if (!this.announcement) {
+      return {}
     }
-  }
+    return {
+      title: `${this.settings.title} - ${this.announcement.title}`
+    }
+  },
+  computed: mapState(['announcements', 'settings'])
 }
 </script>
-<style lang='less'>
-// .announcement-page {
-
-//   .el-header {
-//     height: auto !important;
-//     padding-top: 1em;
-//     border-bottom: 1px solid lightgray;
-//   }
-
-//   .title {
-//     max-width: 80%;
-//     max-height: 0.1rem;
-//     overflow: hidden;
-//     font-size: 1.6rem;
-//     line-height: 1;
-//     padding-right: 40px;
-//   }
-
-//   pre {
-//     white-space: pre-line;
-//     word-break: break-word;
-//     color: #aaa;
-//     font-size: 1.2em;
-//     font-family: inherit;
-//   }
-
-// }
-
-// @media only screen and (max-width: 768px) {
-//   #eventDetail {
-//     .title {
-//       font-size: 1em;
-//       font-weight: bold;
-//     }
-//   }
-// }
-</style>

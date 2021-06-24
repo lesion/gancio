@@ -12,7 +12,6 @@ const mail = {
     log.debug('Enqueue new email ', template, locale)
     const task = new Task({
       name: 'MAIL',
-      removable: true,
       method: mail._send,
       args: [addresses, template, locals, locale]
     })
@@ -20,7 +19,7 @@ const mail = {
   },
 
   _send (addresses, template, locals, locale) {
-    log.debug(`Send ${template} email to ${addresses} with locale ${locale}`)
+    log.info(`Send ${template} email to ${addresses} with locale ${locale}`)
     const email = new Email({
       views: { root: path.join(__dirname, '..', 'emails') },
       htmlToText: true,
@@ -62,8 +61,7 @@ const mail = {
     }
     return email.send(msg)
       .catch(e => {
-        log.error('Error sending email =>')
-        log.error(e)
+        log.error('Error sending email => %s', e)
       })
   }
 }

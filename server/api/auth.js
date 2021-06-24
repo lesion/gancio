@@ -41,9 +41,12 @@ const Auth = {
   hasPerm (scope) {
     return (req, res, next) => {
       log.debug(scope, req.path)
-      oauth.oauthServer.authenticate({ scope })(req, res, () => {
-        log.debug('has perm')
-        next()
+      oauth.oauthServer.authenticate({ scope })(req, res, err => {
+        if (err) {
+          next()
+        } else {
+          next(Error(err))
+        }
       })
     }
   }

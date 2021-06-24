@@ -1,7 +1,6 @@
 const { Model, DataTypes } = require('sequelize')
 const sequelize = require('./index')
 
-// const Event = require('./event')
 class Place extends Model {}
 
 Place.init({
@@ -11,14 +10,7 @@ Place.init({
     index: true,
     allowNull: false
   },
-  address: DataTypes.STRING,
-  confirmed: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true,
-    allowNull: false
-  }
+  address: DataTypes.STRING
 }, { sequelize, modelName: 'place' })
-
-// Place.hasMany(Event)
 
 module.exports = Place

@@ -249,7 +249,7 @@
     "login": {
         "ok": "Connecté",
         "insert_email": "Saisissez votre adresse courriel",
-        "error": "Impossible de se connecter. Veuillez vérifier vos identifiants.",
+        "error": "Impossible de se connecter. Veuillez vérifier vos informations de connexion.",
         "forgot_password": "Mot de passe oublié ?",
         "not_registered": "Pas encore inscrit·e ?",
         "check_email": "Vérifiez votre boîte de réception et les indésirables.",

@@ -2,6 +2,7 @@
 export default {
   theme: {
     dark: true,
+    // theme: { disable: true },
     themes: {
       dark: {
         primary: '#FF6E40'

@@ -5,7 +5,7 @@ div#list
       h3(v-if='title') {{title}}
     v-list-item(
       target='_blank'
-      :to='`/event/${event.id}`'
+      :to='`/event/${event.slug || event.id}`'
       v-for='event in computedEvents'
       :key='`${event.id}_${event.start_datetime}`' small)
       v-list-item-content

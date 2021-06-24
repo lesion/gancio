@@ -7,7 +7,6 @@ module.exports = {
   // follow request from fediverse
   async follow (req, res) {
     const body = req.body
-    log.debug('follow')
     if (typeof body.object !== 'string') { return }
     const username = body.object.replace(`${config.baseurl}/federation/u/`, '')
     if (username !== req.settings.instance_name) {
@@ -20,7 +19,7 @@ module.exports = {
     // await user.addFollowers([req.fedi_user.id])
     // await user.update({ followers: [...user.followers, body.actor] })
     await req.fedi_user.update({ follower: true })
-    log.debug(`Followed by ${body.actor}`)
+    log.info(`Followed by ${body.actor}`)
     const guid = crypto.randomBytes(16).toString('hex')
     const message = {
       '@context': 'https://www.w3.org/ns/activitystreams',
@@ -43,11 +42,11 @@ module.exports = {
     }
 
     if (body.actor !== body.object.actor || body.actor !== req.fedi_user.ap_id) {
-      log.debug('Unfollow an user created by a different actor !?!?')
+      log.info('Unfollow an user created by a different actor !?!?')
       return res.status(400).send('Bad things')
     }
     await req.fedi_user.update({ follower: false })
-    log.debug(`Unfollowed by ${body.actor}`)
+    log.info(`Unfollowed by ${body.actor}`)
     res.sendStatus(200)
   }
 }

@@ -14,48 +14,54 @@
           v-container
             v-row
               //- Not logged event
-              v-col.col-12(v-if='!$auth.loggedIn')
+              v-col(v-if='!$auth.loggedIn' cols=12)
                 p(v-html="$t('event.anon_description')")
 
               //- Title
-              v-text-field.col-12(
-                @change='v => event.title = v'
-                :value = 'event.title'
-                :rules="[$validators.required('common.title')]"
-                prepend-icon='mdi-format-title'
-                :label="$t('common.title')"
-                autofocus
-                ref='title')
+              v-col(cols=12)
+                v-text-field(
+                  @change='v => event.title = v'
+                  :value = 'event.title'
+                  :rules="[$validators.required('common.title')]"
+                  prepend-icon='mdi-format-title'
+                  :label="$t('common.title')"
+                  autofocus
+                  ref='title')
 
               //- Where
-              WhereInput.col-12(v-model='event.place')
+              v-col(cols=12)
+                WhereInput(ref='where' v-model='event.place')
 
               //- When
-              DateInput.col-12(v-model='date')
+              DateInput(v-model='date')
 
               //- Description
-              Editor.col-12.mb-3(
-                :label="$t('event.description_description')"
-                v-model='event.description'
-                :placeholder="$t('event.description_description')"
-                max-height='400px')
+              v-col.px-0(cols='12')
+                Editor.px-3.ma-0(
+                  :label="$t('event.description_description')"
+                  v-model='event.description'
+                  :placeholder="$t('event.description_description')"
+                  max-height='400px')
 
               //- MEDIA / FLYER / POSTER
-              v-file-input.col-12.col-sm-6.mt-3(
-                :label="$t('common.media')"
-                :hint="$t('event.media_description')"
-                prepend-icon="mdi-camera"
-                v-model='event.image'
-                persistent-hint
-                accept='image/*')
+              v-col(cols=12 md=6)
+                v-file-input(
+                  :label="$t('common.media')"
+                  :hint="$t('event.media_description')"
+                  prepend-icon="mdi-camera"
+                  v-model='event.image'
+                  persistent-hint
+                  accept='image/*')
+                v-img.col-12.col-sm-2.ml-3(v-if='mediaPreview' :src='mediaPreview')
 
               //- tags
-              v-combobox.col-12.col-sm-6.mt-3(v-model='event.tags'
-                prepend-icon="mdi-tag-multiple"
-                chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-                :delimiters="[',', ' ']"
-                :items="tags.map(t => t.tag)"
-                :label="$t('common.tags')")
+              v-col(cols=12 md=6)
+                v-combobox(v-model='event.tags'
+                  prepend-icon="mdi-tag-multiple"
+                  chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
+                  :delimiters="[',', ' ']"
+                  :items="tags.map(t => t.tag)"
+                  :label="$t('common.tags')")
 
       v-card-actions
         v-spacer
@@ -70,12 +76,11 @@ import Editor from '@/components/Editor'
 import List from '@/components/List'
 import ImportDialog from './ImportDialog'
 import DateInput from './DateInput'
-import HourInput from './HourInput'
 import WhereInput from './WhereInput'
 
 export default {
   name: 'NewEvent',
-  components: { List, Editor, ImportDialog, WhereInput, HourInput, DateInput },
+  components: { List, Editor, ImportDialog, WhereInput, DateInput },
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
@@ -107,6 +112,7 @@ export default {
       data.event.description = event.description
       data.event.id = event.id
       data.event.tags = event.tags
+      data.event.image_path = event.image_path
       return data
     }
     return {}
@@ -140,18 +146,41 @@ export default {
     }
   },
   computed: {
-    ...mapState(['tags', 'places', 'settings'])
+    ...mapState(['tags', 'places', 'settings']),
+    mediaPreview () {
+      if (!this.event.image && !this.event.image_path) {
+        return false
+      }
+      const url = this.event.image ? URL.createObjectURL(this.event.image) : `/media/thumb/${this.event.image_path}`
+      return url
+    }
   },
   methods: {
     ...mapActions(['updateMeta']),
     eventImported (event) {
       this.event = Object.assign(this.event, event)
+      this.$refs.where.selectPlace({ name: event.place.name, create: true })
+      this.date = {
+        recurrent: this.event.recurrent || null,
+        from: new Date(dayjs.unix(this.event.start_datetime)),
+        due: new Date(dayjs.unix(this.event.end_datetime)),
+        multidate: event.multidate,
+        fromHour: true,
+        dueHour: true
+      }
+      this.openImportDialog = false
     },
     cleanFile () {
       this.event.image = {}
     },
     async done () {
-      if (!this.$refs.form.validate()) { return }
+      if (!this.$refs.form.validate()) {
+        this.$nextTick(() => {
+          const el = document.querySelector('.v-input.error--text:first-of-type')
+          el.scrollIntoView()
+        })
+        return
+      }
       this.loading = true
 
       const formData = new FormData()

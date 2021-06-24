@@ -1,5 +1,5 @@
 <template lang="pug">
-.when
+v-col(cols=12)
   .text-center
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-model='type' color='primary' @change='type => change("type", type)')
       v-btn(value='normal' label="normal") {{$t('event.normal')}}
@@ -9,7 +9,6 @@
     p {{$t(`event.${type}_description`)}}
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-if='type === "recurrent"' color='primary' :value='value.recurrent.frequency' @change='fq => change("frequency", fq)')
       v-btn(v-for='f in frequencies' :key='f.value' :value='f.value') {{f.text}}
-
     client-only
       .datePicker.mt-3
         v-input(:value='fromDate'
@@ -28,17 +27,20 @@
 
   div.text-center.mb-2(v-if='type === "recurrent"')
     span(v-if='value.recurrent.frequency !== "1m" && value.recurrent.frequency !== "2m"') {{whenPatterns}}
-    v-btn-toggle.mt-1.flex-column.flex-sm-row(v-else :value='value.recurrent.type' color='primary' @change='fq => change("", fq)')
+    v-btn-toggle.mt-1.flex-column.flex-sm-row(v-else :value='value.recurrent.type' color='primary' @change='fq => change("recurrentType", fq)')
       v-btn(v-for='whenPattern in whenPatterns' :value='whenPattern.key' :key='whenPatterns.key' small) {{whenPattern.label}}
 
   v-row.mt-3.col-md-6.mx-auto
     v-col.col-12.col-sm-6
       v-select(dense :label="$t('event.from')" :value='fromHour' clearable
+        :disabled='!value.from'
         :rules="[$validators.required('event.from')]"
         :items='hourList' @change='hr => change("fromHour", hr)')
 
     v-col.col-12.col-sm-6
-      v-select(dense :label="$t('event.due')" :value='dueHour' clearable
+      v-select(dense :label="$t('event.due')"
+        :disabled='!fromHour'
+        :value='dueHour' clearable
         :items='hourList' @change='hr => change("dueHour", hr)')
 
   //- div.col-md-12(v-if='isRecurrent')
@@ -131,27 +133,26 @@ export default {
           // { label: this.$tc(`event.recurrent_${freq}_ordinal`, { n, days: weekDay }), key: 'weekday' }
         ]
 
+        if (n < 5) {
+          patterns.push(
+            {
+              label: this.$t(`event.recurrent_${freq}_ordinal`, { n: this.$t(`ordinal.${n}`), days: weekDay }),
+              key: n
+            }
+          )
+        }
+
         // if selected day is in last week, propose also this type of selection
         const lastWeek = date.daysInMonth() - monthDay < 7
         if (lastWeek) {
           patterns.push(
             {
-              label: this.$t(`event.recurrent_${freq}_ordinal`,
-                { n: this.$t('ordinal.-1'), days: weekDay }),
-              key: 'weekday'
+              label: this.$t(`event.recurrent_${freq}_ordinal`, { n: this.$t('ordinal.-1'), days: weekDay }),
+              key: -1
             }
           )
         }
 
-        if (n < 5) {
-          patterns.push(
-            {
-              label: this.$t(`event.recurrent_${freq}_ordinal`,
-                { n: this.$t(`ordinal.${n}`), days: weekDay }),
-              key: 'weekday'
-            }
-          )
-        }
         return patterns
       } else if (freq === '1d') {
         return this.$t('event.recurrent_each_day')
@@ -196,6 +197,8 @@ export default {
         }
       } else if (what === 'frequency') {
         this.$emit('input', { ...this.value, recurrent: { ...this.value.recurrent, frequency: value } })
+      } else if (what === 'recurrentType') {
+        this.$emit('input', { ...this.value, recurrent: { ...this.value.recurrent, type: value } })
       } else if (what === 'fromHour') {
         if (value) {
           const [hour, minute] = value.split(':')
@@ -219,7 +222,12 @@ export default {
         } else {
           this.$emit('input', { ...this.value, dueHour: false })
         }
+      // change date in calendar (could be a range or a recurrent event...)
       } else if (what === 'date') {
+        if (value === null) {
+          this.$emit('input', { ...this.value, from: null, fromHour: false })
+          return
+        }
         if (this.value.multidate) {
           let from = value.start
           let due = value.end

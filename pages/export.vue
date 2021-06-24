@@ -1,6 +1,7 @@
 <template lang="pug">
   v-container
     v-card(outlined)
+      v-card-title {{$t('common.share')}}
       v-card-text
         p.text-body-1 {{$t('export.intro')}}
         v-row
@@ -64,9 +65,9 @@
                   color='primary' v-clipboard:copy='listScript' v-clipboard:success='copyLink.bind(this,"list")') {{$t('common.copy')}}
                     v-icon.ml-1 mdi-content-copy
 
-        //- v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
-        //- v-tab-item(v-if='settings.enable_federation')
-        //-   FollowMe
+        v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
+        v-tab-item(v-if='settings.enable_federation')
+          FollowMe
           //- TOFIX
           //- v-tab.pt-1(label='calendar' name='calendar')
           //- v-tab-item
@@ -125,27 +126,31 @@ export default {
       }
 
       if (this.filters.tags.length) {
-        params.push(`tags=${this.filters.tags.map(t => t.id)}`)
+        params.push(`tags=${this.filters.tags.join(',')}`)
       }
 
+      if (this.filters.show_recurrent) {
+        params.push('show_recurrent=true')
+      }
       return `<iframe style='border: 0px; width: 100%;' src="${this.settings.baseurl}/embed/list?${params.join('&')}"></iframe>`
     },
     link () {
       const typeMap = ['rss', 'ics', 'list']
-      const tags = this.filters.tags.join(',')
-      const places = this.filters.places.join(',')
-      let query = ''
-      if (tags || places) {
-        query = '?'
-        if (tags) {
-          query += 'tags=' + tags
-          if (places) { query += '&places=' + places }
-        } else {
-          query += 'places=' + places
-        }
+      const params = []
+
+      if (this.filters.tags.length) {
+        params.push(`tags=${this.filters.tags.join(',')}`)
       }
 
-      return `${this.settings.baseurl}/feed/${typeMap[this.type]}${query}`
+      if (this.filters.places.length) {
+        params.push(`places=${this.filters.places.join(',')}`)
+      }
+
+      if (this.filters.show_recurrent) {
+        params.push('show_recurrent=true')
+      }
+
+      return `${this.settings.baseurl}/feed/${typeMap[this.type]}?${params.join('&')}`
     },
     showLink () {
       return (['rss', 'ics'].includes(this.type))
@@ -158,7 +163,7 @@ export default {
         start: dayjs().unix(),
         places: this.filters.places,
         tags: this.filters.tags,
-        show_recurrent: this.filters.show_recurrent
+        show_recurrent: !!this.filters.show_recurrent
       })
     },
     copyLink (type) {

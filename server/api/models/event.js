@@ -1,8 +1,10 @@
 const config = require('config')
 const moment = require('dayjs')
-const htmlToText = require('html-to-text')
+const { htmlToText } = require('html-to-text')
 
 const { Model, DataTypes } = require('sequelize')
+const SequelizeSlugify = require('sequelize-slugify')
+
 const sequelize = require('./index')
 
 const Resource = require('./resource')
@@ -26,7 +28,11 @@ Event.init({
     autoIncrement: true
   },
   title: DataTypes.STRING,
-  slug: DataTypes.STRING,
+  slug: {
+    type: DataTypes.STRING,
+    index: true,
+    unique: true
+  },
   description: DataTypes.TEXT,
   multidate: DataTypes.BOOLEAN,
   start_datetime: {
@@ -51,6 +57,7 @@ Event.belongsTo(User)
 User.hasMany(Event)
 
 Event.belongsToMany(Tag, { through: 'event_tags' })
+Tag.belongsToMany(Event, { through: 'event_tags' })
 
 Event.belongsToMany(Notification, { through: EventNotification })
 Notification.belongsToMany(Event, { through: EventNotification })
@@ -61,9 +68,11 @@ Resource.belongsTo(Event)
 Event.hasMany(Event, { as: 'child', foreignKey: 'parentId' })
 Event.belongsTo(Event, { as: 'parent' })
 
+SequelizeSlugify.slugifyModel(Event, { source: ['title'] })
+
 Event.prototype.toAPNote = function (username, locale, to = []) {
   const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
-  const plainDescription = htmlToText.fromString(this.description && this.description.replace('\n', '').slice(0, 1000))
+  const plainDescription = htmlToText(this.description && this.description.replace('\n', '').slice(0, 1000))
   const content = `
   ${this.title}<br/><br/>
     📍 ${this.place && this.place.name}<br/>
@@ -71,7 +80,7 @@ Event.prototype.toAPNote = function (username, locale, to = []) {
 
     ${plainDescription}<br/><br/>
 
-    <a href='${config.baseurl}/event/${this.id}'>${config.baseurl}/event/${this.id}</a><br/>
+    <a href='${config.baseurl}/event/${this.slug || this.id}'>${config.baseurl}/event/${this.slug || this.id}</a><br/>
 
     ${tags && tags.map(t => `#${t}`)}
   `

@@ -21,25 +21,13 @@ export const state = () => ({
 })
 
 export const mutations = {
-  // setEvents (state, events) {
-  //   // set`past` and `newDay` flags to event
-  //   let lastDay = null
-  //   state.events = events.map(e => {
-  //     const currentDay = dayjs.unix(e.start_datetime).date()
-  //     e.newDay = (!lastDay || lastDay !== currentDay) && currentDay
-  //     lastDay = currentDay
-  //     const end_datetime = e.end_datetime || e.start_datetime + 3600 * 2
-  //     const past = ((dayjs().unix()) - end_datetime) > 0
-  //     e.past = !!past
-  //     return e
-  //   })
-  // },
   update (state, { tags, places }) {
     state.tags = tags
     state.places = places
   },
   setSettings (state, settings) {
     state.settings = settings
+    state.filters.show_recurrent = settings.recurrent_event_visible
   },
   setSetting (state, setting) {
     state.settings[setting.key] = setting.value

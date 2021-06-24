@@ -4,14 +4,14 @@ services:
   gancio:
     build: .
     restart: always
-    image: node:latest
+    image: node:buster
+    user: node
     container_name: gancio
-    command: gancio start --docker --db=sqlite
     environment:
-      - DEBUG=*,-babel,-follow-redirects,-send,-body-parser:*,-express:*,-connect:*,-sequelize:*
+      - PATH=$PATH:/home/node/.yarn/bin
+      - GANCIO_DATA=/home/node/data
+    command: gancio start --docker
     volumes:
-      - ./db.sqlite:/opt/gancio/db.sqlite
-      - ./config.json:/opt/gancio/config.json
-      - ./uploads:/opt/gancio/uploads
+      - ./data:/home/node/data
     ports:
       - "127.0.0.1:13120:13120"
