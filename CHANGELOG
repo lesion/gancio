@@ -1,6 +1,10 @@
 All notable changes to this project will be documented in this file.
 
 ### Unreleased
+  
+  - fix AP resource removal
+  - improve AP resource UI
+  
 
 ### 1.0 (alpha)
 This release is a complete rewrite of frontend UI and many internals, main changes are:

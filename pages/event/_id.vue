@@ -64,31 +64,33 @@ v-container#event.pa-0.pa-sm-2
 
       //- resources from fediverse
       #resources.mt-1(v-if='settings.enable_federation')
-        div.float-right(v-if='!settings.hide_boosts')
-          small.mr-3 🔖 {{event.likes.length}}
-          small ✊ {{event.boost.length}}<br/>
+        //- div.float-right(v-if='!settings.hide_boosts')
+        //-   small.mr-3 🔖 {{event.likes.length}}
+        //-   small ✊ {{event.boost.length}}<br/>
 
-        v-dialog.showResource#resourceDialog(v-model='showResources' fullscreen
-          width='95vw'
+        v-dialog(v-model='showResources'
+          fullscreen
           destroy-on-close
           @keydown.native.right='$refs.carousel.next()'
           @keydown.native.left='$refs.carousel.prev()')
-          v-carousel(:interval='10000' ref='carousel' arrow='always')
-            v-carousel-item(v-for='attachment in selectedResource.data.attachment' :key='attachment.url')
-              v-img(:src='attachment.url')
-        v-list.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources' dark
+            v-carousel.pa-5(:interval='10000' ref='carousel' hide-delimiters height='100%' show-arrows-on-over)
+              v-carousel-item(v-for='attachment in selectedResource.data.attachment'
+                v-if='isImg(attachment)'
+                :key='attachment.url')
+                v-img(:src='attachment.url' contain max-width='100%' max-height='100%')
+
+        v-card#resources.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources'
           :key='resource.id' :class='{disabled: resource.hidden}')
-          v-list-item
-            v-list-title
+            v-card-subtitle
               v-menu(v-if='$auth.user && $auth.user.is_admin' offset-y)
-                template(v-slot:activator="{ on, attrs }")
-                  v-btn.mr-2(v-on='on' v-attrs='attrs' color='primary' small icon outlined)
+                template(v-slot:activator="{ on }")
+                  v-btn.mr-2(v-on='on' color='primary' small icon)
                     v-icon mdi-dots-vertical
                 v-list
                   v-list-item(v-if='!resource.hidden' @click='hideResource(resource, true)')
                     v-list-item-title <v-icon left>mdi-eye-off</v-icon> {{$t('admin.hide_resource')}}
                   v-list-item(v-else @click='hideResource(resource, false)')
-                    v-list-item-title <v-icon left>mdi-eye-on</v-icon> {{$t('admin.show_resource')}}
+                    v-list-item-title <v-icon left>mdi-eye</v-icon> {{$t('admin.show_resource')}}
                   v-list-item(@click='deleteResource(resource)')
                     v-list-item-title <v-icon left>mdi-delete</v-icon> {{$t('admin.delete_resource')}}
                   v-list-item(@click='blockUser(resource)')
@@ -97,9 +99,16 @@ v-container#event.pa-0.pa-sm-2
               a(:href='resource.data.url || resource.data.context')
                 small {{resource.data.published|dateFormat('ddd, D MMMM HH:mm')}}
 
+            v-card-text
+
               div.mt-1(v-html='resource_filter(resource.data.content)')
-              span.previewImage(@click='showResource(resource)')
-                img(v-for='img in resource.data.attachment' :src='img.url')
+              span(v-for='attachment in resource.data.attachment' :key='attachment.url' @click='showResource(resource)')
+                audio(v-if='isAudio(attachment)' controls)
+                  source(:src='attachment.url')
+                v-img.cursorPointer(v-if='isImg(attachment)' :src='attachment.url'
+                  max-height="250px"
+                  max-width="250px"
+                  contain :alt='attachment.name')
 
       //- Next/prev arrow
       .text-center.mt-5.mb-5
@@ -243,6 +252,14 @@ export default {
     window.removeEventListener('keydown', this.keyDown)
   },
   methods: {
+    isImg (attachment) {
+      const type = attachment.mediaType.split('/')[0]
+      return type === 'image'
+    },
+    isAudio (attachment) {
+      const type = attachment.mediaType.split('/')[0]
+      return type === 'audio'
+    },
     keyDown (ev) {
       if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) { return }
       if (ev.key === 'ArrowRight' && this.event.next) {
@@ -255,7 +272,7 @@ export default {
     showResource (resource) {
       this.showResources = true
       this.selectedResource = resource
-      document.getElementById('resourceDialog').focus()
+      // document.getElementById('resourceDialog').focus()
     },
     async hideResource (resource, hidden) {
       await this.$axios.$put(`/resources/${resource.id}`, { hidden })
