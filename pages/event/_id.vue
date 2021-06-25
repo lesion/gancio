@@ -11,7 +11,7 @@ v-container#event.pa-0.pa-sm-2
       v-row
         v-col.col-12.col-lg-8
           //- fake image to use u-featured in h-event microformat
-          img.u-featured(v-show='false' :src='`${settings.baseurl}${imgPath}`')
+          img.u-featured(v-show='false' v-if='event.image_path' :src='`${settings.baseurl}${imgPath}`')
           v-img.main_image.mb-3(
             contain
             :src='imgPath'
