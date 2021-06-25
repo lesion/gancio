@@ -11,7 +11,7 @@ v-container#event.pa-0.pa-sm-2
       v-row
         v-col.col-12.col-lg-8
           //- fake image to use u-featured in h-event microformat
-          img.u-featured(v-show='false' :src='`${settings.baseurl}${imgPath}`')
+          img.u-featured(v-show='false' v-if='event.image_path' :src='`${settings.baseurl}${imgPath}`')
           v-img.main_image.mb-3(
             contain
             :src='imgPath'
@@ -64,25 +64,30 @@ v-container#event.pa-0.pa-sm-2
 
       //- resources from fediverse
       #resources.mt-1(v-if='settings.enable_federation')
-        div.float-right(v-if='!settings.hide_boosts')
-          small.mr-3 🔖 {{event.likes.length}}
-          small ✊ {{event.boost.length}}<br/>
+        //- div.float-right(v-if='!settings.hide_boosts')
+        //-   small.mr-3 🔖 {{event.likes.length}}
+        //-   small ✊ {{event.boost.length}}<br/>
 
-        v-dialog.showResource#resourceDialog(v-model='showResources' fullscreen
-          width='95vw'
+        v-dialog(v-model='showResources'
+          fullscreen
+          width="100%"
+          max-width="100%"
+          transition="dialog-bottom-transition"
           destroy-on-close
           @keydown.native.right='$refs.carousel.next()'
           @keydown.native.left='$refs.carousel.prev()')
-          v-carousel(:interval='10000' ref='carousel' arrow='always')
-            v-carousel-item(v-for='attachment in selectedResource.data.attachment' :key='attachment.url')
-              v-img(:src='attachment.url')
-        v-list.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources' dark
+              v-carousel.pa-5(:interval='10000' ref='carousel' arrow='always')
+                v-carousel-item(v-for='attachment in selectedResource.data.attachment'
+                  v-if='isImg(attachment)'
+                  :key='attachment.url'
+                  :src='attachment.url')
+
+        v-card#resources.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources'
           :key='resource.id' :class='{disabled: resource.hidden}')
-          v-list-item
-            v-list-title
+            v-card-subtitle
               v-menu(v-if='$auth.user && $auth.user.is_admin' offset-y)
-                template(v-slot:activator="{ on, attrs }")
-                  v-btn.mr-2(v-on='on' v-attrs='attrs' color='primary' small icon outlined)
+                template(v-slot:activator="{ on }")
+                  v-btn.mr-2(v-on='on' color='primary' small icon outlined)
                     v-icon mdi-dots-vertical
                 v-list
                   v-list-item(v-if='!resource.hidden' @click='hideResource(resource, true)')
@@ -97,9 +102,17 @@ v-container#event.pa-0.pa-sm-2
               a(:href='resource.data.url || resource.data.context')
                 small {{resource.data.published|dateFormat('ddd, D MMMM HH:mm')}}
 
+            v-card-text
+
               div.mt-1(v-html='resource_filter(resource.data.content)')
-              span.previewImage(@click='showResource(resource)')
-                img(v-for='img in resource.data.attachment' :src='img.url')
+              span(v-for='attachment in resource.data.attachment' :key='attachment.url' @click='showResource(resource)')
+                span {{attachment}}
+                audio(v-if='isAudio(attachment)' controls)
+                  source(:src='attachment.url')
+                v-img.cursorPointer(v-if='isImg(attachment)' :src='attachment.url'
+                  max-height="200px"
+                  max-width="200px"
+                  contain :alt='attachment.name')
 
       //- Next/prev arrow
       .text-center.mt-5.mb-5
@@ -243,6 +256,15 @@ export default {
     window.removeEventListener('keydown', this.keyDown)
   },
   methods: {
+    isImg (attachment) {
+      const type = attachment.mediaType.split('/')[0]
+      console.error(type)
+      return type === 'image'
+    },
+    isAudio (attachment) {
+      const type = attachment.mediaType.split('/')[0]
+      return type === 'audio'
+    },
     keyDown (ev) {
       if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) { return }
       if (ev.key === 'ArrowRight' && this.event.next) {
@@ -255,7 +277,7 @@ export default {
     showResource (resource) {
       this.showResources = true
       this.selectedResource = resource
-      document.getElementById('resourceDialog').focus()
+      // document.getElementById('resourceDialog').focus()
     },
     async hideResource (resource, hidden) {
       await this.$axios.$put(`/resources/${resource.id}`, { hidden })
