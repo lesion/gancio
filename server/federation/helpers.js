@@ -211,7 +211,10 @@ const Helpers = {
       log.info(`Actor ${req.body.actor} not found`)
       return res.status(401).send('Actor not found')
     }
-    if (httpSignature.verifySignature(parsed, user.object.publicKey.publicKeyPem)) { return next() }
+    if (httpSignature.verifySignature(parsed, user.object.publicKey.publicKeyPem)) {
+      log.debug(`Valid signature from ${req.body.actor} `)
+      return next()
+    }
 
     // still not valid
     log.info(`Invalid signature from user ${req.body.actor}`)
