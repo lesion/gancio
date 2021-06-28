@@ -71,17 +71,23 @@ v-container#event.pa-0.pa-sm-2
         v-dialog(v-model='showResources'
           fullscreen
           destroy-on-close
-          @keydown.native.right='$refs.carousel.next()'
-          @keydown.native.left='$refs.carousel.prev()')
-            v-carousel.pa-5(:interval='10000' ref='carousel' hide-delimiters height='100%' show-arrows-on-over)
+          scrollable
+          transition='dialog-bottom-transition')
+          v-card
+            v-btn.ma-2(icon dark @click='showResources = false')
+              v-icon mdi-close
+            v-carousel.pa-5(:interval='10000' ref='carousel' hide-delimiters v-model='currentAttachment'
+              height='100%' show-arrows-on-over)
               v-carousel-item(v-for='attachment in selectedResource.data.attachment'
                 v-if='isImg(attachment)'
                 :key='attachment.url')
                 v-img(:src='attachment.url' contain max-width='100%' max-height='100%')
+            v-card-actions.align-center.justify-center
+              span {{currentAttachmentLabel}}
 
-        v-card#resources.mb-1(v-if='settings.enable_resources' v-for='resource in event.resources'
-          :key='resource.id' :class='{disabled: resource.hidden}')
-            v-card-subtitle
+        v-card.grey.darken-4.mb-3#resources(v-if='settings.enable_resources' v-for='resource in event.resources'
+          :key='resource.id' :class='{disabled: resource.hidden}' elevation='10' outlined)
+            v-card-title
               v-menu(v-if='$auth.user && $auth.user.is_admin' offset-y)
                 template(v-slot:activator="{ on }")
                   v-btn.mr-2(v-on='on' color='primary' small icon)
@@ -102,10 +108,10 @@ v-container#event.pa-0.pa-sm-2
             v-card-text
 
               div.mt-1(v-html='resource_filter(resource.data.content)')
-              span(v-for='attachment in resource.data.attachment' :key='attachment.url' @click='showResource(resource)')
+              span(v-for='attachment in resource.data.attachment' :key='attachment.url')
                 audio(v-if='isAudio(attachment)' controls)
                   source(:src='attachment.url')
-                v-img.cursorPointer(v-if='isImg(attachment)' :src='attachment.url'
+                v-img.cursorPointer(v-if='isImg(attachment)' :src='attachment.url' @click='showResource(resource)'
                   max-height="250px"
                   max-width="250px"
                   contain :alt='attachment.name')
@@ -127,6 +133,7 @@ v-container#event.pa-0.pa-sm-2
 import { mapState } from 'vuex'
 import EventAdmin from './eventAdmin'
 import EmbedEvent from './embedEvent'
+import get from 'lodash/get'
 import moment from 'dayjs'
 const htmlToText = require('html-to-text')
 
@@ -143,6 +150,7 @@ export default {
   },
   data () {
     return {
+      currentAttachment: 0,
       event: {},
       showEmbed: false,
       showResources: false,
@@ -229,6 +237,9 @@ export default {
     ...mapState(['settings']),
     plainDescription () {
       return htmlToText.fromString(this.event.description.replace('\n', '').slice(0, 1000))
+    },
+    currentAttachmentLabel () {
+      return get(this.selectedResource, `data.attachment[${this.currentAttachment}].name`, '')
     },
     imgPath () {
       return '/media/' + this.event.image_path
