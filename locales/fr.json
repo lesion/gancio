@@ -84,7 +84,9 @@
         "address": "Adresse",
         "where": "Où",
         "send": "Envoyer",
-        "export": "Exporter"
+        "export": "Exporter",
+        "label": "Nom",
+        "max_events": "Nb. max d'événements"
     },
     "event": {
         "follow_me_description": "Une des manières de rester informé sur les évènements publiés ici sur {title}\nest de suivre le compte <u>{account}</u> sur le fediverse, par exemple via Mastodon, et pourquoi pas d'ajouter des ressources à un évènement à partir de là.<br/><br/>\nSi vous n'avez jamais entendu parler de Mastodon and du fediverse, nous vous recommandons de lire <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>cet article (en anglais)</a>.<br/><br/>Saisissez votre nom d'instance ci-dessous (par ex. mastodon.social)",
@@ -129,7 +131,8 @@
         "recurrent_2m_days": "|Le {days} un mois sur deux|Les {jours} un mois sur deux",
         "recurrent_2w_days": "Un {days} sur deux",
         "edit_recurrent": "Modifier l’évènement récurrent :",
-        "updated": "Évènement mis à jour"
+        "updated": "Évènement mis à jour",
+        "import_description": "Vous pouvez importer des événements depuis d'autres plateformes ou d'autres instances à travers des formats standards (ics et h-event)"
     },
     "register": {
         "description": "Les mouvements sociaux doivent s'organiser et s'autofinancer.<br/>\n<br/>Avant de pouvoir publier, <strong> le compte doit être approuvé</strong>, considérez que <strong> derrière ce site vous trouverez de vraies personnes, à qui vous pouvez écrire en deux lignes pour exprimer les évènements que vous souhaiteriez publier.",
@@ -200,7 +203,8 @@
         "remove_admin": "Supprimer l'administrateur",
         "delete_user": "Supprimer",
         "event_confirm_description": "Vous pouvez confirmer les évènements ajoutés par des utilisateurs anonymes ici",
-        "place_description": "Si vous avez donné le mauvais lieu ou la mauvaise adresse, vous pouvez les modifier.<br/>Tous les évènements courants et passés associés à ce lieu seront mis à jour."
+        "place_description": "Si vous avez donné le mauvais lieu ou la mauvaise adresse, vous pouvez les modifier.<br/>Tous les évènements courants et passés associés à ce lieu seront mis à jour.",
+        "add_instance": "Ajouter une instance"
     },
     "oauth": {
         "scopes": {
