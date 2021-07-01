@@ -8,6 +8,12 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.0.1 (alpha)
+  
+  - fix AP resource removal
+  - improve AP resource UI
+  - fix Docker setup
+  - update deps
 ### 1.0 (alpha)
 This release is a complete rewrite of frontend UI and many internals, main changes are:
 
