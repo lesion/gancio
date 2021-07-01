@@ -70,7 +70,7 @@
     "pg": "^8.6.0",
     "pg-native": "3.0.0",
     "prom-client": "^13.1.0",
-    "sequelize": "^6.6.2",
+    "sequelize": "^6.6.4",
     "sequelize-cli": "^6.2.0",
     "sequelize-slugify": "^1.5.0",
     "sharp": "^0.28.2",
@@ -83,7 +83,7 @@
     "v-calendar": "2.3.0",
     "vue": "^2.6.14",
     "vue-clipboard2": "^0.3.1",
-    "vue-i18n": "^8.24.4",
+    "vue-i18n": "^8.24.5",
     "vue-server-renderer": "^2.6.14",
     "vue-template-compiler": "^2.6.14",
     "winston": "^3.3.3",
@@ -110,14 +110,14 @@
     "eslint-plugin-vue": "^7.10.0",
     "fibers": "^5.0.0",
     "less-loader": "7",
-    "prettier": "^2.3.0",
+    "prettier": "^2.3.2",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
     "sass": "^1.32.12",
     "sass-loader": "10",
-    "typescript": "^4.3.4",
+    "typescript": "^4.3.5",
     "vue-cli-plugin-vuetify": "~2.4.0",
-    "vuetify": "^2.5.4",
+    "vuetify": "^2.5.6",
     "vuetify-loader": "^1.7.1",
     "webpack": "4",
     "webpack-cli": "^4.7.2"
@@ -130,7 +130,11 @@
     "jimp": "0.16.1",
     "resize-img": "2.0.0",
     "underscore": "1.13.1",
-    "@nuxtjs/vuetify/**/sass": "1.32.12"
+    "@nuxtjs/vuetify/**/sass": "1.32.12",
+    "css-what": "5.0.1",
+    "postcss": "7.0.36",
+    "glob-parent": "5.1.2",
+    "core-js": "3.14.0"
   },
   "bin": {
     "gancio": "server/cli.js"
