@@ -174,7 +174,7 @@ async function setupQuestionnaire (is_docker, db) {
     name: 'smtp_type',
     message: 'How should we send the emails ?',
     type: 'list',
-    choices: ['SMTP', 'sendmail']
+    choices: ['SMTP', 'sendmail', 'None (choose later)']
   })
 
   questions.push({
@@ -190,13 +190,13 @@ async function setupQuestionnaire (is_docker, db) {
     message: 'SMTP Host',
     default: 'localhost',
     validate: notEmpty,
-    when: answers => answers.smtp_type !== 'sendmail'
+    when: answers => answers.smtp_type === 'SMTP'
   })
 
   questions.push({
     name: 'smtp.secure',
     message: 'Does SMTP server support TLS?',
-    when: answers => answers.smtp_type !== 'sendmail' && !['localhost', '127.0.0.1'].includes(answers.smtp.host),
+    when: answers => answers.smtp_type === 'SMTP' && !['localhost', '127.0.0.1'].includes(answers.smtp.host),
     default: true,
     type: 'confirm'
   })
@@ -205,7 +205,7 @@ async function setupQuestionnaire (is_docker, db) {
     name: 'smtp.port',
     message: 'SMTP Port',
     default: answers => ['localhost', '127.0.0.1'].includes(answers.smtp.host) ? 25 : (answers.smtp.secure ? 465 : 587),
-    when: answers => answers.smtp_type !== 'sendmail'
+    when: answers => answers.smtp_type === 'SMTP'
   })
 
   questions.push({
@@ -213,7 +213,7 @@ async function setupQuestionnaire (is_docker, db) {
     message: 'is SMTP authentication needed?',
     type: 'confirm',
     default: answers => !['localhost', '127.0.0.1'].includes(answers.smtp.host),
-    when: answers => answers.smtp_type !== 'sendmail'
+    when: answers => answers.smtp_type === 'SMTP'
   })
 
   questions.push({
@@ -221,7 +221,7 @@ async function setupQuestionnaire (is_docker, db) {
     message: 'SMTP User',
     validate: notEmpty,
     default: answers => answers.admin.email,
-    when: answers => answers.smtp_type !== 'sendmail' && answers.smtp_need_auth
+    when: answers => answers.smtp_type === 'SMTP' && answers.smtp_need_auth
   })
 
   questions.push({
@@ -229,7 +229,7 @@ async function setupQuestionnaire (is_docker, db) {
     message: 'SMTP Password',
     type: 'password',
     validate: notEmpty,
-    when: answers => answers.smtp_type !== 'sendmail' && answers.smtp_need_auth
+    when: answers => answers.smtp_type === 'SMTP' && answers.smtp_need_auth
   })
 
   const answers = await inquirer.prompt(questions)
@@ -287,7 +287,7 @@ async function start (options) {
   if (firstrun.check(options.config)) {
     if (options.docker) {
       consola.error(
-        '⚠ ️ Something goes wrong, did you run "docker-compose run --rm gancio gancio setup"'
+        '⚠ ️ Something goes wrong, did you run "docker-compose run --rm gancio gancio setup --docker --db=<YOUR_DB_DIALECT>"'
       )
       process.exit(-1)
     }
