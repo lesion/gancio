@@ -13,12 +13,9 @@ nav_order: 2
 
 ## Initial setup
 
-> info "Clone not needed"
-> You do not need to clone the full repo, a `Dockerfile` and a `docker-compose.yml` are enough.
-
 - __Create a directory where everything related to gancio is stored__
 ```bash
-mkdir -p /opt/gancio/data
+mkdir -p /opt/gancio
 cd /opt/gancio
 ```
 
@@ -27,6 +24,7 @@ cd /opt/gancio
 1. **Download docker-compose.yml and Dockerfile**
 ```bash
 wget {{site.url}}{% link /docker/Dockerfile %}
+wget {{site.url}}{% link /docker/entrypoint.sh %}
 wget {{site.url}}{% link /docker/sqlite/docker-compose.yml %}
 ```
 
@@ -44,6 +42,7 @@ docker-compose run --rm gancio gancio setup --docker --db=sqlite
 1. **Download docker-compose.yml and Dockerfile**
 ```bash
 wget {{site.url}}{% link /docker/Dockerfile %}
+wget {{site.url}}{% link /docker/entrypoint.sh %}
 wget {{site.url}}{% link /docker/postgres/docker-compose.yml %}
 ```
 
@@ -86,6 +85,7 @@ tail -f  data/logs/gancio.log
 > 1. `cd /opt/gancio`
 > 1. [Backup your data]({% link install/backup.md %})
 > 1. Download new `Dockerfile` <br/> `wget {{site.url}}{% link /docker/Dockerfile %}`
+> 1. Download new `entrypoint.sh` <br/> `wget {{site.url}}{% link /docker/entrypoint.sh %}`
 > 1. Download new `docker-compose.yml`  (substitute `sqlite` with `postgres` in case):  <br/>`wget {{site.url}}{% link /docker/sqlite/docker-compose.yml %}`
 > 1. Build the new container `docker-compose build`
 > 1. Extract your backup into `./data` <br/>`mkdir data; tar xvzf gancio-<yourLastBackup>-backup.tgz -C data`
