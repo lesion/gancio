@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
   - improve AP resource UI
   - fix Docker setup
   - update deps
+
 ### 1.0 (alpha)
 This release is a complete rewrite of frontend UI and many internals, main changes are:
 
