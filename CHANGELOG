@@ -1,7 +1,7 @@
 All notable changes to this project will be documented in this file.
 
-### Unreleased
-  
+### 1.0.1 (alpha)
+
   - fix AP resource removal
   - improve AP resource UI
   - fix Docker setup
