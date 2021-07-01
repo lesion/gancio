@@ -38,7 +38,6 @@ module.exports = {
     // sync db
     const db = require('./api/models/index')
     const User = require('./api/models/user')
-    // const Notification = require('./api/models/notification')
     const users = await User.findAll()
     if (users.length) {
       consola.warn(' ⚠   Non empty db! Please move your current db elsewhere than retry.')
@@ -53,28 +52,6 @@ module.exports = {
       is_admin: true,
       is_active: true
     })
-
-    // add default notification
-    consola.info('Add default notification')
-
-    // await db.announcement.create({
-    //   visible: true,
-    //   title: 'Welcome to Gancio',
-    //   announcement: 'TODO: HTML First presentation post'
-    // })
-
-    // try {
-
-    //   // send confirmed events to mastodon
-    // await Notification.create({ action: 'Create', type: 'ap', filters: '{ "is_visible": true }' })
-    // await Notification.create({ action: 'Update', type: 'ap', filters: '{ "is_visible": true }' })
-    // await Notification.create({ action: 'Delete', type: 'ap', filters: '{ "is_visible": true }' })
-    // //   // send anon events to admin
-    // await Notification.create({ action: 'Create', type: 'admin_email', filters: '{ "is_visible": false }' })
-    // }
-
-    // TODO email's notifications
-    // await db.notification.create({ action: 'Create', type: 'email', filters: { is_visible: true } })
 
     // close db connection
     await db.close()
