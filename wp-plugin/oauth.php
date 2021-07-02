@@ -27,6 +27,13 @@ function delete_post ($post_id) {
 function wpgancio_save_event ($post_id) {
   $event = get_post( $post_id );
 
+  function tagName ($tag) {
+    return $tag->name;
+  }
+
+  $tmp_tags = get_the_terms( $event, 'event-tag' );
+  $tags = array_map('tagName', $tmp_tags);
+
   // do not save if it's a draft
   if ($event->post_status != 'publish') {
     return;
@@ -45,6 +52,7 @@ function wpgancio_save_event ($post_id) {
 
   $body = array (
     'title' => $event->post_title,
+    'tags' => $tags,
     'description' => $event->post_content,
     'start_datetime' => intval($date),
     'place_name' => $place_name,
@@ -64,13 +72,15 @@ function wpgancio_save_event ($post_id) {
     $response = $http->request( $instance_url . '/api/event', array(
       'method' => 'PUT',
       'headers' => array (
-        'Authorization' => 'Bearer ' . get_option('wpgancio_token')
-      ), 'body' => $body ));
+        'Authorization' => 'Bearer ' . get_option('wpgancio_token'),
+        'Content-Type' => 'application/json'
+      ), 'body' => wp_json_encode($body) ));
   } else { // or create
     $response = wp_remote_post($instance_url . '/api/event', array(
       'headers' => array (
-        'Authorization' => 'Bearer ' . get_option('wpgancio_token')
-      ), 'body' => $body ));
+        'Authorization' => 'Bearer ' . get_option('wpgancio_token'),
+        'Content-Type' => 'application/json'
+      ), 'body' => wp_json_encode($body) ));
   }
 
   if ( is_wp_error( $response ) ) {
