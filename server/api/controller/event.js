@@ -264,13 +264,18 @@ const eventController = {
   async add (req, res) {
     // req.err comes from multer streaming error
     if (req.err) {
-      log.info(req.err)
+      log.warn(req.err)
       return res.status(400).json(req.err.toString())
     }
 
     try {
       const body = req.body
       const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
+
+      if (!body.place_name) {
+        log.warn('Place is required')
+        return res.status(400).send('Place is required')
+      }
 
       const eventDetails = {
         title: body.title,
