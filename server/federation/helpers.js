@@ -195,7 +195,7 @@ const Helpers = {
     //   .update(req.body)
     //   .digest('base64')
     // if (`SHA-256=${digest}` !== req.headers.signature) {
-    //   log.warning(`Signature mismatch ${req.headers.signature} - ${digest}`)
+    //   log.warn(`Signature mismatch ${req.headers.signature} - ${digest}`)
     //   return res.status(401).send('Signature mismatch')
     // }
 
