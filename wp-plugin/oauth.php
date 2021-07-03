@@ -4,16 +4,15 @@ defined( 'ABSPATH' ) or die( 'Nope, not accessing this' );
 // eventorganizer / triggered after an event has been updated
 // http://codex.wp-event-organiser.com/hook-eventorganiser_save_event.html
 add_action('eventorganiser_save_event', 'wpgancio_save_event', 15);
-add_action('wp_trash_post', 'delete_post', 15);
+add_action('wp_trash_post', 'wpgancio_delete_post', 15);
 
-function delete_post ($post_id) {
+function wpgancio_delete_post ($post_id) {
   $post = get_post($post_id);
   $instance_url = get_option('wpgancio_instance_url');
 
   if ($post->post_type == 'event') {
-    $gancio_id = get_post_meta($post_id, 'gancio_id', TRUE);
+    $gancio_id = get_post_meta($post_id, 'wpgancio_gancio_id', TRUE);
     if ($gancio_id) {
-      $body['id'] = $gancio_id;
       $http = _wp_http_get_object();
       $response = $http->request( "${instance_url}/api/event/${gancio_id}", array(
         'method' => 'DELETE',
@@ -28,7 +27,7 @@ function wpgancio_save_event ($post_id) {
   $event = get_post( $post_id );
 
   function tagName ($tag) {
-    return $tag->name;
+    return sanitize_title($tag->name);
   }
 
   $tmp_tags = get_the_terms( $event, 'event-tag' );
@@ -39,9 +38,9 @@ function wpgancio_save_event ($post_id) {
     return;
   }
 
-  $gancio_id = get_post_meta($post_id, 'gancio_id', TRUE);
+  $gancio_id = get_post_meta($post_id, 'wpgancio_gancio_id', TRUE);
 
-  // image_path
+  // when
   $date = eo_get_schedule_start( 'U', $post_id );
 
   // get place details
@@ -62,7 +61,7 @@ function wpgancio_save_event ($post_id) {
   // add image if specified
   $image_url = get_the_post_thumbnail_url($post_id);
   if ($image_url) {
-    $body['image_url'] = $image_url;
+    $body['image_url'] = esc_url($image_url);
   }
 
   // update
@@ -84,10 +83,10 @@ function wpgancio_save_event ($post_id) {
   }
 
   if ( is_wp_error( $response ) ) {
-    $error_message = $response->get_error_message();
+    $error_message = esc_html($response->get_error_message());
     echo "<div class='error notice'><p>${error_message}</p></div>";
     return;
   }
   $data = json_decode(wp_remote_retrieve_body($response));
-  update_post_meta($post_id, 'gancio_id', $data->id);
+  update_post_meta($post_id, 'wpgancio_gancio_id', intval($data->id));
 }
