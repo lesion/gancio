@@ -8,34 +8,14 @@ parent: Install
 
 
 ##  Nginx proxy configuration
-This is the default nginx configuration for gancio, please modify at least the **server_name** and **ssl_certificate**'s path.  
-Note that this does not include a cache configuration and that gancio does
-not use a cache control at all, if you can help with this task you're
-welcome.
+This is the default nginx configuration for gancio, it does not include **HTTPS** setup but you can easily use [certbot](https://certbot.eff.org/) for that.
+
 
 ```nginx
 server {
   listen 80;
   listen [::]:80;
-  server_name gancio.cisti.org;
-  root /var/www/letsencrypt;
-  location /.well-known/acme-challenge/ { allow all; }
-  location / { return 301 https://$host$request_uri; }
-}
-
-server {
-  listen 443 ssl http2;
-  listen [::]:443 ssl http2;
-  server_name gancio.cisti.org;
-
-  ssl_protocols TLSv1.2;
-  ssl_ciphers HIGH:!MEDIUM:!LOW:!aNULL:!NULL:!SHA;
-  ssl_prefer_server_ciphers on;
-  ssl_session_cache shared:SSL:10m;
-
-  # Uncomment these lines once you acquire a certificate:
-  # ssl_certificate     /etc/letsencrypt/live/gancio.cisti.org/fullchain.pem;
-  # ssl_certificate_key /etc/letsencrypt/live/gancio.cisti.org/privkey.pem;
+  server_name <<YOUR_DOMAIN>>;
 
   keepalive_timeout    70;
   sendfile             on;
