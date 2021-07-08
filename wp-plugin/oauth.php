@@ -83,8 +83,8 @@ function wpgancio_save_event ($post_id) {
   }
 
   if ( is_wp_error( $response ) ) {
-    $error_message = esc_html($response->get_error_message());
-    echo "<div class='error notice'><p>${error_message}</p></div>";
+    $error_message = $response->get_error_message();
+    echo "<div class='error notice'><p>" . esc_html($error_message) . "</p></div>";
     return;
   }
   $data = json_decode(wp_remote_retrieve_body($response));
