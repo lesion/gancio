@@ -76,7 +76,7 @@ tail -f  data/logs/gancio.log
 1. Navigate away from Gancio directory & into Nginx Directory
 ```bash
 cd ~
-cd /etc/nginx
+cd /etc/nginx/sites-available
 ```
 
 1. [Setup nginx as a proxy]({% link install/nginx.md %}
