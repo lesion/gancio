@@ -13,6 +13,9 @@ Note that this does not include a cache configuration and that gancio does
 not use a cache control at all, if you can help with this task you're
 welcome.
 
+- __You should be in the correct directory__
+`/etc/nginx/sites-available`
+
 ```nginx
 server {
   listen 80;
@@ -73,4 +76,9 @@ server {
   }
 }
 
+```
+
+- __Following this, you should create a link to the file in sites-enabled:__
+```bash
+ln -s /etc/nginx/sites-available/<your-config> /etc/nginx/sites-enabled/
 ```
