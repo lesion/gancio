@@ -8,7 +8,7 @@ has_toc: false
 ---
 ## Install
 
-You can install gancio on a cheap VPS (500mb of ram will be enough)
+You can install gancio on a cheap VPS (500mb of ram will be enough but docker is not suggested in small machine)
 
 - [Install on Debian]({% link install/debian.md %})
 - [Install using docker]({% link install/docker.md %})
