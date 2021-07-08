@@ -518,8 +518,9 @@ const eventController = {
     }
 
     const recurrent = e.recurrent
-    let cursor = dayjs()
     const start_date = dayjs.unix(e.start_datetime)
+    const now = dayjs()
+    let cursor = start_date > now ? start_date : now
     const duration = dayjs.unix(e.end_datetime).diff(start_date, 's')
     const frequency = recurrent.frequency
     const type = recurrent.type
