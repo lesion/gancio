@@ -1,6 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
 
 ### Gancio dev configuration
+releases
+wp-plugin/wpgancio
 config/development.json
 gancio_config.json
 config.json

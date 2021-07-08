@@ -145,7 +145,7 @@ api.use((req, res) => res.sendStatus(404))
 
 // Handle 500
 api.use((error, req, res, next) => {
-  log.error(error)
+  log.error('[API ERROR]', error)
   res.status(500).send('500: Internal Server Error')
 })
 

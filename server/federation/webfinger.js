@@ -140,7 +140,7 @@ router.use((req, res) => {
 
 // Handle 500
 router.use((error, req, res, next) => {
-  log.error(error)
+  log.error('[WEBFINGER]', error)
   res.status(500).send('500: Internal Server Error')
 })
 

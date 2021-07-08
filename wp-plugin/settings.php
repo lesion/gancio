@@ -22,7 +22,7 @@ function wpgancio_update_options ($old_value, $instance_url) {
   $redirect_uri = get_site_url(null, '/wp-admin/options-general.php?page=wpgancio' );
   $query = join('&', array(
     'response_type=code',
-    'redirect_uri=' . esc_html($redirect_uri),
+    'redirect_uri=' . esc_url($redirect_uri),
     'scope=event:write',
     'client_id=' . get_option('wpgancio_client_id'),
   ));
@@ -53,8 +53,8 @@ function wpgancio_instance_url_validate ($instance_url) {
       $response->get_error_message());
   } else {
     $data = json_decode( wp_remote_retrieve_body($response), true);
-    update_option('wpgancio_client_secret', $data['client_secret']);
-    update_option('wpgancio_client_id', $data['client_id']);
+    update_option('wpgancio_client_secret', sanitize_key($data['client_secret']));
+    update_option('wpgancio_client_id', sanitize_key($data['client_id']));
     return $instance_url;
   }
 }
@@ -88,7 +88,7 @@ function wpgancio_instance_url_cb( $args ) {
     name="wpgancio_instance_url">
 
   <p class="description">
-    <?php esc_html_e( 'Insert your gancio instance URL', 'wpgancio' ); ?>
+    <?php esc_html( 'Insert your gancio instance URL', 'wpgancio' ); ?>
   </p>
 
   <?php
@@ -104,9 +104,7 @@ function wpgancio_options_page_html() {
   if ( ! current_user_can( 'manage_options' ) ) { return; }
 
   // show error/update messages
-  //settings_errors( 'wpgancio_messages' );
-
-  $code = $_GET['code'];
+  $code = sanitize_key($_GET['code']);
   if ( $code ) {
     update_option('wpgancio_code', $code);
     $instance_url = get_option( 'wpgancio_instance_url' );
@@ -127,8 +125,8 @@ function wpgancio_options_page_html() {
       settings_errors( 'wpgancio_messages' );
     } else {
       $data = json_decode( wp_remote_retrieve_body($response), true);
-      update_option('wpgancio_token', $data['access_token']);
-      update_option('wpgancio_refresh', $data['refresh_token']);
+      update_option('wpgancio_token', sanitize_key($data['access_token']));
+      update_option('wpgancio_refresh', sanitize_key($data['refresh_token']));
       add_settings_error('wpgancio_messages', 'wpgancio_messages', 'Association completed!', 'success');
       settings_errors( 'wpgancio_messages' );
     }
@@ -141,11 +139,14 @@ function wpgancio_options_page_html() {
  <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
  <form action="options.php" method="post">
  <?php
+
   // output security fields for the registered setting "wpgancio"
   settings_fields( 'wpgancio' );
+
   // output setting sections and their fields
   // (sections are registered for "wpgancio", each field is registered to a specific section)
   do_settings_sections( 'wpgancio' );
+
   // output save settings button
   submit_button( 'Save Settings' );
  ?>

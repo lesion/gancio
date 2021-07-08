@@ -61,7 +61,7 @@ app.use('/oauth', oauth)
 
 // // Handle 500
 app.use((error, req, res, next) => {
-  log.error(error)
+  log.error('[ERROR]', error)
   res.status(500).send('500: Internal Server Error')
 })
 

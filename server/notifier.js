@@ -51,7 +51,7 @@ const notifier = {
         await notifier.sendNotification(notification, event)
         notification.event_notification.status = 'sent'
       } catch (err) {
-        log.error(err)
+        log.error('[NOTIFY EVENT]', err)
         notification.event_notification.status = 'error'
       }
       return notification.event_notification.save()
@@ -71,7 +71,7 @@ const notifier = {
         e.status = 'sent'
         return e.save()
       } catch (err) {
-        log.error(err)
+        log.error('[NOTIFY]', err)
         e.status = 'error'
         e.error = err
         return e.save()

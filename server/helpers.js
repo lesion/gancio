@@ -163,8 +163,8 @@ module.exports = {
         }))
       }
     } catch (e) {
-      log.error(e)
-      res.status(400).json(e.toString)
+      log.error('[Import URL]', e)
+      res.status(400).json(e.toString())
     }
   },
 

@@ -8,9 +8,7 @@ const config = require('config')
 
 try {
   mkdirp.sync(config.upload_path + '/thumb')
-} catch (e) {
-  log.error(e)
-}
+} catch (e) {}
 
 const DiskStorage = {
   _handleFile (req, file, cb) {
@@ -25,11 +23,11 @@ const DiskStorage = {
     let onError = false
     const err = e => {
       if (onError) {
-        log.error(err)
+        log.error('[UPLOAD]', err)
         return
       }
       onError = true
-      log.error(e)
+      log.error('[UPLOAD]', e)
       req.err = e
       cb(null)
     }
