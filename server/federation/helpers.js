@@ -126,7 +126,7 @@ const Helpers = {
         return res.data
       })
       .catch(e => {
-        log.error(`${URL}: ${e}`)
+        log.error(`get Actor ${URL}`, e)
         return false
       })
 

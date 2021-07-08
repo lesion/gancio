@@ -103,7 +103,7 @@ const settingsController = {
       settingsController[is_secret ? 'secretSettings' : 'settings'][key] = value
       return true
     } catch (e) {
-      log.error(e)
+      log.error('[SETTING SET]', e)
       return false
     }
   },
@@ -129,7 +129,7 @@ const settingsController = {
       .png({ quality: 90 })
       .toFile(baseImgPath + '.png', async (err, info) => {
         if (err) {
-          log.error(err)
+          log.error('[LOGO]', err)
         }
         const image = await readFile(baseImgPath + '.png')
         const favicon = await toIco([image], { sizes: [64], resize: true })

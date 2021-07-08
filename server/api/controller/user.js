@@ -103,7 +103,7 @@ const userController = {
       mail.send(config.admin_email, 'admin_register', { user, config })
       res.sendStatus(200)
     } catch (e) {
-      log.error('Registration error: "%s"', e)
+      log.error('Registration error:', e)
       res.status(404).json(e)
     }
   },
@@ -116,7 +116,7 @@ const userController = {
       mail.send(user.email, 'user_confirm', { user, config }, req.settings.locale)
       res.json(user)
     } catch (e) {
-      log.error('User creation error: %s', e)
+      log.error('User creation error:', e)
       res.status(404).json(e)
     }
   },
@@ -127,7 +127,7 @@ const userController = {
       user.destroy()
       res.sendStatus(200)
     } catch (e) {
-      log.error('User removal error: "%s"', e)
+      log.error('User removal error:"', e)
       res.status(404).json(e)
     }
   }

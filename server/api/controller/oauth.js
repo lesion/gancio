@@ -42,7 +42,7 @@ const oauthController = {
       delete client.id
       res.json(client)
     } catch (e) {
-      log.error(e)
+      log.error('[OAUTH CLIENT]', e)
       res.status(400).json(e)
     }
   },

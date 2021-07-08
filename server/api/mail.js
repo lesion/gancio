@@ -61,7 +61,7 @@ const mail = {
     }
     return email.send(msg)
       .catch(e => {
-        log.error('Error sending email => %s', e)
+        log.error('[MAIL]', e)
       })
   }
 }

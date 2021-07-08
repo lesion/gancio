@@ -118,7 +118,7 @@ const eventController = {
         order: [[Resource, 'id', 'DESC']]
       })
     } catch (e) {
-      log.error(e)
+      log.error('[EVENT]', e)
       return res.sendStatus(400)
     }
 
@@ -194,7 +194,7 @@ const eventController = {
       const notifier = require('../../notifier')
       notifier.notifyEvent('Create', event.id)
     } catch (e) {
-      log.error(e)
+      log.error('[EVENT]', e)
       res.sendStatus(404)
     }
   },
@@ -334,7 +334,7 @@ const eventController = {
         notifier.notifyEvent('Create', event.id)
       }
     } catch (e) {
-      log.error(e)
+      log.error('[EVENT ADD]', e)
       res.sendStatus(400)
     }
   },
@@ -419,6 +419,7 @@ const eventController = {
       }
       const notifier = require('../../notifier')
       await notifier.notifyEvent('Delete', event.id)
+      log.debug('[EVENT REMOVED]', event.title)
       await event.destroy()
       res.sendStatus(200)
     } else {
@@ -474,7 +475,8 @@ const eventController = {
         { model: Place, required: true, attributes: ['id', 'name', 'address'] }
       ]
     }).catch(e => {
-      log.error(e)
+      log.error('[EVENT]', e)
+      return []
     })
 
     return events.map(e => {
