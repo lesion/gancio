@@ -19,8 +19,15 @@ mkdir -p /opt/gancio
 cd /opt/gancio
 ```
 
+- __You must have the following installed: Docker, Docker Compose and Nginx __
+1. https://docs.docker.com/engine/install/
+1. https://docs.docker.com/compose/install/
+1. https://nginx.org/en/docs/install.html
+
+
 ## Use sqlite
 <div class='code-example bg-grey-lt-100' markdown="1">
+
 1. **Download docker-compose.yml and Dockerfile**
 ```bash
 wget {{site.url}}{% link /docker/Dockerfile %}
@@ -64,6 +71,12 @@ docker-compose up -d
 1. Look at logs
 ```bash
 tail -f  data/logs/gancio.log
+```
+
+1. Navigate away from Gancio directory & into Nginx Directory
+```bash
+cd ~
+cd /etc/nginx/sites-available
 ```
 
 1. [Setup nginx as a proxy]({% link install/nginx.md %}
