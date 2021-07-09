@@ -78,7 +78,7 @@ export default {
       if (!ret) { return }
       await this.$axios.delete(`/user/${user.id}`)
       this.$root.$message('admin.user_remove_ok')
-      this.users_ = this.users_.filter(u => u.id !== user.id)
+      this.$emit('update')
     },
     async toggle (user) {
       if (user.is_active) {
