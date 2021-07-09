@@ -159,7 +159,7 @@ const Helpers = {
         return Instance.create({ name: instance.title, domain, data, blocked: false })
       })
       .catch(e => {
-        log.error(e)
+        log.error('[INSTANCE CREATE]', e)
         return Instance.create({ name: domain, domain, blocked: false })
       })
     return instance
