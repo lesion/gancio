@@ -8,6 +8,15 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+
+### 1.0.2 (alpha)
+  - improve oauth flow UI
+  - [WordPress plugin](https://wordpress.org/plugins/wpgancio/)
+  - fix h-event import
+  - improve error logging (add stack trace to exception)
+  - choose start date for recurreing events (#120)
+  - fix user delete from admin
+
 ### 1.0.1 (alpha)
   
   - fix AP resource removal
