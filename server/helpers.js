@@ -142,7 +142,7 @@ module.exports = {
               start_datetime: dayjs(get(props, 'start[0]', '')).unix(),
               end_datetime: dayjs(get(props, 'end[0]', '')).unix(),
               tags: get(props, 'category', []),
-              image_path: get(props, 'featured[0]')
+              media: { url: get(props, 'featured[0]') }
             }
           })
           return res.json(events)

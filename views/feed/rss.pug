@@ -14,8 +14,8 @@ rss(version='2.0' xmlns:atom="http://www.w3.org/2005/Atom")
                     | <h4>#{event.title}</h4>
                     | <strong>#{event.place.name} - #{event.place.address}</strong>
                     | <small>(#{moment.unix(event.start_datetime).format("dddd, D MMMM HH:mm")})</small><br/>
-                    if (event.image_path)
-                        | <img src="#{settings.baseurl}/media/#{event.image_path}"/>
+                    if (event.media)
+                        | <img alt="#{event.media[0].name}" src="#{settings.baseurl}/media/#{event.media[0].url}"/>
                     | <pre>!{event.description}</pre>
                     | ]]>
                 pubDate= new Date(event.updatedAt).toUTCString()

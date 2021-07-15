@@ -44,6 +44,7 @@ Event.init({
     index: true
   },
   image_path: DataTypes.STRING,
+  media: DataTypes.JSON,
   is_visible: DataTypes.BOOLEAN,
   recurrent: DataTypes.JSON,
   likes: { type: DataTypes.JSON, defaultValue: [] },

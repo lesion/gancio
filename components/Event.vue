@@ -1,7 +1,7 @@
 <template lang="pug">
   v-card.h-event.event.d-flex
     nuxt-link(:to='`/event/${event.slug || event.id}`')
-      v-img.u-featured.img(:src="`/media/thumb/${event.image_path || 'logo.svg' }`")
+      v-img.u-featured.img(v-if='event.media' :src='thumbnail' :position='thumbnailPosition' :alt='event.media.length ? event.media[0].name : ""')
       v-icon.float-right.mr-1(v-if='event.parentId' color='success') mdi-repeat
       .title.p-name {{event.title}}
 
@@ -52,6 +52,22 @@ export default {
   },
   computed: {
     ...mapState(['settings']),
+    thumbnail () {
+      let path
+      if (this.event.media && this.event.media.length) {
+        path = this.event.media[0].url
+      } else {
+        path = 'logo.svg'
+      }
+      return '/media/thumb/' + path
+    },
+    thumbnailPosition () {
+      if (this.event.media && this.event.media.length && this.event.media[0].focalpoint) {
+        const focalpoint = this.event.media[0].focalpoint
+        return `${(focalpoint[0] + 1) * 50}% ${(focalpoint[1] + 1) * 50}%`
+      }
+      return 'center center'
+    },
     is_mine () {
       if (!this.$auth.user) {
         return false

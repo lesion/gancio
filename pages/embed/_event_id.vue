@@ -1,8 +1,8 @@
 <template lang="pug">
-  nuxt-link.embed_event(:to='`/event/${event.slug || event.id}`' target='_blank' :class='{ withImg: event.image_path }')
+  nuxt-link.embed_event(:to='`/event/${event.slug || event.id}`' target='_blank' :class='{ withImg: event.media }')
 
     //- image
-    img.float-left(:src='`/media/thumb/${event.image_path || "logo.png"}`')
+    img.float-left(:src='event | mediaURL("thumb")')
     .event-info
       //-  title
       .date {{event|when}}<br/>

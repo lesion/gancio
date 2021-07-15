@@ -184,7 +184,7 @@ export default {
       // Message({ message: this.$t('email_notification_activated'), showClose: true, type: 'success' })
     },
     imgPath (event) {
-      return event.image_path && event.image_path
+      return event.media && event.media[0].url
     }
   }
 }

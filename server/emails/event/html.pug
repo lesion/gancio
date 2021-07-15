@@ -4,9 +4,9 @@ block content
   p 📍 Dove: #{event.place.name} - #{event.place.address}
   p ⏰ Quando: #{datetime(event.start_datetime)}
   br
-  if event.image_path
+  if event.media
     <center>
-      <img style="height: 89vh; margin: 0 auto;" src="#{config.baseurl}/media/#{event.image_path}" />
+      <img style="height: 89vh; margin: 0 auto;" alt="#{event.media[0].name}" src="#{config.baseurl}/media/#{event.media[0].url}" />
     </center>
   p !{event.description}
 

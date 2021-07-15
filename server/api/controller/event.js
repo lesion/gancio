@@ -289,10 +289,21 @@ const eventController = {
         is_visible: !!req.user
       }
 
-      if (req.file) {
-        eventDetails.image_path = req.file.filename
-      } else if (body.image_url) {
-        eventDetails.image_path = await helpers.getImageFromURL(body.image_url)
+      if (req.file || body.image_url) {
+        let url
+        if (req.file) {
+          url = req.file.filename
+        } else {
+          url = await helpers.getImageFromURL(body.image_url)
+        }
+
+        const focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : [0, 0]
+
+        eventDetails.media = [{
+          url,
+          name: body.image_name || '',
+          focalpoint: [parseFloat(focalpoint[0]), parseFloat(focalpoint[1].toFixed(2))]
+        }]
       }
 
       const event = await Event.create(eventDetails)
@@ -343,28 +354,29 @@ const eventController = {
     if (req.err) {
       return res.status(400).json(req.err.toString())
     }
-    const body = req.body
-    const event = await Event.findByPk(body.id)
-    if (!event) { return res.sendStatus(404) }
-    if (!req.user.is_admin && event.userId !== req.user.id) {
-      return res.sendStatus(403)
-    }
 
-    const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
-    const eventDetails = {
-      title: body.title,
-      // remove html tags
-      description: helpers.sanitizeHTML(linkifyHtml(body.description, { target: '_blank' })),
-      multidate: body.multidate,
-      start_datetime: body.start_datetime,
-      end_datetime: body.end_datetime,
-      recurrent
-    }
+    try {
+      const body = req.body
+      const event = await Event.findByPk(body.id)
+      if (!event) { return res.sendStatus(404) }
+      if (!req.user.is_admin && event.userId !== req.user.id) {
+        return res.sendStatus(403)
+      }
 
-    if (req.file) {
-      if (event.image_path && !event.recurrent) {
-        const old_path = path.resolve(config.upload_path, event.image_path)
-        const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.image_path)
+      const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
+      const eventDetails = {
+        title: body.title,
+        // remove html tags
+        description: helpers.sanitizeHTML(linkifyHtml(body.description, { target: '_blank' })),
+        multidate: body.multidate,
+        start_datetime: body.start_datetime,
+        end_datetime: body.end_datetime,
+        recurrent
+      }
+
+      if ((req.file || /^https?:\/\//.test(body.image_url)) && !event.recurrent && event.media.length) {
+        const old_path = path.resolve(config.upload_path, event.media[0].url)
+        const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.media[0].url)
         try {
           fs.unlinkSync(old_path)
           fs.unlinkSync(old_thumb_path)
@@ -372,34 +384,55 @@ const eventController = {
           log.info(e.toString())
         }
       }
-      eventDetails.image_path = req.file.filename
-    } else if (body.image_url) {
-      eventDetails.image_path = await helpers.getImageFromURL(body.image_url)
-    }
+      let url
+      if (req.file) {
+        url = req.file.filename
+      } else if (body.image_url) {
+        if (/^https?:\/\//.test(body.image_url)) {
+          url = await helpers.getImageFromURL(body.image_url)
+        } else {
+          url = body.image_url
+        }
+      }
 
-    await event.update(eventDetails)
-    const [place] = await Place.findOrCreate({
-      where: { name: body.place_name },
-      defaults: { address: body.place_address }
-    })
+      if (body.image_focalpoint) {
+        const focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : [0, 0]
+        eventDetails.media = [{
+          url,
+          name: body.image_name || '',
+          focalpoint: [parseFloat(focalpoint[0].slice(0, 6)), parseFloat(focalpoint[1].slice(0, 6))]
+        }]
+      } else {
+        eventDetails.media = []
+      }
 
-    await event.setPlace(place)
-    await event.setTags([])
-    if (body.tags) {
-      await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
-      const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
-      await event.addTags(tags)
-    }
-    const newEvent = await Event.findByPk(event.id, { include: [Tag, Place] })
-    res.json(newEvent)
+      await event.update(eventDetails)
+      const [place] = await Place.findOrCreate({
+        where: { name: body.place_name },
+        defaults: { address: body.place_address }
+      })
 
-    // create recurrent instances of event if needed
-    // without waiting for the task manager
-    if (event.recurrent) {
-      eventController._createRecurrent()
-    } else {
-      const notifier = require('../../notifier')
-      notifier.notifyEvent('Update', event.id)
+      await event.setPlace(place)
+      await event.setTags([])
+      if (body.tags) {
+        await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
+        const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
+        await event.addTags(tags)
+      }
+      const newEvent = await Event.findByPk(event.id, { include: [Tag, Place] })
+      res.json(newEvent)
+
+      // create recurrent instances of event if needed
+      // without waiting for the task manager
+      if (event.recurrent) {
+        eventController._createRecurrent()
+      } else {
+        const notifier = require('../../notifier')
+        notifier.notifyEvent('Update', event.id)
+      }
+    } catch (e) {
+      log.error('[EVENT UPDATE]', e)
+      res.sendStatus(400)
     }
   },
 
@@ -407,9 +440,9 @@ const eventController = {
     const event = await Event.findByPk(req.params.id)
     // check if event is mine (or user is admin)
     if (event && (req.user.is_admin || req.user.id === event.userId)) {
-      if (event.image_path && !event.recurrent) {
-        const old_path = path.join(config.upload_path, event.image_path)
-        const old_thumb_path = path.join(config.upload_path, 'thumb', event.image_path)
+      if (event.media && event.media.length && !event.recurrent) {
+        const old_path = path.join(config.upload_path, event.media[0].url)
+        const old_thumb_path = path.join(config.upload_path, 'thumb', event.media[0].url)
         try {
           fs.unlinkSync(old_thumb_path)
           fs.unlinkSync(old_path)
@@ -504,6 +537,7 @@ const eventController = {
 
   /**
    * Ensure we have the next instance of a recurrent event
+   * TODO: create a future instance if the next one is skipped
    */
   _createRecurrentOccurrence (e) {
     log.debug(`Create recurrent event [${e.id}] ${e.title}"`)
@@ -511,7 +545,7 @@ const eventController = {
       parentId: e.id,
       title: e.title,
       description: e.description,
-      image_path: e.image_path,
+      media: e.media,
       is_visible: true,
       userId: e.userId,
       placeId: e.placeId
