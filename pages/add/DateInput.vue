@@ -7,8 +7,10 @@ v-col(cols=12)
       v-btn(v-if='settings.allow_recurrent_event' value='recurrent' label="recurrent") {{$t('event.recurrent')}}
 
     p {{$t(`event.${type}_description`)}}
+
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-if='type === "recurrent"' color='primary' :value='value.recurrent.frequency' @change='fq => change("frequency", fq)')
       v-btn(v-for='f in frequencies' :key='f.value' :value='f.value') {{f.text}}
+
     client-only
       .datePicker.mt-3
         v-input(:value='fromDate'
@@ -43,11 +45,6 @@ v-col(cols=12)
         :value='dueHour' clearable
         :items='hourList' @change='hr => change("dueHour", hr)')
 
-  //- div.col-md-12(v-if='isRecurrent')
-  //-   p(v-if='value.recurrent.frequency !== "1m" && value.recurrent.frequency !== "2m"') 🡲 {{whenPatterns}}
-  //-   v-btn-toggle(v-else dense group v-model='value.recurrent.type' color='primary')
-  //-     v-btn(text link v-for='whenPattern in whenPatterns' :value='whenPattern.key' :key='whenPatterns.key') {{whenPattern.label}}
-
   List(v-if='type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
 
 </template>
@@ -66,12 +63,7 @@ export default {
   data () {
     return {
       type: 'normal',
-      time: { start: null, end: null },
-      fromDateMenu: null,
-      dueDateMenu: null,
-      date: null,
       page: null,
-      frequency: '',
       events: [],
       frequencies: [
         { value: '1w', text: this.$t('event.each_week') },
@@ -108,9 +100,11 @@ export default {
       const hourList = []
       const pad = '00'
       for (let h = 0; h < 24; h++) {
-        hourList.push(`${(pad + h).slice(-pad.length)}:00`)
-        hourList.push(`${(pad + h).slice(-pad.length)}:30`)
+        const paddedHour = (pad + h).slice(-2)
+        hourList.push({ text: paddedHour + ':00 ' + (h <= 12 ? 'AM' : 'PM'), value: paddedHour + ':00' })
+        hourList.push({ text: paddedHour + ':30 ' + (h <= 12 ? 'AM' : 'PM'), value: paddedHour + ':30' })
       }
+
       return hourList
     },
     whenPatterns () {
@@ -178,7 +172,7 @@ export default {
       if (what === 'type') {
         if (typeof value === 'undefined') { this.type = 'normal' }
         if (value === 'recurrent') {
-          this.$emit('input', { ...this.value, recurrent: {}, multidate: false })
+          this.$emit('input', { ...this.value, recurrent: { frequency: '1w' }, multidate: false })
         } else if (value === 'multidate') {
           this.$emit('input', { ...this.value, recurrent: null, multidate: true })
         } else {
