@@ -113,9 +113,6 @@ export default {
       }
       return hourList
     },
-    isRecurrent () {
-      return !!this.value.recurrent
-    },
     whenPatterns () {
       if (!this.value.from) { return }
       const date = dayjs(this.value.from)
