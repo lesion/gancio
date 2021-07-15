@@ -98,11 +98,11 @@ export default {
     },
     hourList () {
       const hourList = []
-      const pad = '00'
+      const leftPad = h => ('00' + h).slice(-2)
       for (let h = 0; h < 24; h++) {
-        const paddedHour = (pad + h).slice(-2)
-        hourList.push({ text: paddedHour + ':00 ' + (h <= 12 ? 'AM' : 'PM'), value: paddedHour + ':00' })
-        hourList.push({ text: paddedHour + ':30 ' + (h <= 12 ? 'AM' : 'PM'), value: paddedHour + ':30' })
+        const textHour = leftPad(h < 13 ? h : h - 12)
+        hourList.push({ text: textHour + ':00 ' + (h <= 12 ? 'AM' : 'PM'), value: leftPad(h) + ':00' })
+        hourList.push({ text: textHour + ':30 ' + (h <= 12 ? 'AM' : 'PM'), value: leftPad(h) + ':30' })
       }
 
       return hourList
