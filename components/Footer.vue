@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-footer(color='secondary')
+  v-footer(color='secondary' aria-label='Footer')
 
     v-dialog(v-model='showFollowMe' destroy-on-close max-width='700px')
       FollowMe(@close='showFollowMe=false' is-dialog)
