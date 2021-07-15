@@ -200,7 +200,7 @@
         "favicon": "Logo",
         "user_block_confirm": "Confermi di voler bloccare l'utente {user}?",
         "instance_block_confirm": "Confermi di voler bloccare l'istanza {instance}?",
-        "delete_announcement_confirm": " Vuoieliminare questo l'annuncio?",
+        "delete_announcement_confirm": "Vuoi eliminare questo l'annuncio?",
         "announcement_remove_ok": "Annuncio rimosso",
         "announcement_description": "In questa sezione puoi inserire annunci che rimarranno in homepage",
         "instance_locale": "Lingua predefinita",

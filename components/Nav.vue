@@ -14,23 +14,23 @@
 
     v-tooltip(bottom) {{$t('common.add_event')}}
       template(v-slot:activator='{ on }')
-        v-btn(v-if='could_add' icon nuxt to='/add' v-on='on')
+        v-btn(v-if='could_add' icon nuxt to='/add' v-on='on' :aria-label='$t("common.add_event")')
           v-icon(large color='primary') mdi-plus
 
     v-tooltip(bottom) {{$t('common.share')}}
       template(v-slot:activator='{ on }')
-        v-btn(icon nuxt to='/export' v-on='on')
+        v-btn(icon nuxt to='/export' v-on='on' :aria-label='$t("common.share")')
           v-icon mdi-share-variant
 
     v-tooltip(v-if='!$auth.loggedIn' bottom) {{$t('common.login')}}
       template(v-slot:activator='{ on }')
-        v-btn(icon nuxt to='/login' v-on='on')
+        v-btn(icon nuxt to='/login' v-on='on' :aria-label='$t("common.login")')
           v-icon mdi-login
 
     v-menu(v-else
       offset-y bottom open-on-hover transition="slide-y-transition")
       template(v-slot:activator="{ on, attrs }")
-        v-btn(icon v-bind='attrs' v-on='on')
+        v-btn(icon v-bind='attrs' v-on='on' aria-label='Menu')
           v-icon mdi-dots-vertical
       v-list
         v-list-item(nuxt to='/settings')
@@ -51,7 +51,7 @@
           v-list-item-content
             v-list-item-title {{$t('common.logout')}}
 
-    v-btn(icon v-clipboard:copy='feedLink' v-clipboard:success='copyLink')
+    v-btn(icon v-clipboard:copy='feedLink' v-clipboard:success='copyLink' aria-label='RSS')
       v-icon(color='orange') mdi-rss
 
 </template>

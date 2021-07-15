@@ -8,6 +8,7 @@
       :locale='$i18n.locale'
       :attributes='attributes'
       transition='fade'
+      aria-label='Calendar'
       is-expanded
       is-inline
       @dayclick='click')
