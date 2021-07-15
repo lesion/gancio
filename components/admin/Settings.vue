@@ -2,7 +2,6 @@
   v-container
     v-card-title {{$t('common.settings')}}
     v-card-text
-
       //- select timezone
       v-autocomplete(v-model='instance_timezone'
         :label="$t('admin.select_instance_timezone')"
@@ -55,6 +54,23 @@
         inset
         :label="$t('admin.recurrent_event_visible')")
 
+    v-card-title EMail
+    v-card-text
+      v-text-field(v-model='smtp.auth.user'
+        :label="$t('admin.smtp_auth_user')"
+        :hint="$t('admin.smtp_auth_user_description')"
+        persistent-hint
+        @blur='save("smtp.auth.user", smtp.auth.user)')
+
+      v-text-field.mt-5(v-model='smtp.auth.password'
+        :label="$t('admin.smtp_auth_password')"
+        :hint="$t('admin.smtp_auth_password_description')"
+        type='password'
+        persistent-hint
+        @blur='save("smtp.auth.password", smtp.auth.password)')
+
+      v-btn.mt-5(color='primary') Test email setup
+
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
@@ -68,7 +84,8 @@ export default {
     return {
       title: $store.state.settings.title,
       description: $store.state.settings.description,
-      locales: Object.keys(locales).map(locale => ({ value: locale, text: locales[locale] }))
+      locales: Object.keys(locales).map(locale => ({ value: locale, text: locales[locale] })),
+      smtp: { auth: { } }
     }
   },
   computed: {
