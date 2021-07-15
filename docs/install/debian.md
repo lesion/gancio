@@ -64,6 +64,7 @@ sudo pm2 startup -u gancio
 
 ## Upgrade
 ```bash
+sudo yarn cache clean gancio
 sudo yarn global add --silent {{site.url}}/latest.tgz  2> /dev/null
 sudo service pm2 restart
 ```
