@@ -46,7 +46,7 @@
         "ok": "Ok",
         "cancel": "Cancelar",
         "enable": "Habilitar",
-        "disable": "Deshabilita",
+        "disable": "Deshabilitar",
         "me": "Tú",
         "password_updated": "Contraseña actualizada.",
         "comments": "ningún comentario|un comentario|{n} comentarios",
@@ -85,7 +85,9 @@
         "tags": "Tags",
         "import": "Importar",
         "reset": "Reset",
-        "theme": "Tema"
+        "theme": "Tema",
+        "label": "Etiqueta",
+        "max_events": "Número de eventos máximo"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
@@ -128,8 +130,8 @@
         "not_found": "Evento no encontrado",
         "remove_confirmation": "¿Estás seguro/a de querér eliminar este evento?",
         "recurrent": "Recurrente",
-        "recurrent_description": "Elegí la frecuencia y selecciona los días.",
-        "multidate_description": "¿Un festival o más de un día? Elegí cuándo comienza y cuándo termina.",
+        "recurrent_description": "Elegí la frecuencia y selecciona los días",
+        "multidate_description": "¿Un festival o más de un día? Elegí cuándo comienza y cuándo termina",
         "multidate": "Más días",
         "normal": "Normal",
         "normal_description": "Selecciona el día.",
@@ -154,14 +156,18 @@
         "ics": "ICS",
         "import_ICS": "Importar desde ICS",
         "import_URL": "Importar desde la URL",
-        "only_future": "solo eventos venideros"
+        "only_future": "solo eventos venideros",
+        "import_description": "Puedes importar eventos de otras plataformas y otras instancias mediante formatos estandars (ics y h-event)",
+        "edit_recurrent": "Editar evento recurrente:",
+        "updated": "Evento actualizado",
+        "saved": "Evento guardado"
     },
     "admin": {
-        "place_description": "En el caso de que un lugar sea incorrecto o cambie de dirección, puedes cambiarlo. <br/> En este caso hay que tener en cuenta que todos los eventos asociados con ese lugar cambiarán de dirección (¡incluso los pasados!)",
+        "place_description": "En el caso de que un lugar sea incorrecto o cambie de dirección, puedes cambiarlo. <br/> Todos los eventos presentes y pasados asociados con este lugar cambiarán de dirección.",
         "event_confirm_description": "Puedes confirmar aquí los eventos agregados por usuarios anónimos",
         "delete_user": "Elimina",
         "remove_admin": "Borra admin",
-        "delete_user_confirm": "¿Estás seguro/a de borrar este usuario?",
+        "delete_user_confirm": "¿Estás seguro/a de borrar a {user}?",
         "user_remove_ok": "Usuario eliminado",
         "user_create_ok": "Usuario creado",
         "allow_registration_description": "¿Querés habilitar el registro?",
@@ -170,7 +176,7 @@
         "allow_recurrent_event": "Habilitar eventos fijos",
         "recurrent_event_visible": "Eventos fijos visibles por defecto",
         "federation": "Federación / ActivityPub",
-        "enable_federation": "Habilitar la federación!",
+        "enable_federation": "Habilitar la federación",
         "enable_federation_help": "Será posible seguir esta instancia desde el fediverso",
         "select_instance_timezone": "Uso horario",
         "enable_resources": "Habilitar recursos",
@@ -179,7 +185,7 @@
         "hide_boost_bookmark_help": "Oculta los pequeños iconos que muestran el número de impulsos y marcadores que vienen del fediverso",
         "block": "Bloquear",
         "unblock": "Desbloquear",
-        "user_add_help": "Enviaremos un correo electrónico al nuevo usuario con instrucciones para confirmar la suscripción y elegir una contraseña.",
+        "user_add_help": "Enviaremos un correo electrónico al nuevo usuario con instrucciones para confirmar la suscripción y elegir una contraseña",
         "instance_name": "Nombre de la instancia",
         "show_resource": "Mostrar recurso",
         "hide_resource": "Ocultar recurso",
@@ -191,7 +197,7 @@
         "resources": "Recursos",
         "user_blocked": "El usuario {usuario} ya no podrá añadir recursos",
         "favicon": "Logo",
-        "user_block_confirm": "¿Estás seguro de que quieres bloquear al usuario?",
+        "user_block_confirm": "¿Estás seguro de que quieres bloquear a {user}?",
         "delete_announcement_confirm": "¿Estás seguro de que quieres borrar el anuncio?",
         "announcement_remove_ok": "Anuncio borrado",
         "announcement_description": "En esta sección se pueden insertar anuncios que permanecerán en la página de inicio",
@@ -212,7 +218,10 @@
         "delete_footer_link_confirm": "Seguro que quieres quitar este enlace?",
         "footer_links": "Enlaces a pie de página",
         "add_link": "Añadir enlace",
-        "is_dark": "Tema oscuro"
+        "is_dark": "Tema oscuro",
+        "instance_block_confirm": "¿Estás seguro/a que quieres bloquear la instancia {instance}?",
+        "add_instance": "Añadir instancia",
+        "disable_user_confirm": "Estas seguro de que quieres deshabilitar a {user}?"
     },
     "auth": {
         "not_confirmed": "Todavía no hemos confirmado este email…",
@@ -227,7 +236,7 @@
         "update_confirm": "¿Estás seguro de que quieres guardar los cambios?"
     },
     "error": {
-        "nick_taken": "Este nickname ya está registrado",
+        "nick_taken": "Este apodo ya está registrado.",
         "email_taken": "Este correo electrónico ya está registrado."
     },
     "ordinal": {
@@ -238,11 +247,11 @@
         "5": "quinto",
         "-1": "último"
     },
-    "about": "\n  <p>\n  Gancio es un proyecto del <a href='https://autistici.org/underscore'>underscore hacklab</a> y es uno de los\n  servicios de <a href='https://cisti.org'>cisti.org</a>.</p>\n\n  <h5>¿Que es gancio?</h5>\n  <p>Gancio (se pronuncia \"gancho\") es una herramienta para compartir eventos orientado a las comunidades radicales.\n   Dentro del gancio pueden encontrar y agregar eventos.\n   Gancio, como todo <a href='https://cisti.org'> cisti.org </a> es una herramienta\n   antisexista, antirracista, antifascista y anticapitalista, así que piensen en eso cuando\n   van a publicar un evento. </p>\n\n  <h5>Ok, pero ¿que quiere decir gancio?</h5>\n  <p>\n  Literalmente sería \"enganche\", pero en realidad viene de una forma de decir que se usa en en Turín (Italia). Ahí si alguien dice: \"ehi, ci diamo un gancio alle 8?\" (\"ehi, ¿nos damos un enganche a las 8?\") quiere decir \"ehí, ¿nos vemos a las 8?\". \"Darsi un gancio\" es juntarse a una hora X en un lugar Y.</p>\n  <code>\n  <ul>\n  <li> ¿A qué hora es el <i>gancio</i> para ir a la marcha?</li>\n  <li> No sé, de todos modos no puedo ir, ya tengo un <i>gancio</i> para ir a una reunión.</li>\n  </ul>\n  </code>\n\n  <h5> Contactos</h5>\n  <p>\n  ¿Escribiste una nueva interfaz para gancio? ¿Quieres abrir un gancio en tu ciudad?\n  ¿Hay algo que te gustaría mejorar? Para contribuir el código fuente es libre y disponible \n  <a href='https://git.lattuga.net/cisti/gancio'>aquí</a>. Ayuda y sugerencias son siempre bienvenidos, puedes comunicarte con nosotros \n  enviando un mail a underscore arroba autistici.org</p>",
+    "about": "\n  <p><a href='https://gancio.org'>Gancio</a> es una agenda compartida para comunidades locales.</p>\n  ",
     "confirm": {
         "title": "Confirmación de usuario",
         "not_valid": "Mmmmm algo salió mal.",
-        "valid": "Su cuenta ha sido confirmada, ahora puede <a href=\"/login\">ingresar</a>."
+        "valid": "Su cuenta ha sido confirmada, ahora puede <a href=\"/login\">ingresar</a>"
     },
     "oauth": {
         "authorization_request": "La aplicación externa <code>{app}</code> requiere permiso para realizar las siguientes tareas en <code>{instance_name}</code>:",
