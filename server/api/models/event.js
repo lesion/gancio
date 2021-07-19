@@ -86,15 +86,18 @@ Event.prototype.toAPNote = function (username, locale, to = []) {
     ${tags && tags.map(t => `#${t}`)}
   `
 
-  // const attachment = []
+  const attachment = []
+  if (this.media && this.media.length) {
+    attachment.push({
+      type: 'Document',
+      mediaType: 'image/jpeg',
+      url: `${config.baseurl}/media/${this.media[0].url}`,
+      name: this.media[0].name || '',
+      blurHash: null,
+      focalPoint: this.media[0].focalPoint || [0, 0]
+    })
+  }
   // if (this.image_path) {
-  //   attachment.push({
-  //     type: 'Document',
-  //     mediaType: 'image/jpeg',
-  //     url: `${config.baseurl}/media/${this.image_path}`,
-  //     name: null,
-  //     blurHash: null
-  //   })
   // }
 
   return {
