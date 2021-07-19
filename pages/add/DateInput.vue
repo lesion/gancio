@@ -58,7 +58,8 @@ export default {
   name: 'DateInput',
   components: { List },
   props: {
-    value: { type: Object, default: () => ({ from: null, due: null, recurrent: null }) }
+    value: { type: Object, default: () => ({ from: null, due: null, recurrent: null }) },
+    event: { type: Object, default: () => null }
   },
   data () {
     return {
@@ -77,7 +78,7 @@ export default {
     todayEvents () {
       const start = dayjs(this.value.from).startOf('day').unix()
       const end = dayjs(this.value.from).endOf('day').unix()
-      const events = this.events.filter(e => e.start_datetime >= start && e.start_datetime <= end)
+      const events = this.events.filter(e => (this.event.id && e.id !== this.event.id) && e.start_datetime >= start && e.start_datetime <= end)
       return events
     },
     attributes () {

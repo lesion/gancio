@@ -33,7 +33,7 @@
                 WhereInput(ref='where' v-model='event.place')
 
               //- When
-              DateInput(v-model='date')
+              DateInput(v-model='date' :event='event')
 
               //- Description
               v-col.px-0(cols='12')

@@ -129,7 +129,7 @@
         "where_description": "Dov'è il gancio? Se il posto non è presente potrai crearlo.",
         "confirmed": "Evento confermato",
         "not_found": "Evento non trovato",
-        "remove_confirmation": "Sei sicuro/a di voler eliminare questo evento?",
+        "remove_confirmation": "Vuoi eliminare questo evento?",
         "remove_recurrent_confirmation": "Sei sicura di voler eliminare questo evento ricorrente?\nGli eventi passati verranno mantenuti ma non ne verranno creati altri.",
         "recurrent": "Ricorrente",
         "edit_recurrent": "Modifica evento ricorrente:",
