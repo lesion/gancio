@@ -297,13 +297,15 @@ const eventController = {
           url = await helpers.getImageFromURL(body.image_url)
         }
 
-        const focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : [0, 0]
+        const focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
 
         eventDetails.media = [{
           url,
           name: body.image_name || '',
-          focalpoint: [parseFloat(focalpoint[0]), parseFloat(focalpoint[1].toFixed(2))]
+          focalpoint: [parseFloat(focalpoint[0].slice(0, 6)), parseFloat(focalpoint[1].slice(0, 6))]
         }]
+      } else {
+        eventDetails.media = []
       }
 
       const event = await Event.create(eventDetails)
@@ -374,7 +376,7 @@ const eventController = {
         recurrent
       }
 
-      if ((req.file || /^https?:\/\//.test(body.image_url)) && !event.recurrent && event.media.length) {
+      if ((req.file || /^https?:\/\//.test(body.image_url)) && !event.recurrent && event.media && event.media.length) {
         const old_path = path.resolve(config.upload_path, event.media[0].url)
         const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.media[0].url)
         try {
@@ -395,8 +397,8 @@ const eventController = {
         }
       }
 
-      if (body.image_focalpoint) {
-        const focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : [0, 0]
+      if (url && !event.recurrent) {
+        const focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
         eventDetails.media = [{
           url,
           name: body.image_name || '',
@@ -452,7 +454,12 @@ const eventController = {
       }
       const notifier = require('../../notifier')
       await notifier.notifyEvent('Delete', event.id)
-      log.debug('[EVENT REMOVED]', event.title)
+
+      // unassociate child events
+      if (event.recurrent) {
+        await Event.update({ parentId: null }, { where: { parentId: event.id } })
+      }
+      log.debug('[EVENT REMOVED] ' + event.title)
       await event.destroy()
       res.sendStatus(200)
     } else {

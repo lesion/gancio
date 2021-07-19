@@ -11,14 +11,14 @@ v-container#event.pa-0.pa-sm-2
       v-row
         v-col.col-12.col-lg-8
           //- fake image to use u-featured in h-event microformat
-          img.u-featured(v-show='false' v-if='event.media' :src='event | mediaURL')
+          img.u-featured(v-show='false' v-if='hasMedia' :src='event | mediaURL')
           v-img.main_image.mb-3(
             contain
             :alt='event | mediaURL("alt")'
             :src='event | mediaURL'
             :lazy-src='event | mediaURL("thumb")'
-            v-if='event.media && event.media.length')
-          .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-if='!event.media && event.description' v-html='event.description')
+            v-if='hasMedia')
+          .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-if='!hasMedia && event.description' v-html='event.description')
 
         v-col.col-12.col-lg-4
           v-card
@@ -61,11 +61,11 @@ v-container#event.pa-0.pa-sm-2
                     :href='`/api/event/${event.slug || event.id}.ics`')
                     v-icon mdi-calendar-export
 
-      .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-if='event.media && event.description' v-html='event.description')
+      .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-if='hasMedia && event.description' v-html='event.description')
 
       //- resources from fediverse
       #resources.mt-1(v-if='settings.enable_federation')
-        //- div.float-right(v-if='!settings.hide_boosts')
+        //- div.float-right(v-if='settings.hide_boosts')
         //-   small.mr-3 🔖 {{event.likes.length}}
         //-   small ✊ {{event.boost.length}}<br/>
 
@@ -236,6 +236,9 @@ export default {
   },
   computed: {
     ...mapState(['settings']),
+    hasMedia () {
+      return this.event.media && this.event.media.length
+    },
     plainDescription () {
       return htmlToText.fromString(this.event.description.replace('\n', '').slice(0, 1000))
     },
