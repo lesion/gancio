@@ -132,6 +132,7 @@ module.exports = {
           }
           const events = data.items.map(e => {
             const props = e.properties
+            const media = get(props, 'featured[0]')
             return {
               title: get(props, 'name[0]', ''),
               description: get(props, 'description[0]', ''),
@@ -142,7 +143,7 @@ module.exports = {
               start_datetime: dayjs(get(props, 'start[0]', '')).unix(),
               end_datetime: dayjs(get(props, 'end[0]', '')).unix(),
               tags: get(props, 'category', []),
-              media: { url: get(props, 'featured[0]') }
+              media: media ? [{ name: get(props, 'name[0]', ''), url: get(props, 'featured[0]'), focalpoint: [0, 0] }] : []
             }
           })
           return res.json(events)

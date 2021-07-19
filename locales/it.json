@@ -159,7 +159,10 @@
         "import_ICS": "Importa da ICS",
         "import_URL": "Importa da URL (ics o h-event)",
         "ics": "ICS",
-        "import_description": "Puoi importare eventi da altre piattaforme e da altre istanze attraverso i formati standard (ics e h-event)"
+        "import_description": "Puoi importare eventi da altre piattaforme e da altre istanze attraverso i formati standard (ics e h-event)",
+        "alt_text_description": "Descrizione per utenti con disabilità visive",
+        "choose_focal_point": "Scegli il punto centrale cliccando",
+        "remove_media_confirmation": "Confermi l'eliminazione dell'immagine?"
     },
     "admin": {
         "place_description": "Nel caso in cui un luogo sia errato o cambi indirizzo, puoi modificarlo.<br/>Considera che tutti gli eventi associati a questo luogo cambieranno indirizzo (anche quelli passati).",
