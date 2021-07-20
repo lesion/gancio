@@ -1,5 +1,14 @@
 All notable changes to this project will be documented in this file.
 
+### UNRELEASED
+  - 12 hour clock selection, #119
+  - improve media management
+    - add alt-text to featured image, fix #106
+    - add focalPoint support, fix #116
+  - improve a11y
+  - improve node v16 compatibility
+  - fix #122 ? (downgrade prettier)
+
 ### 1.0.2 (alpha)
   - improve oauth flow UI
   - [WordPress plugin](https://wordpress.org/plugins/wpgancio/)
