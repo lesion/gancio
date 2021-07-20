@@ -322,7 +322,7 @@ async function setup (options) {
   process.exit(0)
 }
 
-consola.info(`📅 ${pkg.name} - v${pkg.version} - ${pkg.description}`)
+consola.info(`📅 ${pkg.name} - v${pkg.version} - ${pkg.description} (nodejs: ${process.version})`)
 
 require('yargs')
   .usage('Usage $0 <command> [options]')
