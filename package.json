@@ -108,7 +108,6 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-standard": "^5.0.0",
     "eslint-plugin-vue": "^7.10.0",
-    "fibers": "^5.0.0",
     "less-loader": "7",
     "prettier": "^2.3.0",
     "pug": "^3.0.2",
