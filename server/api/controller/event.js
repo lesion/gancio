@@ -297,12 +297,12 @@ const eventController = {
           url = await helpers.getImageFromURL(body.image_url)
         }
 
-        const focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
-
+        let focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
+        focalpoint = [parseFloat(focalpoint[0]).toFixed(2), parseFloat(focalpoint[1]).toFixed(2)]
         eventDetails.media = [{
           url,
           name: body.image_name || '',
-          focalpoint: [parseFloat(focalpoint[0].slice(0, 6)), parseFloat(focalpoint[1].slice(0, 6))]
+          focalpoint: [parseFloat(focalpoint[0]), parseFloat(focalpoint[1])]
         }]
       } else {
         eventDetails.media = []
