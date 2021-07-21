@@ -1,6 +1,6 @@
 All notable changes to this project will be documented in this file.
 
-### UNRELEASED
+### 1.0.3 (alpha)
   - 12 hour clock selection, #119
   - improve media management
     - add alt-text to featured image, fix #106
