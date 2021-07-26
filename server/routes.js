@@ -33,6 +33,10 @@ app.use('/media/', express.static(config.upload_path))
 // initialize instance settings / authentication / locale
 app.use(helpers.initSettings)
 
+app.use('/noimg.svg', (req, res, next) => {
+  return express.static('./static/noimg.svg')
+})
+
 // serve favicon and static content
 app.use('/logo.png', (req, res, next) => {
   const logoPath = req.settings.logo || './static/gancio'

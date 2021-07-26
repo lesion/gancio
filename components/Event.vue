@@ -1,7 +1,7 @@
 <template lang="pug">
   v-card.h-event.event.d-flex
     nuxt-link(:to='`/event/${event.slug || event.id}`')
-      v-img.u-featured.img(v-if='event.media' aspect-ratio='1.7778' :src='thumbnail' :position='thumbnailPosition' :alt='event.media.length ? event.media[0].name : ""')
+      v-img.u-featured.img(aspect-ratio='1.7778' :src='thumbnail' :position='thumbnailPosition' :alt='event.media && event.media.length ? event.media[0].name : ""')
       v-icon.float-right.mr-1(v-if='event.parentId' color='success') mdi-repeat
       .title.p-name {{event.title}}
 
@@ -55,11 +55,11 @@ export default {
     thumbnail () {
       let path
       if (this.event.media && this.event.media.length) {
-        path = this.event.media[0].url
+        path = '/media/thumb/' + this.event.media[0].url
       } else {
-        path = 'logo.svg'
+        path = '/noimg.svg'
       }
-      return '/media/thumb/' + path
+      return path
     },
     thumbnailPosition () {
       if (this.event.media && this.event.media.length && this.event.media[0].focalpoint) {
