@@ -63,8 +63,13 @@ sudo pm2 startup -u gancio
 ```
 
 ## Upgrade
+
+> warning "Backup your data"
+> Backup your data is generally a good thing to do and this is especially true before upgrading.
+> Don't be lazy and [backup]({% link install/backup.md %}) your data!
+
 ```bash
-sudo yarn cache clean gancio
+sudo yarn global remove gancio
 sudo yarn global add --silent {{site.url}}/latest.tgz  2> /dev/null
 sudo service pm2 restart
 ```
