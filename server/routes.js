@@ -55,11 +55,11 @@ app.get('/feed/:type', cors(), exportController.export)
 app.use('/.well-known', webfinger)
 app.use('/federation', federation)
 
-// api!
 app.use(cookieParser())
 
 // fill req.user if request is authenticated
 app.use(auth.fillUser)
+// api!
 app.use('/api', api)
 app.use('/oauth', oauth)
 
