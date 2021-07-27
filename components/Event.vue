@@ -22,12 +22,12 @@
         v-list(dense)
           v-list-item-group
             v-list-item(v-clipboard:success="() => $root.$message('common.copied', { color: 'success' })"
-                  v-clipboard:copy='`${settings.baseurl}/event/${event.id}`')
+                  v-clipboard:copy='`${settings.baseurl}/event/${event.slug || event.id}`')
               v-list-item-icon
                 v-icon mdi-content-copy
               v-list-item-content
                 v-list-item-title {{$t('common.copy_link')}}
-            v-list-item(:href='`/api/event/${event.id}.ics`')
+            v-list-item(:href='`/api/event/${event.slug || event.id}.ics`')
               v-list-item-icon
                 v-icon mdi-calendar-export
               v-list-item-content

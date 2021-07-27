@@ -12,7 +12,6 @@ div#list
         v-list-item-subtitle <v-icon small color='success' v-if='event.parentId'>mdi-repeat</v-icon> {{event|when}}
           span.primary--text.ml-1 @{{event.place.name}}
         v-list-item-title(v-text='event.title')
-      //- a.text-body-1(:href='`/event/${event.id}`' target='_blank') {{event.title}}
 </template>
 <script>
 
