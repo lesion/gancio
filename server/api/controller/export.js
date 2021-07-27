@@ -12,6 +12,7 @@ const exportController = {
     const type = req.params.type
     const tags = req.query.tags
     const places = req.query.places
+    const show_recurrent = !!req.query.show_recurrent
 
     const where = {}
     const yesterday = moment().subtract('1', 'day').unix()
@@ -23,6 +24,10 @@ const exportController = {
 
     if (places) {
       where.placeId = places.split(',')
+    }
+
+    if (!show_recurrent) {
+      where.parentId = null
     }
 
     const events = await Event.findAll({
