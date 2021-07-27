@@ -62,8 +62,8 @@ const exportController = {
     const eventsMap = events.map(e => {
       const tmpStart = moment.unix(e.start_datetime)
       const tmpEnd = moment.unix(e.end_datetime)
-      const start = tmpStart.utc(true).format('YYYY-M-D-H-m').split('-')
-      const end = tmpEnd.utc(true).format('YYYY-M-D-H-m').split('-')
+      const start = tmpStart.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
+      const end = tmpEnd.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
       return {
         start,
         // startOutputType: 'utc',
@@ -77,8 +77,12 @@ const exportController = {
       }
     })
     res.type('text/calendar; charset=UTF-8')
-    const ret = ics.createEvents(eventsMap)
-    res.send(ret.value)
+    ics.createEvents(eventsMap, (err, value) => {
+      if (err) {
+        return res.status(401).send(err)
+      }
+      return res.send(value)
+    })
   }
 }
 
