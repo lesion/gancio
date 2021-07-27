@@ -35,7 +35,7 @@ postgres=# grant all privileges on database gancio to gancio;
 1. Create a user to run gancio from
 ```bash
 sudo adduser gancio
-su gancio
+su - gancio
 ```
 1. Install Gancio
 ```bash
