@@ -8,7 +8,7 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
-### UNRELEASED
+### 1.0.5 (alpha)
   - fix/improve debian install docs
   - fix ics export, use new ics package
   - use slug url everywhere (rss feed, embedded list)
