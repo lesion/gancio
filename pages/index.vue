@@ -65,7 +65,7 @@ export default {
         { hid: 'og-description', name: 'og:description', content: this.settings.description },
         { hid: 'og-title', property: 'og:title', content: this.settings.title },
         { hid: 'og-url', property: 'og:url', content: this.settings.baseurl },
-        { property: 'og:image', content: this.settings.baseurl + '/favicon.ico' }
+        { property: 'og:image', content: this.settings.baseurl + '/logo.png' }
       ],
       link: [
         { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' }

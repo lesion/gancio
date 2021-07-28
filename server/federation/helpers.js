@@ -97,7 +97,8 @@ const Helpers = {
         'https://www.w3.org/ns/activitystreams',
         'https://w3id.org/security/v1',
         {
-          Hashtag: 'as:Hashtag'
+          Hashtag: 'as:Hashtag',
+          focalPoint: { '@container': '@list', '@id': 'toot:focalPoint' }
         }]
       await Helpers.signAndSend(JSON.stringify(body), sharedInbox)
     }

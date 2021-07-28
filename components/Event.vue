@@ -1,7 +1,7 @@
 <template lang="pug">
   v-card.h-event.event.d-flex
     nuxt-link(:to='`/event/${event.slug || event.id}`')
-      v-img.u-featured.img(:src="`/media/thumb/${event.image_path || 'logo.svg' }`")
+      v-img.u-featured.img(aspect-ratio='1.7778' :src='thumbnail' :position='thumbnailPosition' :alt='event.media && event.media.length ? event.media[0].name : ""')
       v-icon.float-right.mr-1(v-if='event.parentId' color='success') mdi-repeat
       .title.p-name {{event.title}}
 
@@ -22,12 +22,12 @@
         v-list(dense)
           v-list-item-group
             v-list-item(v-clipboard:success="() => $root.$message('common.copied', { color: 'success' })"
-                  v-clipboard:copy='`${settings.baseurl}/event/${event.id}`')
+                  v-clipboard:copy='`${settings.baseurl}/event/${event.slug || event.id}`')
               v-list-item-icon
                 v-icon mdi-content-copy
               v-list-item-content
                 v-list-item-title {{$t('common.copy_link')}}
-            v-list-item(:href='`/api/event/${event.id}.ics`')
+            v-list-item(:href='`/api/event/${event.slug || event.id}.ics`')
               v-list-item-icon
                 v-icon mdi-calendar-export
               v-list-item-content
@@ -52,6 +52,22 @@ export default {
   },
   computed: {
     ...mapState(['settings']),
+    thumbnail () {
+      let path
+      if (this.event.media && this.event.media.length) {
+        path = '/media/thumb/' + this.event.media[0].url
+      } else {
+        path = '/noimg.svg'
+      }
+      return path
+    },
+    thumbnailPosition () {
+      if (this.event.media && this.event.media.length && this.event.media[0].focalpoint) {
+        const focalpoint = this.event.media[0].focalpoint
+        return `${(focalpoint[0] + 1) * 50}% ${(focalpoint[1] + 1) * 50}%`
+      }
+      return 'center center'
+    },
     is_mine () {
       if (!this.$auth.user) {
         return false

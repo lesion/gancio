@@ -11,13 +11,14 @@ v-container#event.pa-0.pa-sm-2
       v-row
         v-col.col-12.col-lg-8
           //- fake image to use u-featured in h-event microformat
-          img.u-featured(v-show='false' v-if='event.image_path' :src='`${settings.baseurl}${imgPath}`')
+          img.u-featured(v-show='false' v-if='hasMedia' :src='event | mediaURL')
           v-img.main_image.mb-3(
             contain
-            :src='imgPath'
-            :lazy-src='thumbImgPath'
-            v-if='event.image_path')
-          .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-else v-html='event.description')
+            :alt='event | mediaURL("alt")'
+            :src='event | mediaURL'
+            :lazy-src='event | mediaURL("thumb")'
+            v-if='hasMedia')
+          .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-if='!hasMedia && event.description' v-html='event.description')
 
         v-col.col-12.col-lg-4
           v-card
@@ -34,8 +35,8 @@ v-container#event.pa-0.pa-sm-2
 
               .text-h6.p-location
                 v-icon mdi-map-marker
-                b.vcard.ml-2 {{event.place.name}}
-              .text-subtitle-1.adr {{event.place.address}}
+                b.vcard.ml-2 {{event.place && event.place.name}}
+              .text-subtitle-1.adr {{event.place && event.place.address}}
 
             //- tags, hashtags
             v-card-text(v-if='event.tags.length')
@@ -60,11 +61,11 @@ v-container#event.pa-0.pa-sm-2
                     :href='`/api/event/${event.slug || event.id}.ics`')
                     v-icon mdi-calendar-export
 
-      .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-if='event.image_path && event.description' v-html='event.description')
+      .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-if='hasMedia && event.description' v-html='event.description')
 
       //- resources from fediverse
       #resources.mt-1(v-if='settings.enable_federation')
-        //- div.float-right(v-if='!settings.hide_boosts')
+        //- div.float-right(v-if='settings.hide_boosts')
         //-   small.mr-3 🔖 {{event.likes.length}}
         //-   small ✊ {{event.boost.length}}<br/>
 
@@ -170,8 +171,8 @@ export default {
     const place_feed = {
       rel: 'alternate',
       type: 'application/rss+xml',
-      title: `${this.settings.title} events  @${this.event.place.name}`,
-      href: this.settings.baseurl + `/feed/rss?places=${this.event.place.id}`
+      title: `${this.settings.title} events  @${this.event.place && this.event.place.name}`,
+      href: this.settings.baseurl + `/feed/rss?places=${this.event.place && this.event.place.id}`
     }
 
     return {
@@ -197,7 +198,7 @@ export default {
         { property: 'og:type', content: 'event' },
         {
           property: 'og:image',
-          content: this.thumbImgPath
+          content: this.$options.filters.mediaURL(this.event)
         },
         { property: 'og:site_name', content: this.settings.title },
         {
@@ -213,7 +214,7 @@ export default {
         { property: 'twitter:title', content: this.event.title },
         {
           property: 'twitter:image',
-          content: this.thumbImgPath
+          content: this.$options.filters.mediaURL(this.event, 'thumb')
         },
         {
           property: 'twitter:description',
@@ -221,7 +222,7 @@ export default {
         }
       ],
       link: [
-        { rel: 'image_src', href: this.thumbImgPath },
+        { rel: 'image_src', href: this.$options.filters.mediaURL(this.event, 'thumb') },
         {
           rel: 'alternate',
           type: 'application/rss+xml',
@@ -235,17 +236,14 @@ export default {
   },
   computed: {
     ...mapState(['settings']),
+    hasMedia () {
+      return this.event.media && this.event.media.length
+    },
     plainDescription () {
       return htmlToText.fromString(this.event.description.replace('\n', '').slice(0, 1000))
     },
     currentAttachmentLabel () {
       return get(this.selectedResource, `data.attachment[${this.currentAttachment}].name`, '')
-    },
-    imgPath () {
-      return '/media/' + this.event.image_path
-    },
-    thumbImgPath () {
-      return this.settings.baseurl + '/media/thumb/' + this.event.image_path
     },
     is_mine () {
       if (!this.$auth.user) {

@@ -10,7 +10,7 @@ module.exports = {
     if (typeof body.object !== 'string') { return }
     const username = body.object.replace(`${config.baseurl}/federation/u/`, '')
     if (username !== req.settings.instance_name) {
-      log.warn(`Following the wrong user: ${username} instead of ${req.settings.instance_name}`)
+      log.warn(`Following the wrong user: ${username} instead of ${req.settings.instance_name} (could be a wrong config.baseurl)`)
       return res.status(404).send('User not found')
     }
 

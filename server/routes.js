@@ -33,6 +33,10 @@ app.use('/media/', express.static(config.upload_path))
 // initialize instance settings / authentication / locale
 app.use(helpers.initSettings)
 
+app.use('/noimg.svg', (req, res, next) => {
+  return express.static('./static/noimg.svg')
+})
+
 // serve favicon and static content
 app.use('/logo.png', (req, res, next) => {
   const logoPath = req.settings.logo || './static/gancio'
@@ -51,11 +55,11 @@ app.get('/feed/:type', cors(), exportController.export)
 app.use('/.well-known', webfinger)
 app.use('/federation', federation)
 
-// api!
 app.use(cookieParser())
 
 // fill req.user if request is authenticated
 app.use(auth.fillUser)
+// api!
 app.use('/api', api)
 app.use('/oauth', oauth)
 

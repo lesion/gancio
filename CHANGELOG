@@ -1,5 +1,34 @@
 All notable changes to this project will be documented in this file.
 
+### UNRELEASED
+  - fix/improve debian install docs
+  - fix ics export, use new ics package
+  - use slug url everywhere (rss feed, embedded list)
+  - use i18n in event confirmation email
+  - remove lot of deps warning and remove some unused dependencies
+  - fix show_recurrent in embedded list
+  - remove old to-ico dep, use png favicon instead
+
+### 1.0.4 (alpha)
+  - shows a generic img for events without it
+
+### 1.0.3 (alpha)
+  - 12 hour clock selection, #119
+  - improve media management
+    - add alt-text to featured image, fix #106
+    - add focalPoint support, fix #116
+  - improve a11y
+  - improve node v16 compatibility
+  - fix #122 ? (downgrade prettier)
+
+### 1.0.2 (alpha)
+  - improve oauth flow UI
+  - [WordPress plugin](https://wordpress.org/plugins/wpgancio/)
+  - fix h-event import
+  - improve error logging (add stack trace to exception)
+  - choose start date for recurreing events (#120)
+  - fix user delete from admin
+
 ### 1.0.1 (alpha)
 
   - fix AP resource removal

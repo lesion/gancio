@@ -11,8 +11,8 @@
       v-card-text(v-show='!!message') {{ message }}
       v-card-actions
         v-spacer
-        v-btn(color='error' @click='cancel') {{$t('common.cancel')}}
-        v-btn(color='primary' @click='agree') {{$t('common.ok')}}
+        v-btn(text color='error' @click='cancel') {{$t('common.cancel')}}
+        v-btn(text color='primary' @click='agree') {{$t('common.ok')}}
 </template>
 
 <script>

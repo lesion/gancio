@@ -2,7 +2,7 @@
   v-row.mt-5(align='center' justify='center')
     v-col(cols='12' md="6" lg="5" xl="4")
       v-card
-        v-card-title <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{$t('common.set_password')}}
+        v-card-title <nuxt-link to='/'><v-img src='/logo.png' max-width="40px" max-height="40px" contain class='mr-4'/></nuxt-link> {{$t('common.set_password')}}
         template(v-if='valid')
           v-card-text(v-if='valid')
             v-form(v-if='valid')

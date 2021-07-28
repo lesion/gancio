@@ -43,7 +43,7 @@ const notifier = {
     // insert notifications
     const notifications = await eventController.getNotifications(event, action)
     await event.addNotifications(notifications)
-    const event_notifications = await event.getNotifications()
+    const event_notifications = await event.getNotifications({ through: { where: { status: 'new' } } })
 
     const promises = event_notifications.map(async notification => {
       try {

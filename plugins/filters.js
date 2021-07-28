@@ -33,6 +33,18 @@ export default ({ app, store }) => {
 
   // shown in mobile homepage
   Vue.filter('day', value => dayjs.unix(value).locale(store.state.locale).format('dddd, D MMM'))
+  Vue.filter('mediaURL', (event, type) => {
+    if (event.media && event.media.length) {
+      if (type === 'alt') {
+        return event.media[0].name
+      } else {
+        return store.state.settings.baseurl + '/media/' + (type === 'thumb' ? 'thumb/' : '') + event.media[0].url
+      }
+    } else if (type !== 'alt') {
+      return store.state.settings.baseurl + '/media/' + (type === 'thumb' ? 'thumb/' : '') + 'logo.svg'
+    }
+    return ''
+  })
 
   Vue.filter('from', timestamp => dayjs.unix(timestamp).fromNow())
 

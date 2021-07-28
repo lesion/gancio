@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-footer(color='secondary')
+  v-footer(color='secondary' aria-label='Footer')
 
     v-dialog(v-model='showFollowMe' destroy-on-close max-width='700px')
       FollowMe(@close='showFollowMe=false' is-dialog)
@@ -20,7 +20,7 @@
           :href='instance.url'
           two-line)
           v-list-item-avatar
-            v-img(:src='`${instance.url}/favicon.ico`')
+            v-img(:src='`${instance.url}/logo.png`')
           v-list-item-content
             v-list-item-title {{instance.name}}
             v-list-item-subtitle {{instance.label}}
