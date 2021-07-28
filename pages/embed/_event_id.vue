@@ -37,7 +37,7 @@ export default {
 .embed_event {
   display: flex;
   transition: margin .1s;
-  background: url('/favicon.ico') no-repeat right 5px bottom 5px;
+  background: url('/logo.png') no-repeat right 5px bottom 5px;
   background-size: 32px;
   background-color: #1f1f1f;
   text-decoration: none;

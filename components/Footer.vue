@@ -20,7 +20,7 @@
           :href='instance.url'
           two-line)
           v-list-item-avatar
-            v-img(:src='`${instance.url}/favicon.ico`')
+            v-img(:src='`${instance.url}/logo.png`')
           v-list-item-content
             v-list-item-title {{instance.name}}
             v-list-item-subtitle {{instance.label}}

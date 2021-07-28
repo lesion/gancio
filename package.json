@@ -67,7 +67,6 @@
     "sqlite3": "mapbox/node-sqlite3#593c9d4",
     "tiptap": "^1.32.0",
     "tiptap-extensions": "^1.35.0",
-    "to-ico": "lesion/to-ico#master",
     "umzug": "^2.3.0",
     "v-calendar": "2.3.1",
     "vue": "^2.6.14",

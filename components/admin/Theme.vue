@@ -9,8 +9,8 @@
         accept='image/*')
         template(slot='append-outer')
           v-btn(color='warning' text @click='resetLogo') <v-icon>mdi-restore</v-icon> {{$t('common.reset')}}
-          v-img(:src='`${settings.baseurl}/favicon.ico?${logoKey}`'
-            max-width="100px" max-height="80px" contain)
+          v-img(:src='`${settings.baseurl}/logo.png?${logoKey}`'
+            max-width="60px" max-height="60px" contain)
 
       //- v-switch.mt-5(v-model='is_dark'
       //-   inset
