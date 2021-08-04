@@ -18,5 +18,8 @@
     "register": {
         "content": "Nous avons reçu la demande d'inscription. Nous la confirmerons au plus vite.",
         "subject": "Demande d'inscription reçue"
+    },
+    "event_confirm": {
+        "content": "Vous pouvez confirmer cet événement sur <a href='{{url}}'>cette page</a>"
     }
 }
