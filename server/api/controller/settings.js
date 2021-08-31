@@ -6,10 +6,7 @@ const fs = require('fs')
 const pkg = require('../../../package.json')
 const crypto = require('crypto')
 const util = require('util')
-const toIco = require('to-ico')
 const generateKeyPair = util.promisify(crypto.generateKeyPair)
-const readFile = util.promisify(fs.readFile)
-const writeFile = util.promisify(fs.writeFile)
 const sharp = require('sharp')
 const log = require('../../log')
 
@@ -124,16 +121,13 @@ const settingsController = {
     const baseImgPath = path.resolve(config.upload_path, 'logo')
 
     // convert and resize to png
-    sharp(uploadedPath)
+    return sharp(uploadedPath)
       .resize(400)
       .png({ quality: 90 })
-      .toFile(baseImgPath + '.png', async (err, info) => {
+      .toFile(baseImgPath + '.png', (err, info) => {
         if (err) {
-          log.error('[LOGO]', err)
+          log.error('[LOGO] ' + err)
         }
-        const image = await readFile(baseImgPath + '.png')
-        const favicon = await toIco([image], { sizes: [64], resize: true })
-        writeFile(baseImgPath + '.ico', favicon)
         settingsController.set('logo', baseImgPath)
         res.sendStatus(200)
       })

@@ -34,7 +34,7 @@
       v-btn(text color='primary' @click='openMediaDetails = true') {{$t('common.edit')}}
       v-btn(text color='error' @click='remove') {{$t('common.remove')}}
     div(v-if='mediaPreview')
-      v-img.col-12.col-sm-2.ml-3(:src='mediaPreview' aspect-ratio='1.7778' :position='`${(this.value.focalpoint[0] + 1) * 50}% ${(this.value.focalpoint[1] + 1) * 50}%`')
+      v-img.col-12.col-sm-2.ml-3(:src='mediaPreview' aspect-ratio='1.7778' :position='savedPosition')
       span.float-right {{event.media[0].name}}
     v-file-input(
       v-else
@@ -68,8 +68,13 @@ export default {
       const url = this.value.image ? URL.createObjectURL(this.value.image) : /^https?:\/\//.test(this.value.url) ? this.value.url : `/media/thumb/${this.value.url}`
       return url
     },
+    savedPosition () {
+      const focalpoint = this.value.focalpoint || [0, 0]
+      return `${(focalpoint[0] + 1) * 50}% ${(focalpoint[1] + 1) * 50}%`
+    },
     position () {
-      return `${(this.focalpoint[0] + 1) * 50}% ${(this.focalpoint[1] + 1) * 50}%`
+      const focalpoint = this.focalpoint || [0, 0]
+      return `${(focalpoint[0] + 1) * 50}% ${(focalpoint[1] + 1) * 50}%`
     }
   },
   methods: {

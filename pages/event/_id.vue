@@ -35,8 +35,8 @@ v-container#event.pa-0.pa-sm-2
 
               .text-h6.p-location
                 v-icon mdi-map-marker
-                b.vcard.ml-2 {{event.place.name}}
-              .text-subtitle-1.adr {{event.place.address}}
+                b.vcard.ml-2 {{event.place && event.place.name}}
+              .text-subtitle-1.adr {{event.place && event.place.address}}
 
             //- tags, hashtags
             v-card-text(v-if='event.tags.length')
@@ -171,8 +171,8 @@ export default {
     const place_feed = {
       rel: 'alternate',
       type: 'application/rss+xml',
-      title: `${this.settings.title} events  @${this.event.place.name}`,
-      href: this.settings.baseurl + `/feed/rss?places=${this.event.place.id}`
+      title: `${this.settings.title} events  @${this.event.place && this.event.place.name}`,
+      href: this.settings.baseurl + `/feed/rss?places=${this.event.place && this.event.place.id}`
     }
 
     return {

@@ -17,7 +17,7 @@ const announceController = {
       announcement: req.body.announcement,
       visible: true
     }
-    log.info('Create announcement: "%s" ', req.body.title)
+    log.info('Create announcement: ' + req.body.title)
     const announce = await Announcement.create(announcementDetail)
     res.json(announce)
   },

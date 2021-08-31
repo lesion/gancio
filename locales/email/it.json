@@ -18,5 +18,8 @@
     "admin_register": {
         "subject": "Nuova registrazione",
         "content": "{{user.email}} si è registratǝ a {{config.title}} scrivendo:<br/><pre>{{user.description}}</pre><br/> Puoi confermarlo <a href='{{config.baseurl}}/admin'>qui</a>."
+    },
+    "event_confirm": {
+        "content": "Puoi confermare questo evento premendo il tasto conferma in <a href='{{url}}'>questa pagina</a>"
     }
 }

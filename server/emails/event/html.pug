@@ -1,21 +1,22 @@
 extends ../layout.pug
 block content
   h3 #{event.title}
-  p 📍 Dove: #{event.place.name} - #{event.place.address}
-  p ⏰ Quando: #{datetime(event.start_datetime)}
+  p 📍 #{event.place.name} - #{event.place.address}
+  p ⏰ #{datetime(event.start_datetime)}
   br
-  if event.media
+  if event.media && event.media.length
     <center>
       <img style="height: 89vh; margin: 0 auto;" alt="#{event.media[0].name}" src="#{config.baseurl}/media/#{event.media[0].url}" />
     </center>
-  p !{event.description}
+  if event.description
+    p !{event.description}
 
   each tag in event.tags
     span ##{tag.tag} 
   br
-  <a href="#{config.baseurl}/event/#{event.id}">#{config.baseurl}/event/#{event.id}</a>
+  <a href="#{config.baseurl}/event/#{event.slug || event.id}">#{config.baseurl}/event/#{event.slug || event.id}</a>
   hr
   if to_confirm
-    p Puoi confermare questo evento premendo il tasto conferma a <a href="#{config.baseurl}/event/#{event.id}">questa pagina</a>
-  else
-    p Puoi eliminare queste notifiche <a href="#{config.baseurl}/del_notification/#{notification.remove_code}">qui</a>
+    p !{t('event_confirm.content', {config, url: `${config.baseurl}/event/${event.slug || event.id}`})}
+  //- else
+  //-   p Puoi eliminare queste notifiche <a href="#{config.baseurl}/del_notification/#{notification.remove_code}">qui</a>
