@@ -54,11 +54,11 @@
               v-row
                 v-col.mr-2(:span='11')
                   v-text-field(v-model='list.title' :label='$t("common.title")')
-                  v-text-field(v-model='list.maxEvents' type='number' :label='$t("common.max_events")')
+                  v-text-field(v-model='list.maxEvents' type='number' min='1' :label='$t("common.max_events")')
                 v-col.float-right(:span='12')
                   List(
                     :title='list.title'
-                    :maxEvents='list.maxEvents'
+                    :maxEvents='Number(list.maxEvents)'
                     :events='events')
               v-text-field.mb-1(type='textarea' v-model='listScript' readonly )
                 v-btn(slot='prepend' text
