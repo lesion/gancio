@@ -110,7 +110,7 @@ Event.prototype.toAPNote = function (username, locale, to = []) {
     // location: {
     //   name: this.place && this.place.name
     // },
-    // attachment,
+    attachment,
     // tag: tags && tags.map(tag => ({
     //   type: 'Hashtag',
     //   name: '#' + tag,
