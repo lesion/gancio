@@ -65,14 +65,14 @@ li {
   overflow: hidden;
 
   .title {
-    transition: all .5s;
-    display: block;
-    max-height: 3em;
-    color: white;
+    display: -webkit-box;
     overflow: hidden;
     margin: 0.5rem 1rem 0.5rem 1rem;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     font-size: 1.1em !important;
-    line-height: 1.1em !important;
+    line-height: 1.2em !important;
   }
 
   .body {
