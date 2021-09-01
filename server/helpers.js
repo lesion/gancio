@@ -66,10 +66,11 @@ module.exports = {
     req.settings.description = req.settings.description || config.description
     req.settings.version = pkg.version
 
-    // set locale and user locale
+    // select locale based on cookie and accept-language header
     const acceptedLanguages = req.headers['accept-language']
     acceptLanguage.languages(Object.keys(locales))
     req.settings.locale = acceptLanguage.get(acceptedLanguages)
+    // set locale and user locale
     req.settings.user_locale = settingsController.user_locale[req.settings.locale]
     dayjs.locale(req.settings.locale)
     dayjs.tz.setDefault(req.settings.instance_timezone)
