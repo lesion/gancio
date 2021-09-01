@@ -5,14 +5,14 @@
       p(v-html="$t('event.import_description')")
       v-form(v-model='valid' ref='form' lazy-validation @submit.prevent='importGeneric')
         v-row
-          v-col
+          .col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12
             v-text-field(v-model='URL'
               :label="$t('common.url')"
               :hint="$t('event.import_URL')"
               persistent-hint
               :loading='loading' :error='error'
               :error-messages='errorMessage')
-          v-col
+          .col
             v-file-input(
               v-model='file'
               accept=".ics"
