@@ -51,17 +51,32 @@
           v-list-item-content
             v-list-item-title {{$t('common.logout')}}
 
+    v-menu(offset-y bottom open-on-hover transition="slide-y-transition" dense)
+      template(v-slot:activator="{ on, attrs }")
+        v-btn(icon v-bind='attrs' v-on='on' aria-label='Language') {{locale}}
+      v-list
+        v-list-item(v-for='(v, k) in locales' :key='k' @click='changeLocale(k)')
+          v-list-item-content
+            v-list-item-title {{v}} {{k}}
+        v-list-item(nuxt target='_blank' href='https://hosted.weblate.org/engage/gancio/')
+          v-list-item-content
+            v-list-item-title(v-text='$t("common.help_translate")')
+
     v-btn(icon v-clipboard:copy='feedLink' v-clipboard:success='copyLink' aria-label='RSS')
       v-icon(color='orange') mdi-rss
 
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import locales from '../locales/esm.js'
 
 export default {
   name: 'Nav',
   computed: {
-    ...mapState(['filters', 'settings']),
+    ...mapState(['filters', 'settings', 'locale']),
+    locales () {
+      return locales
+    },
     feedLink () {
       const tags = this.filters.tags && this.filters.tags.join(',')
       const places = this.filters.places && this.filters.places.join(',')
@@ -83,30 +98,17 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setLocale']),
+    changeLocale (k) {
+      this.setLocale(k)
+      this.$i18n.locale = k
+    },
     copyLink () {
       this.$root.$message('common.feed_url_copied')
     },
     logout () {
       this.$root.$message('common.logout_ok')
       this.$auth.logout()
-    },
-    async createTrustedInstance () {
-      let url = this.instance_url
-      if (!url.match(/^https?:\/\//)) {
-        url = `https://${url}`
-      }
-      try {
-        const instance = await this.$axios.$get(`${url}/.well-known/nodeinfo/2.0`)
-        const trusted_instance = {
-          url,
-          name: instance.metadata.nodeName,
-          description: instance.metadata.nodeDescription,
-          place: instance.metadata.placeDescription
-        }
-        this.setSetting({ key: 'trusted_instances', value: this.settings.trusted_instances.concat(trusted_instance) })
-      } catch (e) {
-        this.$root.$message(e, { color: 'error' })
-      }
     }
   }
 }

@@ -67,6 +67,9 @@ export const actions = {
   setAnnouncements ({ commit }, announcements) {
     commit('setAnnouncements', announcements)
   },
+  setLocale ({ commit }, locale) {
+    commit('setLocale', locale)
+  },
   async setSetting ({ commit }, setting) {
     await this.$axios.$post('/settings', setting)
     commit('setSetting', setting)
