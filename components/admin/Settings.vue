@@ -3,19 +3,25 @@
     v-card-title {{$t('common.settings')}}
     v-card-text
 
+      v-text-field(v-model='title'
+        :label="$t('common.title')"
+        :hint="$t('admin.title_description')"
+        @blur='save("title", title)'
+        persistent-hint)
+
+      v-text-field.mt-5(v-model='description'
+        :label="$t('common.description')"
+        :hint="$t('admin.description_description')"
+        persistent-hint
+        @blur='save("description", description)')
+
       //- select timezone
-      v-autocomplete(v-model='instance_timezone'
+      v-autocomplete.mt-5(v-model='instance_timezone'
         :label="$t('admin.select_instance_timezone')"
         :hint="$t('admin.instance_timezone_description')"
         :items="filteredTimezones"
         persistent-hint
-        item-text='value'
-        item-value='value'
         placeholder='Timezone, type to search')
-        template(v-slot:item='{ item }')
-          v-list-item-content
-            v-list-item-title {{item.value}}
-            v-list-item-subtitle {{item.offset}}
 
       v-select.mt-5(
         v-model='instance_locale'
@@ -24,19 +30,6 @@
         persistent-hint
         :items='locales'
       )
-
-      v-text-field.mt-5(v-model='title'
-        :label="$t('common.title')"
-        :hint="$t('admin.title_description')"
-        @blur='save("title", title)'
-        persistent-hint
-      )
-
-      v-text-field.mt-5(v-model='description'
-        :label="$t('common.description')"
-        :hint="$t('admin.description_description')"
-        persistent-hint
-        @blur='save("description", description)')
 
       v-switch.mt-4(v-model='allow_registration'
         inset
