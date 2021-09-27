@@ -1,41 +1,27 @@
-// const fs = require('fs')
-// const path = require('path')
 const Sequelize = require('sequelize')
-// const basename = path.basename(__filename)
-const config = require('config')
-const consola = require('consola')
-// const db = {}
-let sequelize = null
+const config = require('../../config')
+const log = require('../../log')
 
-try {
-  sequelize = new Sequelize(config.db)
-} catch (e) {
-  consola.warn(` ⚠️ Cannot connect to db, check your configuration => ${e}`)
-  process.exit(-1)
+const db = {
+  sequelize: null,
+  close () {
+    return db.sequelize.close()
+  },
+  async connect (dbConf = config.db) {
+    log.debug(`Connecting to DB: ${dbConf}`)
+    db.sequelize = new Sequelize(dbConf)
+    await db.sequelize.authenticate()
+    return db.sequelize
+  }
 }
 
-sequelize.authenticate().catch(e => {
-  consola.error(' ⚠ Error connecting to DB: ', String(e))
-  process.exit(-1)
-})
+if (!config.firstrun) {
+  try {
+    db.connect()
+  } catch (e) {
+    log.warn(` ⚠️ Cannot connect to db, check your configuration => ${e}`)
+    process.exit(1)
+  }
+}
 
-// fs
-//   .readdirSync(__dirname)
-//   .filter(file => {
-//     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js')
-//   })
-//   .forEach(file => {
-//     const model = sequelize.import(path.join(__dirname, file))
-//     db[model.name] = model
-//   })
-
-// Object.keys(db).forEach(modelName => {
-//   if (db[modelName].associate) {
-//     db[modelName].associate(db)
-//   }
-// })
-
-// db.sequelize = sequelize
-// db.Sequelize = Sequelize
-
-module.exports = sequelize
+module.exports = db

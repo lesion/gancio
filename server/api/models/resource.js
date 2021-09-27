@@ -1,7 +1,6 @@
 const { Model, DataTypes } = require('sequelize')
-const sequelize = require('./index')
+const sequelize = require('./index').sequelize
 
-// const Event = require('./event')
 const APUser = require('./ap_user')
 
 class Resource extends Model {}

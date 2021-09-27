@@ -1,11 +1,11 @@
-const config = require('config')
+const config = require('../../config')
 const moment = require('dayjs')
 const { htmlToText } = require('html-to-text')
 
 const { Model, DataTypes } = require('sequelize')
 const SequelizeSlugify = require('sequelize-slugify')
 
-const sequelize = require('./index')
+const sequelize = require('./index').sequelize
 
 const Resource = require('./resource')
 const Notification = require('./notification')

@@ -1,7 +1,7 @@
 
 const bcrypt = require('bcryptjs')
 const { Model, DataTypes } = require('sequelize')
-const sequelize = require('./index')
+const sequelize = require('./index').sequelize
 
 class User extends Model {}
 
