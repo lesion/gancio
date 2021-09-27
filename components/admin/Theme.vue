@@ -12,9 +12,9 @@
           v-img(:src='`${settings.baseurl}/logo.png?${logoKey}`'
             max-width="60px" max-height="60px" contain)
 
-      //- v-switch.mt-5(v-model='is_dark'
-      //-   inset
-      //-   :label="$t('admin.is_dark')")
+      v-switch.mt-5(v-model='is_dark'
+        inset
+        :label="$t('admin.is_dark')")
 
       //- TODO choose theme colors
       //- v-row
@@ -52,17 +52,16 @@
     v-card-text
       v-btn(color='primary' text @click='openLinkModal') <v-icon>mdi-plus</v-icon> {{$t('admin.add_link')}}
       v-btn(color='warning' text @click='reset') <v-icon>mdi-restore</v-icon> {{$t('common.reset')}}
-      v-list.mt-1(two-line subheader)
-        v-list-item(v-for='link in settings.footerLinks'
-          :key='`${link.label}`' @click='editFooterLink(link)')
-          v-list-item-content
-            v-list-item-title {{link.label}}
-            v-list-item-subtitle {{link.href}}
-          v-list-item-action
-            //- v-btn.float-right(icon color='accent' @click='editFooterLink(link)')
-            //-   v-icon mdi-pencil
-            v-btn(icon color='error' @click.stop='removeFooterLink(link)')
-              v-icon mdi-delete-forever
+      v-card
+        v-list.mt-1(two-line subheader)
+          v-list-item(v-for='link in settings.footerLinks'
+            :key='`${link.label}`' @click='editFooterLink(link)')
+            v-list-item-content
+              v-list-item-title {{link.label}}
+              v-list-item-subtitle {{link.href}}
+            v-list-item-action
+              v-btn(icon color='error' @click.stop='removeFooterLink(link)')
+                v-icon mdi-delete-forever
 
 </template>
 <script>
