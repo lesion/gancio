@@ -36,6 +36,7 @@ import Calendar from '@/components/Calendar'
 export default {
   name: 'Index',
   components: { Event, Search, Announcement, Calendar },
+  middleware: 'setup',
   async asyncData ({ params, $api, store }) {
     const events = await $api.getEvents({
       start: dayjs().startOf('month').unix(),

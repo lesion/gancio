@@ -261,5 +261,11 @@
         "scopes": {
             "event:write": "Add and edit your events"
         }
+    },
+    "setup": {
+        "check_db": "Check DB",
+        "completed": "Setup completed",
+        "completed_description": "Installation completed!<br/>You can now login with the following user: {email} / {password}. Please write to us at gancio@cisti.org for any question.",
+        "start": "Start"
     }
 }
