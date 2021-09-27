@@ -51,8 +51,8 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import moment from 'moment-timezone'
-import _ from 'lodash'
+import moment from 'dayjs'
+import tzNames from './tz.json'
 import locales from '../../locales/esm'
 
 export default {
@@ -92,11 +92,8 @@ export default {
     },
     filteredTimezones () {
       const current_timezone = moment.tz.guess()
-      const ret = _(moment.tz.names())
-        .unshift(current_timezone)
-        .map(tz => ({ value: tz, offset: moment().tz(tz).format('z Z') }))
-        .value()
-      return ret
+      tzNames.unshift(current_timezone)
+      return tzNames
     }
   },
   methods: {
