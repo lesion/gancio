@@ -1,6 +1,4 @@
-const Setting = require('../models/setting')
-const config = require('config')
-const consola = require('consola')
+const config = require('../../config')
 const path = require('path')
 const fs = require('fs')
 const pkg = require('../../../package.json')
@@ -11,9 +9,11 @@ const sharp = require('sharp')
 const log = require('../../log')
 
 const defaultSettings = {
+  title: 'Gancio',
+  description: 'A shared agenda for local communities',
   instance_timezone: 'Europe/Rome',
   instance_locale: 'en',
-  instance_name: config.title.toLowerCase().replace(/ /g, ''),
+  instance_name: 'gancio', // config.title.toLowerCase().replace(/ /g, ''),
   instance_place: '',
   allow_registration: true,
   allow_anon_event: true,
@@ -42,6 +42,11 @@ const settingsController = {
   secretSettings: {},
 
   async load () {
+    if (config.firstrun) {
+      settingsController.settings = defaultSettings
+      return
+    }
+    const Setting = require('../models/setting')
     if (!settingsController.settings.initialized) {
       // initialize instance settings from db
       // note that this is done only once when the server starts
@@ -80,7 +85,7 @@ const settingsController = {
       if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {
         const user_locale = fs.readdirSync(path.resolve(config.user_locale))
         user_locale.forEach(async f => {
-          consola.info(`Loading user locale ${f}`)
+          log.info(`Loading user locale ${f}`)
           const locale = path.basename(f, '.js')
           settingsController.user_locale[locale] =
             (await require(path.resolve(config.user_locale, f))).default
@@ -90,6 +95,7 @@ const settingsController = {
   },
 
   async set (key, value, is_secret = false) {
+    const Setting = require('../models/setting')
     log.info(`SET ${key} ${is_secret ? '*****' : value}`)
     try {
       const [setting, created] = await Setting.findOrCreate({
@@ -135,14 +141,7 @@ const settingsController = {
 
   getAllRequest (req, res) {
     // get public settings and public configuration
-    const settings = {
-      ...settingsController.settings,
-      baseurl: config.baseurl,
-      title: config.title,
-      description: config.description,
-      version: pkg.version
-    }
-    res.json(settings)
+    res.json({ ...settingsController.settings, version: pkg.version })
   }
 }
 

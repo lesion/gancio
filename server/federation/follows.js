@@ -1,4 +1,4 @@
-const config = require('config')
+const config = require('../config')
 const Helpers = require('./helpers')
 const crypto = require('crypto')
 const log = require('../log')

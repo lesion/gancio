@@ -3,7 +3,7 @@ const Place = require('../api/models/place')
 const APUser = require('../api/models/ap_user')
 const Tag = require('../api/models/tag')
 
-const config = require('config')
+const config = require('../config')
 const log = require('../log')
 const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')

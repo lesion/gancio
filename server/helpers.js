@@ -6,7 +6,7 @@ const dayjs = require('dayjs')
 const timezone = require('dayjs/plugin/timezone')
 dayjs.extend(timezone)
 
-const config = require('config')
+const config = require('./config')
 const log = require('./log')
 const pkg = require('../package.json')
 const fs = require('fs')
@@ -61,7 +61,8 @@ module.exports = {
     req.settings = settingsController.settings
     req.secretSettings = settingsController.secretSettings
 
-    req.settings.baseurl = config.baseurl
+    req.settings.baseurl = config.baseurl || req.protocol + '://' + req.headers.host
+    req.settings.hostname = new URL.URL(req.settings.baseurl).hostname
     req.settings.title = req.settings.title || config.title
     req.settings.description = req.settings.description || config.description
     req.settings.version = pkg.version
@@ -187,4 +188,6 @@ module.exports = {
     log.debug(cursor)
     return cursor
   }
+
+  
 }

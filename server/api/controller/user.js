@@ -1,6 +1,6 @@
 const crypto = require('crypto')
 const { Op } = require('sequelize')
-const config = require('config')
+const config = require('../../config')
 const mail = require('../mail')
 const User = require('../models/user')
 const settingsController = require('./settings')

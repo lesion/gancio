@@ -1,5 +1,5 @@
 const mail = require('./api/mail')
-const config = require('config')
+const config = require('./config')
 const log = require('./log')
 const fediverseHelpers = require('./federation/helpers')
 

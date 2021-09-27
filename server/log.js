@@ -1,7 +1,6 @@
 const { createLogger, transports, format } = require('winston')
 const DailyRotateFile = require('winston-daily-rotate-file')
-// const dayjs = require('dayjs')
-const config = require('config')
+const config = require('./config')
 
 const gancioFormat = format.printf(info => {
   if (info.stack) {

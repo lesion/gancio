@@ -1,5 +1,3 @@
-const conf = require('config')
-
 module.exports = {
   telemetry: false,
   modern: (process.env.NODE_ENV === 'production') && 'client',
@@ -14,8 +12,6 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/png', href: '/logo.png' }]
   },
   dev: (process.env.NODE_ENV !== 'production'),
-
-  server: conf.server,
 
   /*
    ** Customize the progress-bar color

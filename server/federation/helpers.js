@@ -1,7 +1,7 @@
 const axios = require('axios')
 // const request = require('request')
 const crypto = require('crypto')
-const config = require('config')
+const config = require('../config')
 const httpSignature = require('http-signature')
 const APUser = require('../api/models/ap_user')
 const Instance = require('../api/models/instance')

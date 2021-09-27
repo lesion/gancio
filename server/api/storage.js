@@ -4,7 +4,7 @@ const crypto = require('crypto')
 const mkdirp = require('mkdirp')
 const sharp = require('sharp')
 const log = require('../log')
-const config = require('config')
+const config = require('../config')
 
 try {
   mkdirp.sync(config.upload_path + '/thumb')
