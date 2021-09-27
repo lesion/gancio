@@ -18,7 +18,7 @@ v-container#event.pa-0.pa-sm-2
             :src='event | mediaURL'
             :lazy-src='event | mediaURL("thumb")'
             v-if='hasMedia')
-          .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-if='!hasMedia && event.description' v-html='event.description')
+          .p-description.text-body-1.pa-3.rounded(v-if='!hasMedia && event.description' v-html='event.description')
 
         v-col.col-12.col-lg-4
           v-card
@@ -61,7 +61,7 @@ v-container#event.pa-0.pa-sm-2
                     :href='`/api/event/${event.slug || event.id}.ics`')
                     v-icon mdi-calendar-export
 
-      .p-description.text-body-1.pa-3.grey.darken-4.rounded(v-if='hasMedia && event.description' v-html='event.description')
+      .p-description.text-body-1.pa-3.rounded(v-if='hasMedia && event.description' v-html='event.description')
 
       //- resources from fediverse
       #resources.mt-1(v-if='settings.enable_federation')
@@ -327,7 +327,6 @@ export default {
 <style lang='less'>
 .title {
   margin-bottom: 25px;
-  color: yellow;
   font-weight: 300 !important;
 }
 .main_image {

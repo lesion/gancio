@@ -24,7 +24,7 @@ const defaultSettings = {
   hide_boosts: true,
   enable_trusted_instances: true,
   trusted_instances: [],
-  'theme.is_dark': true,
+  'theme.is_dark': false,
   'theme.primary': '#FF4500',
   footerLinks: [
     { href: '/', label: 'home' },
