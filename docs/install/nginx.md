@@ -1,4 +1,4 @@
-t---
+---
 layout: default
 title: Nginx setup
 permalink: /install/nginx
