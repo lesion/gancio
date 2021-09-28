@@ -50,8 +50,10 @@ export const actions = {
   // we use it to get configuration from db, set locale, etc...
   nuxtServerInit ({ commit }, { req }) {
     commit('setSettings', req.settings)
-    commit('setAnnouncements', req.announcements)
-    commit('update', req.meta)
+    if (!req.firstrun) {
+      commit('setAnnouncements', req.announcements)
+      commit('update', req.meta)
+    }
   },
   async updateAnnouncements ({ commit }) {
     const announcements = await this.$axios.$get('/announcements')
