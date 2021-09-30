@@ -1,7 +1,7 @@
 const ical = require('ical.js')
 const settingsController = require('./api/controller/settings')
 const acceptLanguage = require('accept-language')
-
+const express = require('express')
 const dayjs = require('dayjs')
 const timezone = require('dayjs/plugin/timezone')
 dayjs.extend(timezone)
@@ -75,6 +75,30 @@ module.exports = {
     req.settings.user_locale = settingsController.user_locale[req.settings.locale]
     dayjs.locale(req.settings.locale)
     dayjs.tz.setDefault(req.settings.instance_timezone)
+    next()
+  },
+
+  serveStatic () {
+    const router = express.Router()
+    // serve logo, favicon, event's images/thumb
+    router.use('/media/', express.static(config.upload_path))
+    router.use('/noimg.svg', express.static('./static/noimg.svg'))
+    
+    router.use('/logo.png', (req, res, next) => {
+      const logoPath = req.settings.logo || './static/gancio'
+      return express.static(logoPath + '.png')(req, res, next)
+    })
+
+    router.use('/favicon.ico', (req, res, next) => {
+      const faviconPath = req.settings.logo || './assets/favicon'
+      return express.static(faviconPath + '.ico')(req, res, next)
+    })
+
+    return router
+  },
+
+  logRequest (req, res, next) {
+    log.debug(`${req.method} ${req.path}`)
     next()
   },
 

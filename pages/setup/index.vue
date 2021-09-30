@@ -32,6 +32,9 @@ export default {
   components: { DbStep, Settings, Completed },
   middleware: 'setup',
   layout: 'iframe',
+  head: {
+    title: 'Setup',
+  },
   auth: false,
   data () {
     return {

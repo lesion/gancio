@@ -4,7 +4,7 @@ const APUser = require('../api/models/ap_user')
 
 const log = require('../log')
 const helpers = require('../helpers')
-const linkifyHtml = require('linkifyjs/html')
+const linkifyHtml = require('linkify-html')
 
 module.exports = {
 
