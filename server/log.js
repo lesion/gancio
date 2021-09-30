@@ -37,4 +37,5 @@ const logger = createLogger({
       )]
 })
 
+logger.info(`Logging to ${config.log_path}/gancio.log (level: ${config.log_level})`)
 module.exports = logger
