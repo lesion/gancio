@@ -1,19 +1,28 @@
-const config = require('../../config')
 const path = require('path')
+const URL = require('url')
 const fs = require('fs')
-const pkg = require('../../../package.json')
 const crypto = require('crypto')
-const util = require('util')
-const generateKeyPair = util.promisify(crypto.generateKeyPair)
+const { promisify } = require('util')
 const sharp = require('sharp')
+const config = require('../../config')
+const pkg = require('../../../package.json')
+const generateKeyPair = promisify(crypto.generateKeyPair)
 const log = require('../../log')
+
+
+let defaultHostname
+try {
+  defaultHostname = new URL.URL(config.baseurl).hostname
+} catch (e) {}
 
 const defaultSettings = {
   title: 'Gancio',
   description: 'A shared agenda for local communities',
+  baseurl: config.baseurl || '',
+  hostname: defaultHostname,
   instance_timezone: 'Europe/Rome',
   instance_locale: 'en',
-  instance_name: 'gancio', // config.title.toLowerCase().replace(/ /g, ''),
+  instance_name: 'gancio',
   instance_place: '',
   allow_registration: true,
   allow_anon_event: true,
@@ -29,7 +38,8 @@ const defaultSettings = {
   footerLinks: [
     { href: '/', label: 'home' },
     { href: '/about', label: 'about' }
-  ]
+  ],
+  admin_email: config.admin_email || ''
 }
 
 /**
