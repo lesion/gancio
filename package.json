@@ -6,8 +6,8 @@
   "scripts": {
     "build": "cross-env nuxt build --modern",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "dev": "NODE_ENV=development node server/index.js",
-    "dev:inspect": "NODE_ENV=development node --inspect server/index.js",
+    "dev": "NODE_ENV=development node server/cli.js",
+    "dev:inspect": "NODE_ENV=development node --inspect server/cli.js",
     "dev:nuxt": "cross-env NODE_ENV=development nuxt dev --modern",
     "doc": "cd docs && bundle exec jekyll b",
     "doc:dev": "cd docs && bundle exec jekyll s --drafts",
@@ -49,6 +49,7 @@
     "inquirer": "^8.1.5",
     "jsdom": "^17.0.0",
     "jsonwebtoken": "^8.5.1",
+    "linkify-html": "^3.0.2",
     "linkifyjs": "3.0.1",
     "lodash": "^4.17.21",
     "microformat-node": "^2.0.1",
