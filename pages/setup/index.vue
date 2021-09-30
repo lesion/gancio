@@ -51,9 +51,13 @@ export default {
       this.step = this.step + 1
     },
     async configCompleted () {
-      const user = await this.$axios.$post('/setup/restart')
-      this.step = this.step + 1
-      this.$refs.completed.start(user)
+      try {
+        const user = await this.$axios.$post('/setup/restart')
+        this.step = this.step + 1
+        this.$refs.completed.start(user)
+      } catch (e) {
+        this.$root.$message(e.response.data, { color: 'error' })
+      }
     }
   }
 }
