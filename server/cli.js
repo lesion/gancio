@@ -9,15 +9,13 @@ if (process.env.NODE_ENV === 'production') {
   process.chdir(path.resolve(__dirname, '..'))
 }
 
-async function start (options) {
-  try {
-    require('./config')
-  } catch (e) {
-    console.error(e)
-    process.exit(-1)
-  }
-
-  require('./index')
+async function start () {
+  const suffix = require('../package.json').name.includes('-edge') ? '-edge' : ''
+  require('@nuxt/cli' + suffix).run(['start', '--modern'])
+    .catch((error) => {
+      console.error(error)
+      process.exit(2)
+    })
 }
 
 console.info(`📅 ${pkg.name} - v${pkg.version} - ${pkg.description} (nodejs: ${process.version}, ENV: ${process.env.NODE_ENV})`)

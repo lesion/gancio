@@ -1,18 +1,9 @@
 const URL = require('url')
+const helpers = require('../../helpers.js')
 const log = require('../../log')
 const db = require('../models/index.js')
 const config = require('../../config')
 const settingsController = require('./settings')
-const crypto = require('crypto')
-const { promisify } = require('util')
-const randomBytes = promisify(crypto.randomBytes)
-async function randomString (len = 16) {
-  const bytes = await randomBytes(len * 8)
-  return crypto
-    .createHash('sha1')
-    .update(bytes)
-    .digest('hex')
-}
 
 const setupController = {
 
@@ -62,8 +53,8 @@ const setupController = {
         await settingsController.set('hostname', new URL.URL(settingsController.settings.baseurl).hostname)
 
         // create admin
-        const password = await randomString()
-        const email = `admin@${settingsController.settings.hostname}`
+        const password = helpers.randomString()
+        const email = `admin`
         const User = require('../models/user')
         await User.create({
           email,

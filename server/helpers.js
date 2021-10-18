@@ -47,6 +47,14 @@ domPurify.addHook('beforeSanitizeElements', node => {
 })
 
 module.exports = {
+
+  randomString (length = 12) {
+    const wishlist = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    return Array.from(crypto.randomFillSync(new Uint32Array(length)))
+      .map(x => wishlist[x % wishlist.length])
+      .join('')
+  },
+
   sanitizeHTML (html) {
     return domPurify.sanitize(html, {
       ALLOWED_TAGS: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'br',

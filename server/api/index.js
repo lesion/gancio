@@ -17,6 +17,7 @@ if (config.firstrun) {
   api.post('/settings', settingsController.setRequest)
   api.post('/setup/db', setupController.setupDb)
   api.post('/setup/restart', setupController.restart)
+  api.post('/settings/smtp', settingsController.testSMTP)
 
 } else {
 

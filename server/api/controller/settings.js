@@ -39,7 +39,8 @@ const defaultSettings = {
     { href: '/', label: 'home' },
     { href: '/about', label: 'about' }
   ],
-  admin_email: config.admin_email || ''
+  admin_email: config.admin_email || '',
+  smtp: config.smtp || false
 }
 
 /**
@@ -125,6 +126,19 @@ const settingsController = {
     const { key, value, is_secret } = req.body
     const ret = await settingsController.set(key, value, is_secret)
     if (ret) { res.sendStatus(200) } else { res.sendStatus(400) }
+  },
+
+  async testSMTP (req, res) {
+    const smtp = req.body
+    await settingsController.set('smtp', smtp.smtp)
+    const mail = require('../mail')
+    try {
+      await mail._send(settingsController.settings.admin_email, 'test')
+      return res.sendStatus(200)
+    } catch (e) {
+      console.error(e)
+      return res.status(400).send(String(e))
+    }
   },
 
   setLogo (req, res) {

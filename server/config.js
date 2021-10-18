@@ -9,9 +9,9 @@ let config = {
     port: 13120
   },
   log_level: 'debug',
-  log_path: path.resolve(process.env.cwd, 'logs'),
+  log_path: path.resolve(process.env.cwd || '', 'logs'),
   db: {},
-  upload_path: path.resolve(process.env.cwd, 'uploads'),
+  upload_path: path.resolve(process.env.cwd || '', 'uploads'),
   write (config_path= process.env.config_path || './config.json') {
     return fs.writeFileSync(config_path, JSON.stringify(config, null, 2))
   },
