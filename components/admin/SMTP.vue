@@ -4,26 +4,27 @@
     v-card-text
       p(v-html="$t('admin.smtp_description')")
 
-      v-text-field(v-model='admin_email'
-        :label="$t('admin.admin_email')"
-        :rules="$validators.email")
+      v-form(v-model='isValid')
+        v-text-field(v-model='admin_email'
+          :label="$t('admin.admin_email')"
+          :rules="$validators.email")
 
-      v-text-field(v-model='smtp.host'
-        :label="$t('admin.smtp_hostname')"
-        :rules="[$validators.required('admin.smtp_hostname')]")
+        v-text-field(v-model='smtp.host'
+          :label="$t('admin.smtp_hostname')"
+          :rules="[$validators.required('admin.smtp_hostname')]")
 
-      v-text-field(v-model='smtp.auth.user'
-        :label="$t('common.user')"
-        :rules="[$validators.required('common.user')]")
+        v-text-field(v-model='smtp.auth.user'
+          :label="$t('common.user')"
+          :rules="[$validators.required('common.user')]")
 
-      v-text-field(v-model='smtp.auth.pass'
-        :label="$t('common.password')"
-        :rules="[$validators.required('common.password')]"
-        type='password')
+        v-text-field(v-model='smtp.auth.pass'
+          :label="$t('common.password')"
+          :rules="[$validators.required('common.password')]"
+          type='password')
 
     v-card-actions
       v-spacer
-      v-btn(color='primary' @click='testSMTP' :loading='loading' :disabled='loading') {{$t('admin.smtp_test_button')}}
+      v-btn(color='primary' @click='testSMTP' :loading='loading' :disabled='loading || !isValid') {{$t('admin.smtp_test_button')}}
       v-btn(color='warning' @click="done") {{$t("common.ok")}}
   
 </template>
@@ -32,6 +33,7 @@ import { mapActions, mapState } from 'vuex'
 export default {
   data () {
     return {
+      isValid: false,
       loading: false,
       smtp: { host: '', auth: {} }
     }
@@ -44,9 +46,11 @@ export default {
     },
   },
   mounted () {
-    this.smtp.auth.user = this.settings.smtp.auth.user
-    this.smtp.auth.pass = this.settings.smtp.auth.pass
-    this.smtp.host = this.settings.smtp.host
+    if (this.settings.smtp && this.settings.smtp.auth) {
+      this.smtp.auth.user = this.settings.smtp.auth.user
+      this.smtp.auth.pass = this.settings.smtp.auth.pass
+      this.smtp.host = this.settings.smtp.host
+    }
   },
   methods: {
     ...mapActions(['setSetting']),

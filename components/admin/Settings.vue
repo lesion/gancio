@@ -48,20 +48,35 @@
         inset
         :label="$t('admin.recurrent_event_visible')")
 
+    v-dialog(v-model='showSMTP' destroy-on-close max-width='700px')
+      SMTP(@close='showSMTP = false')
+
+    v-card-actions
+      v-btn(text @click='showSMTP=true') {{$t('admin.show_smtp_setup')}}
+      v-btn(text @click='$emit("complete")' color='primary' v-if='setup') {{$t('common.next')}}
+        v-icon mdi-arrow-right
+
+
 </template>
 <script>
+import SMTP from './SMTP.vue'
 import { mapActions, mapState } from 'vuex'
 import moment from 'dayjs'
 import tzNames from './tz.json'
 import locales from '../../locales/esm'
 
 export default {
+  props: {
+    setup: { type: Boolean, default: false }
+  },
+  components: { SMTP },
   name: 'Settings',
   data ({ $store }) {
     return {
       title: $store.state.settings.title,
       description: $store.state.settings.description,
-      locales: Object.keys(locales).map(locale => ({ value: locale, text: locales[locale] }))
+      locales: Object.keys(locales).map(locale => ({ value: locale, text: locales[locale] })),
+      showSMTP: false,
     }
   },
   computed: {
