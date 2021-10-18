@@ -2,7 +2,7 @@
   v-card
     v-card-title(v-text="$t('common.follow_me_title')")
     v-card-text
-      p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${domain}`})")
+      p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${settings.hostname}`})")
       v-text-field(
         :rules="[$validators.required('common.url')]"
         :loading='loading'
@@ -39,10 +39,6 @@ export default {
 
   computed: {
     ...mapState(['settings']),
-    domain () {
-      const URL = new window.URL(this.settings.baseurl)
-      return URL.hostname
-    },
     couldGo () {
       // check if is mastodon
       this.get_instance_info(this.instance_hostname)
@@ -50,7 +46,7 @@ export default {
     },
     link () {
       // check if exists
-      return `https://${this.instance_hostname}/authorize_interaction?uri=${this.settings.instance_name}@${this.domain}`
+      return `https://${this.instance_hostname}/authorize_interaction?uri=${this.settings.instance_name}@${this.settings.hostname}`
     }
   },
   methods: {
@@ -76,7 +72,7 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style>
 .instance_thumb {
   height: 20px;
 }
