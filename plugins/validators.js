@@ -8,7 +8,7 @@ export default ({ app }, inject) => {
     },
     email: [
       v => !!v || $t('validators.required', { fieldName: $t('common.email') }),
-      v => (v && !!linkify.test(v, 'email')) || $t('validators.email')
+      v => (v && (v === 'admin' || !!linkify.test(v, 'email')) || $t('validators.email'))
     ],
     password: [
       v => !!v || $t('validators.required', { fieldName: $t('common.password') })

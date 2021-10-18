@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     next () {
-      window.location='/'
+      window.location='/admin'
     },
     async start (user) {
       this.user = { ...user }
@@ -29,7 +29,6 @@ export default {
 
       try {
         await this.$axios.$get('/ping')
-        // window.location='/'
         this.loading = false
       } catch (e) {
         setTimeout(() => this.start(user), 1000)

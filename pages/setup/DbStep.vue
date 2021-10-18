@@ -15,7 +15,7 @@
           v-text-field(type='password' v-model='db.password' label='Password' :rules="[$validators.required('password')]")  
 
     v-card-actions
-      v-btn(text @click='checkDb' color='primary' :loading='loading' :disabled='loading') {{$t('setup.check_db')}}
+      v-btn(text @click='checkDb' color='primary' :loading='loading' :disabled='loading') {{$t('common.next')}}
         v-icon mdi-arrow-right
 </template>
 <script>
