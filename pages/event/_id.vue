@@ -324,12 +324,7 @@ export default {
   }
 }
 </script>
-<style>
-.title {
-  margin-bottom: 25px;
-  font-weight: 300 !important;
-}
-
+<style scoped>
 .main_image {
   margin: 0 auto;
   border-radius: 5px;
