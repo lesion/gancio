@@ -324,15 +324,14 @@ export default {
   }
 }
 </script>
-<style lang='less'>
+<style>
 .title {
   margin-bottom: 25px;
   font-weight: 300 !important;
 }
+
 .main_image {
-  // width: 100%;
   margin: 0 auto;
-  // max-height: 120vh;
   border-radius: 5px;
   transition: max-height 0.2s;
 }

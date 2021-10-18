@@ -255,7 +255,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style>
 .datePicker {
   max-width: 500px !important;
   margin: 0 auto;

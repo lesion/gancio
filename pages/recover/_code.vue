@@ -50,7 +50,7 @@ export default {
   }
 }
 </script>
-<style lang='less'>
+<style>
   h4 img {
     max-height: 40px;
     border-radius: 20px;
