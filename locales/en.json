@@ -219,7 +219,13 @@
         "footer_links": "Footer links",
         "delete_footer_link_confirm": "Sure to remove this link?",
         "edit_place": "Edit place",
-        "new_announcement": "New announcement"
+        "new_announcement": "New announcement",
+        "show_smtp_setup": "Email settings",
+        "smtp_hostname": "SMTP Hostname",
+        "smtp_description": "Gancio send email:<br/><ul><li>admins should receive emails of anon event (if enabled) to confirm them.</li><li>admins should receive emails of registration request (if enabled) to confirm them.</li><li>user should receive an email of registration requested.</li><li>user should receive an email of confirmed registration.</li>user should receive a confirmation email when subscribed directly by admin.</li></ul>",
+        "smtp_test_success": "A test email is sent to {admin_email}, please check your inbox",
+        "smtp_test_button": "Send a test email"
+
     },
     "auth": {
         "not_confirmed": "Not confirmed yet…",
@@ -265,7 +271,7 @@
     "setup": {
         "check_db": "Check DB",
         "completed": "Setup completed",
-        "completed_description": "Installation completed!<br/>You can now login with the following user: {email} / {password}. Please write to us at gancio@cisti.org for any question.",
+        "completed_description": "<p>Installation completed!<br/>You can now login with the following user:<br/>User: <b>{email}</b><br/>Password: <b>{password}<b/><br/><h2>!</h2></p>",
         "start": "Start"
     }
 }
