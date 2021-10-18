@@ -1,3 +1,5 @@
+const config = require('./server/config.js')
+
 module.exports = {
   telemetry: false,
   modern: (process.env.NODE_ENV === 'production') && 'client',
@@ -12,9 +14,10 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/png', href: '/logo.png' }]
   },
   dev: (process.env.NODE_ENV !== 'production'),
+  server: config.server,
 
   /*
-   ** Customize the progress-bar color
+   ** Customize the progress-bar component
    */
   loading: '~/components/Loading.vue',
   /*
