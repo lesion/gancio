@@ -21,5 +21,9 @@
     },
     "event_confirm": {
         "content": "You can confirm this event at <a href='{{url}}'>this page</a>"
-    }    
+    },
+    "test": {
+        "subject": "Your SMTP configuration is working",
+        "content": "This is a test email, if you are reading this your configuration is working."
+    }
 }
