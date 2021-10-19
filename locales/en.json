@@ -222,9 +222,10 @@
         "new_announcement": "New announcement",
         "show_smtp_setup": "Email settings",
         "smtp_hostname": "SMTP Hostname",
-        "smtp_description": "Gancio send email:<br/><ul><li>admins should receive emails of anon event (if enabled) to confirm them.</li><li>admins should receive emails of registration request (if enabled) to confirm them.</li><li>user should receive an email of registration requested.</li><li>user should receive an email of confirmed registration.</li>user should receive a confirmation email when subscribed directly by admin.</li></ul>",
+        "smtp_description": "<ul><li>Admin should receive an email when anon event is added (if enabled).</li><li>Admin should receive email of registration request (if enabled).</li><li>User should receive an email of registration request.</li><li>User should receive email of confirmed registration.</li><li>User should receive a confirmation email when subscribed directly by admin.</li><li>Users should receive email to restore password when they forgot it</li></ul>",
         "smtp_test_success": "A test email is sent to {admin_email}, please check your inbox",
-        "smtp_test_button": "Send a test email"
+        "smtp_test_button": "Send a test email",
+        "admin_email": "Admin e-mail"
 
     },
     "auth": {
