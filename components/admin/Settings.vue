@@ -52,7 +52,7 @@
       SMTP(@close='showSMTP = false')
 
     v-card-actions
-      v-btn(text @click='showSMTP=true') {{$t('admin.show_smtp_setup')}}
+      v-btn(text @click='showSMTP=true') <v-icon>mdi-email</v-icon> {{$t('admin.show_smtp_setup')}}
       v-btn(text @click='$emit("complete")' color='primary' v-if='setup') {{$t('common.next')}}
         v-icon mdi-arrow-right
 

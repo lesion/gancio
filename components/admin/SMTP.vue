@@ -6,6 +6,7 @@
 
       v-form(v-model='isValid')
         v-text-field(v-model='admin_email'
+          @blur="save('admin_email', admin_email )"
           :label="$t('admin.admin_email')"
           :rules="$validators.email")
 
@@ -31,27 +32,21 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 export default {
-  data () {
+  data ({ $store }) {
+    const smtp = { host: '', auth: { user: '', pass: '' } }
+    if ($store.state.settings.smtp && $store.state.settings.smtp.auth) {
+      smtp.host = $store.state.settings.smtp.host
+      smtp.auth.user = $store.state.settings.smtp.auth.user
+      smtp.auth.pass = $store.state.settings.smtp.auth.pass
+    }
     return {
       isValid: false,
       loading: false,
-      smtp: { host: '', auth: {} }
+      smtp,
+      admin_email: $store.state.settings.admin_email || ''
     }
   },
-  computed: {
-    ...mapState(['settings']),
-    admin_email: {
-      get () { return this.settings.admin_email },
-      set (value) { this.setSetting({ key: 'admin_email', value }) }
-    },
-  },
-  mounted () {
-    if (this.settings.smtp && this.settings.smtp.auth) {
-      this.smtp.auth.user = this.settings.smtp.auth.user
-      this.smtp.auth.pass = this.settings.smtp.auth.pass
-      this.smtp.host = this.settings.smtp.host
-    }
-  },
+  computed: mapState(['settings']),
   methods: {
     ...mapActions(['setSetting']),
     async testSMTP () {
@@ -65,6 +60,11 @@ export default {
       }
       this.loading = false
     },
+    save (key, value) {
+      if (this.settings[key] !== value) {
+        this.setSetting({ key, value })
+      }
+    },    
     done () {
       this.$emit('close')
       this.setSetting({ key: 'smtp', value: this.smtp })
