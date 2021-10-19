@@ -222,7 +222,8 @@
         "footer_links": "Collegamenti del piè di pagina",
         "delete_footer_link_confirm": "Vuoi eliminare questo collegamento?",
         "edit_place": "Modifica luogo",
-        "new_announcement": "Nuovo annuncio"
+        "new_announcement": "Nuovo annuncio",
+        "show_smtp_setup": "Impostazioni email"
     },
     "auth": {
         "not_confirmed": "Non ancora confermato…",
@@ -264,5 +265,9 @@
         "scopes": {
             "event:write": "Pubblicare/modificare i tuoi eventi"
         }
+    },
+    "setup": {
+        "completed_description": "<p>Puoi entrare con le seguenti credenziali:<br/><br/>Utente: <b>{email}</b><br/>Password: <b>{password}<b/></p>",
+        "start": "Inizia"
     }
 }
