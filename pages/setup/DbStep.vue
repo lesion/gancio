@@ -27,8 +27,7 @@ export default {
         hostname: 'localhost',
         database: 'gancio'
       },
-      loading: false,
-      buttonText: 'setup.check_db'
+      loading: false
     }
   },
   methods: {

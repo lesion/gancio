@@ -270,7 +270,6 @@
         }
     },
     "setup": {
-        "check_db": "Check DB",
         "completed": "Setup completed",
         "completed_description": "<p>You can now login with the following user:<br/><br/>User: <b>{email}</b><br/>Password: <b>{password}<b/></p>",
         "start": "Start"
