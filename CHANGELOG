@@ -1,5 +1,22 @@
 All notable changes to this project will be documented in this file.
 
+### unreleased
+
+  - a whole new setup via web!
+  - move all configuration into db
+  - remove moment-timezone, consola, config, inquirer dependencies
+  - re-order general settings in admin panel
+  - new dark/light theme setting
+  - new SMTP configuration dialog, fix #115
+
+### 1.0.6 (alpha)
+  - fix Dockerfile yarn cache issue on update, #123
+  - fix overflow on event title @homepage
+  - better import dialog on mobile
+  - re-add attachment to AP
+  - fix max event export
+  - update deps
+
 ### 1.0.5 (alpha)
   - fix/improve debian install docs
   - fix ics export, use new ics package
