@@ -94,6 +94,7 @@ module.exports = {
   },
 
   buildModules: [
+    'nuxt-build-optimisations',
     '@nuxtjs/vuetify'
   ],
   vuetify: {
@@ -103,24 +104,4 @@ module.exports = {
     /* module options */
   },
 
-  /*
-   ** Build configuration
-   */
-  build: {
-    babel: {
-      // envName: server, client, modern
-      presets ({ envName }) {
-        return [
-          [
-            '@nuxt/babel-preset-app',
-            {
-              corejs: { version: 3 }
-            }
-          ]
-        ]
-      },
-      plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]]
-    },
-    cache: true
-  }
 }

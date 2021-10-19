@@ -50,6 +50,7 @@
     "microformat-node": "^2.0.1",
     "mkdirp": "^1.0.4",
     "multer": "^1.4.3",
+    "nuxt-build-optimisations": "^1.0.7",
     "nuxt-edge": "^2.16.0-27226092.034b9901",
     "nuxt-express-module": "^0.0.11",
     "pg": "^8.6.0",
