@@ -1,8 +1,7 @@
 <template lang="pug">
   v-container
     v-card-title.d-block.text-h5.text-center(v-text="$t('setup.completed')")
-    v-card-text
-      p(v-html="$t('setup.completed_description', user)")
+    v-card-text(v-html="$t('setup.completed_description', user)")
     v-card-actions
       v-btn(text @click='next' color='primary' :loading='loading' :disabled='loading') {{$t('setup.start')}}
         v-icon mdi-arrow-right

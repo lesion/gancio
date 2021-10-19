@@ -17,7 +17,7 @@ const mail = {
     TaskManager.add(task)
   },
 
-  _send (addresses, template, locals, locale) {
+  _send (addresses, template, locals, locale = settingsController.settings.instance_locale) {
     const settings = settingsController.settings
     log.info(`Send ${template} email to ${addresses} with locale ${locale}`)
     const email = new Email({

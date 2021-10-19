@@ -31,7 +31,7 @@ import Completed from './Completed'
 export default {
   components: { DbStep, Settings, Completed },
   middleware: 'setup',
-  layout: 'iframe',
+  layout: 'clean',
   head: {
     title: 'Setup',
   },
