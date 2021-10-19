@@ -133,7 +133,7 @@ const settingsController = {
     await settingsController.set('smtp', smtp.smtp)
     const mail = require('../mail')
     try {
-      await mail._send(settingsController.settings.admin_email, 'test')
+      await mail._send(settingsController.settings.admin_email, 'test', null, 'en')
       return res.sendStatus(200)
     } catch (e) {
       console.error(e)
