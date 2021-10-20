@@ -56,7 +56,7 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     './@nuxtjs/axios',
     './@nuxtjs/auth',
-    ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }]
+    // ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }]
   ],
 
   /*
@@ -95,7 +95,9 @@ module.exports = {
 
   buildModules: [
     'nuxt-build-optimisations',
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }],
+    '@/plugins/initialize.server.js'
   ],
   vuetify: {
     defaultAssets: false,
