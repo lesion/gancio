@@ -8,7 +8,7 @@ const locales = require('../../locales')
 
 const mail = {
   send (addresses, template, locals, locale = settingsController.settings.instance_locale) {
-    log.debug('Enqueue new email ', template, locale)
+    log.debug(`Enqueue new email ${template} ${locale}`)
     const task = new Task({
       name: 'MAIL',
       method: mail._send,

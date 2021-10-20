@@ -100,7 +100,7 @@ const userController = {
       const user = await User.create(req.body)
       log.info(`Sending registration email to ${user.email}`)
       mail.send(user.email, 'register', { user, config }, req.settings.locale)
-      mail.send(config.admin_email, 'admin_register', { user, config })
+      mail.send(settingsController.settings.admin_email, 'admin_register', { user, config })
       res.sendStatus(200)
     } catch (e) {
       log.error('Registration error:', e)
@@ -123,8 +123,9 @@ const userController = {
 
   async remove (req, res) {
     try {
-      const user = await User.findByPk(req.params.id)
+      const user = await User.findByPk(req.user.id)
       user.destroy()
+      log.warning(`User ${req.user.email} removed!`)
       res.sendStatus(200)
     } catch (e) {
       log.error('User removal error:"', e)
