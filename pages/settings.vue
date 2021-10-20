@@ -8,7 +8,6 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import url from 'url'
 
 export default {
   name: 'Settings',
@@ -19,12 +18,7 @@ export default {
       user: { }
     }
   },
-  computed: {
-    ...mapState(['settings']),
-    baseurl () {
-      return url.parse(this.settings.baseurl).host
-    }
-  },
+  computed: mapState(['settings']),
   methods: {
     // async change_password () {
     //   if (!this.password) { return }
