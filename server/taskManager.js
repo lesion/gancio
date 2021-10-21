@@ -28,11 +28,11 @@ class Task {
     try {
       const ret = this.method.apply(this, this.args)
       if (ret && typeof ret.then === 'function') {
-        ret.catch(e => log.error('TASK ERROR [%s]: %s', this.name, e))
+        ret.catch(e => log.error(`TASK ERROR [${this.name}]: ${e} ${e.stack}`))
         return ret
       }
     } catch (e) {
-      log.error('TASK ERROR [%s]: %s ', this.name, e)
+      log.error(`TASK ERROR [${this.name}]: ${e} ${e.stack}`)
       return Promise.resolve(false)
     }
   }
