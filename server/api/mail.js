@@ -8,6 +8,10 @@ const locales = require('../../locales')
 
 const mail = {
   send (addresses, template, locals, locale = settingsController.settings.instance_locale) {
+    if (!settingsController.settings.admin_email || !settingsController.settings.smtp) {
+      log.error(`Cannot send any email: SMTP Email configuration not completed!`)
+      return
+    }
     log.debug(`Enqueue new email ${template} ${locale}`)
     const task = new Task({
       name: 'MAIL',
