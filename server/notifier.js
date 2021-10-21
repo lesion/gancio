@@ -11,6 +11,7 @@ const Place = require('./api/models/place')
 const Tag = require('./api/models/tag')
 
 const eventController = require('./api/controller/event')
+const settingsController = require('./api/controller/settings')
 
 const notifier = {
 
@@ -22,7 +23,7 @@ const notifier = {
       // case 'mail': TODO: locale?
       //   return mail.send(notification.email, 'event', { event, notification })
       case 'admin_email':
-        p = mail.send(config.admin_email, 'event',
+        p = mail.send(settingsController.settings.admin_email, 'event',
           { event, to_confirm: !event.is_visible, notification })
         promises.push(p)
         break
