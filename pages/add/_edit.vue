@@ -204,7 +204,7 @@ export default {
             this.$root.$message('event.image_too_big', { color: 'error' })
             break
           default:
-            this.$root.$message(e.response.data, { color: 'error' })
+            this.$root.$message(e.response ? e.response.data : e, { color: 'error' })
         }
         this.loading = false
       }
