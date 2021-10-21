@@ -52,7 +52,8 @@
       SMTP(@close='showSMTP = false')
 
     v-card-actions
-      v-btn(text @click='showSMTP=true') <v-icon>mdi-email</v-icon> {{$t('admin.show_smtp_setup')}}
+      v-btn(text @click='showSMTP=true')
+        <v-icon v-if='showSMTPAlert' color='error'>mdi-alert</v-icon> {{$t('admin.show_smtp_setup')}}
       v-btn(text @click='$emit("complete")' color='primary' v-if='setup') {{$t('common.next')}}
         v-icon mdi-arrow-right
 
@@ -81,6 +82,9 @@ export default {
   },
   computed: {
     ...mapState(['settings']),
+    showSMTPAlert () {
+      return !this.setup && !this.settings.admin_email && !this.settings.smtp && !this.settings.smtp.host && !this.settings.smtp.user
+    },
     instance_locale: {
       get () { return this.settings.instance_locale },
       set (value) { this.setSetting({ key: 'instance_locale', value }) }
