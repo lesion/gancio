@@ -4,6 +4,7 @@ const log = require('../../log')
 const db = require('../models/index.js')
 const config = require('../../config')
 const settingsController = require('./settings')
+const path = require('path')
 
 const setupController = {
 
@@ -12,6 +13,10 @@ const setupController = {
       const dbConf = req.body.db
       if (!dbConf) {
         return res.sendStatus(400)
+      }
+
+      if (dbConf.storage) {
+        dbConf.storage = path.resolve(process.env.cwd, dbConf.storage)
       }
 
       try {
