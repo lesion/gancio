@@ -200,14 +200,20 @@
         "allow_registration_description": "Autoriser l'ouverture des inscriptions ?",
         "user_create_ok": "Utilisateur créé",
         "user_remove_ok": "Utilisateur supprimé",
-        "delete_user_confirm": "Êtes-vous sûr·e de vouloir supprimer {user}",
+        "delete_user_confirm": "Êtes-vous sûr·e de vouloir supprimer {user} ?",
         "remove_admin": "Supprimer l'administrateur",
         "delete_user": "Supprimer",
         "event_confirm_description": "Vous pouvez confirmer les évènements ajoutés par des utilisateurs anonymes ici",
         "place_description": "Si vous avez donné le mauvais lieu ou la mauvaise adresse, vous pouvez les modifier.<br/>Tous les évènements courants et passés associés à ce lieu seront mis à jour.",
         "add_instance": "Ajouter une instance",
         "instance_block_confirm": "Êtes-vous sûr·e de vouloir bloquer l'instance {instance} ?",
-        "disable_user_confirm": "Êtes-vous sûr·e de vouloir désactiver {user} ?"
+        "disable_user_confirm": "Êtes-vous sûr·e de vouloir désactiver {user} ?",
+        "smtp_hostname": "Nom d'hôte SMTP",
+        "smtp_test_button": "Envoyer un e-mail de test",
+        "smtp_description": "<ul><li>L'administrateur reçoit un e-mail lorsqu'un événement anonyme est ajouté (si activé).</li><li>L'administrateur reçoit un e-mail pour chaque demande d'inscription (si activé).</li><li>L'utilisateur reçoit un e-mail suite à sa demande d'inscription.</li><li>L'utilisateur reçoit un e-mail lorsque son inscription est confirmée.</li><li>L'utilisateur reçoit un e-mail de confirmation s'il est inscrit directement par l'administrateur.</li><li>Les utilisateurs reçoivent un e-mail pour restaurer leur mot de passe s'ils l'oublient.</li></ul>",
+        "show_smtp_setup": "Paramètres d'e-mail",
+        "smtp_test_success": "Un e-mail de test a été envoyé à {admin_email}, veuillez vérifier votre boîte de réception",
+        "admin_email": "E-mail de l'administrateur"
     },
     "oauth": {
         "scopes": {
@@ -261,5 +267,11 @@
         "not_registered": "Pas encore inscrit·e ?",
         "check_email": "Vérifiez votre boîte de réception et les indésirables.",
         "description": "En vous connectant vous pouvez publier de nouveaux évènements."
+    },
+    "setup": {
+        "check_db": "Vérifier la base de données",
+        "completed": "Configuration terminée",
+        "completed_description": "<p>Vous pouvez désormais vous connectez avec le compte utilisateur suivant :<br/><br/>Identifiant : <b>{email}</b><br/>Mot de passe : <b>{password}<b/></p>",
+        "start": "Commencer"
     }
 }
