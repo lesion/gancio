@@ -2,7 +2,8 @@
   v-container.p-4.text-center
     v-alert(v-if="error.statusCode === 404") ¯\_(ツ)_/¯ {{error.message}}
     v-alert(v-else type='error') <v-icon>mdi-warning</v-icon> An error occurred: {{error.message}}
-    nuxt-link(to='/') Back to home
+    nuxt-link(to='/')
+      v-btn Back to home
 </template>
 
 <script>
