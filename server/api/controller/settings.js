@@ -16,8 +16,8 @@ try {
 } catch (e) {}
 
 const defaultSettings = {
-  title: 'Gancio',
-  description: 'A shared agenda for local communities',
+  title: config.title || 'Gancio',
+  description: config.description || 'A shared agenda for local communities',
   baseurl: config.baseurl || '',
   hostname: defaultHostname,
   instance_timezone: 'Europe/Rome',
