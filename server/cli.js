@@ -2,7 +2,7 @@
 const pkg = require('../package.json')
 const path = require('path')
 
-process.env.cwd = path.resolve('./')
+process.env.cwd = process.env.GANCIO_DATA || path.resolve('./')
 
 process.chdir(path.resolve(__dirname, '..'))
 
