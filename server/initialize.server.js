@@ -7,8 +7,7 @@ export default function () {
       TaskManager = require('../server/taskManager').TaskManager
       TaskManager.start()
     }
-    const msg = `Listen on ${config.server.host}:${config.server.port} , visit me here => ${config.baseurl}`
-    log.info(msg)
+    log.info(`Listen on ${config.server.host}:${config.server.port}`)
 
     // close connections/port/unix socket
     async function shutdown () {
@@ -23,5 +22,5 @@ export default function () {
     process.on('SIGTERM', shutdown)
     process.on('SIGINT', shutdown)  
   }
-  this.nuxt.hook('ready', start)
+  this.nuxt.hook('listen', start)
 }
