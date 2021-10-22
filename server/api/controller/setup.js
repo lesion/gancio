@@ -16,7 +16,7 @@ const setupController = {
       }
 
       if (dbConf.storage) {
-        dbConf.storage = path.resolve(process.env.cwd, dbConf.storage)
+        dbConf.storage = path.resolve(process.env.cwd || '', dbConf.storage)
       }
 
       try {
