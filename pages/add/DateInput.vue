@@ -232,7 +232,7 @@ export default {
           this.$emit('input', { ...this.value, from, due })
         } else {
           let from = value
-          let due = value
+          let due = null
           if (this.value.fromHour) {
             from = dayjs(value).hour(dayjs(this.value.from).hour())
           }
@@ -243,14 +243,6 @@ export default {
         }
       }
     },
-    changeType (type) {
-      if (type === 'recurrent') {
-        this.updateRecurrent({})
-      }
-    },
-    selectFrequency (f) {
-      this.$emit('input', { recurrent: { frequency: f }, from: this.value.from, due: this.value.due })
-    }
   }
 }
 </script>
