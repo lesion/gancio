@@ -9,7 +9,6 @@
           @blur="save('admin_email', admin_email )"
           :label="$t('admin.admin_email')"
           :rules="$validators.email")
-        p {{smtp}}
         v-text-field(v-model='smtp.host'
           :label="$t('admin.smtp_hostname')"
           :rules="[$validators.required('admin.smtp_hostname')]")
