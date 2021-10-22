@@ -34,7 +34,6 @@
 
               //- When
               DateInput(v-model='date' :event='event')
-
               //- Description
               v-col.px-0(cols='12')
                 Editor.px-3.ma-0(
@@ -127,7 +126,7 @@ export default {
       page: { month, year },
       fileList: [],
       id: null,
-      date: { from: 0, due: 0, recurrent: null },
+      date: { from: null, due: null, recurrent: null },
       edit: false,
       loading: false,
       disableAddress: false
@@ -181,7 +180,7 @@ export default {
       formData.append('description', this.event.description)
       formData.append('multidate', !!this.date.multidate)
       formData.append('start_datetime', dayjs(this.date.from).unix())
-      formData.append('end_datetime', this.date.due && dayjs(this.date.due).unix())
+      formData.append('end_datetime', this.date.due ? dayjs(this.date.due).unix() : this.date.from.add(2, 'hour').unix())
 
       if (this.edit) {
         formData.append('id', this.event.id)
