@@ -5,7 +5,7 @@ let config = {
   firstrun: true,
   baseurl: "http://localhost:13120",
   server: {
-    host: '127.0.0.1',
+    host: '0.0.0.0',
     port: 13120
   },
   log_level: 'debug',
