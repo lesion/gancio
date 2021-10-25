@@ -34,37 +34,27 @@ postgres=# grant all privileges on database gancio to gancio;
 
 1. Create a user to run gancio from
 ```bash
-sudo adduser gancio
-su - gancio
+sudo adduser --group --system --shell /bin/false --home /opt/gancio gancio
 ```
 1. Install Gancio
 ```bash
-yarn global add --silent {{site.url}}/latest.tgz 2> /dev/null
+sudo yarn global add --silent {{site.url}}/latest.tgz 2> /dev/null
 ```
 
-1. Launch interactive setup
+1. Setup systemd service and reload systemd
 ```bash
-$(yarn global bin)/gancio setup --config config.json
+sudo wget http://gancio.org/gancio.service -O /etc/systemd/system/gancio.service
+sudo service daemon-reload
 ```
 
-1. Start
+1. Start gancio service (this should listen on port 13120)
 ```bash
-$(yarn global bin)/gancio start --config config.json
+sudo service gancio start
 ```
-1. Point your web browser to [http://localhost:13120](http://localhost:13120) or where you selected during setup.
 
 1. [Setup nginx as a proxy]({% link install/nginx.md %})
 
-1. To deploy gancio in production you should use something like **[pm2](http://pm2.keymetrics.io/)**:
-
-```bash
-sudo yarn global add pm2
-pm2 start gancio -- --config config.json
-
-# Run this command to run your application as a service and automatically restart after a reboot:
-pm2 startup # read the output!
-sudo pm2 startup -u gancio
-```
+1. Point your web browser to your domain :tada:
 
 ## Upgrade
 
@@ -76,5 +66,5 @@ sudo pm2 startup -u gancio
 yarn global remove gancio
 yarn cache clean
 yarn global add --silent {{site.url}}/latest.tgz  2> /dev/null
-sudo service pm2 restart
+sudo service gancio restart
 ```

@@ -16,6 +16,10 @@ nav_order: 2
 
 - __You must have the following dependencies installed: Docker, Docker Compose and Nginx__
 
+```bash
+sudo apt install docker docker-compose nginx
+```
+or  
 1. [Install docker](https://docs.docker.com/engine/install/)
 1. [Install docker-compose](https://docs.docker.com/compose/install/)
 1. [Install nginx](https://nginx.org/en/docs/install.html)
@@ -37,10 +41,9 @@ wget {{site.url}}{% link /docker/sqlite/docker-compose.yml %}
 ```
 
 
-1. Build docker image and launch interactive setup
+1. Build docker image
 ```
 docker-compose build
-docker-compose run --rm gancio gancio setup --docker --db=sqlite
 ```
 </div>
 
@@ -54,10 +57,9 @@ wget {{site.url}}{% link /docker/entrypoint.sh %}
 wget {{site.url}}{% link /docker/postgres/docker-compose.yml %}
 ```
 
-1. Build docker image and launch interactive setup
+1. Build docker image
 ```
 docker-compose build
-docker-compose run --rm gancio gancio setup --docker --db=postgres
 ```
 </div>
 
@@ -74,15 +76,9 @@ docker-compose up -d
 tail -f  data/logs/gancio.log
 ```
 
-1. Navigate away from Gancio directory & into Nginx Directory
-```bash
-cd ~
-cd /etc/nginx/sites-available
-```
-
 1. [Setup nginx as a proxy]({% link install/nginx.md %})
 
-1. Point your web browser to [http://localhost:13120](http://localhost:13120) or where you specified during setup and enjoy :tada:
+1. Point your web browser to your domain :tada:
 
 1. Edit `data/config.json` and restart the container on your needs, see [Configuration]({% link install/configuration.md %}) for more details.
 
