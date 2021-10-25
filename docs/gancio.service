@@ -1,0 +1,13 @@
+[Unit]
+Description=Gancio
+After=network.target
+
+[Service]
+Type=simple
+User=gancio
+WorkingDirectory=/opt/gancio
+ExecStart=gancio
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
