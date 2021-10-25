@@ -7,7 +7,6 @@ process.env.cwd = process.env.GANCIO_DATA || path.resolve('./')
 process.chdir(path.resolve(__dirname, '..'))
 
 async function start () {
-  const suffix = require('../package.json').name.includes('-edge') ? '-edge' : ''
   require('@nuxt/cli-edge').run(['start', '--modern'])
     .catch((error) => {
       console.error(error)
@@ -15,16 +14,10 @@ async function start () {
     })
 }
 
-console.info(`📅 ${pkg.name} - v${pkg.version} - ${pkg.description} (nodejs: ${process.version}, ENV: ${process.env.NODE_ENV})`)
+console.info(`📅 ${pkg.name} - v${pkg.version} - ${pkg.description} (nodejs: ${process.version})`)
 
 require('yargs')
   .usage('Usage $0 <command> [options]')
-  .option('docker', {
-    alias: 'd',
-    describe: 'Inside docker',
-    default: false,
-    type: 'boolean'
-  })
   .option('config', {
     alias: 'c',
     describe: 'Configuration file',
