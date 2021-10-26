@@ -1,13 +1,20 @@
 All notable changes to this project will be documented in this file.
 
-### unreleased
+### 1.1.0 - 26 ott '21
 
-  - a whole new setup via web!
-  - move all configuration into db
-  - remove moment-timezone, consola, config, inquirer dependencies
+  - a whole new setup via web! fix #126
+  - new SMTP configuration dialog, fix #115
   - re-order general settings in admin panel
   - new dark/light theme setting
-  - new SMTP configuration dialog, fix #115
+  - move quite all configuration into db
+  - fix some email recipients
+  - fix hidden events when not ended
+  - update translations
+  - improve install documentation
+  - add systemd gancio.service
+  - allow italic and span tags inside editor
+  - remove moment-timezone, consola, config, inquirer dependencies
+  - update deps
 
 ### 1.0.6 (alpha)
   - fix Dockerfile yarn cache issue on update, #123
