@@ -33,7 +33,6 @@ import { mapActions, mapState } from 'vuex'
 export default {
   data ({ $store }) {
     const smtp = { host: '', auth: { user: '', pass: '' } }
-    console.error($store.state.settings)
     if ($store.state.settings.smtp) {
       smtp.host = $store.state.settings.smtp.host
       if ($store.state.settings.smtp.auth) {
