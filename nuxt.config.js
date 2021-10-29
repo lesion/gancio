@@ -24,8 +24,9 @@ module.exports = {
    ** Global CSS
    */
   css: [
-    '@/assets/style.less',
-    '@mdi/font/css/materialdesignicons.css'
+    'vuetify/dist/vuetify.min.css',    
+    '@mdi/font/css/materialdesignicons.css',
+    '@/assets/style.less'
   ],
 
   /*
@@ -34,21 +35,13 @@ module.exports = {
   plugins: [
     '@/plugins/i18n.js',
     '@/plugins/filters', // text filters, datetime filters, generic transformation helpers etc.
-    '@/plugins/vue-clipboard', // vuetify
+    '@/plugins/vuetify', // vuetify
     '@/plugins/axios', // axios baseurl configuration
     '@/plugins/validators', // inject validators
     '@/plugins/api', // api helpers
     { src: '@/plugins/v-calendar', ssr: false } // v-calendar
   ],
 
-  render: {
-    compressor: false,
-    bundleRenderer: {
-      shouldPreload: (file, type) => {
-        return ['script', 'style', 'font'].includes(type)
-      }
-    }
-  },
   /*
    ** Nuxt.js modules
    */
@@ -94,16 +87,9 @@ module.exports = {
       }
     }
   },
-  buildModules: [
-    'nuxt-build-optimisations',
-    '@nuxtjs/vuetify',
-    // ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }],
-  ],
-  vuetify: {
-    defaultAssets: false,
-    optionsPath: './vuetify.options.js',
-    treeShake: true
-    /* module options */
+  build: {
+    corejs: 3,
+    cache: true,
+    hardSource: true
   },
-
 }
