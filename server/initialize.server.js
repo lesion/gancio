@@ -12,15 +12,16 @@ export default function () {
     // close connections/port/unix socket
     async function shutdown () {
       if (TaskManager) { TaskManager.stop() }
-      nuxt.close(async () => {
-        log.info('Closing DB')
-        const sequelize = require('../server/api/models')
-        await sequelize.close()
-        process.exit()
-      })
+      log.info('Closing DB')
+      const sequelize = require('../server/api/models')
+      await sequelize.close()
+      process.off('SIGTERM', shutdown)
+      process.off('SIGINT', shutdown)
+      nuxt.close()
+      process.exit()
     }
     process.on('SIGTERM', shutdown)
-    process.on('SIGINT', shutdown)  
+    process.on('SIGINT', shutdown)
   }
   this.nuxt.hook('listen', start)
 }

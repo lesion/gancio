@@ -69,12 +69,15 @@ const setupController = {
         })
 
         res.json({ password, email })
-
-        // exit process so pm2 || docker could restart me || service
         log.info(`Admin: ${email} / password: ${password}`)
         log.info('Restart needed')
-        process.exit()
+        
+        res.end()
+        // exit process so pm2 || docker could restart me || service
+        process.kill(process.pid)
+
       } catch (e) {
+        log.error(String(e))
         return res.status(400).send(String(e))
       }
     }
