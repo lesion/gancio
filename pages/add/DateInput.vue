@@ -205,14 +205,14 @@ export default {
           const fromHour = dayjs(this.value.from).hour()
 
           // add a day
-          let due = dayjs(this.value.due)
+          let due = dayjs(this.value.from)
           if (fromHour > Number(hour) && !this.value.multidate) {
             due = due.add(1, 'day')
           }
           due = due.hour(hour).minute(minute)
           this.$emit('input', { ...this.value, due, dueHour: true })
         } else {
-          this.$emit('input', { ...this.value, dueHour: false })
+          this.$emit('input', { ...this.value, due: null, dueHour: false })
         }
       // change date in calendar (could be a range or a recurrent event...)
       } else if (what === 'date') {
@@ -232,11 +232,11 @@ export default {
           this.$emit('input', { ...this.value, from, due })
         } else {
           let from = value
-          let due = null
+          let due = this.value.due
           if (this.value.fromHour) {
             from = dayjs(value).hour(dayjs(this.value.from).hour())
           }
-          if (this.value.dueHour) {
+          if (this.value.dueHour && this.value.due) {
             due = dayjs(value).hour(dayjs(this.value.due).hour())
           }
           this.$emit('input', { ...this.value, from, due })
