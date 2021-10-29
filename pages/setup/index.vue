@@ -56,7 +56,7 @@ export default {
         this.step = this.step + 1
         this.$refs.completed.start(user)
       } catch (e) {
-        this.$root.$message(e.response.data, { color: 'error' })
+        this.$root.$message(e.response ? e.response.data : e, { color: 'error' })
       }
     }
   }
