@@ -7,7 +7,7 @@
     "build": "nuxt build --modern",
     "start:inspect": "NODE_ENV=production node --inspect node_modules/.bin/nuxt start --modern",
     "dev": "nuxt dev",
-    "start": "nuxt start",
+    "start": "nuxt start --modern",
     "doc": "cd docs && bundle exec jekyll b",
     "doc:dev": "cd docs && bundle exec jekyll s --drafts",
     "migrate": "NODE_ENV=production sequelize db:migrate",
@@ -61,6 +61,7 @@
     "umzug": "^2.3.0",
     "v-calendar": "2.3.4",
     "vue": "^2.6.14",
+    "vuetify": "^2.5.10",
     "vue-clipboard2": "^0.3.3",
     "vue-i18n": "^8.26.5",
     "vue-template-compiler": "^2.6.14",
@@ -69,21 +70,14 @@
     "yargs": "^17.2.0"
   },
   "devDependencies": {
-    "@babel/runtime-corejs3": "^7.14.8",
     "@mdi/font": "^6.4.95",
-    "@nuxtjs/vuetify": "^1.12.1",
     "less": "^4.1.1",
     "less-loader": "^7",
-    "nuxt-build-optimisations": "^1.0.7",
     "prettier": "^2.3.0",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
     "sass": "^1.43.3",
-    "sass-loader": "^10",
     "sequelize-cli": "^6.2.0",
-    "vue-cli-plugin-vuetify": "~2.4.2",
-    "vuetify": "^2.5.10",
-    "vuetify-loader": "^1.7.1",
     "webpack": "4",
     "webpack-cli": "^4.7.2"
   },
@@ -98,7 +92,7 @@
     "postcss": "7.0.36",
     "glob-parent": "5.1.2",
     "chokidar": "3.5.2",
-    "core-js": "3.16.0"
+    "core-js": "3.19.0"
   },
   "bin": {
     "gancio": "server/cli.js"
