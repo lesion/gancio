@@ -5,7 +5,7 @@
   "author": "lesion",
   "scripts": {
     "build": "nuxt build --modern",
-    "dev:inspect": "NODE_ENV=development node --inspect server/cli.js",
+    "start:inspect": "NODE_ENV=production node --inspect node_modules/.bin/nuxt start --modern",
     "dev": "nuxt dev",
     "start": "nuxt start",
     "doc": "cd docs && bundle exec jekyll b",
