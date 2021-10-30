@@ -69,7 +69,7 @@ Resource.belongsTo(Event)
 Event.hasMany(Event, { as: 'child', foreignKey: 'parentId' })
 Event.belongsTo(Event, { as: 'parent' })
 
-SequelizeSlugify.slugifyModel(Event, { source: ['title'] })
+SequelizeSlugify.slugifyModel(Event, { source: ['title'], overwrite: false })
 
 Event.prototype.toAPNote = function (username, locale, to = []) {
   const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
