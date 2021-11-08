@@ -36,6 +36,9 @@ const setupController = {
         config.db = dbConf
         config.firstrun = false
         config.db.logging = false
+        config.baseurl = req.protocol + '://' + req.headers.host
+        config.hostname = new URL.URL(config.baseurl).hostname
+
         const settingsController = require('./settings')
         await settingsController.load()
         return res.sendStatus(200)
@@ -54,9 +57,6 @@ const setupController = {
         // calculate default settings values
         await settingsController.set('theme.is_dark', true)
         await settingsController.set('instance_name', settingsController.settings.title.toLowerCase().replace(/ /g, ''))
-        await settingsController.set('baseurl', req.protocol + '://' + req.headers.host)
-        await settingsController.set('hostname', new URL.URL(settingsController.settings.baseurl).hostname)
-
         // create admin
         const password = helpers.randomString()
         const email = `admin`
