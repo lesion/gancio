@@ -1,9 +1,11 @@
 const fs = require('fs')
 const path = require('path')
+const URL = require('url')
 
 let config = {
   firstrun: true,
-  baseurl: "http://localhost:13120",
+  baseurl: '',
+  hostname: '',
   server: {
     host: '0.0.0.0',
     port: 13120
@@ -24,6 +26,9 @@ let config = {
       const configContent = fs.readFileSync(config_path)
       config = Object.assign(config, JSON.parse(configContent))
       config.firstrun = false
+      if (!config.hostname) {
+        config.hostname = new URL.URL(config.baseurl).hostname
+      }
     } else {
       config.firstrun = true
       console.info('> Configuration file does not exists, running setup..')
