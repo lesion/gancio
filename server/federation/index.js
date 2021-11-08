@@ -23,8 +23,7 @@ router.use(cors())
 router.use((req, res, next) => {
   if (settingsController.settings.enable_federation) { return next() }
   log.debug('Federation disabled!')
-  res.status(401).send('Federation disabled')
-  next(false)
+  return  res.status(401).send('Federation disabled')
 })
 
 router.use(express.json({ type: ['application/json', 'application/activity+json', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'] }))
