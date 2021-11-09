@@ -12,7 +12,7 @@ const api = require('./api')
 
 
 const app = express()
-
+app.enable('trust proxy')
 app.use(helpers.logRequest)
 
 // initialize instance settings / authentication / locale

@@ -4,18 +4,20 @@ import merge from 'lodash/merge'
 
 Vue.use(VueI18n)
 
-export default ({ app, store, req }) => {
+export default async ({ app, store, req }) => {
+  const messages = {}
   if (process.server) {
-    store.commit('setLocale', req.settings.locale)
-    if (req.settings.user_locale) { store.commit('setUserLocale', req.settings.user_locale) }
+    store.commit('setLocale', req.acceptedLocale)
+    if (req.user_locale) {
+      store.commit('setUserLocale', req.user_locale)
+    }
   }
 
-  const messages = {}
-  messages[store.state.locale] = require(`../locales/${store.state.locale}.json`)
+  messages[store.state.locale] = await import(/* webpackChunkName: "lang-[request]" */`../locales/${store.state.locale}.json`)
 
   // always include en fallback locale
   if (store.state.locale !== 'en') {
-    messages.en = require('../locales/en.json')
+    messages.en = await import('../locales/en.json')
   }
 
   if (store.state.user_locale) {
