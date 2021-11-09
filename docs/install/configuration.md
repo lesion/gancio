@@ -42,17 +42,19 @@ Where to save images
 Probably you want to modify some text for your specific community, that's
 why we thought the `user_locale` configuration: you can specify your version of
 each string of **gancio** making a directory with your locales inside.
-For example, let's say you want to modify the text inside the `/about`
-page:  
-`mkdir /opt/gancio/user_locale`
-put something like this in `/opt/gancio/user_locale/en.js` to override the about in
+For example, let's say you want to modify the text shown during registration:  
+`mkdir /opt/gancio/user_locale`  
+
+put something like this in `/opt/gancio/user_locale/en.json` to override the registration description in
 english:  
-```js
-export default {
-      about: 'A new about'
+```json
+{
+  "registrer": {
+    "description": "My new registration page description"
+  }
 }
 ```  
-and then point the `user_locale` configuration to that directory:  
+and then point the `user_locale` configuration to that directory (in your `config.json`):  
 ```json
 "user_locale": "/opt/gancio/user_locale"
 ```  
