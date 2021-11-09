@@ -127,7 +127,7 @@ const Helpers = {
         return res.data
       })
       .catch(e => {
-        log.error(`get Actor ${URL}`, e)
+        log.error(`get Actor ${URL}`, String(e))
         return false
       })
 
@@ -181,7 +181,7 @@ const Helpers = {
 
     let user = await Helpers.getActor(req.body.actor, instance)
     if (!user) {
-      log.info(`Actor ${req.body.actor} not found`)
+      log.info(`Actor ${req.body.actor} not found`)        
       return res.status(401).send('Actor not found')
     }
     if (user.blocked) {
