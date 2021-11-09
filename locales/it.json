@@ -267,6 +267,7 @@
         }
     },
     "setup": {
+        "completed": "Setup completato",
         "completed_description": "<p>Puoi entrare con le seguenti credenziali:<br/><br/>Utente: <b>{email}</b><br/>Password: <b>{password}<b/></p>",
         "start": "Inizia"
     }
