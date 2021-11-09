@@ -75,15 +75,10 @@ Event.prototype.toAPNote = function (username, locale, to = []) {
   const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
   const plainDescription = htmlToText(this.description && this.description.replace('\n', '').slice(0, 1000))
   const content = `
-  ${this.title}<br/><br/>
-    📍 ${this.place && this.place.name}<br/>
-    📅 ${moment.unix(this.start_datetime).locale(locale).format('dddd, D MMMM (HH:mm)')}<br/><br/>
+    📍 ${this.place && this.place.name}
+    📅 ${moment.unix(this.start_datetime).locale(locale).format('dddd, D MMMM (HH:mm)')}
 
-    ${plainDescription}<br/><br/>
-
-    <a href='${config.baseurl}/event/${this.slug || this.id}'>${config.baseurl}/event/${this.slug || this.id}</a><br/>
-
-    ${tags && tags.map(t => `#${t}`)}
+    ${plainDescription}
   `
 
   const attachment = []
@@ -97,31 +92,29 @@ Event.prototype.toAPNote = function (username, locale, to = []) {
       focalPoint: this.media[0].focalPoint || [0, 0]
     })
   }
-  // if (this.image_path) {
-  // }
 
   return {
     id: `${config.baseurl}/federation/m/${this.id}`,
-    // name: this.title,
-    url: `${config.baseurl}/event/${this.id}`,
-    type: 'Note',
-    // startTime: moment.unix(this.start_datetime).locale(locale).format(),
-    // endTime: moment.unix(this.end_datetime).locale(locale).format(),
-    // location: {
-    //   name: this.place && this.place.name
-    // },
+    name: this.title,   
+    url: `${config.baseurl}/event/${this.slug || this.id}`,
+    type: 'Event',
+    startTime: moment.unix(this.start_datetime).locale(locale).format(),
+    endTime: moment.unix(this.end_datetime).locale(locale).format(),
+    location: {
+      name: this.place && this.place.name
+    },
     attachment,
-    // tag: tags && tags.map(tag => ({
-    //   type: 'Hashtag',
-    //   name: '#' + tag,
-    //   href: '/tags/' + tag
-    // })),
+    tag: tags && tags.map(tag => ({
+      type: 'Hashtag',
+      name: '#' + tag,
+      href: '/tags/' + tag
+    })),
     published: dayjs(this.createdAt).utc().format(),
     attributedTo: `${config.baseurl}/federation/u/${username}`,
-    to: 'https://www.w3.org/ns/activitystreams#Public',
+    to: ['https://www.w3.org/ns/activitystreams#Public'],
     cc: [`${config.baseurl}/federation/u/${username}/followers`],
     content,
-    summary: null
+    summary: content
   }
 }
 
