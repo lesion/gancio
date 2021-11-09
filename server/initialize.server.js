@@ -1,7 +1,16 @@
+
 export default function () {
-  function start (nuxt) {
+  async function start (nuxt) {
     const log = require('../server/log')
     const config = require('../server/config')
+    const settingsController = require('./api/controller/settings')
+    const dayjs = require('dayjs')
+    const timezone = require('dayjs/plugin/timezone')
+    dayjs.extend(timezone)
+    
+    await settingsController.load()
+    dayjs.tz.setDefault(settingsController.settings.instance_timezone)
+
     let TaskManager
     if (!config.firstrun) {
       TaskManager = require('../server/taskManager').TaskManager

@@ -8,6 +8,7 @@ const config = require('../../config')
 const pkg = require('../../../package.json')
 const generateKeyPair = promisify(crypto.generateKeyPair)
 const log = require('../../log')
+const locales = require('../../../locales/index')
 
 
 let defaultHostname
@@ -57,51 +58,53 @@ const settingsController = {
       settingsController.settings = defaultSettings
       return
     }
+    if (settingsController.settings.initialized) return
+    settingsController.settings.initialized = true
+    // initialize instance settings from db
+    // note that this is done only once when the server starts
+    // and not for each request
     const Setting = require('../models/setting')
-    if (!settingsController.settings.initialized) {
-      // initialize instance settings from db
-      // note that this is done only once when the server starts
-      // and not for each request (it's a kind of cache)!
-      const settings = await Setting.findAll()
-      settingsController.settings.initialized = true
-      settingsController.settings = defaultSettings
-      settings.forEach(s => {
-        if (s.is_secret) {
-          settingsController.secretSettings[s.key] = s.value
-        } else {
-          settingsController.settings[s.key] = s.value
+    const settings = await Setting.findAll()
+    settingsController.settings = defaultSettings
+    settings.forEach(s => {
+      if (s.is_secret) {
+        settingsController.secretSettings[s.key] = s.value
+      } else {
+        settingsController.settings[s.key] = s.value
+      }
+    })
+
+    // add pub/priv instance key if needed
+    if (!settingsController.settings.publicKey) {
+      log.info('Instance priv/pub key not found, generating....')
+      const { publicKey, privateKey } = await generateKeyPair('rsa', {
+        modulusLength: 4096,
+        publicKeyEncoding: {
+          type: 'spki',
+          format: 'pem'
+        },
+        privateKeyEncoding: {
+          type: 'pkcs8',
+          format: 'pem'
         }
       })
 
-      // add pub/priv instance key if needed
-      if (!settingsController.settings.publicKey) {
-        log.info('Instance priv/pub key not found, generating....')
-        const { publicKey, privateKey } = await generateKeyPair('rsa', {
-          modulusLength: 4096,
-          publicKeyEncoding: {
-            type: 'spki',
-            format: 'pem'
-          },
-          privateKeyEncoding: {
-            type: 'pkcs8',
-            format: 'pem'
-          }
-        })
+      await settingsController.set('publicKey', publicKey)
+      await settingsController.set('privateKey', privateKey, true)
+    }
 
-        await settingsController.set('publicKey', publicKey)
-        await settingsController.set('privateKey', privateKey, true)
-      }
-
-      // initialize user_locale
-      if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {
-        const user_locale = fs.readdirSync(path.resolve(config.user_locale))
-        user_locale.forEach(async f => {
-          log.info(`Loading user locale ${f}`)
-          const locale = path.basename(f, '.js')
-          settingsController.user_locale[locale] =
-            (await require(path.resolve(config.user_locale, f))).default
-        })
-      }
+    // initialize user_locale
+    if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {
+      const user_locales_files = fs.readdirSync(path.resolve(config.user_locale))
+        user_locales_files.forEach( f => {
+        const locale = path.basename(f ,'.json')
+        if (locales[locale]) {
+          log.info(`Adding custom locale ${locale}`)
+          settingsController.user_locale[locale] = require(path.resolve(config.user_locale, f)).default
+        } else {
+          log.warning(`Unknown custom user locale: ${locale} [valid locales are ${locales}]`)
+        }
+      })
     }
   },
 

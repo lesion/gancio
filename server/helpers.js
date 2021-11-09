@@ -3,8 +3,6 @@ const settingsController = require('./api/controller/settings')
 const acceptLanguage = require('accept-language')
 const express = require('express')
 const dayjs = require('dayjs')
-const timezone = require('dayjs/plugin/timezone')
-dayjs.extend(timezone)
 
 const config = require('./config')
 const log = require('./log')
@@ -64,25 +62,22 @@ module.exports = {
   },
 
   async initSettings (req, res, next) {
-    await settingsController.load()
     // initialize settings
-    req.settings = settingsController.settings
-    req.secretSettings = settingsController.secretSettings
+    req.settings = { ...settingsController.settings }
 
-    req.settings.baseurl = config.baseurl || req.protocol + '://' + req.headers.host
-    req.settings.hostname = new URL.URL(req.settings.baseurl).hostname
+    req.settings.baseurl = config.baseurl
+    req.settings.hostname = config.hostname
     req.settings.title = req.settings.title || config.title
     req.settings.description = req.settings.description || config.description
     req.settings.version = pkg.version
 
     // select locale based on cookie and accept-language header
-    const acceptedLanguages = req.headers['accept-language']
     acceptLanguage.languages(Object.keys(locales))
-    req.settings.locale = acceptLanguage.get(acceptedLanguages)
+    req.acceptedLocale = acceptLanguage.get(req.headers['accept-language'])
+
     // set locale and user locale
-    req.settings.user_locale = settingsController.user_locale[req.settings.locale]
-    dayjs.locale(req.settings.locale)
-    dayjs.tz.setDefault(req.settings.instance_timezone)
+    req.user_locale = settingsController.user_locale[req.acceptedLocale]
+    dayjs.locale(req.acceptedLocale)
     next()
   },
 
