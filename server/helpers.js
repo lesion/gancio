@@ -88,8 +88,8 @@ module.exports = {
 
   serveStatic () {
     const router = express.Router()
-    // serve logo, favicon, event's images/thumb
-    router.use('/media/', express.static(config.upload_path))
+    // serve event's images/thumb
+    router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' } ))
     router.use('/noimg.svg', express.static('./static/noimg.svg'))
     
     router.use('/logo.png', (req, res, next) => {
