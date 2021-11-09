@@ -15,6 +15,7 @@ let config = {
   db: {},
   upload_path: path.resolve(process.env.cwd || '', 'uploads'),
   write (config_path= process.env.config_path || './config.json') {
+    delete config.firstrun
     return fs.writeFileSync(config_path, JSON.stringify(config, null, 2))
   },
 
