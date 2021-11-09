@@ -15,7 +15,8 @@ export const state = () => ({
     enable_resources: false,
     hide_boosts: true,
     enable_trusted_instances: true,
-    trusted_instances: []
+    trusted_instances: [],
+    footerLinks: []
   },
   announcements: []
 })
@@ -34,6 +35,9 @@ export const mutations = {
   },
   setLocale (state, locale) {
     state.locale = locale
+  },
+  setUserlocale (state, messages) {
+    state.user_locale = messages
   },
   setFilters (state, filters) {
     state.filters.tags = [...filters.tags]
