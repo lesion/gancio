@@ -123,9 +123,9 @@ const userController = {
 
   async remove (req, res) {
     try {
-      const user = await User.findByPk(req.user.id)
-      user.destroy()
-      log.warning(`User ${req.user.email} removed!`)
+      const user = await User.findByPk(req.params.id)
+      await user.destroy()
+      log.warn(`User ${req.user.email} removed!`)
       res.sendStatus(200)
     } catch (e) {
       log.error('User removal error:"', e)
