@@ -132,7 +132,7 @@ module.exports = {
               cc: [`${config.baseurl}/federation/u/${name}/followers`],
               published: dayjs(e.createdAt).utc().format(),
               actor: `${config.baseurl}/federation/u/${name}`,
-              object: e.toAPNote(name, req.settings.instance_locale)
+              object: e.toAP(name, req.settings.instance_locale)
             }))
         }
       })
@@ -160,7 +160,7 @@ module.exports = {
 //       cc: [`${config.baseurl}/federation/u/${name}/followers`],
 //       published: dayjs(e.createdAt).utc().format(),
 //       actor: `${config.baseurl}/federation/u/${name}`,
-//       object: e.toAPNote(name, req.settings.locale)
+//       object: e.toAP(name, req.settings.locale)
 //     }))
 // })
 // }

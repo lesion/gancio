@@ -71,7 +71,7 @@ Event.belongsTo(Event, { as: 'parent' })
 
 SequelizeSlugify.slugifyModel(Event, { source: ['title'], overwrite: false })
 
-Event.prototype.toAPNote = function (username, locale, to = []) {
+Event.prototype.toAP = function (username, locale, to = []) {
   const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
   const plainDescription = htmlToText(this.description && this.description.replace('\n', '').slice(0, 1000))
   const content = `
