@@ -67,7 +67,7 @@ module.exports = {
     }
     // check if fedi_user that requested resource removal
     // is the same that created the resource at first place
-    if (req.fedi_user.ap_id === resource.ap_user.id) {
+    if (req.fedi_user.ap_id === resource.ap_user.ap_id) {
       await resource.destroy()
       log.info(`Comment ${req.body.object.id} removed`)
       res.sendStatus(201)
