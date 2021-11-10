@@ -76,9 +76,16 @@ export default {
     async deleteUser (user) {
       const ret = await this.$root.$confirm('admin.delete_user_confirm', { user: user.email })
       if (!ret) { return }
-      await this.$axios.delete(`/user/${user.id}`)
-      this.$root.$message('admin.user_remove_ok')
-      this.$emit('update')
+      try {
+        this.loading = true
+        await this.$axios.$delete(`/user/${user.id}`)
+        this.$root.$message('admin.user_remove_ok')
+        this.$emit('update')
+      } catch (e) {
+        const err = get(e, 'response.data.errors[0].message', e)
+        this.$root.$message(this.$t(err), { color: 'error' })
+        this.loading = false
+      }
     },
     async toggle (user) {
       if (user.is_active) {
