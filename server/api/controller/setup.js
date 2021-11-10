@@ -69,7 +69,6 @@ const setupController = {
         })
 
         res.json({ password, email })
-        log.info(`Admin: ${email} / password: ${password}`)
         log.info('Restart needed')
         
         res.end()
