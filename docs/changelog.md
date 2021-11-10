@@ -8,6 +8,22 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.2.0 - 9 nov '21
+  - do not overwrite event slug when title is modified to preserve links
+  - add public cache to events images
+  - fix baseurl in initial setup configuration
+  - fix user removal
+  - load settings during startup and not for each request
+  - refactoring user custom locale
+  - published AP event's type is not `Note` anymore but `Event`
+  - 
+
+### 1.1.1 - 29 ott '21
+  - fix issue adding event with dueHour resulting in `bad request`
+  - fix restart during setup
+  - do not use @nuxt/vuetify module, manually preload vuetify via plugin
+  - remove deprecated nuxt-express-module and use serverMiddleware directly
+
 ### 1.1.0 - 26 ott '21
 
   - a whole new setup via web! fix #126
