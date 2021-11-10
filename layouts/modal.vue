@@ -5,7 +5,7 @@
     Nav
 
     v-main(app)
-      v-scroll-y-transition(hide-on-leave)
+      v-fade-transition(hide-on-leave)
         nuxt
 
     Footer
