@@ -1,4 +1,5 @@
 <template lang="pug">
+v-container
   v-row.mt-5(align='center' justify='center')
     v-col(cols='12' md="6" lg="5" xl="4")
       v-card
