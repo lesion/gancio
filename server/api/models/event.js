@@ -87,7 +87,7 @@ Event.prototype.toAP = function (username, locale, to = []) {
       type: 'Document',
       mediaType: 'image/jpeg',
       url: `${config.baseurl}/media/${this.media[0].url}`,
-      name: this.media[0].name || '',
+      name: this.media[0].name || this.title || '',
       blurHash: null,
       focalPoint: this.media[0].focalPoint || [0, 0]
     })
