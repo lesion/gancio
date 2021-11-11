@@ -42,7 +42,7 @@
       :hint="$t('event.media_description')"
       prepend-icon="mdi-camera"
       :value='value.image'
-      @change="v => $emit('input', { image: v, focalpoint: [0, 0] })"
+      @change="selectMedia"
       persistent-hint
       accept='image/*')
 </template>
@@ -79,13 +79,16 @@ export default {
   },
   methods: {
     save () {
-      this.$emit('input', { url: this.value.url, image: this.value.image, name: this.name || '', focalpoint: [...this.focalpoint] })
+      this.$emit('input', { url: this.value.url, image: this.value.image, name: this.name || this.value.image.name || '', focalpoint: [...this.focalpoint] })
       this.openMediaDetails = false
     },
     async remove () {
       const ret = await this.$root.$confirm('event.remove_media_confirmation')
       if (!ret) { return }
       this.$emit('remove')
+    },
+    selectMedia (v) {
+      this.$emit('input', { image: v, name: v.name, focalpoint: [0, 0] })      
     },
     selectFocal (ev) {
       const boundingClientRect = ev.target.getBoundingClientRect()

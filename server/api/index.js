@@ -130,7 +130,7 @@ if (config.firstrun) {
   api.put('/event/unconfirm/:event_id', isAuth, eventController.unconfirm)
 
   // get event
-  api.get('/event/:event_id.:format?', cors, eventController.get)
+  api.get('/event/:event_slug.:format?', cors, eventController.get)
 
   // export events (rss/ics)
   api.get('/export/:type', cors, exportController.export)
