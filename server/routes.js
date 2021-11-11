@@ -35,9 +35,10 @@ if (!config.firstrun) {
 
   // rss/ics/atom feed
   app.get('/feed/:type', cors(), exportController.export)
-  
-  // federation api / activitypub / webfinger / nodeinfo
   app.use('/.well-known', webfinger)
+  
+  app.use('/event/:slug', helpers.APRedirect)
+  // federation api / activitypub / webfinger / nodeinfo
   app.use('/federation', federation)
   app.use(spamFilter)
 

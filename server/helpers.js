@@ -214,7 +214,20 @@ module.exports = {
     cursor = cursor.hour(date.hour()).minute(date.minute()).second(0)
     log.debug(cursor)
     return cursor
+  },
+ 
+  async APRedirect (req, res, next) {
+    const accepted = req.accepts('html', 'application/json', 'application/activity+json', 'application/ld+json' )
+    if (accepted && accepted !== 'html') {
+      const eventController = require('../server/api/controller/event')
+      try {
+        const event = await eventController._get(req.params.slug)
+        if (event) {
+          return res.redirect(`/federation/m/${event.id}`)
+        }
+      } catch (e) {}
+    }
+    next()
   }
 
-  
 }

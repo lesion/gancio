@@ -85,11 +85,26 @@ const eventController = {
     res.json(place)
   },
 
+  async _get(slug) {
+    // retrocompatibility, old events URL does not use slug, use id as fallback
+    const id = Number(slug) || -1
+    return Event.findOne({
+      where: {
+        [Op.or]: {
+          slug,
+          id
+        }
+      }
+    })
+  },
+
   async get (req, res) {
     const format = req.params.format || 'json'
     const is_admin = req.user && req.user.is_admin
-    const slug = req.params.event_id
-    const id = Number(req.params.event_id) || -1
+    const slug = req.params.event_slug
+
+    // retrocompatibility, old events URL does not use slug, use id as fallback
+    const id = Number(slug) || -1
     let event
 
     try {
@@ -301,7 +316,7 @@ const eventController = {
         focalpoint = [parseFloat(focalpoint[0]).toFixed(2), parseFloat(focalpoint[1]).toFixed(2)]
         eventDetails.media = [{
           url,
-          name: body.image_name || '',
+          name: body.image_name || body.title || '',
           focalpoint: [parseFloat(focalpoint[0]), parseFloat(focalpoint[1])]
         }]
       } else {
