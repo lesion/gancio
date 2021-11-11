@@ -50,7 +50,7 @@
     "microformat-node": "^2.0.1",
     "mkdirp": "^1.0.4",
     "multer": "^1.4.3",
-    "nuxt-edge": "^2.16.0-27272174.ab1c6cb4",
+    "nuxt-edge": "^2.16.0-27276495.ab1c6cb4",
     "pg": "^8.6.0",
     "sequelize": "^6.9.0",
     "sequelize-slugify": "^1.6.0",
