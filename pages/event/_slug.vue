@@ -143,8 +143,8 @@ export default {
   components: { EventAdmin, EmbedEvent },
   async asyncData ({ $axios, params, error, store }) {
     try {
-      const event = await $axios.$get(`/event/${params.id}`)
-      return { event, id: Number(params.id) }
+      const event = await $axios.$get(`/event/${params.slug}`)
+      return { event }
     } catch (e) {
       error({ statusCode: 404, message: 'Event not found' })
     }
