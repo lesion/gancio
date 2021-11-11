@@ -93,15 +93,17 @@ Event.prototype.toAP = function (username, locale, to = []) {
     })
   }
 
+
   return {
     id: `${config.baseurl}/federation/m/${this.id}`,
-    name: this.title,   
+    name: this.title,
     url: `${config.baseurl}/event/${this.slug || this.id}`,
     type: 'Event',
     startTime: moment.unix(this.start_datetime).locale(locale).format(),
-    endTime: moment.unix(this.end_datetime).locale(locale).format(),
+    endTime: this.end_datetime ? moment.unix(this.end_datetime).locale(locale).format() : null,
     location: {
-      name: this.place && this.place.name
+      name: this.place.name,
+      address: this.place.address
     },
     attachment,
     tag: tags && tags.map(tag => ({
