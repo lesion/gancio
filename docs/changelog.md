@@ -7,6 +7,13 @@ nav_order: 10
 
 
 All notable changes to this project will be documented in this file.
+### 1.2.1 - 11 nov '21
+  - fix `Note` remove from fediverse
+  - AP Actor is now `Application`, was `Person`
+  - better handling event AP representations
+  
+  this release is a step forward to improve AP compatibility with other platforms, thanks @tcit
+
 
 ### 1.2.0 - 9 nov '21
   - do not overwrite event slug when title is modified to preserve links
@@ -16,7 +23,6 @@ All notable changes to this project will be documented in this file.
   - load settings during startup and not for each request
   - refactoring user custom locale
   - published AP event's type is not `Note` anymore but `Event`
-  - 
 
 ### 1.1.1 - 29 ott '21
   - fix issue adding event with dueHour resulting in `bad request`
