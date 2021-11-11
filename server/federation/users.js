@@ -29,7 +29,7 @@ module.exports = {
         }
       ],
       id: `${config.baseurl}/federation/u/${name}`,
-      type: 'Person',
+      type: 'Application',
       summary: config.description,
       name,
       preferredUsername: name,
