@@ -9,7 +9,7 @@
         :headers='headers')
         template(v-slot:item.actions='{ item }')
           v-btn(text small @click='confirm(item)' color='success') {{$t('common.confirm')}}
-          v-btn(text small :to='`/event/${item.id}`' color='success') {{$t('common.preview')}}
+          v-btn(text small :to='`/event/${item.slug || item.id}`' color='success') {{$t('common.preview')}}
           v-btn(text small :to='`/add/${item.id}`' color='warning') {{$t('common.edit')}}
           v-btn(text small @click='remove(item)'
             color='error') {{$t('common.delete')}}
