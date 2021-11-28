@@ -84,7 +84,9 @@
         "import": "Importa",
         "reset": "Reinicia",
         "theme": "Tema",
-        "tags": "Etiquetes"
+        "tags": "Etiquetes",
+        "label": "Etiqueta",
+        "max_events": "Nre. màx. d'activitats"
     },
     "login": {
         "description": "Amb la sessió iniciada pots afegir activitats noves.",
@@ -122,7 +124,7 @@
         "media_description": "Pots adjuntar un cartell (opcional)",
         "added": "S'ha afegit l'activitat",
         "added_anon": "S'ha afegit l'activitat però encara ha de ser confirmada.",
-        "where_description": "On es farà? Si no està posat, escriu-ho i <b>prem Enter</b>. ",
+        "where_description": "On es farà? Si no està posat, escriu-ho i <b>prem Enter</b>.",
         "confirmed": "S'ha confirmat l'activitat",
         "not_found": "No s'ha trobat l'activitat",
         "remove_confirmation": "Segur que vols esborrar l'activitat?",
@@ -153,7 +155,11 @@
         "remove_recurrent_confirmation": "Estàs segur/a d'esborrar aquesta activitat periòdica?\nNo s'esborraran les ocurrències antigues, només es deixaran de crear les futures.",
         "ics": "ICS",
         "import_ICS": "Importa des d'un ICS",
-        "import_URL": "Importa des d'una URL"
+        "import_URL": "Importa des d'una URL",
+        "edit_recurrent": "Edita l'activitat periòdica:",
+        "updated": "S'ha actualitzat l'activitat",
+        "saved": "S'ha desat l'activitat",
+        "import_description": "Pots importar activitats des d'altres instàncies o plataformes que facin servir formats estàndards (ics o h-event)"
     },
     "admin": {
         "place_description": "En el cas que un lloc és incorrecte o l'adreça ha de canviar, pots arreglar-ho.<br/>Tingues en compte que totes les activitats passades i futures associades amb aquest lloc també canviaran d'adreça.",
@@ -210,7 +216,16 @@
         "delete_footer_link_confirm": "Segur que vols esborrar aquest enllaç?",
         "footer_links": "Enllaços del peu",
         "add_link": "Afegeix un enllaç",
-        "is_dark": "Tema fosc"
+        "is_dark": "Tema fosc",
+        "disable_user_confirm": "Segur que vols deshabilitar a {user}?",
+        "add_instance": "Afegeix una instància",
+        "instance_block_confirm": "Segur que vols bloquejar la instància {instance}?",
+        "show_smtp_setup": "Configuració de correu",
+        "admin_email": "Correu d'admin",
+        "smtp_test_success": "S'ha enviat un correu de prova a {admin_email}, comprova que hagi arribat bé",
+        "smtp_hostname": "Amfitrió SMTP (hostname)",
+        "smtp_description": "<ul><li>L'admin hauria de rebre un correu cada cop que es pengi alguna una activitat anònima (si estan activades).</li><li>L'admin hauria de rebre un correu per cada soŀlicitud de registre (si estan actives).</li><li>La usuària hauria de rebre un correu després de soŀlicitar registrar-se.</li><li>La usuària hauria de rebre un correu quan se li hagi confirmat el registre.</li><li>La usuària hauria de rebre un correu si l'admin la registra directament.</li><li>La usuària hauria de rebre un correu de restabliment de contrasenya si ho demana</li></ul>",
+        "smtp_test_button": "Envia un correu de prova"
     },
     "auth": {
         "not_confirmed": "Encara no s'ha confirmat…",
@@ -252,5 +267,10 @@
     "validators": {
         "email": "Escriu una adreça de correu vàlida",
         "required": "Cal omplir el camp {fieldName} és"
+    },
+    "setup": {
+        "completed": "S'ha completat la configuració inicial",
+        "completed_description": "<p>Ara ja pots entrar amb aquesta usuària:<br/><br/>Nom: <b>{email}</b><br/>Contrasenya: <b>{password}<b/></p>",
+        "start": "Comença"
     }
 }
