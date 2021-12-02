@@ -56,10 +56,7 @@
                   v-text-field(v-model='list.title' :label='$t("common.title")')
                   v-text-field(v-model='list.maxEvents' type='number' min='1' :label='$t("common.max_events")')
                 v-col.float-right(:span='12')
-                  List(
-                    :title='list.title'
-                    :maxEvents='Number(list.maxEvents)'
-                    :events='events')
+                  gancio-events(:baseurl='settings.baseurl' :maxlength='list.maxEvents &&  Number(list.maxEvents)' :title='list.title')
               v-text-field.mb-1(type='textarea' v-model='listScript' readonly )
                 v-btn(slot='prepend' text
                   color='primary' v-clipboard:copy='listScript' v-clipboard:success='copyLink.bind(this,"list")') {{$t('common.copy')}}
@@ -99,7 +96,7 @@ export default {
     return {
       type: 'rss',
       notification: { email: '' },
-      list: { title: 'Gancio', maxEvents: 3 },
+      list: { title: 'Gancio', maxEvents: 1 },
       filters: { tags: [], places: [], show_recurrent: false },
       events: []
     }
@@ -111,14 +108,10 @@ export default {
   },
   computed: {
     ...mapState(['settings']),
-    domain () {
-      const URL = url.parse(this.settings.baseurl)
-      return URL.hostname
-    },
     listScript () {
       const params = []
       if (this.list.title) {
-        params.push(`title=${this.list.title}`)
+        params.push(`title="${this.list.title}"`)
       }
 
       if (this.filters.places.length) {
@@ -130,9 +123,13 @@ export default {
       }
 
       if (this.filters.show_recurrent) {
-        params.push('show_recurrent=true')
+        params.push('show_recurrent')
       }
-      return `<iframe style='border: 0px; width: 100%;' src="${this.settings.baseurl}/embed/list?${params.join('&')}"></iframe>`
+
+      if (this.list.maxEvents) {
+        params.push('maxlength=' + this.list.maxEvents)
+      }
+      return `<script src="${this.settings.baseurl}/gancio-events.es.js'><gancio-events ${params.join(' ')}></gancio-events>`
     },
     link () {
       const typeMap = ['rss', 'ics', 'list']
