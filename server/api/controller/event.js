@@ -357,7 +357,7 @@ const eventController = {
       if (event.recurrent) {
         eventController._createRecurrent()
       } else {
-        // send notifications (mastodon / email)
+        // send notifications
         const notifier = require('../../notifier')
         notifier.notifyEvent('Create', event.id)
       }
@@ -482,7 +482,8 @@ const eventController = {
     }
   },
 
-  async _select ({ start, end, tags, places, show_recurrent }) {
+  async _select ({ start, end, tags, places, show_recurrent, max }) {
+
     const where = {
       // do not include parent recurrent event
       recurrent: null,
@@ -517,18 +518,20 @@ const eventController = {
       attributes: {
         exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'description', 'resources']
       },
-      order: ['start_datetime', Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE "tagTag" = tag) DESC')],
+      order: ['start_datetime'],
       include: [
         { model: Resource, required: false, attributes: ['id'] },
         {
           model: Tag,
+          order: [Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
           attributes: ['tag'],
           required: !!tags,
           ...where_tags,
           through: { attributes: [] }
         },
         { model: Place, required: true, attributes: ['id', 'name', 'address'] }
-      ]
+      ],
+      limit: max
     }).catch(e => {
       log.error('[EVENT]', e)
       return []
@@ -545,15 +548,16 @@ const eventController = {
    * Select events based on params
    */
   async select (req, res) {
-    const start = req.query.start
+    const start = req.query.start || dayjs().unix()
     const end = req.query.end
     const tags = req.query.tags
     const places = req.query.places
+    const max = req.query.max
     const show_recurrent = settingsController.settings.allow_recurrent_event &&
       (typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settingsController.settings.recurrent_event_visible)
 
     res.json(await eventController._select({
-      start, end, places, tags, show_recurrent
+      start, end, places, tags, show_recurrent, max
     }))
   },
 
