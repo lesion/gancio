@@ -11,10 +11,18 @@ module.exports = {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' }
     ],
+    script: [{ src: '/gancio-events.es.js' }],
     link: [{ rel: 'icon', type: 'image/png', href: '/logo.png' }]
   },
   dev: (process.env.NODE_ENV !== 'production'),
   server: config.server,
+
+
+  vue: {
+    config: {
+      ignoredElements: ['gancio-events']
+    }
+  },
 
   /*
    ** Customize the progress-bar component

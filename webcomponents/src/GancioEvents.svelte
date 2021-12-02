@@ -40,28 +40,17 @@
 <svelte:options tag="gancio-events"/>
 {#if events.length}
 <div id='gancioEvents'>
-  {#if title}
-    <a href='{baseurl}' target='_blank'>
-      <div class='content'>
-        <span id='headerTitle'>{title}</span>
-        <img id='logo' alt='logo' src='{baseurl}/logo.png'/>
-      </div>
-    </a>
-  {/if}
+  <a href='{baseurl}' target='_blank'>
+    <div class='content'>
+      <span id='headerTitle'>{title || 'Gancio'}</span>
+      <img id='logo' alt='logo' src='{baseurl}/logo.png'/>
+    </div>
+  </a>
   {#each events as event}
     <a href='{baseurl}/event/{event.slug || event.id}' target='_blank'>
       <div class='content'>
         <div class='subtitle'>
           {when(event.start_datetime)}
-          {new Date(event.start_datetime*1000)
-            .toLocaleDateString(undefined,
-              {
-                weekday: 'long',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })}
           <span class='place'>@{event.place.name}</span>
         </div>
         <div class='title'>

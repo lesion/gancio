@@ -1,15 +1,24 @@
 <script>
+  import { onMount } from 'svelte'
   export let baseurl = 'https://demo.gancio.org'
   export let id
 
+  let mounted = false
   let event
 
-  function update (id) {
-
-    fetch(`${baseurl}/api/event/${id}`)
-    .then(res => res.json())
-    .then(e => event = e)
+  function update (id, baseurl) {
+    if (mounted) {
+      fetch(`${baseurl}/api/event/${id}`)
+        .then(res => res.json())
+        .then(e => event = e)
+    }
   }
+
+  onMount(() => {
+    mounted = true
+    update(id, baseurl)
+  })
+  $: update(id, baseurl)
 
   function when (event) {
     return new Date(event.start_datetime*1000)
@@ -34,8 +43,6 @@
       }
       return 'center center'    
   }
-
-  $: update(id)
 
 </script>
 <svelte:options tag="gancio-event"/>
