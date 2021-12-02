@@ -1,7 +1,7 @@
 <template lang="pug">
   v-footer(aria-label='Footer')
 
-    v-dialog(v-model='showFollowMe' destroy-on-close max-width='700px')
+    v-dialog(v-model='showFollowMe' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
       FollowMe(@close='showFollowMe=false' is-dialog)
 
     v-btn(color='primary' text href='https://gancio.org' target='_blank') Gancio <small>{{settings.version}}</small>
@@ -41,6 +41,7 @@ export default {
   computed: {
     ...mapState(['settings']),
     footerLinks () {
+      if (!this.settings || !this.settings.footerLinks) return []
       return this.settings.footerLinks.map(link => {
         if (/^https?:\/\//.test(link.href)) {
           return { href: link.href, label: link.label }

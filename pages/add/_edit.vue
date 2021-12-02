@@ -6,7 +6,7 @@
         v-spacer
         v-btn(link text color='primary' @click='openImportDialog=true')
           <v-icon>mdi-file-import</v-icon> {{$t('common.import')}}
-      v-dialog(v-model='openImportDialog')
+      v-dialog(v-model='openImportDialog' :fullscreen='$vuetify.breakpoint.xsOnly')
         ImportDialog(@close='openImportDialog=false' @imported='eventImported')
 
       v-card-text.px-0.px-xs-2

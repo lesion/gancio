@@ -126,7 +126,7 @@ v-container#event.pa-0.pa-sm-2
           :to='`/event/${event.next}`' :disabled='!event.next')
           v-icon mdi-arrow-right
 
-      v-dialog(v-model='showEmbed' width='1000px')
+      v-dialog(v-model='showEmbed' width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
         EmbedEvent(:event='event' @close='showEmbed=false')
 
 </template>

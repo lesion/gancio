@@ -40,7 +40,7 @@
           @blur='save("instance_place", instance_place)'
         )
 
-        v-dialog(v-model='dialogAddInstance' width="500px")
+        v-dialog(v-model='dialogAddInstance' width='500px' :fullscreen='$vuetify.breakpoint.xsOnly')
           v-card
             v-card-title {{$t('admin.add_trusted_instance')}}
             v-card-text

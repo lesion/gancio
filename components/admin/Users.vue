@@ -10,7 +10,7 @@
     v-btn(color='primary' text @click='newUserDialog = true') <v-icon>mdi-plus</v-icon> {{$t('common.new_user')}}
 
     //- ADD NEW USER
-    v-dialog(v-model='newUserDialog' :fullscreen="$vuetify.breakpoint.xsOnly")
+    v-dialog(v-model='newUserDialog' :fullscreen='$vuetify.breakpoint.xsOnly')
 
       v-card(color='secondary')
         v-card-title {{$t('common.new_user')}}

@@ -48,7 +48,7 @@
         inset
         :label="$t('admin.recurrent_event_visible')")
 
-    v-dialog(v-model='showSMTP' destroy-on-close max-width='700px')
+    v-dialog(v-model='showSMTP' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
       SMTP(@close='showSMTP = false')
 
     v-card-actions

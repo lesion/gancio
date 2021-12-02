@@ -1,6 +1,6 @@
 <template lang="pug">
   span
-    v-dialog(v-model='openMediaDetails' max-width='1000px')
+    v-dialog(v-model='openMediaDetails' :fullscreen="$vuetify.breakpoint.xsOnly" width='1000px')
       v-card
         v-card-title {{$t('common.media')}}
         v-card-text

@@ -1,6 +1,7 @@
 
 <template lang="pug">
   v-dialog(v-model='show'
+    :fullscreen='$vuetify.breakpoint.xsOnly'
     :color='options.color'
     :title='title'
     :max-width='options.width'

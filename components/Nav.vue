@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-app-bar(app)
+  v-app-bar(app aria-label='Menu')
 
     //- logo, title and description
     v-list-item(:to='$route.name==="index"?"/about":"/"')

@@ -32,7 +32,7 @@
       //-           v-on='on') {{i}}
       //-       v-color-picker(light @update:color='c => updateColor(i, c)')
 
-      v-dialog(v-model='linkModal' width='500')
+      v-dialog(v-model='linkModal' width='500' :fullscreen='$vuetify.breakpoint.xsOnly')
         v-card
           v-card-title {{$t('admin.footer_links')}}
           v-card-text
