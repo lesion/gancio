@@ -54,7 +54,7 @@
     "pg": "^8.6.0",
     "sequelize": "^6.9.0",
     "sequelize-slugify": "^1.6.0",
-    "sharp": "^0.29.2",
+    "sharp": "^0.27.2",
     "sqlite3": "mapbox/node-sqlite3#918052b",
     "tiptap": "^1.32.0",
     "tiptap-extensions": "^1.35.0",
