@@ -11,16 +11,16 @@ const url = require('url')
 const log = require('../log')
 
 router.use(cors())
-router.use((req, res, next) => {
+function allowFederation (req,res,next) {
   // is federation enabled ?
   if (req.settings.enable_federation) {
     return next()
   }
   log.debug('Federation disabled')
   res.status(404).send('Federation disabled')
-})
+}
 
-router.get('/webfinger', (req, res) => {
+router.get('/webfinger', allowFederation, (req, res) => {
   if (!req.query || !req.query.resource || !req.query.resource.includes('acct:')) {
     log.debug('Bad webfinger request => ', req.query && req.query.resource)
     return res.status(400).send('Bad request. Please make sure "acct:USER@DOMAIN" is what you are sending as the "resource" query parameter.')
