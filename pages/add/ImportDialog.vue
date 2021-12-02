@@ -22,8 +22,8 @@
 
     v-card-actions
       v-spacer
-      v-btn(@click='$emit("close")' color='warning') {{$t('common.cancel')}}
-      v-btn(@click='importGeneric' :loading='loading' :disabled='loading'
+      v-btn(text @click='$emit("close")' color='warning') {{$t('common.cancel')}}
+      v-btn(text @click='importGeneric' :loading='loading' :disabled='loading'
         color='primary') {{$t('common.import')}}
 
 </template>
