@@ -9,7 +9,7 @@ parent: Install
 
 1. Install dependencies
 ```bash
-sudo apt install curl gcc g++ make libpq-dev
+sudo apt install curl gcc g++ make wget libpq-dev
 ```
 
 
@@ -44,12 +44,13 @@ sudo yarn global add --silent {{site.url}}/latest.tgz 2> /dev/null
 1. Setup systemd service and reload systemd
 ```bash
 sudo wget http://gancio.org/gancio.service -O /etc/systemd/system/gancio.service
-sudo service daemon-reload
+sudo systemctl daemon-reload
+sudo systemctl enable gancio
 ```
 
 1. Start gancio service (this should listen on port 13120)
 ```bash
-sudo service gancio start
+sudo systemctl start gancio
 ```
 
 1. [Setup nginx as a proxy]({% link install/nginx.md %})
