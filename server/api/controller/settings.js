@@ -106,6 +106,30 @@ const settingsController = {
         }
       })
     }
+
+    const plugins_path = path.resolve(process.env.cwd || '', 'plugins')
+    if (fs.existsSync(plugins_path)) {
+      const notifier = require('../../notifier')
+      const pluginsFile = fs.readdirSync(plugins_path).filter(e => path.extname(e).toLowerCase() === '.js')
+      pluginsFile.forEach( pluginFile => {
+        log.info(`Loading plugin ${pluginFile}`)
+        try {
+          const plugin = require(path.resolve(plugins_path, pluginFile))
+          plugin.load({ settings: settingsController.settings })
+          if (typeof plugin.onEventCreate === 'function') {
+            notifier.emitter.on('Create', plugin.onEventCreate)
+          }
+          if (typeof plugin.onEventDelete === 'function') {
+            notifier.emitter.on('Delete', plugin.onEventDelete)
+          }
+          if (typeof plugin.onEventUpdate === 'function') {
+            notifier.emitter.on('Update', plugin.onEventUpdate)
+          }
+        } catch (e) {
+          log.error(e)
+        }
+      })
+    }
   },
 
   async set (key, value, is_secret = false) {

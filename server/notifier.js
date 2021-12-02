@@ -1,5 +1,6 @@
+const events = require('events')
+
 const mail = require('./api/mail')
-const config = require('./config')
 const log = require('./log')
 const fediverseHelpers = require('./federation/helpers')
 
@@ -14,6 +15,8 @@ const eventController = require('./api/controller/event')
 const settingsController = require('./api/controller/settings')
 
 const notifier = {
+
+  emitter: new events.EventEmitter(),
 
   sendNotification (notification, event) {
     const promises = []
@@ -38,7 +41,8 @@ const notifier = {
     const event = await Event.findByPk(eventId, {
       include: [Tag, Place, Notification, User]
     })
-
+    
+    notifier.emitter.emit(action, event.get({ plain: true, raw: true }))
     log.debug(action, event.title)
 
     // insert notifications
