@@ -1,7 +1,7 @@
 <template lang="pug">
   v-card.h-event.event.d-flex
     nuxt-link(:to='`/event/${event.slug || event.id}`')
-      v-img.u-featured.img(aspect-ratio='1.7778' :src='thumbnail' :position='thumbnailPosition' :alt='event.media && event.media.length ? event.media[0].name : ""')
+      img.img.u-featured(:src='thumbnail' :alt='alt' loading='lazy' :style="{ 'object-position': thumbnailPosition }")
       v-icon.float-right.mr-1(v-if='event.parentId' color='success') mdi-repeat
       .title.p-name {{event.title}}
 
@@ -17,7 +17,7 @@
 
       v-menu(offset-y)
         template(v-slot:activator="{on}")
-          v-btn.align-self-end(icon v-on='on' color='primary')
+          v-btn.align-self-end(icon v-on='on' color='primary' alt='more')
             v-icon mdi-dots-vertical
         v-list(dense)
           v-list-item-group
@@ -60,6 +60,9 @@ export default {
         path = '/noimg.svg'
       }
       return path
+    },
+    alt () {
+      return this.event.media && this.event.media.length ? this.event.media[0].name : ''
     },
     thumbnailPosition () {
       if (this.event.media && this.event.media.length && this.event.media[0].focalpoint) {
