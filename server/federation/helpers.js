@@ -181,7 +181,10 @@ const Helpers = {
 
     let user = await Helpers.getActor(req.body.actor, instance)
     if (!user) {
-      log.info(`Actor ${req.body.actor} not found`)        
+      log.info(`Actor ${req.body.actor} not found`)
+      if (req.body.type === 'Delete') {
+        return res.sendStatus(201)
+      }
       return res.status(401).send('Actor not found')
     }
     if (user.blocked) {
