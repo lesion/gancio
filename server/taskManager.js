@@ -33,7 +33,6 @@ class Task {
       }
     } catch (e) {
       log.error(`TASK ERROR [${this.name}]: ${e} ${e.stack}`)
-      return Promise.resolve(false)
     }
   }
 }
@@ -84,7 +83,7 @@ class TaskManager {
     // remove removable tasks
     this.tasks = this.tasks.filter(t => t.repeat)
 
-    return Promise.all(tasks)
+    return Promise.allSettled(tasks)
   }
 
   async tick () {
