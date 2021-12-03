@@ -107,15 +107,17 @@ const settingsController = {
       })
     }
 
+    // load custom plugins
     const plugins_path = path.resolve(process.env.cwd || '', 'plugins')
     if (fs.existsSync(plugins_path)) {
       const notifier = require('../../notifier')
       const pluginsFile = fs.readdirSync(plugins_path).filter(e => path.extname(e).toLowerCase() === '.js')
       pluginsFile.forEach( pluginFile => {
-        log.info(`Loading plugin ${pluginFile}`)
         try {
           const plugin = require(path.resolve(plugins_path, pluginFile))
+          if (typeof plugin.load !== 'function') return
           plugin.load({ settings: settingsController.settings })
+          log.info(`Plugin ${pluginFile} loaded!`)
           if (typeof plugin.onEventCreate === 'function') {
             notifier.emitter.on('Create', plugin.onEventCreate)
           }
@@ -126,7 +128,7 @@ const settingsController = {
             notifier.emitter.on('Update', plugin.onEventUpdate)
           }
         } catch (e) {
-          log.error(e)
+          log.warn(`Unable to load plugin ${pluginFile}: ${String(e)}`)
         }
       })
     }
