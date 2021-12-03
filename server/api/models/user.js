@@ -30,6 +30,9 @@ User.init({
   scopes: {
     withoutPassword: {
       attributes: { exclude: ['password', 'recover_code'] }
+    },
+    withRecover: {
+      attributes: { exclude: ['password'] }
     }
   }
 })

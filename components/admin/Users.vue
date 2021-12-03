@@ -37,6 +37,7 @@
           v-icon(v-if='item.is_active' color='success') mdi-check
           v-icon(v-else color='warning') mdi-close
         template(v-slot:item.actions='{item}')
+          v-btn(v-if='item.recover_code' text small :to='`/user_confirm/${item.recover_code}`') {{$t('common.confirm')}}
           v-btn(text small @click='toggle(item)'
             :color='item.is_active?"warning":"success"') {{item.is_active?$t('common.disable'):$t('common.enable')}}
           v-btn(text small @click='toggleAdmin(item)'
