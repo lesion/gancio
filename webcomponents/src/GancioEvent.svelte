@@ -47,7 +47,7 @@
 </script>
 <svelte:options tag="gancio-event"/>
 {#if event}
-<a href='{baseurl}/event/{event.slug || event.id}' class="card">
+<a href='{baseurl}/event/{event.slug || event.id}' class='card' target='_blank'>
   {#if event.media.length}
   <img src="{thumbnail(event)}" alt="{event.media[0].name}" style="object-position: {position(event)}; aspect-ratio=1.7778;">
   {/if}
