@@ -279,7 +279,7 @@ if (typeof HTMLElement === "function") {
 }
 function get_each_context(ctx, list, i) {
   const child_ctx = ctx.slice();
-  child_ctx[7] = list[i];
+  child_ctx[8] = list[i];
   return child_ctx;
 }
 function create_if_block$1(ctx) {
@@ -373,16 +373,16 @@ function create_each_block(ctx) {
   let a;
   let div2;
   let div0;
-  let t0_value = when$1(ctx[7].start_datetime) + "";
+  let t0_value = when$1(ctx[8].start_datetime) + "";
   let t0;
   let t1;
   let span;
   let t2;
-  let t3_value = ctx[7].place.name + "";
+  let t3_value = ctx[8].place.name + "";
   let t3;
   let t4;
   let div1;
-  let t5_value = ctx[7].title + "";
+  let t5_value = ctx[8].title + "";
   let t5;
   let t6;
   let a_href_value;
@@ -404,7 +404,7 @@ function create_each_block(ctx) {
       attr(div0, "class", "subtitle");
       attr(div1, "class", "title");
       attr(div2, "class", "content");
-      attr(a, "href", a_href_value = "" + (ctx[0] + "/event/" + (ctx[7].slug || ctx[7].id)));
+      attr(a, "href", a_href_value = "" + (ctx[0] + "/event/" + (ctx[8].slug || ctx[8].id)));
       attr(a, "target", "_blank");
     },
     m(target, anchor) {
@@ -422,13 +422,13 @@ function create_each_block(ctx) {
       append(a, t6);
     },
     p(ctx2, dirty) {
-      if (dirty & 4 && t0_value !== (t0_value = when$1(ctx2[7].start_datetime) + ""))
+      if (dirty & 4 && t0_value !== (t0_value = when$1(ctx2[8].start_datetime) + ""))
         set_data(t0, t0_value);
-      if (dirty & 4 && t3_value !== (t3_value = ctx2[7].place.name + ""))
+      if (dirty & 4 && t3_value !== (t3_value = ctx2[8].place.name + ""))
         set_data(t3, t3_value);
-      if (dirty & 4 && t5_value !== (t5_value = ctx2[7].title + ""))
+      if (dirty & 4 && t5_value !== (t5_value = ctx2[8].title + ""))
         set_data(t5, t5_value);
-      if (dirty & 5 && a_href_value !== (a_href_value = "" + (ctx2[0] + "/event/" + (ctx2[7].slug || ctx2[7].id)))) {
+      if (dirty & 5 && a_href_value !== (a_href_value = "" + (ctx2[0] + "/event/" + (ctx2[8].slug || ctx2[8].id)))) {
         attr(a, "href", a_href_value);
       }
     },
@@ -492,8 +492,11 @@ function instance$1($$self, $$props, $$invalidate) {
   let { maxlength = false } = $$props;
   let { tags = "" } = $$props;
   let { places = "" } = $$props;
+  let mounted = false;
   let events = [];
   function update2(v) {
+    if (!mounted)
+      return;
     const params = [];
     if (maxlength) {
       params.push(`max=${maxlength}`);
@@ -508,6 +511,10 @@ function instance$1($$self, $$props, $$invalidate) {
       $$invalidate(2, events = e);
     });
   }
+  onMount(() => {
+    mounted = true;
+    update2();
+  });
   $$self.$$set = ($$props2) => {
     if ("baseurl" in $$props2)
       $$invalidate(0, baseurl = $$props2.baseurl);

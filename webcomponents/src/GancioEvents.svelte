@@ -6,9 +6,11 @@
   export let tags = ''
   export let places = ''
 
+  let mounted = false
   let events = []
 
   function update (v) {
+    if (!mounted) return
     const params = []
     if (maxlength) {
       params.push(`max=${maxlength}`)
@@ -41,6 +43,12 @@
                 minute: '2-digit'
               })
   }
+
+
+  onMount(() => {
+    mounted = true
+    update()
+  })
   $: update(maxlength && title && places && tags)
 
 </script>
