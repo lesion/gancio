@@ -49,7 +49,7 @@
 {#if event}
 <a href='{baseurl}/event/{event.slug || event.id}' class="card">
   {#if event.media.length}
-  <img src="{thumbnail(event)}" alt="{event.media[0].name}" style="background-position: {position(event)}; aspect-ratio=1.7778;">
+  <img src="{thumbnail(event)}" alt="{event.media[0].name}" style="object-position: {position(event)}; aspect-ratio=1.7778;">
   {/if}
   <div class="container">
     <strong>{event.title}</strong>
@@ -75,7 +75,6 @@
 /* Add rounded corners to the top left and the top right corner of the image */
 img {
   border-radius: 5px 5px 0 0;
-  max-height: 250px;
   min-height: 160px;
   width: 100%;
   object-fit: cover;

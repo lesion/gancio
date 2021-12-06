@@ -10,7 +10,7 @@
           v-col
             Search(
               :filters='filters'
-              @update='updateFilters')
+              @update='f => filters = f')
       v-tabs(v-model='type')
 
         //- TOFIX
@@ -30,9 +30,7 @@
             v-card-text
               p(v-html='$t(`export.feed_description`)')
               v-text-field(v-model='link' readonly)
-                v-btn(slot='prepend' text color='primary'
-                  v-clipboard:copy='link'
-                  v-clipboard:success='copyLink.bind(this, "feed")') {{$t("common.copy")}}
+                v-btn(slot='prepend' text color='primary' @click='clipboard(link)') {{$t("common.copy")}}
                   v-icon.ml-1 mdi-content-copy
 
         v-tab ics/ical
@@ -41,8 +39,7 @@
             v-card-text
               p(v-html='$t(`export.ical_description`)')
               v-text-field(v-model='link')
-                v-btn(slot='prepend' text color='primary'
-                  v-clipboard:copy='link' v-clipboard:success='copyLink.bind(this, "ical")') {{$t("common.copy")}}
+                v-btn(slot='prepend' text color='primary' @click='clipboard(link)') {{$t("common.copy")}}
                   v-icon.ml-1 mdi-content-copy
 
         v-tab List
@@ -56,11 +53,15 @@
                   v-text-field(v-model='list.title' :label='$t("common.title")')
                   v-text-field(v-model='list.maxEvents' type='number' min='1' :label='$t("common.max_events")')
                 v-col.float-right(:span='12')
-                  gancio-events(:baseurl='settings.baseurl' :maxlength='list.maxEvents &&  Number(list.maxEvents)' :title='list.title')
-              v-text-field.mb-1(type='textarea' v-model='listScript' readonly )
-                v-btn(slot='prepend' text
-                  color='primary' v-clipboard:copy='listScript' v-clipboard:success='copyLink.bind(this,"list")') {{$t('common.copy')}}
-                    v-icon.ml-1 mdi-content-copy
+                  span {{filters.places.join(',')}}
+                  gancio-events(:baseurl='settings.baseurl'
+                    :maxlength='list.maxEvents &&  Number(list.maxEvents)'
+                    :title='list.title'
+                    :places='filters.places.join(",")'
+                    :tags='filters.tags.join(",")')
+              v-alert.pa-5.my-4.blue-grey.darken-4.text-body-1.lime--text.text--lighten-3 <pre>{{code}}</pre>
+                v-btn.float-end(text color='primary' @click='clipboard(code)') {{$t("common.copy")}}
+                  v-icon.ml-1 mdi-content-copy
 
         v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
         v-tab-item(v-if='settings.enable_federation')
@@ -81,10 +82,12 @@ import { mapState } from 'vuex'
 import List from '@/components/List'
 import FollowMe from '../components/FollowMe'
 import Search from '@/components/Search'
+import clipboard from '../assets/clipboard'
 
 export default {
   name: 'Exports',
   components: { List, FollowMe, Search },
+  mixins: [clipboard],
   async asyncData ({ $axios, params, store, $api }) {
     const events = await $api.getEvents({
       start: dayjs().unix(),
@@ -96,7 +99,7 @@ export default {
     return {
       type: 'rss',
       notification: { email: '' },
-      list: { title: 'Gancio', maxEvents: 1 },
+      list: { title: 'Gancio', maxEvents: null },
       filters: { tags: [], places: [], show_recurrent: false },
       events: []
     }
@@ -108,18 +111,19 @@ export default {
   },
   computed: {
     ...mapState(['settings']),
-    listScript () {
-      const params = []
+    code () {
+      const params = [`baseurl="${this.settings.baseurl}"`]
+
       if (this.list.title) {
         params.push(`title="${this.list.title}"`)
       }
 
       if (this.filters.places.length) {
-        params.push(`places=${this.filters.places.map(p => p.id)}`)
+        params.push(`places="${this.filters.places.join(',')}"`)
       }
 
       if (this.filters.tags.length) {
-        params.push(`tags=${this.filters.tags.join(',')}`)
+        params.push(`tags="${this.filters.tags.join(',')}"`)
       }
 
       if (this.filters.show_recurrent) {
@@ -129,7 +133,10 @@ export default {
       if (this.list.maxEvents) {
         params.push('maxlength=' + this.list.maxEvents)
       }
-      return `<script src="${this.settings.baseurl}/gancio-events.es.js'><gancio-events ${params.join(' ')}></gancio-events>`
+
+      return `<script src="${this.settings.baseurl}/gancio-events.es.js'>\n<gancio-events ${params.join(' ')}></gancio-events>\n\n`
+
+      
     },
     link () {
       const typeMap = ['rss', 'ics', 'list']
@@ -154,22 +161,6 @@ export default {
     }
   },
   methods: {
-    async updateFilters (filters) {
-      this.filters = filters
-      this.events = await this.$api.getEvents({
-        start: dayjs().unix(),
-        places: this.filters.places,
-        tags: this.filters.tags,
-        show_recurrent: !!this.filters.show_recurrent
-      })
-    },
-    copyLink (type) {
-      if (type === 'feed') {
-        this.$root.$message('common.feed_url_copied')
-      } else {
-        this.$root.$message('common.copied')
-      }
-    },
     async add_notification () {
       // validate()
       // if (!this.notification.email) {

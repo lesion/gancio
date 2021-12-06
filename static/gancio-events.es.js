@@ -279,7 +279,7 @@ if (typeof HTMLElement === "function") {
 }
 function get_each_context(ctx, list, i) {
   const child_ctx = ctx.slice();
-  child_ctx[6] = list[i];
+  child_ctx[7] = list[i];
   return child_ctx;
 }
 function create_if_block$1(ctx) {
@@ -373,16 +373,16 @@ function create_each_block(ctx) {
   let a;
   let div2;
   let div0;
-  let t0_value = when$1(ctx[6].start_datetime) + "";
+  let t0_value = when$1(ctx[7].start_datetime) + "";
   let t0;
   let t1;
   let span;
   let t2;
-  let t3_value = ctx[6].place.name + "";
+  let t3_value = ctx[7].place.name + "";
   let t3;
   let t4;
   let div1;
-  let t5_value = ctx[6].title + "";
+  let t5_value = ctx[7].title + "";
   let t5;
   let t6;
   let a_href_value;
@@ -404,7 +404,7 @@ function create_each_block(ctx) {
       attr(div0, "class", "subtitle");
       attr(div1, "class", "title");
       attr(div2, "class", "content");
-      attr(a, "href", a_href_value = "" + (ctx[0] + "/event/" + (ctx[6].slug || ctx[6].id)));
+      attr(a, "href", a_href_value = "" + (ctx[0] + "/event/" + (ctx[7].slug || ctx[7].id)));
       attr(a, "target", "_blank");
     },
     m(target, anchor) {
@@ -422,13 +422,13 @@ function create_each_block(ctx) {
       append(a, t6);
     },
     p(ctx2, dirty) {
-      if (dirty & 4 && t0_value !== (t0_value = when$1(ctx2[6].start_datetime) + ""))
+      if (dirty & 4 && t0_value !== (t0_value = when$1(ctx2[7].start_datetime) + ""))
         set_data(t0, t0_value);
-      if (dirty & 4 && t3_value !== (t3_value = ctx2[6].place.name + ""))
+      if (dirty & 4 && t3_value !== (t3_value = ctx2[7].place.name + ""))
         set_data(t3, t3_value);
-      if (dirty & 4 && t5_value !== (t5_value = ctx2[6].title + ""))
+      if (dirty & 4 && t5_value !== (t5_value = ctx2[7].title + ""))
         set_data(t5, t5_value);
-      if (dirty & 5 && a_href_value !== (a_href_value = "" + (ctx2[0] + "/event/" + (ctx2[6].slug || ctx2[6].id)))) {
+      if (dirty & 5 && a_href_value !== (a_href_value = "" + (ctx2[0] + "/event/" + (ctx2[7].slug || ctx2[7].id)))) {
         attr(a, "href", a_href_value);
       }
     },
@@ -487,13 +487,26 @@ function when$1(timestamp) {
   });
 }
 function instance$1($$self, $$props, $$invalidate) {
-  let { baseurl = "https://dev.gancio.org" } = $$props;
+  let { baseurl = "" } = $$props;
   let { title = "Gancio events" } = $$props;
   let { maxlength = false } = $$props;
-  let { tags = false } = $$props;
+  let { tags = "" } = $$props;
+  let { places = "" } = $$props;
   let events = [];
   function update2(v) {
-    fetch(`${baseurl}/api/events${maxlength ? "?max=" + maxlength : ""}`).then((res) => res.json()).then((e) => $$invalidate(2, events = e));
+    const params = [];
+    if (maxlength) {
+      params.push(`max=${maxlength}`);
+    }
+    if (tags) {
+      params.push(`tags=${tags}`);
+    }
+    if (places) {
+      params.push(`places=${places}`);
+    }
+    fetch(`${baseurl}/api/events?${params.join("&")}`).then((res) => res.json()).then((e) => {
+      $$invalidate(2, events = e);
+    });
   }
   $$self.$$set = ($$props2) => {
     if ("baseurl" in $$props2)
@@ -504,13 +517,15 @@ function instance$1($$self, $$props, $$invalidate) {
       $$invalidate(3, maxlength = $$props2.maxlength);
     if ("tags" in $$props2)
       $$invalidate(4, tags = $$props2.tags);
+    if ("places" in $$props2)
+      $$invalidate(5, places = $$props2.places);
   };
   $$self.$$.update = () => {
-    if ($$self.$$.dirty & 10) {
+    if ($$self.$$.dirty & 58) {
       update2();
     }
   };
-  return [baseurl, title, events, maxlength, tags];
+  return [baseurl, title, events, maxlength, tags, places];
 }
 class GancioEvents extends SvelteElement {
   constructor(options) {
@@ -524,7 +539,8 @@ class GancioEvents extends SvelteElement {
       baseurl: 0,
       title: 1,
       maxlength: 3,
-      tags: 4
+      tags: 4,
+      places: 5
     }, null);
     if (options) {
       if (options.target) {
@@ -537,7 +553,7 @@ class GancioEvents extends SvelteElement {
     }
   }
   static get observedAttributes() {
-    return ["baseurl", "title", "maxlength", "tags"];
+    return ["baseurl", "title", "maxlength", "tags", "places"];
   }
   get baseurl() {
     return this.$$.ctx[0];
@@ -565,6 +581,13 @@ class GancioEvents extends SvelteElement {
   }
   set tags(tags) {
     this.$$set({ tags });
+    flush();
+  }
+  get places() {
+    return this.$$.ctx[5];
+  }
+  set places(places) {
+    this.$$set({ places });
     flush();
   }
 }
@@ -666,7 +689,7 @@ function create_if_block_1(ctx) {
       if (!src_url_equal(img.src, img_src_value = ctx[2](ctx[1])))
         attr(img, "src", img_src_value);
       attr(img, "alt", img_alt_value = ctx[1].media[0].name);
-      attr(img, "style", img_style_value = "background-position: " + position(ctx[1]) + "; aspect-ratio=1.7778;");
+      attr(img, "style", img_style_value = "object-position: " + position(ctx[1]) + "; aspect-ratio=1.7778;");
     },
     m(target, anchor) {
       insert(target, img, anchor);
@@ -678,7 +701,7 @@ function create_if_block_1(ctx) {
       if (dirty & 2 && img_alt_value !== (img_alt_value = ctx2[1].media[0].name)) {
         attr(img, "alt", img_alt_value);
       }
-      if (dirty & 2 && img_style_value !== (img_style_value = "background-position: " + position(ctx2[1]) + "; aspect-ratio=1.7778;")) {
+      if (dirty & 2 && img_style_value !== (img_style_value = "object-position: " + position(ctx2[1]) + "; aspect-ratio=1.7778;")) {
         attr(img, "style", img_style_value);
       }
     },
@@ -755,7 +778,6 @@ function instance($$self, $$props, $$invalidate) {
   }
   onMount(() => {
     mounted = true;
-    console.error("dentro onMount ", id, baseurl);
     update2(id, baseurl);
   });
   function thumbnail(event2) {
@@ -777,7 +799,7 @@ function instance($$self, $$props, $$invalidate) {
 class GancioEvent extends SvelteElement {
   constructor(options) {
     super();
-    this.shadowRoot.innerHTML = `<style>.card{display:block;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;box-shadow:0 4px 8px 0 rgba(0,0,0,0.2);transition:0.3s;border-radius:5px;max-width:500px;text-decoration:none;color:white;background-color:#1e1e1e;overflow:hidden}img{border-radius:5px 5px 0 0;max-height:250px;min-height:160px;width:100%;object-fit:cover;object-position:top}.card:hover .container{padding-left:20px}.card:hover{box-shadow:0 8px 16px 0 rgba(0,0,0,0.2)}.container{transition:padding-left .2s;padding:16px}.place{font-weight:600;color:#ff6e40}</style>`;
+    this.shadowRoot.innerHTML = `<style>.card{display:block;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;box-shadow:0 4px 8px 0 rgba(0,0,0,0.2);transition:0.3s;border-radius:5px;max-width:500px;text-decoration:none;color:white;background-color:#1e1e1e;overflow:hidden}img{border-radius:5px 5px 0 0;min-height:160px;width:100%;object-fit:cover;object-position:top}.card:hover .container{padding-left:20px}.card:hover{box-shadow:0 8px 16px 0 rgba(0,0,0,0.2)}.container{transition:padding-left .2s;padding:16px}.place{font-weight:600;color:#ff6e40}</style>`;
     init(this, {
       target: this.shadowRoot,
       props: attribute_to_object(this.attributes),

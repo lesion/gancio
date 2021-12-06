@@ -41,15 +41,14 @@ v-container#event.pa-0.pa-sm-2
             //- tags, hashtags
             v-card-text(v-if='event.tags.length')
               v-chip.p-category.ml-1.mt-3(v-for='tag in event.tags' color='primary'
-                outlined :key='tag' v-text='tag')
+                outlined :key='tag')
+                span(v-text='tag')
 
             //- info & actions
             v-toolbar
               v-tooltip(bottom) {{$t('common.copy_link')}}
                 template(v-slot:activator="{on, attrs} ")
-                  v-btn.ml-2(large icon v-on='on' color='primary'
-                    v-clipboard:success='copyLink'
-                    v-clipboard:copy='`${settings.baseurl}/event/${event.slug || event.id}`')
+                  v-btn.ml-2(large icon v-on='on' color='primary' @click='clipboard(`${settings.baseurl}/event/${event.slug || event.id}`)')
                     v-icon mdi-content-copy
               v-tooltip(bottom) {{$t('common.embed')}}
                 template(v-slot:activator="{on, attrs} ")
@@ -136,10 +135,13 @@ import EventAdmin from './eventAdmin'
 import EmbedEvent from './embedEvent'
 import get from 'lodash/get'
 import moment from 'dayjs'
+import clipboard from '../../assets/clipboard'
+
 const htmlToText = require('html-to-text')
 
 export default {
   name: 'Event',
+  mixins: [clipboard],
   components: { EventAdmin, EmbedEvent },
   async asyncData ({ $axios, params, error, store }) {
     try {

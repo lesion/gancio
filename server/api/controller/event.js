@@ -510,7 +510,7 @@ const eventController = {
 
     let where_tags = {}
     if (tags) {
-      where_tags = { where: { tag: tags.split(',') } }
+      where_tags = { where: { [Op.or]: { tag: tags.split(',') } } }
     }
 
     const events = await Event.findAll({

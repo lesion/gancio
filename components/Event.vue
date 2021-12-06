@@ -21,8 +21,7 @@
             v-icon mdi-dots-vertical
         v-list(dense)
           v-list-item-group
-            v-list-item(v-clipboard:success="() => $root.$message('common.copied', { color: 'success' })"
-                  v-clipboard:copy='`${settings.baseurl}/event/${event.slug || event.id}`')
+            v-list-item(@click='clipboard(`${settings.baseurl}/event/${event.slug || event.id}`)')
               v-list-item-icon
                 v-icon mdi-content-copy
               v-list-item-content
@@ -45,11 +44,13 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import clipboard from '../assets/clipboard'
 
 export default {
   props: {
     event: { type: Object, default: () => ({}) }
   },
+  mixins: [clipboard],
   computed: {
     ...mapState(['settings']),
     thumbnail () {

@@ -3,10 +3,8 @@ v-card
   v-card-title(v-text="$t('common.embed_title')")
   v-card-text
         v-alert.mb-3.mt-1(type='info' show-icon) {{$t('common.embed_help')}}
-        v-alert.pa-5.my-4.blue-grey.darken-4.text-body-1.lime--text.text--lighten-3 {{code.script}}<br/>{{code.el}}<br/><br/>
-          v-btn.float-end(text  color='primary'
-            v-clipboard:copy='code'
-            v-clipboard:success='copyLink') {{$t("common.copy")}}
+        v-alert.pa-5.my-4.blue-grey.darken-4.text-body-1.lime--text.text--lighten-3 <pre>{{code}}</pre>
+          v-btn.float-end(text  color='primary' @click='clipboard(code)') {{$t("common.copy")}}
             v-icon.ml-1 mdi-content-copy
         p.mx-auto
           .mx-auto
@@ -14,27 +12,22 @@ v-card
   v-card-actions
     v-spacer
     v-btn(text color='warning' @click="$emit('close')") {{$t("common.cancel")}}
-    v-btn(text v-clipboard:copy='code' v-clipboard:success='copyLink' color="primary") {{$t("common.copy")}}
+    v-btn(text @click='clipboard(code)' color="primary") {{$t("common.copy")}}
 </template>
 <script>
 import { mapState } from 'vuex'
+import clipboard from '../../assets/clipboard'
 
 export default {
   name: 'EmbedEvent',
+  mixins: [clipboard],
   props: {
     event: { type: Object, default: () => ({}) }
   },
   computed: {
     ...mapState(['settings']),
     code () {
-      const script = `<script src='${this.settings.baseurl}/gancio-events.es.js'/>`
-      const el = `<gancio-event id='${this.event.id}' baseurl='${this.settings.baseurl}'></gancio-event>`
-      return { script, el }
-    }
-  },
-  methods: {
-    copyLink () {
-      this.$root.$message('common.copied', { color: 'success' })
+      return `<script src='${this.settings.baseurl}/gancio-events.es.js'/>\n<gancio-event baseurl='${this.settings.baseurl}' id=${this.event.id}></gancio-event>\n\n`
     }
   }
 }

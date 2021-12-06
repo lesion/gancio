@@ -1,27 +1,35 @@
 <script>
-  export let baseurl = 'https://dev.gancio.org'
+  import { onMount } from 'svelte'
+  export let baseurl = ''
   export let title = 'Gancio events'
   export let maxlength = false
-  export let tags = false 
+  export let tags = ''
+  export let places = ''
 
   let events = []
-  function update (v) {
 
+  function update (v) {
     const params = []
     if (maxlength) {
       params.push(`max=${maxlength}`)
     }
 
     if(tags) {
-      params.push(`tags="${tags}"`)
+      params.push(`tags=${tags}`)
     }
 
+    if (places) {
+      params.push(`places=${places}`)
+    }
     
-    fetch(`${baseurl}/api/events${maxlength ? '?max=' + maxlength : '' }`)
+    fetch(`${baseurl}/api/events?${params.join('&')}`)
     .then(res => res.json())
-    .then(e => events = e)
+    .then(e => {
+      events = e
+    })
   }
 
+  
   function when (timestamp) {
     return new Date(timestamp*1000)
             .toLocaleDateString(undefined,
@@ -33,8 +41,7 @@
                 minute: '2-digit'
               })
   }
-  // update()
-  $: update(maxlength && title)
+  $: update(maxlength && title && places && tags)
 
 </script>
 <svelte:options tag="gancio-events"/>

@@ -51,15 +51,17 @@
           v-list-item-content
             v-list-item-title {{$t('common.logout')}}
 
-    v-btn(icon v-clipboard:copy='feedLink' v-clipboard:success='copyLink' aria-label='RSS')
+    v-btn(icon @click='clipboard(feedLink, "common.feed_url_copied")' aria-label='RSS')
       v-icon(color='orange') mdi-rss
 
 </template>
 <script>
 import { mapState } from 'vuex'
+import clipboard from '../assets/clipboard'
 
 export default {
   name: 'Nav',
+  mixins: [clipboard],
   computed: {
     ...mapState(['filters', 'settings']),
     feedLink () {
@@ -83,9 +85,6 @@ export default {
     }
   },
   methods: {
-    copyLink () {
-      this.$root.$message('common.feed_url_copied')
-    },
     logout () {
       this.$root.$message('common.logout_ok')
       this.$auth.logout()
