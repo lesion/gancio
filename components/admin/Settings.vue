@@ -83,7 +83,7 @@ export default {
   computed: {
     ...mapState(['settings']),
     showSMTPAlert () {
-      return !this.setup && !this.settings.admin_email && !this.settings.smtp && !this.settings.smtp.host && !this.settings.smtp.user
+      return !this.setup && (!this.settings.admin_email || !this.settings.smtp || !this.settings.smtp.host || !this.settings.smtp.user)
     },
     instance_locale: {
       get () { return this.settings.instance_locale },

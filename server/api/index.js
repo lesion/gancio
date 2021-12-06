@@ -21,7 +21,6 @@ if (config.firstrun) {
 
 } else {
 
-
   const { isAuth, isAdmin } = require('./auth')
   const eventController = require('./controller/event')
   const settingsController = require('./controller/settings')

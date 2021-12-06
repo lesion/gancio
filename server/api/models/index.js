@@ -38,18 +38,18 @@ const db = {
       }
     })
     return await umzug.up()    
-  }
-}
-
-if (!config.firstrun) {
-  try {
-    db.connect().then(e => {
-      log.debug('Running migrations')
-      db.runMigrations()
-    })
-  } catch (e) {
-    log.warn(` ⚠️ Cannot connect to db, check your configuration => ${e}`)
-    process.exit(1)
+  },
+  async initialize () {
+    if (!config.firstrun) {
+      try {
+        await db.connect()
+        log.debug('Running migrations')
+        return db.runMigrations()
+      } catch (e) {
+        log.warn(` ⚠️ Cannot connect to db, check your configuration => ${e}`)
+        process.exit(1)
+      }
+    }
   }
 }
 
