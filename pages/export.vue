@@ -134,7 +134,7 @@ export default {
         params.push('maxlength=' + this.list.maxEvents)
       }
 
-      return `<script src="${this.settings.baseurl}/gancio-events.es.js'></script>\n<gancio-events ${params.join(' ')}></gancio-events>\n\n`
+      return `<script src="${this.settings.baseurl}\/gancio-events.es.js'><\/script>\n<gancio-events ${params.join(' ')}></gancio-events>\n\n`
 
       
     },

@@ -27,7 +27,7 @@ export default {
   computed: {
     ...mapState(['settings']),
     code () {
-      return `<script src='${this.settings.baseurl}/gancio-events.es.js'></script>\n<gancio-event baseurl='${this.settings.baseurl}' id=${this.event.id}></gancio-event>\n\n`
+      return `<script src='${this.settings.baseurl}\/gancio-events.es.js'><\/script>\n<gancio-event baseurl='${this.settings.baseurl}' id=${this.event.id}></gancio-event>\n\n`
     }
   }
 }
