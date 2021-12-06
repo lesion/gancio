@@ -75,6 +75,7 @@
 /* Add rounded corners to the top left and the top right corner of the image */
 img {
   border-radius: 5px 5px 0 0;
+  max-height: 250px;
   min-height: 160px;
   width: 100%;
   object-fit: cover;
