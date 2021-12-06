@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import VueClipboard from 'vue-clipboard2'
 import Vuetify from 'vuetify'
 
 // import it from 'vuetify/lib/locale/it.js'
@@ -12,7 +11,6 @@ import Vuetify from 'vuetify'
 
 export default ({ app }) => {
   Vue.use(Vuetify)
-  Vue.use(VueClipboard)
   app.vuetify = new Vuetify({
     // lang: {
       // locales: { en, it }, //, es, fr, no, ca },
