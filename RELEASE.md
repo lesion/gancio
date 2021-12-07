@@ -1,11 +1,7 @@
 - change version in package.json
 - add changes to CHANGELOG / changelog.md
-- yarn build
-- yarn pack
-- yarn publish
-- yarn doc
+./release.sh
 - git add .
 - git ci -m 'v...'
 - git tag ...
 - git push --tags
-- 
