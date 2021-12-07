@@ -53,7 +53,6 @@
                   v-text-field(v-model='list.title' :label='$t("common.title")')
                   v-text-field(v-model='list.maxEvents' type='number' min='1' :label='$t("common.max_events")')
                 v-col.float-right(:span='12')
-                  span {{filters.places.join(',')}}
                   gancio-events(:baseurl='settings.baseurl'
                     :maxlength='list.maxEvents &&  Number(list.maxEvents)'
                     :title='list.title'
