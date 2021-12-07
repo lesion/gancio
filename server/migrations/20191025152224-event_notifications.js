@@ -5,7 +5,7 @@ module.exports = {
     return queryInterface.createTable('event_notifications', {
       status: {
         type: Sequelize.ENUM,
-        values: ['new', 'sent', 'error'],
+        values: ['new', 'sent', 'error', 'sending'],
         defaultValue: 'new',
         index: true
       },

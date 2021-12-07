@@ -13,6 +13,7 @@ const db = {
   },
   connect (dbConf = config.db) {
     log.debug(`Connecting to DB: ${JSON.stringify(dbConf)}`)
+    dbConf.dialectOptions = { autoJsonMap: false }
     db.sequelize = new Sequelize(dbConf)
     return db.sequelize.authenticate()
   },

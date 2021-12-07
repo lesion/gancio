@@ -6,9 +6,11 @@
         v-btn-toggle(text color='primary' v-model='db.dialect')
           v-btn(value='sqlite' text) sqlite
           v-btn(value='postgres' text) postgres
+          v-btn(value='mariadb' text) mariadb
+          v-btn(value='mysql' text) mysql
         template(v-if='db.dialect === "sqlite"')
           v-text-field(v-model='db.storage' label='Path')
-        template(v-if='db.dialect === "postgres"')
+        template(v-if='db.dialect !== "sqlite"')
           v-text-field(v-model='db.hostname' label='Hostname' :rules="[$validators.required('hostname')]")
           v-text-field(v-model='db.database' label='Database' :rules="[$validators.required('database')]")
           v-text-field(v-model='db.username' label='Username' :rules="[$validators.required('username')]")
