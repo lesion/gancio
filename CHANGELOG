@@ -1,5 +1,19 @@
 All notable changes to this project will be documented in this file.
 
+### 1.2.2 - 7 dic '21
+  - shiny new gancio-event\[s\] webcomponents => [docs](https://gancio.org/usage/embed)
+  - new backend plugin system
+  - improve media focal point selection
+  - improve non-js experience (load img, use native lazy loading)
+  - improve user_confirm / recover code flow
+  - fix task manager exception
+  - fix db initialization when a custom setup is used, #131
+  - remove vue-clipboard2 dependency due to [this](https://github.com/euvl/v-clipboard/issues/18) bug and using a [native with fallback mixin instead](./assets/clipboard.js)
+  - fix a regression to support old CPU, #130
+  - makes dialog use fullscreen on mobile
+  - fix Delete AP Actor Action from fediverse when remote Actor is gone
+  - add `max` param to /events API
+
 ### 1.2.1 - 11 nov '21
   - fix `Note` remove from fediverse
   - AP Actor is now `Application`, was `Person`
