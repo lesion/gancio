@@ -637,6 +637,7 @@ function create_if_block(ctx) {
       attr(div2, "class", "container");
       attr(a, "href", a_href_value = "" + (ctx[0] + "/event/" + (ctx[1].slug || ctx[1].id)));
       attr(a, "class", "card");
+      attr(a, "target", "_blank");
     },
     m(target, anchor) {
       insert(target, a, anchor);
