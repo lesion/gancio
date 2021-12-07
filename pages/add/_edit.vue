@@ -6,7 +6,7 @@
         v-spacer
         v-btn(link text color='primary' @click='openImportDialog=true')
           <v-icon>mdi-file-import</v-icon> {{$t('common.import')}}
-      v-dialog(v-model='openImportDialog')
+      v-dialog(v-model='openImportDialog' :fullscreen='$vuetify.breakpoint.xsOnly')
         ImportDialog(@close='openImportDialog=false' @imported='eventImported')
 
       v-card-text.px-0.px-xs-2
@@ -33,8 +33,7 @@
                 WhereInput(ref='where' v-model='event.place')
 
               //- When
-              DateInput(v-model='date')
-
+              DateInput(v-model='date' :event='event')
               //- Description
               v-col.px-0(cols='12')
                 Editor.px-3.ma-0(
@@ -45,14 +44,7 @@
 
               //- MEDIA / FLYER / POSTER
               v-col(cols=12 md=6)
-                v-file-input(
-                  :label="$t('common.media')"
-                  :hint="$t('event.media_description')"
-                  prepend-icon="mdi-camera"
-                  v-model='event.image'
-                  persistent-hint
-                  accept='image/*')
-                v-img.col-12.col-sm-2.ml-3(v-if='mediaPreview' :src='mediaPreview')
+                MediaInput(v-model='event.media[0]' :event='event' @remove='event.media=[]')
 
               //- tags
               v-col(cols=12 md=6)
@@ -66,7 +58,7 @@
       v-card-actions
         v-spacer
         v-btn(@click='done' :loading='loading' :disabled='!valid || loading'
-          color='primary') {{edit?$t('common.edit'):$t('common.send')}}
+          color='primary') {{edit?$t('common.save'):$t('common.send')}}
 
 </template>
 <script>
@@ -77,16 +69,17 @@ import List from '@/components/List'
 import ImportDialog from './ImportDialog'
 import DateInput from './DateInput'
 import WhereInput from './WhereInput'
+import MediaInput from './MediaInput'
 
 export default {
   name: 'NewEvent',
-  components: { List, Editor, ImportDialog, WhereInput, DateInput },
+  components: { List, Editor, ImportDialog, MediaInput, WhereInput, DateInput },
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
   async asyncData ({ params, $axios, error, store }) {
     if (params.edit) {
-      const data = { event: { place: {} } }
+      const data = { event: { place: {}, media: [] } }
       data.id = params.edit
       data.edit = true
       let event
@@ -112,7 +105,7 @@ export default {
       data.event.description = event.description
       data.event.id = event.id
       data.event.tags = event.tags
-      data.event.image_path = event.image_path
+      data.event.media = event.media || []
       return data
     }
     return {}
@@ -128,15 +121,14 @@ export default {
         title: '',
         description: '',
         tags: [],
-        image: null
+        media: []
       },
       page: { month, year },
       fileList: [],
       id: null,
-      date: { from: 0, due: 0, recurrent: null },
+      date: { from: null, due: null, recurrent: null },
       edit: false,
       loading: false,
-      mediaUrl: '',
       disableAddress: false
     }
   },
@@ -145,16 +137,7 @@ export default {
       title: `${this.settings.title} - ${this.$t('common.add_event')}`
     }
   },
-  computed: {
-    ...mapState(['tags', 'places', 'settings']),
-    mediaPreview () {
-      if (!this.event.image && !this.event.image_path) {
-        return false
-      }
-      const url = this.event.image ? URL.createObjectURL(this.event.image) : `/media/thumb/${this.event.image_path}`
-      return url
-    }
-  },
+  computed: mapState(['tags', 'places', 'settings']),
   methods: {
     ...mapActions(['updateMeta']),
     eventImported (event) {
@@ -170,9 +153,6 @@ export default {
       }
       this.openImportDialog = false
     },
-    cleanFile () {
-      this.event.image = {}
-    },
     async done () {
       if (!this.$refs.form.validate()) {
         this.$nextTick(() => {
@@ -187,16 +167,20 @@ export default {
 
       formData.append('recurrent', JSON.stringify(this.date.recurrent))
 
-      if (this.event.image) {
-        formData.append('image', this.event.image)
+      if (this.event.media.length) {
+        formData.append('image', this.event.media[0].image)
+        formData.append('image_url', this.event.media[0].url)
+        formData.append('image_name', this.event.media[0].name)
+        formData.append('image_focalpoint', this.event.media[0].focalpoint)
       }
+
       formData.append('title', this.event.title)
       formData.append('place_name', this.event.place.name)
       formData.append('place_address', this.event.place.address)
       formData.append('description', this.event.description)
       formData.append('multidate', !!this.date.multidate)
       formData.append('start_datetime', dayjs(this.date.from).unix())
-      formData.append('end_datetime', this.date.due && dayjs(this.date.due).unix())
+      formData.append('end_datetime', this.date.due ? dayjs(this.date.due).unix() : this.date.from.add(2, 'hour').unix())
 
       if (this.edit) {
         formData.append('id', this.event.id)
@@ -219,7 +203,7 @@ export default {
             this.$root.$message('event.image_too_big', { color: 'error' })
             break
           default:
-            this.$root.$message(e.response.data, { color: 'error' })
+            this.$root.$message(e.response ? e.response.data : e, { color: 'error' })
         }
         this.loading = false
       }

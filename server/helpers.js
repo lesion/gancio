@@ -1,12 +1,10 @@
 const ical = require('ical.js')
 const settingsController = require('./api/controller/settings')
 const acceptLanguage = require('accept-language')
-
+const express = require('express')
 const dayjs = require('dayjs')
-const timezone = require('dayjs/plugin/timezone')
-dayjs.extend(timezone)
 
-const config = require('config')
+const config = require('./config')
 const log = require('./log')
 const pkg = require('../package.json')
 const fs = require('fs')
@@ -47,32 +45,63 @@ domPurify.addHook('beforeSanitizeElements', node => {
 })
 
 module.exports = {
+
+  randomString (length = 12) {
+    const wishlist = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    return Array.from(crypto.randomFillSync(new Uint32Array(length)))
+      .map(x => wishlist[x % wishlist.length])
+      .join('')
+  },
+
   sanitizeHTML (html) {
     return domPurify.sanitize(html, {
-      ALLOWED_TAGS: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'br',
+      ALLOWED_TAGS: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'br', 'i', 'span',
         'h6', 'b', 'a', 'li', 'ul', 'ol', 'code', 'blockquote', 'u', 's', 'strong'],
       ALLOWED_ATTR: ['href', 'target']
     })
   },
 
   async initSettings (req, res, next) {
-    await settingsController.load()
     // initialize settings
-    req.settings = settingsController.settings
-    req.secretSettings = settingsController.secretSettings
+    req.settings = { ...settingsController.settings }
 
     req.settings.baseurl = config.baseurl
+    req.settings.hostname = config.hostname
     req.settings.title = req.settings.title || config.title
     req.settings.description = req.settings.description || config.description
     req.settings.version = pkg.version
 
-    // set locale and user locale
-    const acceptedLanguages = req.headers['accept-language']
+    // select locale based on cookie and accept-language header
     acceptLanguage.languages(Object.keys(locales))
-    req.settings.locale = acceptLanguage.get(acceptedLanguages)
-    req.settings.user_locale = settingsController.user_locale[req.settings.locale]
-    dayjs.locale(req.settings.locale)
-    dayjs.tz.setDefault(req.settings.instance_timezone)
+    req.acceptedLocale = acceptLanguage.get(req.headers['accept-language'])
+
+    // set locale and user locale
+    req.user_locale = settingsController.user_locale[req.acceptedLocale]
+    dayjs.locale(req.acceptedLocale)
+    next()
+  },
+
+  serveStatic () {
+    const router = express.Router()
+    // serve event's images/thumb
+    router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' } ))
+    router.use('/noimg.svg', express.static('./static/noimg.svg'))
+    
+    router.use('/logo.png', (req, res, next) => {
+      const logoPath = req.settings.logo || './static/gancio'
+      return express.static(logoPath + '.png')(req, res, next)
+    })
+
+    router.use('/favicon.ico', (req, res, next) => {
+      const faviconPath = req.settings.logo || './assets/favicon'
+      return express.static(faviconPath + '.ico')(req, res, next)
+    })
+
+    return router
+  },
+
+  logRequest (req, res, next) {
+    log.debug(`${req.method} ${req.path}`)
     next()
   },
 
@@ -132,6 +161,7 @@ module.exports = {
           }
           const events = data.items.map(e => {
             const props = e.properties
+            const media = get(props, 'featured[0]')
             return {
               title: get(props, 'name[0]', ''),
               description: get(props, 'description[0]', ''),
@@ -142,7 +172,7 @@ module.exports = {
               start_datetime: dayjs(get(props, 'start[0]', '')).unix(),
               end_datetime: dayjs(get(props, 'end[0]', '')).unix(),
               tags: get(props, 'category', []),
-              image_path: get(props, 'featured[0]')
+              media: media ? [{ name: get(props, 'name[0]', ''), url: get(props, 'featured[0]'), focalpoint: [0, 0] }] : []
             }
           })
           return res.json(events)
@@ -163,8 +193,8 @@ module.exports = {
         }))
       }
     } catch (e) {
-      log.error(e)
-      res.status(400).json(e.toString)
+      log.error('[Import URL]', e)
+      res.status(400).json(e.toString())
     }
   },
 
@@ -184,5 +214,20 @@ module.exports = {
     cursor = cursor.hour(date.hour()).minute(date.minute()).second(0)
     log.debug(cursor)
     return cursor
+  },
+ 
+  async APRedirect (req, res, next) {
+    const accepted = req.accepts('html', 'application/json', 'application/activity+json', 'application/ld+json' )
+    if (accepted && accepted !== 'html') {
+      const eventController = require('../server/api/controller/event')
+      try {
+        const event = await eventController._get(req.params.slug)
+        if (event) {
+          return res.redirect(`/federation/m/${event.id}`)
+        }
+      } catch (e) {}
+    }
+    next()
   }
+
 }

@@ -1,17 +1,21 @@
 <template lang="pug">
+v-container
   v-row.mt-5(align='center' justify='center')
     v-col(cols='12' md="6" lg="5" xl="4")
       v-card
-        v-card-title <nuxt-link to='/'><img src='/favicon.ico'/></nuxt-link> {{$t('common.set_password')}}
-        template(v-if='valid')
-          v-card-text(v-if='valid')
-            v-form(v-if='valid')
-              v-text-field(type='password' v-model='new_password' :label="$t('common.new_password')")
+        v-card-title {{$t('common.set_password')}}
+        template(v-if='user')
+          v-card-subtitle {{user.email}}
+          v-card-text
+            v-form
+              v-text-field(type='password' v-model='new_password' :label="$t('common.new_password')" :rules='$validators.password' autofocus)
 
           v-card-actions
-            v-btn(color="success" :disabled='!new_password' @click='change_password') {{$t('common.send')}}
+            v-spacer
+            v-btn(text color="primary" :disabled='!new_password' @click='change_password') {{$t('common.send')}}
 
-        v-card-text(v-else) {{$t('recover.not_valid_code')}}
+        v-card-text(v-else)
+          v-alert.ma-5(type='error') {{$t('recover.not_valid_code')}}
 
 </template>
 <script>
@@ -21,10 +25,10 @@ export default {
   async asyncData ({ params, $axios }) {
     const code = params.code
     try {
-      const valid = await $axios.$post('/user/check_recover_code', { recover_code: code })
-      return { valid, code }
+      const user = await $axios.$post('/user/check_recover_code', { recover_code: code })
+      return { user, code }
     } catch (e) {
-      return { valid: false }
+      return { user: false }
     }
   },
   data () {

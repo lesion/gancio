@@ -34,7 +34,7 @@ oauth.use((req, res) => res.sendStatus(404))
 
 oauth.use((err, req, res, next) => {
   const error_msg = err.toString()
-  log.error(error_msg)
+  log.error('[OAUTH USE] ' + error_msg)
   res.status(500).send(error_msg)
 })
 

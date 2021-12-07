@@ -1,6 +1,6 @@
 const crypto = require('crypto')
 const { Op } = require('sequelize')
-const config = require('config')
+const config = require('../../config')
 const mail = require('../mail')
 const User = require('../models/user')
 const settingsController = require('./settings')
@@ -26,7 +26,7 @@ const userController = {
     if (!recover_code) { return res.sendStatus(400) }
     const user = await User.findOne({ where: { recover_code: { [Op.eq]: recover_code } } })
     if (!user) { return res.sendStatus(400) }
-    res.sendStatus(200)
+    res.json({ email: user.email })
   },
 
   async updatePasswordWithRecoverCode (req, res) {
@@ -50,7 +50,7 @@ const userController = {
   },
 
   async getAll (req, res) {
-    const users = await User.scope('withoutPassword').findAll({
+    const users = await User.scope(req.user.is_admin ? 'withRecover' : 'withoutPassword').findAll({
       order: [['is_admin', 'DESC'], ['createdAt', 'DESC']]
     })
     res.json(users)
@@ -100,10 +100,10 @@ const userController = {
       const user = await User.create(req.body)
       log.info(`Sending registration email to ${user.email}`)
       mail.send(user.email, 'register', { user, config }, req.settings.locale)
-      mail.send(config.admin_email, 'admin_register', { user, config })
+      mail.send(settingsController.settings.admin_email, 'admin_register', { user, config })
       res.sendStatus(200)
     } catch (e) {
-      log.error('Registration error: "%s"', e)
+      log.error('Registration error:', e)
       res.status(404).json(e)
     }
   },
@@ -112,11 +112,11 @@ const userController = {
     try {
       req.body.is_active = true
       req.body.recover_code = crypto.randomBytes(16).toString('hex')
-      const user = await User.create(req.body)
+      const user = await User.scope('withRecover').create(req.body)
       mail.send(user.email, 'user_confirm', { user, config }, req.settings.locale)
       res.json(user)
     } catch (e) {
-      log.error('User creation error: %s', e)
+      log.error('User creation error:', e)
       res.status(404).json(e)
     }
   },
@@ -124,10 +124,11 @@ const userController = {
   async remove (req, res) {
     try {
       const user = await User.findByPk(req.params.id)
-      user.destroy()
+      await user.destroy()
+      log.warn(`User ${user.email} removed!`)
       res.sendStatus(200)
     } catch (e) {
-      log.error('User removal error: "%s"', e)
+      log.error('User removal error:"', e)
       res.status(404).json(e)
     }
   }

@@ -1,10 +1,10 @@
 const crypto = require('crypto')
 const path = require('path')
-const config = require('config')
+const config = require('../../config')
 const fs = require('fs')
 const { Op } = require('sequelize')
 const intersection = require('lodash/intersection')
-const linkifyHtml = require('linkifyjs/html')
+const linkifyHtml = require('linkify-html')
 const Sequelize = require('sequelize')
 const dayjs = require('dayjs')
 const helpers = require('../../helpers')
@@ -85,11 +85,26 @@ const eventController = {
     res.json(place)
   },
 
+  async _get(slug) {
+    // retrocompatibility, old events URL does not use slug, use id as fallback
+    const id = Number(slug) || -1
+    return Event.findOne({
+      where: {
+        [Op.or]: {
+          slug,
+          id
+        }
+      }
+    })
+  },
+
   async get (req, res) {
     const format = req.params.format || 'json'
     const is_admin = req.user && req.user.is_admin
-    const slug = req.params.event_id
-    const id = Number(req.params.event_id) || -1
+    const slug = req.params.event_slug
+
+    // retrocompatibility, old events URL does not use slug, use id as fallback
+    const id = Number(slug) || -1
     let event
 
     try {
@@ -118,7 +133,7 @@ const eventController = {
         order: [[Resource, 'id', 'DESC']]
       })
     } catch (e) {
-      log.error(e)
+      log.error('[EVENT]', e)
       return res.sendStatus(400)
     }
 
@@ -194,7 +209,7 @@ const eventController = {
       const notifier = require('../../notifier')
       notifier.notifyEvent('Create', event.id)
     } catch (e) {
-      log.error(e)
+      log.error('[EVENT]', e)
       res.sendStatus(404)
     }
   },
@@ -264,13 +279,18 @@ const eventController = {
   async add (req, res) {
     // req.err comes from multer streaming error
     if (req.err) {
-      log.info(req.err)
+      log.warn(req.err)
       return res.status(400).json(req.err.toString())
     }
 
     try {
       const body = req.body
       const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
+
+      if (!body.place_name) {
+        log.warn('Place is required')
+        return res.status(400).send('Place is required')
+      }
 
       const eventDetails = {
         title: body.title,
@@ -284,10 +304,23 @@ const eventController = {
         is_visible: !!req.user
       }
 
-      if (req.file) {
-        eventDetails.image_path = req.file.filename
-      } else if (body.image_url) {
-        eventDetails.image_path = await helpers.getImageFromURL(body.image_url)
+      if (req.file || body.image_url) {
+        let url
+        if (req.file) {
+          url = req.file.filename
+        } else {
+          url = await helpers.getImageFromURL(body.image_url)
+        }
+
+        let focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
+        focalpoint = [parseFloat(focalpoint[0]).toFixed(2), parseFloat(focalpoint[1]).toFixed(2)]
+        eventDetails.media = [{
+          url,
+          name: body.image_name || body.title || '',
+          focalpoint: [parseFloat(focalpoint[0]), parseFloat(focalpoint[1])]
+        }]
+      } else {
+        eventDetails.media = []
       }
 
       const event = await Event.create(eventDetails)
@@ -324,12 +357,12 @@ const eventController = {
       if (event.recurrent) {
         eventController._createRecurrent()
       } else {
-        // send notifications (mastodon / email)
+        // send notifications
         const notifier = require('../../notifier')
         notifier.notifyEvent('Create', event.id)
       }
     } catch (e) {
-      log.error(e)
+      log.error('[EVENT ADD]', e)
       res.sendStatus(400)
     }
   },
@@ -338,28 +371,29 @@ const eventController = {
     if (req.err) {
       return res.status(400).json(req.err.toString())
     }
-    const body = req.body
-    const event = await Event.findByPk(body.id)
-    if (!event) { return res.sendStatus(404) }
-    if (!req.user.is_admin && event.userId !== req.user.id) {
-      return res.sendStatus(403)
-    }
 
-    const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
-    const eventDetails = {
-      title: body.title,
-      // remove html tags
-      description: helpers.sanitizeHTML(linkifyHtml(body.description, { target: '_blank' })),
-      multidate: body.multidate,
-      start_datetime: body.start_datetime,
-      end_datetime: body.end_datetime,
-      recurrent
-    }
+    try {
+      const body = req.body
+      const event = await Event.findByPk(body.id)
+      if (!event) { return res.sendStatus(404) }
+      if (!req.user.is_admin && event.userId !== req.user.id) {
+        return res.sendStatus(403)
+      }
 
-    if (req.file) {
-      if (event.image_path && !event.recurrent) {
-        const old_path = path.resolve(config.upload_path, event.image_path)
-        const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.image_path)
+      const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
+      const eventDetails = {
+        title: body.title,
+        // remove html tags
+        description: helpers.sanitizeHTML(linkifyHtml(body.description, { target: '_blank' })),
+        multidate: body.multidate,
+        start_datetime: body.start_datetime,
+        end_datetime: body.end_datetime,
+        recurrent
+      }
+
+      if ((req.file || /^https?:\/\//.test(body.image_url)) && !event.recurrent && event.media && event.media.length) {
+        const old_path = path.resolve(config.upload_path, event.media[0].url)
+        const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.media[0].url)
         try {
           fs.unlinkSync(old_path)
           fs.unlinkSync(old_thumb_path)
@@ -367,34 +401,55 @@ const eventController = {
           log.info(e.toString())
         }
       }
-      eventDetails.image_path = req.file.filename
-    } else if (body.image_url) {
-      eventDetails.image_path = await helpers.getImageFromURL(body.image_url)
-    }
+      let url
+      if (req.file) {
+        url = req.file.filename
+      } else if (body.image_url) {
+        if (/^https?:\/\//.test(body.image_url)) {
+          url = await helpers.getImageFromURL(body.image_url)
+        } else {
+          url = body.image_url
+        }
+      }
 
-    await event.update(eventDetails)
-    const [place] = await Place.findOrCreate({
-      where: { name: body.place_name },
-      defaults: { address: body.place_address }
-    })
+      if (url && !event.recurrent) {
+        const focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
+        eventDetails.media = [{
+          url,
+          name: body.image_name || '',
+          focalpoint: [parseFloat(focalpoint[0].slice(0, 6)), parseFloat(focalpoint[1].slice(0, 6))]
+        }]
+      } else {
+        eventDetails.media = []
+      }
 
-    await event.setPlace(place)
-    await event.setTags([])
-    if (body.tags) {
-      await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
-      const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
-      await event.addTags(tags)
-    }
-    const newEvent = await Event.findByPk(event.id, { include: [Tag, Place] })
-    res.json(newEvent)
+      await event.update(eventDetails)
+      const [place] = await Place.findOrCreate({
+        where: { name: body.place_name },
+        defaults: { address: body.place_address }
+      })
 
-    // create recurrent instances of event if needed
-    // without waiting for the task manager
-    if (event.recurrent) {
-      eventController._createRecurrent()
-    } else {
-      const notifier = require('../../notifier')
-      notifier.notifyEvent('Update', event.id)
+      await event.setPlace(place)
+      await event.setTags([])
+      if (body.tags) {
+        await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
+        const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
+        await event.addTags(tags)
+      }
+      const newEvent = await Event.findByPk(event.id, { include: [Tag, Place] })
+      res.json(newEvent)
+
+      // create recurrent instances of event if needed
+      // without waiting for the task manager
+      if (event.recurrent) {
+        eventController._createRecurrent()
+      } else {
+        const notifier = require('../../notifier')
+        notifier.notifyEvent('Update', event.id)
+      }
+    } catch (e) {
+      log.error('[EVENT UPDATE]', e)
+      res.sendStatus(400)
     }
   },
 
@@ -402,9 +457,9 @@ const eventController = {
     const event = await Event.findByPk(req.params.id)
     // check if event is mine (or user is admin)
     if (event && (req.user.is_admin || req.user.id === event.userId)) {
-      if (event.image_path && !event.recurrent) {
-        const old_path = path.join(config.upload_path, event.image_path)
-        const old_thumb_path = path.join(config.upload_path, 'thumb', event.image_path)
+      if (event.media && event.media.length && !event.recurrent) {
+        const old_path = path.join(config.upload_path, event.media[0].url)
+        const old_thumb_path = path.join(config.upload_path, 'thumb', event.media[0].url)
         try {
           fs.unlinkSync(old_thumb_path)
           fs.unlinkSync(old_path)
@@ -414,6 +469,12 @@ const eventController = {
       }
       const notifier = require('../../notifier')
       await notifier.notifyEvent('Delete', event.id)
+
+      // unassociate child events
+      if (event.recurrent) {
+        await Event.update({ parentId: null }, { where: { parentId: event.id } })
+      }
+      log.debug('[EVENT REMOVED] ' + event.title)
       await event.destroy()
       res.sendStatus(200)
     } else {
@@ -421,7 +482,8 @@ const eventController = {
     }
   },
 
-  async _select ({ start, end, tags, places, show_recurrent }) {
+  async _select ({ start, end, tags, places, show_recurrent, max }) {
+
     const where = {
       // do not include parent recurrent event
       recurrent: null,
@@ -448,7 +510,7 @@ const eventController = {
 
     let where_tags = {}
     if (tags) {
-      where_tags = { where: { tag: tags.split(',') } }
+      where_tags = { where: { [Op.or]: { tag: tags.split(',') } } }
     }
 
     const events = await Event.findAll({
@@ -456,20 +518,23 @@ const eventController = {
       attributes: {
         exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'description', 'resources']
       },
-      order: ['start_datetime', Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE "tagTag" = tag) DESC')],
+      order: ['start_datetime'],
       include: [
         { model: Resource, required: false, attributes: ['id'] },
         {
           model: Tag,
+          order: [Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
           attributes: ['tag'],
           required: !!tags,
           ...where_tags,
           through: { attributes: [] }
         },
         { model: Place, required: true, attributes: ['id', 'name', 'address'] }
-      ]
+      ],
+      limit: max
     }).catch(e => {
-      log.error(e)
+      log.error('[EVENT]', e)
+      return []
     })
 
     return events.map(e => {
@@ -483,20 +548,22 @@ const eventController = {
    * Select events based on params
    */
   async select (req, res) {
-    const start = req.query.start
+    const start = req.query.start || dayjs().unix()
     const end = req.query.end
     const tags = req.query.tags
     const places = req.query.places
+    const max = req.query.max
     const show_recurrent = settingsController.settings.allow_recurrent_event &&
       (typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settingsController.settings.recurrent_event_visible)
 
     res.json(await eventController._select({
-      start, end, places, tags, show_recurrent
+      start, end, places, tags, show_recurrent, max
     }))
   },
 
   /**
    * Ensure we have the next instance of a recurrent event
+   * TODO: create a future instance if the next one is skipped
    */
   _createRecurrentOccurrence (e) {
     log.debug(`Create recurrent event [${e.id}] ${e.title}"`)
@@ -504,15 +571,16 @@ const eventController = {
       parentId: e.id,
       title: e.title,
       description: e.description,
-      image_path: e.image_path,
+      media: e.media,
       is_visible: true,
       userId: e.userId,
       placeId: e.placeId
     }
 
     const recurrent = e.recurrent
-    let cursor = dayjs()
     const start_date = dayjs.unix(e.start_datetime)
+    const now = dayjs()
+    let cursor = start_date > now ? start_date : now
     const duration = dayjs.unix(e.end_datetime).diff(start_date, 's')
     const frequency = recurrent.frequency
     const type = recurrent.type

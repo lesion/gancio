@@ -1,41 +1,56 @@
-// const fs = require('fs')
-// const path = require('path')
 const Sequelize = require('sequelize')
-// const basename = path.basename(__filename)
-const config = require('config')
-const consola = require('consola')
-// const db = {}
-let sequelize = null
+const Umzug = require('umzug')
+const path = require('path')
+const config = require('../../config')
+const log = require('../../log')
 
-try {
-  sequelize = new Sequelize(config.db)
-} catch (e) {
-  consola.warn(` ⚠️ Cannot connect to db, check your configuration => ${e}`)
-  process.exit(-1)
+const db = {
+  sequelize: null,
+  close () {
+    if (db.sequelize) {
+      return db.sequelize.close()
+    }
+  },
+  connect (dbConf = config.db) {
+    log.debug(`Connecting to DB: ${JSON.stringify(dbConf)}`)
+    db.sequelize = new Sequelize(dbConf)
+    return db.sequelize.authenticate()
+  },
+  async isEmpty () {
+    const users = await db.sequelize.query('SELECT * from users').catch(e => {})
+    return !(users && users.length)
+  },
+  async runMigrations () {
+    const logging = config.firstrun ? false : log.debug.bind(log)
+    const umzug = new Umzug({
+      storage: 'sequelize',
+      storageOptions: { sequelize: db.sequelize },
+      logging,
+      migrations: {
+        wrap: fun => {
+          return () =>
+            fun(db.sequelize.queryInterface, Sequelize).catch(e => {
+              // log.error(e)
+              return false
+            })
+        },
+        path: path.resolve(__dirname, '..', '..', 'migrations')
+      }
+    })
+    return await umzug.up()    
+  },
+  async initialize () {
+    if (!config.firstrun) {
+      try {
+        await db.connect()
+        log.debug('Running migrations')
+        return db.runMigrations()
+      } catch (e) {
+        log.warn(` ⚠️ Cannot connect to db, check your configuration => ${e}`)
+        process.exit(1)
+      }
+    }
+  }
 }
 
-sequelize.authenticate().catch(e => {
-  consola.error(' ⚠ Error connecting to DB: ', String(e))
-  process.exit(-1)
-})
-
-// fs
-//   .readdirSync(__dirname)
-//   .filter(file => {
-//     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js')
-//   })
-//   .forEach(file => {
-//     const model = sequelize.import(path.join(__dirname, file))
-//     db[model.name] = model
-//   })
-
-// Object.keys(db).forEach(modelName => {
-//   if (db[modelName].associate) {
-//     db[modelName].associate(db)
-//   }
-// })
-
-// db.sequelize = sequelize
-// db.Sequelize = Sequelize
-
-module.exports = sequelize
+module.exports = db

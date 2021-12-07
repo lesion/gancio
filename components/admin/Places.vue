@@ -3,7 +3,7 @@
     v-card-title {{$t('common.places')}}
     v-card-subtitle(v-html="$t('admin.place_description')")
 
-    v-dialog(v-model='dialog' width='600')
+    v-dialog(v-model='dialog' width='600' :fullscreen='$vuetify.breakpoint.xsOnly')
       v-card(color='secondary')
         v-card-title {{$t('admin.edit_place')}}
         v-card-text

@@ -7,7 +7,6 @@ const User = require('../api/models/user')
 const Tag = require('../api/models/tag')
 const Place = require('../api/models/place')
 
-const settingsController = require('../api/controller/settings')
 const Helpers = require('./helpers')
 const Inbox = require('./inbox')
 const log = require('../log')
@@ -21,37 +20,31 @@ router.use(cors())
 
 // is federation enabled? middleware
 router.use((req, res, next) => {
+  const settingsController = require('../api/controller/settings')
   if (settingsController.settings.enable_federation) { return next() }
   log.debug('Federation disabled!')
-  res.status(401).send('Federation disabled')
-  next(false)
+  return  res.status(401).send('Federation disabled')
 })
 
 router.use(express.json({ type: ['application/json', 'application/activity+json', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'] }))
 
 router.get('/m/:event_id', async (req, res) => {
+  const settingsController = require('../api/controller/settings')
   log.debug('[AP] Get event details ')
   const event_id = req.params.event_id
   if (req.accepts('html')) { return res.redirect(301, `/event/${event_id}`) }
 
   const event = await Event.findByPk(req.params.event_id, { include: [User, Tag, Place] })
   if (!event) { return res.status(404).send('Not found') }
-  return res.json(event.toAPNote(settingsController.settings.instance_name, req.settings.locale))
+  return res.json(event.toAP(settingsController.settings.instance_name, req.settings.instance_locale))
 })
 
 // get any message coming from federation
 router.post('/u/:name/inbox', Helpers.verifySignature, Inbox)
 
-function redirect_on_html_accepted (req, res, next) {
-  if (req.accepts('html')) {
-    return res.redirect(settingsController.settings.baseurl)
-  }
-  return next()
-}
-
 router.get('/u/:name/outbox', Users.outbox)
 router.get('/u/:name/followers', Users.followers)
-router.get('/u/:name', redirect_on_html_accepted, Users.get)
+router.get('/u/:name', Users.get)
 
 // Handle 404
 router.use((req, res) => {

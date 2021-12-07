@@ -10,7 +10,7 @@
       .col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-4.pa-sm-3
         //- this is needed as v-calendar does not support SSR
         //- https://github.com/nathanreyes/v-calendar/issues/336
-        client-only
+        client-only(placeholder='Calendar unavailable without js')
           Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='filteredEvents')
 
       .col.pt-0.pt-md-2
@@ -36,6 +36,7 @@ import Calendar from '@/components/Calendar'
 export default {
   name: 'Index',
   components: { Event, Search, Announcement, Calendar },
+  middleware: 'setup',
   async asyncData ({ params, $api, store }) {
     const events = await $api.getEvents({
       start: dayjs().startOf('month').unix(),
@@ -65,7 +66,7 @@ export default {
         { hid: 'og-description', name: 'og:description', content: this.settings.description },
         { hid: 'og-title', property: 'og:title', content: this.settings.title },
         { hid: 'og-url', property: 'og:url', content: this.settings.baseurl },
-        { property: 'og:image', content: this.settings.baseurl + '/favicon.ico' }
+        { property: 'og:image', content: this.settings.baseurl + '/logo.png' }
       ],
       link: [
         { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' }

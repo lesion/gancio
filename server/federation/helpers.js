@@ -1,7 +1,7 @@
 const axios = require('axios')
 // const request = require('request')
 const crypto = require('crypto')
-const config = require('config')
+const config = require('../config')
 const httpSignature = require('http-signature')
 const APUser = require('../api/models/ap_user')
 const Instance = require('../api/models/instance')
@@ -89,7 +89,7 @@ const Helpers = {
         to: ['https://www.w3.org/ns/activitystreams#Public'],
         cc: [...recipients[sharedInbox], `${config.baseurl}/federation/u/${settingsController.settings.instance_name}/followers`],
         actor: `${config.baseurl}/federation/u/${settingsController.settings.instance_name}`,
-        object: event.toAPNote(settingsController.settings.instance_name,
+        object: event.toAP(settingsController.settings.instance_name,
           settingsController.settings.instance_locale,
           recipients[sharedInbox])
       }
@@ -97,7 +97,8 @@ const Helpers = {
         'https://www.w3.org/ns/activitystreams',
         'https://w3id.org/security/v1',
         {
-          Hashtag: 'as:Hashtag'
+          Hashtag: 'as:Hashtag',
+          focalPoint: { '@container': '@list', '@id': 'toot:focalPoint' }
         }]
       await Helpers.signAndSend(JSON.stringify(body), sharedInbox)
     }
@@ -126,7 +127,7 @@ const Helpers = {
         return res.data
       })
       .catch(e => {
-        log.error(`${URL}: ${e}`)
+        log.error(`get Actor ${URL}`, String(e))
         return false
       })
 
@@ -159,7 +160,7 @@ const Helpers = {
         return Instance.create({ name: instance.title, domain, data, blocked: false })
       })
       .catch(e => {
-        log.error(e)
+        log.error('[INSTANCE CREATE]', e)
         return Instance.create({ name: domain, domain, blocked: false })
       })
     return instance
@@ -181,6 +182,9 @@ const Helpers = {
     let user = await Helpers.getActor(req.body.actor, instance)
     if (!user) {
       log.info(`Actor ${req.body.actor} not found`)
+      if (req.body.type === 'Delete') {
+        return res.sendStatus(201)
+      }
       return res.status(401).send('Actor not found')
     }
     if (user.blocked) {
@@ -195,7 +199,7 @@ const Helpers = {
     //   .update(req.body)
     //   .digest('base64')
     // if (`SHA-256=${digest}` !== req.headers.signature) {
-    //   log.warning(`Signature mismatch ${req.headers.signature} - ${digest}`)
+    //   log.warn(`Signature mismatch ${req.headers.signature} - ${digest}`)
     //   return res.status(401).send('Signature mismatch')
     // }
 
@@ -211,7 +215,10 @@ const Helpers = {
       log.info(`Actor ${req.body.actor} not found`)
       return res.status(401).send('Actor not found')
     }
-    if (httpSignature.verifySignature(parsed, user.object.publicKey.publicKeyPem)) { return next() }
+    if (httpSignature.verifySignature(parsed, user.object.publicKey.publicKeyPem)) {
+      log.debug(`Valid signature from ${req.body.actor} `)
+      return next()
+    }
 
     // still not valid
     log.info(`Invalid signature from user ${req.body.actor}`)

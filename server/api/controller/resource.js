@@ -1,4 +1,7 @@
 const Resource = require('../models/resource')
+const APUser = require('../models/ap_user')
+const Event = require('../models/event')
+const get = require('lodash/get')
 
 const resourceController = {
   async hide (req, res) {
@@ -17,12 +20,28 @@ const resourceController = {
   },
 
   async getAll (req, res) {
-    const limit = req.body.limit || 100
+    const limit = req.body.limit || 1000
     // const where = {}
     // if (req.params.instanceId) {
     //   where =
     //
-    const resources = await Resource.findAll({ limit })
+    let resources = await Resource.findAll({ limit, include: [APUser, Event], order: [['createdAt', 'DESC']] })
+    resources = resources.map(r => ({
+      id: r.id,
+      hidden: r.hidden,
+      created: r.createdAt,
+      data: {
+        content: r.data.content
+      },
+      event: {
+        id: r.event.id,
+        title: r.event.title
+      },
+      ap_user: {
+        ap_id: get(r, 'ap_user.ap_id', ''),
+        preferredUsername: get(r, 'ap_user.object.preferredUsername', '')
+      }
+    }))
     res.json(resources)
   }
 }

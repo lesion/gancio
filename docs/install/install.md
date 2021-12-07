@@ -6,17 +6,20 @@ has_children: true
 nav_order: 3
 has_toc: false
 ---
-## Install
+## Pre-requisites
+- a Linux machine with <strong>root access</strong> (a VPS with 500MB of RAM and a cpu should be enough but do not use docker on a small machine :stuck_out_tongue_winking_eye:)
+- a domain name or subdomain (eg. gancio.mydomain.org, subpath are not supported)
+- an SMTP server to deliver emails
 
-You can install gancio on a cheap VPS (500mb of ram will be enough)
+## Install
 
 - [Install on Debian]({% link install/debian.md %})
 - [Install using docker]({% link install/docker.md %})
 
 ### Post installation
-- [Setup Nginx as a proxy]({% link install/nginx.md %})
-- [Configuration]({% link install/configuration.md %})
-- [Backup]({% link install/backup.md %})
+- [Setup a backup]({% link install/backup.md %})
 
 
-If you wanna hack or run the current development release take a look at [Hacking & contribute]({% link dev/dev.md %})
+> info "Info"
+> If you wanna hack or run the current development release take a look at [Hacking & contribute]({% link dev/dev.md %}).
+>

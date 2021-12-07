@@ -3,7 +3,7 @@ const Place = require('../api/models/place')
 const APUser = require('../api/models/ap_user')
 const Tag = require('../api/models/tag')
 
-const config = require('config')
+const config = require('../config')
 const log = require('../log')
 const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')
@@ -29,7 +29,7 @@ module.exports = {
         }
       ],
       id: `${config.baseurl}/federation/u/${name}`,
-      type: 'Person',
+      type: 'Application',
       summary: config.description,
       name,
       preferredUsername: name,
@@ -132,7 +132,7 @@ module.exports = {
               cc: [`${config.baseurl}/federation/u/${name}/followers`],
               published: dayjs(e.createdAt).utc().format(),
               actor: `${config.baseurl}/federation/u/${name}`,
-              object: e.toAPNote(name, req.settings.locale)
+              object: e.toAP(name, req.settings.instance_locale)
             }))
         }
       })
@@ -160,7 +160,7 @@ module.exports = {
 //       cc: [`${config.baseurl}/federation/u/${name}/followers`],
 //       published: dayjs(e.createdAt).utc().format(),
 //       actor: `${config.baseurl}/federation/u/${name}`,
-//       object: e.toAPNote(name, req.settings.locale)
+//       object: e.toAP(name, req.settings.locale)
 //     }))
 // })
 // }

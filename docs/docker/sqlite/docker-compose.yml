@@ -5,11 +5,12 @@ services:
     build: .
     restart: always
     image: node:buster
-    user: node
     container_name: gancio
     environment:
       - PATH=$PATH:/home/node/.yarn/bin
       - GANCIO_DATA=/home/node/data
+      - NODE_ENV=production
+    entrypoint: /entrypoint.sh
     command: gancio start --docker
     volumes:
       - ./data:/home/node/data

@@ -4,7 +4,7 @@ const APUser = require('../api/models/ap_user')
 
 const log = require('../log')
 const helpers = require('../helpers')
-const linkifyHtml = require('linkifyjs/html')
+const linkifyHtml = require('linkify-html')
 
 module.exports = {
 
@@ -59,7 +59,7 @@ module.exports = {
   async remove (req, res) {
     const resource = await Resource.findOne({
       where: { activitypub_id: req.body.object.id },
-      include: [{ model: APUser, required: false, attributes: ['ap_id'] }]
+      include: [{ model: APUser, required: true, attributes: ['ap_id'] }]
     })
     if (!resource) {
       log.info(`Comment ${req.body.object.id} not found`)
@@ -67,8 +67,7 @@ module.exports = {
     }
     // check if fedi_user that requested resource removal
     // is the same that created the resource at first place
-    log.debug(res.fedi_user.ap_id, resource.ap_user.ap_id)
-    if (res.fedi_user.ap_id === resource.ap_user.id) {
+    if (req.fedi_user.ap_id === resource.ap_user.ap_id) {
       await resource.destroy()
       log.info(`Comment ${req.body.object.id} removed`)
       res.sendStatus(201)

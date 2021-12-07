@@ -34,11 +34,9 @@ plugins:
 search_enabled: true
 
 aux_links:
-  "Blog":
-    - https://blog.gancio.org
   "Source":
     - https://framagit.org/les/gancio
-  "Mastodon":
+  "@gancio@mastodon.cisti.org":
     - https://mastodon.cisti.org/@gancio
 
 gh_edit_link: true # show or hide edit this page link

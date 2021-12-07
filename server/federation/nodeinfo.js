@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const cors = require('cors')
 const settingsController = require('../api/controller/settings')
-const config = require('config')
+const config = require('../config')
 const version = require('../../package.json').version
 
 router.use(cors())

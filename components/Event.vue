@@ -1,7 +1,7 @@
 <template lang="pug">
   v-card.h-event.event.d-flex
     nuxt-link(:to='`/event/${event.slug || event.id}`')
-      v-img.u-featured.img(:src="`/media/thumb/${event.image_path || 'logo.svg' }`")
+      img.img.u-featured(:src='thumbnail' :alt='alt' loading='lazy' :style="{ 'object-position': thumbnailPosition }")
       v-icon.float-right.mr-1(v-if='event.parentId' color='success') mdi-repeat
       .title.p-name {{event.title}}
 
@@ -17,17 +17,16 @@
 
       v-menu(offset-y)
         template(v-slot:activator="{on}")
-          v-btn.align-self-end(icon v-on='on' color='primary')
+          v-btn.align-self-end(icon v-on='on' color='primary' alt='more')
             v-icon mdi-dots-vertical
         v-list(dense)
           v-list-item-group
-            v-list-item(v-clipboard:success="() => $root.$message('common.copied', { color: 'success' })"
-                  v-clipboard:copy='`${settings.baseurl}/event/${event.id}`')
+            v-list-item(@click='clipboard(`${settings.baseurl}/event/${event.slug || event.id}`)')
               v-list-item-icon
                 v-icon mdi-content-copy
               v-list-item-content
                 v-list-item-title {{$t('common.copy_link')}}
-            v-list-item(:href='`/api/event/${event.id}.ics`')
+            v-list-item(:href='`/api/event/${event.slug || event.id}.ics`')
               v-list-item-icon
                 v-icon mdi-calendar-export
               v-list-item-content
@@ -45,13 +44,34 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import clipboard from '../assets/clipboard'
 
 export default {
   props: {
     event: { type: Object, default: () => ({}) }
   },
+  mixins: [clipboard],
   computed: {
     ...mapState(['settings']),
+    thumbnail () {
+      let path
+      if (this.event.media && this.event.media.length) {
+        path = '/media/thumb/' + this.event.media[0].url
+      } else {
+        path = '/noimg.svg'
+      }
+      return path
+    },
+    alt () {
+      return this.event.media && this.event.media.length ? this.event.media[0].name : ''
+    },
+    thumbnailPosition () {
+      if (this.event.media && this.event.media.length && this.event.media[0].focalpoint) {
+        const focalpoint = this.event.media[0].focalpoint
+        return `${(focalpoint[0] + 1) * 50}% ${(focalpoint[1] + 1) * 50}%`
+      }
+      return 'center center'
+    },
     is_mine () {
       if (!this.$auth.user) {
         return false

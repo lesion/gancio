@@ -1,5 +1,5 @@
 const Event = require('../api/models/event')
-const config = require('config')
+const config = require('../config')
 const log = require('../log')
 
 module.exports = {

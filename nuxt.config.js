@@ -1,4 +1,4 @@
-const conf = require('config')
+const config = require('./server/config.js')
 
 module.exports = {
   telemetry: false,
@@ -11,22 +11,30 @@ module.exports = {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    script: [{ src: '/gancio-events.es.js' }],
+    link: [{ rel: 'icon', type: 'image/png', href: '/logo.png' }]
   },
   dev: (process.env.NODE_ENV !== 'production'),
+  server: config.server,
 
-  server: conf.server,
+
+  vue: {
+    config: {
+      ignoredElements: ['gancio-events']
+    }
+  },
 
   /*
-   ** Customize the progress-bar color
+   ** Customize the progress-bar component
    */
   loading: '~/components/Loading.vue',
   /*
    ** Global CSS
    */
   css: [
-    '@/assets/style.less',
-    '@mdi/font/css/materialdesignicons.css'
+    'vuetify/dist/vuetify.min.css', 
+    '@mdi/font/css/materialdesignicons.css',
+    '@/assets/style.less'
   ],
 
   /*
@@ -35,30 +43,24 @@ module.exports = {
   plugins: [
     '@/plugins/i18n.js',
     '@/plugins/filters', // text filters, datetime filters, generic transformation helpers etc.
-    '@/plugins/vue-clipboard', // vuetify
+    '@/plugins/vuetify', // vuetify
     '@/plugins/axios', // axios baseurl configuration
     '@/plugins/validators', // inject validators
     '@/plugins/api', // api helpers
     { src: '@/plugins/v-calendar', ssr: false } // v-calendar
   ],
 
-  render: {
-    compressor: false,
-    bundleRenderer: {
-      shouldPreload: (file, type) => {
-        return ['script', 'style', 'font'].includes(type)
-      }
-    }
-  },
   /*
    ** Nuxt.js modules
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    './@nuxtjs/axios',
-    './@nuxtjs/auth',
-    ['nuxt-express-module', { expressPath: 'server/', routesPath: 'server/routes' }]
+    '@nuxtjs/axios',
+    '@nuxtjs/auth',
+    '@/server/initialize.server.js'
   ],
+
+  serverMiddleware: ['server/routes'],
 
   /*
    ** Axios module configuration
@@ -93,28 +95,9 @@ module.exports = {
       }
     }
   },
-
-  buildModules: [
-    '@nuxtjs/vuetify'
-  ],
-  vuetify: {
-    defaultAssets: false,
-    optionsPath: './vuetify.options.js',
-    treeShake: true
-    /* module options */
-  },
-
-  /*
-   ** Build configuration
-   */
   build: {
-    presets: ['@nuxt/babel-preset-app', {
-      useBuiltIns: 'usage', // or "entry"
-      corejs: 3
-    }],
-    babel: {
-      plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]]
-    },
-    cache: true
-  }
+    corejs: 3,
+    cache: true,
+    hardSource: true
+  },
 }

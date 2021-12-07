@@ -5,7 +5,6 @@ Plugin URI:  https://gancio.org
 Description: Connects an user of a gancio instance to a Wordpress user so that published events are automatically pushed with Gancio API.
 Version:     1.0
 Author:      Gancio
-Author URI:  https://gancio.org
 License:  AGPL 3.0
 
 WPGancio is free software: you can redistribute it and/or modify it under the

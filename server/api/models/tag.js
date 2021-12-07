@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize')
-const sequelize = require('./index')
+const sequelize = require('./index').sequelize
 
 class Tag extends Model {}
 

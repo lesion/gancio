@@ -2,41 +2,32 @@
 v-card
   v-card-title(v-text="$t('common.embed_title')")
   v-card-text
-    v-row
-      v-col.col-12
-        v-alert.mb-1.mt-1(type='info' show-icon) {{$t('common.embed_help')}}
-        v-text-field(v-model='code')
-          v-btn(slot='prepend' text color='primary'
-            v-clipboard:copy='code'
-            v-clipboard:success='copyLink') {{$t("common.copy")}}
+        v-alert.mb-3.mt-1(type='info' show-icon) {{$t('common.embed_help')}}
+        v-alert.pa-5.my-4.blue-grey.darken-4.text-body-1.lime--text.text--lighten-3 <pre>{{code}}</pre>
+          v-btn.float-end(text  color='primary' @click='clipboard(code)') {{$t("common.copy")}}
             v-icon.ml-1 mdi-content-copy
-
-      v-col.mt-2(v-html='code')
+        p.mx-auto
+          .mx-auto
+            gancio-event(:id='event.id' :baseurl='settings.baseurl')
   v-card-actions
     v-spacer
-    v-btn(color='warning' @click="$emit('close')") {{$t("common.cancel")}}
-    v-btn(v-clipboard:copy='code' v-clipboard:success='copyLink' color="primary") {{$t("common.copy")}}
+    v-btn(text color='warning' @click="$emit('close')") {{$t("common.cancel")}}
+    v-btn(text @click='clipboard(code)' color="primary") {{$t("common.copy")}}
 </template>
 <script>
 import { mapState } from 'vuex'
+import clipboard from '../../assets/clipboard'
 
 export default {
   name: 'EmbedEvent',
+  mixins: [clipboard],
   props: {
     event: { type: Object, default: () => ({}) }
   },
   computed: {
     ...mapState(['settings']),
     code () {
-      const style = "style='border: 0; width: 100%; height: 215px;'"
-      const src = `${this.settings.baseurl}/embed/${this.event.slug || this.event.id}`
-      const code = `<iframe ${style} src="${src}"></iframe>`
-      return code
-    }
-  },
-  methods: {
-    copyLink () {
-      this.$root.$message('common.copied', { color: 'success' })
+      return `<script src='${this.settings.baseurl}\/gancio-events.es.js'><\/script>\n<gancio-event baseurl='${this.settings.baseurl}' id=${this.event.id}></gancio-event>\n\n`
     }
   }
 }

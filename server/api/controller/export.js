@@ -12,6 +12,7 @@ const exportController = {
     const type = req.params.type
     const tags = req.query.tags
     const places = req.query.places
+    const show_recurrent = !!req.query.show_recurrent
 
     const where = {}
     const yesterday = moment().subtract('1', 'day').unix()
@@ -25,9 +26,13 @@ const exportController = {
       where.placeId = places.split(',')
     }
 
+    if (!show_recurrent) {
+      where.parentId = null
+    }
+
     const events = await Event.findAll({
       order: ['start_datetime'],
-      attributes: { exclude: ['is_visible', 'recurrent', 'createdAt', 'updatedAt', 'likes', 'boost', 'slug', 'userId', 'placeId'] },
+      attributes: { exclude: ['is_visible', 'recurrent', 'createdAt', 'likes', 'boost', 'userId', 'placeId'] },
       where: {
         is_visible: true,
         recurrent: { [Op.eq]: null },
@@ -62,8 +67,8 @@ const exportController = {
     const eventsMap = events.map(e => {
       const tmpStart = moment.unix(e.start_datetime)
       const tmpEnd = moment.unix(e.end_datetime)
-      const start = tmpStart.utc(true).format('YYYY-M-D-H-m').split('-')
-      const end = tmpEnd.utc(true).format('YYYY-M-D-H-m').split('-')
+      const start = tmpStart.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
+      const end = tmpEnd.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
       return {
         start,
         // startOutputType: 'utc',
@@ -77,8 +82,12 @@ const exportController = {
       }
     })
     res.type('text/calendar; charset=UTF-8')
-    const ret = ics.createEvents(eventsMap)
-    res.send(ret.value)
+    ics.createEvents(eventsMap, (err, value) => {
+      if (err) {
+        return res.status(401).send(err)
+      }
+      return res.send(value)
+    })
   }
 }
 

@@ -1,5 +1,5 @@
 
-export default ({ $axios, store }, inject) => {
+export default ({ $axios }, inject) => {
   const api = {
 
     /**

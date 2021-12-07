@@ -1,19 +1,18 @@
 <template lang='pug'>
-  v-row.mt-5(align='center' justify='center')
-    v-col(cols='12' md="6" lg="5" xl="4")
-      v-card(light)
-        v-card-title {{settings.title}} - {{$t('common.authorize')}}
-        v-card-text
-          u {{$auth.user.email}}
-          div
-            p(v-html="$t('oauth.authorization_request', { app: client.name, instance_name: settings.title })")
-            ul
-              li(v-for="s in scope.split(' ')") {{$t(`oauth.scopes.${scope}`)}}
-            span(v-html="$t('oauth.redirected_to', {url: $route.query.redirect_uri})")
-        v-card-actions
-          v-spacer
-          v-btn(color='error' to='/') {{$t('common.cancel')}}
-          v-btn(:href='authorizeURL' color='success') {{$t('common.authorize')}}
+  .d-flex.justify-space-around
+    v-card.mt-5(max-width='600px')
+      v-card-title {{settings.title}} - {{$t('common.authorize')}}
+      v-card-text
+        u {{$auth.user.email}}
+        div
+          p(v-html="$t('oauth.authorization_request', { app: client.name, instance_name: settings.title })")
+          ul.mb-2
+            li(v-for="s in scope.split(' ')") {{$t(`oauth.scopes.${scope}`)}}
+          span(v-html="$t('oauth.redirected_to', {url: $route.query.redirect_uri})")
+      v-card-actions
+        v-spacer
+        v-btn(color='error' to='/') {{$t('common.cancel')}}
+        v-btn(:href='authorizeURL' color='success') {{$t('common.authorize')}}
 </template>
 
 <script>
@@ -71,7 +70,7 @@ export default {
   }
 }
 </script>
-<style lang='less'>
+<style>
   h4 img {
     max-height: 40px;
     border-radius: 20px;

@@ -1,7 +1,7 @@
 
 const bcrypt = require('bcryptjs')
 const { Model, DataTypes } = require('sequelize')
-const sequelize = require('./index')
+const sequelize = require('./index').sequelize
 
 class User extends Model {}
 
@@ -30,6 +30,9 @@ User.init({
   scopes: {
     withoutPassword: {
       attributes: { exclude: ['password', 'recover_code'] }
+    },
+    withRecover: {
+      attributes: { exclude: ['password'] }
     }
   }
 })

@@ -2,7 +2,7 @@
   v-container
     v-card-title {{$t('common.announcements')}}
     v-card-subtitle(v-html="$t('admin.announcement_description')")
-    v-dialog(v-model='dialog' width='800px')
+    v-dialog(v-model='dialog' width='800px' :fullscreen='$vuetify.breakpoint.xsOnly')
       v-card
         v-card-title {{$t('admin.new_announcement')}}
         v-card-text.px-0

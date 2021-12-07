@@ -129,7 +129,7 @@
         "where_description": "Dov'è il gancio? Se il posto non è presente potrai crearlo.",
         "confirmed": "Evento confermato",
         "not_found": "Evento non trovato",
-        "remove_confirmation": "Sei sicuro/a di voler eliminare questo evento?",
+        "remove_confirmation": "Vuoi eliminare questo evento?",
         "remove_recurrent_confirmation": "Sei sicura di voler eliminare questo evento ricorrente?\nGli eventi passati verranno mantenuti ma non ne verranno creati altri.",
         "recurrent": "Ricorrente",
         "edit_recurrent": "Modifica evento ricorrente:",
@@ -159,7 +159,10 @@
         "import_ICS": "Importa da ICS",
         "import_URL": "Importa da URL (ics o h-event)",
         "ics": "ICS",
-        "import_description": "Puoi importare eventi da altre piattaforme e da altre istanze attraverso i formati standard (ics e h-event)"
+        "import_description": "Puoi importare eventi da altre piattaforme e da altre istanze attraverso i formati standard (ics e h-event)",
+        "alt_text_description": "Descrizione per utenti con disabilità visive",
+        "choose_focal_point": "Scegli il punto centrale cliccando",
+        "remove_media_confirmation": "Confermi l'eliminazione dell'immagine?"
     },
     "admin": {
         "place_description": "Nel caso in cui un luogo sia errato o cambi indirizzo, puoi modificarlo.<br/>Considera che tutti gli eventi associati a questo luogo cambieranno indirizzo (anche quelli passati).",
@@ -191,15 +194,16 @@
         "hide_resource": "Nascondi risorsa",
         "show_resource": "Mostra risorsa",
         "delete_resource": "Elimina risorsa",
-        "delete_resource_confirm": "Sei sicuro/a di voler eliminare questa risorsa?",
+        "delete_resource_confirm": "Sei sicurǝ di voler eliminare questa risorsa?",
         "block_user": "Blocca questo utente",
         "user_blocked": "L'utente {user} non potrà più aggiungere risorse",
         "filter_instances": "Filtra istanze",
         "filter_users": "Filtra utenti",
         "instance_name": "Nome istanza",
         "favicon": "Logo",
-        "user_block_confirm": "Sei sicuro/a di voler bloccare l'utente?",
-        "delete_announcement_confirm": "Sei sicuro/a di voler eliminare l'annuncio?",
+        "user_block_confirm": "Confermi di voler bloccare l'utente {user}?",
+        "instance_block_confirm": "Confermi di voler bloccare l'istanza {instance}?",
+        "delete_announcement_confirm": "Vuoi eliminare questo l'annuncio?",
         "announcement_remove_ok": "Annuncio rimosso",
         "announcement_description": "In questa sezione puoi inserire annunci che rimarranno in homepage",
         "instance_locale": "Lingua predefinita",
@@ -216,9 +220,10 @@
         "is_dark": "Tema scuro",
         "add_link": "Aggiungi link",
         "footer_links": "Collegamenti del piè di pagina",
-        "delete_footer_link_confirm": "Sei sicuro/a di eliminare questo collegamento?",
+        "delete_footer_link_confirm": "Vuoi eliminare questo collegamento?",
         "edit_place": "Modifica luogo",
-        "new_announcement": "Nuovo annuncio"
+        "new_announcement": "Nuovo annuncio",
+        "show_smtp_setup": "Impostazioni email"
     },
     "auth": {
         "not_confirmed": "Non ancora confermato…",
@@ -260,5 +265,10 @@
         "scopes": {
             "event:write": "Pubblicare/modificare i tuoi eventi"
         }
+    },
+    "setup": {
+        "completed": "Setup completato",
+        "completed_description": "<p>Puoi entrare con le seguenti credenziali:<br/><br/>Utente: <b>{email}</b><br/>Password: <b>{password}<b/></p>",
+        "start": "Inizia"
     }
 }

@@ -15,7 +15,8 @@ export const state = () => ({
     enable_resources: false,
     hide_boosts: true,
     enable_trusted_instances: true,
-    trusted_instances: []
+    trusted_instances: [],
+    footerLinks: []
   },
   announcements: []
 })
@@ -35,6 +36,9 @@ export const mutations = {
   setLocale (state, locale) {
     state.locale = locale
   },
+  setUserlocale (state, messages) {
+    state.user_locale = messages
+  },
   setFilters (state, filters) {
     state.filters.tags = [...filters.tags]
     state.filters.places = [...filters.places]
@@ -50,8 +54,10 @@ export const actions = {
   // we use it to get configuration from db, set locale, etc...
   nuxtServerInit ({ commit }, { req }) {
     commit('setSettings', req.settings)
-    commit('setAnnouncements', req.announcements)
-    commit('update', req.meta)
+    if (!req.firstrun) {
+      commit('setAnnouncements', req.announcements)
+      commit('update', req.meta)
+    }
   },
   async updateAnnouncements ({ commit }) {
     const announcements = await this.$axios.$get('/announcements')

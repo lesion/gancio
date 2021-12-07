@@ -13,8 +13,7 @@
             dense :headers='instancesHeader'
             @click:row='instanceSelected')
             template(v-slot:item.blocked="{ item }")
-              v-icon(v-if='item.blocked') mdi-checkbox-intermediate
-              v-icon(v-else) mdi-checkbox-blank-outline
+              v-icon(@click='toggleBlock(item)') {{item.blocked ? 'mdi-checkbox-intermediate' : 'mdi-checkbox-blank-outline'}}
 
         v-col(:span='11')
           span {{$t('common.users')}}
@@ -24,49 +23,39 @@
             :search='usersFilter'
             :hide-default-footer='users.length<5'
             dense :headers='usersHeader')
-            //- template(v-slot:item.username="{item}")
-            //-   a(:href='item.ap_id') {{item.object.preferredUsername}}
-            //- el-table-column(:label="$t('common.user')" width='150')
-            //-   template(slot-scope='data')
-            //-     span(slot='reference')
-            //-       a(:href='data.row.object.id' target='_blank') {{data.row.object.name}}
-            //-       small ({{data.row.object.preferredUsername}})
-            //- el-table-column(:label="$t('common.resources')" width='90')
-            //-   template(slot-scope='data')
-            //-     span {{data.row.resources.length}}
-            //- el-table-column(:label="$t('common.actions')" width='200')
-            //-   template(slot-scope='data')
-            //-     el-button-group
-            //-       el-button(size='mini'
-            //-         :type='data.row.blocked?"danger":"warning"'
-            //-         @click='toggleUserBlock(data.row)') {{data.row.blocked?$t('admin.unblock'):$t('admin.block')}}
+            template(v-slot:item.blocked="{ item }")
+              v-icon(@click='toggleUserBlock(item)') {{item.blocked?'mdi-checkbox-intermediate':'mdi-checkbox-blank-outline'}}
 
       div
         v-card-title {{$t('common.resources')}}
-        v-data-table(:items='resources'
+        v-data-table(:items='resources' dense
+          :headers='resourcesHeader'
           :hide-default-footer='resources.length<10'
-        )
-        //- el-table-column(:label="$t('common.event')")
-        //-   template(slot-scope='data')
-        //-     span {{data.row.event}}
-        //- el-table-column(:label="$t('common.resources')")
-        //-   template(slot-scope='data')
-        //-     span(:class='{disabled: data.row.hidden}' v-html='data.row.data.content')
-        //- el-table-column(:label="$t('common.user')" width='200')
-        //-   template(slot-scope='data')
-        //-     span(:class='{disabled: data.row.hidden}' v-html='data.row.data.actor')
-        //- el-table-column(:label="$t('common.actions')" width="150")
-        //-   template(slot-scope='data')
-        //-     el-dropdown
-        //-       el-button(type="primary" icon="el-icon-arrow-down" size='mini') {{$t('common.moderation')}}
-        //-       el-dropdown-menu(slot='dropdown')
-        //-         el-dropdown-item(v-if='!data.row.hidden' icon='el-icon-remove' @click.native='hideResource(data.row, true)') {{$t('admin.hide_resource')}}
-        //-         el-dropdown-item(v-else icon='el-icon-success' @click.native='hideResource(data.row, false)') {{$t('admin.show_resource')}}
-        //-         el-dropdown-item(icon='el-icon-delete' @click.native='deleteResource(data.row)') {{$t('admin.delete_resource')}}
-        //-         el-dropdown-item(icon='el-icon-lock' @click.native='toggleUserBlock(data.row.ap_user)') {{$t('admin.block_user')}}
+          :items-per-page='10')
+          template(v-slot:item.content='{ item }')
+            span(v-html='item.data.content')
+          template(v-slot:item.user='{ item }')
+            span {{item.ap_user.preferredUsername}}
+          template(v-slot:item.event='{ item }')
+            span {{item.event.title}}
+          template(v-slot:item.actions='{ item }')
+            v-menu(offset-y)
+              template(v-slot:activator="{ on }")
+                v-btn.mr-2(v-on='on' color='primary' small icon)
+                  v-icon mdi-dots-vertical
+              v-list
+                v-list-item(v-if='!item.hidden' @click='hideResource(item, true)')
+                  v-list-item-title <v-icon left>mdi-eye-off</v-icon> {{$t('admin.hide_resource')}}
+                v-list-item(v-else @click='hideResource(item, false)')
+                  v-list-item-title <v-icon left>mdi-eye</v-icon> {{$t('admin.show_resource')}}
+                v-list-item(@click='deleteResource(item)')
+                  v-list-item-title <v-icon left>mdi-delete</v-icon> {{$t('admin.delete_resource')}}
+                //- v-list-item(@click='toggleUserBlock(item.ap_user)')
+                //-   v-list-item-title <v-icon left>mdi-lock</v-icon> {{$t('admin.block_user')}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
+import get from 'lodash/get'
 
 export default {
   name: 'Moderation',
@@ -76,7 +65,8 @@ export default {
       resources: [],
       users: [],
       usersHeader: [
-        { value: 'object.preferredUsername', text: 'Name' }
+        { value: 'object.preferredUsername', text: 'Name' },
+        { value: 'blocked', text: 'Blocked' }
       ],
       instancesHeader: [
         { value: 'domain', text: 'Domain' },
@@ -85,44 +75,24 @@ export default {
         { value: 'users', text: 'known users' }
       ],
       resourcesHeader: [
-        { value: '', text: '' }
+        { value: 'created', text: 'Created' },
+        { value: 'event', text: 'Event' },
+        { value: 'user', text: 'user' },
+        { value: 'content', text: 'Content' },
+        { value: 'actions', text: 'Actions' }
       ],
       usersFilter: '',
       instancesFilter: ''
     }
   },
-  computed: {
-    ...mapState(['settings'])
-    // paginatedResources () {
-    //   return this.resources.slice((this.resourcePage - 1) * this.perPage,
-    //     this.resourcePage * this.perPage)
-    // },
-    // paginatedInstances () {
-    //   return this.filteredInstances.slice((this.instancePage - 1) * this.perPage,
-    //     this.instancePage * this.perPage)
-    // },
-    // filteredUsers () {
-    //   if (!this.usersFilter) { return this.users }
-    //   const usersFilter = this.usersFilter.toLowerCase()
-    //   return this.users.filter(user => user.name.includes(usersFilter) || user.preferredName.includes(usersFilter))
-    // },
-    // filteredInstances () {
-    //   if (!this.instancesFilter) { return this.instances }
-    //   const instancesFilter = this.instancesFilter.toLowerCase()
-    //   return this.instances.filter(instance =>
-    //     (instance.name && instance.name.includes(instancesFilter)) ||
-    //     (instance.domain && instance.domain.includes(instancesFilter))
-    //   )
-    // },
-    // paginatedSelectedUsers () {
-    //   return this.filteredUsers.slice((this.userPage - 1) * this.perPage,
-    //     this.userPage * this.perPage)
-    // }
-  },
+  computed: mapState(['settings']),
   async mounted () {
     this.instances = await this.$axios.$get('/instances')
+    if (!this.instances.length) {
+      return
+    }
+    this.users = await this.$axios.$get(`/instances/${this.instances[0].domain}`)
     this.resources = await this.$axios.$get('/resources')
-    // this.users = await this.$axios.$get('/users')
   },
   methods: {
     ...mapActions(['setSetting']),
@@ -133,6 +103,7 @@ export default {
     },
     async instanceSelected (instance) {
       this.users = await this.$axios.$get(`/instances/${instance.domain}`)
+      this.resources = await this.$axios.$get('/resources', { filters: { instance: instance.domain } })
     },
     async hideResource (resource, hidden) {
       await this.$axios.$put(`/resources/${resource.id}`, { hidden })
@@ -140,7 +111,7 @@ export default {
     },
     async toggleUserBlock (ap_user) {
       if (!ap_user.blocked) {
-        const ret = await this.$root.$confirm('admin.user_block_confirm')
+        const ret = await this.$root.$confirm('admin.user_block_confirm', { user: get(ap_user, 'object.preferredUsername', ap_user.preferredUsername) })
         if (!ret) { return }
       }
       await this.$axios.post('/instances/toggle_user_block', { ap_id: ap_user.ap_id })
@@ -153,6 +124,10 @@ export default {
       this.resources = this.resources.filter(r => r.id !== resource.id)
     },
     async toggleBlock (instance) {
+      if (!instance.blocked) {
+        const ret = await this.$root.$confirm('admin.instance_block_confirm', { instance: instance.domain })
+        if (!ret) { return }
+      }
       await this.$axios.post('/instances/toggle_block', { instance: instance.domain, blocked: !instance.blocked })
       instance.blocked = !instance.blocked
     }

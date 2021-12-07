@@ -1,22 +1,29 @@
-const Setting = require('../models/setting')
-const config = require('config')
-const consola = require('consola')
 const path = require('path')
+const URL = require('url')
 const fs = require('fs')
-const pkg = require('../../../package.json')
 const crypto = require('crypto')
-const util = require('util')
-const toIco = require('to-ico')
-const generateKeyPair = util.promisify(crypto.generateKeyPair)
-const readFile = util.promisify(fs.readFile)
-const writeFile = util.promisify(fs.writeFile)
+const { promisify } = require('util')
 const sharp = require('sharp')
+const config = require('../../config')
+const pkg = require('../../../package.json')
+const generateKeyPair = promisify(crypto.generateKeyPair)
 const log = require('../../log')
+const locales = require('../../../locales/index')
+
+
+let defaultHostname
+try {
+  defaultHostname = new URL.URL(config.baseurl).hostname
+} catch (e) {}
 
 const defaultSettings = {
+  title: config.title || 'Gancio',
+  description: config.description || 'A shared agenda for local communities',
+  baseurl: config.baseurl || '',
+  hostname: defaultHostname,
   instance_timezone: 'Europe/Rome',
   instance_locale: 'en',
-  instance_name: config.title.toLowerCase().replace(/ /g, ''),
+  instance_name: 'gancio',
   instance_place: '',
   allow_registration: true,
   allow_anon_event: true,
@@ -32,7 +39,9 @@ const defaultSettings = {
   footerLinks: [
     { href: '/', label: 'home' },
     { href: '/about', label: 'about' }
-  ]
+  ],
+  admin_email: config.admin_email || '',
+  smtp: config.smtp || false
 }
 
 /**
@@ -45,54 +54,88 @@ const settingsController = {
   secretSettings: {},
 
   async load () {
-    if (!settingsController.settings.initialized) {
-      // initialize instance settings from db
-      // note that this is done only once when the server starts
-      // and not for each request (it's a kind of cache)!
-      const settings = await Setting.findAll()
-      settingsController.settings.initialized = true
+    if (config.firstrun) {
       settingsController.settings = defaultSettings
-      settings.forEach(s => {
-        if (s.is_secret) {
-          settingsController.secretSettings[s.key] = s.value
-        } else {
-          settingsController.settings[s.key] = s.value
+      return
+    }
+    if (settingsController.settings.initialized) return
+    settingsController.settings.initialized = true
+    // initialize instance settings from db
+    // note that this is done only once when the server starts
+    // and not for each request
+    const Setting = require('../models/setting')
+    const settings = await Setting.findAll()
+    settingsController.settings = defaultSettings
+    settings.forEach(s => {
+      if (s.is_secret) {
+        settingsController.secretSettings[s.key] = s.value
+      } else {
+        settingsController.settings[s.key] = s.value
+      }
+    })
+
+    // add pub/priv instance key if needed
+    if (!settingsController.settings.publicKey) {
+      log.info('Instance priv/pub key not found, generating....')
+      const { publicKey, privateKey } = await generateKeyPair('rsa', {
+        modulusLength: 4096,
+        publicKeyEncoding: {
+          type: 'spki',
+          format: 'pem'
+        },
+        privateKeyEncoding: {
+          type: 'pkcs8',
+          format: 'pem'
         }
       })
 
-      // add pub/priv instance key if needed
-      if (!settingsController.settings.publicKey) {
-        log.info('Instance priv/pub key not found, generating....')
-        const { publicKey, privateKey } = await generateKeyPair('rsa', {
-          modulusLength: 4096,
-          publicKeyEncoding: {
-            type: 'spki',
-            format: 'pem'
-          },
-          privateKeyEncoding: {
-            type: 'pkcs8',
-            format: 'pem'
+      await settingsController.set('publicKey', publicKey)
+      await settingsController.set('privateKey', privateKey, true)
+    }
+
+    // initialize user_locale
+    if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {
+      const user_locales_files = fs.readdirSync(path.resolve(config.user_locale))
+        user_locales_files.forEach( f => {
+        const locale = path.basename(f ,'.json')
+        if (locales[locale]) {
+          log.info(`Adding custom locale ${locale}`)
+          settingsController.user_locale[locale] = require(path.resolve(config.user_locale, f)).default
+        } else {
+          log.warning(`Unknown custom user locale: ${locale} [valid locales are ${locales}]`)
+        }
+      })
+    }
+
+    // load custom plugins
+    const plugins_path = path.resolve(process.env.cwd || '', 'plugins')
+    if (fs.existsSync(plugins_path)) {
+      const notifier = require('../../notifier')
+      const pluginsFile = fs.readdirSync(plugins_path).filter(e => path.extname(e).toLowerCase() === '.js')
+      pluginsFile.forEach( pluginFile => {
+        try {
+          const plugin = require(path.resolve(plugins_path, pluginFile))
+          if (typeof plugin.load !== 'function') return
+          plugin.load({ settings: settingsController.settings })
+          log.info(`Plugin ${pluginFile} loaded!`)
+          if (typeof plugin.onEventCreate === 'function') {
+            notifier.emitter.on('Create', plugin.onEventCreate)
           }
-        })
-
-        await settingsController.set('publicKey', publicKey)
-        await settingsController.set('privateKey', privateKey, true)
-      }
-
-      // initialize user_locale
-      if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {
-        const user_locale = fs.readdirSync(path.resolve(config.user_locale))
-        user_locale.forEach(async f => {
-          consola.info(`Loading user locale ${f}`)
-          const locale = path.basename(f, '.js')
-          settingsController.user_locale[locale] =
-            (await require(path.resolve(config.user_locale, f))).default
-        })
-      }
+          if (typeof plugin.onEventDelete === 'function') {
+            notifier.emitter.on('Delete', plugin.onEventDelete)
+          }
+          if (typeof plugin.onEventUpdate === 'function') {
+            notifier.emitter.on('Update', plugin.onEventUpdate)
+          }
+        } catch (e) {
+          log.warn(`Unable to load plugin ${pluginFile}: ${String(e)}`)
+        }
+      })
     }
   },
 
   async set (key, value, is_secret = false) {
+    const Setting = require('../models/setting')
     log.info(`SET ${key} ${is_secret ? '*****' : value}`)
     try {
       const [setting, created] = await Setting.findOrCreate({
@@ -103,7 +146,7 @@ const settingsController = {
       settingsController[is_secret ? 'secretSettings' : 'settings'][key] = value
       return true
     } catch (e) {
-      log.error(e)
+      log.error('[SETTING SET]', e)
       return false
     }
   },
@@ -112,6 +155,19 @@ const settingsController = {
     const { key, value, is_secret } = req.body
     const ret = await settingsController.set(key, value, is_secret)
     if (ret) { res.sendStatus(200) } else { res.sendStatus(400) }
+  },
+
+  async testSMTP (req, res) {
+    const smtp = req.body
+    await settingsController.set('smtp', smtp.smtp)
+    const mail = require('../mail')
+    try {
+      await mail._send(settingsController.settings.admin_email, 'test', null, 'en')
+      return res.sendStatus(200)
+    } catch (e) {
+      console.error(e)
+      return res.status(400).send(String(e))
+    }
   },
 
   setLogo (req, res) {
@@ -124,16 +180,13 @@ const settingsController = {
     const baseImgPath = path.resolve(config.upload_path, 'logo')
 
     // convert and resize to png
-    sharp(uploadedPath)
+    return sharp(uploadedPath)
       .resize(400)
       .png({ quality: 90 })
-      .toFile(baseImgPath + '.png', async (err, info) => {
+      .toFile(baseImgPath + '.png', (err, info) => {
         if (err) {
-          log.error(err)
+          log.error('[LOGO] ' + err)
         }
-        const image = await readFile(baseImgPath + '.png')
-        const favicon = await toIco([image], { sizes: [64], resize: true })
-        writeFile(baseImgPath + '.ico', favicon)
         settingsController.set('logo', baseImgPath)
         res.sendStatus(200)
       })
@@ -141,14 +194,7 @@ const settingsController = {
 
   getAllRequest (req, res) {
     // get public settings and public configuration
-    const settings = {
-      ...settingsController.settings,
-      baseurl: config.baseurl,
-      title: config.title,
-      description: config.description,
-      version: pkg.version
-    }
-    res.json(settings)
+    res.json({ ...settingsController.settings, version: pkg.version })
   }
 }
 

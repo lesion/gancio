@@ -1,10 +1,13 @@
 const { createLogger, transports, format } = require('winston')
 const DailyRotateFile = require('winston-daily-rotate-file')
-const dayjs = require('dayjs')
-const config = require('config')
+const config = require('./config')
 
-const gancioFormat = format.printf(({ timestamp, level, message, error }) => {
-  return `${dayjs(timestamp).format('DD MMM YYYY HH:mm:ss')} ${level}: ${message}`
+const gancioFormat = format.printf(info => {
+  if (info.stack) {
+    return `${info.timestamp} ${info.level}: ${info.message} \r\n${info.stack}`
+  } else {
+    return `${info.timestamp} ${info.level}: ${info.message}`
+  }
 })
 
 const logger = createLogger({
@@ -12,15 +15,11 @@ const logger = createLogger({
   transports: process.env.NODE_ENV !== 'production'
     ? [new transports.Console(
         {
-          handleExceptions: true,
-          handleRejections: true,
           level: 'debug',
-          format: format.combine(format.errors({ stack: true }), format.timestamp(), format.colorize(), format.splat(), gancioFormat)
+          format: format.combine(format.splat(), format.timestamp(), format.colorize(), gancioFormat)
         }
       )]
     : [new DailyRotateFile({
-        handleExceptions: true,
-        handleRejections: true,
         level: config.log_level || 'info',
         filename: config.log_path + '/gancio.%DATE%.log',
         symlinkName: 'gancio.log',
@@ -28,16 +27,15 @@ const logger = createLogger({
         zippedArchive: true,
         maxSize: '10m',
         maxFiles: '10d',
-        format: format.combine(format.timestamp(), format.splat(), gancioFormat)
+        format: format.combine(format.timestamp(), gancioFormat)
       }),
       new transports.Console(
         {
-          handleExceptions: true,
-          handleRejections: true,
           level: config.log_level || 'info',
-          format: format.combine(format.timestamp(), format.splat(), format.colorize(), gancioFormat)
+          format: format.combine(format.timestamp(), format.colorize(), gancioFormat)
         }
       )]
 })
 
+logger.info(`Logging to ${config.log_path}/gancio.log (level: ${config.log_level})`)
 module.exports = logger

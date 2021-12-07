@@ -10,7 +10,7 @@
     v-btn(color='primary' text @click='newUserDialog = true') <v-icon>mdi-plus</v-icon> {{$t('common.new_user')}}
 
     //- ADD NEW USER
-    v-dialog(v-model='newUserDialog' :fullscreen="$vuetify.breakpoint.xsOnly")
+    v-dialog(v-model='newUserDialog' :fullscreen='$vuetify.breakpoint.xsOnly')
 
       v-card(color='secondary')
         v-card-title {{$t('common.new_user')}}
@@ -37,6 +37,7 @@
           v-icon(v-if='item.is_active' color='success') mdi-check
           v-icon(v-else color='warning') mdi-close
         template(v-slot:item.actions='{item}')
+          v-btn(v-if='item.recover_code' text small :to='`/user_confirm/${item.recover_code}`') {{$t('common.confirm')}}
           v-btn(text small @click='toggle(item)'
             :color='item.is_active?"warning":"success"') {{item.is_active?$t('common.disable'):$t('common.enable')}}
           v-btn(text small @click='toggleAdmin(item)'
@@ -76,9 +77,16 @@ export default {
     async deleteUser (user) {
       const ret = await this.$root.$confirm('admin.delete_user_confirm', { user: user.email })
       if (!ret) { return }
-      await this.$axios.delete(`/user/${user.id}`)
-      this.$root.$message('admin.user_remove_ok')
-      this.users_ = this.users_.filter(u => u.id !== user.id)
+      try {
+        this.loading = true
+        await this.$axios.$delete(`/user/${user.id}`)
+        this.$root.$message('admin.user_remove_ok')
+        this.$emit('update')
+      } catch (e) {
+        const err = get(e, 'response.data.errors[0].message', e)
+        this.$root.$message(this.$t(err), { color: 'error' })
+        this.loading = false
+      }
     },
     async toggle (user) {
       if (user.is_active) {

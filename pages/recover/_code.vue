@@ -1,33 +1,34 @@
 <template lang='pug'>
+v-container
   v-row.mt-5(align='center' justify='center')
     v-col(cols='12' md="6" lg="5" xl="4")
       v-card
-        v-card-title {{settings.title}} - {{$t('common.recover_password')}}
-        v-card-text
-          div(v-if='valid')
+        v-card-title {{$t('common.recover_password')}}
+        template(v-if='user')
+          v-card-subtitle {{user.email}}
+          v-card-text
             v-text-field(type='password'
               :rules="$validators.password"
               autofocus :placeholder='$t("common.new_password")'
               v-model='new_password')
-          div(v-else) {{$t('recover.not_valid_code')}}
+        div(v-else) {{$t('recover.not_valid_code')}}
 
         v-card-actions
           v-spacer
-          v-btn(v-if='valid' color='primary' @click='change_password') {{$t('common.send')}}
+          v-btn(v-if='user' text color='primary' @click='change_password') {{$t('common.send')}}
 </template>
 <script>
 import { mapState } from 'vuex'
 
 export default {
   name: 'Recover',
-  layout: 'modal',
   async asyncData ({ params, $axios }) {
     const code = params.code
     try {
-      const valid = await $axios.$post('/user/check_recover_code', { recover_code: code })
-      return { valid, code }
+      const user = await $axios.$post('/user/check_recover_code', { recover_code: code })
+      return { user, code }
     } catch (e) {
-      return { valid: false }
+      return { user: false }
     }
   },
   data () {
@@ -50,7 +51,7 @@ export default {
   }
 }
 </script>
-<style lang='less'>
+<style>
   h4 img {
     max-height: 40px;
     border-radius: 20px;

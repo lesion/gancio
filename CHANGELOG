@@ -1,6 +1,100 @@
 All notable changes to this project will be documented in this file.
 
-### Unreleased
+### 1.2.2 - 7 dic '21
+  - shiny new gancio-event\[s\] webcomponents => [docs](https://gancio.org/usage/embed)
+  - new backend plugin system
+  - improve media focal point selection
+  - improve non-js experience (load img, use native lazy loading)
+  - improve user_confirm / recover code flow
+  - fix task manager exception
+  - fix db initialization when a custom setup is used, #131
+  - remove vue-clipboard2 dependency due to [this](https://github.com/euvl/v-clipboard/issues/18) bug and using a [native with fallback mixin instead](./assets/clipboard.js)
+  - fix a regression to support old CPU, #130
+  - makes dialog use fullscreen on mobile
+  - fix Delete AP Actor Action from fediverse when remote Actor is gone
+  - add `max` param to /events API
+
+### 1.2.1 - 11 nov '21
+  - fix `Note` remove from fediverse
+  - AP Actor is now `Application`, was `Person`
+  - better handling event AP representations
+  
+  this release is a step forward to improve AP compatibility with other platforms, thanks @tcit
+
+### 1.2.0 - 9 nov '21
+  - do not overwrite event slug when title is modified to preserve links
+  - add public cache to events images
+  - fix baseurl in initial setup configuration
+  - fix user removal
+  - load settings during startup and not for each request
+  - refactoring user custom locale
+  - published AP event's type is not `Note` anymore but `Event`
+
+### 1.1.1 - 29 ott '21
+  - fix issue adding event with dueHour resulting in `bad request`
+  - fix restart during setup
+  - do not use @nuxt/vuetify module, manually preload vuetify via plugin
+  - remove deprecated nuxt-express-module and use serverMiddleware directly
+
+### 1.1.0 - 26 ott '21
+
+  - a whole new setup via web! fix #126
+  - new SMTP configuration dialog, fix #115
+  - re-order general settings in admin panel
+  - new dark/light theme setting
+  - move quite all configuration into db
+  - fix some email recipients
+  - fix hidden events when not ended
+  - update translations
+  - improve install documentation
+  - add systemd gancio.service
+  - allow italic and span tags inside editor
+  - remove moment-timezone, consola, config, inquirer dependencies
+  - update deps
+
+### 1.0.6 (alpha)
+  - fix Dockerfile yarn cache issue on update, #123
+  - fix overflow on event title @homepage
+  - better import dialog on mobile
+  - re-add attachment to AP
+  - fix max event export
+  - update deps
+
+### 1.0.5 (alpha)
+  - fix/improve debian install docs
+  - fix ics export, use new ics package
+  - use slug url everywhere (rss feed, embedded list)
+  - use i18n in event confirmation email
+  - remove lot of deps warning and remove some unused dependencies
+  - fix show_recurrent in embedded list
+  - remove old to-ico dep, use png favicon instead
+
+### 1.0.4 (alpha)
+  - shows a generic img for events without it
+
+### 1.0.3 (alpha)
+  - 12 hour clock selection, #119
+  - improve media management
+    - add alt-text to featured image, fix #106
+    - add focalPoint support, fix #116
+  - improve a11y
+  - improve node v16 compatibility
+  - fix #122 ? (downgrade prettier)
+
+### 1.0.2 (alpha)
+  - improve oauth flow UI
+  - [WordPress plugin](https://wordpress.org/plugins/wpgancio/)
+  - fix h-event import
+  - improve error logging (add stack trace to exception)
+  - choose start date for recurreing events (#120)
+  - fix user delete from admin
+
+### 1.0.1 (alpha)
+
+  - fix AP resource removal
+  - improve AP resource UI
+  - fix Docker setup
+  - update deps
 
 ### 1.0 (alpha)
 This release is a complete rewrite of frontend UI and many internals, main changes are:

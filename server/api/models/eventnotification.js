@@ -1,4 +1,4 @@
-const sequelize = require('./index')
+const sequelize = require('./index').sequelize
 const { Model, DataTypes } = require('sequelize')
 
 class EventNotification extends Model {}

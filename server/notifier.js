@@ -1,5 +1,6 @@
+const events = require('events')
+
 const mail = require('./api/mail')
-const config = require('config')
 const log = require('./log')
 const fediverseHelpers = require('./federation/helpers')
 
@@ -11,8 +12,11 @@ const Place = require('./api/models/place')
 const Tag = require('./api/models/tag')
 
 const eventController = require('./api/controller/event')
+const settingsController = require('./api/controller/settings')
 
 const notifier = {
+
+  emitter: new events.EventEmitter(),
 
   sendNotification (notification, event) {
     const promises = []
@@ -22,7 +26,7 @@ const notifier = {
       // case 'mail': TODO: locale?
       //   return mail.send(notification.email, 'event', { event, notification })
       case 'admin_email':
-        p = mail.send(config.admin_email, 'event',
+        p = mail.send(settingsController.settings.admin_email, 'event',
           { event, to_confirm: !event.is_visible, notification })
         promises.push(p)
         break
@@ -37,13 +41,14 @@ const notifier = {
     const event = await Event.findByPk(eventId, {
       include: [Tag, Place, Notification, User]
     })
-
+    
+    notifier.emitter.emit(action, event.get({ plain: true, raw: true }))
     log.debug(action, event.title)
 
     // insert notifications
     const notifications = await eventController.getNotifications(event, action)
     await event.addNotifications(notifications)
-    const event_notifications = await event.getNotifications()
+    const event_notifications = await event.getNotifications({ through: { where: { status: 'new' } } })
 
     const promises = event_notifications.map(async notification => {
       try {
@@ -51,7 +56,7 @@ const notifier = {
         await notifier.sendNotification(notification, event)
         notification.event_notification.status = 'sent'
       } catch (err) {
-        log.error(err)
+        log.error('[NOTIFY EVENT]', err)
         notification.event_notification.status = 'error'
       }
       return notification.event_notification.save()
@@ -71,7 +76,7 @@ const notifier = {
         e.status = 'sent'
         return e.save()
       } catch (err) {
-        log.error(err)
+        log.error('[NOTIFY]', err)
         e.status = 'error'
         e.error = err
         return e.save()

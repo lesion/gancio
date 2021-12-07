@@ -1,8 +1,8 @@
 <template lang="pug">
-  nuxt-link.embed_event(:to='`/event/${event.slug || event.id}`' target='_blank' :class='{ withImg: event.image_path }')
+  nuxt-link.embed_event(:to='`/event/${event.slug || event.id}`' target='_blank' :class='{ withImg: event.media }')
 
     //- image
-    img.float-left(:src='`/media/thumb/${event.image_path || "logo.png"}`')
+    img.float-left(:src='event | mediaURL("thumb")')
     .event-info
       //-  title
       .date {{event|when}}<br/>
@@ -37,7 +37,7 @@ export default {
 .embed_event {
   display: flex;
   transition: margin .1s;
-  background: url('/favicon.ico') no-repeat right 5px bottom 5px;
+  background: url('/logo.png') no-repeat right 5px bottom 5px;
   background-size: 32px;
   background-color: #1f1f1f;
   text-decoration: none;

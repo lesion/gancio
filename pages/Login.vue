@@ -11,13 +11,13 @@
                 v-text-field(v-model='email' type='email'
                   validate-on-blur
                   :rules='$validators.email' autofocus
-                  :placeholder='$t("common.email")'
+                  :label='$t("common.email")'
                   ref='email')
 
                 v-text-field(v-model='password'
                   :rules='$validators.password'
                   type='password'
-                  :placeholder='$t("common.password")')
+                  :label='$t("common.password")')
 
             v-card-actions
               v-btn(text

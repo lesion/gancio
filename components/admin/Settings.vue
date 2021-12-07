@@ -3,19 +3,25 @@
     v-card-title {{$t('common.settings')}}
     v-card-text
 
+      v-text-field(v-model='title'
+        :label="$t('common.title')"
+        :hint="$t('admin.title_description')"
+        @blur='save("title", title)'
+        persistent-hint)
+
+      v-text-field.mt-5(v-model='description'
+        :label="$t('common.description')"
+        :hint="$t('admin.description_description')"
+        persistent-hint
+        @blur='save("description", description)')
+
       //- select timezone
-      v-autocomplete(v-model='instance_timezone'
+      v-autocomplete.mt-5(v-model='instance_timezone'
         :label="$t('admin.select_instance_timezone')"
         :hint="$t('admin.instance_timezone_description')"
         :items="filteredTimezones"
         persistent-hint
-        item-text='value'
-        item-value='value'
         placeholder='Timezone, type to search')
-        template(v-slot:item='{ item }')
-          v-list-item-content
-            v-list-item-title {{item.value}}
-            v-list-item-subtitle {{item.offset}}
 
       v-select.mt-5(
         v-model='instance_locale'
@@ -24,19 +30,6 @@
         persistent-hint
         :items='locales'
       )
-
-      v-text-field.mt-5(v-model='title'
-        :label="$t('common.title')"
-        :hint="$t('admin.title_description')"
-        @blur='save("title", title)'
-        persistent-hint
-      )
-
-      v-text-field.mt-5(v-model='description'
-        :label="$t('common.description')"
-        :hint="$t('admin.description_description')"
-        persistent-hint
-        @blur='save("description", description)')
 
       v-switch.mt-4(v-model='allow_registration'
         inset
@@ -55,24 +48,43 @@
         inset
         :label="$t('admin.recurrent_event_visible')")
 
+    v-dialog(v-model='showSMTP' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
+      SMTP(@close='showSMTP = false')
+
+    v-card-actions
+      v-btn(text @click='showSMTP=true')
+        <v-icon v-if='showSMTPAlert' color='error'>mdi-alert</v-icon> {{$t('admin.show_smtp_setup')}}
+      v-btn(text @click='$emit("complete")' color='primary' v-if='setup') {{$t('common.next')}}
+        v-icon mdi-arrow-right
+
+
 </template>
 <script>
+import SMTP from './SMTP.vue'
 import { mapActions, mapState } from 'vuex'
-import moment from 'moment-timezone'
-import _ from 'lodash'
+import moment from 'dayjs'
+import tzNames from './tz.json'
 import locales from '../../locales/esm'
 
 export default {
+  props: {
+    setup: { type: Boolean, default: false }
+  },
+  components: { SMTP },
   name: 'Settings',
   data ({ $store }) {
     return {
       title: $store.state.settings.title,
       description: $store.state.settings.description,
-      locales: Object.keys(locales).map(locale => ({ value: locale, text: locales[locale] }))
+      locales: Object.keys(locales).map(locale => ({ value: locale, text: locales[locale] })),
+      showSMTP: false,
     }
   },
   computed: {
     ...mapState(['settings']),
+    showSMTPAlert () {
+      return !this.setup && (!this.settings.admin_email || !this.settings.smtp || !this.settings.smtp.host || !this.settings.smtp.user)
+    },
     instance_locale: {
       get () { return this.settings.instance_locale },
       set (value) { this.setSetting({ key: 'instance_locale', value }) }
@@ -99,11 +111,8 @@ export default {
     },
     filteredTimezones () {
       const current_timezone = moment.tz.guess()
-      const ret = _(moment.tz.names())
-        .unshift(current_timezone)
-        .map(tz => ({ value: tz, offset: moment().tz(tz).format('z Z') }))
-        .value()
-      return ret
+      tzNames.unshift(current_timezone)
+      return tzNames
     }
   },
   methods: {

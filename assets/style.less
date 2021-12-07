@@ -37,6 +37,9 @@ li {
 .v-dialog {
   width: 600px;
   max-width: 800px;
+  &.v-dialog--fullscreen {
+    max-width: 100%;
+  }
 }
 
 .theme--dark.v-list {
@@ -62,14 +65,14 @@ li {
   overflow: hidden;
 
   .title {
-    transition: all .5s;
-    display: block;
-    max-height: 3em;
-    color: white;
+    display: -webkit-box;
     overflow: hidden;
     margin: 0.5rem 1rem 0.5rem 1rem;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     font-size: 1.1em !important;
-    line-height: 1em !important;
+    line-height: 1.2em !important;
   }
 
   .body {
@@ -80,9 +83,9 @@ li {
     width: 100%;
     max-height: 250px;
     min-height: 160px;
-    background-color: #222;
     object-fit: cover;
     object-position: top;
+    aspect-ratio: 1.7778;
   }
 
   .place {
@@ -99,10 +102,6 @@ li {
   }
 }
 
-.v-list {
-  background-color: #333 !important;
-}
-
 .vc-past {
   opacity: 0.4;
 }
@@ -116,4 +115,14 @@ li {
   white-space: nowrap;
   overflow: hidden;
   display: block;
+}
+
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+pre {
+  white-space: break-spaces;
+  font-size: 13px;
 }

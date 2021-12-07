@@ -1,7 +1,6 @@
 const Email = require('email-templates')
 const path = require('path')
 const moment = require('dayjs')
-const config = require('config')
 const settingsController = require('./controller/settings')
 const log = require('../log')
 const { Task, TaskManager } = require('../taskManager')
@@ -9,7 +8,11 @@ const locales = require('../../locales')
 
 const mail = {
   send (addresses, template, locals, locale = settingsController.settings.instance_locale) {
-    log.debug('Enqueue new email ', template, locale)
+    if (process.env.NODE_ENV === 'production' && (!settingsController.settings.admin_email || !settingsController.settings.smtp)) {
+      log.error(`Cannot send any email: SMTP Email configuration not completed!`)
+      return
+    }
+    log.debug(`Enqueue new email ${template} ${locale}`)
     const task = new Task({
       name: 'MAIL',
       method: mail._send,
@@ -18,7 +21,8 @@ const mail = {
     TaskManager.add(task)
   },
 
-  _send (addresses, template, locals, locale) {
+  _send (addresses, template, locals, locale = settingsController.settings.instance_locale) {
+    const settings = settingsController.settings
     log.info(`Send ${template} email to ${addresses} with locale ${locale}`)
     const email = new Email({
       views: { root: path.join(__dirname, '..', 'emails') },
@@ -31,7 +35,7 @@ const mail = {
         }
       },
       message: {
-        from: `📅 ${config.title} <${config.admin_email}>`
+        from: `📅 ${settings.title} <${settings.admin_email}>`
       },
       send: true,
       i18n: {
@@ -39,29 +43,29 @@ const mail = {
         objectNotation: true,
         syncFiles: false,
         updateFiles: false,
-        defaultLocale: settingsController.settings.instance_locale || 'en',
+        defaultLocale: settings.instance_locale || 'en',
         locale,
         locales: Object.keys(locales)
       },
-      transport: config.smtp
+      transport: settings.smtp || {}
     })
 
     const msg = {
       template,
       message: {
-        to: addresses,
-        bcc: config.admin_email
+        to: addresses
       },
       locals: {
         ...locals,
         locale,
-        config: { title: config.title, baseurl: config.baseurl, description: config.description, admin_email: config.admin_email },
+        config: { title: settings.title, baseurl: settings.baseurl, description: settings.description, admin_email: settings.admin_email },
         datetime: datetime => moment.unix(datetime).locale(locale).format('ddd, D MMMM HH:mm')
       }
     }
     return email.send(msg)
       .catch(e => {
-        log.error('Error sending email => %s', e)
+        log.error('[MAIL]', e)
+        throw e
       })
   }
 }
