@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     save () {
-      this.$emit('input', { url: this.value.url, image: this.value.image, name: this.name || this.value.image.name || '', focalpoint: [...this.focalpoint] })
+      this.$emit('input', { url: this.value.url, image: this.value.image, name: this.name || (this.value.image && this.value.image.name) || '', focalpoint: [...this.focalpoint] })
       this.openMediaDetails = false
     },
     async remove () {

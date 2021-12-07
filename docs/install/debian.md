@@ -67,5 +67,5 @@ sudo systemctl start gancio
 yarn global remove gancio
 yarn cache clean
 yarn global add --silent {{site.url}}/latest.tgz  2> /dev/null
-sudo service gancio restart
+sudo systemctl restart gancio
 ```

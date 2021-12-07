@@ -2,10 +2,11 @@ All notable changes to this project will be documented in this file.
 
 ### 1.2.2 - 7 dic '21
   - shiny new gancio-event\[s\] webcomponents => [docs](https://gancio.org/usage/embed)
-  - new backend plugin system
+  - new backend plugin system => [docs](https://gancio.org/dev/plugins)
   - improve media focal point selection
   - improve non-js experience (load img, use native lazy loading)
   - improve user_confirm / recover code flow
+  - permit admins to choose user password (usefull on instance without SMTP configuration)
   - fix task manager exception
   - fix db initialization when a custom setup is used, #131
   - remove vue-clipboard2 dependency due to [this](https://github.com/euvl/v-clipboard/issues/18) bug and using a [native with fallback mixin instead](./assets/clipboard.js)

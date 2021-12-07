@@ -31,7 +31,7 @@ nowhere on gancio appears the identity of who published the event, not even unde
 - Recurrent events support (each monday, each two monday, each monday and friday, each two saturday, etc.)
 - Filters events for tags or places
 - RSS and ICS export (with filters)
-- embeddable iframe ([example](https://gancio.cisti.org/embed/list?title=Upcoming events))
+- embed your events in your website with [webcomponents](./usage/embed) or iframe ([example](https://gancio.cisti.org/embed/list?title=Upcoming events))
 - boost / bookmark / comment events from the fediverse!
 - Lot of configurations available (user registration open/close, enable federation, enable recurrent events)
 
