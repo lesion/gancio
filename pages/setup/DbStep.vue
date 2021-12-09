@@ -7,11 +7,10 @@
           v-btn(value='sqlite' text) sqlite
           v-btn(value='postgres' text) postgres
           v-btn(value='mariadb' text) mariadb
-          v-btn(value='mysql' text) mysql
         template(v-if='db.dialect === "sqlite"')
           v-text-field(v-model='db.storage' label='Path')
         template(v-if='db.dialect !== "sqlite"')
-          v-text-field(v-model='db.hostname' label='Hostname' :rules="[$validators.required('hostname')]")
+          v-text-field(v-model='db.host' label='Hostname' :rules="[$validators.required('hostname')]")
           v-text-field(v-model='db.database' label='Database' :rules="[$validators.required('database')]")
           v-text-field(v-model='db.username' label='Username' :rules="[$validators.required('username')]")
           v-text-field(type='password' v-model='db.password' label='Password' :rules="[$validators.required('password')]")  
@@ -26,7 +25,7 @@ export default {
     return {
       db: {
         storage: './gancio.sqlite',
-        hostname: 'localhost',
+        host: 'localhost',
         database: 'gancio'
       },
       loading: false
