@@ -19,7 +19,6 @@ app.use(helpers.logRequest)
 app.use(helpers.initSettings)
 app.use(helpers.serveStatic())
 
-// ignore unimplemented ping url from fediverse
 app.use(cookieParser())
 
 
@@ -40,6 +39,8 @@ if (!config.firstrun) {
   app.use('/event/:slug', helpers.APRedirect)
   // federation api / activitypub / webfinger / nodeinfo
   app.use('/federation', federation)
+
+// ignore unimplemented ping url from fediverse
   app.use(spamFilter)
 
   // fill req.user if request is authenticated
