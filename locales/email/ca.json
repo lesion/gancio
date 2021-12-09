@@ -1,7 +1,7 @@
 {
     "register": {
         "subject": "Hem rebut una soŀlicitud de registre",
-        "content": "Hem rebut una soŀlicitud de registre. Hi respondrem tan aviat com ens sigui possible."
+        "content": "Hem rebut una soŀlicitud de registre. Hi respondrem tan aviat com ens sigui possible.<br/>Salut."
     },
     "confirm": {
         "subject": "Ja pots publicar activitats",
@@ -9,7 +9,7 @@
     },
     "user_confirm": {
         "subject": "Ja pots publicar activitats",
-        "content": "Hola, que creat un compte a <a href='{{config.baseurl}}'>{{config.title}}</a>? Si és així, <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>confirma-ho i tria una contrasenya</a>, si us plau."
+        "content": "Hola, que has creat un compte a <a href='{{config.baseurl}}'>{{config.title}}</a>? Si és així, <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>confirma-ho i tria una contrasenya</a>, si us plau."
     },
     "recover": {
         "subject": "Recupera la contrasenya",
@@ -20,7 +20,7 @@
         "content": "{{user.email}} ha soŀlicitat regsitrar-se a {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Respon a la soŀlicitud <a href='{{config.baseurl}}/admin'>aquí</a>."
     },
     "event_confirm": {
-        "content": "Pots acceptar aquesta activitat a <a href='{{url}}'>la pàgina de confirmació</a>"
+        "content": "Pots confirmar aquesta activitat a <a href='{{url}}'>la pàgina de confirmació</a>"
     },
     "test": {
         "subject": "La configuració SMTP funciona",
