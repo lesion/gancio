@@ -21,8 +21,8 @@ sudo npm install -g yarn
 ```
 <small>[source](https://github.com/nodesource/distributions/blob/master/README.md)</small>
 
-
-1. Setup with postgreSQL __(optional as you can choose sqlite)__
+#### Choose you database (sqlite, postgresql, mariadb, mysql)
+1. Setup using postgreSQL __(optional)__
 ```bash
 sudo apt-get install postgresql
 # Create the database
@@ -30,6 +30,18 @@ su postgres -c psql
 postgres=# create database gancio;
 postgres=# create user gancio with encrypted password 'gancio';
 postgres=# grant all privileges on database gancio to gancio;
+```
+
+1. Setup using MariaDB (__optional__)
+```bash
+sudo apt-get install mariadb
+sudo mysql
+MariaDB [(none)]> create database gancio;
+Query OK, 1 row affected (0.001 sec)
+MariaDB [(none)]> create user gancio identified by 'gancio';
+Query OK, 0 rows affected (0.011 sec)
+MariaDB [(none)]> grant all privileges on gancio.* to gancio;
+Query OK, 0 rows affected (0.009 sec)
 ```
 
 1. Create a user to run gancio from
