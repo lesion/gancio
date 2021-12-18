@@ -162,7 +162,7 @@
         "saved": "Ekitaldia gorde da"
     },
     "admin": {
-        "place_description": "Lekuaren zehaztapenak aldatu ditzakezu, bai gaizki idatzita dagoelako, bai helbidez aldatu delako.<br/> Ondorioz, leku horrekin lotutako ekitaldi guztiak helbidez aldatuko direla kontuan hartu behar da (baita iraganekoak ere!)",
+        "place_description": "Helbidea oker badaukazu, alda dezakezu.<br/>Toki honekin lotutako gertaera guztiek helbidea aldatuko dute.",
         "event_confirm_description": "Erabiltzaile anonimoek sortutako ekitaldiak hemen baieztatu ditzakezu",
         "delete_user": "Erabiltzailea ezabatu",
         "remove_admin": "Administratzailea ezabatu",
