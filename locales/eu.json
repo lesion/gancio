@@ -116,7 +116,7 @@
     },
     "event": {
         "anon": "Anonimoa",
-        "anon_description": "Ekitaldia sortu dezakezu <a href='/login'>saioa hasi</a> edo <a href='/register'>izena eman</a> gabe,\nbaina kasu honetan norbaitek egiaztatu beharko du ekitaldia gune honetarako egokia dela eta itxaron beharko duzu. Gainera, behin egiaztatuta hura aldatzea ez da posiblea izango.<br/><br/>\nDena den, ahalik eta azkarren erantzuten saiatuko gara. ",
+        "anon_description": "Ekitaldi bat sor dezakezu saioa hasi edo izena eman gabe, baina norbaitek berau irakurri eta\ngune honetarako egokia dela baieztatu arte itxaron beharko duzu. Ez da posible izango ekitaldia aldatzerik.<br/><br/>\nHorren ordez <a href='/login'>saioa hasi</a> edo <a href='/register'>izena eman</a> dezakezu. Bestela, jarraitu aurrera eta ahalik azkarren erantzuten saiatuko gara. ",
         "same_day": "egun berean",
         "what_description": "Izenburua",
         "description_description": "Deskripzioa",
@@ -155,7 +155,7 @@
         "ics": "ICS",
         "import_ICS": "ICS-tik inportatu",
         "import_URL": "URL-tik inportatu",
-        "interact_with_me_at": "Mintzatu nirekin fedibertsoan hemen:",
+        "interact_with_me_at": "Mintzatu nirekin fedibertsoko leku honetan:",
         "only_future": "datozen ekitaldiak bakarrik",
         "edit_recurrent": "Editatu ekitaldi errepikaria:",
         "updated": "Ekitaldia eguneratu da",
@@ -166,7 +166,7 @@
         "event_confirm_description": "Erabiltzaile anonimoek sortutako ekitaldiak hemen baieztatu ditzakezu",
         "delete_user": "Ezabatu",
         "remove_admin": "Kendu administratzaile baimena",
-        "delete_user_confirm": "Ziur zaude {user} ezabatu nahi duzula?",
+        "delete_user_confirm": "Ziur al zaude {user} ezabatu nahi duzula?",
         "user_remove_ok": "Erabiltzailea ezabatu da",
         "user_create_ok": "Erabiltzailea sortu da",
         "allow_registration_description": "Izen-emateak ahalbidetu nahi dituzu?",
@@ -224,7 +224,8 @@
         "smtp_test_button": "Bidali probako eposta bat",
         "smtp_test_success": "Probako eposta bidali da {admin_email}-(e)ra, begiratu zure sarrera-ontzia",
         "admin_email": "Administratzailearen eposta",
-        "smtp_hostname": "SMTP hostname"
+        "smtp_hostname": "SMTP hostname",
+        "smtp_description": "<ul><li>Administratzaileak eposta bat jaso beharko luke anonimo batek ekitaldi bat gehitzen duenean (gaituta badago).</li><li>Administratzaileak eposta bat jaso beharko luke izena emateko eskari bakoitzeko (gaituta badago).</li><li>Erabiltzaileak eposta bat jaso beharko luke izena emateko eskariarekin.</li><li>Erabiltzaileak eposta bat jaso beharko luke izen ematea baieztatzean.</li><li>Erabiltzaileak eposta bat jaso beharko luke administratzaileak zuzenean izena emanez gero.</li><li>Erabiltzaileek eposta bat jaso beharko lukete pasahitza ahazten dutenean.</li></ul>"
     },
     "auth": {
         "not_confirmed": "Oraindik baieztatu gabe dago…",
@@ -268,6 +269,8 @@
         "required": "{fieldName} beharrezkoa da"
     },
     "setup": {
-        "start": "Hasi"
+        "start": "Hasi",
+        "completed": "Instalazioa bukatu da",
+        "completed_description": "<p>Erabiltzaile honekin saioa has dezakezu orain:<br/><br/>Erabiltzailea: <b>{email}</b><br/>Pasahitza: <b>{password}<b/></p>"
     }
 }
