@@ -13,6 +13,7 @@ const EventNotification = require('./eventnotification')
 const Place = require('./place')
 const User = require('./user')
 const Tag = require('./tag')
+const Site = require('./site')
 
 const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')
@@ -53,6 +54,9 @@ Event.init({
 
 Event.belongsTo(Place)
 Place.hasMany(Event)
+
+Event.belongsTo(Site)
+Site.hasMany(Event)
 
 Event.belongsTo(User)
 User.hasMany(Event)

@@ -10,6 +10,12 @@ Setting.init({
     allowNull: false,
     index: true
   },
+  siteId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    allowNull: true,
+    index: true
+  },
   value: DataTypes.JSON,
   is_secret: DataTypes.BOOLEAN
 }, { sequelize, modelName: 'setting' })
