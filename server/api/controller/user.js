@@ -51,6 +51,7 @@ const userController = {
 
   async getAll (req, res) {
     const users = await User.scope(req.user.is_admin ? 'withRecover' : 'withoutPassword').findAll({
+      where: { siteId: req.siteId },
       order: [['is_admin', 'DESC'], ['createdAt', 'DESC']]
     })
     res.json(users)
@@ -81,6 +82,7 @@ const userController = {
     const n_users = await User.count()
     try {
       req.body.recover_code = crypto.randomBytes(16).toString('hex')
+      req.body.siteId = req.siteId
 
       // the first registered user will be an active admin
       if (n_users === 0) {
@@ -112,6 +114,7 @@ const userController = {
     try {
       req.body.is_active = true
       req.body.recover_code = crypto.randomBytes(16).toString('hex')
+      req.body.siteId = req.siteId
       const user = await User.scope('withRecover').create(req.body)
       mail.send(user.email, 'user_confirm', { user, config }, req.settings.locale)
       res.json(user)

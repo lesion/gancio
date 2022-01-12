@@ -37,6 +37,14 @@ const Auth = {
     }
   },
 
+  isSuperAdmin (req, res, next) {
+    if (req.user.is_admin && req.settings.isMainSite) {
+      next()
+    } else {
+      req.status(404)
+    }
+  },
+
   // TODO
   hasPerm (scope) {
     return (req, res, next) => {

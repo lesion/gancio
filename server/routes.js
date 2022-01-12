@@ -16,7 +16,8 @@ app.enable('trust proxy')
 app.use(helpers.logRequest)
 
 // initialize instance settings / authentication / locale
-app.use(helpers.initSettings)
+app.use(helpers.setSite)
+app.use(helpers.loadSettings)
 app.use(helpers.serveStatic())
 
 app.use(cookieParser())
@@ -68,7 +69,7 @@ app.use(async (req, res, next) => {
   if (!config.firstrun) {
     const eventController = require('./api/controller/event')
     const announceController = require('./api/controller/announce')    
-    req.meta = await eventController._getMeta()
+    req.meta = await eventController._getMeta(req.siteId)
     req.announcements = await announceController._getVisible()
   }
   req.firstrun = config.firstrun

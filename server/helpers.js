@@ -61,19 +61,36 @@ module.exports = {
     })
   },
 
-  async initSettings (req, res, next) {
-    // initialize settings
-    req.settings = { ...settingsController.settings }
+  async setSite (req, res, next) {
+    const hostname = req.headers.host
+    // const hostname = new URL.URL(baseurl).hostname
+    // res.hostname = hostname
+    console.error(hostname)
+    res.locals.hostname = hostname
+    if (config.firstrun) return next()
+    const Site = require('./api/models/site')
+    req.site = await Site.findOne({ where: { hostname } })
+    console.error(req.site)
+    req.siteId = req.site && req.site.id
+    next()
+  },
 
-    req.settings.baseurl = config.baseurl
-    req.settings.hostname = config.hostname
-    req.settings.title = req.settings.title || config.title
+  async loadSettings (req, res, next) {
+    req.settings = settingsController.settings
     req.settings.description = req.settings.description || config.description
     req.settings.version = pkg.version
 
     // select locale based on cookie and accept-language header
     acceptLanguage.languages(Object.keys(locales))
     req.acceptedLocale = acceptLanguage.get(req.headers['accept-language'])
+    if (config.firstrun) return next()
+
+    // initialize settings
+    req.settings = await settingsController.getAll(req.siteId)
+
+    // req.settings.baseurl = config.baseurl
+    // req.settings.hostname = config.hostname
+    // req.settings.title = req.settings.title || config.title
 
     // set locale and user locale
     req.user_locale = settingsController.user_locale[req.acceptedLocale]

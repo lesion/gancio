@@ -34,6 +34,7 @@ const defaultSettings = {
   hide_boosts: true,
   enable_trusted_instances: true,
   trusted_instances: [],
+  enable_multisite: true,
   'theme.is_dark': true,
   'theme.primary': '#FF4500',
   footerLinks: [
@@ -58,40 +59,42 @@ const settingsController = {
       settingsController.settings = defaultSettings
       return
     }
-    if (settingsController.settings.initialized) return
-    settingsController.settings.initialized = true
+    require('../models/setting')
+    // if (settingsController.settings.initialized) return
+    // settingsController.settings.initialized = true
     // initialize instance settings from db
     // note that this is done only once when the server starts
     // and not for each request
-    const Setting = require('../models/setting')
-    const settings = await Setting.findAll()
-    settingsController.settings = defaultSettings
-    settings.forEach(s => {
-      if (s.is_secret) {
-        settingsController.secretSettings[s.key] = s.value
-      } else {
-        settingsController.settings[s.key] = s.value
-      }
-    })
+    // return
+    // const settings = await Setting.findAll()
+    // settingsController.settings = defaultSettings
+    // settings.forEach(s => {
+    //   if (s.is_secret) {
+    //     settingsController.secretSettings[s.key] = s.value
+    //   } else {
+    //     settingsController.settings[s.key] = s.value
+    //   }
+    // })
 
     // add pub/priv instance key if needed
-    if (!settingsController.settings.publicKey) {
-      log.info('Instance priv/pub key not found, generating....')
-      const { publicKey, privateKey } = await generateKeyPair('rsa', {
-        modulusLength: 4096,
-        publicKeyEncoding: {
-          type: 'spki',
-          format: 'pem'
-        },
-        privateKeyEncoding: {
-          type: 'pkcs8',
-          format: 'pem'
-        }
-      })
+    // TODO
+    // if (!settingsController.settings.publicKey) {
+    //   log.info('Instance priv/pub key not found, generating....')
+    //   const { publicKey, privateKey } = await generateKeyPair('rsa', {
+    //     modulusLength: 4096,
+    //     publicKeyEncoding: {
+    //       type: 'spki',
+    //       format: 'pem'
+    //     },
+    //     privateKeyEncoding: {
+    //       type: 'pkcs8',
+    //       format: 'pem'
+    //     }
+    //   })
 
-      await settingsController.set('publicKey', publicKey)
-      await settingsController.set('privateKey', privateKey, true)
-    }
+    //   await settingsController.set('publicKey', publicKey)
+    //   await settingsController.set('privateKey', privateKey, true)
+    // }
 
     // initialize user_locale
     if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {
@@ -134,18 +137,28 @@ const settingsController = {
     }
   },
 
-  async set (key, value, is_secret = false) {
+  async getAll (siteId) {
+    const Setting = require('../models/setting')
+    const settingsRecords = await Setting.findAll({ where: { siteId } })
+    const settings = {}
+    settingsRecords.forEach(s => { settings[s.key] = s.value })
+    settings.isMainSite = siteId === null
+    return Object.assign({}, defaultSettings, settings)
+  },
+
+  async set (key, value, siteId, is_secret = false) {
     const Setting = require('../models/setting')
     log.info(`SET ${key} ${is_secret ? '*****' : value}`)
     try {
       const [setting, created] = await Setting.findOrCreate({
-        where: { key },
-        defaults: { value, is_secret }
+        where: { key, siteId },
+        defaults: { value, is_secret, siteId }
       })
-      if (!created) { setting.update({ value, is_secret }) }
+      if (!created) { setting.update({ value, is_secret, siteId }) }
       settingsController[is_secret ? 'secretSettings' : 'settings'][key] = value
       return true
     } catch (e) {
+      console.error(e)
       log.error('[SETTING SET]', e)
       return false
     }
@@ -153,7 +166,7 @@ const settingsController = {
 
   async setRequest (req, res) {
     const { key, value, is_secret } = req.body
-    const ret = await settingsController.set(key, value, is_secret)
+    const ret = await settingsController.set(key, value, req.siteId, is_secret)
     if (ret) { res.sendStatus(200) } else { res.sendStatus(400) }
   },
 
@@ -172,7 +185,7 @@ const settingsController = {
 
   setLogo (req, res) {
     if (!req.file) {
-      settingsController.set('logo', false)
+      settingsController.set('logo', false, req.siteId)
       return res.status(200)
     }
 
@@ -187,14 +200,14 @@ const settingsController = {
         if (err) {
           log.error('[LOGO] ' + err)
         }
-        settingsController.set('logo', baseImgPath)
+        settingsController.set('logo', baseImgPath, req.siteId)
         res.sendStatus(200)
       })
   },
 
   getAllRequest (req, res) {
     // get public settings and public configuration
-    res.json({ ...settingsController.settings, version: pkg.version })
+    res.json({ ...settingsController.getAll(req.siteId), version: pkg.version })
   }
 }
 

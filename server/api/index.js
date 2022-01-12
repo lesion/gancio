@@ -21,7 +21,7 @@ if (config.firstrun) {
 
 } else {
 
-  const { isAuth, isAdmin } = require('./auth')
+  const { isAuth, isAdmin, isSuperAdmin } = require('./auth')
   const eventController = require('./controller/event')
   const settingsController = require('./controller/settings')
   const exportController = require('./controller/export')
@@ -31,6 +31,7 @@ if (config.firstrun) {
   const resourceController = require('./controller/resource')
   const oauthController = require('./controller/oauth')
   const announceController = require('./controller/announce')
+  const siteController = require('./controller/site')
   const helpers = require('../helpers')
   const storage = require('./storage')
   const upload = multer({ storage })
@@ -55,8 +56,8 @@ if (config.firstrun) {
   }
   ```
   */
-  api.get('/ping', (req, res) => res.sendStatus(200))
   api.get('/user', isAuth, (req, res) => res.json(req.user))
+  api.get('/ping', (req, res) => res.sendStatus(200))
 
 
   api.post('/user/recover', userController.forgotPassword)
@@ -155,6 +156,10 @@ if (config.firstrun) {
   api.get('/clients', isAuth, oauthController.getClients)
   api.get('/client/:client_id', isAuth, oauthController.getClient)
   api.post('/client', oauthController.createClient)
+
+  // MULTISITE
+  api.get('/sites', isSuperAdmin, siteController.getAll)
+  api.post('/site', isSuperAdmin, siteController.create)
 }
 
 api.use((req, res) => res.sendStatus(404))

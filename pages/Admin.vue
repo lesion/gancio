@@ -45,6 +45,11 @@
         v-tab(v-if='settings.enable_federation') {{$t('common.moderation')}}
         v-tab-item
           Moderation
+        
+        //- MULTISITE
+        v-tab(v-show='settings.isMainSite && settings.enable_multisite') {{$t('common.multisite')}}
+        v-tab-item
+          Multisite
 
 </template>
 <script>
@@ -56,11 +61,12 @@ import Settings from '../components/admin/Settings'
 import Federation from '../components/admin/Federation'
 import Moderation from '../components/admin/Moderation'
 import Announcement from '../components/admin/Announcement'
+import Multisite from '../components/admin/Multisite'
 import Theme from '../components/admin/Theme'
 
 export default {
   name: 'Admin',
-  components: { Users, Events, Places, Settings, Federation, Moderation, Announcement, Theme },
+  components: { Users, Events, Places, Settings, Federation, Moderation, Announcement, Theme, Multisite },
   middleware: ['auth'],
   async asyncData ({ $axios, params, store }) {
     try {

@@ -47,6 +47,11 @@
         v-model='recurrent_event_visible'
         inset
         :label="$t('admin.recurrent_event_visible')")
+      
+      v-switch.mt-1(v-if='settings.isMainSite'
+        v-model='enable_multisite'
+        inset
+        :label="$t('admin.enable_multisite')")
 
     v-dialog(v-model='showSMTP' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
       SMTP(@close='showSMTP = false')
@@ -109,6 +114,10 @@ export default {
       get () { return this.settings.recurrent_event_visible },
       set (value) { this.setSetting({ key: 'recurrent_event_visible', value }) }
     },
+    enable_multisite: {
+      get () { return this.settings.enable_multisite },
+      set (value) { this.setSetting({ key: 'enable_multisite', value }) }
+    },    
     filteredTimezones () {
       const current_timezone = moment.tz.guess()
       tzNames.unshift(current_timezone)

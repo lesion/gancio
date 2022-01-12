@@ -23,8 +23,9 @@ const log = require('../../log')
 
 const eventController = {
 
-  async _getMeta () {
+  async _getMeta (siteId) {
     const places = await Place.findAll({
+      where: { siteId },
       order: [[Sequelize.literal('weigth'), 'DESC']],
       attributes: {
         include: [[Sequelize.fn('count', Sequelize.col('events.placeId')), 'weigth']],
@@ -47,7 +48,7 @@ const eventController = {
   },
 
   async getMeta (req, res) {
-    res.json(await eventController._getMeta())
+    res.json(await eventController._getMeta(req.siteId))
   },
 
   async getNotifications (event, action) {
@@ -300,6 +301,7 @@ const eventController = {
         start_datetime: body.start_datetime,
         end_datetime: body.end_datetime,
         recurrent,
+        siteId: req.siteId,
         // publish this event only if authenticated
         is_visible: !!req.user
       }
@@ -326,9 +328,10 @@ const eventController = {
       const event = await Event.create(eventDetails)
 
       const [place] = await Place.findOrCreate({
-        where: { name: body.place_name },
+        where: { name: body.place_name, siteId: req.siteId },
         defaults: {
-          address: body.place_address
+          address: body.place_address,
+          siteId: req.siteId
         }
       })
 
@@ -482,7 +485,7 @@ const eventController = {
     }
   },
 
-  async _select ({ start, end, tags, places, show_recurrent, max }) {
+  async _select ({ siteId, start, end, tags, places, show_recurrent, max }) {
 
     const where = {
       // do not include parent recurrent event
@@ -490,6 +493,8 @@ const eventController = {
 
       // confirmed event only
       is_visible: true,
+
+      siteId,
 
       [Op.or]: {
         start_datetime: { [Op.gte]: start },
@@ -557,7 +562,7 @@ const eventController = {
       (typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settingsController.settings.recurrent_event_visible)
 
     res.json(await eventController._select({
-      start, end, places, tags, show_recurrent, max
+      siteId: req.siteId, start, end, places, tags, show_recurrent, max
     }))
   },
 
