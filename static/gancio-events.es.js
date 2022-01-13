@@ -101,20 +101,20 @@ function schedule_update() {
 function add_render_callback(fn) {
   render_callbacks.push(fn);
 }
-let flushing = false;
 const seen_callbacks = new Set();
+let flushidx = 0;
 function flush() {
-  if (flushing)
-    return;
-  flushing = true;
+  const saved_component = current_component;
   do {
-    for (let i = 0; i < dirty_components.length; i += 1) {
-      const component = dirty_components[i];
+    while (flushidx < dirty_components.length) {
+      const component = dirty_components[flushidx];
+      flushidx++;
       set_current_component(component);
       update(component.$$);
     }
     set_current_component(null);
     dirty_components.length = 0;
+    flushidx = 0;
     while (binding_callbacks.length)
       binding_callbacks.pop()();
     for (let i = 0; i < render_callbacks.length; i += 1) {
@@ -130,8 +130,8 @@ function flush() {
     flush_callbacks.pop()();
   }
   update_scheduled = false;
-  flushing = false;
   seen_callbacks.clear();
+  set_current_component(saved_component);
 }
 function update($$) {
   if ($$.fragment !== null) {
@@ -279,7 +279,7 @@ if (typeof HTMLElement === "function") {
 }
 function get_each_context(ctx, list, i) {
   const child_ctx = ctx.slice();
-  child_ctx[8] = list[i];
+  child_ctx[9] = list[i];
   return child_ctx;
 }
 function create_if_block$1(ctx) {
@@ -293,7 +293,7 @@ function create_if_block$1(ctx) {
   let img;
   let img_src_value;
   let t2;
-  let each_value = ctx[2];
+  let each_value = ctx[3];
   let each_blocks = [];
   for (let i = 0; i < each_value.length; i += 1) {
     each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
@@ -320,6 +320,7 @@ function create_if_block$1(ctx) {
       attr(a, "href", ctx[0]);
       attr(a, "target", "_blank");
       attr(div1, "id", "gancioEvents");
+      attr(div1, "class", ctx[2]);
     },
     m(target, anchor) {
       insert(target, div1, anchor);
@@ -343,8 +344,8 @@ function create_if_block$1(ctx) {
       if (dirty & 1) {
         attr(a, "href", ctx2[0]);
       }
-      if (dirty & 5) {
-        each_value = ctx2[2];
+      if (dirty & 9) {
+        each_value = ctx2[3];
         let i;
         for (i = 0; i < each_value.length; i += 1) {
           const child_ctx = get_each_context(ctx2, each_value, i);
@@ -361,6 +362,9 @@ function create_if_block$1(ctx) {
         }
         each_blocks.length = each_value.length;
       }
+      if (dirty & 4) {
+        attr(div1, "class", ctx2[2]);
+      }
     },
     d(detaching) {
       if (detaching)
@@ -373,19 +377,20 @@ function create_each_block(ctx) {
   let a;
   let div2;
   let div0;
-  let t0_value = when$1(ctx[8].start_datetime) + "";
+  let t0_value = when$1(ctx[9].start_datetime) + "";
   let t0;
   let t1;
   let span;
   let t2;
-  let t3_value = ctx[8].place.name + "";
+  let t3_value = ctx[9].place.name + "";
   let t3;
   let t4;
   let div1;
-  let t5_value = ctx[8].title + "";
+  let t5_value = ctx[9].title + "";
   let t5;
   let t6;
   let a_href_value;
+  let a_title_value;
   return {
     c() {
       a = element("a");
@@ -404,7 +409,8 @@ function create_each_block(ctx) {
       attr(div0, "class", "subtitle");
       attr(div1, "class", "title");
       attr(div2, "class", "content");
-      attr(a, "href", a_href_value = "" + (ctx[0] + "/event/" + (ctx[8].slug || ctx[8].id)));
+      attr(a, "href", a_href_value = "" + (ctx[0] + "/event/" + (ctx[9].slug || ctx[9].id)));
+      attr(a, "title", a_title_value = ctx[9].title);
       attr(a, "target", "_blank");
     },
     m(target, anchor) {
@@ -422,14 +428,17 @@ function create_each_block(ctx) {
       append(a, t6);
     },
     p(ctx2, dirty) {
-      if (dirty & 4 && t0_value !== (t0_value = when$1(ctx2[8].start_datetime) + ""))
+      if (dirty & 8 && t0_value !== (t0_value = when$1(ctx2[9].start_datetime) + ""))
         set_data(t0, t0_value);
-      if (dirty & 4 && t3_value !== (t3_value = ctx2[8].place.name + ""))
+      if (dirty & 8 && t3_value !== (t3_value = ctx2[9].place.name + ""))
         set_data(t3, t3_value);
-      if (dirty & 4 && t5_value !== (t5_value = ctx2[8].title + ""))
+      if (dirty & 8 && t5_value !== (t5_value = ctx2[9].title + ""))
         set_data(t5, t5_value);
-      if (dirty & 5 && a_href_value !== (a_href_value = "" + (ctx2[0] + "/event/" + (ctx2[8].slug || ctx2[8].id)))) {
+      if (dirty & 9 && a_href_value !== (a_href_value = "" + (ctx2[0] + "/event/" + (ctx2[9].slug || ctx2[9].id)))) {
         attr(a, "href", a_href_value);
+      }
+      if (dirty & 8 && a_title_value !== (a_title_value = ctx2[9].title)) {
+        attr(a, "title", a_title_value);
       }
     },
     d(detaching) {
@@ -440,7 +449,7 @@ function create_each_block(ctx) {
 }
 function create_fragment$1(ctx) {
   let if_block_anchor;
-  let if_block = ctx[2].length && create_if_block$1(ctx);
+  let if_block = ctx[3].length && create_if_block$1(ctx);
   return {
     c() {
       if (if_block)
@@ -454,7 +463,7 @@ function create_fragment$1(ctx) {
       insert(target, if_block_anchor, anchor);
     },
     p(ctx2, [dirty]) {
-      if (ctx2[2].length) {
+      if (ctx2[3].length) {
         if (if_block) {
           if_block.p(ctx2, dirty);
         } else {
@@ -492,9 +501,10 @@ function instance$1($$self, $$props, $$invalidate) {
   let { maxlength = false } = $$props;
   let { tags = "" } = $$props;
   let { places = "" } = $$props;
+  let { theme = "light" } = $$props;
   let mounted = false;
   let events = [];
-  function update2(v) {
+  async function update2(v) {
     if (!mounted)
       return;
     const params = [];
@@ -508,7 +518,9 @@ function instance$1($$self, $$props, $$invalidate) {
       params.push(`places=${places}`);
     }
     fetch(`${baseurl}/api/events?${params.join("&")}`).then((res) => res.json()).then((e) => {
-      $$invalidate(2, events = e);
+      $$invalidate(3, events = e);
+    }).catch((e) => {
+      console.error("Error loading Gancio API -> ", e);
     });
   }
   onMount(() => {
@@ -521,23 +533,25 @@ function instance$1($$self, $$props, $$invalidate) {
     if ("title" in $$props2)
       $$invalidate(1, title = $$props2.title);
     if ("maxlength" in $$props2)
-      $$invalidate(3, maxlength = $$props2.maxlength);
+      $$invalidate(4, maxlength = $$props2.maxlength);
     if ("tags" in $$props2)
-      $$invalidate(4, tags = $$props2.tags);
+      $$invalidate(5, tags = $$props2.tags);
     if ("places" in $$props2)
-      $$invalidate(5, places = $$props2.places);
+      $$invalidate(6, places = $$props2.places);
+    if ("theme" in $$props2)
+      $$invalidate(2, theme = $$props2.theme);
   };
   $$self.$$.update = () => {
-    if ($$self.$$.dirty & 58) {
+    if ($$self.$$.dirty & 118) {
       update2();
     }
   };
-  return [baseurl, title, events, maxlength, tags, places];
+  return [baseurl, title, theme, events, maxlength, tags, places];
 }
 class GancioEvents extends SvelteElement {
   constructor(options) {
     super();
-    this.shadowRoot.innerHTML = `<style>#gancioEvents{font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;overflow-x:hidden;font-size:1rem;width:100%;max-width:500px;box-sizing:content-box}#logo{position:absolute;top:10px;right:10px;height:40px}#headerTitle{line-height:45px;font-size:1.3rem;font-weight:600}a{text-decoration:none;color:#ccc;display:flex;flex-direction:column;flex:1 1 100%;padding:8px 20px;margin:0;line-height:1.275rem;font-weight:400;font-size:.875rem;position:relative;transition:background-color .3s cubic-bezier(.25,.8,.5,1), padding-left .3s;box-sizing:content-box}a:nth-child(odd){background-color:#161616}a:nth-child(even){background-color:#222}a:first-child{border-radius:5px 5px 0px 0px}a:last-child{border-radius:0px 0px 5px 5px;padding-bottom:5px}a:hover{background-color:#333 !important;padding-left:23px}.place{font-weight:600;color:#ff6e40}.title{color:white}</style>`;
+    this.shadowRoot.innerHTML = `<style>#gancioEvents{font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;overflow-x:hidden;font-size:1rem;width:100%;max-width:500px;box-sizing:content-box;box-shadow:rgba(60, 64, 67, 0.4) 0px 1px 2px 0px, rgba(60, 64, 67, 0.25) 0px 1px 3px 1px;border-radius:5px}#logo{position:absolute;top:10px;right:10px;height:40px}#headerTitle{line-height:45px;font-size:1.3rem;font-weight:600}a{text-decoration:none;color:var(--text-color);display:flex;flex-direction:column;flex:1 1 100%;padding:8px 20px;margin:0;line-height:1.275rem;font-weight:400;font-size:.875rem;position:relative;transition:background-color .3s cubic-bezier(.25,.8,.5,1), padding-left .3s;box-sizing:content-box}.dark{--bg-odd-color:#161616;--bg-even-color:#222;--bg-hover-color:#333;--text-color:white;--title-color:white}.light{--bg-odd-color:#f5f5f5;--bg-even-color:#FAFAFA;--bg-hover-color:#EEE;--text-color:#222;--title-color:black}a:nth-child(odd){background-color:var(--bg-odd-color)}a:nth-child(even){background-color:var(--bg-even-color)}a:first-child{border-radius:5px 5px 0px 0px}a:last-child{border-radius:0px 0px 5px 5px;padding-bottom:5px}a:hover{background-color:var(--bg-hover-color);padding-left:23px}.place{font-weight:600;color:#ff6e40}.title{color:var(--title-color)}</style>`;
     init(this, {
       target: this.shadowRoot,
       props: attribute_to_object(this.attributes),
@@ -545,9 +559,10 @@ class GancioEvents extends SvelteElement {
     }, instance$1, create_fragment$1, safe_not_equal, {
       baseurl: 0,
       title: 1,
-      maxlength: 3,
-      tags: 4,
-      places: 5
+      maxlength: 4,
+      tags: 5,
+      places: 6,
+      theme: 2
     }, null);
     if (options) {
       if (options.target) {
@@ -560,7 +575,7 @@ class GancioEvents extends SvelteElement {
     }
   }
   static get observedAttributes() {
-    return ["baseurl", "title", "maxlength", "tags", "places"];
+    return ["baseurl", "title", "maxlength", "tags", "places", "theme"];
   }
   get baseurl() {
     return this.$$.ctx[0];
@@ -577,24 +592,31 @@ class GancioEvents extends SvelteElement {
     flush();
   }
   get maxlength() {
-    return this.$$.ctx[3];
+    return this.$$.ctx[4];
   }
   set maxlength(maxlength) {
     this.$$set({ maxlength });
     flush();
   }
   get tags() {
-    return this.$$.ctx[4];
+    return this.$$.ctx[5];
   }
   set tags(tags) {
     this.$$set({ tags });
     flush();
   }
   get places() {
-    return this.$$.ctx[5];
+    return this.$$.ctx[6];
   }
   set places(places) {
     this.$$set({ places });
+    flush();
+  }
+  get theme() {
+    return this.$$.ctx[2];
+  }
+  set theme(theme) {
+    this.$$set({ theme });
     flush();
   }
 }
