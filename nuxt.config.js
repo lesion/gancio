@@ -32,7 +32,7 @@ module.exports = {
    ** Global CSS
    */
   css: [
-    'vuetify/dist/vuetify.min.css', 
+    'vuetify/dist/vuetify.min.css',
     '@mdi/font/css/materialdesignicons.css',
     '@/assets/style.less'
   ],

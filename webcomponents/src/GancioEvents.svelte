@@ -5,6 +5,7 @@
   export let maxlength = false
   export let tags = ''
   export let places = ''
+  export let theme = 'light'
 
   let mounted = false
   let events = []
@@ -29,6 +30,9 @@
     .then(e => {
       events = e
     })
+    .catch(e => {
+      console.error('Error loading Gancio API -> ', e)
+    })
   }
 
   
@@ -49,12 +53,12 @@
     mounted = true
     update()
   })
-  $: update(maxlength && title && places && tags)
+  $: update(maxlength && title && places && tags && theme)
 
 </script>
 <svelte:options tag="gancio-events"/>
 {#if events.length}
-<div id='gancioEvents'>
+<div id='gancioEvents' class='{theme}'>
   <a href='{baseurl}' target='_blank'>
     <div class='content'>
       <span id='headerTitle'>{title || 'Gancio'}</span>
@@ -62,7 +66,7 @@
     </div>
   </a>
   {#each events as event}
-    <a href='{baseurl}/event/{event.slug || event.id}' target='_blank'>
+    <a href='{baseurl}/event/{event.slug || event.id}' title='{event.title}' target='_blank'>
       <div class='content'>
         <div class='subtitle'>
           {when(event.start_datetime)}
@@ -85,6 +89,8 @@
   width: 100%;
   max-width: 500px;
   box-sizing: content-box;
+  box-shadow: rgba(60, 64, 67, 0.4) 0px 1px 2px 0px, rgba(60, 64, 67, 0.25) 0px 1px 3px 1px;
+  border-radius: 5px;
 }
 
 #logo {
@@ -102,7 +108,7 @@
 
 a {
   text-decoration: none;
-  color: #ccc;
+  color: var(--text-color);
   display: flex;
   flex-direction: column;
   flex: 1 1 100%;
@@ -116,14 +122,28 @@ a {
   box-sizing: content-box;
 }
 
+.dark {
+  --bg-odd-color: #161616;
+  --bg-even-color: #222;
+  --bg-hover-color: #333;
+  --text-color: white;
+  --title-color: white;
+}
+
+.light {
+  --bg-odd-color: #f5f5f5;
+  --bg-even-color: #FAFAFA;
+  --bg-hover-color: #EEE;
+  --text-color: #222;
+  --title-color: black;
+}
 a:nth-child(odd) {
-  background-color: #161616;
+  background-color: var(--bg-odd-color);
 }
 
 a:nth-child(even) {
-  background-color: #222;
+  background-color: var(--bg-even-color);
 }
-
 
 a:first-child {
   border-radius: 5px 5px 0px 0px;
@@ -135,7 +155,7 @@ a:last-child {
 }
 
 a:hover {
-  background-color: #333 !important;
+  background-color: var(--bg-hover-color);
   padding-left: 23px;
 }
 
@@ -145,7 +165,7 @@ a:hover {
 }
 
 .title {
-  color: white;
+  color: var(--title-color);
 }
 
 </style>
