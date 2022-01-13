@@ -52,10 +52,12 @@
                 v-col.mr-2(:span='11')
                   v-text-field(v-model='list.title' :label='$t("common.title")')
                   v-text-field(v-model='list.maxEvents' type='number' min='1' :label='$t("common.max_events")')
+                  v-switch(v-model='list.theme' inset true-value='dark' false-value='light' :label="$t('admin.is_dark')")
                 v-col.float-right(:span='12')
                   gancio-events(:baseurl='settings.baseurl'
                     :maxlength='list.maxEvents &&  Number(list.maxEvents)'
                     :title='list.title'
+                    :theme='list.theme'
                     :places='filters.places.join(",")'
                     :tags='filters.tags.join(",")')
               v-alert.pa-5.my-4.blue-grey.darken-4.text-body-1.lime--text.text--lighten-3 <pre>{{code}}</pre>
@@ -98,7 +100,7 @@ export default {
     return {
       type: 'rss',
       notification: { email: '' },
-      list: { title: 'Gancio', maxEvents: null },
+      list: { title: 'Gancio', maxEvents: null, theme: 'dark' },
       filters: { tags: [], places: [], show_recurrent: false },
       events: []
     }
@@ -132,6 +134,8 @@ export default {
       if (this.list.maxEvents) {
         params.push('maxlength=' + this.list.maxEvents)
       }
+
+      params.push(`theme="${this.list.theme}"`)
 
       return `<script src="${this.settings.baseurl}\/gancio-events.es.js"><\/script>\n<gancio-events ${params.join(' ')}></gancio-events>\n\n`
 
