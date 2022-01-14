@@ -504,14 +504,12 @@ const eventController = {
       where.start_datetime = { [Op.lte]: end }
     }
 
-    if (places) {
-      where.placeId = places.split(',')
-    }
-
-    let where_tags = {}
-    if (tags) {
-      where_tags = { where: { [Op.or]: { tag: tags.split(',') } } }
-    }
+    if (places || tags) {
+      where[Op.or] = {
+          placeId: places ? places.split(',') : [],
+          '$tags.tag$': tags ? tags.split(',') : []
+        }
+      }
 
     const events = await Event.findAll({
       where,
@@ -526,7 +524,6 @@ const eventController = {
           order: [Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
           attributes: ['tag'],
           required: !!tags,
-          ...where_tags,
           through: { attributes: [] }
         },
         { model: Place, required: true, attributes: ['id', 'name', 'address'] }

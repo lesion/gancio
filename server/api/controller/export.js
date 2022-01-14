@@ -2,7 +2,7 @@ const Event = require('../models/event')
 const Place = require('../models/place')
 const Tag = require('../models/tag')
 
-const { Op } = require('sequelize')
+const { Op, literal } = require('sequelize')
 const moment = require('dayjs')
 const ics = require('ics')
 
@@ -16,16 +16,13 @@ const exportController = {
 
     const where = {}
     const yesterday = moment().subtract('1', 'day').unix()
-    let where_tags = {}
 
-    if (tags) {
-      where_tags = { where: { tag: tags.split(',') } }
-    }
-
-    if (places) {
-      where.placeId = places.split(',')
-    }
-
+    if (places || tags) {
+      where[Op.or] = {
+          placeId: places ? places.split(',') : [],
+          '$tags.tag$': tags ? tags.split(',') : []
+        }
+      }
     if (!show_recurrent) {
       where.parentId = null
     }
@@ -39,7 +36,15 @@ const exportController = {
         start_datetime: { [Op.gte]: yesterday },
         ...where
       },
-      include: [{ model: Tag, required: false, ...where_tags }, { model: Place, attributes: ['name', 'id', 'address'] }]
+      include: [
+        {
+          model: Tag,
+          order: [literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
+          attributes: ['tag'],
+          required: !!tags,
+          through: { attributes: [] }
+        },
+        { model: Place, attributes: ['name', 'id', 'address'] }]
     })
 
     switch (type) {
