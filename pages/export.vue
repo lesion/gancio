@@ -142,11 +142,11 @@ export default {
       
     },
     link () {
-      const typeMap = ['rss', 'ics', 'list']
+      const typeMap = ['rss', 'ics']
       const params = []
 
       if (this.filters.tags.length) {
-        params.push(`tags=${this.filters.tags.join(',')}`)
+        params.push(`tags=${this.filters.tags.map(encodeURIComponent).join(',')}`)
       }
 
       if (this.filters.places.length) {
@@ -157,7 +157,7 @@ export default {
         params.push('show_recurrent=true')
       }
 
-      return `${this.settings.baseurl}/feed/${typeMap[this.type]}?${params.join('&')}`
+      return `${this.settings.baseurl}/feed/${typeMap[this.type]}${params.length ? '?' : ''}${params.join('&')}`
     },
     showLink () {
       return (['rss', 'ics'].includes(this.type))
