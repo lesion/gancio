@@ -2,7 +2,7 @@
 v-container#event.pa-0.pa-sm-2
   //- EVENT PAGE
   //- gancio supports microformats (http://microformats.org/wiki/h-event)
-  v-card.h-event
+  v-card.h-event(itemscope itemtype="https://schema.org/Event")
     v-card-actions
       //- admin controls
       EventAdmin.mb-1(v-if='is_mine' :event='event')
@@ -11,32 +11,32 @@ v-container#event.pa-0.pa-sm-2
       v-row
         v-col.col-12.col-lg-8
           //- fake image to use u-featured in h-event microformat
-          img.u-featured(v-show='false' v-if='hasMedia' :src='event | mediaURL')
+          img.u-featured(v-show='false' v-if='hasMedia' :src='event | mediaURL' itemprop="image")
           v-img.main_image.mb-3(
             contain
             :alt='event | mediaURL("alt")'
             :src='event | mediaURL'
             :lazy-src='event | mediaURL("thumb")'
             v-if='hasMedia')
-          .p-description.text-body-1.pa-3.rounded(v-if='!hasMedia && event.description' v-html='event.description')
+          .p-description.text-body-1.pa-3.rounded(v-if='!hasMedia && event.description' itemprop='description' v-html='event.description')
 
         v-col.col-12.col-lg-4
           v-card
             v-card-text
               v-icon.float-right(v-if='event.parentId' color='success') mdi-repeat
               .title.text-h5
-                b.p-name {{event.title}}
+                b.p-name(itemprop="name") {{event.title}}
 
-              time.dt-start.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")')
+              time.dt-start.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")' itemprop="startDate" :content="event.start_datetime|unixFormat('YYYY-MM-DDTHH:mm')")
                 v-icon mdi-calendar
                 b.ml-2 {{event|when}}
               div.text-subtitle-1 {{event.start_datetime|from}}
                 small(v-if='event.parentId')  ({{event|recurrentDetail}})
 
-              .text-h6.p-location
+              .text-h6.p-location(itemprop="location" itemscope itemtype="https://schema.org/Place")
                 v-icon mdi-map-marker
-                b.vcard.ml-2 {{event.place && event.place.name}}
-              .text-subtitle-1.adr {{event.place && event.place.address}}
+                b.vcard.ml-2(itemprop="name") {{event.place && event.place.name}}
+                .text-subtitle-1.adr(itemprop='address') {{event.place && event.place.address}}
 
             //- tags, hashtags
             v-card-text(v-if='event.tags.length')
@@ -60,7 +60,7 @@ v-container#event.pa-0.pa-sm-2
                     :href='`/api/event/${event.slug || event.id}.ics`')
                     v-icon mdi-calendar-export
 
-      .p-description.text-body-1.pa-3.rounded(v-if='hasMedia && event.description' v-html='event.description')
+      .p-description.text-body-1.pa-3.rounded(v-if='hasMedia && event.description' itemprop='description' v-html='event.description')
 
       //- resources from fediverse
       #resources.mt-1(v-if='settings.enable_federation')
