@@ -1,5 +1,21 @@
 All notable changes to this project will be documented in this file.
 
+### UNRELEASED
+  - add mysql/mariadb support
+  - add [microdata](https://developer.mozilla.org/en-US/docs/Web/HTML/Microdata) support
+  - improve rss feed:
+    - fix validation
+    - add enclusure media for featured image
+    - add categories
+  - fix typo in export code
+  - add theme attribute to gancio-events (dark/light)
+  - increase thumbs quality
+  - improve logo for light theme
+  - improve wordpress plugin
+    - add \[gancio-event\] and \[gancio-events\] shortcode
+    - allow gancio-events / gancio-event tags in editor
+    - automatically enqueue webcomponent script
+
 ### 1.2.2 - 7 dic '21
   - shiny new gancio-event\[s\] webcomponents => [docs](https://gancio.org/usage/embed)
   - new backend plugin system => [docs](https://gancio.org/dev/plugins)
