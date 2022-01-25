@@ -8,7 +8,7 @@
     v-card-text.body.pt-0.pb-0
       time.dt-start.subtitle-1(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")' itemprop="startDate" :content="event.start_datetime|unixFormat('YYYY-MM-DDTHH:mm')")  <v-icon>mdi-calendar</v-icon> {{ event|when }}
       .d-none.dt-end(itemprop="endDate" :content="event.end_datetime|unixFormat('YYYY-MM-DDTHH:mm')") {{event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
-      a.place.d-block.p-location.pl-0(text color='primary' @click="$emit('placeclick', event.place.id)") <v-icon>mdi-map-marker</v-icon> <span itemprop="location">{{event.place.name}}</span>
+      a.place.d-block.p-location.pl-0(text color='primary' @click="$emit('placeclick', event.place.id)" itemprop="location" :content="event.place.name") <v-icon>mdi-map-marker</v-icon> {{event.place.name}}
 
     v-card-actions.pt-0.actions.justify-space-between
       .tags
