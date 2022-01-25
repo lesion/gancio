@@ -17,12 +17,22 @@ const exportController = {
     const where = {}
     const yesterday = moment().subtract('1', 'day').unix()
 
-    if (places || tags) {
+
+    if (tags && places) {
       where[Op.or] = {
-          placeId: places ? places.split(',') : [],
-          '$tags.tag$': tags ? tags.split(',') : []
-        }
+        placeId: places ? places.split(',') : [],
+        '$tags.tag$': tags.split(',')
       }
+    }
+
+    if (tags) {
+      where['$tags.tag$'] = tags.split(',')
+    }
+
+    if (places) {
+      where.placeId = places.split(',')
+    }
+
     if (!show_recurrent) {
       where.parentId = null
     }

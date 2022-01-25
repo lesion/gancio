@@ -504,12 +504,20 @@ const eventController = {
       where.start_datetime = { [Op.lte]: end }
     }
 
-    if (places || tags) {
+    if (tags && places) {
       where[Op.or] = {
-          placeId: places ? places.split(',') : [],
-          '$tags.tag$': tags ? tags.split(',') : []
-        }
+        placeId: places ? places.split(',') : [],
+        '$tags.tag$': tags.split(',')
       }
+    }
+
+    if (tags) {
+      where['$tags.tag$'] = tags.split(',')
+    }
+
+    if (places) {
+      where.placeId = places.split(',')
+    }
 
     const events = await Event.findAll({
       where,
