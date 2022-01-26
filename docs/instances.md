@@ -10,8 +10,8 @@ nav_order: 7
 - [lapunta.org](https://lapunta.org) (Florence, Italy)
 - [sapratza.in](https://sapratza.in/) (Sardinia, Italy)
 - [termine.161.social](https://termine.161.social) (Germany)
-- [https://ezkerraldea.euskaragendak.eus/]
-- [https://www.lakelogaztetxea.net/] 
+- [ezkerraldea.euskaragendak.eus](https://ezkerraldea.euskaragendak.eus/)
+- [lakelogaztetxea.net](https://ezkerraldea.euskaragendak.eus/)
 
 
 <small>Do you want your instance to appear here? [Write us]({% link contact.md %}).</small>
