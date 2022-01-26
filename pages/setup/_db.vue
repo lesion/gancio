@@ -4,14 +4,14 @@
     h2.mb-2.text-center Gancio Setup
     v-stepper.grey.lighten-5(v-model='step')
       v-stepper-header
-        v-stepper-step(:complete='step > 1' step='1') Database
-        v-divider
+        v-stepper-step(v-show='!dbdone' :complete='step > 1' step='1') Database
+        v-divider(v-show='!dbdone')
         v-stepper-step(:complete='step > 2' step='2') Configuration
         v-divider
         v-stepper-step(:complete='step > 3' step='3') Finish
 
       v-stepper-items
-        v-stepper-content(step='1')
+        v-stepper-content(v-show='!dbdone' step='1')
           DbStep(@complete='dbCompleted')
         v-stepper-content(step='2')
           Settings(setup, @complete='configCompleted')
@@ -36,14 +36,16 @@ export default {
     title: 'Setup',
   },
   auth: false,
-  data () {
+  asyncData ({ params }) {
+
     return {
+      dbdone: !!Number(params.db),
       config: {
         db: {
           dialect: ''
         }
       },
-      step: 1
+      step: 1 + Number(params.db)
     }
   },
   methods: {

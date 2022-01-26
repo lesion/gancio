@@ -24,6 +24,7 @@ export default {
   data () {
     return {
       db: {
+        dialect: 'sqlite',
         storage: './gancio.sqlite',
         host: 'localhost',
         database: 'gancio'

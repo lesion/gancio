@@ -47,6 +47,7 @@
     "linkify-html": "^3.0.4",
     "linkifyjs": "3.0.4",
     "lodash": "^4.17.21",
+    "mariadb": "^2.5.5",
     "microformat-node": "^2.0.1",
     "mkdirp": "^1.0.4",
     "multer": "^1.4.3",

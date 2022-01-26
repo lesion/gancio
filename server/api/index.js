@@ -10,7 +10,7 @@ api.use(express.urlencoded({ extended: false }))
 api.use(express.json())
 
 
-if (config.firstrun) {
+if (config.status !== 'READY') {
 
   const setupController = require('./controller/setup')
   const settingsController = require('./controller/settings')

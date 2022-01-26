@@ -54,7 +54,7 @@ export const actions = {
   // we use it to get configuration from db, set locale, etc...
   nuxtServerInit ({ commit }, { req }) {
     commit('setSettings', req.settings)
-    if (!req.firstrun) {
+    if (req.status === 'READY') {
       commit('setAnnouncements', req.announcements)
       commit('update', req.meta)
     }

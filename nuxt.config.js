@@ -20,7 +20,7 @@ module.exports = {
 
   vue: {
     config: {
-      ignoredElements: ['gancio-events']
+      ignoredElements: ['gancio-events', 'gancio-event']
     }
   },
 

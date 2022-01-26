@@ -3,7 +3,7 @@ const path = require('path')
 const URL = require('url')
 
 let config = {
-  firstrun: true,
+  status: 'SETUP',
   baseurl: '',
   hostname: '',
   server: {
@@ -15,7 +15,7 @@ let config = {
   db: {},
   upload_path: path.resolve(process.env.cwd || '', 'uploads'),
   write (config_path= process.env.config_path || './config.json') {
-    delete config.firstrun
+    delete config.status
     return fs.writeFileSync(config_path, JSON.stringify(config, null, 2))
   },
 
@@ -26,12 +26,12 @@ let config = {
     if (fs.existsSync(config_path)) {
       const configContent = fs.readFileSync(config_path)
       config = Object.assign(config, JSON.parse(configContent))
-      config.firstrun = false
+      config.status = 'READY'
       if (!config.hostname) {
         config.hostname = new URL.URL(config.baseurl).hostname
       }
     } else {
-      config.firstrun = true
+      config.status = 'SETUP'
       console.info('> Configuration file does not exists, running setup..')
     }
   }
