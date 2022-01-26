@@ -166,6 +166,7 @@ a:hover {
 
 .title {
   color: var(--title-color);
+  font-weight: bold;
 }
 
 </style>
