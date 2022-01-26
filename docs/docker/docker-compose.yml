@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  gancio:
+    build: .
+    restart: always
+    image: node:buster
+    container_name: gancio
+    environment:
+      - PATH=$PATH:/home/node/.yarn/bin
+      - GANCIO_DATA=/home/node/data
+      - NODE_ENV=production
+      - GANCIO_DB_DIALECT=sqlite
+      - GANCIO_DB_STORAGE=./gancio.sqlite
+    entrypoint: /entrypoint.sh
+    command: gancio start --docker
+    volumes:
+      - ./data:/home/node/data
+    ports:
+      - "127.0.0.1:13120:13120"
