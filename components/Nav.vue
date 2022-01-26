@@ -65,7 +65,7 @@ export default {
   computed: {
     ...mapState(['filters', 'settings']),
     feedLink () {
-      const tags = this.filters.tags && this.filters.tags.join(',')
+      const tags = this.filters.tags && this.filters.tags.map(encodeURIComponent).join(',')
       const places = this.filters.places && this.filters.places.join(',')
       let query = ''
       if (tags || places) {

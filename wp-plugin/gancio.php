@@ -21,7 +21,7 @@ along with (WPGancio). If not, see (https://www.gnu.org/licenses/agpl-3.0.html).
 
 defined( 'ABSPATH' ) or die( 'Nope, not accessing this' );
 require_once('settings.php');
-
+require_once('wc.php');
 require_once('oauth.php');
 
 

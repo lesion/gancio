@@ -11,76 +11,51 @@ nav_order: 2
 1. TOC
 {:toc}
 
-## Initial setup
+## Setup
 
-
-- __You must have the following dependencies installed: Docker, Docker Compose and Nginx__
-
+Make sure to have [Docker Engine](https://docs.docker.com/engine/install/),
+[Docker Compose](https://docs.docker.com/compose/install/) and [nginx](https://nginx.org/en/docs/install.html) installed:
 ```bash
 sudo apt install docker docker-compose nginx
 ```
-or  
-1. [Install docker](https://docs.docker.com/engine/install/)
-1. [Install docker-compose](https://docs.docker.com/compose/install/)
-1. [Install nginx](https://nginx.org/en/docs/install.html)
 
-- __Create a directory where everything related to gancio is stored__
+Create a directory where everything related to gancio is stored:
 ```bash
 mkdir -p /opt/gancio
 cd /opt/gancio
 ```
 
-## Use sqlite
-<div class='code-example bg-grey-lt-100' markdown="1">
-
-1. **Download docker-compose.yml and Dockerfile**
+Download `Dockerfile` and `entrypoint.sh`:
 ```bash
 wget {{site.url}}{% link /docker/Dockerfile %}
 wget {{site.url}}{% link /docker/entrypoint.sh %}
-wget {{site.url}}{% link /docker/sqlite/docker-compose.yml %}
 ```
 
-
-1. Build docker image
-```
-docker-compose build
-```
-</div>
-
-## Use postgreSQL
-<div class='code-example bg-grey-lt-100' markdown="1">
-
-1. **Download docker-compose.yml and Dockerfile**
+Download `docker-compose.yml` choosing your preferred database dialect between `sqlite`, `postgres` and `mariadb`:
 ```bash
-wget {{site.url}}{% link /docker/Dockerfile %}
-wget {{site.url}}{% link /docker/entrypoint.sh %}
-wget {{site.url}}{% link /docker/postgres/docker-compose.yml %}
+DB=sqlite
+wget {{site.url}}/docker/$DB/docker-compose.yml
 ```
 
-1. Build docker image
-```
+Build docker image
+```bash
 docker-compose build
 ```
-</div>
-
 
 ## Start gancio
 
-1. Run your container
+Start your container:
 ```bash
 docker-compose up -d
 ```
 
-1. Look at logs
+You can take a look at logs using:
 ```bash
 tail -f  data/logs/gancio.log
 ```
 
-1. [Setup nginx as a proxy]({% link install/nginx.md %})
+You'll need to [setup nginx as a proxy]({% link install/nginx.md %}) then you can point your web browser to your domain :tada:
 
-1. Point your web browser to your domain :tada:
-
-1. Edit `data/config.json` and restart the container on your needs, see [Configuration]({% link install/configuration.md %}) for more details.
 
 ## Upgrade
 

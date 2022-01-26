@@ -1,9 +1,6 @@
 
 export default async function () {
-  const db = require('./api/models/index')
-  await db.initialize()
   async function start (nuxt) {
-
     const log = require('../server/log')
     const config = require('../server/config')
     const settingsController = require('./api/controller/settings')
@@ -14,7 +11,7 @@ export default async function () {
     dayjs.tz.setDefault(settingsController.settings.instance_timezone)
 
     let TaskManager
-    if (!config.firstrun) {
+    if (config.status === 'READY') {
       TaskManager = require('../server/taskManager').TaskManager
       TaskManager.start()
     }

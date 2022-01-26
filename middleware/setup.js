@@ -1,10 +1,15 @@
-export default function ({ $axios, req, res, redirect, route }) {
+export default async function ({ $config, req, redirect, route, error }) {
   if (process.server) {
     $axios.defaults.headers.common['host'] = res.locals.hostname
-    if (req.firstrun && route.path !== '/setup') {
-      return redirect('/setup')
+    if (req.status === 'SETUP' && route.path !== '/setup/0') {
+      return redirect('/setup/0')
     }
-    if (!req.firstrun && route.path === '/setup') {
+
+    if (req.status === 'DBCONF' && route.path !== '/setup/1') {
+      return redirect('/setup/1')
+    }
+    
+    if (req.status === 'READY' && route.path.startsWith('/setup')) {
       return redirect('/')
     }
   }

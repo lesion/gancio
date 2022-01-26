@@ -23,7 +23,7 @@ sudo -u postgres pg_dump -Fc gancio > gancio.dump
 1. Archive database, configuration, custom user locales, logs, images and thumbnails
 ```bash
 sudo tar -czf gancio-$(date +%Y-%m-%d-%H%M%S)-backup.tgz  \
-  $(ls -d config.json uploads user_locale db.sqlite gancio.dump postgres data logs 2> /dev/null)
+  $(ls -d config.json uploads user_locale db.sqlite gancio.dump postgres data db logs 2> /dev/null)
 ```
 
 > info "Automatic backup"

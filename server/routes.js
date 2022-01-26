@@ -6,6 +6,28 @@ const cookieParser = require('cookie-parser')
 // const metricsMiddleware = promBundle({ includeMethod: true })
 
 const config = require('./config')
+
+if (config.status == 'READY') {
+  const db = require('./api/models/index')
+  db.initialize()
+} else {
+  if (process.env.GANCIO_DB_DIALECT) {
+    const setupController = require('./api/controller/setup')
+    const dbConf = {
+      dialect: process.env.GANCIO_DB_DIALECT,
+      storage: process.env.GANCIO_DB_STORAGE,
+      host: process.env.GANCIO_DB_HOST,
+      database: process.env.GANCIO_DB_DATABASE,
+      username: process.env.GANCIO_DB_USERNAME,
+      password: process.env.GANCIO_DB_PASSWORD,
+    }
+
+    setupController._setupDb(dbConf)
+      .catch(e => { process.exit(1) })
+  }
+
+}
+
 const helpers = require('./helpers')
 const log = require('./log')
 const api = require('./api')
@@ -24,7 +46,7 @@ app.use(cookieParser())
 
 
 // do not handle all routes on setup
-if (!config.firstrun) {
+if (config.status === 'READY') {
   const cors = require('cors')
   const { spamFilter } = require('./federation/helpers')
   const oauth = require('./api/oauth')
@@ -66,13 +88,13 @@ app.use((error, req, res, next) => {
 app.use(async (req, res, next) => {
   // const start_datetime = getUnixTime(startOfWeek(startOfMonth(new Date())))
   // req.events = await eventController._select(start_datetime, 100)
-  if (!config.firstrun) {
+  if (config.status === 'READY') {
     const eventController = require('./api/controller/event')
     const announceController = require('./api/controller/announce')    
     req.meta = await eventController._getMeta(req.siteId)
     req.announcements = await announceController._getVisible()
   }
-  req.firstrun = config.firstrun
+  req.status = config.status
   next()
 })
 

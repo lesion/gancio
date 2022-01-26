@@ -22,7 +22,7 @@ const db = {
     return !(users && users.length)
   },
   async runMigrations () {
-    const logging = config.firstrun ? false : log.debug.bind(log)
+    const logging = config.status !== 'READY' ? false : log.debug.bind(log)
     const umzug = new Umzug({
       storage: 'sequelize',
       storageOptions: { sequelize: db.sequelize },
@@ -41,7 +41,7 @@ const db = {
     return await umzug.up()    
   },
   async initialize () {
-    if (!config.firstrun) {
+    if (config.status === 'READY') {
       try {
         await db.connect()
         log.debug('Running migrations')
