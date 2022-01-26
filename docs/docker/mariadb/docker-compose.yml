@@ -5,12 +5,13 @@ services:
     image: mariadb
     container_name: mariadb
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - ./db:/var/lib/mysql
       - /etc/localtime:/etc/localtime:ro
     environment:
       - MARIADB_USER=gancio
       - MARIADB_DATABASE=gancio
       - MARIADB_PASSWORD=gancio
+      - MARIADB_RANDOM_ROOT_PASSWORD=yes
     restart: always
   gancio:
     build: .
@@ -21,6 +22,11 @@ services:
       - PATH=$PATH:/home/node/.yarn/bin
       - GANCIO_DATA=/home/node/data
       - NODE_ENV=production
+      - GANCIO_DB_DIALECT=mariadb
+      - GANCIO_DB_HOST=db
+      - GANCIO_DB_DATABASE=gancio
+      - GANCIO_DB_USER=gancio
+      - GANCIO_DB_PASSWORD=gancio
     command: gancio start --docker
     entrypoint: /entrypoint.sh
     volumes:
