@@ -25,7 +25,7 @@ services:
       - GANCIO_DB_DIALECT=mariadb
       - GANCIO_DB_HOST=db
       - GANCIO_DB_DATABASE=gancio
-      - GANCIO_DB_USER=gancio
+      - GANCIO_DB_USERNAME=gancio
       - GANCIO_DB_PASSWORD=gancio
     command: gancio start --docker
     entrypoint: /entrypoint.sh
