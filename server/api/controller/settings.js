@@ -142,11 +142,11 @@ const settingsController = {
     const settingsRecords = await Setting.findAll({ where: { siteId } })
     const settings = {}
     settingsRecords.forEach(s => { settings[s.key] = s.value })
-    settings.isMainSite = siteId === null
+    settings.isMainSite = siteId === 0
     return Object.assign({}, defaultSettings, settings)
   },
 
-  async set (key, value, siteId, is_secret = false) {
+  async set (key, value, siteId=0, is_secret = false) {
     const Setting = require('../models/setting')
     log.info(`SET ${key} ${is_secret ? '*****' : value}`)
     try {
@@ -172,7 +172,7 @@ const settingsController = {
 
   async testSMTP (req, res) {
     const smtp = req.body
-    await settingsController.set('smtp', smtp.smtp)
+    await settingsController.set('smtp', smtp.smtp, req.siteId)
     const mail = require('../mail')
     try {
       await mail._send(settingsController.settings.admin_email, 'test', null, 'en')
