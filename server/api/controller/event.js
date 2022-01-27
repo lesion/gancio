@@ -568,9 +568,8 @@ const eventController = {
 
   /**
    * Ensure we have the next instance of a recurrent event
-   * TODO: create a future instance if the next one is skipped
    */
-  _createRecurrentOccurrence (e) {
+  async _createRecurrentOccurrence (e, startAt) {
     log.debug(`Create recurrent event [${e.id}] ${e.title}"`)
     const event = {
       parentId: e.id,
@@ -584,23 +583,20 @@ const eventController = {
 
     const recurrent = e.recurrent
     const start_date = dayjs.unix(e.start_datetime)
-    const now = dayjs()
-    let cursor = start_date > now ? start_date : now
+    let cursor = start_date > startAt ? start_date : startAt
+    startAt = cursor
     const duration = dayjs.unix(e.end_datetime).diff(start_date, 's')
     const frequency = recurrent.frequency
     const type = recurrent.type
 
-    log.info(`NOW IS ${cursor} while event is at ${start_date} (freq: ${frequency})`)
-
     cursor = cursor.hour(start_date.hour()).minute(start_date.minute()).second(0)
-    log.info(`set cursor to correct date and hour => ${cursor}`)
 
     if (!frequency) { return }
 
     // each week or 2
     if (frequency[1] === 'w') {
       cursor = cursor.day(start_date.day())
-      if (cursor.isBefore(dayjs())) {
+      if (cursor.isBefore(startAt)) {
         cursor = cursor.add(7, 'day')
       }
       if (frequency[0] === '2') {
@@ -610,21 +606,20 @@ const eventController = {
       if (type === 'ordinal') {
         cursor = cursor.date(start_date.date())
 
-        if (cursor.isBefore(dayjs())) {
+        if (cursor.isBefore(startAt)) {
           cursor = cursor.add(1, 'month')
         }
       } else { // weekday
         // get weekday
-        log.info(type)
         // get recurrent freq details
         cursor = helpers.getWeekdayN(cursor, type, start_date.day())
-        if (cursor.isBefore(dayjs())) {
+        if (cursor.isBefore(startAt)) {
           cursor = cursor.add(4, 'week')
           cursor = helpers.getWeekdayN(cursor, type, start_date.day())
         }
       }
     }
-    log.info(cursor)
+    log.debug(cursor)
     event.start_datetime = cursor.unix()
     event.end_datetime = event.start_datetime + duration
     const newEvent = await Event.create(event)
@@ -642,10 +637,15 @@ const eventController = {
         { model: Event, as: 'child', required: false, where: { start_datetime: { [Op.gte]: start_datetime } }}],
       order: [['child', 'start_datetime', 'DESC']]
     })
-    // filter events that as no instance in future yet
-    const creations = events
-      .filter(e => e.child.length === 0)
-      .map(eventController._createRecurrentOccurrence)
+
+    // create a new occurrence for each recurring events but the one's that has an already visible occurrence coming
+    const creations = events.map(e => {
+      if (e.child.length) {
+        if (e.child.find(c => c.is_visible)) return
+        return eventController._createRecurrentOccurrence(e, dayjs.unix(e.child[0].start_datetime+1))
+      }
+      return eventController._createRecurrentOccurrence(e, dayjs())
+    })
 
     return Promise.all(creations)
   }
