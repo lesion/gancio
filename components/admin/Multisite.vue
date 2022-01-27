@@ -113,8 +113,9 @@ export default {
       if (!this.$refs.site_form.validate()) { return }
       try {
         this.loading = true
-        await this.$axios.$post('/site', this.site)
+        const site = await this.$axios.$post('/site', this.site)
         this.site = { hostname: '', email: '', is_active: true }
+        this.sites.push(site)
         this.$root.$message('admin.site_create_ok', { color: 'success' })
         this.$emit('update')
         this.loading = false
