@@ -53,7 +53,7 @@ const siteController = {
       const userBody = { is_active: true, email: req.body.email, siteId: site.id, is_active: true, is_admin: true }
       userBody.recover_code = crypto.randomBytes(16).toString('hex')
       const user = await User.scope('withRecover').create(userBody)
-      mail.send(user.email, 'user_confirm', { user, config }, req.settings.locale)
+      mail.send(user.email, 'user_confirm', { user, config: { ...config, baseurl: req.settings.baseurl } }, req.settings.locale)
       res.json(site)
     } catch (e) {
       log.error('User creation error:', e)
