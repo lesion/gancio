@@ -43,7 +43,6 @@ module.exports = {
         siteId: {
           type: Sequelize.INTEGER,
           primaryKey: true,
-          allowNull: true,
           index: true,
           defaultValue: null,
           references: {
@@ -65,7 +64,8 @@ module.exports = {
         }        
       }, { transaction })
 
-      await queryInterface.sequelize.query('INSERT INTO settings SELECT key, NULL, value, is_secret, createdAt, updatedAt from old_settings', { transaction })
+      await queryInterface.sequelize.query('INSERT INTO sites (id, updatedAt, createdAt) values(0, date("now"), date("now"))', { transaction })
+      await queryInterface.sequelize.query('INSERT INTO settings SELECT key, 0, value, is_secret, createdAt, updatedAt from old_settings', { transaction })
       // await queryInterface.changeColumn('settings', 'key', {
       //   type: Sequelize.STRING,
       //   allowNull: false,
@@ -88,15 +88,6 @@ module.exports = {
       //   fields: ['key', 'siteId']
       // })
       await queryInterface.addColumn('places', 'siteId', {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'sites',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      }, { transaction })
-      await queryInterface.addColumn('tags', 'siteId', {
         type: Sequelize.INTEGER,
         references: {
           model: 'sites',
@@ -134,9 +125,9 @@ module.exports = {
       }, { transaction })      
       await transaction.commit()
     } catch (err) {
-      console.error(err)
       await transaction.rollback()
       throw err
+      // return false
     }
   },
   async down (queryInterface, Sequelize) {
@@ -145,7 +136,6 @@ module.exports = {
       await queryInterface.dropTable('sites')
       await queryInterface.removeColumn('settings', 'siteId')
       await queryInterface.removeColumn('places', 'siteId')
-      await queryInterface.removeColumn('tags', 'siteId')
       await queryInterface.removeColumn('events', 'siteId')
       await queryInterface.removeColumn('users', 'siteId')
       // await queryInterface.removeColumn('announcements', 'siteId')

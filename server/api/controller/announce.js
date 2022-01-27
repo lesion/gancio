@@ -7,8 +7,8 @@ const announceController = {
     return res.json(announces)
   },
 
-  _getVisible () {
-    return Announcement.findAll({ where: { visible: true }, raw: true })
+  _getVisible (siteId) {
+    return Announcement.findAll({ where: { visible: true, siteId }, raw: true })
   },
 
   async add (req, res) {

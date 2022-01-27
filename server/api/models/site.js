@@ -26,7 +26,6 @@ Site.init({
 const Place = require('./place')
 // const Resource = require('./resource')
 const Setting = require('./setting')
-const Tag = require('./tag')
 const User = require('./user')
 const Announcement = require('./announcement')
 
@@ -35,9 +34,6 @@ Place.belongsTo(Site)
 
 Site.hasMany(Setting)
 Setting.belongsTo(Site)
-
-Site.hasMany(Tag)
-Tag.belongsTo(Site)
 
 Site.hasMany(User)
 User.belongsTo(Site)

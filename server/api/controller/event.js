@@ -238,6 +238,7 @@ const eventController = {
       const events = await Event.findAll({
         where: {
           parentId: null,
+          siteId: req.siteId,
           is_visible: false,
           start_datetime: { [Op.gt]: dayjs().unix() }
         },
@@ -385,11 +386,12 @@ const eventController = {
 
       const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
       const eventDetails = {
-        title: body.title,
+
         // remove html tags
         description: helpers.sanitizeHTML(linkifyHtml(body.description, { target: '_blank' })),
         multidate: body.multidate,
         start_datetime: body.start_datetime,
+        siteId: req.siteId,
         end_datetime: body.end_datetime,
         recurrent
       }
@@ -584,7 +586,8 @@ const eventController = {
       media: e.media,
       is_visible: true,
       userId: e.userId,
-      placeId: e.placeId
+      placeId: e.placeId,
+      siteId: e.siteId
     }
 
     const recurrent = e.recurrent

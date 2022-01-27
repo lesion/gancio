@@ -92,7 +92,7 @@ app.use(async (req, res, next) => {
     const eventController = require('./api/controller/event')
     const announceController = require('./api/controller/announce')    
     req.meta = await eventController._getMeta(req.siteId)
-    req.announcements = await announceController._getVisible()
+    req.announcements = await announceController._getVisible(req.siteId)
   }
   req.status = config.status
   next()
