@@ -627,7 +627,8 @@ const eventController = {
     log.info(cursor)
     event.start_datetime = cursor.unix()
     event.end_datetime = event.start_datetime + duration
-    Event.create(event)
+    const newEvent = await Event.create(event)
+    return newEvent.addTags(e.tags)
   },
 
   /**
@@ -637,8 +638,9 @@ const eventController = {
     // select recurrent events and its childs
     const events = await Event.findAll({
       where: { is_visible: true, recurrent: { [Op.ne]: null } },
-      include: [{ model: Event, as: 'child', required: false, where: { start_datetime: { [Op.gte]: start_datetime } } }],
-      order: ['start_datetime']
+      include: [{ model: Tag, required: false },
+        { model: Event, as: 'child', required: false, where: { start_datetime: { [Op.gte]: start_datetime } }}],
+      order: [['child', 'start_datetime', 'DESC']]
     })
     // filter events that as no instance in future yet
     const creations = events
