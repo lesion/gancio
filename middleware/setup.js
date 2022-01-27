@@ -1,6 +1,5 @@
-export default async function ({ $config, req, redirect, route, error }) {
+export default async function ({ $axios, $config, res, req, redirect, route, error }) {
   if (process.server) {
-    $axios.defaults.headers.common['host'] = res.locals.hostname
     if (req.status === 'SETUP' && route.path !== '/setup/0') {
       return redirect('/setup/0')
     }
