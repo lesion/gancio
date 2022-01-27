@@ -67,11 +67,11 @@ module.exports = {
     // res.hostname = hostname
     console.error(hostname)
     res.locals.hostname = hostname
-    if (config.firstrun) return next()
+    req.siteId=0
+    if (config.status !== 'READY') return next()
     const Site = require('./api/models/site')
     req.site = await Site.findOne({ where: { hostname } })
-    console.error(req.site)
-    req.siteId = req.site && req.site.id
+    req.siteId = req.site && req.site.id || 0
     next()
   },
 
@@ -83,7 +83,7 @@ module.exports = {
     // select locale based on cookie and accept-language header
     acceptLanguage.languages(Object.keys(locales))
     req.acceptedLocale = acceptLanguage.get(req.headers['accept-language'])
-    if (config.firstrun) return next()
+    if (config.status !== 'READY') return next()
 
     // initialize settings
     req.settings = await settingsController.getAll(req.siteId)
