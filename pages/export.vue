@@ -96,11 +96,11 @@ export default {
     })
     return { events }
   },
-  data () {
+  data ({ $store }) {
     return {
       type: 'rss',
       notification: { email: '' },
-      list: { title: 'Gancio', maxEvents: null, theme: 'dark' },
+      list: { title: $store.state.settings.title, maxEvents: null, theme: 'dark' },
       filters: { tags: [], places: [], show_recurrent: false },
       events: []
     }
