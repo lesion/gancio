@@ -11,7 +11,7 @@ nav_order: 7
 - [sapratza.in](https://sapratza.in/) (Sardinia, Italy)
 - [termine.161.social](https://termine.161.social) (Germany)
 - [ezkerraldea.euskaragendak.eus](https://ezkerraldea.euskaragendak.eus/)
-- [lakelogaztetxea.net](https://ezkerraldea.euskaragendak.eus/)
+- [lakelogaztetxea.net](https://lakelogaztetxea.net)
 
 
 <small>Do you want your instance to appear here? [Write us]({% link contact.md %}).</small>
