@@ -65,6 +65,13 @@ module.exports = {
     // initialize settings
     req.settings = { ...settingsController.settings }
 
+    if (req.settings.smtp && req.settings.smtp.auth && req.settings.smtp.auth.pass) {
+      if (req.user.is_admin) {
+        delete req.settings.smtp.auth.pass
+      } else {
+        delete req.settings.smtp
+      }
+    }
     req.settings.baseurl = config.baseurl
     req.settings.hostname = config.hostname
     req.settings.title = req.settings.title || config.title
