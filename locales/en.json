@@ -225,8 +225,8 @@
         "smtp_description": "<ul><li>Admin should receive an email when anon event is added (if enabled).</li><li>Admin should receive email of registration request (if enabled).</li><li>User should receive an email of registration request.</li><li>User should receive email of confirmed registration.</li><li>User should receive a confirmation email when subscribed directly by admin.</li><li>Users should receive email to restore password when they forgot it</li></ul>",
         "smtp_test_success": "A test email is sent to {admin_email}, please check your inbox",
         "smtp_test_button": "Send a test email",
-        "admin_email": "Admin e-mail"
-
+        "admin_email": "Admin e-mail",
+        "widget": "Widget"
     },
     "auth": {
         "not_confirmed": "Not confirmed yet…",
