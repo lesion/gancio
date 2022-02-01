@@ -66,7 +66,7 @@ module.exports = {
     req.settings = { ...settingsController.settings }
 
     if (req.settings.smtp && req.settings.smtp.auth && req.settings.smtp.auth.pass) {
-      if (req.user.is_admin) {
+      if (req.user && req.user.is_admin) {
         delete req.settings.smtp.auth.pass
       } else {
         delete req.settings.smtp

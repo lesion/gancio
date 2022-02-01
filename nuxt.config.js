@@ -101,6 +101,5 @@ module.exports = {
     hardSource: true,
     extractCSS: true,
     optimizeCSS: true,
-    standalone: true
   },
 }
