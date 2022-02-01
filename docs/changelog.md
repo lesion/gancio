@@ -7,6 +7,8 @@ nav_order: 10
 
 
 All notable changes to this project will be documented in this file.
+### 1.3.3 - 1 feb '22
+  - security fix, avoid sharing smtp pass with front-end
 
 ### 1.3.2 - 1 feb '22
   - fix webcomponent for event without img
