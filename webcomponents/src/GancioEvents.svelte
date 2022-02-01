@@ -67,12 +67,14 @@
     mounted = true
     update()
   })
-  $: update(maxlength && title && places && tags && theme && show_recurrent)
+  $: update(maxlength && title && places && tags && theme && show_recurrent && sidebar)
 
 </script>
 <svelte:options tag="gancio-events"/>
 {#if events.length}
-<div id='gancioEvents' class='{theme} {sidebar === 'true' ? "sidebar" : "nosidebar"}'>
+<div id='gancioEvents'
+  class:dark="{theme === 'dark'}" class:light="{theme === 'light'}"
+  class:sidebar="{sidebar === 'true'}" class:nosidebar="{sidebar !== 'true'}">
   {#if title && sidebar === 'true'}
   <a href='{baseurl}' target='_blank' id='header'>
     <div class='content'>

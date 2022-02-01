@@ -67,6 +67,9 @@ function set_data(text2, data) {
   if (text2.wholeText !== data)
     text2.data = data;
 }
+function toggle_class(element2, name, toggle) {
+  element2.classList[toggle ? "add" : "remove"](name);
+}
 function attribute_to_object(attributes) {
   const result = {};
   for (const attribute of attributes) {
@@ -290,7 +293,6 @@ function get_each_context_1(ctx, list, i) {
 function create_if_block$1(ctx) {
   let div;
   let t;
-  let div_class_value;
   let if_block = ctx[1] && ctx[3] === "true" && create_if_block_4(ctx);
   let each_value = ctx[4];
   let each_blocks = [];
@@ -307,7 +309,10 @@ function create_if_block$1(ctx) {
         each_blocks[i].c();
       }
       attr(div, "id", "gancioEvents");
-      attr(div, "class", div_class_value = "" + (ctx[2] + " " + (ctx[3] === "true" ? "sidebar" : "nosidebar")));
+      toggle_class(div, "dark", ctx[2] === "dark");
+      toggle_class(div, "light", ctx[2] === "light");
+      toggle_class(div, "sidebar", ctx[3] === "true");
+      toggle_class(div, "nosidebar", ctx[3] !== "true");
     },
     m(target, anchor) {
       insert(target, div, anchor);
@@ -349,8 +354,17 @@ function create_if_block$1(ctx) {
         }
         each_blocks.length = each_value.length;
       }
-      if (dirty & 12 && div_class_value !== (div_class_value = "" + (ctx2[2] + " " + (ctx2[3] === "true" ? "sidebar" : "nosidebar")))) {
-        attr(div, "class", div_class_value);
+      if (dirty & 4) {
+        toggle_class(div, "dark", ctx2[2] === "dark");
+      }
+      if (dirty & 4) {
+        toggle_class(div, "light", ctx2[2] === "light");
+      }
+      if (dirty & 8) {
+        toggle_class(div, "sidebar", ctx2[3] === "true");
+      }
+      if (dirty & 8) {
+        toggle_class(div, "nosidebar", ctx2[3] !== "true");
       }
     },
     d(detaching) {
@@ -836,7 +850,7 @@ function instance$1($$self, $$props, $$invalidate) {
       $$invalidate(3, sidebar = $$props2.sidebar);
   };
   $$self.$$.update = () => {
-    if ($$self.$$.dirty & 486) {
+    if ($$self.$$.dirty & 494) {
       update2();
     }
   };
