@@ -28,7 +28,7 @@ To embed an event in webpages you use `<gancio-event>` custom element, you can c
 <gancio-event id=17 baseurl='https://demo.gancio.org'></gancio-event>
 ```
 
-<script src='https://demo.gancio.org/gancio-events.es.js'></script>
+<script src='/assets/js/gancio-events.es.js'></script>
 <gancio-event id=17 baseurl='https://demo.gancio.org'></gancio-event>  
 
 
@@ -37,15 +37,53 @@ You can also embed a list of events using `<gancio-events>` custom element, you 
 
 
 ```html
-<gancio-events baseurl='https://demo.gancio.org'>
-  <a href='https://demo.gancio.org'>Gancio Events</a>
+<gancio-events baseurl='https://gancio.cisti.org'>
+  <a href='https://gancio.cisti.org'>Gancio Events</a>
 </gancio-events>
 ```
 
-<gancio-events baseurl='https://demo.gancio.org'><a href='https://demo.gancio.org'>Gancio Events</a></gancio-events>  
+<script>
+  var theme = 'light';
+  var sidebar = 'true';
+  function toggleDark() {
+    var items = document.getElementsByTagName('gancio-events');
+    theme = theme === 'dark' ? 'light' : 'dark';
+    items[0].setAttribute('theme', theme );
+  }
+
+  function toggleSidebar() {
+    var items = document.getElementsByTagName('gancio-events');
+    sidebar = sidebar === 'true' ? 'false' : 'true';
+    items[0].setAttribute('sidebar', sidebar );
+  }
+
+
+  function changeMax(value) {
+    var items = document.getElementsByTagName('gancio-events');
+    items[0].setAttribute('maxlength', value);
+  }
+
+  function changeTitle (title) {
+    var items = document.getElementsByTagName('gancio-events');
+    items[0].setAttribute('title', title)
+  }
+</script>
+
+<style>
+  label {
+    display: block;
+    margin: 0px;
+    padding: 10px;
+  }
+</style>
+<label><input type='checkbox' onchange="toggleDark()"/> Dark</label>
+<label><input type='checkbox' onchange="toggleSidebar()"/> Sidebar</label>
+<label>Max items <input value=4 type='number' label='Max items' onchange="changeMax(this.value)"/></label>
+<label>Title <input value='Gancio' type='text' onkeyup="changeTitle(this.value)"/></label>
+<gancio-events sidebar='true' title='Gancio' theme='light' maxlength=4 baseurl='https://gancio.cisti.org'><a href='https://gancio.cisti.org'>Gancio Events</a></gancio-events>  
 
 > info "Customize"
-> Note that you can modify the title (or completely remove it using an empty `title` param) and the icon,
+> Note that you can modify the title (or completely remove it using an empty `title` param),
 > you can limit the list to a maximum number of events using the `maxlength` parameter and filter events by `tags` or `places` using that parameters (it's easier using **gancio** than to explain it here)
 
 

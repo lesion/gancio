@@ -130,11 +130,6 @@
 .nosidebar {
   max-width: 1200px;
 }
-.event {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-}
 
 #header{
   padding: 1.2rem 1rem;
@@ -171,12 +166,6 @@
   height: 100%;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
-.event .content {
-  display: flex;
-  flex: auto;
-  flex-direction: column;
-  min-width: 300px;
-}
 
 .nosidebar .event {
   margin-bottom: 2rem;
@@ -202,8 +191,6 @@ a {
   text-decoration: none;
   color: var(--text-color);
   display: flex;
-  flex-direction: column;
-  flex: 1 1 100%;
   padding: 8px 20px;
   margin: 0;
   line-height: 1.275rem;
@@ -278,6 +265,7 @@ a:active .title {
 
 .tag {
   margin-right: 10px;
+  display: inline-block;
 }
 
 </style>
