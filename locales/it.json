@@ -223,7 +223,8 @@
         "delete_footer_link_confirm": "Vuoi eliminare questo collegamento?",
         "edit_place": "Modifica luogo",
         "new_announcement": "Nuovo annuncio",
-        "show_smtp_setup": "Impostazioni email"
+        "show_smtp_setup": "Impostazioni email",
+        "widget": "Widget"
     },
     "auth": {
         "not_confirmed": "Non ancora confermato…",
