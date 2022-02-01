@@ -77,7 +77,7 @@ You can also embed a list of events using `<gancio-events>` custom element, you 
   }
 </style>
 <label><input type='checkbox' onchange="toggleDark()"/> Dark</label>
-<label><input type='checkbox' onchange="toggleSidebar()"/> Sidebar</label>
+<label><input type='checkbox' checked onchange="toggleSidebar()"/> Sidebar</label>
 <label>Max items <input value=4 type='number' label='Max items' onchange="changeMax(this.value)"/></label>
 <label>Title <input value='Gancio' type='text' onkeyup="changeTitle(this.value)"/></label>
 <gancio-events sidebar='true' title='Gancio' theme='light' maxlength=4 baseurl='https://gancio.cisti.org'><a href='https://gancio.cisti.org'>Gancio Events</a></gancio-events>  
