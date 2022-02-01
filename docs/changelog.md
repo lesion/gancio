@@ -7,6 +7,10 @@ nav_order: 10
 
 
 All notable changes to this project will be documented in this file.
+
+### 1.3.2 - 1 feb '22
+  - fix webcomponent for event without img
+
 ### 1.3.1 - 1 feb '22
   - inherits tags in recurring events [#138](https://framagit.org/les/gancio/-/issues/138)
   - you can now skip an occurrence of a recurring event

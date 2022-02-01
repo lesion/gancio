@@ -90,11 +90,11 @@
         {#if event.media.length}
           <img style="object-position: {position(event)}; aspect-ratio=1.7778;"
             alt="{event.media[0].name}"
-            src="{event.media.length ? baseurl + '/media/thumb/' + event.media[0].url : baseurl + '/noimg.svg'}" loading='lazy'/>
+            src="{baseurl + '/media/thumb/' + event.media[0].url}" loading='lazy'/>
         {:else}
-          <img style="object-position: {position(event)}; aspect-ratio=1.7778;"
-          alt="{event.media[0].name}"
-          src="{event.media.length ? baseurl + '/media/thumb/' + event.media[0].url : baseurl + '/noimg.svg'}" loading='lazy'/>
+          <img style="aspect-ratio=1.7778;"
+            alt="{event.title}"
+            src="{baseurl + '/noimg.svg'}" loading='lazy'/>
         {/if}
       </div>
       {/if}
@@ -147,8 +147,9 @@
 
 .event .img {
   width: 100%;
-  max-width: 500px;
-  height: 250px;
+  max-width: 450px;
+  max-height: 250px;
+  aspect-ratio: 1.7778;
   flex: 1 0 auto;
   /* height: 100%; */
 }

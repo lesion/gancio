@@ -466,15 +466,14 @@ function create_if_block_2(ctx) {
 }
 function create_else_block(ctx) {
   let img;
-  let img_style_value;
   let img_alt_value;
   let img_src_value;
   return {
     c() {
       img = element("img");
-      attr(img, "style", img_style_value = "object-position: " + position$1(ctx[11]) + "; aspect-ratio=1.7778;");
-      attr(img, "alt", img_alt_value = ctx[11].media[0].name);
-      if (!src_url_equal(img.src, img_src_value = ctx[11].media.length ? ctx[0] + "/media/thumb/" + ctx[11].media[0].url : ctx[0] + "/noimg.svg"))
+      attr(img, "style", "aspect-ratio=1.7778;");
+      attr(img, "alt", img_alt_value = ctx[11].title);
+      if (!src_url_equal(img.src, img_src_value = ctx[0] + "/noimg.svg"))
         attr(img, "src", img_src_value);
       attr(img, "loading", "lazy");
     },
@@ -482,13 +481,10 @@ function create_else_block(ctx) {
       insert(target, img, anchor);
     },
     p(ctx2, dirty) {
-      if (dirty & 16 && img_style_value !== (img_style_value = "object-position: " + position$1(ctx2[11]) + "; aspect-ratio=1.7778;")) {
-        attr(img, "style", img_style_value);
-      }
-      if (dirty & 16 && img_alt_value !== (img_alt_value = ctx2[11].media[0].name)) {
+      if (dirty & 16 && img_alt_value !== (img_alt_value = ctx2[11].title)) {
         attr(img, "alt", img_alt_value);
       }
-      if (dirty & 17 && !src_url_equal(img.src, img_src_value = ctx2[11].media.length ? ctx2[0] + "/media/thumb/" + ctx2[11].media[0].url : ctx2[0] + "/noimg.svg")) {
+      if (dirty & 1 && !src_url_equal(img.src, img_src_value = ctx2[0] + "/noimg.svg")) {
         attr(img, "src", img_src_value);
       }
     },
@@ -508,7 +504,7 @@ function create_if_block_3(ctx) {
       img = element("img");
       attr(img, "style", img_style_value = "object-position: " + position$1(ctx[11]) + "; aspect-ratio=1.7778;");
       attr(img, "alt", img_alt_value = ctx[11].media[0].name);
-      if (!src_url_equal(img.src, img_src_value = ctx[11].media.length ? ctx[0] + "/media/thumb/" + ctx[11].media[0].url : ctx[0] + "/noimg.svg"))
+      if (!src_url_equal(img.src, img_src_value = ctx[0] + "/media/thumb/" + ctx[11].media[0].url))
         attr(img, "src", img_src_value);
       attr(img, "loading", "lazy");
     },
@@ -522,7 +518,7 @@ function create_if_block_3(ctx) {
       if (dirty & 16 && img_alt_value !== (img_alt_value = ctx2[11].media[0].name)) {
         attr(img, "alt", img_alt_value);
       }
-      if (dirty & 17 && !src_url_equal(img.src, img_src_value = ctx2[11].media.length ? ctx2[0] + "/media/thumb/" + ctx2[11].media[0].url : ctx2[0] + "/noimg.svg")) {
+      if (dirty & 17 && !src_url_equal(img.src, img_src_value = ctx2[0] + "/media/thumb/" + ctx2[11].media[0].url)) {
         attr(img, "src", img_src_value);
       }
     },
@@ -869,7 +865,7 @@ function instance$1($$self, $$props, $$invalidate) {
 class GancioEvents extends SvelteElement {
   constructor(options) {
     super();
-    this.shadowRoot.innerHTML = `<style>#gancioEvents{font-family:ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";overflow-x:hidden;width:100%;box-sizing:content-box;margin:0 auto;font-size:1rem}.nosidebar{max-width:1200px}#header{padding:1.2rem 1rem;background-color:var(--bg-odd-color)}.sidebar{max-width:500px;box-shadow:rgba(60, 64, 67, 0.4) 0px 1px 2px 0px, rgba(60, 64, 67, 0.25) 0px 1px 3px 1px;border-radius:5px;font-size:1rem}.event .img{width:100%;max-width:500px;height:250px;flex:1 0 auto}@media screen and (max-width: 800px){.event{flex-wrap:wrap}.event .img{max-width:100%}}.event img{object-fit:cover;border-radius:15px;width:100%;height:100%;box-shadow:rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px}.nosidebar .event{margin-bottom:2rem}.nosidebar .content{margin-left:1rem;margin-top:5px}.tags{margin-top:2px}#logo{position:absolute;top:10px;right:10px;height:40px}a{text-decoration:none;color:var(--text-color);display:flex;padding:8px 20px;margin:0;line-height:1.275rem;font-weight:400;font-size:.875rem;position:relative;transition:background-color .3s cubic-bezier(.25,.8,.5,1), padding .3s;box-sizing:content-box}a:hover .title,a:focus .title,a:active .title{text-decoration:underline}.dark{--bg-odd-color:#161616;--bg-even-color:#222;--bg-hover-color:#333;--text-color:white;--title-color:white;--line-color:rgba(120, 120, 120, 0.2)}.light{--bg-odd-color:#f5f5f5;--bg-even-color:#FAFAFA;--bg-hover-color:#EEE;--text-color:#222;--title-color:black;--line-color:rgba(220, 220, 220, 0.9)}.sidebar a{background-color:var(--bg-even-color);border-bottom:1px solid var(--line-color)}.sidebar a:hover,.sidebar a:focus,.sidebar a:active{background-color:var(--bg-hover-color);padding-left:15px;padding-right:25px}.place{font-weight:400;font-size:1.2rem;line-height:1.4rem;color:orangered}.title{color:var(--title-color);font-weight:bold;font-size:1.3rem;line-height:1.1em}.nosidebar .title{font-size:1.9em;line-height:1.1em}.subtitle{font-size:1rem;line-height:1.1em;color:var(--title-color);opacity:0.9}.tag{margin-right:10px;display:inline-block}</style>`;
+    this.shadowRoot.innerHTML = `<style>#gancioEvents{font-family:ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";overflow-x:hidden;width:100%;box-sizing:content-box;margin:0 auto;font-size:1rem}.nosidebar{max-width:1200px}#header{padding:1.2rem 1rem;background-color:var(--bg-odd-color)}.sidebar{max-width:500px;box-shadow:rgba(60, 64, 67, 0.4) 0px 1px 2px 0px, rgba(60, 64, 67, 0.25) 0px 1px 3px 1px;border-radius:5px;font-size:1rem}.event .img{width:100%;max-width:450px;max-height:250px;aspect-ratio:1.7778;flex:1 0 auto}@media screen and (max-width: 800px){.event{flex-wrap:wrap}.event .img{max-width:100%}}.event img{object-fit:cover;border-radius:15px;width:100%;height:100%;box-shadow:rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px}.nosidebar .event{margin-bottom:2rem}.nosidebar .content{margin-left:1rem;margin-top:5px}.tags{margin-top:2px}#logo{position:absolute;top:10px;right:10px;height:40px}a{text-decoration:none;color:var(--text-color);display:flex;padding:8px 20px;margin:0;line-height:1.275rem;font-weight:400;font-size:.875rem;position:relative;transition:background-color .3s cubic-bezier(.25,.8,.5,1), padding .3s;box-sizing:content-box}a:hover .title,a:focus .title,a:active .title{text-decoration:underline}.dark{--bg-odd-color:#161616;--bg-even-color:#222;--bg-hover-color:#333;--text-color:white;--title-color:white;--line-color:rgba(120, 120, 120, 0.2)}.light{--bg-odd-color:#f5f5f5;--bg-even-color:#FAFAFA;--bg-hover-color:#EEE;--text-color:#222;--title-color:black;--line-color:rgba(220, 220, 220, 0.9)}.sidebar a{background-color:var(--bg-even-color);border-bottom:1px solid var(--line-color)}.sidebar a:hover,.sidebar a:focus,.sidebar a:active{background-color:var(--bg-hover-color);padding-left:15px;padding-right:25px}.place{font-weight:400;font-size:1.2rem;line-height:1.4rem;color:orangered}.title{color:var(--title-color);font-weight:bold;font-size:1.3rem;line-height:1.1em}.nosidebar .title{font-size:1.9em;line-height:1.1em}.subtitle{font-size:1rem;line-height:1.1em;color:var(--title-color);opacity:0.9}.tag{margin-right:10px;display:inline-block}</style>`;
     init(this, {
       target: this.shadowRoot,
       props: attribute_to_object(this.attributes),
