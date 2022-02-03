@@ -7,6 +7,18 @@ nav_order: 10
 
 
 All notable changes to this project will be documented in this file.
+### 1.3.3 - 1 feb '22
+  - security fix, avoid sharing smtp pass with front-end
+
+### 1.3.2 - 1 feb '22
+  - fix webcomponent for event without img
+
+### 1.3.1 - 1 feb '22
+  - inherits tags in recurring events [#138](https://framagit.org/les/gancio/-/issues/138)
+  - you can now skip an occurrence of a recurring event
+  - fix `show_recurrent` event in webcomponent and API
+  - add new webcomponent `sidebar` attribute and a [`fullwith` layout](https://gancio.org/usage/embed#embed-event-lists)
+
 ### 1.3.0 - 26 gen '22
   - add mariadb support
   - add [microdata](https://developer.mozilla.org/en-US/docs/Web/HTML/Microdata) support

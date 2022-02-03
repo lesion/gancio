@@ -98,6 +98,8 @@ module.exports = {
   build: {
     corejs: 3,
     cache: true,
-    hardSource: true
+    hardSource: true,
+    extractCSS: true,
+    optimizeCSS: true,
   },
 }

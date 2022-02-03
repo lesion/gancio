@@ -565,8 +565,9 @@ const eventController = {
     const tags = req.query.tags
     const places = req.query.places
     const max = req.query.max
+
     const show_recurrent = settingsController.settings.allow_recurrent_event &&
-      (typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settingsController.settings.recurrent_event_visible)
+      typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settingsController.settings.recurrent_event_visible
 
     res.json(await eventController._select({
       siteId: req.siteId, start, end, places, tags, show_recurrent, max

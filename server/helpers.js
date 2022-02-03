@@ -76,7 +76,14 @@ module.exports = {
   },
 
   async loadSettings (req, res, next) {
-    req.settings = settingsController.settings
+    req.settings = { ...settingsController.settings }
+    if (req.settings.smtp && req.settings.smtp.auth && req.settings.smtp.auth.pass) {
+      delete req.settings.smtp.auth.pass
+    }
+    delete req.settings.publicKey
+    req.settings.baseurl = config.baseurl
+    req.settings.hostname = config.hostname
+    req.settings.title = req.settings.title || config.title
     req.settings.description = req.settings.description || config.description
     req.settings.version = pkg.version
 
