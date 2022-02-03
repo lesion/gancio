@@ -206,6 +206,7 @@ const settingsController = {
   },
 
   getAllRequest (req, res) {
+    console.error('dentro get all request!')
     // get public settings and public configuration
     res.json({ ...settingsController.getAll(req.siteId), version: pkg.version })
   }
