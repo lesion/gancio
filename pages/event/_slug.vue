@@ -30,6 +30,7 @@ v-container#event.pa-0.pa-sm-2
               time.dt-start.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")' itemprop="startDate" :content="event.start_datetime|unixFormat('YYYY-MM-DDTHH:mm')")
                 v-icon mdi-calendar
                 b.ml-2 {{event|when}}
+                .d-none.dt-end(itemprop="endDate" :content="event.end_datetime|unixFormat('YYYY-MM-DDTHH:mm')") {{event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
               div.text-subtitle-1 {{event.start_datetime|from}}
                 small(v-if='event.parentId')  ({{event|recurrentDetail}})
 
