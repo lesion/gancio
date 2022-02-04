@@ -14,6 +14,7 @@ const axios = require('axios')
 const crypto = require('crypto')
 const Microformats = require('microformat-node')
 const get = require('lodash/get')
+const cloneDeep = require('lodash/cloneDeep')
 
 const DOMPurify = require('dompurify')
 const { JSDOM } = require('jsdom')
@@ -63,10 +64,9 @@ module.exports = {
 
   async initSettings (req, res, next) {
     // initialize settings
-    req.settings = { ...settingsController.settings }
+    req.settings = cloneDeep(settingsController.settings)
 
     if (req.settings.smtp && req.settings.smtp.auth && req.settings.smtp.auth.pass) {
-
       delete req.settings.smtp.auth.pass
     }
     delete req.settings.publicKey
