@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     save () {
-      this.$emit('input', { url: this.value.url, image: this.value.image, name: this.name || (this.value.image && this.value.image.name) || '', focalpoint: [...this.focalpoint] })
+      this.$emit('input', { url: this.value.url, image: this.value.image, name: this.name || (this.event.title) || '', focalpoint: [...this.focalpoint] })
       this.openMediaDetails = false
     },
     async remove () {
@@ -96,7 +96,7 @@ export default {
       this.$emit('remove')
     },
     selectMedia (v) {
-      this.$emit('input', { image: v, name: v.name, focalpoint: [0, 0] })      
+      this.$emit('input', { image: v, name: this.event.title, focalpoint: [0, 0] })      
     },
     handleStart (ev) {
       ev.preventDefault()
