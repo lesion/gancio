@@ -190,11 +190,6 @@ const settingsController = {
         settingsController.set('logo', baseImgPath)
         res.sendStatus(200)
       })
-  },
-
-  getAllRequest (req, res) {
-    // get public settings and public configuration
-    res.json({ ...settingsController.settings, version: pkg.version })
   }
 }
 

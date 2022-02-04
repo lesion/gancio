@@ -119,7 +119,6 @@ if (config.status !== 'READY') {
   api.post('/event/notification', eventController.addNotification)
   api.delete('/event/notification/:code', eventController.delNotification)
 
-  api.get('/settings', settingsController.getAllRequest)
   api.post('/settings', isAdmin, settingsController.setRequest)
   api.post('/settings/logo', isAdmin, multer({ dest: config.upload_path }).single('logo'), settingsController.setLogo)
   api.post('/settings/smtp', isAdmin, settingsController.testSMTP)
