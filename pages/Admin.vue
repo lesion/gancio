@@ -1,7 +1,7 @@
 <template lang="pug">
-  v-container
+  v-container.container.pa-0.pa-md-3
     v-card
-      v-tabs(v-model='selectedTab')
+      v-tabs(v-model='selectedTab' show-arrows)
 
         //- SETTINGS
         v-tab {{$t('common.settings')}}

@@ -1,7 +1,7 @@
 <template lang="pug">
   v-card.h-event.event.d-flex(itemscope itemtype="https://schema.org/Event")
     nuxt-link(:to='`/event/${event.slug || event.id}`' itemprop="url")
-      img.img.u-featured(:src='thumbnail' :alt='alt' loading='lazy' itemprop="image" :style="{ 'object-position': thumbnailPosition }")
+      img.img.u-featured(:src='thumbnail' :alt='alt' :loading='this.lazy?"lazy":"eager"' itemprop="image" :style="{ 'object-position': thumbnailPosition }")
       v-icon.float-right.mr-1(v-if='event.parentId' color='success') mdi-repeat
       .title.p-name(itemprop="name") {{event.title}}
 
@@ -9,6 +9,7 @@
       time.dt-start.subtitle-1(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")' itemprop="startDate" :content="event.start_datetime|unixFormat('YYYY-MM-DDTHH:mm')")  <v-icon>mdi-calendar</v-icon> {{ event|when }}
       .d-none.dt-end(itemprop="endDate" :content="event.end_datetime|unixFormat('YYYY-MM-DDTHH:mm')") {{event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
       a.place.d-block.p-location.pl-0(text color='primary' @click="$emit('placeclick', event.place.id)" itemprop="location" :content="event.place.name") <v-icon>mdi-map-marker</v-icon> {{event.place.name}}
+      .d-none(itemprop='location.address') {{event.place.address}}
 
     v-card-actions.pt-0.actions.justify-space-between
       .tags
@@ -48,7 +49,8 @@ import clipboard from '../assets/clipboard'
 
 export default {
   props: {
-    event: { type: Object, default: () => ({}) }
+    event: { type: Object, default: () => ({}) },
+    lazy: Boolean
   },
   mixins: [clipboard],
   computed: {

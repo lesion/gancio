@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container.container.px-0.px-md-3
+  v-container.container.pa-0.pa-md-3
     v-card
       v-card-title
         h4 {{edit?$t('common.edit_event'):$t('common.add_event')}}

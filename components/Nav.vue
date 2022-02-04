@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-app-bar(app aria-label='Menu')
+  v-app-bar(app aria-label='Menu' height=64)
 
     //- logo, title and description
     v-list-item(:to='$route.name==="index"?"/about":"/"')
@@ -12,23 +12,36 @@
 
     v-spacer
 
-    v-tooltip(bottom) {{$t('common.add_event')}}
-      template(v-slot:activator='{ on }')
-        v-btn(v-if='could_add' icon nuxt to='/add' v-on='on' :aria-label='$t("common.add_event")')
+    client-only(v-if='could_add')
+      v-tooltip(bottom) {{$t('common.add_event')}}
+        template(v-slot:activator='{ on }')
+          v-btn(icon nuxt to='/add' v-on='on' :aria-label='$t("common.add_event")')
+            v-icon(large color='primary') mdi-plus
+      template(#placeholder)
+        v-btn(icon nuxt to='/add' :aria-label='$t("common.add_event")')
           v-icon(large color='primary') mdi-plus
 
-    v-tooltip(bottom) {{$t('common.share')}}
-      template(v-slot:activator='{ on }')
-        v-btn(icon nuxt to='/export' v-on='on' :aria-label='$t("common.share")')
+
+    client-only
+      v-tooltip(bottom) {{$t('common.share')}}
+        template(v-slot:activator='{ on }')
+          v-btn(icon nuxt to='/export' v-on='on' :aria-label='$t("common.share")')
+            v-icon mdi-share-variant
+      template(#placeholder)
+        v-btn(icon nuxt to='/export' :aria-label='$t("common.share")')
           v-icon mdi-share-variant
 
-    v-tooltip(v-if='!$auth.loggedIn' bottom) {{$t('common.login')}}
-      template(v-slot:activator='{ on }')
-        v-btn(icon nuxt to='/login' v-on='on' :aria-label='$t("common.login")')
+    client-only
+      v-tooltip(v-if='!$auth.loggedIn' bottom) {{$t('common.login')}}
+        template(v-slot:activator='{ on }')
+          v-btn(icon nuxt to='/login' v-on='on' :aria-label='$t("common.login")')
+            v-icon mdi-login
+      template(#placeholder)
+        v-btn(icon nuxt to='/login' :aria-label='$t("common.login")')
           v-icon mdi-login
 
-    v-menu(v-else
-      offset-y bottom open-on-hover transition="slide-y-transition")
+    v-menu(v-if='$auth.loggedIn')
+      offset-y(bottom open-on-hover transition="slide-y-transition")
       template(v-slot:activator="{ on, attrs }")
         v-btn(icon v-bind='attrs' v-on='on' aria-label='Menu')
           v-icon mdi-dots-vertical

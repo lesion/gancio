@@ -7,7 +7,7 @@
 
     //- Calendar and search bar
     v-row.pt-0.pt-sm-2.pl-0.pl-sm-2
-      .col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-4.pa-sm-3
+      #calh.col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-4.pa-sm-3
         //- this is needed as v-calendar does not support SSR
         //- https://github.com/nathanreyes/v-calendar/issues/336
         client-only(placeholder='Calendar unavailable without js')
@@ -19,8 +19,7 @@
 
     //- Events
     #events.mb-2.mt-1.pl-1.pl-sm-2
-      //- div.event(v-for='(event, idx) in events' :key='event.id' v-intersect="(entries, observer, isIntersecting) => intersecting[event.id] = isIntersecting")
-      Event(:event='event' @destroy='destroy' v-for='(event, idx) in visibleEvents' :key='event.id' @tagclick='tagClick' @placeclick='placeClick')
+      Event(:event='event' @destroy='destroy' v-for='(event, idx) in visibleEvents' :lazy='idx>2' :key='event.id' @tagclick='tagClick' @placeclick='placeClick')
 
 </template>
 

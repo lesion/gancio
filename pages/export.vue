@@ -1,6 +1,6 @@
 <template lang="pug">
-  v-container
-    v-card(outlined)
+  v-container.pa-0.pa-md-3
+    v-card
       v-card-title {{$t('common.share')}}
       v-card-text
         p.text-body-1 {{$t('export.intro')}}
@@ -11,7 +11,7 @@
             Search(
               :filters='filters'
               @update='f => filters = f')
-      v-tabs(v-model='type')
+      v-tabs(v-model='type' show-arrows)
 
         //- TOFIX
         //- v-tab {{$t('common.email')}}
