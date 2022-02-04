@@ -180,6 +180,7 @@ export default {
 
     return {
       title: `${this.settings.title} - ${this.event.title}`,
+      script: [{ src: '/gancio-events.es.js', async: true, body: true }],
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         {
