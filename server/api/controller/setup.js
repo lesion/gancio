@@ -5,6 +5,7 @@ const db = require('../models/index.js')
 const config = require('../../config')
 const settingsController = require('./settings')
 const path = require('path')
+const escape = require('lodash/escape')
 
 const setupController = {
 
@@ -88,7 +89,7 @@ const setupController = {
 
       } catch (e) {
         log.error(String(e))
-        return res.status(400).send(String(e))
+        return res.status(400).send(escape(String(e)))
       }
     }
 

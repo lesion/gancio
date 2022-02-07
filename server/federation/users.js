@@ -2,7 +2,7 @@ const Event = require('../api/models/event')
 const Place = require('../api/models/place')
 const APUser = require('../api/models/ap_user')
 const Tag = require('../api/models/tag')
-
+const escape = require('lodash/escape')
 const config = require('../config')
 const log = require('../log')
 const utc = require('dayjs/plugin/utc')
@@ -16,7 +16,7 @@ module.exports = {
     const name = req.params.name
     if (!name) { return res.status(400).send('Bad request.') }
 
-    if (name !== req.settings.instance_name) { return res.status(404).send(`No record found for ${name}`) }
+    if (name !== req.settings.instance_name) { return res.status(404).send(`No record found for ${escape(name)}`) }
     const ret = {
       '@context': [
         'https://www.w3.org/ns/activitystreams',
@@ -64,7 +64,7 @@ module.exports = {
     if (!name) { return res.status(400).send('Bad request.') }
     if (name !== req.settings.instance_name) {
       log.warn('No record found')
-      return res.status(404).send(`No record found for ${name}`)
+      return res.status(404).send(`No record found for ${escape(name)}`)
     }
     const followers = await APUser.findAll({ where: { follower: true } })
 
@@ -102,7 +102,7 @@ module.exports = {
     }
     if (name !== req.settings.instance_name) {
       log.info(`No record found for ${name}`)
-      return res.status(404).send(`No record found for ${name}`)
+      return res.status(404).send(`No record found for ${escape(name)}`)
     }
 
     const events = await Event.findAll({ include: [{ model: Tag, required: false }, Place], limit: 10 })

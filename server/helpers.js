@@ -112,6 +112,9 @@ module.exports = {
 
   async getImageFromURL (url) {
     log.debug(`getImageFromURL ${url}`)
+    if(!/^https?:\/\//.test(url)) {
+      throw Error('Hacking attempt?')
+    }
     const filename = crypto.randomBytes(16).toString('hex') + '.jpg'
     const finalPath = path.resolve(config.upload_path, filename)
     const thumbPath = path.resolve(config.upload_path, 'thumb', filename)
