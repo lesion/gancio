@@ -7,56 +7,56 @@
         v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.bold() }"
           @click="commands.bold")
-          v-icon mdi-format-bold
+          v-icon(v-text='mdiFormatBold')
 
         v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.underline() }"
           @click="commands.underline")
-          v-icon mdi-format-underline
+          v-icon(v-text='mdiFormatUnderline')
 
         v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.strike() }"
           @click="commands.strike")
-          v-icon mdi-format-strikethrough-variant
+          v-icon(v-text='mdiFormatStrikethroughVariant')
 
         v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.italic() }"
           @click="commands.italic")
-          v-icon mdi-format-italic
+          v-icon(v-text='mdiFormatItalic')
 
         v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.heading({level: 1}) }"
           @click="commands.heading({level: 1})")
-          v-icon mdi-format-header-1
+          v-icon(v-text='mdiFormatHeader1')
 
         v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.heading({level: 2}) }"
           @click="commands.heading({level: 2})")
-          v-icon mdi-format-header-2
+          v-icon(v-text='mdiFormatHeader2')
 
         v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.heading({level: 3}) }"
           @click="commands.heading({level: 3})")
-          v-icon mdi-format-header-3
+          v-icon(v-text='mdiFormatHeader3')
 
         v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.code() }"
           @click="commands.code")
-          v-icon mdi-code-tags
+          v-icon(v-text='mdiCodeTags')
 
         v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.blockquote() }"
           @click="commands.blockquote")
-          v-icon mdi-format-quote-open
+          v-icon(v-text='mdiFormatQuoteOpen')
 
         v-btn(icon text tabindex='-1'
           :class="{ primary: isActive.bullet_list() }"
           @click="commands.bullet_list")
-          v-icon mdi-format-list-bulleted
+          v-icon(v-text='mdiFormatListBulleted')
 
         v-btn(icon text tabindex='-1' :class='{ primary: isActive.link() }'
           @click='commands.link({href: getMarkAttrs("link") && getMarkAttrs("link").href ? "" : "https://"}); $refs.link.focus();')
-            v-icon mdi-link
+            v-icon(v-text='mdiLink')
         v-text-field.pt-0.ml-1(v-show='isActive.link()' ref='link' @focus='focus' @blur='blur' hide-details
             :value='isActive.link() && getMarkAttrs("link") && getMarkAttrs("link").href || ""'
             @keypress.enter='commands.link({ href: $event.target.value}); editor.focus()')
@@ -65,6 +65,9 @@
 </template>
 <script>
 import debounce from 'lodash/debounce'
+import { mdiLink, mdiFormatListBulleted, mdiFormatQuoteOpen, mdiCodeTags,
+  mdiFormatHeader1, mdiFormatHeader2, mdiFormatHeader3, mdiFormatItalic,
+  mdiFormatStrikethroughVariant, mdiFormatBold, mdiFormatUnderline } from '@mdi/js'
 import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from 'tiptap'
 import {
   Blockquote,
@@ -97,6 +100,9 @@ export default {
   },
   data () {
     return {
+      mdiLink, mdiFormatListBulleted, mdiFormatQuoteOpen, mdiCodeTags,
+      mdiFormatHeader1, mdiFormatHeader2, mdiFormatHeader3, mdiFormatItalic,
+      mdiFormatStrikethroughVariant, mdiFormatBold, mdiFormatUnderline,      
       options: [],
       linkActive: false,
       editor: null,

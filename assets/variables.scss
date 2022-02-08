@@ -1,0 +1,142 @@
+// assets/variables.scss
+
+// Variables you want to modify
+// $btn-border-radius: 0px;
+
+// If you need to extend Vuetify SASS lists
+// $material-light: ( cards: blue );
+
+@import '~vuetify/src/styles/styles.sass';
+
+html, body {
+  scrollbar-width: thin;
+  overflow: auto !important;
+  scrollbar-color: #FF4511 #111;
+  font-family: sans-serif;
+}
+
+li {
+  margin-left: 10px;
+}
+
+.v-dialog .theme--dark.v-card {
+  background-color: #434343;
+}
+
+.v-application .p-description.text-body-1 {
+  letter-spacing: normal !important;
+}
+
+#home {
+  max-width: 1400px;
+  padding: 0px;
+  overflow: hidden;
+}
+
+#events {
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#calh {
+  height: 292px;
+}
+
+.container {
+  max-width: 1400px;
+}
+
+.v-dialog {
+  width: 600px;
+  max-width: 800px;
+  &.v-dialog--fullscreen {
+    max-width: 100%;
+  }
+}
+
+.theme--dark.v-list {
+  background-color: #333;
+}
+
+.v-autocomplete__content.v-menu__content {
+  scrollbar-width: thin;
+  scrollbar-color: #FF4511 #111;
+}
+
+// EVENT
+.event {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  width: 330px;
+  max-width: 500px !important;
+  flex-grow: 1;
+  margin-top: .4em;
+  margin-right: .4em;
+  transition: all .5s;
+  overflow: hidden;
+
+  .title {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0.5rem 1rem 0.5rem 1rem;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    font-size: 1.1em !important;
+    line-height: 1.2em !important;
+  }
+
+  .body {
+    flex: 1 1 auto;
+  }
+
+  .img {
+    width: 100%;
+    max-height: 250px;
+    min-height: 160px;
+    object-fit: cover;
+    object-position: top;
+    aspect-ratio: 1.7778;
+  }
+
+  .place {
+    max-width: 100%;
+    span {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  a {
+    text-decoration: none;
+  }
+}
+
+.vc-past {
+  opacity: 0.4;
+}
+
+#event {
+  max-width: 1200px;
+}
+
+.tags .v-chip .v-chip__content {
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+}
+
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+pre {
+  white-space: break-spaces;
+  font-size: 13px;
+}

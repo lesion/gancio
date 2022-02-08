@@ -24,17 +24,18 @@
           @click:close='remove(data.item)'
           :input-value="data.selected")
           v-avatar(left)
-            v-icon {{data.item.type === 'place' ? 'mdi-map-marker' : 'mdi-tag' }}
+            v-icon(v-text="data.item.type === 'place' ? mdiMapMarker : mdiTag")
           span {{ data.item.label }}
       template(v-slot:item='{ item }')
           v-list-item-avatar
-            v-icon {{item.type === 'place' ? 'mdi-map-marker' : 'mdi-tag' }}
+            v-icon(v-text="item.type === 'place' ? mdiMapMarker : mdiTag")
           v-list-item-content
             v-list-item-title(v-text='item.label')
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { mdiMapMarker, mdiTag } from '@mdi/js'
 export default {
   name: 'Search',
   props: {
@@ -43,6 +44,7 @@ export default {
   },
   data () {
     return {
+      mdiTag, mdiMapMarker,
       tmpfilter: null,
       search: ''
     }

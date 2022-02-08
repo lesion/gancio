@@ -13,7 +13,7 @@
             dense :headers='instancesHeader'
             @click:row='instanceSelected')
             template(v-slot:item.blocked="{ item }")
-              v-icon(@click='toggleBlock(item)') {{item.blocked ? 'mdi-checkbox-intermediate' : 'mdi-checkbox-blank-outline'}}
+              v-icon(@click='toggleBlock(item)' v-text='item.blocked ? mdiCheckboxIntermediate : mdiCheckboxBlankOutline')
 
         v-col(:span='11')
           span {{$t('common.users')}}
@@ -24,7 +24,7 @@
             :hide-default-footer='users.length<5'
             dense :headers='usersHeader')
             template(v-slot:item.blocked="{ item }")
-              v-icon(@click='toggleUserBlock(item)') {{item.blocked?'mdi-checkbox-intermediate':'mdi-checkbox-blank-outline'}}
+              v-icon(@click='toggleUserBlock(item)' v-text='item.blocked ? mdiCheckboxIntermediate : mdiCheckboxBlankOutline')
 
       div
         v-card-title {{$t('common.resources')}}
@@ -42,25 +42,27 @@
             v-menu(offset-y)
               template(v-slot:activator="{ on }")
                 v-btn.mr-2(v-on='on' color='primary' small icon)
-                  v-icon mdi-dots-vertical
+                  v-icon(v-text='mdiDotsVertical')
               v-list
                 v-list-item(v-if='!item.hidden' @click='hideResource(item, true)')
-                  v-list-item-title <v-icon left>mdi-eye-off</v-icon> {{$t('admin.hide_resource')}}
+                  v-list-item-title <v-icon left v-text='mdiEyeOff'></v-icon> {{$t('admin.hide_resource')}}
                 v-list-item(v-else @click='hideResource(item, false)')
-                  v-list-item-title <v-icon left>mdi-eye</v-icon> {{$t('admin.show_resource')}}
+                  v-list-item-title <v-icon left v-text='mdiEye'></v-icon> {{$t('admin.show_resource')}}
                 v-list-item(@click='deleteResource(item)')
-                  v-list-item-title <v-icon left>mdi-delete</v-icon> {{$t('admin.delete_resource')}}
+                  v-list-item-title <v-icon left v-text='mdiDelete'></v-icon> {{$t('admin.delete_resource')}}
                 //- v-list-item(@click='toggleUserBlock(item.ap_user)')
                 //-   v-list-item-title <v-icon left>mdi-lock</v-icon> {{$t('admin.block_user')}}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
 import get from 'lodash/get'
+import { mdiDelete, mdiEye, mdiEyeOff, mdiDotsVertical, mdiCheckboxIntermediate, mdiCheckboxBlankOutline } from '@mdi/js'
 
 export default {
   name: 'Moderation',
   data () {
     return {
+      mdiDelete, mdiEye, mdiEyeOff, mdiDotsVertical, mdiCheckboxIntermediate, mdiCheckboxBlankOutline,
       instances: [],
       resources: [],
       users: [],

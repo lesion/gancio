@@ -56,7 +56,7 @@
               v-btn(color='error' @click='dialogAddInstance=false') {{$t('common.cancel')}}
               v-btn(color='primary' :disabled='!valid || loading' :loading='loading' @click='createTrustedInstance') {{$t('common.ok')}}
 
-        v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon>mdi-plus</v-icon> {{$t('admin.add_instance')}}
+        v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.add_instance')}}
         v-data-table(
           v-if='settings.trusted_instances.length'
           :hide-default-footer='settings.trusted_instances.length<10'
@@ -64,17 +64,19 @@
           :items='settings.trusted_instances')
           template(v-slot:item.actions="{item}")
             v-btn(icon @click='deleteInstance(item)' color='error')
-              v-icon mdi-delete-forever
+              v-icon(v-text='mdiDeleteForever')
 
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
 import axios from 'axios'
+import { mdiDeleteForever, mdiPlus } from '@mdi/js'
 
 export default {
   name: 'Federation',
   data ({ $store, $options }) {
     return {
+      mdiDeleteForever, mdiPlus,
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
       instance_place: $store.state.settings.instance_place,

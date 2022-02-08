@@ -1,22 +1,25 @@
 <template lang='pug'>
 div
   v-btn(text color='primary' v-if='event.is_visible' @click='toggle(false)') {{$t(`common.${event.parentId?'skip':'hide'}`)}}
-  v-btn(text color='success' v-else @click='toggle(false)') <v-icon color='yellow'>mdi-alert</v-icon> {{$t('common.confirm')}}
+  v-btn(text color='success' v-else @click='toggle(false)') <v-icon color='yellow' v-text='mdiAlert'></v-icon> {{$t('common.confirm')}}
   v-btn(text color='primary' @click='$router.push(`/add/${event.id}`)') {{$t('common.edit')}}
   v-btn(text color='primary' v-if='!event.parentId' @click='remove(false)') {{$t('common.remove')}}
 
   template(v-if='event.parentId')
     v-divider
-    span.mr-1 <v-icon>mdi-repeat</v-icon> {{$t('event.edit_recurrent')}}
+    span.mr-1 <v-icon v-text='mdiRepeat'></v-icon> {{$t('event.edit_recurrent')}}
     v-btn(text color='primary' v-if='event.parent.is_visible' @click='toggle(true)') {{$t('common.pause')}}
     v-btn(text color='primary' v-else @click='toggle(true)') {{$t('common.start')}}
     v-btn(text color='primary' @click='$router.push(`/add/${event.parentId}`)') {{$t('common.edit')}}
     v-btn(text color='primary' @click='remove(true)') {{$t('common.remove')}}
 </template>
 <script>
-
+import { mdiAlert, mdiRepeat } from '@mdi/js'
 export default {
   name: 'EventAdmin',
+  data () {
+    return { mdiAlert, mdiRepeat }
+  },
   props: {
     event: {
       type: Object,

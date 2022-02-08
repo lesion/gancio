@@ -32,13 +32,16 @@
         :items='places')
         template(v-slot:item.actions='{item}')
           v-btn(@click='editPlace(item)' color='primary' icon)
-            v-icon mdi-pencil
+            v-icon(v-text='mdiPencil')
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
+import { mdiPencil } from '@mdi/js'
+
 export default {
   data () {
     return {
+      mdiPencil,
       loading: false,
       dialog: false,
       valid: false,

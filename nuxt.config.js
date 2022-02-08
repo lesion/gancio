@@ -1,4 +1,5 @@
 const config = require('./server/config.js')
+const minifyTheme = require('minify-css-string').default
 
 module.exports = {
   telemetry: false,
@@ -27,14 +28,6 @@ module.exports = {
    ** Customize the progress-bar component
    */
   loading: '~/components/Loading.vue',
-  /*
-   ** Global CSS
-   */
-  css: [
-    'vuetify/dist/vuetify.min.css',
-    '@mdi/font/css/materialdesignicons.css',
-    '@/assets/style.less'
-  ],
 
   /*
    ** Plugins to load before mounting the App
@@ -42,7 +35,6 @@ module.exports = {
   plugins: [
     '@/plugins/i18n.js',
     '@/plugins/filters', // text filters, datetime filters, generic transformation helpers etc.
-    '@/plugins/vuetify', // vuetify
     '@/plugins/axios', // axios baseurl configuration
     '@/plugins/validators', // inject validators
     '@/plugins/api', // api helpers
@@ -93,6 +85,30 @@ module.exports = {
         tokenType: 'Bearer'
       }
     }
+  },
+  buildModules: ['@nuxtjs/vuetify'],
+  vuetify: {
+    customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
+    theme: {
+      options: {
+        customProperties: false,
+        variations: false, 
+        minifyTheme,
+      },
+      dark: true,
+      themes: {
+        dark: {
+          primary: '#FF6E40'
+        },
+        light: {
+          primary: '#FF4500'
+        }
+      }      
+    },
+    defaultAssets: {
+      icons: false
+    }    
   },
   build: {
     corejs: 3,

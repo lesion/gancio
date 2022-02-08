@@ -6,7 +6,7 @@
         :label="$t('common.where')"
         :hint="$t('event.where_description')"
         :search-input.sync="placeName"
-        prepend-icon='mdi-map-marker'
+        :prepend-icon='mdiMapMarker'
         persistent-hint
         :value="value.name"
         :items="filteredPlaces"
@@ -15,14 +15,14 @@
         @change='selectPlace')
         template(v-slot:item="{ item }")
           v-list-item-content(two-line v-if='item.create')
-            v-list-item-title <v-icon color='primary'>mdi-plus</v-icon> {{item.name}}
+            v-list-item-title <v-icon color='primary' v-text='mdiPlus'></v-icon> {{item.name}}
           v-list-item-content(two-line v-else)
             v-list-item-title {{item.name}}
             v-list-item-subtitle {{item.address}}
 
     v-col(cols=12 md=6)
       v-text-field(ref='address'
-        prepend-icon='mdi-map'
+        :prepend-icon='mdiMap'
         :disabled='disableAddress'
         :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
         :label="$t('common.address')"
@@ -32,6 +32,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { mdiMap, mdiMapMarker, mdiPlus } from '@mdi/js'
 
 export default {
   name: 'WhereInput',
@@ -40,6 +41,7 @@ export default {
   },
   data () {
     return {
+      mdiMap, mdiMapMarker, mdiPlus,
       place: { },
       placeName: '',
       disableAddress: true

@@ -23,19 +23,19 @@ v-container#event.pa-0.pa-sm-2
         v-col.col-12.col-lg-4
           v-card
             v-card-text
-              v-icon.float-right(v-if='event.parentId' color='success') mdi-repeat
+              v-icon.float-right(v-if='event.parentId' color='success' v-text='mdiRepeat')
               .title.text-h5
                 b.p-name(itemprop="name") {{event.title}}
 
               time.dt-start.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")' itemprop="startDate" :content="event.start_datetime|unixFormat('YYYY-MM-DDTHH:mm')")
-                v-icon mdi-calendar
+                v-icon(v-text='mdiCalendar')
                 b.ml-2 {{event|when}}
                 .d-none.dt-end(itemprop="endDate" :content="event.end_datetime|unixFormat('YYYY-MM-DDTHH:mm')") {{event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
               div.text-subtitle-1 {{event.start_datetime|from}}
                 small(v-if='event.parentId')  ({{event|recurrentDetail}})
 
               .text-h6.p-location(itemprop="location" itemscope itemtype="https://schema.org/Place")
-                v-icon mdi-map-marker
+                v-icon(v-text='mdiMapMarker')
                 b.vcard.ml-2(itemprop="name") {{event.place && event.place.name}}
                 .text-subtitle-1.adr(itemprop='address') {{event.place && event.place.address}}
 
@@ -50,16 +50,16 @@ v-container#event.pa-0.pa-sm-2
               v-tooltip(bottom) {{$t('common.copy_link')}}
                 template(v-slot:activator="{on, attrs} ")
                   v-btn.ml-2(large icon v-on='on' color='primary' @click='clipboard(`${settings.baseurl}/event/${event.slug || event.id}`)')
-                    v-icon mdi-content-copy
+                    v-icon(v-text='mdiContentCopy')
               v-tooltip(bottom) {{$t('common.embed')}}
                 template(v-slot:activator="{on, attrs} ")
                   v-btn.ml-2(large icon v-on='on' @click='showEmbed=true' color='primary')
-                    v-icon mdi-code-tags
+                    v-icon(v-text='mdiCodeTags')
               v-tooltip(bottom) {{$t('common.add_to_calendar')}}
                 template(v-slot:activator="{on, attrs} ")
                   v-btn.ml-2(large icon v-on='on' color='primary'
                     :href='`/api/event/${event.slug || event.id}.ics`')
-                    v-icon mdi-calendar-export
+                    v-icon(v-text='mdiCalendarExport')
 
       .p-description.text-body-1.pa-3.rounded(v-if='hasMedia && event.description' itemprop='description' v-html='event.description')
 
@@ -76,7 +76,7 @@ v-container#event.pa-0.pa-sm-2
           transition='dialog-bottom-transition')
           v-card
             v-btn.ma-2(icon dark @click='showResources = false')
-              v-icon mdi-close
+              v-icon(v-text='mdiClose')
             v-carousel.pa-5(:interval='10000' ref='carousel' hide-delimiters v-model='currentAttachment'
               height='100%' show-arrows-on-over)
               v-carousel-item(v-for='attachment in selectedResource.data.attachment'
@@ -92,16 +92,16 @@ v-container#event.pa-0.pa-sm-2
               v-menu(v-if='$auth.user && $auth.user.is_admin' offset-y)
                 template(v-slot:activator="{ on }")
                   v-btn.mr-2(v-on='on' color='primary' small icon)
-                    v-icon mdi-dots-vertical
+                    v-icon(v-text='mdiDotsVertical')
                 v-list
                   v-list-item(v-if='!resource.hidden' @click='hideResource(resource, true)')
-                    v-list-item-title <v-icon left>mdi-eye-off</v-icon> {{$t('admin.hide_resource')}}
+                    v-list-item-title <v-icon left v-text='mdiEyeOff'></v-icon> {{$t('admin.hide_resource')}}
                   v-list-item(v-else @click='hideResource(resource, false)')
-                    v-list-item-title <v-icon left>mdi-eye</v-icon> {{$t('admin.show_resource')}}
+                    v-list-item-title <v-icon left v-text='mdiEye'></v-icon> {{$t('admin.show_resource')}}
                   v-list-item(@click='deleteResource(resource)')
-                    v-list-item-title <v-icon left>mdi-delete</v-icon> {{$t('admin.delete_resource')}}
+                    v-list-item-title <v-icon left v-text='mdiDelete'></v-icon> {{$t('admin.delete_resource')}}
                   v-list-item(@click='blockUser(resource)')
-                    v-list-item-title <v-icon left>mdi-lock</v-icon> {{$t('admin.block_user')}}
+                    v-list-item-title <v-icon left v-text='mdiLock'></v-icon> {{$t('admin.block_user')}}
 
               a(:href='resource.data.url || resource.data.context')
                 small {{resource.data.published|dateFormat('ddd, D MMMM HH:mm')}}
@@ -121,10 +121,10 @@ v-container#event.pa-0.pa-sm-2
       .text-center.mt-5.mb-5
         v-btn.mr-2(nuxt icon outlined color='primary'
           :to='`/event/${event.prev}`' :disabled='!event.prev')
-          v-icon mdi-arrow-left
+          v-icon(v-text='mdiArrowLeft')
         v-btn(nuxt bottom right outlined icon color='primary'
           :to='`/event/${event.next}`' :disabled='!event.next')
-          v-icon mdi-arrow-right
+          v-icon(v-text='mdiArrowRight')
 
       v-dialog(v-model='showEmbed' width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
         EmbedEvent(:event='event' @close='showEmbed=false')
@@ -133,12 +133,14 @@ v-container#event.pa-0.pa-sm-2
 <script>
 import { mapState } from 'vuex'
 import EventAdmin from './eventAdmin'
-import EmbedEvent from './embedEvent'
 import get from 'lodash/get'
 import moment from 'dayjs'
 import clipboard from '../../assets/clipboard'
-
 const htmlToText = require('html-to-text')
+
+import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose,
+  mdiEye, mdiEyeOff, mdiDelete,
+  mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker } from '@mdi/js'
 
 export default {
   name: 'Event',
@@ -154,6 +156,8 @@ export default {
   },
   data () {
     return {
+      mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar,
+      mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff,
       currentAttachment: 0,
       event: {},
       showEmbed: false,

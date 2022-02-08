@@ -2,7 +2,7 @@
   v-card.h-event.event.d-flex(itemscope itemtype="https://schema.org/Event")
     nuxt-link(:to='`/event/${event.slug || event.id}`' itemprop="url")
       img.img.u-featured(:src='thumbnail' :alt='alt' :loading='this.lazy?"lazy":"eager"' itemprop="image" :style="{ 'object-position': thumbnailPosition }")
-      v-icon.float-right.mr-1(v-if='event.parentId' color='success') mdi-repeat
+      v-icon.float-right.mr-1(v-if='event.parentId' color='success' v-text='mdiRepeat')
       .title.p-name(itemprop="name") {{event.title}}
 
     v-card-text.body.pt-0.pb-0
@@ -19,35 +19,39 @@
       v-menu(offset-y)
         template(v-slot:activator="{on}")
           v-btn.align-self-end(icon v-on='on' color='primary' alt='more')
-            v-icon mdi-dots-vertical
+            v-icon(v-text='mdiDotsVertical')
         v-list(dense)
           v-list-item-group
             v-list-item(@click='clipboard(`${settings.baseurl}/event/${event.slug || event.id}`)')
               v-list-item-icon
-                v-icon mdi-content-copy
+                v-icon(v-text='mdiContentCopy')
               v-list-item-content
                 v-list-item-title {{$t('common.copy_link')}}
             v-list-item(:href='`/api/event/${event.slug || event.id}.ics`')
               v-list-item-icon
-                v-icon mdi-calendar-export
+                v-icon(v-text='mdiCalendarExport')
               v-list-item-content
                 v-list-item-title {{$t('common.add_to_calendar')}}
             v-list-item(v-if='is_mine' :to='`/add/${event.id}`')
               v-list-item-icon
-                v-icon mdi-pencil
+                v-icon(v-text='mdiPencil')
               v-list-item-content
                 v-list-item-title {{$t('common.edit')}}
             v-list-item(v-if='is_mine' @click='remove(false)')
               v-list-item-icon
-                v-icon(color='error') mdi-delete-forever
+                v-icon(color='error' v-text='mdiDeleteForever')
               v-list-item-content
                 v-list-item-title {{$t('common.remove')}}
 </template>
 <script>
 import { mapState } from 'vuex'
 import clipboard from '../assets/clipboard'
+import { mdiRepeat, mdiPencil, mdiDotsVertical, mdiContentCopy, mdiCalendarExport, mdiDeleteForever } from '@mdi/js'
 
 export default {
+  data () {
+    return { mdiRepeat, mdiPencil, mdiDotsVertical, mdiContentCopy, mdiCalendarExport, mdiDeleteForever }
+  },
   props: {
     event: { type: Object, default: () => ({}) },
     lazy: Boolean

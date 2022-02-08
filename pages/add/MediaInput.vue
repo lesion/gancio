@@ -41,13 +41,14 @@
       v-else
       :label="$t('common.media')"
       :hint="$t('event.media_description')"
-      prepend-icon="mdi-camera"
+      :prepend-icon="mdiCamera"
       :value='value.image'
       @change="selectMedia"
       persistent-hint
       accept='image/*')
 </template>
 <script>
+import { mdiCamera } from '@mdi/js'
 export default {
   name: 'MediaInput',
   props: {
@@ -56,6 +57,7 @@ export default {
   },
   data () {
     return {
+      mdiCamera,
       openMediaDetails: false,
       name: this.value.name || '',
       focalpoint: this.value.focalpoint || [0, 0],

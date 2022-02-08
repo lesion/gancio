@@ -7,17 +7,20 @@
     :left="left"
     :right="right"
     :timeout="timeout")
-    v-icon.mr-3(color="white") {{icon}}
+    v-icon.mr-3(color="white" v-text='icon')
     span {{ message }}
     template(v-slot:action="{ }")
-      v-icon(size="16" @click="active = false") mdi-close-circle
+      v-icon(size="16" @click="active = false" v-text='mdiCloseCircle')
 </template>
 
 <script>
+import { mdiAlert, mdiCloseCircle } from '@mdi/js'
+
 export default {
   data () {
     return {
-      icon: 'md-alert',
+      mdiAlert, mdiCloseCircle,
+      icon: mdiAlert,
       color: 'secondary',
       bottom: true,
       top: false,
@@ -33,7 +36,7 @@ export default {
       this.active = true
       this.message = this.$t(message, opts)
       this.color = opts.color || 'secondary'
-      this.icon = opts.icon || 'md-alert'
+      this.icon = opts.icon || mdiAlert
     }
   }
 }

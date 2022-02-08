@@ -3,11 +3,11 @@
     v-card-title {{$t('common.users')}}
       v-spacer
       v-text-field(v-model='search'
-        append-icon='mdi-magnify' outlined rounded
+        :append-icon='mdiMagnify' outlined rounded
         label='Search'
         single-line hide-details)
 
-    v-btn(color='primary' text @click='newUserDialog = true') <v-icon>mdi-plus</v-icon> {{$t('common.new_user')}}
+    v-btn(color='primary' text @click='newUserDialog = true') <v-icon v-text='mdiPlus'></v-icon> {{$t('common.new_user')}}
 
     //- ADD NEW USER
     v-dialog(v-model='newUserDialog' :fullscreen='$vuetify.breakpoint.xsOnly')
@@ -20,7 +20,7 @@
               :label="$t('common.email')"
               :rules="$validators.email")
             v-switch(v-model='new_user.is_admin' :label="$t('common.admin')" inset)
-          v-alert(type='info' :closable='false') {{$t('admin.user_add_help')}}
+          v-alert(type='info' :closable='false' :icon='mdiInformation') {{$t('admin.user_add_help')}}
           v-card-actions
             v-spacer
             v-btn(@click='newUserDialog=false' color='error') {{$t('common.cancel')}}
@@ -34,8 +34,8 @@
         :hide-default-footer='users.length<5'
         :search='search')
         template(v-slot:item.is_active='{item}')
-          v-icon(v-if='item.is_active' color='success') mdi-check
-          v-icon(v-else color='warning') mdi-close
+          v-icon(v-if='item.is_active' color='success' v-text='mdiCheck')
+          v-icon(v-else color='warning' v-text='mdiClose')
         template(v-slot:item.actions='{item}')
           v-btn(v-if='item.recover_code' text small :to='`/user_confirm/${item.recover_code}`') {{$t('common.confirm')}}
           v-btn(text small @click='toggle(item)'
@@ -49,6 +49,7 @@
 <script>
 import { mapState } from 'vuex'
 import get from 'lodash/get'
+import { mdiClose, mdiMagnify, mdiCheck, mdiPlus, mdiInformation } from '@mdi/js'
 
 export default {
   name: 'Users',
@@ -57,6 +58,7 @@ export default {
   },
   data () {
     return {
+      mdiClose, mdiMagnify, mdiCheck, mdiPlus, mdiInformation,
       newUserDialog: false,
       valid: false,
       new_user: {
