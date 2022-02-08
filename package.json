@@ -74,6 +74,7 @@
     "@nuxtjs/vuetify": "^1.12.3",
     "less": "^4.1.1",
     "less-loader": "^7",
+    "minify-css-string": "^1.0.0",
     "prettier": "^2.3.0",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
