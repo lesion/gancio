@@ -64,7 +64,7 @@
     "vue-i18n": "^8.26.7",
     "vue-template-compiler": "^2.6.14",
     "vuetify": "^2.6.1",
-    "winston": "^3.3.3",
+    "winston": "^3.4.0",
     "winston-daily-rotate-file": "^4.5.5",
     "yargs": "^17.2.0"
   },
