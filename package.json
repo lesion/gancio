@@ -66,7 +66,7 @@
     "vuetify": "^2.6.1",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5",
-    "yargs": "^17.2.0"
+    "yargs": "^17.3.1"
   },
   "devDependencies": {
     "@mdi/font": "^6.5.95",
