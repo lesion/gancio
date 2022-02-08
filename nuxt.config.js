@@ -14,7 +14,7 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' }
     ],
     link: [{ rel: 'icon', type: 'image/png', href: '/logo.png' }],
-    link: [{ rel: 'preload', type: 'image/png', href: '/logo.png', as: 'media' }],
+    link: [{ rel: 'preload', type: 'image/png', href: '/logo.png', as: 'image' }],
     script: [{ src: '/gancio-events.es.js', async: true, body: true }],
   },
   dev: isDev,
@@ -112,11 +112,12 @@ module.exports = {
       }      
     },
     defaultAssets: false
+  },
   build: {
     corejs: 3,
     cache: true,
-    // hardSource: true,
-    extractCSS: true,
-    optimizeCSS: true,
+    hardSource: !isDev,
+    extractCSS: !isDev,
+    optimizeCSS: !isDev
   },
 }

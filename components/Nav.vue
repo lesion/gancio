@@ -4,7 +4,7 @@
     //- logo, title and description
     v-list-item(:to='$route.name==="index"?"/about":"/"')
       v-list-item-avatar(tile)
-        v-img(src='/logo.png')
+        v-img(src='/logo.png' alt='home')
       v-list-item-content.d-none.d-sm-flex
         v-list-item-title
           h2 {{settings.title}}

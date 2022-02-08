@@ -19,7 +19,7 @@
       client-only
         v-menu(offset-y)
           template(v-slot:activator="{on}")
-            v-btn.align-self-end(icon v-on='on' color='primary' alt='more')
+            v-btn.align-self-end(icon v-on='on' color='primary' aria-label='more')
               v-icon(v-text='mdiDotsVertical')
           v-list(dense)
             v-list-item-group
@@ -44,7 +44,7 @@
                 v-list-item-content
                   v-list-item-title {{$t('common.remove')}}
         template(#placeholder)
-          v-btn.align-self-end(icon color='primary' alt='more')
+          v-btn.align-self-end(icon color='primary' aria-label='more')
             v-icon(v-text='mdiDotsVertical')                
 </template>
 <script>
