@@ -12,46 +12,61 @@ try {
 
 const DiskStorage = {
   _handleFile (req, file, cb) {
-    const filename = crypto.randomBytes(16).toString('hex') + '.jpg'
-    const finalPath = path.resolve(config.upload_path, filename)
+    const filename = crypto.randomBytes(16).toString('hex')
+    const imgPath = path.resolve(config.upload_path, filename)
     const thumbPath = path.resolve(config.upload_path, 'thumb', filename)
-    const outStream = fs.createWriteStream(finalPath)
-    const thumbStream = fs.createWriteStream(thumbPath)
 
-    const resizer = sharp().resize(1200).jpeg({ quality: 98 })
-    const thumbnailer = sharp().resize(500).jpeg({ quality: 98 })
-    let onError = false
-    const err = e => {
-      if (onError) {
-        log.error('[UPLOAD]', err)
-        return
-      }
-      onError = true
-      log.error('[UPLOAD]', e)
-      req.err = e
-      cb(null)
-    }
+    const sharpStream = sharp({ failOnError: false })
+    const promises = []
 
-    file.stream
-      .pipe(thumbnailer)
-      .on('error', err)
-      .pipe(thumbStream)
-      .on('error', err)
+    // fallback jpeg thumb
+    promises.push(
+      sharpStream
+        .clone()
+        .resize(500, null, { withoutEnlargement: true })
+        .jpeg({ quality: 90, mozjpeg: true })
+        .toFile(thumbPath + '.jpg')
+    )
 
-    file.stream
-      .pipe(resizer)
-      .on('error', err)
-      .pipe(outStream)
-      .on('error', err)
+    // fallback jpeg img
+    promises.push(
+      sharpStream
+        .clone()
+        .resize(1600, null, { withoutEnlargement: true })
+        .jpeg({ quality: 90, mozjpeg: true })
+        .toFile(imgPath + '.jpg')
+    )
 
-    outStream.on('finish', () => {
-      cb(null, {
-        destination: config.upload_path,
-        filename,
-        path: finalPath,
-        size: outStream.bytesWritten
+    // webp thumb
+    promises.push(
+      sharpStream
+        .clone()
+        .resize(500, null, { withoutEnlargement: true })
+        .webp({ nearLossLess: true })
+        .toFile(thumbPath + '.webp')
+    )
+
+    // webp image
+    promises.push(
+      sharpStream
+        .clone()
+        .resize(1600, null, { withoutEnlargement: true })
+        .webp({ nearLossLess: true })
+        .toFile(imgPath + '.webp')
+    )
+
+    file.stream.pipe(sharpStream)
+
+    Promise.all(promises)
+      .then(ret => { 
+        console.error(ret)
+        cb(null, { filename, path: imgPath }) 
       })
-    })
+      .catch(err => {
+        log.error("Error processing files, let's clean it up" + err)
+      })
+  
+
   },
   _removeFile (req, file, cb) {
     delete file.destination
