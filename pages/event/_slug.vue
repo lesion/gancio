@@ -132,7 +132,6 @@ v-container#event.pa-0.pa-sm-2
 </template>
 <script>
 import { mapState } from 'vuex'
-import EventAdmin from './eventAdmin'
 import get from 'lodash/get'
 import moment from 'dayjs'
 import clipboard from '../../assets/clipboard'
@@ -145,7 +144,10 @@ import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose,
 export default {
   name: 'Event',
   mixins: [clipboard],
-  components: { EventAdmin, EmbedEvent },
+  components: {
+    EventAdmin: () => import(/* webpackChunkName: "event" */'./eventAdmin'),
+    EmbedEvent: () => import(/* webpackChunkName: "event" */'./embedEvent'),
+  },
   async asyncData ({ $axios, params, error, store }) {
     try {
       const event = await $axios.$get(`/event/${params.slug}`)
@@ -184,7 +186,6 @@ export default {
 
     return {
       title: `${this.settings.title} - ${this.event.title}`,
-      script: [{ src: '/gancio-events.es.js', async: true, body: true }],
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         {

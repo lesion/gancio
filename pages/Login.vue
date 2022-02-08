@@ -1,7 +1,7 @@
 <template lang='pug'>
-  v-container
-    v-row.mt-5(align='center' justify='center')
-      v-col(cols='12' md="6" lg="5" xl="4")
+  v-container.pa-0.pa-md-3
+    v-row.mt-md-5.ma-0(align='center' justify='center')
+      v-col.pa-0.pa-md-3(cols='12' md="6" lg="5" xl="4")
         v-form(v-model='valid' ref='form' lazy-validation @submit.prevent='submit')
           v-card
             v-card-title {{$t('common.login')}}
@@ -57,7 +57,6 @@ export default {
   methods: {
     async forgot () {
       if (!this.email) {
-      //   this.$root.$message({ message: this.$t('login.insert_email'), color: 'error' })
         this.$refs.email.focus()
         return
       }

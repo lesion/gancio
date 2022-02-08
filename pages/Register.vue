@@ -1,7 +1,7 @@
 <template lang='pug'>
-v-container
-  v-row.mt-5(align='center' justify='center')
-    v-col(cols='12' md="6" lg="5" xl="4")
+v-container.pa-0.pa-md-3
+  v-row.mt-md-5.ma-0(align='center' justify='center')
+    v-col.pa-0.pa-md-3(cols='12' md="6" lg="5" xl="4")
 
       v-card
         v-card-title {{$t('common.register')}}
@@ -28,17 +28,19 @@ v-container
           v-btn(@click='register'
             :disabled='!valid || loading' :loading='loading'
             color='primary') {{$t('common.send')}}
-            v-icon mdi-chevron-right
+            v-icon(v-text='mdiChevronRight')
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import get from 'lodash/get'
+import { mdiChevronRight } from '@mdi/js'
 
 export default {
   name: 'Register',
   data () {
     return {
+      mdiChevronRight,
       loading: false,
       user: {},
       valid: true

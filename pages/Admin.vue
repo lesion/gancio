@@ -49,18 +49,19 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import Users from '../components/admin/Users'
-import Events from '../components/admin/Events'
-import Places from '../components/admin/Places'
-import Settings from '../components/admin/Settings'
-import Federation from '../components/admin/Federation'
-import Moderation from '../components/admin/Moderation'
-import Announcement from '../components/admin/Announcement'
-import Theme from '../components/admin/Theme'
 
 export default {
   name: 'Admin',
-  components: { Users, Events, Places, Settings, Federation, Moderation, Announcement, Theme },
+  components: { 
+    Users:  () => import(/* webpackChunkName: "admin" */'../components/admin/Users'),
+    Events: () => import(/* webpackChunkName: "admin" */'../components/admin/Events'),
+    Places: () => import(/* webpackChunkName: "admin" */'../components/admin/Places'),
+    Settings: () => import(/* webpackChunkName: "admin" */'../components/admin/Settings'),
+    Federation: () => import(/* webpackChunkName: "admin" */'../components/admin/Federation.vue'),
+    Moderation: () => import(/* webpackChunkName: "admin" */'../components/admin/Moderation.vue'),
+    Announcement: () => import(/* webpackChunkName: "admin" */'../components/admin/Announcement.vue'),
+    Theme: () => import(/* webpackChunkName: "admin" */'../components/admin/Theme.vue')
+  },
   middleware: ['auth'],
   async asyncData ({ $axios, params, store }) {
     try {

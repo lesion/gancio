@@ -120,7 +120,6 @@ export default {
   head () {
     return {
       title: `${this.settings.title} - ${this.$t('common.export')}`,
-      script: [{ src: '/gancio-events.es.js', async: true, body: true }],
     }
   },
   computed: {

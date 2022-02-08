@@ -51,7 +51,7 @@
                 v-combobox(v-model='event.tags'
                   :prepend-icon="mdiTagMultiple"
                   chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-                  :delimiters="[',', ' ']"
+                  :delimiters="[',', ';']"
                   :items="tags.map(t => t.tag)"
                   :label="$t('common.tags')")
 
@@ -69,7 +69,14 @@ import { mdiFileImport, mdiFormatTitle, mdiTagMultiple } from '@mdi/js'
 
 export default {
   name: 'NewEvent',
-  components: { List, Editor, ImportDialog, MediaInput, WhereInput, DateInput },
+  components: {
+    List: () => import(/* webpackChunkName: "add" */'@/components/List'),
+    Editor: () => import(/* webpackChunkName: "add" */'@/components/Editor'), 
+    ImportDialog: () => import(/* webpackChunkName: "add" */'./ImportDialog.vue'),
+    MediaInput: () => import(/* webpackChunkName: "add" */'./MediaInput.vue'),
+    WhereInput: () => import(/* webpackChunkName: "add" */'./WhereInput.vue'),
+    DateInput: () => import(/* webpackChunkName: "add" */'./DateInput.vue')
+  },
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },

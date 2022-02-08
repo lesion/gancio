@@ -14,13 +14,13 @@
 </template>
 
 <script>
-import { mdiAlert, mdiCloseCircle } from '@mdi/js'
+import { mdiAlert, mdiCloseCircle, mdiInformation } from '@mdi/js'
 
 export default {
   data () {
     return {
-      mdiAlert, mdiCloseCircle,
-      icon: mdiAlert,
+      mdiAlert, mdiAlert, mdiCloseCircle, mdiInformation,
+      icon: mdiInformation,
       color: 'secondary',
       bottom: true,
       top: false,
@@ -36,7 +36,7 @@ export default {
       this.active = true
       this.message = this.$t(message, opts)
       this.color = opts.color || 'secondary'
-      this.icon = opts.icon || mdiAlert
+      this.icon = opts.icon || (this.color === 'success' ? mdiInformation : mdiAlert)
     }
   }
 }
