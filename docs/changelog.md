@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
   - add XSS and path traversal mitigation
   - improve a11y
   - update deps
+
 ### 1.3.3 - 1 feb '22
   - security fix, avoid sharing smtp pass with front-end
 

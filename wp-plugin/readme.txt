@@ -3,13 +3,13 @@ Contributors: lesion
 Donate link: https://gancio.org
 Tags: events, gancio, fediverse, AP, activity pub
 Requires at least: 4.7
-Tested up to: 5.7.2
-Stable tag: 1.2
+Tested up to: 5.9
+Stable tag: 1.3
 Requires PHP: 7.0
 License: AGPLv3 or later
 License URI: https://www.gnu.org/licenses/agpl-3.0.html
 
-Connect a gancio instance to a Wordpress user so that published events are automatically pushed.
+This plugin allows you to [embed](https://gancio.org/usage/embed) a list of events or a single event from your [Gancio](https://gancio.org) website using a shortcode.
 
 == Description ==
 This plugin allows you to [embed](https://gancio.org/usage/embed) a list of events or a single event from your [Gancio](https://gancio.org) website using a shortcode.
