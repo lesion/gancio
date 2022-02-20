@@ -27,7 +27,7 @@ This probably support unix socket too
 ```
 
 - ### Database
-DB configuration, look [here](https://sequelize.org/master/class/lib/sequelize.js~Sequelize.html#instance-constructor-constructor) for options.
+DB configuration, look [here](https://sequelize.org/v6/class/src/sequelize.js~Sequelize.html#instance-constructor-constructor) for options.
 ```json
   "db": {
     "dialect": "sqlite",
