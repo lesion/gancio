@@ -1,1 +1,29 @@
-{}
+{
+    "register": {
+        "subject": "Recibida solicitude de rexistro",
+        "content": "Recibimos unha solicitude de rexistro. Confirmarémola o antes posible."
+    },
+    "recover": {
+        "subject": "Recuperación do contrasinal",
+        "content": "Ola, pediches recuperar o contrasinal en {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Preme aquí</a> para confirmalo."
+    },
+    "admin_register": {
+        "content": "{{user.email}} solicitou rexistrarse en {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confírmao <a href='{{config.baseurl}}/admin'>aquí</a>.",
+        "subject": "Nova conta"
+    },
+    "test": {
+        "subject": "A configuración SMTP é correcta",
+        "content": "Este é un email de proba, se estás lendo isto é que a configuración funciona."
+    },
+    "confirm": {
+        "subject": "Xa podes comezar a publicar eventos",
+        "content": "Ola, a túa conta en <a href='{{config.baseurl}}'>{{config.title}}</a> foi confirmada. Escríbenos a {{config.admin_email}} se precisas máis información."
+    },
+    "user_confirm": {
+        "content": "Ola, creouse a túa conta en <a href='{{config.baseurl}}'>{{config.title}}</a>. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Debes confirmala e elexir un contrasinal</a>.",
+        "subject": "Xa podes comezar a publicar eventos"
+    },
+    "event_confirm": {
+        "content": "Podes confirmar este evento <a href='{{url}}'>nesta páxina</a>"
+    }
+}
