@@ -213,7 +213,8 @@
         "smtp_description": "<ul><li>L'administrateur reçoit un e-mail lorsqu'un événement anonyme est ajouté (si activé).</li><li>L'administrateur reçoit un e-mail pour chaque demande d'inscription (si activé).</li><li>L'utilisateur reçoit un e-mail suite à sa demande d'inscription.</li><li>L'utilisateur reçoit un e-mail lorsque son inscription est confirmée.</li><li>L'utilisateur reçoit un e-mail de confirmation s'il est inscrit directement par l'administrateur.</li><li>Les utilisateurs reçoivent un e-mail pour restaurer leur mot de passe s'ils l'oublient.</li></ul>",
         "show_smtp_setup": "Paramètres d'e-mail",
         "smtp_test_success": "Un e-mail de test a été envoyé à {admin_email}, veuillez vérifier votre boîte de réception",
-        "admin_email": "E-mail de l'administrateur"
+        "admin_email": "E-mail de l'administrateur",
+        "widget": "Vignette active"
     },
     "oauth": {
         "scopes": {
