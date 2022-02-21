@@ -194,7 +194,7 @@ export default {
       } else if (what === 'fromHour') {
         if (value) {
           const [hour, minute] = value.split(':')
-          const from = dayjs(this.value.from).hour(hour).minute(minute)
+          const from = dayjs(this.value.from).hour(hour).minute(minute).second(0)
           this.$emit('input', { ...this.value, from, fromHour: true })
         } else {
           this.$emit('input', { ...this.value, fromHour: false })
@@ -209,7 +209,7 @@ export default {
           if (fromHour > Number(hour) && !this.value.multidate) {
             due = due.add(1, 'day')
           }
-          due = due.hour(hour).minute(minute)
+          due = due.hour(hour).minute(minute).second(0)
           this.$emit('input', { ...this.value, due, dueHour: true })
         } else {
           this.$emit('input', { ...this.value, due: null, dueHour: false })
