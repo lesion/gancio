@@ -225,17 +225,13 @@ module.exports = {
   },
  
   async APRedirect (req, res, next) {
-    const accepted = req.accepts('html', 'application/json', 'application/activity+json', 'application/ld+json' )
-    if (accepted && accepted !== 'html') {
+    if (!req.accepts('html')) {
       const eventController = require('../server/api/controller/event')
-      try {
-        const event = await eventController._get(req.params.slug)
-        if (event) {
-          return res.redirect(`/federation/m/${event.id}`)
-        }
-      } catch (e) {}
+      const event = await eventController._get(req.params.slug)
+      if (event) {
+        return res.redirect(`/federation/m/${event.id}`)
+      }
     }
     next()
   }
-
 }
