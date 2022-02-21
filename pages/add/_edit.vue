@@ -54,6 +54,10 @@
                   :delimiters="[',', ';']"
                   :items="tags.map(t => t.tag)"
                   :label="$t('common.tags')")
+                  template(v-slot:selection="{ item, on, attrs, selected, parent}")
+                    v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+                      :input-value="selected" label small) {{item}}
+        </v-chip>
 
       v-card-actions
         v-spacer
@@ -65,7 +69,7 @@
 import { mapActions, mapState } from 'vuex'
 import dayjs from 'dayjs'
 
-import { mdiFileImport, mdiFormatTitle, mdiTagMultiple } from '@mdi/js'
+import { mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle } from '@mdi/js'
 
 export default {
   name: 'NewEvent',
@@ -117,7 +121,7 @@ export default {
     const month = dayjs().month() + 1
     const year = dayjs().year()
     return {
-      mdiFileImport, mdiFormatTitle, mdiTagMultiple,
+      mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle,
       valid: false,
       openImportDialog: false,
       event: {

@@ -15,7 +15,7 @@
 
       .col.pt-0.pt-md-2
         Search(:filters='filters' @update='updateFilters')
-        v-chip(v-if='selectedDay' close @click:close='dayChange({ date: selectedDay})') {{selectedDay}}
+        v-chip(v-show='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange({ date: selectedDay})') {{selectedDay}}
 
     //- Events
     #events.mb-2.mt-1.pl-1.pl-sm-2
@@ -31,6 +31,7 @@ import Event from '@/components/Event'
 import Announcement from '@/components/Announcement'
 import Search from '@/components/Search'
 import Calendar from '@/components/Calendar'
+import { mdiCloseCircle } from '@mdi/js'
 
 export default {
   name: 'Index',
@@ -46,6 +47,7 @@ export default {
   },
   data ({ $store }) {
     return {
+      mdiCloseCircle,
       first: true,
       isCurrentMonth: true,
       now: dayjs().unix(),

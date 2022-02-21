@@ -21,6 +21,7 @@
       template(v-slot:selection="data")
         v-chip(v-bind="data.attrs"
           close
+          :close-icon='mdiCloseCircle'
           @click:close='remove(data.item)'
           :input-value="data.selected")
           v-avatar(left)
@@ -35,7 +36,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { mdiMapMarker, mdiTag } from '@mdi/js'
+import { mdiMapMarker, mdiTag, mdiCloseCircle } from '@mdi/js'
 export default {
   name: 'Search',
   props: {
@@ -44,7 +45,7 @@ export default {
   },
   data () {
     return {
-      mdiTag, mdiMapMarker,
+      mdiTag, mdiMapMarker, mdiCloseCircle,
       tmpfilter: null,
       search: ''
     }
