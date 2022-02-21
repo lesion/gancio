@@ -48,7 +48,7 @@
           v-icon(v-text='mdiDotsVertical')
 
 
-    v-btn(icon @click='clipboard(feedLink, "common.feed_url_copied")' aria-label='RSS')
+    v-btn(icon target='_blank' :href='feedLink' aria-label='RSS')
       v-icon(color='orange' v-text='mdiRss')
 
 </template>
