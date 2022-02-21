@@ -138,7 +138,7 @@ import clipboard from '../../assets/clipboard'
 const htmlToText = require('html-to-text')
 
 import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose,
-  mdiEye, mdiEyeOff, mdiDelete,
+  mdiEye, mdiEyeOff, mdiDelete, mdiRepeat,
   mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker } from '@mdi/js'
 
 export default {
@@ -159,7 +159,7 @@ export default {
   data () {
     return {
       mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar,
-      mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff,
+      mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat,
       currentAttachment: 0,
       event: {},
       showEmbed: false,
