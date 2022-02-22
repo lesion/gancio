@@ -177,6 +177,7 @@
 .nosidebar .content {
   margin-left: 1rem;
   margin-top: 5px;
+  text-align: left;
 }
 
 .tags {
