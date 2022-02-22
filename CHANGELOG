@@ -1,5 +1,12 @@
 All notable changes to this project will be documented in this file.
 
+### UNRELEASED
+  - add gl/galego locale
+  - fix import redirect loop
+  - fix missing close and repeat icons
+  - turn rss icon into a real link to improve a11y
+  - force seconds to 0 for each events, fixing recurring events starting date
+
 ### 1.4.0 - 9 feb '22
   - improve Cumulative Layout Shift
   - remove filename as default media label to avoid leak metadata
