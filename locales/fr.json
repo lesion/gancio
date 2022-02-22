@@ -136,7 +136,7 @@
         "saved": "Événement enregistré"
     },
     "register": {
-        "description": "Les mouvements sociaux doivent s'organiser et s'autofinancer.<br/>\n<br/>Avant de pouvoir publier, <strong> le compte doit être approuvé</strong>, considérez que <strong> derrière ce site vous trouverez de vraies personnes, à qui vous pouvez écrire en deux lignes pour exprimer les évènements que vous souhaiteriez publier.",
+        "description": "Les mouvements sociaux doivent s'organiser et s'autofinancer.<br/>\n<br/>Avant de pouvoir publier, <strong> le compte doit être approuvé</strong>, considérez que <strong> derrière ce site vous trouverez de vraies personnes</strong>, à qui vous pouvez écrire en deux lignes pour exprimer les évènements que vous souhaiteriez publier.",
         "first_user": "Administrateur créé",
         "complete": "L'inscription doit être confirmée.",
         "error": "Erreur : "
