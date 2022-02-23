@@ -145,21 +145,35 @@ const eventController = {
     const next = await Event.findOne({
       attributes: ['id', 'slug'],
       where: {
+        id: { [Op.not]: event.id },
         is_visible: true,
         recurrent: null,
-        start_datetime: { [Op.gt]: event.start_datetime }
+        [Op.or]: [
+          { start_datetime: { [Op.gt]: event.start_datetime } },
+          { 
+            start_datetime: event.start_datetime,
+            id: { [Op.gt]: event.id }
+          }
+        ]
       },
-      order: [['start_datetime', 'ASC']]
+      order: [['start_datetime', 'ASC'], ['id', 'ASC']]
     })
 
     const prev = await Event.findOne({
       attributes: ['id', 'slug'],
       where: {
         is_visible: true,
+        id: { [Op.not]: event.id },
         recurrent: null,
-        start_datetime: { [Op.lt]: event.start_datetime }
+        [Op.or]: [
+          { start_datetime: { [Op.lt]: event.start_datetime } },
+          { 
+            start_datetime: event.start_datetime,
+            id: { [Op.lt]: event.id }
+          }
+        ]
       },
-      order: [['start_datetime', 'DESC']]
+      order: [['start_datetime', 'DESC'], ['id', 'DESC']]
     })
 
     // TODO: also check if event is mine
