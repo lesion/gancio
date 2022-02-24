@@ -69,24 +69,24 @@ v-container#event.pa-0.pa-sm-2
         //-   small.mr-3 🔖 {{event.likes.length}}
         //-   small ✊ {{event.boost.length}}<br/>
 
-        v-dialog(v-model='showResources'
-          fullscreen
-          destroy-on-close
-          scrollable
-          transition='dialog-bottom-transition')
+        v-dialog(v-model='showResources' max-width="900" width="900" :fullscreen='$vuetify.breakpoint.xsOnly'
+          destroy-on-close)
           v-card
             v-btn.ma-2(icon dark @click='showResources = false')
               v-icon(v-text='mdiClose')
-            v-carousel.pa-5(:interval='10000' ref='carousel' hide-delimiters v-model='currentAttachment'
+            v-carousel.pa-5(:interval='10000'
+              :next-icon='mdiArrowRight'
+              :prev-icon='mdiArrowLeft'
+              ref='carousel' hide-delimiters v-model='currentAttachment'
               height='100%' show-arrows-on-over)
               v-carousel-item(v-for='attachment in selectedResource.data.attachment'
                 v-if='isImg(attachment)'
                 :key='attachment.url')
-                v-img(:src='attachment.url' contain max-width='100%' max-height='100%')
+                v-img(:src='attachment.url' contain max-height='90%')
             v-card-actions.align-center.justify-center
               span {{currentAttachmentLabel}}
 
-        v-card.grey.darken-4.mb-3#resources(v-if='settings.enable_resources' v-for='resource in event.resources'
+        v-card.mb-3.resources(v-if='settings.enable_resources' v-for='resource in event.resources'
           :key='resource.id' :class='{disabled: resource.hidden}' elevation='10' outlined)
             v-card-title
               v-menu(v-if='$auth.user && $auth.user.is_admin' offset-y)
@@ -109,13 +109,14 @@ v-container#event.pa-0.pa-sm-2
             v-card-text
 
               div.mt-1(v-html='resource_filter(resource.data.content)')
-              span(v-for='attachment in resource.data.attachment' :key='attachment.url')
-                audio(v-if='isAudio(attachment)' controls)
-                  source(:src='attachment.url')
-                v-img.cursorPointer(v-if='isImg(attachment)' :src='attachment.url' @click='showResource(resource)'
-                  max-height="250px"
-                  max-width="250px"
-                  contain :alt='attachment.name')
+              div.d-flex.flex-wrap
+                span.mr-1(v-for='attachment in resource.data.attachment' :key='attachment.url')
+                  audio(v-if='isAudio(attachment)' controls)
+                    source(:src='attachment.url')
+                  v-img.cursorPointer(v-if='isImg(attachment)' :src='attachment.url' @click='showResource(resource)'
+                    max-height="250px"
+                    max-width="250px"
+                    contain :alt='attachment.name')
 
       //- Next/prev arrow
       .text-center.mt-5.mb-5
@@ -138,7 +139,7 @@ import clipboard from '../../assets/clipboard'
 const htmlToText = require('html-to-text')
 
 import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose,
-  mdiEye, mdiEyeOff, mdiDelete, mdiRepeat,
+  mdiEye, mdiEyeOff, mdiDelete, mdiRepeat, mdiLock,
   mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker } from '@mdi/js'
 
 export default {
@@ -159,7 +160,7 @@ export default {
   data () {
     return {
       mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar,
-      mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat,
+      mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat, mdiLock,
       currentAttachment: 0,
       event: {},
       showEmbed: false,
