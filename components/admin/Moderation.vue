@@ -10,6 +10,7 @@
             :items-per-page='5'
             :search='instancesFilter'
             :hide-default-footer='instances.length<5'
+            :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
             dense :headers='instancesHeader'
             @click:row='instanceSelected')
             template(v-slot:item.blocked="{ item }")
@@ -22,6 +23,7 @@
             :items-per-page='5'
             :search='usersFilter'
             :hide-default-footer='users.length<5'
+            :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
             dense :headers='usersHeader')
             template(v-slot:item.blocked="{ item }")
               v-icon(@click='toggleUserBlock(item)' v-text='item.blocked ? mdiCheckboxIntermediate : mdiCheckboxBlankOutline')
@@ -31,13 +33,16 @@
         v-data-table(:items='resources' dense
           :headers='resourcesHeader'
           :hide-default-footer='resources.length<10'
-          :items-per-page='10')
+          :items-per-page='10'
+          :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }')
           template(v-slot:item.content='{ item }')
             span(v-html='item.data.content')
+          template(v-slot:item.created='{ item }')
+            span {{item.created | dateFormat('lll')}}
           template(v-slot:item.user='{ item }')
-            span {{item.ap_user.preferredUsername}}
+            a(:href='item.ap_user.url || item.ap_user.ap_id' target='_blank') {{item.ap_user.preferredUsername}}
           template(v-slot:item.event='{ item }')
-            span {{item.event.title}}
+            nuxt-link(:to='`/event/${item.event.slug || item.event.id}`') {{item.event.title}}
           template(v-slot:item.actions='{ item }')
             v-menu(offset-y)
               template(v-slot:activator="{ on }")
@@ -56,13 +61,15 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import get from 'lodash/get'
-import { mdiDelete, mdiEye, mdiEyeOff, mdiDotsVertical, mdiCheckboxIntermediate, mdiCheckboxBlankOutline } from '@mdi/js'
+import { mdiDelete, mdiEye, mdiEyeOff, mdiDotsVertical, mdiCheckboxIntermediate,
+mdiCheckboxBlankOutline, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
 
 export default {
   name: 'Moderation',
   data () {
     return {
-      mdiDelete, mdiEye, mdiEyeOff, mdiDotsVertical, mdiCheckboxIntermediate, mdiCheckboxBlankOutline,
+      mdiDelete, mdiEye, mdiEyeOff, mdiDotsVertical, mdiCheckboxIntermediate,
+      mdiCheckboxBlankOutline, mdiChevronLeft, mdiChevronRight,
       instances: [],
       resources: [],
       users: [],
