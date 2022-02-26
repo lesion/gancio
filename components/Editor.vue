@@ -61,7 +61,7 @@
             :value='isActive.link() && getMarkAttrs("link") && getMarkAttrs("link").href || ""'
             @keypress.enter='commands.link({ href: $event.target.value}); editor.focus()')
 
-    editor-content.content(:editor='editor' spellcheck='false' :style="{ 'max-height': maxHeight }")
+    editor-content.content(:editor='editor' spellcheck='false' :style="{ 'max-height': maxHeight }" :aria-label='label' :label='label')
 </template>
 <script>
 import debounce from 'lodash/debounce'
