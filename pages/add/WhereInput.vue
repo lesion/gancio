@@ -13,12 +13,13 @@
         no-filter
         item-text='name'
         @change='selectPlace')
-        template(v-slot:item="{ item }")
-          v-list-item-content(two-line v-if='item.create')
-            v-list-item-title <v-icon color='primary' v-text='mdiPlus'></v-icon> {{item.name}}
-          v-list-item-content(two-line v-else)
-            v-list-item-title {{item.name}}
-            v-list-item-subtitle {{item.address}}
+        template(v-slot:item="{ item, attrs, on }")
+          v-list-item(v-bind='attrs' v-on='on')
+            v-list-item-content(two-line v-if='item.create')
+              v-list-item-title <v-icon color='primary' v-text='mdiPlus' :aria-label='add'></v-icon> {{item.name}}
+            v-list-item-content(two-line v-else)
+              v-list-item-title(v-text='item.name')
+              v-list-item-subtitle(v-text='item.address')
 
     v-col(cols=12 md=6)
       v-text-field(ref='address'

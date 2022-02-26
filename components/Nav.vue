@@ -11,19 +11,19 @@
         v-list-item-subtitle {{settings.description}}
 
     v-spacer
-    v-btn(v-if='$auth.loggedIn || settings.allow_anon_event' icon nuxt to='/add' :aria-label='$t("common.add_event")')
+    v-btn(v-if='$auth.loggedIn || settings.allow_anon_event' icon nuxt to='/add' :aria-label='$t("common.add_event")' :title='$t("common.add_event")')
       v-icon(large color='primary' v-text='mdiPlus')
 
-    v-btn(icon nuxt to='/export' :aria-label='$t("common.share")')
+    v-btn(icon nuxt to='/export' :title='$t("common.share")' :aria-label='$t("common.share")')
       v-icon(v-text='mdiShareVariant')
 
-    v-btn(v-if='!$auth.loggedIn' icon nuxt to='/login' :aria-label='$t("common.login")')
+    v-btn(v-if='!$auth.loggedIn' icon nuxt to='/login' :title='$t("common.login")' :aria-label='$t("common.login")')
       v-icon(v-text='mdiLogin')
 
     client-only
       v-menu(v-if='$auth.loggedIn' offset-y)
         template(v-slot:activator="{ on, attrs }")
-          v-btn(icon v-bind='attrs' v-on='on' aria-label='Menu')
+          v-btn(icon v-bind='attrs' v-on='on' title='Menu' aria-label='Menu')
             v-icon(v-text='mdiDotsVertical')
         v-list
           v-list-item(nuxt to='/settings')
@@ -44,11 +44,11 @@
             v-list-item-content
               v-list-item-title {{$t('common.logout')}}
       template(#placeholder)
-        v-btn(v-if='$auth.loggedIn' icon aria-label='Menu')
+        v-btn(v-if='$auth.loggedIn' icon aria-label='Menu' title='Menu')
           v-icon(v-text='mdiDotsVertical')
 
 
-    v-btn(icon target='_blank' :href='feedLink' aria-label='RSS')
+    v-btn(icon target='_blank' :href='feedLink' title='RSS' aria-label='RSS')
       v-icon(color='orange' v-text='mdiRss')
 
 </template>

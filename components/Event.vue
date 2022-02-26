@@ -19,7 +19,7 @@
       client-only
         v-menu(offset-y)
           template(v-slot:activator="{on}")
-            v-btn.align-self-end(icon v-on='on' color='primary' aria-label='more')
+            v-btn.align-self-end(icon v-on='on' color='primary' title='more' aria-label='more')
               v-icon(v-text='mdiDotsVertical')
           v-list(dense)
             v-list-item-group

@@ -21,7 +21,7 @@ v-container#event.pa-0.pa-sm-2
           .p-description.text-body-1.pa-3.rounded(v-if='!hasMedia && event.description' itemprop='description' v-html='event.description')
 
         v-col.col-12.col-lg-4
-          v-card
+          v-card(outlined)
             v-card-text
               v-icon.float-right(v-if='event.parentId' color='success' v-text='mdiRepeat')
               .title.text-h5
@@ -47,19 +47,14 @@ v-container#event.pa-0.pa-sm-2
 
             //- info & actions
             v-toolbar
-              v-tooltip(bottom) {{$t('common.copy_link')}}
-                template(v-slot:activator="{on, attrs} ")
-                  v-btn.ml-2(large icon v-on='on' color='primary' @click='clipboard(`${settings.baseurl}/event/${event.slug || event.id}`)')
-                    v-icon(v-text='mdiContentCopy')
-              v-tooltip(bottom) {{$t('common.embed')}}
-                template(v-slot:activator="{on, attrs} ")
-                  v-btn.ml-2(large icon v-on='on' @click='showEmbed=true' color='primary')
-                    v-icon(v-text='mdiCodeTags')
-              v-tooltip(bottom) {{$t('common.add_to_calendar')}}
-                template(v-slot:activator="{on, attrs} ")
-                  v-btn.ml-2(large icon v-on='on' color='primary'
-                    :href='`/api/event/${event.slug || event.id}.ics`')
-                    v-icon(v-text='mdiCalendarExport')
+              v-btn.ml-2(large icon :title="$t('common.copy_link')" :aria-label="$t('common.copy_link')" color='primary'
+                @click='clipboard(`${settings.baseurl}/event/${event.slug || event.id}`)')
+                v-icon(v-text='mdiContentCopy')
+              v-btn.ml-2(large icon :title="$t('common.embed')" :aria-label="$t('common.embed')" @click='showEmbed=true' color='primary')
+                v-icon(v-text='mdiCodeTags')
+              v-btn.ml-2(large icon :title="$t('common.add_to_calendar')" color='primary' :aria-label="$t('common.add_to_calendar')"
+                :href='`/api/event/${event.slug || event.id}.ics`')
+                v-icon(v-text='mdiCalendarExport')
 
       .p-description.text-body-1.pa-3.rounded(v-if='hasMedia && event.description' itemprop='description' v-html='event.description')
 
@@ -87,7 +82,7 @@ v-container#event.pa-0.pa-sm-2
               span {{currentAttachmentLabel}}
 
         v-card.mb-3.resources(v-if='settings.enable_resources' v-for='resource in event.resources'
-          :key='resource.id' :class='{disabled: resource.hidden}' elevation='10' outlined)
+          :key='resource.id' elevation='10' :flat='resource.hidden' outlined)
             v-card-title
               v-menu(v-if='$auth.user && $auth.user.is_admin' offset-y)
                 template(v-slot:activator="{ on }")
@@ -102,6 +97,8 @@ v-container#event.pa-0.pa-sm-2
                     v-list-item-title <v-icon left v-text='mdiDelete'></v-icon> {{$t('admin.delete_resource')}}
                   v-list-item(@click='blockUser(resource)')
                     v-list-item-title <v-icon left v-text='mdiLock'></v-icon> {{$t('admin.block_user')}}
+
+              v-icon.mr-1(v-show='resource.hidden' v-text='mdiEyeOff')
 
               a(:href='resource.data.url || resource.data.context')
                 small {{resource.data.published|dateFormat('ddd, D MMMM HH:mm')}}
