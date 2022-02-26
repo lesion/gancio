@@ -37,8 +37,7 @@ const app = express()
 app.enable('trust proxy')
 app.use(helpers.logRequest)
 
-// initialize instance settings / authentication / locale
-app.use(helpers.initSettings)
+app.use(helpers.setUserLocale)
 app.use(helpers.serveStatic())
 
 app.use(cookieParser())
@@ -65,7 +64,7 @@ if (config.status === 'READY') {
 // ignore unimplemented ping url from fediverse
   app.use(spamFilter)
 
-  // fill req.user if request is authenticated
+  // fill res.locals.user if request is authenticated
   app.use(auth.fillUser)
 
   app.use('/oauth', oauth)
@@ -84,16 +83,18 @@ app.use((error, req, res, next) => {
 // remaining request goes to nuxt
 // first nuxt component is ./pages/index.vue (with ./layouts/default.vue)
 // prefill current events, tags, places and announcements (used in every path)
+app.use(helpers.initSettings)
 app.use(async (req, res, next) => {
   // const start_datetime = getUnixTime(startOfWeek(startOfMonth(new Date())))
   // req.events = await eventController._select(start_datetime, 100)
   if (config.status === 'READY') {
+
     const eventController = require('./api/controller/event')
     const announceController = require('./api/controller/announce')    
-    req.meta = await eventController._getMeta()
-    req.announcements = await announceController._getVisible()
+    res.locals.meta = await eventController._getMeta()
+    res.locals.announcements = await announceController._getVisible()
   }
-  req.status = config.status
+  res.locals.status = config.status
   next()
 })
 

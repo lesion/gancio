@@ -16,13 +16,13 @@ const Auth = {
     }
 
     oauth.oauthServer.authenticate()(req, res, () => {
-      req.user = get(res, 'locals.oauth.token.user', null)
+      res.locals.user = get(res, 'locals.oauth.token.user', null)
       next()
     })
   },
 
   isAuth (req, res, next) {
-    if (req.user) {
+    if (res.locals.user) {
       next()
     } else {
       res.sendStatus(404)
@@ -30,7 +30,7 @@ const Auth = {
   },
 
   isAdmin (req, res, next) {
-    if (req.user.is_admin) {
+    if (res.locals.user.is_admin) {
       next()
     } else {
       res.status(404)

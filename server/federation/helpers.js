@@ -192,7 +192,7 @@ const Helpers = {
       return res.status(401).send('User blocked')
     }
 
-    req.fedi_user = user
+    res.locals.fedi_user = user
 
     // TODO: check Digest // cannot do this with json bodyparser
     // const digest = crypto.createHash('sha256')

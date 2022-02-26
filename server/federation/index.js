@@ -6,6 +6,7 @@ const Event = require('../api/models/event')
 const User = require('../api/models/user')
 const Tag = require('../api/models/tag')
 const Place = require('../api/models/place')
+const settingsController =  require('../api/controller/settings')
 
 const Helpers = require('./helpers')
 const Inbox = require('./inbox')
@@ -20,7 +21,6 @@ router.use(cors())
 
 // is federation enabled? middleware
 router.use((req, res, next) => {
-  const settingsController = require('../api/controller/settings')
   if (settingsController.settings.enable_federation) { return next() }
   log.debug('Federation disabled!')
   return  res.status(401).send('Federation disabled')
@@ -36,7 +36,7 @@ router.get('/m/:event_id', async (req, res) => {
 
   const event = await Event.findByPk(req.params.event_id, { include: [User, Tag, Place] })
   if (!event) { return res.status(404).send('Not found') }
-  return res.json(event.toAP(settingsController.settings.instance_name, req.settings.instance_locale))
+  return res.json(event.toAP(settingsController.settings.instance_name, settingsController.settings.instance_locale))
 })
 
 // get any message coming from federation

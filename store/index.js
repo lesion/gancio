@@ -52,11 +52,11 @@ export const mutations = {
 export const actions = {
   // this method is called server side only for each request for nuxt
   // we use it to get configuration from db, set locale, etc...
-  nuxtServerInit ({ commit }, { req }) {
-    commit('setSettings', req.settings)
-    if (req.status === 'READY') {
-      commit('setAnnouncements', req.announcements)
-      commit('update', req.meta)
+  nuxtServerInit ({ commit }, { req, res }) {
+    commit('setSettings', res.locals.settings)
+    if (res.locals.status === 'READY') {
+      commit('setAnnouncements', res.locals.announcements)
+      commit('update', res.locals.meta)
     }
   },
   async updateAnnouncements ({ commit }) {
