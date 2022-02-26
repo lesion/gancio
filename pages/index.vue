@@ -15,7 +15,7 @@
 
       .col.pt-0.pt-md-2
         Search(:filters='filters' @update='updateFilters')
-        v-chip(v-show='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange({ date: selectedDay})') {{selectedDay}}
+        v-chip(v-if='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange({ date: selectedDay})') {{selectedDay}}
 
     //- Events
     #events.mb-2.mt-1.pl-1.pl-sm-2
@@ -175,12 +175,7 @@ export default {
       this.setFilters(filters)
     },
     dayChange (day) {
-      const date = dayjs(day.date).format('YYYY-MM-DD')
-      if (this.selectedDay === date) {
-        this.selectedDay = null
-        return
-      }
-      this.selectedDay = date
+      this.selectedDay = day ? dayjs(day).format('YYYY-MM-DD') : null
     }
   }
 }
