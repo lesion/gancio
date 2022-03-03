@@ -4,7 +4,7 @@
     v-dialog(v-model='showFollowMe' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
       FollowMe(@close='showFollowMe=false' is-dialog)
 
-    v-btn(color='primary' text href='https://gancio.org' target='_blank') Gancio <small>{{settings.version}}</small>
+    v-btn(color='primary' text href='https://gancio.org' target='_blank' rel="noopener") Gancio <small>{{settings.version}}</small>
     v-btn.ml-1(v-for='link in footerLinks'
       :key='link.label' color='primary' text
       :href='link.href' :to='link.to' :target="link.href && '_blank'") {{link.label}}

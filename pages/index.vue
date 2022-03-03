@@ -7,7 +7,7 @@
 
     //- Calendar and search bar
     v-row.pt-0.pt-sm-2.pl-0.pl-sm-2
-      .col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-4.pa-sm-3
+      #calh.col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-4.pa-sm-3
         //- this is needed as v-calendar does not support SSR
         //- https://github.com/nathanreyes/v-calendar/issues/336
         client-only(placeholder='Calendar unavailable without js')
@@ -15,12 +15,11 @@
 
       .col.pt-0.pt-md-2
         Search(:filters='filters' @update='updateFilters')
-        v-chip(v-if='selectedDay' close @click:close='dayChange({ date: selectedDay})') {{selectedDay}}
+        v-chip(v-if='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange({ date: selectedDay})') {{selectedDay}}
 
     //- Events
     #events.mb-2.mt-1.pl-1.pl-sm-2
-      //- div.event(v-for='(event, idx) in events' :key='event.id' v-intersect="(entries, observer, isIntersecting) => intersecting[event.id] = isIntersecting")
-      Event(:event='event' @destroy='destroy' v-for='(event, idx) in visibleEvents' :key='event.id' @tagclick='tagClick' @placeclick='placeClick')
+      Event(:event='event' @destroy='destroy' v-for='(event, idx) in visibleEvents' :lazy='idx>2' :key='event.id' @tagclick='tagClick' @placeclick='placeClick')
 
 </template>
 
@@ -32,6 +31,7 @@ import Event from '@/components/Event'
 import Announcement from '@/components/Announcement'
 import Search from '@/components/Search'
 import Calendar from '@/components/Calendar'
+import { mdiCloseCircle } from '@mdi/js'
 
 export default {
   name: 'Index',
@@ -47,6 +47,7 @@ export default {
   },
   data ({ $store }) {
     return {
+      mdiCloseCircle,
       first: true,
       isCurrentMonth: true,
       now: dayjs().unix(),
@@ -174,12 +175,7 @@ export default {
       this.setFilters(filters)
     },
     dayChange (day) {
-      const date = dayjs(day.date).format('YYYY-MM-DD')
-      if (this.selectedDay === date) {
-        this.selectedDay = null
-        return
-      }
-      this.selectedDay = date
+      this.selectedDay = day ? dayjs(day).format('YYYY-MM-DD') : null
     }
   }
 }

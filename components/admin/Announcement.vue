@@ -17,7 +17,7 @@
           v-btn(@click='dialog=false' color='error') {{$t('common.cancel')}}
           v-btn(@click='save' color='primary' :disabled='!valid || loading' :loading='loading') {{$t(`common.${editing?'save':'send'}`)}}
 
-    v-btn(@click='openDialog' text color='primary') <v-icon>mdi-plus</v-icon> {{$t('common.add')}}
+    v-btn(@click='openDialog' text color='primary') <v-icon v-text='mdiPlus'></v-icon> {{$t('common.add')}}
     v-card-text
       v-data-table(
           v-if='announcements.length'
@@ -36,11 +36,13 @@ import { mapActions } from 'vuex'
 import cloneDeep from 'lodash/cloneDeep'
 import Editor from '../Editor'
 import Announcement from '../Announcement'
+import { mdiPlus } from '@mdi/js'
 
 export default {
   components: { Editor, Announcement },
   data () {
     return {
+      mdiPlus,
       valid: false,
       dialog: false,
       editing: false,

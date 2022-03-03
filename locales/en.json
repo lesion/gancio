@@ -109,7 +109,7 @@
         "list_description": "If you have a website and want to show a list of events, use the following code"
     },
     "register": {
-        "description": "Social movements should organize and self-finance.<br/>\n<br/>Before you can publish, <strong> the account must be approved</strong>, consider that <strong> behind this site you will find real people, so write two lines to let us know what events you would like to publish.",
+        "description": "Social movements should organize and self-finance.<br/>\n<br/>Before you can publish, <strong> the account must be approved</strong>, consider that <strong> behind this site you will find real people</strong>, so write two lines to let us know what events you would like to publish.",
         "error": "Error: ",
         "complete": "Registration has to be confirmed.",
         "first_user": "Administrator created"

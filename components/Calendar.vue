@@ -1,17 +1,18 @@
 <template lang="pug">
   #calendar
-    vc-calendar(
+    vc-date-picker(
+      v-model='selectedDate'
       title-position='left'
       :is-dark="settings['theme.is_dark']"
       :columns="$screens({ sm: 2 }, 1)"
+      @input='click'
       @update:from-page='updatePage'
       :locale='$i18n.locale'
       :attributes='attributes'
       transition='fade'
       aria-label='Calendar'
       is-expanded
-      is-inline
-      @dayclick='click')
+      is-inline)
 
 </template>
 <script>
@@ -28,6 +29,7 @@ export default {
     const month = dayjs().month() + 1
     const year = dayjs().year()
     return {
+      selectedDate: null,
       page: { month, year }
     }
   },

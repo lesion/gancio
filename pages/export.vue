@@ -1,6 +1,6 @@
 <template lang="pug">
-  v-container
-    v-card(outlined)
+  v-container.pa-0.pa-md-3
+    v-card
       v-card-title {{$t('common.share')}}
       v-card-text
         p.text-body-1 {{$t('export.intro')}}
@@ -11,7 +11,7 @@
             Search(
               :filters='filters'
               @update='f => filters = f')
-      v-tabs(v-model='type')
+      v-tabs(v-model='type' show-arrows)
 
         //- TOFIX
         //- v-tab {{$t('common.email')}}
@@ -31,7 +31,7 @@
               p(v-html='$t(`export.feed_description`)')
               v-text-field(v-model='link' readonly)
                 v-btn(slot='prepend' text color='primary' @click='clipboard(link)') {{$t("common.copy")}}
-                  v-icon.ml-1 mdi-content-copy
+                  v-icon.ml-1(v-text='mdiContentCopy')
 
         v-tab ics/ical
         v-tab-item
@@ -40,7 +40,7 @@
               p(v-html='$t(`export.ical_description`)')
               v-text-field(v-model='link')
                 v-btn(slot='prepend' text color='primary' @click='clipboard(link)') {{$t("common.copy")}}
-                  v-icon.ml-1 mdi-content-copy
+                  v-icon.ml-1(v-text='mdiContentCopy')
 
         v-tab List
         v-tab-item
@@ -65,7 +65,7 @@
                     :sidebar="list.sidebar")
               v-alert.pa-5.my-4.blue-grey.darken-4.text-body-1.lime--text.text--lighten-3 <pre>{{code}}</pre>
                 v-btn.float-end(text color='primary' @click='clipboard(code)') {{$t("common.copy")}}
-                  v-icon.ml-1 mdi-content-copy
+                  v-icon.ml-1(v-text='mdiContentCopy')
 
         v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
         v-tab-item(v-if='settings.enable_federation')
@@ -83,14 +83,17 @@
 <script>
 import dayjs from 'dayjs'
 import { mapState } from 'vuex'
-import List from '@/components/List'
 import FollowMe from '../components/FollowMe'
 import Search from '@/components/Search'
 import clipboard from '../assets/clipboard'
+import { mdiContentCopy } from '@mdi/js'
 
 export default {
   name: 'Exports',
-  components: { List, FollowMe, Search },
+  components: {
+    FollowMe,
+    Search
+  },
   mixins: [clipboard],
   async asyncData ({ $axios, params, store, $api }) {
     const events = await $api.getEvents({
@@ -101,6 +104,7 @@ export default {
   },
   data ({ $store }) {
     return {
+      mdiContentCopy,
       type: 'rss',
       notification: { email: '' },
       list: {
@@ -115,7 +119,7 @@ export default {
   },
   head () {
     return {
-      title: `${this.settings.title} - ${this.$t('common.export')}`
+      title: `${this.settings.title} - ${this.$t('common.export')}`,
     }
   },
   computed: {

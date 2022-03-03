@@ -9,14 +9,18 @@ div#list
       v-for='event in computedEvents'
       :key='`${event.id}_${event.start_datetime}`' small)
       v-list-item-content
-        v-list-item-subtitle <v-icon small color='success' v-if='event.parentId'>mdi-repeat</v-icon> {{event|when}}
+        v-list-item-subtitle <v-icon small color='success' v-if='event.parentId' v-text='mdiRepeat'></v-icon> {{event|when}}
           span.primary--text.ml-1 @{{event.place.name}}
         v-list-item-title(v-text='event.title')
 </template>
 <script>
+import { mdiRepeat } from '@mdi/js'
 
 export default {
   name: 'List',
+  data () {
+    return { mdiRepeat }
+  },
   props: {
     title: {
       type: String,

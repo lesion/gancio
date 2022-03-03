@@ -2,21 +2,23 @@ const Event = require('../api/models/event')
 const Place = require('../api/models/place')
 const APUser = require('../api/models/ap_user')
 const Tag = require('../api/models/tag')
-
+const escape = require('lodash/escape')
 const config = require('../config')
 const log = require('../log')
 const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')
+const settingsController = require('../api/controller/settings')
 dayjs.extend(utc)
 
 module.exports = {
   get (req, res) {
     log.debug('Get actor')
     if (req.accepts('html')) { return res.redirect(301, '/') }
+    const settings = settingsController.settings
     const name = req.params.name
     if (!name) { return res.status(400).send('Bad request.') }
 
-    if (name !== req.settings.instance_name) { return res.status(404).send(`No record found for ${name}`) }
+    if (name !== settings.instance_name) { return res.status(404).send(`No record found for ${escape(name)}`) }
     const ret = {
       '@context': [
         'https://www.w3.org/ns/activitystreams',
@@ -50,7 +52,7 @@ module.exports = {
       publicKey: {
         id: `${config.baseurl}/federation/u/${name}#main-key`,
         owner: `${config.baseurl}/federation/u/${name}`,
-        publicKeyPem: req.settings.publicKey
+        publicKeyPem: settings.publicKey
       }
     }
     res.type('application/activity+json; charset=utf-8')
@@ -62,9 +64,9 @@ module.exports = {
     const page = req.query.page
     log.debug(`Retrieve ${name} followers`)
     if (!name) { return res.status(400).send('Bad request.') }
-    if (name !== req.settings.instance_name) {
+    if (name !== settings.instance_name) {
       log.warn('No record found')
-      return res.status(404).send(`No record found for ${name}`)
+      return res.status(404).send(`No record found for ${escape(name)}`)
     }
     const followers = await APUser.findAll({ where: { follower: true } })
 
@@ -95,14 +97,15 @@ module.exports = {
   async outbox (req, res) {
     const name = req.params.name
     const page = req.query.page
+    const settings = settingsController.settings
 
     if (!name) {
       log.info('[AP] Bad /outbox request')
       return res.status(400).send('Bad request.')
     }
-    if (name !== req.settings.instance_name) {
+    if (name !== settings.instance_name) {
       log.info(`No record found for ${name}`)
-      return res.status(404).send(`No record found for ${name}`)
+      return res.status(404).send(`No record found for ${escape(name)}`)
     }
 
     const events = await Event.findAll({ include: [{ model: Tag, required: false }, Place], limit: 10 })
@@ -132,7 +135,7 @@ module.exports = {
               cc: [`${config.baseurl}/federation/u/${name}/followers`],
               published: dayjs(e.createdAt).utc().format(),
               actor: `${config.baseurl}/federation/u/${name}`,
-              object: e.toAP(name, req.settings.instance_locale)
+              object: e.toAP(name, settings.instance_locale)
             }))
         }
       })

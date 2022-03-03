@@ -1,5 +1,24 @@
 All notable changes to this project will be documented in this file.
 
+### UNRELEASED
+  - add gl/galego locale
+  - fix import redirect loop
+  - fix missing close and repeat icons
+  - turn rss icon into a real link to improve a11y
+  - force seconds to 0 for each events, fixing recurring events starting date
+
+### 1.4.0 - 9 feb '22
+  - improve Cumulative Layout Shift
+  - remove filename as default media label to avoid leak metadata
+  - add endData to microdata
+  - security fix with filtering settings, avoid sharing SMTP pass with front-end
+  - fix broken SMTP
+  - remove global materialicons / vuetify css, use threeshake and @nuxt/vuetify (really improve lighthouse score)
+  - new Dockerfile using node:17.4-slim as base img (from 1.5Gb to ~800Mb)
+  - add XSS and path traversal mitigation
+  - improve a11y
+  - update deps
+
 ### 1.3.3 - 1 feb '22
   - security fix, avoid sharing smtp pass with front-end
 

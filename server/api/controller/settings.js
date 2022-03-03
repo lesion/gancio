@@ -9,6 +9,7 @@ const pkg = require('../../../package.json')
 const generateKeyPair = promisify(crypto.generateKeyPair)
 const log = require('../../log')
 const locales = require('../../../locales/index')
+const escape = require('lodash/escape')
 
 
 let defaultHostname
@@ -175,11 +176,12 @@ const settingsController = {
     await settingsController.set('smtp', smtp.smtp, req.siteId)
     const mail = require('../mail')
     try {
-      await mail._send(settingsController.settings.admin_email, 'test', null, 'en')
+      await mail._send(settingsController.settings.admin_email, 'test')
+
       return res.sendStatus(200)
     } catch (e) {
       console.error(e)
-      return res.status(400).send(String(e))
+      return res.status(400).send(escape(String(e)))
     }
   },
 
@@ -203,12 +205,6 @@ const settingsController = {
         settingsController.set('logo', baseImgPath, req.siteId)
         res.sendStatus(200)
       })
-  },
-
-  getAllRequest (req, res) {
-    console.error('dentro get all request!')
-    // get public settings and public configuration
-    res.json({ ...settingsController.getAll(req.siteId), version: pkg.version })
   }
 }
 

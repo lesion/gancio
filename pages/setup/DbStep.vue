@@ -17,12 +17,15 @@
 
     v-card-actions
       v-btn(text @click='checkDb' color='primary' :loading='loading' :disabled='loading') {{$t('common.next')}}
-        v-icon mdi-arrow-right
+        v-icon(v-text='mdiArrowRight')
 </template>
 <script>
+import { mdiArrowRight } from '@mdi/js'
+
 export default {
   data () {
     return {
+      mdiArrowRight,
       db: {
         dialect: 'sqlite',
         storage: './gancio.sqlite',

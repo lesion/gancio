@@ -4,12 +4,12 @@ import merge from 'lodash/merge'
 
 Vue.use(VueI18n)
 
-export default async ({ app, store, req }) => {
+export default async ({ app, store, res }) => {
   const messages = {}
   if (process.server) {
-    store.commit('setLocale', req.acceptedLocale)
-    if (req.user_locale) {
-      store.commit('setUserLocale', req.user_locale)
+    store.commit('setLocale', res.locals.acceptedLocale)
+    if (res.locals.user_locale) {
+      store.commit('setUserLocale', res.locals.user_locale)
     }
   }
 

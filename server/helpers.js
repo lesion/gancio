@@ -62,64 +62,65 @@ module.exports = {
     })
   },
 
+  async setUserLocale (req, res, next) {
+    // select locale based on cookie? and accept-language header
+    acceptLanguage.languages(Object.keys(locales))
+    res.locals.acceptedLocale = acceptLanguage.get(req.headers['accept-language'])
+    dayjs.locale(res.locals.acceptedLocale)
+    next()
+  },
+
   async setSite (req, res, next) {
     const hostname = req.headers.host
     // const hostname = new URL.URL(baseurl).hostname
     // res.hostname = hostname
     console.error(hostname)
     res.locals.hostname = hostname
-    req.siteId=0
+    res.locals.siteId=0
     if (config.status !== 'READY') return next()
     const Site = require('./api/models/site')
-    req.site = await Site.findOne({ where: { hostname } })
-    req.siteId = req.site && req.site.id || 0
+    res.locals.site = await Site.findOne({ where: { hostname } })
+    res.locals.siteId = res.locals.site && res.locals.site.id || 0
     next()
   },
 
-  async loadSettings (req, res, next) {
-    // TODO FIX THIS
-    req.settings = cloneDeep(settingsController.settings)
-    if (req.settings.smtp && req.settings.smtp.auth && req.settings.smtp.auth.pass) {
-      delete req.settings.smtp.auth.pass
-    }
-    delete req.settings.publicKey
-    req.settings.baseurl = config.baseurl
-    req.settings.hostname = config.hostname
-    req.settings.title = req.settings.title || config.title
-    req.settings.description = req.settings.description || config.description
-    req.settings.version = pkg.version
-
-    // select locale based on cookie and accept-language header
-    acceptLanguage.languages(Object.keys(locales))
-    req.acceptedLocale = acceptLanguage.get(req.headers['accept-language'])
-    if (config.status !== 'READY') return next()
-
+  async initSettings (req, res, next) {
     // initialize settings
-    req.settings = await settingsController.getAll(req.siteId)
+    res.locals.settings = await settingsController.getAll(res.locals.siteId)
 
-    // req.settings.baseurl = config.baseurl
-    // req.settings.hostname = config.hostname
-    // req.settings.title = req.settings.title || config.title
+    if (res.locals.settings.smtp && res.locals.settings.smtp.auth) {
+      if (res.locals.user.is_admin) {
+        delete res.locals.settings.smtp.auth.pass
+      } else {
+        delete res.locals.settings.smtp
+      }
+    }
+    delete res.locals.settings.publicKey
+    res.locals.settings.baseurl = config.baseurl
+    res.locals.settings.hostname = config.hostname
+    res.locals.settings.title = settings.title || config.title
+    res.locals.settings.description = settings.description || config.description
+    res.locals.settings.version = pkg.version
 
-    // set locale and user locale
-    req.user_locale = settingsController.user_locale[req.acceptedLocale]
-    dayjs.locale(req.acceptedLocale)
+    // set user locale
+    res.locals.user_locale = settingsController.user_locale[res.locals.acceptedLocale]
     next()
   },
 
   serveStatic () {
+    const settings = settingsController.settings
     const router = express.Router()
     // serve event's images/thumb
     router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' } ))
     router.use('/noimg.svg', express.static('./static/noimg.svg'))
     
     router.use('/logo.png', (req, res, next) => {
-      const logoPath = req.settings.logo || './static/gancio'
+      const logoPath = settings.logo || './static/gancio'
       return express.static(logoPath + '.png')(req, res, next)
     })
 
     router.use('/favicon.ico', (req, res, next) => {
-      const faviconPath = req.settings.logo || './assets/favicon'
+      const faviconPath = settings.logo || './assets/favicon'
       return express.static(faviconPath + '.ico')(req, res, next)
     })
 
@@ -133,6 +134,9 @@ module.exports = {
 
   async getImageFromURL (url) {
     log.debug(`getImageFromURL ${url}`)
+    if(!/^https?:\/\//.test(url)) {
+      throw Error('Hacking attempt?')
+    }
     const filename = crypto.randomBytes(16).toString('hex') + '.jpg'
     const finalPath = path.resolve(config.upload_path, filename)
     const thumbPath = path.resolve(config.upload_path, 'thumb', filename)
@@ -243,17 +247,13 @@ module.exports = {
   },
  
   async APRedirect (req, res, next) {
-    const accepted = req.accepts('html', 'application/json', 'application/activity+json', 'application/ld+json' )
-    if (accepted && accepted !== 'html') {
+    if (!req.accepts('html')) {
       const eventController = require('../server/api/controller/event')
-      try {
-        const event = await eventController._get(req.params.slug)
-        if (event) {
-          return res.redirect(`/federation/m/${event.id}`)
-        }
-      } catch (e) {}
+      const event = await eventController._get(req.params.slug)
+      if (event) {
+        return res.redirect(`/federation/m/${event.id}`)
+      }
     }
     next()
   }
-
 }

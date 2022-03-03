@@ -1,11 +1,11 @@
 <template lang="pug">
-  v-container.container.px-0.px-md-3
+  v-container.container.pa-0.pa-md-3
     v-card
       v-card-title
         h4 {{edit?$t('common.edit_event'):$t('common.add_event')}}
         v-spacer
         v-btn(link text color='primary' @click='openImportDialog=true')
-          <v-icon>mdi-file-import</v-icon> {{$t('common.import')}}
+          <v-icon v-text='mdiFileImport'></v-icon> {{$t('common.import')}}
       v-dialog(v-model='openImportDialog' :fullscreen='$vuetify.breakpoint.xsOnly')
         ImportDialog(@close='openImportDialog=false' @imported='eventImported')
 
@@ -23,7 +23,7 @@
                   @change='v => event.title = v'
                   :value = 'event.title'
                   :rules="[$validators.required('common.title')]"
-                  prepend-icon='mdi-format-title'
+                  :prepend-icon='mdiFormatTitle'
                   :label="$t('common.title')"
                   autofocus
                   ref='title')
@@ -49,11 +49,15 @@
               //- tags
               v-col(cols=12 md=6)
                 v-combobox(v-model='event.tags'
-                  prepend-icon="mdi-tag-multiple"
+                  :prepend-icon="mdiTagMultiple"
                   chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-                  :delimiters="[',', ' ']"
+                  :delimiters="[',', ';']"
                   :items="tags.map(t => t.tag)"
                   :label="$t('common.tags')")
+                  template(v-slot:selection="{ item, on, attrs, selected, parent}")
+                    v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+                      :input-value="selected" label small) {{item}}
+        </v-chip>
 
       v-card-actions
         v-spacer
@@ -64,16 +68,19 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import dayjs from 'dayjs'
-import Editor from '@/components/Editor'
-import List from '@/components/List'
-import ImportDialog from './ImportDialog'
-import DateInput from './DateInput'
-import WhereInput from './WhereInput'
-import MediaInput from './MediaInput'
+
+import { mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle } from '@mdi/js'
 
 export default {
   name: 'NewEvent',
-  components: { List, Editor, ImportDialog, MediaInput, WhereInput, DateInput },
+  components: {
+    List: () => import(/* webpackChunkName: "add" */'@/components/List'),
+    Editor: () => import(/* webpackChunkName: "add" */'@/components/Editor'), 
+    ImportDialog: () => import(/* webpackChunkName: "add" */'./ImportDialog.vue'),
+    MediaInput: () => import(/* webpackChunkName: "add" */'./MediaInput.vue'),
+    WhereInput: () => import(/* webpackChunkName: "add" */'./WhereInput.vue'),
+    DateInput: () => import(/* webpackChunkName: "add" */'./DateInput.vue')
+  },
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
@@ -114,6 +121,7 @@ export default {
     const month = dayjs().month() + 1
     const year = dayjs().year()
     return {
+      mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle,
       valid: false,
       openImportDialog: false,
       event: {

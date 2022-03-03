@@ -5,6 +5,7 @@ const Tag = require('../models/tag')
 const { Op, literal } = require('sequelize')
 const moment = require('dayjs')
 const ics = require('ics')
+const settingsController = require('./settings')
 
 const exportController = {
 
@@ -69,8 +70,9 @@ const exportController = {
   },
 
   feed (req, res, events) {
+    const settings = settingsController.settings
     res.type('application/rss+xml; charset=UTF-8')
-    res.render('feed/rss.pug', { events, settings: req.settings, moment })
+    res.render('feed/rss.pug', { events, settings, moment })
   },
 
   /**
@@ -79,6 +81,7 @@ const exportController = {
    * @param {*} alarms https://github.com/adamgibbons/ics#attributes (alarms)
    */
   ics (req, res, events, alarms = []) {
+    const settings = settingsController.settings
     const eventsMap = events.map(e => {
       const tmpStart = moment.unix(e.start_datetime)
       const tmpEnd = moment.unix(e.end_datetime)
@@ -89,10 +92,10 @@ const exportController = {
         // startOutputType: 'utc',
         end,
         // endOutputType: 'utc',
-        title: `[${req.settings.title}] ${e.title}`,
+        title: `[${settings.title}] ${e.title}`,
         description: e.description,
         location: `${e.place.name} - ${e.place.address}`,
-        url: `${req.settings.baseurl}/event/${e.slug || e.id}`,
+        url: `${settings.baseurl}/event/${e.slug || e.id}`,
         alarms
       }
     })

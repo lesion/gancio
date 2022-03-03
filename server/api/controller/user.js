@@ -15,7 +15,7 @@ const userController = {
     if (!user) { return res.sendStatus(200) }
 
     user.recover_code = crypto.randomBytes(16).toString('hex')
-    mail.send(user.email, 'recover', { user, config }, req.settings.locale)
+    mail.send(user.email, 'recover', { user, config }, res.locals.locale)
 
     await user.save()
     res.sendStatus(200)
@@ -44,14 +44,14 @@ const userController = {
   },
 
   async current (req, res) {
-    if (!req.user) { return res.status(400).send('Not logged') }
-    const user = await User.scope('withoutPassword').findByPk(req.user.id)
+    if (!res.locals.user) { return res.status(400).send('Not logged') }
+    const user = await User.scope('withoutPassword').findByPk(res.locals.user.id)
     res.json(user)
   },
 
   async getAll (req, res) {
-    const users = await User.scope(req.user.is_admin ? 'withRecover' : 'withoutPassword').findAll({
-      where: { siteId: req.siteId },
+    const users = await User.scope(res.locals.user.is_admin ? 'withRecover' : 'withoutPassword').findAll({
+      where: { siteId: res.locals.siteId },
       order: [['is_admin', 'DESC'], ['createdAt', 'DESC']]
     })
     res.json(users)
@@ -63,14 +63,14 @@ const userController = {
 
     if (!user) { return res.status(404).json({ success: false, message: 'User not found!' }) }
 
-    if (req.body.id !== req.user.id && !req.user.is_admin) {
+    if (req.body.id !== res.locals.user.id && !res.locals.user.is_admin) {
       return res.status(400).json({ succes: false, message: 'Not allowed' })
     }
 
     if (!req.body.password) { delete req.body.password }
 
     if (!user.is_active && req.body.is_active && user.recover_code) {
-      mail.send(user.email, 'confirm', { user, config }, req.settings.locale)
+      mail.send(user.email, 'confirm', { user, config }, res.locals.settings.locale)
     }
 
     await user.update(req.body)
@@ -101,7 +101,7 @@ const userController = {
       log.info('Register user ', req.body.email)
       const user = await User.create(req.body)
       log.info(`Sending registration email to ${user.email}`)
-      mail.send(user.email, 'register', { user, config }, req.settings.locale)
+      mail.send(user.email, 'register', { user, config }, res.locales.locale)
       mail.send(settingsController.settings.admin_email, 'admin_register', { user, config })
       res.sendStatus(200)
     } catch (e) {
@@ -116,7 +116,7 @@ const userController = {
       req.body.recover_code = crypto.randomBytes(16).toString('hex')
       req.body.siteId = req.siteId
       const user = await User.scope('withRecover').create(req.body)
-      mail.send(user.email, 'user_confirm', { user, config }, req.settings.locale)
+      mail.send(user.email, 'user_confirm', { user, config }, res.locales.locale)
       res.json(user)
     } catch (e) {
       log.error('User creation error:', e)

@@ -3,6 +3,7 @@ const Umzug = require('umzug')
 const path = require('path')
 const config = require('../../config')
 const log = require('../../log')
+const settingsController = require('../controller/settings')
 
 const db = {
   sequelize: null,
@@ -45,7 +46,8 @@ const db = {
       try {
         await db.connect()
         log.debug('Running migrations')
-        return db.runMigrations()
+        await db.runMigrations()
+        return settingsController.load()
       } catch (e) {
         log.warn(` ⚠️ Cannot connect to db, check your configuration => ${e}`)
         process.exit(1)

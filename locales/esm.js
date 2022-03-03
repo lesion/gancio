@@ -7,5 +7,6 @@ export default {
   eu: 'Euskara',
   nb: 'Norwegian Bokmål',
   fr: 'Francais',
-  de: 'Deutsch'
+  de: 'Deutsch',
+  gl: 'Galego'
 }

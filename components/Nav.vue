@@ -1,66 +1,68 @@
 <template lang="pug">
-  v-app-bar(app aria-label='Menu')
+  v-app-bar(app aria-label='Menu' height=64)
 
     //- logo, title and description
     v-list-item(:to='$route.name==="index"?"/about":"/"')
       v-list-item-avatar(tile)
-        v-img(src='/logo.png')
+        v-img(src='/logo.png' alt='home')
       v-list-item-content.d-none.d-sm-flex
         v-list-item-title
           h2 {{settings.title}}
         v-list-item-subtitle {{settings.description}}
 
     v-spacer
+    v-btn(v-if='$auth.loggedIn || settings.allow_anon_event' icon nuxt to='/add' :aria-label='$t("common.add_event")' :title='$t("common.add_event")')
+      v-icon(large color='primary' v-text='mdiPlus')
 
-    v-tooltip(bottom) {{$t('common.add_event')}}
-      template(v-slot:activator='{ on }')
-        v-btn(v-if='could_add' icon nuxt to='/add' v-on='on' :aria-label='$t("common.add_event")')
-          v-icon(large color='primary') mdi-plus
+    v-btn(icon nuxt to='/export' :title='$t("common.share")' :aria-label='$t("common.share")')
+      v-icon(v-text='mdiShareVariant')
 
-    v-tooltip(bottom) {{$t('common.share')}}
-      template(v-slot:activator='{ on }')
-        v-btn(icon nuxt to='/export' v-on='on' :aria-label='$t("common.share")')
-          v-icon mdi-share-variant
+    v-btn(v-if='!$auth.loggedIn' icon nuxt to='/login' :title='$t("common.login")' :aria-label='$t("common.login")')
+      v-icon(v-text='mdiLogin')
 
-    v-tooltip(v-if='!$auth.loggedIn' bottom) {{$t('common.login')}}
-      template(v-slot:activator='{ on }')
-        v-btn(icon nuxt to='/login' v-on='on' :aria-label='$t("common.login")')
-          v-icon mdi-login
+    client-only
+      v-menu(v-if='$auth.loggedIn' offset-y)
+        template(v-slot:activator="{ on, attrs }")
+          v-btn(icon v-bind='attrs' v-on='on' title='Menu' aria-label='Menu')
+            v-icon(v-text='mdiDotsVertical')
+        v-list
+          v-list-item(nuxt to='/settings')
+            v-list-item-icon
+              v-icon(v-text='mdiCog')
+            v-list-item-content
+              v-list-item-title {{$t('common.settings')}}
 
-    v-menu(v-else
-      offset-y bottom open-on-hover transition="slide-y-transition")
-      template(v-slot:activator="{ on, attrs }")
-        v-btn(icon v-bind='attrs' v-on='on' aria-label='Menu')
-          v-icon mdi-dots-vertical
-      v-list
-        v-list-item(nuxt to='/settings')
-          v-list-item-icon
-            v-icon mdi-cog
-          v-list-item-content
-            v-list-item-title {{$t('common.settings')}}
+          v-list-item(v-if='$auth.user.is_admin' nuxt to='/admin')
+            v-list-item-icon
+              v-icon(v-text='mdiAccount')
+            v-list-item-content
+              v-list-item-title {{$t('common.admin')}}
 
-        v-list-item(v-if='$auth.user.is_admin' nuxt to='/admin')
-          v-list-item-icon
-            v-icon mdi-account
-          v-list-item-content
-            v-list-item-title {{$t('common.admin')}}
+          v-list-item(@click='logout')
+            v-list-item-icon
+              v-icon(v-text='mdiLogout')
+            v-list-item-content
+              v-list-item-title {{$t('common.logout')}}
+      template(#placeholder)
+        v-btn(v-if='$auth.loggedIn' icon aria-label='Menu' title='Menu')
+          v-icon(v-text='mdiDotsVertical')
 
-        v-list-item(@click='logout')
-          v-list-item-icon
-            v-icon mdi-logout
-          v-list-item-content
-            v-list-item-title {{$t('common.logout')}}
 
-    v-btn(icon @click='clipboard(feedLink, "common.feed_url_copied")' aria-label='RSS')
-      v-icon(color='orange') mdi-rss
+    v-btn(icon target='_blank' :href='feedLink' title='RSS' aria-label='RSS')
+      v-icon(color='orange' v-text='mdiRss')
 
 </template>
 <script>
 import { mapState } from 'vuex'
 import clipboard from '../assets/clipboard'
+import { mdiPlus, mdiShareVariant, mdiLogin, mdiDotsVertical, mdiLogout, mdiAccount, mdiCog, mdiRss } from '@mdi/js'
+
 
 export default {
   name: 'Nav',
+  data () {
+    return { mdiPlus, mdiShareVariant, mdiLogout, mdiLogin, mdiDotsVertical, mdiAccount, mdiCog, mdiRss }
+  },
   mixins: [clipboard],
   computed: {
     ...mapState(['filters', 'settings']),
@@ -80,32 +82,11 @@ export default {
 
       return `${this.settings.baseurl}/feed/rss${query}`
     },
-    could_add () {
-      return (this.$auth.loggedIn || this.settings.allow_anon_event)
-    }
   },
   methods: {
     logout () {
       this.$root.$message('common.logout_ok')
       this.$auth.logout()
-    },
-    async createTrustedInstance () {
-      let url = this.instance_url
-      if (!url.match(/^https?:\/\//)) {
-        url = `https://${url}`
-      }
-      try {
-        const instance = await this.$axios.$get(`${url}/.well-known/nodeinfo/2.0`)
-        const trusted_instance = {
-          url,
-          name: instance.metadata.nodeName,
-          description: instance.metadata.nodeDescription,
-          place: instance.metadata.placeDescription
-        }
-        this.setSetting({ key: 'trusted_instances', value: this.settings.trusted_instances.concat(trusted_instance) })
-      } catch (e) {
-        this.$root.$message(e, { color: 'error' })
-      }
     }
   }
 }

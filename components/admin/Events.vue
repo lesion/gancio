@@ -40,7 +40,7 @@ export default {
       try {
         await this.$axios.$put(`/event/confirm/${event.id}`)
         this.$emit('confirmed', event.id)
-        this.$root.$message('event.confirmed')
+        this.$root.$message('event.confirmed', { color: 'success' })
       } catch (e) {}
     },
     async remove (event) {
