@@ -82,7 +82,7 @@ const userController = {
     const n_users = await User.count()
     try {
       req.body.recover_code = crypto.randomBytes(16).toString('hex')
-      req.body.siteId = req.siteId
+      req.body.siteId = res.locals.siteId
 
       // the first registered user will be an active admin
       if (n_users === 0) {
@@ -114,7 +114,7 @@ const userController = {
     try {
       req.body.is_active = true
       req.body.recover_code = crypto.randomBytes(16).toString('hex')
-      req.body.siteId = req.siteId
+      req.body.siteId = res.locals.siteId
       const user = await User.scope('withRecover').create(req.body)
       mail.send(user.email, 'user_confirm', { user, config }, res.locales.locale)
       res.json(user)

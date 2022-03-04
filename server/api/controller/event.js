@@ -48,7 +48,7 @@ const eventController = {
   },
 
   async getMeta (req, res) {
-    res.json(await eventController._getMeta(req.siteId))
+    res.json(await eventController._getMeta(res.locals.siteId))
   },
 
   async getNotifications (event, action) {
@@ -252,7 +252,7 @@ const eventController = {
       const events = await Event.findAll({
         where: {
           parentId: null,
-          siteId: req.siteId,
+          siteId: res.locals.siteId,
           is_visible: false,
           start_datetime: { [Op.gt]: dayjs().unix() }
         },
@@ -316,7 +316,7 @@ const eventController = {
         start_datetime: body.start_datetime,
         end_datetime: body.end_datetime,
         recurrent,
-        siteId: req.siteId,
+        siteId: res.locals.siteId,
         // publish this event only if authenticated
         is_visible: !!res.locals.user
       }
@@ -343,10 +343,10 @@ const eventController = {
       const event = await Event.create(eventDetails)
 
       const [place] = await Place.findOrCreate({
-        where: { name: body.place_name, siteId: req.siteId },
+        where: { name: body.place_name, siteId: res.locals.siteId },
         defaults: {
           address: body.place_address,
-          siteId: req.siteId
+          siteId: res.locals.siteId
         }
       })
 
@@ -405,7 +405,7 @@ const eventController = {
         description: helpers.sanitizeHTML(linkifyHtml(body.description, { target: '_blank' })),
         multidate: body.multidate,
         start_datetime: body.start_datetime,
-        siteId: req.siteId,
+        siteId: res.locals.siteId,
         end_datetime: body.end_datetime,
         recurrent
       }
@@ -584,7 +584,7 @@ const eventController = {
       typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settingsController.settings.recurrent_event_visible
 
     res.json(await eventController._select({
-      siteId: req.siteId, start, end, places, tags, show_recurrent, max
+      siteId: res.locals.siteId, start, end, places, tags, show_recurrent, max
     }))
   },
 

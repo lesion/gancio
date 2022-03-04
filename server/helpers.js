@@ -72,9 +72,6 @@ module.exports = {
 
   async setSite (req, res, next) {
     const hostname = req.headers.host
-    // const hostname = new URL.URL(baseurl).hostname
-    // res.hostname = hostname
-    console.error(hostname)
     res.locals.hostname = hostname
     res.locals.siteId=0
     if (config.status !== 'READY') return next()
@@ -98,8 +95,8 @@ module.exports = {
     delete res.locals.settings.publicKey
     res.locals.settings.baseurl = config.baseurl
     res.locals.settings.hostname = config.hostname
-    res.locals.settings.title = settings.title || config.title
-    res.locals.settings.description = settings.description || config.description
+    res.locals.settings.title = res.locals.settings.title || config.title
+    res.locals.settings.description = res.locals.settings.description || config.description
     res.locals.settings.version = pkg.version
 
     // set user locale

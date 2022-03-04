@@ -167,13 +167,13 @@ const settingsController = {
 
   async setRequest (req, res) {
     const { key, value, is_secret } = req.body
-    const ret = await settingsController.set(key, value, req.siteId, is_secret)
+    const ret = await settingsController.set(key, value, res.locals.siteId, is_secret)
     if (ret) { res.sendStatus(200) } else { res.sendStatus(400) }
   },
 
   async testSMTP (req, res) {
     const smtp = req.body
-    await settingsController.set('smtp', smtp.smtp, req.siteId)
+    await settingsController.set('smtp', smtp.smtp, res.locals.siteId)
     const mail = require('../mail')
     try {
       await mail._send(settingsController.settings.admin_email, 'test')
@@ -187,11 +187,11 @@ const settingsController = {
 
   setLogo (req, res) {
     if (!req.file) {
-      settingsController.set('logo', false, req.siteId)
+      settingsController.set('logo', false, res.locals.siteId)
       return res.status(200)
     }
 
-    const uploadedPath = path.join(req.file.destination, req.file.filename)
+    const uploadedPath = path.join(req.file.destination, res.locals.file.filename)
     const baseImgPath = path.resolve(config.upload_path, 'logo')
 
     // convert and resize to png
@@ -202,7 +202,7 @@ const settingsController = {
         if (err) {
           log.error('[LOGO] ' + err)
         }
-        settingsController.set('logo', baseImgPath, req.siteId)
+        settingsController.set('logo', baseImgPath, res.locals.siteId)
         res.sendStatus(200)
       })
   }
