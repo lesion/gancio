@@ -109,7 +109,7 @@
         "list_description": "Si tens una web i vols encastar una llista d'activitats, pots fer servir el codi de sota"
     },
     "register": {
-        "description": "Els moviments socials necessitem organitzar-nos i auto-finançar-nos. <br/> Aquest és un regal per vosaltres, feu-lo servir només per usos no-comercials i òbviament per activitats antifeixistes, antisexistes, i antiracistes.\n <br/> Abans que puguis publicar, <strong> hem d'aprovar el teu compte </strong>, tingues en comtpe que <strong> darrere d'aquesta web hi ha persones </strong> de carn i ossos. Ens agradaria saber quin tipus d'activitats vols publicar, ens escrius dues línies explicant-ho?",
+        "description": "Els moviments socials necessitem organitzar-nos i auto-finançar-nos.\n<br/> Abans que puguis publicar, <strong> hem d'aprovar el teu compte </strong>, tingues en comtpe que <strong> darrere d'aquesta web hi ha persones </strong> de carn i ossos, així que escriviu dues línies per fer-nos saber quins esdeveniments voleu publicar.",
         "error": "Error: ",
         "complete": "El registre ha de ser confirmat.",
         "first_user": "S'ha creat i activat un compte administrador"
@@ -225,7 +225,8 @@
         "smtp_test_success": "S'ha enviat un correu de prova a {admin_email}, comprova que hagi arribat bé",
         "smtp_hostname": "Amfitrió SMTP (hostname)",
         "smtp_description": "<ul><li>L'admin hauria de rebre un correu cada cop que es pengi alguna una activitat anònima (si estan activades).</li><li>L'admin hauria de rebre un correu per cada soŀlicitud de registre (si estan actives).</li><li>La usuària hauria de rebre un correu després de soŀlicitar registrar-se.</li><li>La usuària hauria de rebre un correu quan se li hagi confirmat el registre.</li><li>La usuària hauria de rebre un correu si l'admin la registra directament.</li><li>La usuària hauria de rebre un correu de restabliment de contrasenya si ho demana</li></ul>",
-        "smtp_test_button": "Envia un correu de prova"
+        "smtp_test_button": "Envia un correu de prova",
+        "widget": "Giny"
     },
     "auth": {
         "not_confirmed": "Encara no s'ha confirmat…",
