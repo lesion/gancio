@@ -7,6 +7,16 @@ nav_order: 10
 
 
 All notable changes to this project will be documented in this file.
+### 1.4.1 - 4 mar '22
+  - add gl/galego locale, thanks @xosem
+  - fix import redirect loop
+  - add missing icons (close, repeat, arrows ...)
+  - turn rss icon into a real link to improve a11y
+  - force seconds to 0 for each events, fix recurring events starting date issue
+  - fix next/prev selection on same datetime events
+  - improve moderation UI (add author and event link + format creation date)
+  - refactoring resource UI from fedi
+
 ### 1.4.0 - 9 feb '22
   - improve Cumulative Layout Shift
   - remove filename as default media label to avoid leak metadata
