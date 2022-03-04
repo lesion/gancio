@@ -76,7 +76,7 @@ module.exports = {
     res.locals.settings = cloneDeep(settingsController.settings)
 
     if (res.locals.settings.smtp && res.locals.settings.smtp.auth) {
-      if (res.locals.user.is_admin) {
+      if (res.locals.user && res.locals.user.is_admin) {
         delete res.locals.settings.smtp.auth.pass
       } else {
         delete res.locals.settings.smtp
