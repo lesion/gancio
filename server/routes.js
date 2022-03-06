@@ -38,6 +38,7 @@ app.enable('trust proxy')
 app.use(helpers.logRequest)
 
 app.use(helpers.setSite)
+app.use(helpers.initSettings)
 app.use(helpers.setUserLocale)
 app.use(helpers.serveStatic())
 
@@ -84,7 +85,6 @@ app.use((error, req, res, next) => {
 // remaining request goes to nuxt
 // first nuxt component is ./pages/index.vue (with ./layouts/default.vue)
 // prefill current events, tags, places and announcements (used in every path)
-app.use(helpers.initSettings)
 app.use(async (req, res, next) => {
   // const start_datetime = getUnixTime(startOfWeek(startOfMonth(new Date())))
   // req.events = await eventController._select(start_datetime, 100)

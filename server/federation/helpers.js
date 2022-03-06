@@ -32,10 +32,10 @@ const Helpers = {
     next()
   },
 
-  async signAndSend (message, inbox) {
+  async signAndSend (message, inbox, siteId) {
     // get the URI of the actor object and append 'inbox' to it
+    const privKey = settingsController.getPrivKey(siteId)
     const inboxUrl = new url.URL(inbox)
-    const privkey = settingsController.secretSettings.privateKey
     const signer = crypto.createSign('sha256')
     const d = new Date()
     // digest header added for Mastodon 3.2.1 compatibility
@@ -67,7 +67,7 @@ const Helpers = {
     }
   },
 
-  async sendEvent (event, type = 'Create') {
+  async sendEvent (event, type = 'Create', siteId) {
     if (!settingsController.settings.enable_federation) {
       log.info('event not send, federation disabled')
       return
@@ -100,7 +100,7 @@ const Helpers = {
           Hashtag: 'as:Hashtag',
           focalPoint: { '@container': '@list', '@id': 'toot:focalPoint' }
         }]
-      await Helpers.signAndSend(JSON.stringify(body), sharedInbox)
+      await Helpers.signAndSend(JSON.stringify(body), sharedInbox, siteId)
     }
   },
 

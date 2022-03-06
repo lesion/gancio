@@ -8,7 +8,7 @@ export default async function () {
     const timezone = require('dayjs/plugin/timezone')
     dayjs.extend(timezone)
     await settingsController.load()
-    dayjs.tz.setDefault(settingsController.settings.instance_timezone)
+    // dayjs.tz.setDefault(settingsController.settings.instance_timezone)
 
     let TaskManager
     if (config.status === 'READY') {

@@ -105,19 +105,18 @@ module.exports = {
   },
 
   serveStatic () {
-    const settings = settingsController.settings
     const router = express.Router()
     // serve event's images/thumb
     router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' } ))
     router.use('/noimg.svg', express.static('./static/noimg.svg'))
     
     router.use('/logo.png', (req, res, next) => {
-      const logoPath = settings.logo || './static/gancio'
+      const logoPath = res.locals.settings.logo || './static/gancio'
       return express.static(logoPath + '.png')(req, res, next)
     })
 
     router.use('/favicon.ico', (req, res, next) => {
-      const faviconPath = settings.logo || './assets/favicon'
+      const faviconPath = res.locals.settings.logo || './assets/favicon'
       return express.static(faviconPath + '.ico')(req, res, next)
     })
 

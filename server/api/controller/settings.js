@@ -147,6 +147,12 @@ const settingsController = {
     return Object.assign({}, defaultSettings, settings)
   },
 
+  async getPrivateKey (siteId) {
+    const Setting = require('../models/settings')
+    const privKey = await Setting.findOne({ where: { siteId, is_secret: true, key: 'privateKey' } })
+    return privKey.value
+  },
+
   async set (key, value, siteId=0, is_secret = false) {
     const Setting = require('../models/setting')
     log.info(`SET ${key} ${is_secret ? '*****' : value}`)
@@ -156,7 +162,7 @@ const settingsController = {
         defaults: { value, is_secret, siteId }
       })
       if (!created) { setting.update({ value, is_secret, siteId }) }
-      settingsController[is_secret ? 'secretSettings' : 'settings'][key] = value
+      // settingsController[is_secret ? 'secretSettings' : 'settings'][key] = value
       return true
     } catch (e) {
       console.error(e)

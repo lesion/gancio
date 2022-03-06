@@ -2,16 +2,16 @@ const config = require('../config')
 const Helpers = require('./helpers')
 const crypto = require('crypto')
 const log = require('../log')
-const settingsController = require('../api/controller/settings')
 
 module.exports = {
   // follow request from fediverse
   async follow (req, res) {
     const body = req.body
+    const settings = res.locals.settings
     if (typeof body.object !== 'string') { return }
     const username = body.object.replace(`${config.baseurl}/federation/u/`, '')
-    if (username !== settingsController.settings.instance_name) {
-      log.warn(`Following the wrong user: ${username} instead of ${settingsController.settings.instance_name} (could be a wrong config.baseurl)`)
+    if (username !== settings.instance_name) {
+      log.warn(`Following the wrong user: ${username} instead of ${settings.instance_name} (could be a wrong config.baseurl)`)
       return res.status(404).send('User not found')
     }
 
@@ -29,16 +29,17 @@ module.exports = {
       actor: `${config.baseurl}/federation/u/${username}`,
       object: body
     }
-    Helpers.signAndSend(JSON.stringify(message), res.locals.fedi_user.object.inbox)
+    Helpers.signAndSend(JSON.stringify(message), res.locals.fedi_user.object.inbox, res.locals.siteId)
     res.sendStatus(200)
   },
 
   // unfollow request from fediverse
   async unfollow (req, res) {
+    const settings = res.locals.settings
     const body = req.body
     const username = body.object.object.replace(`${config.baseurl}/federation/u/`, '')
-    if (username !== settingsController.settings.instance_name) {
-      log.warn(`Unfollowing wrong user: ${username} instead of ${settingsController.settings.instance_name}`)
+    if (username !== settings.instance_name) {
+      log.warn(`Unfollowing wrong user: ${username} instead of ${settings.instance_name}`)
       return res.status(404).send('User not found')
     }
 
