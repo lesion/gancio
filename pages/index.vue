@@ -15,7 +15,7 @@
 
       .col.pt-0.pt-md-2
         Search(:filters='filters' @update='updateFilters')
-        v-chip(v-if='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange({ date: selectedDay})') {{selectedDay}}
+        v-chip(v-if='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange()') {{selectedDay}}
 
     //- Events
     #events.mb-2.mt-1.pl-1.pl-sm-2
