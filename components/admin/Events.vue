@@ -5,6 +5,7 @@
     v-card-text
       v-data-table(
         :hide-default-footer='unconfirmedEvents.length<10'
+        :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
         :items='unconfirmedEvents'
         :headers='headers')
         template(v-slot:item.actions='{ item }')
@@ -16,6 +17,7 @@
 
 </template>
 <script>
+import { mdiChevronLeft, mdiChevronRight } from '@mdi/js'
 
 export default {
   props: {
@@ -23,6 +25,7 @@ export default {
   },
   data () {
     return {
+      mdiChevronLeft, mdiChevronRight,
       valid: false,
       dialog: false,
       editing: false,

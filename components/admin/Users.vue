@@ -32,6 +32,7 @@
         :headers='headers'
         :items='users'
         :hide-default-footer='users.length<5'
+        :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
         :search='search')
         template(v-slot:item.is_active='{item}')
           v-icon(v-if='item.is_active' color='success' v-text='mdiCheck')
@@ -49,7 +50,7 @@
 <script>
 import { mapState } from 'vuex'
 import get from 'lodash/get'
-import { mdiClose, mdiMagnify, mdiCheck, mdiPlus, mdiInformation } from '@mdi/js'
+import { mdiClose, mdiMagnify, mdiCheck, mdiPlus, mdiInformation, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
 
 export default {
   name: 'Users',
@@ -58,7 +59,7 @@ export default {
   },
   data () {
     return {
-      mdiClose, mdiMagnify, mdiCheck, mdiPlus, mdiInformation,
+      mdiClose, mdiMagnify, mdiCheck, mdiPlus, mdiInformation, mdiChevronLeft, mdiChevronRight,
       newUserDialog: false,
       valid: false,
       new_user: {
