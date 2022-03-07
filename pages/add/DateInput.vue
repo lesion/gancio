@@ -78,7 +78,7 @@ export default {
     todayEvents () {
       const start = dayjs(this.value.from).startOf('day').unix()
       const end = dayjs(this.value.from).endOf('day').unix()
-      const events = this.events.filter(e => (this.event.id && e.id !== this.event.id) && e.start_datetime >= start && e.start_datetime <= end)
+      const events = this.events.filter(e => e.start_datetime >= start && e.start_datetime <= end)
       return events
     },
     attributes () {
@@ -161,8 +161,10 @@ export default {
       this.type = 'normal'
     }
     this.events = await this.$api.getEvents({
-      start: dayjs().unix()
+      start: dayjs().unix(),
+      show_recurrent: true
     })
+    this.events = this.events.filter(e => e.id !== this.event.id)
   },
   methods: {
     updateRecurrent (value) {
