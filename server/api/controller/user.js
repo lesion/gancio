@@ -99,7 +99,7 @@ const userController = {
       log.info('Register user ', req.body.email)
       const user = await User.create(req.body)
       log.info(`Sending registration email to ${user.email}`)
-      mail.send(user.email, 'register', { user, config }, res.locales.locale)
+      mail.send(user.email, 'register', { user, config }, res.locals.locale)
       mail.send(settingsController.settings.admin_email, 'admin_register', { user, config })
       res.sendStatus(200)
     } catch (e) {
@@ -113,7 +113,7 @@ const userController = {
       req.body.is_active = true
       req.body.recover_code = crypto.randomBytes(16).toString('hex')
       const user = await User.scope('withRecover').create(req.body)
-      mail.send(user.email, 'user_confirm', { user, config }, res.locales.locale)
+      mail.send(user.email, 'user_confirm', { user, config }, res.locals.locale)
       res.json(user)
     } catch (e) {
       log.error('User creation error:', e)

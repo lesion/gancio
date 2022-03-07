@@ -52,7 +52,7 @@ export default {
     async testSMTP () {
       this.loading = true
       try {
-        this.setSetting({ key: 'smtp', value: this.smtp })
+        await this.setSetting({ key: 'smtp', value: this.smtp })
         await this.$axios.$post('/settings/smtp', { smtp: this.smtp })
         this.$root.$message(this.$t('admin.smtp_test_success', { admin_email: this.admin_email }), { color: 'success' })
       } catch (e) {

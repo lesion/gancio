@@ -1,7 +1,6 @@
 const Event = require('../api/models/event')
 const Resource = require('../api/models/resource')
 const APUser = require('../api/models/ap_user')
-const settingsController = require('../api/controller/settings')
 
 const log = require('../log')
 const helpers = require('../helpers')
@@ -11,7 +10,8 @@ module.exports = {
 
   // create a resource from AP Note
   async create (req, res) {
-    if (!settingsController.settings.enable_resources) {
+
+    if (!res.locals.settings.enable_resources) {
       log.info('Ignore resource as it is disabled in settings')
       return
     }
@@ -45,7 +45,7 @@ module.exports = {
 
     log.debug(`resource from ${req.body.actor} to "${event.title}"`)
 
-    body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content))
+    body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content || ''))
 
     await Resource.create({
       activitypub_id: body.object.id,

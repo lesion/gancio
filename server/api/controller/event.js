@@ -301,15 +301,17 @@ const eventController = {
       const body = req.body
       const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
 
-      if (!body.place_name) {
-        log.warn('Place is required')
-        return res.status(400).send('Place is required')
+      const required_fields = ['place_name', 'title', 'start_datetime']
+      const missing_field = required_fields.find(required_field => !body[required_field])
+      if (missing_field) {
+        log.warn(`${missing_field} is required`)
+        return res.status(400).send(`${missing_field} is required`)
       }
 
       const eventDetails = {
         title: body.title,
         // remove html tags
-        description: helpers.sanitizeHTML(linkifyHtml(body.description)),
+        description: helpers.sanitizeHTML(linkifyHtml(body.description || '')),
         multidate: body.multidate,
         start_datetime: body.start_datetime,
         end_datetime: body.end_datetime,
@@ -567,14 +569,15 @@ const eventController = {
    * Select events based on params
    */
   async select (req, res) {
+    const settings = res.locals.settings
     const start = req.query.start || dayjs().unix()
     const end = req.query.end
     const tags = req.query.tags
     const places = req.query.places
     const max = req.query.max
 
-    const show_recurrent = settingsController.settings.allow_recurrent_event &&
-      typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settingsController.settings.recurrent_event_visible
+    const show_recurrent = settings.allow_recurrent_event &&
+      typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settings.recurrent_event_visible
 
     res.json(await eventController._select({
       start, end, places, tags, show_recurrent, max
