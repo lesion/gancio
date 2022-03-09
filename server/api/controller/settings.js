@@ -110,7 +110,7 @@ const settingsController = {
 
     // load custom plugins
     const plugins_path = path.resolve(process.env.cwd || '', 'plugins')
-    if (fs.existsSync(plugins_path)) {
+    if (process.env.NODE_ENV === 'production' && fs.existsSync(plugins_path)) {
       const notifier = require('../../notifier')
       const pluginsFile = fs.readdirSync(plugins_path).filter(e => path.extname(e).toLowerCase() === '.js')
       pluginsFile.forEach( pluginFile => {
