@@ -72,7 +72,6 @@ module.exports = {
 
   async initSettings (req, res, next) {
     // initialize settings
-    const settings = settingsController.settings
     res.locals.settings = cloneDeep(settingsController.settings)
 
     if (res.locals.settings.smtp && res.locals.settings.smtp.auth) {

@@ -4,29 +4,7 @@ const cookieParser = require('cookie-parser')
 // const metricsController = require('./metrics')
 // const promBundle = require('express-prom-bundle')
 // const metricsMiddleware = promBundle({ includeMethod: true })
-
 const config = require('./config')
-
-if (config.status == 'READY') {
-  const db = require('./api/models/index')
-  db.initialize()
-} else {
-  if (process.env.GANCIO_DB_DIALECT) {
-    const setupController = require('./api/controller/setup')
-    const dbConf = {
-      dialect: process.env.GANCIO_DB_DIALECT,
-      storage: process.env.GANCIO_DB_STORAGE,
-      host: process.env.GANCIO_DB_HOST,
-      database: process.env.GANCIO_DB_DATABASE,
-      username: process.env.GANCIO_DB_USERNAME,
-      password: process.env.GANCIO_DB_PASSWORD,
-    }
-
-    setupController._setupDb(dbConf)
-      .catch(e => { process.exit(1) })
-  }
-
-}
 
 const helpers = require('./helpers')
 const log = require('./log')
