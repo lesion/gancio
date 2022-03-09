@@ -301,7 +301,7 @@ const eventController = {
       const body = req.body
       const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
 
-      const required_fields = ['place_name', 'title', 'start_datetime']
+      const required_fields = [ 'title', 'place_name', 'start_datetime']
       const missing_field = required_fields.find(required_field => !body[required_field])
       if (missing_field) {
         log.warn(`${missing_field} is required`)
