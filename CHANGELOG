@@ -1,5 +1,14 @@
 All notable changes to this project will be documented in this file.
 
+### 1.4.3 - 10 mar '22
+  - fix [#140](https://framagit.org/les/gancio/-/issues/140) - Invalid date
+  - fix [#141](https://framagit.org/les/gancio/-/issues/141) - Cannot change logo
+  - fix same day events
+  - add missing icons in admin
+  - prepare multisite settings
+  - improve initialization
+  - start unit testing API (it's never too late)
+
 ### 1.4.1 - 4 mar '22
   - add gl/galego locale, thanks @xosem
   - fix import redirect loop
