@@ -1,14 +1,13 @@
-const config = require('../server/config')
-const settingsController = require('./api/controller/settings')
-const log = require('../server/log')
-const db = require('./api/models/index')
-const dayjs = require('dayjs')
-const timezone = require('dayjs/plugin/timezone')
 
-// export default async function () {
-module.exports = async function () {
+module.exports = function () {
+  const config = require('../server/config')
+  config.load()
+  const log = require('../server/log')
+  const settingsController = require('./api/controller/settings')
+  const db = require('./api/models/index')
+  const dayjs = require('dayjs')
+  const timezone = require('dayjs/plugin/timezone')
   async function start (nuxt) {
-    config.load()
 
     if (config.status == 'READY') {
       await db.initialize()
@@ -55,10 +54,5 @@ module.exports = async function () {
     process.on('SIGINT', shutdown)
   }
 
-  if (this.nuxt) {
-    this.nuxt.hook('build:done', process.exit)
-    return start(this.nuxt)
-  } else {
-    return start()
-  }
+  return start(this.nuxt)
 }
