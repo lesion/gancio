@@ -7,6 +7,7 @@
     "build": "nuxt build --modern",
     "start:inspect": "NODE_ENV=production node --inspect node_modules/.bin/nuxt start --modern",
     "dev": "nuxt dev",
+    "test": "cd tests/seeds; jest; cd ../..",
     "start": "nuxt start --modern",
     "doc": "cd docs && bundle exec jekyll b",
     "doc:dev": "cd docs && bundle exec jekyll s --drafts",
@@ -73,6 +74,7 @@
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.3",
+    "jest": "^27.5.1",
     "less": "^4.1.1",
     "less-loader": "^7",
     "prettier": "^2.3.0",
@@ -80,6 +82,7 @@
     "pug-plain-loader": "^1.1.0",
     "sass": "^1.49.4",
     "sequelize-cli": "^6.3.0",
+    "supertest": "^6.2.2",
     "webpack": "4",
     "webpack-cli": "^4.7.2"
   },
