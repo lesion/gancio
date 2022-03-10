@@ -30,7 +30,7 @@ const Auth = {
   },
 
   isAdmin (req, res, next) {
-    if (res.locals.users && res.locals.user.is_admin) {
+    if (res.locals.user && res.locals.user.is_admin) {
       next()
     } else {
       res.sendStatus(403)
