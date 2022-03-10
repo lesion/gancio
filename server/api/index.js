@@ -101,7 +101,7 @@ if (config.status !== 'READY') {
    */
 
   // allow anyone to add an event (anon event has to be confirmed, TODO: flood protection)
-  api.post('/event', upload.single('image'), eventController.add)
+  api.post('/event', eventController.isAnonEventAllowed, upload.single('image'), eventController.add)
 
   api.put('/event', isAuth, upload.single('image'), eventController.update)
   api.get('/event/import', isAuth, helpers.importURL)

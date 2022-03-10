@@ -290,6 +290,13 @@ const eventController = {
     res.sendStatus(200)
   },
 
+  async isAnonEventAllowed (req, res, next) {
+    if (!res.locals.settings.allow_anon_event) {
+      return res.sendStatus(403)
+    }
+    next()
+  },
+
   async add (req, res) {
     // req.err comes from multer streaming error
     if (req.err) {

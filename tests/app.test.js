@@ -1,6 +1,7 @@
 const request = require('supertest')
+const fs = require('fs')
 
-const admin = { username: 'admin', password: 'SsJOn5l0JpBE', grant_type: 'password', client_id: 'self' }
+const admin = { username: 'admin', password: 'JqFuXEnkTyOR', grant_type: 'password', client_id: 'self' }
 let token
 // - event list should be empty
 // - try to write without auth
@@ -11,6 +12,7 @@ let token
 // - should login with correct authentication
 let app
 beforeAll( async () => {
+  fs.copyFileSync('./starter.sqlite', './testdb.sqlite')
   await require('../server/initialize.server.js')()
   app = require('../server/routes.js')
 })
@@ -61,17 +63,29 @@ describe('Authentication / Authorization', () => {
       .expect(403)
   })
 
-  // test('should create anon event only when allowed', async () => {
-  //   let response
-  //   response = await request(app)
-  //   .post('/api/settings') // auth._token.local
-  //   .send({ key: 'allow_anon_event', value: false })
-  //   .auth(token.access_token, { type: 'bearer' })
-  //     .expect(200)
-  //   // expect(response.statusCode).toBe(200)
-  //   // response = await request(app).post('/api/settings')
-  //   //   .send({ key: 'allow_anon_event', value: false })
-  // })
+  test('should create anon event only when allowed', async () => {
+    let response
+    response = await request(app).post('/api/settings')
+    .send({ key: 'allow_anon_event', value: false })
+    .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+    
+    response = await request(app).post('/api/event')
+      .expect(403)
+
+    response = await request(app).post('/api/settings')
+      .send({ key: 'allow_anon_event', value: true })
+      .auth(token.access_token, { type: 'bearer' })
+        .expect(200)
+  
+    response = await request(app).post('/api/event')
+      .send({ title: 'test title', place_name: 'place name', start_datetime: new Date().getTime() * 1000 })
+      .expect(200)
+        
+    // expect(response.statusCode).toBe(200)
+    // response = await request(app).post('/api/settings')
+    //   .send({ key: 'allow_anon_event', value: false })
+  })
 
 })
 
@@ -87,7 +101,7 @@ describe('Events', () => {
 
     const promises = Object.keys(required_fields).map(async field => {
       const response = await request(app).post('/api/event').send(required_fields[field])
-      expect(response.statusCode).toBe(400)
+        .expect(400)
       expect(response.text).toBe(`${field} is required`)
       return
     })
