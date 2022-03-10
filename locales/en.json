@@ -272,6 +272,7 @@
     "setup": {
         "completed": "Setup completed",
         "completed_description": "<p>You can now login with the following user:<br/><br/>User: <b>{email}</b><br/>Password: <b>{password}<b/></p>",
+        "copy_password_dialog": "Yes, you have to copy the password!",
         "start": "Start"
     }
 }
