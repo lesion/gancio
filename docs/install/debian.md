@@ -50,7 +50,7 @@ sudo adduser --group --system --shell /bin/false --home /opt/gancio gancio
 ```
 1. Install Gancio
 ```bash
-sudo yarn global add --silent {{site.url}}/latest.tgz 2> /dev/null
+sudo yarn global add --silent {{site.url}}/latest.tgz
 ```
 
 1. Setup systemd service and reload systemd
@@ -78,6 +78,6 @@ sudo systemctl start gancio
 ```bash
 yarn global remove gancio
 yarn cache clean
-yarn global add --silent {{site.url}}/latest.tgz  2> /dev/null
+yarn global add --silent {{site.url}}/latest.tgz
 sudo systemctl restart gancio
 ```
