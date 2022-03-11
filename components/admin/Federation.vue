@@ -70,6 +70,7 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
+import get from 'lodash/get'
 import axios from 'axios'
 import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
 
@@ -130,8 +131,8 @@ export default {
           key: 'trusted_instances',
           value: this.settings.trusted_instances.concat({
             url: this.instance_url,
-            name: instance.data.metadata.nodeName,
-            label: instance.data.metadata.nodeLabel
+            name: get(instance, 'data.metadata.nodeName', ''),
+            label: get(instance, 'data.metadata.nodeLabel', '')
           })
         })
         this.$refs.form.reset()
