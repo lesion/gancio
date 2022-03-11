@@ -100,7 +100,7 @@ const eventController = {
 
   async get (req, res) {
     const format = req.params.format || 'json'
-    const is_admin = req.user && req.user.is_admin
+    const is_admin = res.locals.user && res.locals.user.is_admin
     const slug = req.params.event_slug
 
     // retrocompatibility, old events URL does not use slug, use id as fallback
@@ -145,21 +145,35 @@ const eventController = {
     const next = await Event.findOne({
       attributes: ['id', 'slug'],
       where: {
+        id: { [Op.not]: event.id },
         is_visible: true,
         recurrent: null,
-        start_datetime: { [Op.gt]: event.start_datetime }
+        [Op.or]: [
+          { start_datetime: { [Op.gt]: event.start_datetime } },
+          { 
+            start_datetime: event.start_datetime,
+            id: { [Op.gt]: event.id }
+          }
+        ]
       },
-      order: [['start_datetime', 'ASC']]
+      order: [['start_datetime', 'ASC'], ['id', 'ASC']]
     })
 
     const prev = await Event.findOne({
       attributes: ['id', 'slug'],
       where: {
         is_visible: true,
+        id: { [Op.not]: event.id },
         recurrent: null,
-        start_datetime: { [Op.lt]: event.start_datetime }
+        [Op.or]: [
+          { start_datetime: { [Op.lt]: event.start_datetime } },
+          { 
+            start_datetime: event.start_datetime,
+            id: { [Op.lt]: event.id }
+          }
+        ]
       },
-      order: [['start_datetime', 'DESC']]
+      order: [['start_datetime', 'DESC'], ['id', 'DESC']]
     })
 
     // TODO: also check if event is mine
@@ -192,7 +206,7 @@ const eventController = {
       log.warn(`Trying to confirm a unknown event, id: ${id}`)
       return res.sendStatus(404)
     }
-    if (!req.user.is_admin && req.user.id !== event.userId) {
+    if (!res.locals.user.is_admin && res.locals.user.id !== event.userId) {
       log.warn(`Someone unallowed is trying to confirm -> "${event.title} `)
       return res.sendStatus(403)
     }
@@ -218,7 +232,7 @@ const eventController = {
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
     if (!event) { return req.sendStatus(404) }
-    if (!req.user.is_admin && req.user.id !== event.userId) {
+    if (!res.locals.user.is_admin && res.locals.user.id !== event.userId) {
       return res.sendStatus(403)
     }
 
@@ -276,6 +290,13 @@ const eventController = {
     res.sendStatus(200)
   },
 
+  async isAnonEventAllowed (req, res, next) {
+    if (!res.locals.settings.allow_anon_event) {
+      return res.sendStatus(403)
+    }
+    next()
+  },
+
   async add (req, res) {
     // req.err comes from multer streaming error
     if (req.err) {
@@ -287,21 +308,23 @@ const eventController = {
       const body = req.body
       const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
 
-      if (!body.place_name) {
-        log.warn('Place is required')
-        return res.status(400).send('Place is required')
+      const required_fields = [ 'title', 'place_name', 'start_datetime']
+      const missing_field = required_fields.find(required_field => !body[required_field])
+      if (missing_field) {
+        log.warn(`${missing_field} is required`)
+        return res.status(400).send(`${missing_field} is required`)
       }
 
       const eventDetails = {
         title: body.title,
         // remove html tags
-        description: helpers.sanitizeHTML(linkifyHtml(body.description)),
+        description: helpers.sanitizeHTML(linkifyHtml(body.description || '')),
         multidate: body.multidate,
         start_datetime: body.start_datetime,
         end_datetime: body.end_datetime,
         recurrent,
         // publish this event only if authenticated
-        is_visible: !!req.user
+        is_visible: !!res.locals.user
       }
 
       if (req.file || body.image_url) {
@@ -344,9 +367,9 @@ const eventController = {
       }
 
       // associate user to event and reverse
-      if (req.user) {
-        await req.user.addEvent(event)
-        await event.setUser(req.user)
+      if (res.locals.user) {
+        await res.locals.user.addEvent(event)
+        await event.setUser(res.locals.user)
       }
 
       // return created event to the client
@@ -368,15 +391,15 @@ const eventController = {
   },
 
   async update (req, res) {
-    if (req.err) {
-      return res.status(400).json(req.err.toString())
+    if (res.locals.err) {
+      return res.status(400).json(res.locals.err.toString())
     }
 
     try {
       const body = req.body
       const event = await Event.findByPk(body.id)
       if (!event) { return res.sendStatus(404) }
-      if (!req.user.is_admin && event.userId !== req.user.id) {
+      if (!res.locals.user.is_admin && event.userId !== res.locals.user.id) {
         return res.sendStatus(403)
       }
 
@@ -456,7 +479,7 @@ const eventController = {
   async remove (req, res) {
     const event = await Event.findByPk(req.params.id)
     // check if event is mine (or user is admin)
-    if (event && (req.user.is_admin || req.user.id === event.userId)) {
+    if (event && (res.locals.user.is_admin || res.locals.user.id === event.userId)) {
       if (event.media && event.media.length && !event.recurrent) {
         const old_path = path.join(config.upload_path, event.media[0].url)
         const old_thumb_path = path.join(config.upload_path, 'thumb', event.media[0].url)
@@ -504,13 +527,19 @@ const eventController = {
       where.start_datetime = { [Op.lte]: end }
     }
 
-    if (places) {
-      where.placeId = places.split(',')
+    if (tags && places) {
+      where[Op.or] = {
+        placeId: places ? places.split(',') : [],
+        '$tags.tag$': tags.split(',')
+      }
     }
 
-    let where_tags = {}
     if (tags) {
-      where_tags = { where: { [Op.or]: { tag: tags.split(',') } } }
+      where['$tags.tag$'] = tags.split(',')
+    }
+
+    if (places) {
+      where.placeId = places.split(',')
     }
 
     const events = await Event.findAll({
@@ -526,7 +555,6 @@ const eventController = {
           order: [Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
           attributes: ['tag'],
           required: !!tags,
-          ...where_tags,
           through: { attributes: [] }
         },
         { model: Place, required: true, attributes: ['id', 'name', 'address'] }
@@ -548,13 +576,15 @@ const eventController = {
    * Select events based on params
    */
   async select (req, res) {
+    const settings = res.locals.settings
     const start = req.query.start || dayjs().unix()
     const end = req.query.end
     const tags = req.query.tags
     const places = req.query.places
     const max = req.query.max
-    const show_recurrent = settingsController.settings.allow_recurrent_event &&
-      (typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settingsController.settings.recurrent_event_visible)
+
+    const show_recurrent = settings.allow_recurrent_event &&
+      typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settings.recurrent_event_visible
 
     res.json(await eventController._select({
       start, end, places, tags, show_recurrent, max
@@ -563,9 +593,8 @@ const eventController = {
 
   /**
    * Ensure we have the next instance of a recurrent event
-   * TODO: create a future instance if the next one is skipped
    */
-  _createRecurrentOccurrence (e) {
+  async _createRecurrentOccurrence (e, startAt) {
     log.debug(`Create recurrent event [${e.id}] ${e.title}"`)
     const event = {
       parentId: e.id,
@@ -579,23 +608,20 @@ const eventController = {
 
     const recurrent = e.recurrent
     const start_date = dayjs.unix(e.start_datetime)
-    const now = dayjs()
-    let cursor = start_date > now ? start_date : now
+    let cursor = start_date > startAt ? start_date : startAt
+    startAt = cursor
     const duration = dayjs.unix(e.end_datetime).diff(start_date, 's')
     const frequency = recurrent.frequency
     const type = recurrent.type
 
-    log.info(`NOW IS ${cursor} while event is at ${start_date} (freq: ${frequency})`)
-
     cursor = cursor.hour(start_date.hour()).minute(start_date.minute()).second(0)
-    log.info(`set cursor to correct date and hour => ${cursor}`)
 
     if (!frequency) { return }
 
     // each week or 2
     if (frequency[1] === 'w') {
       cursor = cursor.day(start_date.day())
-      if (cursor.isBefore(dayjs())) {
+      if (cursor.isBefore(startAt)) {
         cursor = cursor.add(7, 'day')
       }
       if (frequency[0] === '2') {
@@ -605,24 +631,24 @@ const eventController = {
       if (type === 'ordinal') {
         cursor = cursor.date(start_date.date())
 
-        if (cursor.isBefore(dayjs())) {
+        if (cursor.isBefore(startAt)) {
           cursor = cursor.add(1, 'month')
         }
       } else { // weekday
         // get weekday
-        log.info(type)
         // get recurrent freq details
         cursor = helpers.getWeekdayN(cursor, type, start_date.day())
-        if (cursor.isBefore(dayjs())) {
+        if (cursor.isBefore(startAt)) {
           cursor = cursor.add(4, 'week')
           cursor = helpers.getWeekdayN(cursor, type, start_date.day())
         }
       }
     }
-    log.info(cursor)
+    log.debug(cursor)
     event.start_datetime = cursor.unix()
     event.end_datetime = event.start_datetime + duration
-    Event.create(event)
+    const newEvent = await Event.create(event)
+    return newEvent.addTags(e.tags)
   },
 
   /**
@@ -632,13 +658,19 @@ const eventController = {
     // select recurrent events and its childs
     const events = await Event.findAll({
       where: { is_visible: true, recurrent: { [Op.ne]: null } },
-      include: [{ model: Event, as: 'child', required: false, where: { start_datetime: { [Op.gte]: start_datetime } } }],
-      order: ['start_datetime']
+      include: [{ model: Tag, required: false },
+        { model: Event, as: 'child', required: false, where: { start_datetime: { [Op.gte]: start_datetime } }}],
+      order: [['child', 'start_datetime', 'DESC']]
     })
-    // filter events that as no instance in future yet
-    const creations = events
-      .filter(e => e.child.length === 0)
-      .map(eventController._createRecurrentOccurrence)
+
+    // create a new occurrence for each recurring events but the one's that has an already visible occurrence coming
+    const creations = events.map(e => {
+      if (e.child.length) {
+        if (e.child.find(c => c.is_visible)) return
+        return eventController._createRecurrentOccurrence(e, dayjs.unix(e.child[0].start_datetime+1))
+      }
+      return eventController._createRecurrentOccurrence(e, dayjs())
+    })
 
     return Promise.all(creations)
   }

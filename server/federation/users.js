@@ -2,21 +2,23 @@ const Event = require('../api/models/event')
 const Place = require('../api/models/place')
 const APUser = require('../api/models/ap_user')
 const Tag = require('../api/models/tag')
-
+const escape = require('lodash/escape')
 const config = require('../config')
 const log = require('../log')
 const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')
+const settingsController = require('../api/controller/settings')
 dayjs.extend(utc)
 
 module.exports = {
   get (req, res) {
     log.debug('Get actor')
     if (req.accepts('html')) { return res.redirect(301, '/') }
+    const settings = settingsController.settings
     const name = req.params.name
     if (!name) { return res.status(400).send('Bad request.') }
 
-    if (name !== req.settings.instance_name) { return res.status(404).send(`No record found for ${name}`) }
+    if (name !== settings.instance_name) { return res.status(404).send(`No record found for ${escape(name)}`) }
     const ret = {
       '@context': [
         'https://www.w3.org/ns/activitystreams',
@@ -50,7 +52,7 @@ module.exports = {
       publicKey: {
         id: `${config.baseurl}/federation/u/${name}#main-key`,
         owner: `${config.baseurl}/federation/u/${name}`,
-        publicKeyPem: req.settings.publicKey
+        publicKeyPem: settings.publicKey
       }
     }
     res.type('application/activity+json; charset=utf-8')
@@ -58,13 +60,14 @@ module.exports = {
   },
 
   async followers (req, res) {
+    const settings = settingsController.settings
     const name = req.params.name
     const page = req.query.page
     log.debug(`Retrieve ${name} followers`)
     if (!name) { return res.status(400).send('Bad request.') }
-    if (name !== req.settings.instance_name) {
+    if (name !== settings.instance_name) {
       log.warn('No record found')
-      return res.status(404).send(`No record found for ${name}`)
+      return res.status(404).send(`No record found for ${escape(name)}`)
     }
     const followers = await APUser.findAll({ where: { follower: true } })
 
@@ -74,20 +77,20 @@ module.exports = {
       log.debug('No pagination')
       return res.json({
         '@context': 'https://www.w3.org/ns/activitystreams',
-        id: `${config.baseurl}/federation/u/${name}/followers`,
+        id: `${settings.baseurl}/federation/u/${name}/followers`,
         type: 'OrderedCollection',
         totalItems: followers.length,
-        first: `${config.baseurl}/federation/u/${name}/followers?page=true`
+        first: `${settings.baseurl}/federation/u/${name}/followers?page=true`
         // last: `${config.baseurl}/federation/u/${name}/followers?page=true`,
         // orderedItems: followers.map(f => f.ap_id)
       })
     }
     return res.json({
       '@context': 'https://www.w3.org/ns/activitystreams',
-      id: `${config.baseurl}/federation/u/${name}/followers?page=${page}`,
+      id: `${settings.baseurl}/federation/u/${name}/followers?page=${page}`,
       type: 'OrderedCollectionPage',
       totalItems: followers.length,
-      partOf: `${config.baseurl}/federation/u/${name}/followers`,
+      partOf: `${settings.baseurl}/federation/u/${name}/followers`,
       orderedItems: followers.map(f => f.ap_id)
     })
   },
@@ -95,44 +98,45 @@ module.exports = {
   async outbox (req, res) {
     const name = req.params.name
     const page = req.query.page
+    const settings = settingsController.settings
 
     if (!name) {
       log.info('[AP] Bad /outbox request')
       return res.status(400).send('Bad request.')
     }
-    if (name !== req.settings.instance_name) {
+    if (name !== settings.instance_name) {
       log.info(`No record found for ${name}`)
-      return res.status(404).send(`No record found for ${name}`)
+      return res.status(404).send(`No record found for ${escape(name)}`)
     }
 
     const events = await Event.findAll({ include: [{ model: Tag, required: false }, Place], limit: 10 })
-    log.debug(`${config.baseurl} Inside ${name} outbox, should return all events from this instance: ${events.length}`)
+    log.debug(`${settings.baseurl} Inside ${name} outbox, should return all events from this instance: ${events.length}`)
 
     // https://www.w3.org/TR/activitypub/#outbox
     res.type('application/activity+json; charset=utf-8')
     if (!page) {
       return res.json({
         '@context': 'https://www.w3.org/ns/activitystreams',
-        id: `${config.baseurl}/federation/u/${name}/outbox`,
+        id: `${settings.baseurl}/federation/u/${name}/outbox`,
         type: 'OrderedCollection',
         totalItems: events.length,
         first: {
-          id: `${config.baseurl}/federation/u/${name}/outbox?page=true`,
+          id: `${settings.baseurl}/federation/u/${name}/outbox?page=true`,
           type: 'OrderedCollectionPage',
           // totalItems: events.length,
-          partOf: `${config.baseurl}/federation/u/${name}/outbox`,
-          // prev: `${config.baseurl}/federation/u/${name}/outbox`,
-          // next: page !== 'last' && `${config.baseurl}/federation/u/${name}/outbox?page=last`,
+          partOf: `${settings.baseurl}/federation/u/${name}/outbox`,
+          // prev: `${settings.baseurl}/federation/u/${name}/outbox`,
+          // next: page !== 'last' && `${settings.baseurl}/federation/u/${name}/outbox?page=last`,
           orderedItems: page === 'last'
             ? []
             : events.map(e => ({
-              id: `${config.baseurl}/federation/m/${e.id}#create`,
+              id: `${settings.baseurl}/federation/m/${e.id}#create`,
               type: 'Create',
               to: ['https://www.w3.org/ns/activitystreams#Public'],
-              cc: [`${config.baseurl}/federation/u/${name}/followers`],
+              cc: [`${settings.baseurl}/federation/u/${name}/followers`],
               published: dayjs(e.createdAt).utc().format(),
-              actor: `${config.baseurl}/federation/u/${name}`,
-              object: e.toAP(name, req.settings.instance_locale)
+              actor: `${settings.baseurl}/federation/u/${name}`,
+              object: e.toAP(name, settings.instance_locale)
             }))
         }
       })

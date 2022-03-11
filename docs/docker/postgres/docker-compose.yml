@@ -18,12 +18,17 @@ services:
   gancio:
     build: .
     restart: always
-    image: node:buster
+    image: node:17.4-slim
     container_name: gancio
     environment:
       - PATH=$PATH:/home/node/.yarn/bin
       - GANCIO_DATA=/home/node/data
       - NODE_ENV=production
+      - GANCIO_DB_DIALECT=postgres
+      - GANCIO_DB_HOST=db
+      - GANCIO_DB_DATABASE=gancio
+      - GANCIO_DB_USERNAME=gancio
+      - GANCIO_DB_PASSWORD=gancio      
     command: gancio start --docker
     entrypoint: /entrypoint.sh
     volumes:

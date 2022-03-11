@@ -1,10 +1,14 @@
 <script>
+
   import { onMount } from 'svelte'
   export let baseurl = ''
-  export let title = 'Gancio events'
+  export let title = ''
   export let maxlength = false
   export let tags = ''
   export let places = ''
+  export let theme = 'light'
+  export let show_recurrent=false
+  export let sidebar='true'
 
   let mounted = false
   let events = []
@@ -23,68 +27,161 @@
     if (places) {
       params.push(`places=${places}`)
     }
+
+    if (show_recurrent) {
+      params.push(`show_recurrent=true`)
+    }
     
     fetch(`${baseurl}/api/events?${params.join('&')}`)
     .then(res => res.json())
     .then(e => {
       events = e
     })
+    .catch(e => {
+      console.error('Error loading Gancio API -> ', e)
+    })
   }
 
-  
+
+  function position(event) {
+    if (event.media[0].focalpoint) {
+        const focalpoint = event.media[0].focalpoint
+        return `${(focalpoint[0] + 1) * 50}% ${(focalpoint[1] + 1) * 50}%`
+      }
+      return 'center center'    
+  }  
+
   function when (timestamp) {
     return new Date(timestamp*1000)
-            .toLocaleDateString(undefined,
-              {
-                weekday: 'long',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })
+      .toLocaleDateString(undefined,
+        {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
   }
-
 
   onMount(() => {
     mounted = true
     update()
   })
-  $: update(maxlength && title && places && tags)
+  $: update(maxlength && title && places && tags && theme && show_recurrent && sidebar)
 
 </script>
 <svelte:options tag="gancio-events"/>
 {#if events.length}
-<div id='gancioEvents'>
-  <a href='{baseurl}' target='_blank'>
+<div id='gancioEvents'
+  class:dark="{theme === 'dark'}" class:light="{theme === 'light'}"
+  class:sidebar="{sidebar === 'true'}" class:nosidebar="{sidebar !== 'true'}">
+  {#if title && sidebar === 'true'}
+  <a href='{baseurl}' target='_blank' id='header'>
     <div class='content'>
-      <span id='headerTitle'>{title || 'Gancio'}</span>
+      <div class='title'>{title}</div>
       <img id='logo' alt='logo' src='{baseurl}/logo.png'/>
     </div>
   </a>
+  {/if}
   {#each events as event}
-    <a href='{baseurl}/event/{event.slug || event.id}' target='_blank'>
+    <a href='{baseurl}/event/{event.slug || event.id}' class='event' title='{event.title}' target='_blank'>
+      {#if sidebar !== 'true'}
+      <div class='img'>
+        {#if event.media.length}
+          <img style="object-position: {position(event)}; aspect-ratio=1.7778;"
+            alt="{event.media[0].name}"
+            src="{baseurl + '/media/thumb/' + event.media[0].url}" loading='lazy'/>
+        {:else}
+          <img style="aspect-ratio=1.7778;"
+            alt="{event.title}"
+            src="{baseurl + '/noimg.svg'}" loading='lazy'/>
+        {/if}
+      </div>
+      {/if}
       <div class='content'>
         <div class='subtitle'>
           {when(event.start_datetime)}
-          <span class='place'>@{event.place.name}</span>
         </div>
         <div class='title'>
           {event.title}
         </div>
+        <span class='place'>@{event.place.name} <span class='subtitle'> {event.place.address}</span></span>
+        {#if event.tags.length}
+          <div class='tags'>
+          {#each event.tags as tag}
+            <span class='tag'>#{tag}</span>
+          {/each}
+          </div>
+        {/if}
       </div>
     </a>
     {/each}
 </div>
 {/if}
 <style>
-
 #gancioEvents {
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   overflow-x: hidden;
-  font-size: 1rem;
   width: 100%;
-  max-width: 500px;
   box-sizing: content-box;
+  margin: 0 auto;
+  font-size: 1rem;
+}
+
+
+.nosidebar {
+  max-width: 1200px;
+}
+
+#header{
+  padding: 1.2rem 1rem;
+  background-color: var(--bg-odd-color);
+}
+
+.sidebar {
+  max-width: 500px;
+  box-shadow: rgba(60, 64, 67, 0.4) 0px 1px 2px 0px, rgba(60, 64, 67, 0.25) 0px 1px 3px 1px;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.event .img {
+  width: 100%;
+  max-width: 450px;
+  max-height: 250px;
+  aspect-ratio: 1.7778;
+  flex: 1 0 auto;
+  /* height: 100%; */
+}
+
+@media screen and (max-width: 800px) {
+  .event {
+    flex-wrap: wrap;
+  }
+  .event .img {
+    max-width: 100%;
+  }
+}
+.event img {
+  object-fit: cover;
+  border-radius: 15px;
+  width: 100%;
+  height: 100%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.nosidebar .event {
+  margin-bottom: 2rem;
+}
+
+.nosidebar .content {
+  margin-left: 1rem;
+  margin-top: 5px;
+  text-align: left;
+}
+
+.tags {
+  margin-top: 2px;
 }
 
 #logo {
@@ -94,58 +191,85 @@
   height: 40px;
 }
 
-#headerTitle {
-  line-height: 45px;
-  font-size: 1.3rem;
-  font-weight: 600;
-}
-
 a {
   text-decoration: none;
-  color: #ccc;
+  color: var(--text-color);
   display: flex;
-  flex-direction: column;
-  flex: 1 1 100%;
   padding: 8px 20px;
   margin: 0;
   line-height: 1.275rem;
   font-weight: 400;
   font-size: .875rem;
   position: relative;
-  transition: background-color .3s cubic-bezier(.25,.8,.5,1), padding-left .3s;
+  transition: background-color .3s cubic-bezier(.25,.8,.5,1), padding .3s;
   box-sizing: content-box;
 }
 
-a:nth-child(odd) {
-  background-color: #161616;
+a:hover .title,
+a:focus .title,
+a:active .title {
+  text-decoration:underline;
 }
 
-a:nth-child(even) {
-  background-color: #222;
+.dark {
+  --bg-odd-color: #161616;
+  --bg-even-color: #222;
+  --bg-hover-color: #333;
+  --text-color: white;
+  --title-color: white;
+  --line-color: rgba(120, 120, 120, 0.2);
 }
 
-
-a:first-child {
-  border-radius: 5px 5px 0px 0px;
+.light {
+  --bg-odd-color: #f5f5f5;
+  --bg-even-color: #FAFAFA;
+  --bg-hover-color: #EEE;
+  --text-color: #222;
+  --title-color: black;
+  --line-color: rgba(220, 220, 220, 0.9);
+}
+.sidebar a {
+  background-color: var(--bg-even-color);
+  border-bottom:1px solid var(--line-color);
 }
 
-a:last-child {
-  border-radius: 0px 0px 5px 5px;
-  padding-bottom: 5px;
-}
-
-a:hover {
-  background-color: #333 !important;
-  padding-left: 23px;
+.sidebar a:hover,
+.sidebar a:focus,
+.sidebar a:active {
+  background-color: var(--bg-hover-color);
+  padding-left: 15px;
+  padding-right:25px;
 }
 
 .place {
-  font-weight: 600;
-  color: #ff6e40;
+  font-weight: 400;
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  color: orangered;
 }
 
 .title {
-  color: white;
+  color: var(--title-color);
+  font-weight: bold;
+  font-size: 1.3rem;
+  line-height: 1.1em;
+}
+
+.nosidebar .title {
+  font-size: 1.9em;
+  line-height: 1.1em;
+}
+
+.subtitle {
+  font-size: 1rem;
+  line-height: 1.1em;
+  color: var(--title-color);
+  opacity: 0.9;
+}
+
+.tag {
+  margin-right: 10px;
+  display: inline-block;
 }
 
 </style>

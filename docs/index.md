@@ -18,22 +18,22 @@ A shared agenda for local communities.
 ## Some relevant key features:
 
 - **Focus on content** not on people:
-nowhere on gancio appears the identity of who published the event, not even under a nickname, not even to administrators (except in the db). This is not an ego-friendly platform.
+nowhere on gancio does the identity of who posted an event appear, not even under a nickname, not even to administrators (except in the db). This is not an ego-friendly platform.
 
-- **Visitors first**. We do not want logged user to get more features than random visitor. We do not want users to register, except to publish events and even in this case you can publish an anonymous event.
+- **Visitors first**. We do not want logged user to get more features than random visitor. We don't want users to register, except to post events and even then you can post an anonymous event.
 
-- **Anonymous events**: optionally a visitor can create events without being registered (an administrator has to confirm them)
+- **Anonymous events**: optionally a visitor can create events without being registered (an administrator must confirm them)
 
-- **We are not interested in making hits** so we export events in many ways, via RSS feeds, via global or individual ics, incorporating lists of events or single event via iframe on other websites and via [AP]({% link federation.md %})
+- **We don't care about making hits** so we export events in many ways: via RSS feeds, via global or individual ics, allowing you to embed list of events or single event via [iframe or webcomponent]({% link embed.md %}) on other websites, via [AP]({% link federation.md %}), [microdata](https://developer.mozilla.org/en-US/docs/Web/HTML/Microdata) and [microformat](https://developer.mozilla.org/en-US/docs/Web/HTML/microformats#h-event)
 
 - Very easy UI
-- Multidays events support (festival, conferences...)
-- Recurrent events support (each monday, each two monday, each monday and friday, each two saturday, etc.)
-- Filters events for tags or places
+- Multi-day events (festival, conferences...)
+- Recurring events (each monday, each two monday, each monday and friday, each two saturday, etc.)
+- Filter events for tags or places
 - RSS and ICS export (with filters)
-- embeddable iframe ([example](https://gancio.cisti.org/embed/list?title=Upcoming events))
+- embed your events in your website with [webcomponents]({% link embed.md %}) or iframe ([example](https://gancio.cisti.org/embed/list?title=Upcoming events))
 - boost / bookmark / comment events from the fediverse!
-- Lot of configurations available (user registration open/close, enable federation, enable recurrent events)
+- Lot of configurations available (dark/light theme, user registration open/close, enable federation, enable recurring events)
 
 ### License
 

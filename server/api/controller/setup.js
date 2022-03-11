@@ -5,52 +5,61 @@ const db = require('../models/index.js')
 const config = require('../../config')
 const settingsController = require('./settings')
 const path = require('path')
+const escape = require('lodash/escape')
 
 const setupController = {
 
-    async setupDb (req, res, next) {
+    async _setupDb (dbConf) {
+
+      if (!dbConf) {
+        throw Error('Empty DB configuration')
+      }
+
+      if (dbConf.dialect === 'sqlite' && dbConf.storage) {
+        dbConf.storage = path.resolve(process.env.cwd || '', dbConf.storage)
+      } else {
+        dbConf.storage = ''
+      }
+
+      // try to connect
+      dbConf.logging = false
+      await db.connect(dbConf)
+
+      // is empty ?
+      const isEmpty = await db.isEmpty()
+      if (!isEmpty) {
+        log.warn(' ⚠  Non empty db! Please move your current db elsewhere than retry.')
+        throw Error(' ⚠  Non empty db! Please move your current db elsewhere than retry.')
+      }
+
+      await db.runMigrations()
+
+      config.db = dbConf
+      config.status = 'DBCONF'
+      config.db.logging = false
+
+    },
+
+    async setupDb (req, res) {
       log.debug('[SETUP] Check db')
       const dbConf = req.body.db
-      if (!dbConf) {
-        return res.sendStatus(400)
-      }
-
-      if (dbConf.storage) {
-        dbConf.storage = path.resolve(process.env.cwd || '', dbConf.storage)
-      }
 
       try {
-        // try to connect
-        dbConf.logging = false
-        await db.connect(dbConf)
-
-        // is empty ?
-        const isEmpty = await db.isEmpty()
-        if (!isEmpty) {
-          log.warn(' ⚠  Non empty db! Please move your current db elsewhere than retry.')
-          return res.status(400).send(' ⚠  Non empty db! Please move your current db elsewhere than retry.')
-        }
-
-        await db.runMigrations()
-
-        config.db = dbConf
-        config.firstrun = false
-        config.db.logging = false
-        config.baseurl = req.protocol + '://' + req.headers.host
-        config.hostname = new URL.URL(config.baseurl).hostname
-
-        const settingsController = require('./settings')
-        await settingsController.load()
-        return res.sendStatus(200)
+        await setupController._setupDb(dbConf)
       } catch (e) {
         return res.status(400).send(String(e))
       }
+
+      return res.sendStatus(200)
     },
 
     async restart (req, res) {
 
       try {
 
+        config.baseurl = req.protocol + '://' + req.headers.host
+        config.hostname = new URL.URL(config.baseurl).hostname
+  
         // write configuration
         config.write()
 
@@ -72,12 +81,13 @@ const setupController = {
         log.info('Restart needed')
         
         res.end()
+
         // exit process so pm2 || docker could restart me || service
-        process.kill(process.pid)
+        setTimeout(() => process.kill(process.pid), 1000)
 
       } catch (e) {
         log.error(String(e))
-        return res.status(400).send(String(e))
+        return res.status(400).send(escape(String(e)))
       }
     }
 

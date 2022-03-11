@@ -136,7 +136,7 @@
         "saved": "Événement enregistré"
     },
     "register": {
-        "description": "Les mouvements sociaux doivent s'organiser et s'autofinancer.<br/>\n<br/>Avant de pouvoir publier, <strong> le compte doit être approuvé</strong>, considérez que <strong> derrière ce site vous trouverez de vraies personnes, à qui vous pouvez écrire en deux lignes pour exprimer les évènements que vous souhaiteriez publier.",
+        "description": "Les mouvements sociaux doivent s'organiser et s'autofinancer.<br/>\n<br/>Avant de pouvoir publier, <strong> le compte doit être approuvé</strong>, considérez que <strong> derrière ce site vous trouverez de vraies personnes</strong>, à qui vous pouvez écrire en deux lignes pour exprimer les évènements que vous souhaiteriez publier.",
         "first_user": "Administrateur créé",
         "complete": "L'inscription doit être confirmée.",
         "error": "Erreur : "
@@ -213,7 +213,8 @@
         "smtp_description": "<ul><li>L'administrateur reçoit un e-mail lorsqu'un événement anonyme est ajouté (si activé).</li><li>L'administrateur reçoit un e-mail pour chaque demande d'inscription (si activé).</li><li>L'utilisateur reçoit un e-mail suite à sa demande d'inscription.</li><li>L'utilisateur reçoit un e-mail lorsque son inscription est confirmée.</li><li>L'utilisateur reçoit un e-mail de confirmation s'il est inscrit directement par l'administrateur.</li><li>Les utilisateurs reçoivent un e-mail pour restaurer leur mot de passe s'ils l'oublient.</li></ul>",
         "show_smtp_setup": "Paramètres d'e-mail",
         "smtp_test_success": "Un e-mail de test a été envoyé à {admin_email}, veuillez vérifier votre boîte de réception",
-        "admin_email": "E-mail de l'administrateur"
+        "admin_email": "E-mail de l'administrateur",
+        "widget": "Vignette active"
     },
     "oauth": {
         "scopes": {

@@ -3,6 +3,7 @@ const Umzug = require('umzug')
 const path = require('path')
 const config = require('../../config')
 const log = require('../../log')
+const settingsController = require('../controller/settings')
 
 const db = {
   sequelize: null,
@@ -13,6 +14,7 @@ const db = {
   },
   connect (dbConf = config.db) {
     log.debug(`Connecting to DB: ${JSON.stringify(dbConf)}`)
+    dbConf.dialectOptions = { autoJsonMap: false }
     db.sequelize = new Sequelize(dbConf)
     return db.sequelize.authenticate()
   },
@@ -21,7 +23,7 @@ const db = {
     return !(users && users.length)
   },
   async runMigrations () {
-    const logging = config.firstrun ? false : log.debug.bind(log)
+    const logging = config.status !== 'READY' ? false : log.debug.bind(log)
     const umzug = new Umzug({
       storage: 'sequelize',
       storageOptions: { sequelize: db.sequelize },
@@ -40,11 +42,12 @@ const db = {
     return await umzug.up()    
   },
   async initialize () {
-    if (!config.firstrun) {
+    if (config.status === 'READY') {
       try {
         await db.connect()
         log.debug('Running migrations')
-        return db.runMigrations()
+        await db.runMigrations()
+        return settingsController.load()
       } catch (e) {
         log.warn(` ⚠️ Cannot connect to db, check your configuration => ${e}`)
         process.exit(1)

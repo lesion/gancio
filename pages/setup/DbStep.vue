@@ -6,25 +6,30 @@
         v-btn-toggle(text color='primary' v-model='db.dialect')
           v-btn(value='sqlite' text) sqlite
           v-btn(value='postgres' text) postgres
+          v-btn(value='mariadb' text) mariadb
         template(v-if='db.dialect === "sqlite"')
           v-text-field(v-model='db.storage' label='Path')
-        template(v-if='db.dialect === "postgres"')
-          v-text-field(v-model='db.hostname' label='Hostname' :rules="[$validators.required('hostname')]")
+        template(v-if='db.dialect !== "sqlite"')
+          v-text-field(v-model='db.host' label='Hostname' :rules="[$validators.required('hostname')]")
           v-text-field(v-model='db.database' label='Database' :rules="[$validators.required('database')]")
           v-text-field(v-model='db.username' label='Username' :rules="[$validators.required('username')]")
           v-text-field(type='password' v-model='db.password' label='Password' :rules="[$validators.required('password')]")  
 
     v-card-actions
       v-btn(text @click='checkDb' color='primary' :loading='loading' :disabled='loading') {{$t('common.next')}}
-        v-icon mdi-arrow-right
+        v-icon(v-text='mdiArrowRight')
 </template>
 <script>
+import { mdiArrowRight } from '@mdi/js'
+
 export default {
   data () {
     return {
+      mdiArrowRight,
       db: {
+        dialect: 'sqlite',
         storage: './gancio.sqlite',
-        hostname: 'localhost',
+        host: 'localhost',
         database: 'gancio'
       },
       loading: false

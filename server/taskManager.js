@@ -54,6 +54,32 @@ class TaskManager {
   }
 
   start (interval = loopInterval) {
+
+    // create and clean recurrent events
+    this.add(new Task({
+      name: 'CREATE_RECURRENT_EVENT',
+      method: eventController._createRecurrent,
+      repeatDelay: hour / 2, // check each half an hour
+      repeat: true
+    }))
+    
+    // remove unrelated places
+    this.add(new Task({
+      name: 'CLEAN_UNUSED_PLACES',
+      method: placeHelpers._cleanUnused,
+      repeatDelay: day,
+      repeat: true,
+      callAtStart: true
+    }))
+    
+    this.add(new Task({
+      name: 'CLEAN_UNUSED_TAGS',
+      method: tagHelpers._cleanUnused,
+      repeatDelay: day,
+      repeat: true,
+      callAtStart: true
+    }))
+
     log.info(`START TASK MANAGER WITH LOOP INTERVAL OF ${interval} seconds`)
     this.interval = interval
     this.timeout = setTimeout(this.tick.bind(this), interval * 1000)
@@ -92,32 +118,6 @@ class TaskManager {
   }
 }
 
-const TS = new TaskManager()
-
-// create and clean recurrent events
-TS.add(new Task({
-  name: 'CREATE_RECURRENT_EVENT',
-  method: eventController._createRecurrent,
-  repeatDelay: hour / 2, // check each half an hour
-  repeat: true
-}))
-
-// remove unrelated places
-TS.add(new Task({
-  name: 'CLEAN_UNUSED_PLACES',
-  method: placeHelpers._cleanUnused,
-  repeatDelay: day,
-  repeat: true,
-  callAtStart: true
-}))
-
-TS.add(new Task({
-  name: 'CLEAN_UNUSED_TAGS',
-  method: tagHelpers._cleanUnused,
-  repeatDelay: day,
-  repeat: true,
-  callAtStart: true
-}))
 
 // daily morning notification
 // TS.add(new Task({
@@ -146,4 +146,4 @@ TS.add(new Task({
 // TS.add(new Task({ name: 'non removable #2', method: daje, args: ['non removable #2'] }))
 // TS.add(new Task({ name: 'non removable and repeat each #2', method: daje, args: ['nn rm and rpt #5'], repeatEach: 5 }))
 
-module.exports = { Task, TaskManager: TS }
+module.exports = { Task, TaskManager: new TaskManager() }

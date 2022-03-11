@@ -1,20 +1,39 @@
 
-export default async function () {
+module.exports = function () {
+  const config = require('../server/config')
+  config.load()
+  const log = require('../server/log')
+  const settingsController = require('./api/controller/settings')
   const db = require('./api/models/index')
-  await db.initialize()
+  const dayjs = require('dayjs')
+  const timezone = require('dayjs/plugin/timezone')
   async function start (nuxt) {
 
-    const log = require('../server/log')
-    const config = require('../server/config')
-    const settingsController = require('./api/controller/settings')
-    const dayjs = require('dayjs')
-    const timezone = require('dayjs/plugin/timezone')
+    if (config.status == 'READY') {
+      await db.initialize()
+    } else {
+      if (process.env.GANCIO_DB_DIALECT) {
+        const setupController = require('./api/controller/setup')
+        const dbConf = {
+          dialect: process.env.GANCIO_DB_DIALECT,
+          storage: process.env.GANCIO_DB_STORAGE,
+          host: process.env.GANCIO_DB_HOST,
+          database: process.env.GANCIO_DB_DATABASE,
+          username: process.env.GANCIO_DB_USERNAME,
+          password: process.env.GANCIO_DB_PASSWORD,
+        }
+    
+        setupController._setupDb(dbConf)
+          .catch(e => { process.exit(1) })
+      }
+      await settingsController.load()
+    }
+
     dayjs.extend(timezone)
-    await settingsController.load()
     dayjs.tz.setDefault(settingsController.settings.instance_timezone)
 
     let TaskManager
-    if (!config.firstrun) {
+    if (config.status === 'READY' && process.env.NODE_ENV == 'production') {
       TaskManager = require('../server/taskManager').TaskManager
       TaskManager.start()
     }
@@ -34,5 +53,6 @@ export default async function () {
     process.on('SIGTERM', shutdown)
     process.on('SIGINT', shutdown)
   }
-  this.nuxt.hook('listen', start)
+
+  return start(this.nuxt)
 }

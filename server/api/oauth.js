@@ -12,11 +12,11 @@ const oauthServer = new OAuthServer({
   debug: true,
   requireClientAuthentication: { password: false },
   authenticateHandler: {
-    handle (req) {
-      if (!req.user) {
+    handle (req, res) {
+      if (!res.locals.user) {
         throw new Error('Not authenticated!')
       }
-      return req.user
+      return res.locals.user
     }
   }
 })
@@ -34,7 +34,7 @@ oauth.use((req, res) => res.sendStatus(404))
 
 oauth.use((err, req, res, next) => {
   const error_msg = err.toString()
-  log.error('[OAUTH USE] ' + error_msg)
+  log.warn('[OAUTH USE] ' + error_msg)
   res.status(500).send(error_msg)
 })
 

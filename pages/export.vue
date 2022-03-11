@@ -1,6 +1,6 @@
 <template lang="pug">
-  v-container
-    v-card(outlined)
+  v-container.pa-0.pa-md-3
+    v-card
       v-card-title {{$t('common.share')}}
       v-card-text
         p.text-body-1 {{$t('export.intro')}}
@@ -11,7 +11,7 @@
             Search(
               :filters='filters'
               @update='f => filters = f')
-      v-tabs(v-model='type')
+      v-tabs(v-model='type' show-arrows)
 
         //- TOFIX
         //- v-tab {{$t('common.email')}}
@@ -31,7 +31,7 @@
               p(v-html='$t(`export.feed_description`)')
               v-text-field(v-model='link' readonly)
                 v-btn(slot='prepend' text color='primary' @click='clipboard(link)') {{$t("common.copy")}}
-                  v-icon.ml-1 mdi-content-copy
+                  v-icon.ml-1(v-text='mdiContentCopy')
 
         v-tab ics/ical
         v-tab-item
@@ -40,7 +40,7 @@
               p(v-html='$t(`export.ical_description`)')
               v-text-field(v-model='link')
                 v-btn(slot='prepend' text color='primary' @click='clipboard(link)') {{$t("common.copy")}}
-                  v-icon.ml-1 mdi-content-copy
+                  v-icon.ml-1(v-text='mdiContentCopy')
 
         v-tab List
         v-tab-item
@@ -49,19 +49,23 @@
               p(v-html='$t(`export.list_description`)')
 
               v-row
-                v-col.mr-2(:span='11')
+                v-col.col-12.col-lg-4
                   v-text-field(v-model='list.title' :label='$t("common.title")')
                   v-text-field(v-model='list.maxEvents' type='number' min='1' :label='$t("common.max_events")')
-                v-col.float-right(:span='12')
-                  span {{filters.places.join(',')}}
+                  v-switch(v-model='list.theme' inset true-value='dark' false-value='light' :label="$t('admin.is_dark')")
+                  v-switch(v-model='list.sidebar' inset true-value='true' false-value='false' :label="$t('admin.widget')")
+                v-col.col-12.col-lg-8
                   gancio-events(:baseurl='settings.baseurl'
                     :maxlength='list.maxEvents &&  Number(list.maxEvents)'
                     :title='list.title'
+                    :theme='list.theme'
                     :places='filters.places.join(",")'
-                    :tags='filters.tags.join(",")')
+                    :tags='filters.tags.join(",")'
+                    :show_recurrent='filters.show_recurrent'
+                    :sidebar="list.sidebar")
               v-alert.pa-5.my-4.blue-grey.darken-4.text-body-1.lime--text.text--lighten-3 <pre>{{code}}</pre>
                 v-btn.float-end(text color='primary' @click='clipboard(code)') {{$t("common.copy")}}
-                  v-icon.ml-1 mdi-content-copy
+                  v-icon.ml-1(v-text='mdiContentCopy')
 
         v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
         v-tab-item(v-if='settings.enable_federation')
@@ -79,14 +83,17 @@
 <script>
 import dayjs from 'dayjs'
 import { mapState } from 'vuex'
-import List from '@/components/List'
 import FollowMe from '../components/FollowMe'
 import Search from '@/components/Search'
 import clipboard from '../assets/clipboard'
+import { mdiContentCopy } from '@mdi/js'
 
 export default {
   name: 'Exports',
-  components: { List, FollowMe, Search },
+  components: {
+    FollowMe,
+    Search
+  },
   mixins: [clipboard],
   async asyncData ({ $axios, params, store, $api }) {
     const events = await $api.getEvents({
@@ -95,18 +102,24 @@ export default {
     })
     return { events }
   },
-  data () {
+  data ({ $store }) {
     return {
+      mdiContentCopy,
       type: 'rss',
       notification: { email: '' },
-      list: { title: 'Gancio', maxEvents: null },
+      list: {
+        title: $store.state.settings.title,
+        maxEvents: null,
+        theme: $store.state.settings['theme.is_dark'] ? 'dark' : 'light',
+        sidebar: 'true'
+      },
       filters: { tags: [], places: [], show_recurrent: false },
       events: []
     }
   },
   head () {
     return {
-      title: `${this.settings.title} - ${this.$t('common.export')}`
+      title: `${this.settings.title} - ${this.$t('common.export')}`,
     }
   },
   computed: {
@@ -114,7 +127,7 @@ export default {
     code () {
       const params = [`baseurl="${this.settings.baseurl}"`]
 
-      if (this.list.title) {
+      if (this.list.title && this.list.sidebar === 'true') {
         params.push(`title="${this.list.title}"`)
       }
 
@@ -127,23 +140,27 @@ export default {
       }
 
       if (this.filters.show_recurrent) {
-        params.push('show_recurrent')
+        params.push(`show_recurrent="${this.filters.show_recurrent}"`)
       }
 
       if (this.list.maxEvents) {
         params.push('maxlength=' + this.list.maxEvents)
       }
 
-      return `<script src="${this.settings.baseurl}\/gancio-events.es.js'><\/script>\n<gancio-events ${params.join(' ')}></gancio-events>\n\n`
+      params.push('sidebar="' + this.list.sidebar + '"')
+
+      params.push(`theme="${this.list.theme}"`)
+
+      return `<script src="${this.settings.baseurl}\/gancio-events.es.js"><\/script>\n<gancio-events ${params.join(' ')}></gancio-events>\n\n`
 
       
     },
     link () {
-      const typeMap = ['rss', 'ics', 'list']
+      const typeMap = ['rss', 'ics']
       const params = []
 
       if (this.filters.tags.length) {
-        params.push(`tags=${this.filters.tags.join(',')}`)
+        params.push(`tags=${this.filters.tags.map(encodeURIComponent).join(',')}`)
       }
 
       if (this.filters.places.length) {
@@ -154,7 +171,7 @@ export default {
         params.push('show_recurrent=true')
       }
 
-      return `${this.settings.baseurl}/feed/${typeMap[this.type]}?${params.join('&')}`
+      return `${this.settings.baseurl}/feed/${typeMap[this.type]}${params.length ? '?' : ''}${params.join('&')}`
     },
     showLink () {
       return (['rss', 'ics'].includes(this.type))

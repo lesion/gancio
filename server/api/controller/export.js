@@ -2,7 +2,7 @@ const Event = require('../models/event')
 const Place = require('../models/place')
 const Tag = require('../models/tag')
 
-const { Op } = require('sequelize')
+const { Op, literal } = require('sequelize')
 const moment = require('dayjs')
 const ics = require('ics')
 
@@ -16,10 +16,17 @@ const exportController = {
 
     const where = {}
     const yesterday = moment().subtract('1', 'day').unix()
-    let where_tags = {}
+
+
+    if (tags && places) {
+      where[Op.or] = {
+        placeId: places ? places.split(',') : [],
+        '$tags.tag$': tags.split(',')
+      }
+    }
 
     if (tags) {
-      where_tags = { where: { tag: tags.split(',') } }
+      where['$tags.tag$'] = tags.split(',')
     }
 
     if (places) {
@@ -39,7 +46,15 @@ const exportController = {
         start_datetime: { [Op.gte]: yesterday },
         ...where
       },
-      include: [{ model: Tag, required: false, ...where_tags }, { model: Place, attributes: ['name', 'id', 'address'] }]
+      include: [
+        {
+          model: Tag,
+          order: [literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
+          attributes: ['tag'],
+          required: !!tags,
+          through: { attributes: [] }
+        },
+        { model: Place, attributes: ['name', 'id', 'address'] }]
     })
 
     switch (type) {
@@ -54,8 +69,9 @@ const exportController = {
   },
 
   feed (req, res, events) {
+    const settings = res.locals.settings
     res.type('application/rss+xml; charset=UTF-8')
-    res.render('feed/rss.pug', { events, settings: req.settings, moment })
+    res.render('feed/rss.pug', { events, settings, moment })
   },
 
   /**
@@ -64,6 +80,7 @@ const exportController = {
    * @param {*} alarms https://github.com/adamgibbons/ics#attributes (alarms)
    */
   ics (req, res, events, alarms = []) {
+    const settings = res.locals.settings
     const eventsMap = events.map(e => {
       const tmpStart = moment.unix(e.start_datetime)
       const tmpEnd = moment.unix(e.end_datetime)
@@ -74,10 +91,10 @@ const exportController = {
         // startOutputType: 'utc',
         end,
         // endOutputType: 'utc',
-        title: `[${req.settings.title}] ${e.title}`,
+        title: `[${settings.title}] ${e.title}`,
         description: e.description,
         location: `${e.place.name} - ${e.place.address}`,
-        url: `${req.settings.baseurl}/event/${e.slug || e.id}`,
+        url: `${settings.baseurl}/event/${e.slug || e.id}`,
         alarms
       }
     })

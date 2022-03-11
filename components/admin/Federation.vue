@@ -56,25 +56,29 @@
               v-btn(color='error' @click='dialogAddInstance=false') {{$t('common.cancel')}}
               v-btn(color='primary' :disabled='!valid || loading' :loading='loading' @click='createTrustedInstance') {{$t('common.ok')}}
 
-        v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon>mdi-plus</v-icon> {{$t('admin.add_instance')}}
+        v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.add_instance')}}
         v-data-table(
           v-if='settings.trusted_instances.length'
           :hide-default-footer='settings.trusted_instances.length<10'
+          :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
           :headers='headers'
           :items='settings.trusted_instances')
           template(v-slot:item.actions="{item}")
             v-btn(icon @click='deleteInstance(item)' color='error')
-              v-icon mdi-delete-forever
+              v-icon(v-text='mdiDeleteForever')
 
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
+import get from 'lodash/get'
 import axios from 'axios'
+import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
 
 export default {
   name: 'Federation',
   data ({ $store, $options }) {
     return {
+      mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight,
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
       instance_place: $store.state.settings.instance_place,
@@ -127,8 +131,8 @@ export default {
           key: 'trusted_instances',
           value: this.settings.trusted_instances.concat({
             url: this.instance_url,
-            name: instance.data.metadata.nodeName,
-            label: instance.data.metadata.nodeLabel
+            name: get(instance, 'data.metadata.nodeName', ''),
+            label: get(instance, 'data.metadata.nodeLabel', '')
           })
         })
         this.$refs.form.reset()

@@ -8,7 +8,7 @@
         @change='uploadLogo'
         accept='image/*')
         template(slot='append-outer')
-          v-btn(color='warning' text @click='resetLogo') <v-icon>mdi-restore</v-icon> {{$t('common.reset')}}
+          v-btn(color='warning' text @click='resetLogo') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
           v-img(:src='`${settings.baseurl}/logo.png?${logoKey}`'
             max-width="60px" max-height="60px" contain)
 
@@ -50,8 +50,8 @@
 
     v-card-title {{$t('admin.footer_links')}}
     v-card-text
-      v-btn(color='primary' text @click='openLinkModal') <v-icon>mdi-plus</v-icon> {{$t('admin.add_link')}}
-      v-btn(color='warning' text @click='reset') <v-icon>mdi-restore</v-icon> {{$t('common.reset')}}
+      v-btn(color='primary' text @click='openLinkModal') <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.add_link')}}
+      v-btn(color='warning' text @click='reset') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
       v-card
         v-list.mt-1(two-line subheader)
           v-list-item(v-for='link in settings.footerLinks'
@@ -61,16 +61,18 @@
               v-list-item-subtitle {{link.href}}
             v-list-item-action
               v-btn(icon color='error' @click.stop='removeFooterLink(link)')
-                v-icon mdi-delete-forever
+                v-icon(v-text='mdiDeleteForever')
 
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
+import { mdiDeleteForever, mdiRestore, mdiPlus } from '@mdi/js'
 
 export default {
   name: 'Theme',
   data () {
     return {
+      mdiDeleteForever, mdiRestore, mdiPlus,
       valid: false,
       logoKey: 0,
       link: { href: '', label: '' },

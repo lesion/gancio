@@ -63,7 +63,7 @@ const oauthController = {
 
   async getClients (req, res) {
     const tokens = await OAuthToken.findAll({
-      include: [{ model: User, where: { id: req.user.id } }, { model: OAuthClient, as: 'client' }],
+      include: [{ model: User, where: { id: res.locals.user.id } }, { model: OAuthClient, as: 'client' }],
       raw: true,
       nest: true
     })

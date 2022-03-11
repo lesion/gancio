@@ -1,11 +1,77 @@
 All notable changes to this project will be documented in this file.
 
+### UNRELEASED
+  - add CLI support to manage accounts (list / modify / add accounts)
+### 1.4.3 - 10 mar '22
+  - fix [#140](https://framagit.org/les/gancio/-/issues/140) - Invalid date
+  - fix [#141](https://framagit.org/les/gancio/-/issues/141) - Cannot change logo
+  - fix same day events
+  - add missing icons in admin
+  - prepare multisite settings
+  - improve initialization
+  - start unit testing API (it's never too late)
+
+### 1.4.1 - 4 mar '22
+  - add gl/galego locale, thanks @xosem
+  - fix import redirect loop
+  - add missing icons (close, repeat, arrows ...)
+  - turn rss icon into a real link to improve a11y
+  - force seconds to 0 for each events, fix recurring events starting date issue
+  - fix next/prev selection on same datetime events
+  - improve moderation UI (add author and event link + format creation date)
+  - refactoring resource UI from fedi
+
+### 1.4.0 - 9 feb '22
+  - improve Cumulative Layout Shift
+  - remove filename as default media label to avoid leak metadata
+  - add endData to microdata
+  - security fix with filtering settings, avoid sharing SMTP pass with front-end
+  - fix broken SMTP
+  - remove global materialicons / vuetify css, use threeshake and @nuxt/vuetify (really improve lighthouse score)
+  - new Dockerfile using node:17.4-slim as base img (from 1.5Gb to ~800Mb)
+  - add XSS and path traversal mitigation
+  - improve a11y
+  - update deps
+
+### 1.3.3 - 1 feb '22
+  - security fix, avoid sharing smtp pass with front-end
+
+### 1.3.2 - 1 feb '22
+  - fix webcomponent for event without img
+
+### 1.3.1 - 1 feb '22
+  - inherits tags in recurring events [#138](https://framagit.org/les/gancio/-/issues/138)
+  - you can now skip an occurrence of a recurring event
+  - fix `show_recurrent` event in webcomponent and API
+  - add new webcomponent `sidebar` attribute and a [`fullwith` layout](https://gancio.org/usage/embed#embed-event-lists)
+
+### 1.3.0 - 26 gen '22
+  - add mariadb support
+  - add [microdata](https://developer.mozilla.org/en-US/docs/Web/HTML/Microdata) support
+  - support db setup via environment variables (used in updated `docker-compose.yml` files)
+  - improve rss feed:
+    - fix validation
+    - add enclusure media for featured image
+    - add categories
+  - fix typo in export code
+  - add theme attribute to gancio-events webcomponent (dark/light)
+  - increase thumbs quality
+  - improve logo for light theme
+  - improve [wordpress plugin](https://wordpress.org/plugins/wpgancio/)
+    - add \[gancio-event\] and \[gancio-events\] shortcode
+    - allow gancio-events / gancio-event tags in editor
+    - automatically enqueue webcomponent script
+  - tags/places filters are now inclusive not exclusive
+  - fix image undefined alternative text
+  - update documentation, dependencies, translations
+
 ### 1.2.2 - 7 dic '21
   - shiny new gancio-event\[s\] webcomponents => [docs](https://gancio.org/usage/embed)
-  - new backend plugin system
+  - new backend plugin system => [docs](https://gancio.org/dev/plugins)
   - improve media focal point selection
   - improve non-js experience (load img, use native lazy loading)
   - improve user_confirm / recover code flow
+  - permit admins to choose user password (usefull on instance without SMTP configuration)
   - fix task manager exception
   - fix db initialization when a custom setup is used, #131
   - remove vue-clipboard2 dependency due to [this](https://github.com/euvl/v-clipboard/issues/18) bug and using a [native with fallback mixin instead](./assets/clipboard.js)

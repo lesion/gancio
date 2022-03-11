@@ -10,7 +10,8 @@ module.exports = {
 
   // create a resource from AP Note
   async create (req, res) {
-    if (!req.settings.enable_resources) {
+
+    if (!res.locals.settings.enable_resources) {
       log.info('Ignore resource as it is disabled in settings')
       return
     }
@@ -44,7 +45,7 @@ module.exports = {
 
     log.debug(`resource from ${req.body.actor} to "${event.title}"`)
 
-    body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content))
+    body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content || ''))
 
     await Resource.create({
       activitypub_id: body.object.id,
@@ -67,7 +68,7 @@ module.exports = {
     }
     // check if fedi_user that requested resource removal
     // is the same that created the resource at first place
-    if (req.fedi_user.ap_id === resource.ap_user.ap_id) {
+    if (res.locals.fedi_user.ap_id === resource.ap_user.ap_id) {
       await resource.destroy()
       log.info(`Comment ${req.body.object.id} removed`)
       res.sendStatus(201)

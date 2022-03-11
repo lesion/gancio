@@ -223,7 +223,13 @@
         "delete_footer_link_confirm": "Vuoi eliminare questo collegamento?",
         "edit_place": "Modifica luogo",
         "new_announcement": "Nuovo annuncio",
-        "show_smtp_setup": "Impostazioni email"
+        "show_smtp_setup": "Impostazioni email",
+        "widget": "Widget",
+        "smtp_description": "<ul><li>L'amministratore riceve una email quando viene aggiunto un evento anonimo (se abilitati).</li><li>L'amministratore riceve le mail di richiesta di registrazione (se abilitata).</li><li>L persone ricevono una mail di conferma della registrazione richiesta.</li><li>Le persone ricevono le email della registrazione confermata.</li><li>Le persone ricevono una mail di avviso quando vengono registrate direttamente da admin.</li><li>Le persone ricevono la mail per modificare la password quando l'hanno dimenticata</li></ul>",
+        "smtp_hostname": "SMTP Hostname",
+        "smtp_test_success": "Una mail di test è stata inviata all'indirizzo {admin_email}, controlla la tua casella di posta",
+        "smtp_test_button": "Invia una mail di prova",
+        "admin_email": "E-mail dell'admin"
     },
     "auth": {
         "not_confirmed": "Non ancora confermato…",
@@ -269,6 +275,7 @@
     "setup": {
         "completed": "Setup completato",
         "completed_description": "<p>Puoi entrare con le seguenti credenziali:<br/><br/>Utente: <b>{email}</b><br/>Password: <b>{password}<b/></p>",
+        "copy_password_dialog": "Sì, devi copiare la password!",
         "start": "Inizia"
     }
 }

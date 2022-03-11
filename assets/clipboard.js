@@ -12,7 +12,7 @@ export default {
         document.execCommand('copy')
         document.body.removeChild(el)
       }
-      this.$root.$message(msg)
+      this.$root.$message(msg, { color: 'success'})
     }
   }
 }

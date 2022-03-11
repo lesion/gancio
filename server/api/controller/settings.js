@@ -9,6 +9,7 @@ const pkg = require('../../../package.json')
 const generateKeyPair = promisify(crypto.generateKeyPair)
 const log = require('../../log')
 const locales = require('../../../locales/index')
+const escape = require('lodash/escape')
 
 
 let defaultHostname
@@ -54,7 +55,7 @@ const settingsController = {
   secretSettings: {},
 
   async load () {
-    if (config.firstrun) {
+    if (config.status !== 'READY') {
       settingsController.settings = defaultSettings
       return
     }
@@ -109,7 +110,7 @@ const settingsController = {
 
     // load custom plugins
     const plugins_path = path.resolve(process.env.cwd || '', 'plugins')
-    if (fs.existsSync(plugins_path)) {
+    if (process.env.NODE_ENV === 'production' && fs.existsSync(plugins_path)) {
       const notifier = require('../../notifier')
       const pluginsFile = fs.readdirSync(plugins_path).filter(e => path.extname(e).toLowerCase() === '.js')
       pluginsFile.forEach( pluginFile => {
@@ -162,11 +163,12 @@ const settingsController = {
     await settingsController.set('smtp', smtp.smtp)
     const mail = require('../mail')
     try {
-      await mail._send(settingsController.settings.admin_email, 'test', null, 'en')
+      await mail._send(settingsController.settings.admin_email, 'test')
+
       return res.sendStatus(200)
     } catch (e) {
       console.error(e)
-      return res.status(400).send(String(e))
+      return res.status(400).send(escape(String(e)))
     }
   },
 
@@ -190,11 +192,6 @@ const settingsController = {
         settingsController.set('logo', baseImgPath)
         res.sendStatus(200)
       })
-  },
-
-  getAllRequest (req, res) {
-    // get public settings and public configuration
-    res.json({ ...settingsController.settings, version: pkg.version })
   }
 }
 

@@ -3,7 +3,6 @@
     v-card-title SMTP Email configuration
     v-card-text
       p(v-html="$t('admin.smtp_description')")
-
       v-form(v-model='isValid')
         v-text-field(v-model='admin_email'
           @blur="save('admin_email', admin_email )"
@@ -53,7 +52,7 @@ export default {
     async testSMTP () {
       this.loading = true
       try {
-        this.setSetting({ key: 'smtp', value: this.smtp })
+        await this.setSetting({ key: 'smtp', value: this.smtp })
         await this.$axios.$post('/settings/smtp', { smtp: this.smtp })
         this.$root.$message(this.$t('admin.smtp_test_success', { admin_email: this.admin_email }), { color: 'success' })
       } catch (e) {
@@ -68,7 +67,9 @@ export default {
       }
     },    
     done () {
-      this.setSetting({ key: 'smtp', value: JSON.parse(JSON.stringify(this.smtp)) })
+      if (this.smtp.auth.pass) {
+        this.setSetting({ key: 'smtp', value: JSON.parse(JSON.stringify(this.smtp)) })
+      }
       this.$emit('close')
     },
 

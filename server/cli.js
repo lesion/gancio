@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const pkg = require('../package.json')
 const path = require('path')
+const accountsCLI = require('./cli/accounts')
 
 process.env.cwd = process.env.GANCIO_DATA || path.resolve('./')
 
@@ -28,6 +29,7 @@ require('yargs')
     process.env.config_path = absolute_config_path
     return absolute_config_path
   })
+  .command(['accounts'], 'Manage accounts', accountsCLI)
   .command(['start', 'run', '$0'], 'Start gancio', {}, start)
   .help('h')
   .alias('h', 'help')

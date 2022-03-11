@@ -1,6 +1,11 @@
 <template lang='pug'>
   v-container
     v-card-title {{$t('common.places')}}
+      v-spacer
+      v-text-field(v-model='search'
+        :append-icon='mdiMagnify' outlined rounded
+        label='Search'
+        single-line hide-details)
     v-card-subtitle(v-html="$t('admin.place_description')")
 
     v-dialog(v-model='dialog' width='600' :fullscreen='$vuetify.breakpoint.xsOnly')
@@ -29,19 +34,26 @@
     v-card-text
       v-data-table(
         :headers='headers'
-        :items='places')
+        :items='places'
+        :hide-default-footer='places.length<5'
+        :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
+        :search='search')
         template(v-slot:item.actions='{item}')
           v-btn(@click='editPlace(item)' color='primary' icon)
-            v-icon mdi-pencil
+            v-icon(v-text='mdiPencil')
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
+import { mdiPencil, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
+
 export default {
   data () {
     return {
+      mdiPencil, mdiChevronRight, mdiChevronLeft,
       loading: false,
       dialog: false,
       valid: false,
+      search: '',
       place: { name: '', address: '', id: null },
       headers: [
         { value: 'name', text: 'Name' },

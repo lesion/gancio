@@ -78,7 +78,7 @@ export default {
     todayEvents () {
       const start = dayjs(this.value.from).startOf('day').unix()
       const end = dayjs(this.value.from).endOf('day').unix()
-      const events = this.events.filter(e => (this.event.id && e.id !== this.event.id) && e.start_datetime >= start && e.start_datetime <= end)
+      const events = this.events.filter(e => e.start_datetime >= start && e.start_datetime <= end)
       return events
     },
     attributes () {
@@ -161,8 +161,10 @@ export default {
       this.type = 'normal'
     }
     this.events = await this.$api.getEvents({
-      start: dayjs().unix()
+      start: dayjs().unix(),
+      show_recurrent: true
     })
+    this.events = this.events.filter(e => e.id !== this.event.id)
   },
   methods: {
     updateRecurrent (value) {
@@ -194,7 +196,7 @@ export default {
       } else if (what === 'fromHour') {
         if (value) {
           const [hour, minute] = value.split(':')
-          const from = dayjs(this.value.from).hour(hour).minute(minute)
+          const from = dayjs(this.value.from).hour(hour).minute(minute).second(0)
           this.$emit('input', { ...this.value, from, fromHour: true })
         } else {
           this.$emit('input', { ...this.value, fromHour: false })
@@ -209,7 +211,7 @@ export default {
           if (fromHour > Number(hour) && !this.value.multidate) {
             due = due.add(1, 'day')
           }
-          due = due.hour(hour).minute(minute)
+          due = due.hour(hour).minute(minute).second(0)
           this.$emit('input', { ...this.value, due, dueHour: true })
         } else {
           this.$emit('input', { ...this.value, due: null, dueHour: false })

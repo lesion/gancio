@@ -53,9 +53,9 @@
 
     v-card-actions
       v-btn(text @click='showSMTP=true')
-        <v-icon v-if='showSMTPAlert' color='error'>mdi-alert</v-icon> {{$t('admin.show_smtp_setup')}}
+        <v-icon v-if='showSMTPAlert' color='error' v-text='mdiAlert'></v-icon> {{$t('admin.show_smtp_setup')}}
       v-btn(text @click='$emit("complete")' color='primary' v-if='setup') {{$t('common.next')}}
-        v-icon mdi-arrow-right
+        v-icon(v-text='mdiArrowRight')
 
 
 </template>
@@ -65,6 +65,7 @@ import { mapActions, mapState } from 'vuex'
 import moment from 'dayjs'
 import tzNames from './tz.json'
 import locales from '../../locales/esm'
+import { mdiAlert, mdiArrowRight } from '@mdi/js'
 
 export default {
   props: {
@@ -74,6 +75,7 @@ export default {
   name: 'Settings',
   data ({ $store }) {
     return {
+      mdiAlert, mdiArrowRight,
       title: $store.state.settings.title,
       description: $store.state.settings.description,
       locales: Object.keys(locales).map(locale => ({ value: locale, text: locales[locale] })),
@@ -83,7 +85,7 @@ export default {
   computed: {
     ...mapState(['settings']),
     showSMTPAlert () {
-      return !this.setup && (!this.settings.admin_email || !this.settings.smtp || !this.settings.smtp.host || !this.settings.smtp.user)
+      return !this.setup && (!this.settings.admin_email || !this.settings.smtp || !this.settings.smtp.host || !this.settings.smtp.auth.user)
     },
     instance_locale: {
       get () { return this.settings.instance_locale },
