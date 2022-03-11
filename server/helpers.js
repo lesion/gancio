@@ -116,8 +116,8 @@ module.exports = {
     })
 
     router.use('/favicon.ico', (req, res, next) => {
-      const faviconPath = res.locals.settings.logo || './assets/favicon'
-      return express.static(faviconPath + '.ico')(req, res, next)
+      const faviconPath = res.locals.settings.logo ? res.locals.settings.logo + '.png' : './assets/favicon.ico'
+      return express.static(faviconPath)(req, res, next)
     })
 
     return router

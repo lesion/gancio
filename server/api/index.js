@@ -81,9 +81,27 @@ if (config.status !== 'READY') {
   api.put('/place', isAdmin, eventController.updatePlace)
 
   /**
+   * Get events
+   * @category Event
+   * @name /api/events
+   * @type GET
+   * @param {integer} [start] - start timestamp (default: now)
+   * @param {integer} [end] - end timestamp (optional)
+   * @param {array} [tags] - List of tags
+   * @param {array} [places] - List of places
+   * @param {integer} [max] - Max events 
+   * @param {boolean} [show_recurrent] - Show also recurrent events (default: as choosen in admin settings)
+   * @example ***Example***  
+   * [https://demo.gancio.org/api/events](https://demo.gancio.org/api/events)  
+   * [usage example](https://framagit.org/les/gancio/-/blob/master/webcomponents/src/GancioEvents.svelte#L18-42)
+   */
+
+   api.get('/events', cors, eventController.select)  
+
+  /**
    * Add a new event
    * @category Event
-   * @name /event
+   * @name /api/event
    * @type POST
    * @info `Content-Type` has to be `multipart/form-data` to support image upload
    * @param {string} title - event's title
@@ -95,13 +113,12 @@ if (config.status !== 'READY') {
    * @param {array} tags - List of tags
    * @param {object} [recurrent] - Recurrent event details
    * @param {string} [recurrent.frequency] - could be `1w` or `2w`
-   * @param {string} [recurrent.type] - not used
    * @param {array} [recurrent.days] - array of days
    * @param {image} [image] - Image
    */
 
   // allow anyone to add an event (anon event has to be confirmed, TODO: flood protection)
-  api.post('/event', upload.single('image'), eventController.add)
+  api.post('/event', eventController.isAnonEventAllowed, upload.single('image'), eventController.add)
 
   api.put('/event', isAuth, upload.single('image'), eventController.update)
   api.get('/event/import', isAuth, helpers.importURL)
@@ -132,9 +149,6 @@ if (config.status !== 'READY') {
 
   // export events (rss/ics)
   api.get('/export/:type', cors, exportController.export)
-
-  // get events in this range
-  api.get('/events', cors, eventController.select)
 
   api.get('/instances', isAdmin, instanceController.getAll)
   api.get('/instances/:instance_domain', isAdmin, instanceController.get)

@@ -37,6 +37,4 @@ let config = {
   }
 }
 
-config.load()
-
 module.exports = config

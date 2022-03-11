@@ -64,20 +64,6 @@ You'll need to [setup nginx as a proxy]({% link install/nginx.md %}) then you ca
 > Don't be lazy and [backup]({% link install/backup.md %}) your data!
 
 
-> error "Upgrade from a version < 1.0"
-> Since v1.0 our docker setup is changed and a new container has to be built:
->
-> 1. `cd /opt/gancio`
-> 1. [Backup your data]({% link install/backup.md %})
-> 1. Download new `Dockerfile` <br/> `wget {{site.url}}{% link /docker/Dockerfile %}`
-> 1. Download new `entrypoint.sh` <br/> `wget {{site.url}}{% link /docker/entrypoint.sh %}`
-> 1. Download new `docker-compose.yml`  (substitute `sqlite` with `postgres` in case):  <br/>`wget {{site.url}}{% link /docker/sqlite/docker-compose.yml %}`
-> 1. Build the new container `docker-compose build`
-> 1. Extract your backup into `./data` <br/>`mkdir data; tar xvzf gancio-<yourLastBackup>-backup.tgz -C data`
-> 1. Stop your old container `docker-compose stop`
-> 1. Start your new container `docker-compose up`
-
-
 ```bash
 cd /opt/gancio
 docker-compose up -d --no-deps --build

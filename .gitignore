@@ -1,13 +1,14 @@
 # Created by .ignore support plugin (hsz.mobi)
 
 ### Gancio dev configuration
-*.sqlite
+gancio.sqlite
+db.sqlite
 releases
 wp-plugin/wpgancio
 config/development.json
-gancio_config.json
-config.json
-db.sqlite
+/gancio_config.json
+/config.json
+/assets/config.json
 thumb
 docs/_site
 .vscode

@@ -25,15 +25,15 @@ const Auth = {
     if (res.locals.user) {
       next()
     } else {
-      res.sendStatus(404)
+      res.sendStatus(403)
     }
   },
 
   isAdmin (req, res, next) {
-    if (res.locals.user.is_admin) {
+    if (res.locals.user && res.locals.user.is_admin) {
       next()
     } else {
-      res.status(404)
+      res.sendStatus(403)
     }
   },
 

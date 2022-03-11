@@ -21,7 +21,7 @@
     v-card-text
       v-data-table(
           v-if='announcements.length'
-          :hide-default-footer='announcements.length<10'
+          :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
           :headers='headers'
           :items='announcements')
         template(v-slot:item.actions='{ item }')
@@ -36,13 +36,13 @@ import { mapActions } from 'vuex'
 import cloneDeep from 'lodash/cloneDeep'
 import Editor from '../Editor'
 import Announcement from '../Announcement'
-import { mdiPlus } from '@mdi/js'
+import { mdiPlus, mdiChevronRight, mdiChevronLeft } from '@mdi/js'
 
 export default {
   components: { Editor, Announcement },
   data () {
     return {
-      mdiPlus,
+      mdiPlus, mdiChevronRight, mdiChevronLeft,
       valid: false,
       dialog: false,
       editing: false,

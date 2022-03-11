@@ -60,6 +60,7 @@
         v-data-table(
           v-if='settings.trusted_instances.length'
           :hide-default-footer='settings.trusted_instances.length<10'
+          :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
           :headers='headers'
           :items='settings.trusted_instances')
           template(v-slot:item.actions="{item}")
@@ -69,14 +70,15 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
+import get from 'lodash/get'
 import axios from 'axios'
-import { mdiDeleteForever, mdiPlus } from '@mdi/js'
+import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
 
 export default {
   name: 'Federation',
   data ({ $store, $options }) {
     return {
-      mdiDeleteForever, mdiPlus,
+      mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight,
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
       instance_place: $store.state.settings.instance_place,
@@ -129,8 +131,8 @@ export default {
           key: 'trusted_instances',
           value: this.settings.trusted_instances.concat({
             url: this.instance_url,
-            name: instance.data.metadata.nodeName,
-            label: instance.data.metadata.nodeLabel
+            name: get(instance, 'data.metadata.nodeName', ''),
+            label: get(instance, 'data.metadata.nodeLabel', '')
           })
         })
         this.$refs.form.reset()

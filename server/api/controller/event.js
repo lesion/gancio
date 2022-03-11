@@ -291,6 +291,13 @@ const eventController = {
     res.sendStatus(200)
   },
 
+  async isAnonEventAllowed (req, res, next) {
+    if (!res.locals.settings.allow_anon_event) {
+      return res.sendStatus(403)
+    }
+    next()
+  },
+
   async add (req, res) {
     // req.err comes from multer streaming error
     if (req.err) {
@@ -302,13 +309,12 @@ const eventController = {
       const body = req.body
       const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
 
-      const required_fields = ['place_name', 'title', 'start_datetime']
-      required_fields.forEach(required_field => {
-        if (!body[required_field]) {
-          log.warn(`${required_field} is required`)
-          return res.status(400).send(`${required_field} is required`)
-        }
-      })
+      const required_fields = [ 'title', 'place_name', 'start_datetime']
+      const missing_field = required_fields.find(required_field => !body[required_field])
+      if (missing_field) {
+        log.warn(`${missing_field} is required`)
+        return res.status(400).send(`${missing_field} is required`)
+      }
 
       const eventDetails = {
         title: body.title,

@@ -38,8 +38,6 @@ const setupController = {
       config.status = 'DBCONF'
       config.db.logging = false
 
-      const settingsController = require('./settings')
-      await settingsController.load()
     },
 
     async setupDb (req, res) {
