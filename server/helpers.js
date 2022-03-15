@@ -77,7 +77,7 @@ module.exports = {
     if (config.status !== 'READY') return next()
     const Site = require('./api/models/site')
     res.locals.site = await Site.findOne({ where: { hostname } })
-    res.locals.siteId = res.locals.site && res.locals.site.id || 0
+    res.locals.siteId = res.locals.site && res.locals.site.id
     next()
   },
 

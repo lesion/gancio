@@ -17,6 +17,7 @@ const Auth = {
 
     oauth.oauthServer.authenticate()(req, res, () => {
       res.locals.user = get(res, 'locals.oauth.token.user', null)
+      console.error(res.locals.user.siteId)
       next()
     })
   },
@@ -38,10 +39,10 @@ const Auth = {
   },
 
   isSuperAdmin (req, res, next) {
-    if (req.user.is_admin && req.settings.isMainSite) {
+    if (res.locals.user && res.locals.user.is_admin && res.locals.settings.isMainSite) {
       next()
     } else {
-      req.status(404)
+      res.sendStatus(403)
     }
   },
 
