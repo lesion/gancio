@@ -8,7 +8,9 @@
   export let places = ''
   export let theme = 'light'
   export let show_recurrent=false
-  export let sidebar='true'
+  export let sidebar = 'true'
+
+  export let external_style = ''
 
   let mounted = false
   let events = []
@@ -71,6 +73,7 @@
 
 </script>
 <svelte:options tag="gancio-events"/>
+{#if external_style}<link rel='stylesheet' href='{external_style}' />{/if}
 {#if events.length}
 <div id='gancioEvents'
   class:dark="{theme === 'dark'}" class:light="{theme === 'light'}"
@@ -127,7 +130,6 @@
   margin: 0 auto;
   font-size: 1rem;
 }
-
 
 .nosidebar {
   max-width: 1200px;
