@@ -34,10 +34,10 @@ v-container#event.pa-0.pa-sm-2
               div.text-subtitle-1 {{event.start_datetime|from}}
                 small(v-if='event.parentId')  ({{event|recurrentDetail}})
 
-              .text-h6.p-location(itemprop="location" itemscope itemtype="https://schema.org/Place")
+              .text-h6.p-location.h-adr(itemprop="location" itemscope itemtype="https://schema.org/Place")
                 v-icon(v-text='mdiMapMarker')
-                b.vcard.ml-2(itemprop="name") {{event.place && event.place.name}}
-                .text-subtitle-1.adr(itemprop='address') {{event.place && event.place.address}}
+                b.vcard.ml-2.p-name(itemprop="name") {{event.place && event.place.name}}
+                .text-subtitle-1.p-street-address(itemprop='address') {{event.place && event.place.address}}
 
             //- tags, hashtags
             v-card-text(v-if='event.tags.length')
