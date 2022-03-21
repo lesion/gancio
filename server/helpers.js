@@ -73,7 +73,6 @@ module.exports = {
   async setSite (req, res, next) {
     const hostname = req.headers.host
     res.locals.hostname = hostname
-    res.locals.siteId=0
     if (config.status !== 'READY') return next()
     const Site = require('./api/models/site')
     res.locals.site = await Site.findOne({ where: { hostname } })

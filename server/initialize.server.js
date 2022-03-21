@@ -26,7 +26,6 @@ module.exports = function () {
         setupController._setupDb(dbConf)
           .catch(e => { process.exit(1) })
       }
-      await settingsController.load()
     }
 
     dayjs.extend(timezone)

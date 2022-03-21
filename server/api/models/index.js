@@ -39,7 +39,7 @@ const db = {
         path: path.resolve(__dirname, '..', '..', 'migrations')
       }
     })
-    return await umzug.up()    
+    return umzug.up()    
   },
   async initialize () {
     if (config.status === 'READY') {

@@ -26,7 +26,7 @@ module.exports = {
 
     if (inReplyTo) {
       // .. to an event ?
-      const match = inReplyTo && inReplyTo.match('.*/federation/m/(.*)')
+      const match = inReplyTo.match('.*/federation/m/(.*)')
       log.info(`Event reply => ${inReplyTo}`)
       if (match) {
         event = await Event.findByPk(Number(match[1]))

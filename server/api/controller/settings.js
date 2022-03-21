@@ -139,6 +139,7 @@ const settingsController = {
   },
 
   async getAll (siteId) {
+    if (config.status !== 'READY') return defaultSettings
     const Setting = require('../models/setting')
     const settingsRecords = await Setting.findAll({ where: { siteId } })
     const settings = {}

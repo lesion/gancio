@@ -17,7 +17,10 @@ const Auth = {
 
     oauth.oauthServer.authenticate()(req, res, () => {
       res.locals.user = get(res, 'locals.oauth.token.user', null)
-      console.error(res.locals.user.siteId)
+      if (res.locals.user && res.locals.user.siteId !== res.locals.siteId) {
+        log.error('?!?! hacking attempt')
+        return res.sendStatus(403)
+      }
       next()
     })
   },

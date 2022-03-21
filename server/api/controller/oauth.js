@@ -76,10 +76,9 @@ const oauthController = {
      * Invoked to retrieve an existing access token previously saved through #saveToken().
      * https://oauth2-server.readthedocs.io/en/latest/model/spec.html#getaccesstoken-accesstoken-callback
      * */
-    async getAccessToken (accessToken) {
-      const oauth_token = await OAuthToken.findByPk(accessToken,
+    getAccessToken (accessToken) {
+      return OAuthToken.findByPk(accessToken,
         { include: [{ model: User, attributes: { exclude: ['password'] } }, { model: OAuthClient, as: 'client' }] })
-      return oauth_token
     },
 
     /**
@@ -96,15 +95,13 @@ const oauthController = {
       return client
     },
 
-    async getRefreshToken (refresh_token) {
-      const oauth_token = await OAuthToken.findOne({ where: { refresh_token }, raw: true })
-      return oauth_token
+    getRefreshToken (refresh_token) {
+      return OAuthToken.findOne({ where: { refresh_token }, raw: true })
     },
 
-    async getAuthorizationCode (code) {
-      const oauth_code = await OAuthCode.findByPk(code,
+    getAuthorizationCode (code) {
+      return OAuthCode.findByPk(code,
         { include: [User, { model: OAuthClient, as: 'client' }] })
-      return oauth_code
     },
 
     async saveToken (token, client, user) {
@@ -133,12 +130,11 @@ const oauthController = {
       return false
     },
 
-    async saveAuthorizationCode (code, client, user) {
+    saveAuthorizationCode (code, client, user) {
       code.userId = user.id
       code.clientId = client.id
       code.expiresAt = dayjs(code.expiresAt).toDate()
-      const ret = await OAuthCode.create(code)
-      return ret
+      return OAuthCode.create(code)
     },
 
     // TODO
@@ -150,11 +146,7 @@ const oauthController = {
       //   'event:remove'
       // ]
       log.debug(`VERIFY SCOPE ${scope} ${token.user.email}`)
-      if (token.user.is_admin && token.user.is_active) {
-        return true
-      } else {
-        return false
-      }
+      return (token.user.is_admin && token.user.is_active)
     }
 
   }

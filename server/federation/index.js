@@ -29,7 +29,6 @@ router.use((req, res, next) => {
 router.use(express.json({ type: ['application/json', 'application/activity+json', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'] }))
 
 router.get('/m/:event_id', async (req, res) => {
-  const settingsController = require('../api/controller/settings')
   log.debug('[AP] Get event details ')
   const event_id = req.params.event_id
   if (req.accepts('html')) { return res.redirect(301, `/event/${event_id}`) }

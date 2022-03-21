@@ -37,10 +37,9 @@ User.init({
   }
 })
 
-User.prototype.comparePassword = async function (pwd) {
+User.prototype.comparePassword = function (pwd) {
   if (!this.password) { return false }
-  const ret = await bcrypt.compare(pwd, this.password)
-  return ret
+  return bcrypt.compare(pwd, this.password)
 }
 
 User.beforeSave(async (user, options) => {

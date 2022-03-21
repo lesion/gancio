@@ -69,12 +69,20 @@ const setupController = {
         // create admin
         const password = helpers.randomString()
         const email = `admin`
+
+        const Site = require('../models/site')
+        const site = await Site.create({
+          hostname: config.hostname,
+          is_active: true
+        })
+
         const User = require('../models/user')
         await User.create({
           email,
           password,
           is_admin: true,
-          is_active: true
+          is_active: true,
+          siteId: site.id
         })
 
         res.json({ password, email })
