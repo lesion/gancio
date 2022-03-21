@@ -2,7 +2,6 @@ const log = require('./log')
 const eventController = require('./api/controller/event')
 const placeHelpers = require('./helpers/place')
 const tagHelpers = require('./helpers/tag')
-// const notifier = require('./notifier')
 
 const loopInterval = 1 // process.env.NODE_ENV === 'production' ? 1 : 1
 const minute = 60 / loopInterval
@@ -140,10 +139,5 @@ class TaskManager {
 //   repeatEach: 60
 // }))
 //
-
-// TS.start()
-// TS.add(new Task({ name: 'removable #1', method: daje, args: ['removable #1'], removable: true }))
-// TS.add(new Task({ name: 'non removable #2', method: daje, args: ['non removable #2'] }))
-// TS.add(new Task({ name: 'non removable and repeat each #2', method: daje, args: ['nn rm and rpt #5'], repeatEach: 5 }))
 
 module.exports = { Task, TaskManager: new TaskManager() }

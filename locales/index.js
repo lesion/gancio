@@ -1,12 +1,12 @@
 module.exports = {
-  it: 'Italiano',
+  ca: 'Català',
+  de: 'Deutsch',
   en: 'English',
   es: 'Español',
-  ca: 'Català',
-  pl: 'Polski',
   eu: 'Euskara',
-  nb: 'Norwegian Bokmål',
   fr: 'Francais',
-  de: 'Deutsch',
   gl: 'Galego',
+  it: 'Italiano',
+  nb: 'Norwegian Bokmål',
+  pl: 'Polski',
 }
