@@ -54,9 +54,6 @@ import get from 'lodash/get'
 
 export default {
   name: 'Sites',
-  props: {
-    sites: { type: Array, default: () => [] }
-  },
   data () {
     return {
       newSiteDialog: false,

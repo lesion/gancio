@@ -65,7 +65,8 @@ export default {
     Federation: () => import(/* webpackChunkName: "admin" */'../components/admin/Federation.vue'),
     Moderation: () => import(/* webpackChunkName: "admin" */'../components/admin/Moderation.vue'),
     Announcement: () => import(/* webpackChunkName: "admin" */'../components/admin/Announcement.vue'),
-    Theme: () => import(/* webpackChunkName: "admin" */'../components/admin/Theme.vue')
+    Theme: () => import(/* webpackChunkName: "admin" */'../components/admin/Theme.vue'),
+    Multisite: () => import(/* webpackChunkName: "admin" */'../components/admin/Multisite.vue'),
   },
   middleware: ['auth'],
   async asyncData ({ $axios, params, store }) {

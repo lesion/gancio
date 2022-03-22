@@ -58,7 +58,7 @@ const setupController = {
       try {
 
         config.baseurl = req.protocol + '://' + req.headers.host
-        config.hostname = new URL.URL(config.baseurl).hostname
+        const hostname = new URL.URL(config.baseurl).host
   
         // write configuration
         config.write()
@@ -66,15 +66,14 @@ const setupController = {
         // calculate default settings values
         await settingsController.set('theme.is_dark', true)
         await settingsController.set('instance_name', settingsController.settings.title.toLowerCase().replace(/ /g, ''))
+
         // create admin
         const password = helpers.randomString()
         const email = `admin`
 
         const Site = require('../models/site')
-        const site = await Site.create({
-          hostname: config.hostname,
-          is_active: true
-        })
+        const mainSite = await Site.findByPk(0)
+        await mainSite.update({ hostname, is_active: true })
 
         const User = require('../models/user')
         await User.create({
@@ -82,7 +81,7 @@ const setupController = {
           password,
           is_admin: true,
           is_active: true,
-          siteId: site.id
+          siteId: 0
         })
 
         res.json({ password, email })
