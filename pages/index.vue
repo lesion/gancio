@@ -104,7 +104,7 @@ export default {
       if (this.selectedDay) {
         const min = dayjs(this.selectedDay).startOf('day').unix()
         const max = dayjs(this.selectedDay).endOf('day').unix()
-        return this.filteredEvents.filter(e => (e.start_datetime < max && e.start_datetime > min))
+        return this.filteredEvents.filter(e => (e.start_datetime <= max && e.start_datetime >= min))
       } else if (this.isCurrentMonth) {
         return this.filteredEvents.filter(e => e.end_datetime ? e.end_datetime > now : e.start_datetime + 2 * 60 * 60 > now)
       } else {
