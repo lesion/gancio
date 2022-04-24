@@ -109,7 +109,7 @@
         "list_description": "Webgune bat baduzu eta ekitaldien zerrenda erakutsi nahi baduzu, ondorengo kodea erabili"
     },
     "register": {
-        "description": "Herri mugimenduek autoantolaketaren bidean diru-iturrien beharrak dauzkatela badakigu.<br/>Honako hauxe oparitxoa da, hortaz erabili ezazue ekitaldi ez-komertzialak iragartzeko, eta esan gabe doa, ekitaldi antifaxistak, antisexistak eta antiarriztetarako :) .\n<br/>Argitaratzen hasi baino lehen<strong> zure kontu berriak onarpena jaso beharko du </strong>beraz, <strong>webgune honen atzean hezur-haragizko pertsonak gaudela jakinda </strong>, (momenutz euskal 'AI'-rik ez daukagu baina adi, agertuko direla) idatzi iezaguzu lerro batzuk argitaratu nahi dituzun ekitaldiei buruz.",
+        "description": "Herri mugimenduek autoantolaketaren bidean diru-iturrien beharrak dauzkatela badakigu.<br/>\nHonako hauxe oparitxoa da, hortaz erabili ezazue ekitaldi ez-komertzialak iragartzeko, eta esan gabe doa, ekitaldi antifaxistak, antisexistak eta antiarriztetarako :) .\n<br/>Argitaratzen hasi baino lehen<strong> zure kontu berriak onarpena jaso beharko du </strong>beraz, <strong>webgune honen atzean hezur-haragizko pertsonak gaudela jakinda </strong>, (momenutz euskal 'AI'-rik ez daukagu baina adi, agertuko direla) idatzi iezaguzu lerro batzuk argitaratu nahi dituzun ekitaldiei buruz.",
         "error": "Errorea: ",
         "complete": "Izen-ematea baieztatua izan behar da.",
         "first_user": "Administratzailea sortu da"
@@ -225,7 +225,8 @@
         "smtp_test_success": "Probako eposta bidali da {admin_email}-(e)ra, begiratu zure sarrera-ontzia",
         "admin_email": "Administratzailearen eposta",
         "smtp_hostname": "SMTP hostname",
-        "smtp_description": "<ul><li>Administratzaileak eposta bat jaso beharko luke anonimo batek ekitaldi bat gehitzen duenean (gaituta badago).</li><li>Administratzaileak eposta bat jaso beharko luke izena emateko eskari bakoitzeko (gaituta badago).</li><li>Erabiltzaileak eposta bat jaso beharko luke izena emateko eskariarekin.</li><li>Erabiltzaileak eposta bat jaso beharko luke izen ematea baieztatzean.</li><li>Erabiltzaileak eposta bat jaso beharko luke administratzaileak zuzenean izena emanez gero.</li><li>Erabiltzaileek eposta bat jaso beharko lukete pasahitza ahazten dutenean.</li></ul>"
+        "smtp_description": "<ul><li>Administratzaileak eposta bat jaso beharko luke anonimo batek ekitaldi bat gehitzen duenean (gaituta badago).</li><li>Administratzaileak eposta bat jaso beharko luke izena emateko eskari bakoitzeko (gaituta badago).</li><li>Erabiltzaileak eposta bat jaso beharko luke izena emateko eskariarekin.</li><li>Erabiltzaileak eposta bat jaso beharko luke izen ematea baieztatzean.</li><li>Erabiltzaileak eposta bat jaso beharko luke administratzaileak zuzenean izena emanez gero.</li><li>Erabiltzaileek eposta bat jaso beharko lukete pasahitza ahazten dutenean.</li></ul>",
+        "widget": "Tresna"
     },
     "auth": {
         "not_confirmed": "Oraindik baieztatu gabe dago…",
