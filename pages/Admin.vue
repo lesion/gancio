@@ -1,6 +1,7 @@
 <template lang="pug">
   v-container.container.pa-0.pa-md-3
     v-card
+      v-alert(v-if='url!==settings.baseurl' outlined type='warning' color='red' show-icon :icon='mdiAlert') {{$t('admin.wrong_domain_warning')}}
       v-tabs(v-model='selectedTab' show-arrows)
 
         //- SETTINGS
@@ -49,6 +50,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { mdiAlert } from '@mdi/js'
 
 export default {
   name: 'Admin',
@@ -63,18 +65,24 @@ export default {
     Theme: () => import(/* webpackChunkName: "admin" */'../components/admin/Theme.vue')
   },
   middleware: ['auth'],
-  async asyncData ({ $axios, params, store }) {
+  async asyncData ({ $axios, req }) {
+    let url
+    if (process.client) {
+      url = window.location.protocol + '//' + window.location.host
+    } else {
+      url = req.protocol + '://' + req.headers.host
+    }
     try {
       const users = await $axios.$get('/users')
       const unconfirmedEvents = await $axios.$get('/event/unconfirmed')
-      return { users, unconfirmedEvents, selectedTab: 0 }
+      return { users, unconfirmedEvents, selectedTab: 0, url }
     } catch (e) {
-      console.error(e)
-      return { users: [], unconfirmedEvents: [], selectedTab: 0 }
+      return { users: [], unconfirmedEvents: [], selectedTab: 0, url }
     }
   },
   data () {
     return {
+      mdiAlert,
       description: '',
       unconfirmedEvents: [],
       selectedTab: 0
@@ -100,7 +108,7 @@ export default {
       this.loading = true
       await this.$axios.$get(`/event/confirm/${id}`)
       this.loading = false
-      this.$root.$message('event.confirmed', { color: 'succes' })
+      this.$root.$message('event.confirmed', { color: 'success' })
       this.unconfirmedEvents = this.unconfirmedEvents.filter(e => e.id !== id)
     }
   }
