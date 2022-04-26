@@ -30,9 +30,7 @@
       params.push(`places=${places}`)
     }
 
-    if (show_recurrent) {
-      params.push(`show_recurrent=true`)
-    }
+    params.push(`show_recurrent=${show_recurrent?'true':'false'}`)
     
     fetch(`${baseurl}/api/events?${params.join('&')}`)
     .then(res => res.json())
