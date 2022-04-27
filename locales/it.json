@@ -277,6 +277,7 @@
         "completed": "Setup completato",
         "completed_description": "<p>Puoi entrare con le seguenti credenziali:<br/><br/>Utente: <b>{email}</b><br/>Password: <b>{password}<b/></p>",
         "copy_password_dialog": "Sì, devi copiare la password!",
-        "start": "Inizia"
+        "start": "Inizia",
+        "https_warning": "Stai visitando il setup da HTTP, ricorda di cambiare il baseurl nel config.json quando passarai ad HTTPS!"
     }
 }

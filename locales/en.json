@@ -230,7 +230,8 @@
         "smtp_test_success": "A test email is sent to {admin_email}, please check your inbox",
         "smtp_test_button": "Send a test email",
         "admin_email": "Admin e-mail",
-        "widget": "Widget"
+        "widget": "Widget",
+        "wrong_domain_warning": "The baseurl configured in config.json <b>({baseurl})</b> differs from the one you're visiting <b>({url})</b>"
     },
     "auth": {
         "not_confirmed": "Not confirmed yet…",
@@ -277,6 +278,7 @@
         "completed": "Setup completed",
         "completed_description": "<p>You can now login with the following user:<br/><br/>User: <b>{email}</b><br/>Password: <b>{password}<b/></p>",
         "copy_password_dialog": "Yes, you have to copy the password!",
-        "start": "Start"
+        "start": "Start",
+        "https_warning": "You're visiting from HTTP, remember to change baseurl in config.json if you switch to HTTPS!"
     }
 }
