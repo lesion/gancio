@@ -84,7 +84,7 @@ export default {
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
-  async asyncData ({ params, $axios, error, store }) {
+  async asyncData ({ params, $axios, error }) {
     if (params.edit) {
       const data = { event: { place: {}, media: [] } }
       data.id = params.edit
@@ -101,8 +101,8 @@ export default {
       data.event.place.address = event.place.address || ''
       data.date = {
         recurrent: event.recurrent,
-        from: new Date(dayjs.unix(event.start_datetime)),
-        due: new Date(dayjs.unix(event.end_datetime)),
+        from: dayjs.unix(event.start_datetime).toDate(),
+        due: dayjs.unix(event.end_datetime).toDate(),
         multidate: event.multidate,
         fromHour: true,
         dueHour: true
@@ -118,8 +118,8 @@ export default {
     return {}
   },
   data () {
-    const month = dayjs().month() + 1
-    const year = dayjs().year()
+    const month = dayjs.tz().month() + 1
+    const year = dayjs.tz().year()
     return {
       mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle,
       valid: false,

@@ -7,12 +7,15 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 
 
 import 'dayjs/locale/it'
+import 'dayjs/locale/en'
 import 'dayjs/locale/es'
 import 'dayjs/locale/ca'
 import 'dayjs/locale/pl'
 import 'dayjs/locale/eu'
 import 'dayjs/locale/nb'
 import 'dayjs/locale/fr'
+import 'dayjs/locale/de'
+import 'dayjs/locale/gl'
 
 dayjs.extend(relativeTime)
 dayjs.extend(utc)
@@ -23,25 +26,27 @@ export default ({ app, store }) => {
   // set timezone to instance_timezone!!
   // to show local time relative to event's place
   // not where in the world I'm looking at the page from
-  dayjs.tz.setDefault(store.state.settings.instance_timezone)
-  dayjs.locale(store.state.locale)
+  const instance_timezone = store.state.settings.instance_timezone
+  const locale = store.state.locale
+  dayjs.tz.setDefault(instance_timezone)
+  dayjs.locale(locale)
 
   // replace links with anchors
   // TODO: remove fb tracking id?
   Vue.filter('linkify', value => value.replace(/(https?:\/\/([^\s]+))/g, '<a href="$1">$2</a>'))
   Vue.filter('url2host', url => url.match(/^https?:\/\/(.[^/:]+)/i)[1])
-  Vue.filter('datetime', value => dayjs(value).locale(store.state.locale).format('ddd, D MMMM HH:mm'))
-  Vue.filter('dateFormat', (value, format) => dayjs(value).format(format))
-  Vue.filter('unixFormat', (timestamp, format) => dayjs.unix(timestamp).format(format))
+  Vue.filter('datetime', value => dayjs.tz(value).locale(locale).format('ddd, D MMMM HH:mm'))
+  Vue.filter('dateFormat', (value, format) => dayjs.tz(value).format(format))
+  Vue.filter('unixFormat', (timestamp, format) => dayjs.unix(timestamp).tz(instance_timezone).format(format))
 
   // shown in mobile homepage
-  Vue.filter('day', value => dayjs.unix(value).locale(store.state.locale).format('dddd, D MMM'))
-  Vue.filter('mediaURL', (event, type) => {
+  Vue.filter('day', value => dayjs.unix(value).tz(instance_timezone).locale(store.state.locale).format('dddd, D MMM'))
+  Vue.filter('mediaURL', (event, type, format = '.jpg') => {
     if (event.media && event.media.length) {
       if (type === 'alt') {
         return event.media[0].name
       } else {
-        return store.state.settings.baseurl + '/media/' + (type === 'thumb' ? 'thumb/' : '') + event.media[0].url
+        return store.state.settings.baseurl + '/media/' + (type === 'thumb' ? 'thumb/' : '') + event.media[0].url.replace(/.jpg$/, format)
       }
     } else if (type !== 'alt') {
       return store.state.settings.baseurl + '/media/' + (type === 'thumb' ? 'thumb/' : '') + 'logo.svg'
@@ -49,16 +54,16 @@ export default ({ app, store }) => {
     return ''
   })
 
-  Vue.filter('from', timestamp => dayjs.unix(timestamp).fromNow())
+  Vue.filter('from', timestamp => dayjs.unix(timestamp).tz(instance_timezone).fromNow())
 
   Vue.filter('recurrentDetail', event => {
     const parent = event.parent
     const { frequency, type } = parent.recurrent
     let recurrent
     if (frequency === '1w' || frequency === '2w') {
-      recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: dayjs.unix(parent.start_datetime).format('dddd') })
+      recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: dayjs.unix(parent.start_datetime).tz(instance_timezone).format('dddd') })
     } else if (frequency === '1m' || frequency === '2m') {
-      const d = type === 'ordinal' ? dayjs.unix(parent.start_datetime).date() : dayjs.unix(parent.start_datetime).format('dddd')
+      const d = type === 'ordinal' ? dayjs.unix(parent.start_datetime).date() : dayjs.unix(parent.start_datetime).tz(instance_timezone).format('dddd')
       if (type === 'ordinal') {
         recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: d })
       } else {
@@ -70,8 +75,8 @@ export default ({ app, store }) => {
   })
 
   Vue.filter('when', (event) => {
-    const start = dayjs.unix(event.start_datetime)
-    const end = dayjs.unix(event.end_datetime)
+    const start = dayjs.unix(event.start_datetime).tz(instance_timezone)
+    const end = dayjs.unix(event.end_datetime).tz(instance_timezone)
 
     // const normal = `${start.format('dddd, D MMMM (HH:mm-')}${end.format('HH:mm) ')}`
     // // recurrent event

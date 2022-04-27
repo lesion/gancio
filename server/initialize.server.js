@@ -5,6 +5,10 @@ module.exports = function () {
   const log = require('../server/log')
   const settingsController = require('./api/controller/settings')
   const db = require('./api/models/index')
+  const dayjs = require('dayjs')
+  const timezone = require('dayjs/plugin/timezone')
+  dayjs.extend(timezone)
+
   async function start (nuxt) {
 
     if (config.status == 'READY') {
@@ -26,6 +30,8 @@ module.exports = function () {
       }
       await settingsController.load()
     }
+
+    dayjs.tz.setDefault(settingsController.settings.instance_timezone)
 
     let TaskManager
     if (config.status === 'READY' && process.env.NODE_ENV == 'production') {

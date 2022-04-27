@@ -9,6 +9,7 @@
       @update:from-page='updatePage'
       :locale='$i18n.locale'
       :attributes='attributes'
+      :timezone='settings.instance_timezone'
       transition='fade'
       aria-label='Calendar'
       is-expanded
@@ -26,8 +27,8 @@ export default {
     events: { type: Array, default: () => [] }
   },
   data () {
-    const month = dayjs().month() + 1
-    const year = dayjs().year()
+    const month = dayjs.tz().month() + 1
+    const year = dayjs.tz().year()
     return {
       selectedDate: null,
       page: { month, year }
@@ -42,9 +43,7 @@ export default {
   methods: {
     ...mapActions(['updateEvents', 'showPastEvents']),
     updatePage (page) {
-      return new Promise((resolve, reject) => {
         this.$emit('monthchange', page)
-      })
     },
     click (day) {
       this.$emit('dayclick', day)

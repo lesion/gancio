@@ -78,8 +78,7 @@ export default {
     todayEvents () {
       const start = dayjs(this.value.from).startOf('day').unix()
       const end = dayjs(this.value.from).endOf('day').unix()
-      const events = this.events.filter(e => e.start_datetime >= start && e.start_datetime <= end)
-      return events
+      return this.events.filter(e => e.start_datetime >= start && e.start_datetime <= end)
     },
     attributes () {
       return attributesFromEvents(this.events, this.tags)
@@ -92,10 +91,10 @@ export default {
     },
 
     fromHour () {
-      return this.value.from && this.value.fromHour ? dayjs(this.value.from).format('HH:mm') : null
+      return this.value.from && this.value.fromHour ? dayjs.tz(this.value.from).format('HH:mm') : null
     },
     dueHour () {
-      return this.value.due && this.value.dueHour ? dayjs(this.value.due).format('HH:mm') : null
+      return this.value.due && this.value.dueHour ? dayjs.tz(this.value.due).format('HH:mm') : null
     },
     hourList () {
       const hourList = []
@@ -196,7 +195,7 @@ export default {
       } else if (what === 'fromHour') {
         if (value) {
           const [hour, minute] = value.split(':')
-          const from = dayjs(this.value.from).hour(hour).minute(minute).second(0)
+          const from = dayjs.tz(this.value.from).hour(hour).minute(minute).second(0)
           this.$emit('input', { ...this.value, from, fromHour: true })
         } else {
           this.$emit('input', { ...this.value, fromHour: false })
@@ -204,7 +203,7 @@ export default {
       } else if (what === 'dueHour') {
         if (value) {
           const [hour, minute] = value.split(':')
-          const fromHour = dayjs(this.value.from).hour()
+          const fromHour = dayjs.tz(this.value.from).hour()
 
           // add a day
           let due = dayjs(this.value.from)
@@ -226,20 +225,20 @@ export default {
           let from = value.start
           let due = value.end
           if (this.value.fromHour) {
-            from = dayjs(value.start).hour(dayjs(this.value.from).hour())
+            from = dayjs.tz(value.start).hour(dayjs.tz(this.value.from).hour())
           }
           if (this.value.dueHour) {
-            due = dayjs(value.end).hour(dayjs(this.value.due).hour())
+            due = dayjs.tz(value.end).hour(dayjs.tz(this.value.due).hour())
           }
           this.$emit('input', { ...this.value, from, due })
         } else {
           let from = value
           let due = this.value.due
           if (this.value.fromHour) {
-            from = dayjs(value).hour(dayjs(this.value.from).hour())
+            from = dayjs.tz(value).hour(dayjs.tz(this.value.from).hour())
           }
           if (this.value.dueHour && this.value.due) {
-            due = dayjs(value).hour(dayjs(this.value.due).hour())
+            due = dayjs.tz(value).hour(dayjs.tz(this.value.due).hour())
           }
           this.$emit('input', { ...this.value, from, due })
         }

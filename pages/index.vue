@@ -1,26 +1,25 @@
 <template lang="pug">
-  v-container#home(fluid)
+v-container#home(fluid)
 
-    //- Announcements
-    #announcements.mx-1.mt-1(v-if='announcements.length')
-      Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
+  //- Announcements
+  #announcements.mx-1.mt-1(v-if='announcements.length')
+    Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
-    //- Calendar and search bar
-    v-row.pt-0.pt-sm-2.pl-0.pl-sm-2
-      #calh.col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-4.pa-sm-3
-        //- this is needed as v-calendar does not support SSR
-        //- https://github.com/nathanreyes/v-calendar/issues/336
-        client-only(placeholder='Calendar unavailable without js')
-          Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='filteredEvents')
+  //- Calendar and search bar
+  v-row.pt-0.pt-sm-2.pl-0.pl-sm-2
+    #calh.col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-4.pa-sm-3
+      //- this is needed as v-calendar does not support SSR
+      //- https://github.com/nathanreyes/v-calendar/issues/336
+      client-only(placeholder='Calendar unavailable without js')
+        Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='filteredEvents')
 
-      .col.pt-0.pt-md-2
-        Search(:filters='filters' @update='updateFilters')
-        v-chip(v-if='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange()') {{selectedDay}}
+    .col.pt-0.pt-md-2
+      Search(:filters='filters' @update='updateFilters')
+      v-chip(v-if='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange()') {{selectedDay}}
 
-    //- Events
-    #events.mb-2.mt-1.pl-1.pl-sm-2
-      Event(:event='event' @destroy='destroy' v-for='(event, idx) in visibleEvents' :lazy='idx>2' :key='event.id' @tagclick='tagClick' @placeclick='placeClick')
-
+  //- Events
+  #events.mb-2.mt-1.pl-1.pl-sm-2
+    Event(:event='event' @destroy='destroy' v-for='(event, idx) in visibleEvents' :lazy='idx>2' :key='event.id' @tagclick='tagClick' @placeclick='placeClick')
 </template>
 
 <script>
@@ -37,7 +36,7 @@ export default {
   name: 'Index',
   components: { Event, Search, Announcement, Calendar },
   middleware: 'setup',
-  async asyncData ({ params, $api, store }) {
+  async asyncData ({ $api }) {
     const events = await $api.getEvents({
       start: dayjs().startOf('month').unix(),
       end: null,
@@ -45,13 +44,13 @@ export default {
     })
     return { events }
   },
-  data ({ $store }) {
+  data () {
     return {
       mdiCloseCircle,
       first: true,
       isCurrentMonth: true,
       now: dayjs().unix(),
-      date: dayjs().format('YYYY-MM-DD'),
+      date: dayjs.tz().format('YYYY-MM-DD'),
       events: [],
       start: dayjs().startOf('month').unix(),
       end: null,
@@ -113,10 +112,8 @@ export default {
     }
   },
   methods: {
-    // onIntersect (isIntersecting, eventId) {
-    // this.intersecting[eventId] = isIntersecting
-    // },
     ...mapActions(['setFilters']),
+
     destroy (id) {
       this.events = this.events.filter(e => e.id !== id)
     },
@@ -158,16 +155,15 @@ export default {
       this.selectedDay = null
 
       // check if current month is selected
-      if (month - 1 === dayjs().month() && year === dayjs().year()) {
+      if (month - 1 === dayjs.tz().month() && year === dayjs.tz().year()) {
         this.isCurrentMonth = true
         this.start = dayjs().startOf('month').unix()
-        this.date = dayjs().format('YYYY-MM-DD')
+        this.date = dayjs.tz().format('YYYY-MM-DD')
       } else {
         this.isCurrentMonth = false
         this.date = ''
         this.start = dayjs().year(year).month(month - 1).startOf('month').unix() // .startOf('week').unix()
       }
-      // TODO: check if calendar view is double
       this.end = dayjs().year(year).month(month).endOf('month').unix() // .endOf('week').unix()
       this.updateEvents()
     },
@@ -175,7 +171,7 @@ export default {
       this.setFilters(filters)
     },
     dayChange (day) {
-      this.selectedDay = day ? dayjs(day).format('YYYY-MM-DD') : null
+      this.selectedDay = day ? dayjs.tz(day).format('YYYY-MM-DD') : null
     }
   }
 }
