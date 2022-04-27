@@ -1,7 +1,7 @@
 <template>
 <figure :class='{ thumb, img: true }' 
-    :height="media.height" :width="media.width"
-    :style="{ 'background-position': thumbnailPosition, 'background-image': preview }">
+    :height="height" :width="width"
+    :style="backgroundPreview">
 
   <picture>
     <source :srcset="srcset" type='image/webp' />
@@ -12,7 +12,7 @@
       :alt='media.name' :loading='lazy?"lazy":"eager"'
       :src="src"
       itemprop="image"
-      :height="media.height" :width="media.width"
+      :height="height" :width="width"
       :style="{ 'object-position': thumbnailPosition }"
       @load="loaded">
 
@@ -36,11 +36,21 @@ export default {
     return { loading: true }
   },
   computed: {
-    preview () {
-      return "url('data:image/png;base64," + this.media?.preview + "')"
+    backgroundPreview () {
+      if (this.media) {
+        return {
+          backgroundPosition: this.thumbnailPosition,
+          backgroundImage: "url('data:image/png;base64," + this.media.preview + "')" }
+      }
     },
     media () {
       return this.event.media[0]
+    },
+    height () {
+      return this.media ? this.media.height : 'auto'
+    },
+    width () {
+      return this.media ? this.media.width : 'auto'
     },
     src () {
       if (this.media) {
@@ -54,7 +64,7 @@ export default {
       return this.src.replace(/.jpg$/, '.webp')
     },
     thumbnailPosition () {
-      if (this.media?.focalpoint) {
+      if (this.media.focalpoint) {
         const focalpoint = this.media.focalpoint
         return `${(focalpoint[0] + 1) * 50}% ${(focalpoint[1] + 1) * 50}%`
       }
@@ -71,12 +81,12 @@ export default {
 <style>
 
 .img {
-  display: inline-flex;
   width: 100%;
   height: auto;
   position: relative;
   overflow: hidden;
-  background-size: 100%;
+  display: flex;
+  background-size: cover;
 }
 
 .img img {
@@ -100,6 +110,7 @@ export default {
 
 .img picture {
   width: 100%;
+  display: flex;
 }
 
 .img picture img.loading {
