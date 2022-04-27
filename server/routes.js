@@ -34,13 +34,14 @@ if (config.status === 'READY') {
 
   // rss/ics/atom feed
   app.get('/feed/:type', cors(), exportController.export)
-  app.use('/.well-known', webfinger)
   
   app.use('/event/:slug', helpers.APRedirect)
+  
   // federation api / activitypub / webfinger / nodeinfo
   app.use('/federation', federation)
+  app.use('/.well-known', webfinger)
 
-// ignore unimplemented ping url from fediverse
+  // ignore unimplemented ping url from fediverse
   app.use(spamFilter)
 
   // fill res.locals.user if request is authenticated
@@ -54,7 +55,7 @@ if (config.status === 'READY') {
 app.use('/api', api)
 
 // // Handle 500
-app.use((error, req, res, next) => {
+app.use((error, _req, res, _next) => {
   log.error('[ERROR]', error)
   res.status(500).send('500: Internal Server Error')
 })
@@ -63,8 +64,6 @@ app.use((error, req, res, next) => {
 // first nuxt component is ./pages/index.vue (with ./layouts/default.vue)
 // prefill current events, tags, places and announcements (used in every path)
 app.use(async (req, res, next) => {
-  // const start_datetime = getUnixTime(startOfWeek(startOfMonth(new Date())))
-  // req.events = await eventController._select(start_datetime, 100)
   if (config.status === 'READY') {
 
     const eventController = require('./api/controller/event')

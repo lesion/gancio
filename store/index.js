@@ -1,3 +1,7 @@
+// const dayjs = require('dayjs')
+// const timezone = require('dayjs/plugin/timezone')
+// dayjs.extend(timezone)
+
 export const state = () => ({
   locale: '',
   user_locale: {},
@@ -54,6 +58,7 @@ export const actions = {
   // we use it to get configuration from db, set locale, etc...
   nuxtServerInit ({ commit }, { req, res }) {
     commit('setSettings', res.locals.settings)
+    // dayjs.tz.(res.locals.settings.instance_timezone)    
     if (res.locals.status === 'READY') {
       commit('setAnnouncements', res.locals.announcements)
       commit('update', res.locals.meta)

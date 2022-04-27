@@ -137,8 +137,7 @@ const oauthController = {
       code.userId = user.id
       code.clientId = client.id
       code.expiresAt = dayjs(code.expiresAt).toDate()
-      const ret = await OAuthCode.create(code)
-      return ret
+      return OAuthCode.create(code)
     },
 
     // TODO
