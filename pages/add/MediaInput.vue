@@ -15,7 +15,7 @@
 
             v-col.col-12.col-sm-4
               p {{$t('event.choose_focal_point')}}
-              img.img.d-none.d-sm-block(v-if='mediaPreview'
+              img.mediaPreview.d-none.d-sm-block(v-if='mediaPreview'
                 :src='mediaPreview' :style="{ 'object-position': position }")
 
               v-textarea.mt-4(type='text'
@@ -35,7 +35,7 @@
       v-btn(text color='primary' @click='openMediaDetails = true') {{$t('common.edit')}}
       v-btn(text color='error' @click='remove') {{$t('common.remove')}}
     div(v-if='mediaPreview')
-      img.img.col-12.ml-3(:src='mediaPreview' :style="{ 'object-position': savedPosition }")
+      img.mediaPreview.col-12.ml-3(:src='mediaPreview' :style="{ 'object-position': savedPosition }")
       span.float-right {{event.media[0].name}}
     v-file-input(
       v-else
@@ -53,7 +53,7 @@ export default {
   name: 'MediaInput',
   props: {
     value: { type: Object, default: () => ({ image: null }) },
-    event: { type: Object, default: () => {} }
+    event: { type: Object, default: () => ({}) }
   },
   data () {
     return {
@@ -142,7 +142,7 @@ export default {
   cursor: crosshair;
 }
 
-.img {
+.mediaPreview {
   width: 100%;
   object-fit: cover;
   object-position: top;

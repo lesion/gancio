@@ -1,7 +1,7 @@
 <template lang="pug">
   v-card.h-event.event.d-flex(itemscope itemtype="https://schema.org/Event")
     nuxt-link(:to='`/event/${event.slug || event.id}`' itemprop="url")
-      img.img.u-featured(:src='thumbnail' :alt='alt' :loading='this.lazy?"lazy":"eager"' itemprop="image" :style="{ 'object-position': thumbnailPosition }")
+      MyPicture(:event='event' thumb :lazy='lazy')
       v-icon.float-right.mr-1(v-if='event.parentId' color='success' v-text='mdiRepeat')
       .title.p-name(itemprop="name") {{event.title}}
 
@@ -50,6 +50,7 @@
 <script>
 import { mapState } from 'vuex'
 import clipboard from '../assets/clipboard'
+import MyPicture from '~/components/MyPicture'
 import { mdiRepeat, mdiPencil, mdiDotsVertical, mdiContentCopy,
   mdiCalendarExport, mdiDeleteForever, mdiCalendar, mdiMapMarker } from '@mdi/js'
 
@@ -58,6 +59,9 @@ export default {
     return { mdiRepeat, mdiPencil, mdiDotsVertical, mdiContentCopy, mdiCalendarExport,
       mdiDeleteForever, mdiMapMarker, mdiCalendar }
   },
+  components: {
+    MyPicture
+  },
   props: {
     event: { type: Object, default: () => ({}) },
     lazy: Boolean
@@ -65,25 +69,6 @@ export default {
   mixins: [clipboard],
   computed: {
     ...mapState(['settings']),
-    thumbnail () {
-      let path
-      if (this.event.media && this.event.media.length) {
-        path = '/media/thumb/' + this.event.media[0].url
-      } else {
-        path = '/noimg.svg'
-      }
-      return path
-    },
-    alt () {
-      return this.event.media && this.event.media.length ? this.event.media[0].name : ''
-    },
-    thumbnailPosition () {
-      if (this.event.media && this.event.media.length && this.event.media[0].focalpoint) {
-        const focalpoint = this.event.media[0].focalpoint
-        return `${(focalpoint[0] + 1) * 50}% ${(focalpoint[1] + 1) * 50}%`
-      }
-      return 'center center'
-    },
     is_mine () {
       if (!this.$auth.user) {
         return false

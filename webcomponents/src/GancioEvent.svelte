@@ -22,18 +22,22 @@
 
   function when (event) {
     return new Date(event.start_datetime*1000)
-            .toLocaleDateString(undefined,
-              {
-                weekday: 'long',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })    
+      .toLocaleDateString(undefined,
+        {
+          weekday: 'long',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
   }
 
-  function thumbnail(event) {
-    return `${baseurl}/media/thumb/${event.media[0].url}`
+  function thumbnail(event, format) {
+    const imgPath = event.media[0].url
+    if (format === 'webp') {
+      return `${baseurl}/media/thumb/${imgPath.replace(/.jpg$/, '.webp')}`
+    }
+    return `${baseurl}/media/thumb/${imgPath}`
   }
 
   function position(event) {
@@ -49,7 +53,11 @@
 {#if event}
 <a href='{baseurl}/event/{event.slug || event.id}' class='card' target='_blank'>
   {#if event.media.length}
-  <img src="{thumbnail(event)}" alt="{event.media[0].name}" style="object-position: {position(event)}; aspect-ratio=1.7778;">
+
+  <picture>
+    <source srcset="{thumbnail(event, 'webp')}" type='image/webp' />
+    <img src="{thumbnail(event)}" alt="{event.media[0].name}" style="object-position: {position(event)}; aspect-ratio=1.7778;">
+  </picture>  
   {/if}
   <div class="container">
     <strong>{event.title}</strong>

@@ -1,34 +1,34 @@
 <template lang="pug">
-  v-row
-    v-col(cols=12 md=6)
-      v-combobox(ref='place'
-        :rules="[$validators.required('common.where')]"
-        :label="$t('common.where')"
-        :hint="$t('event.where_description')"
-        :search-input.sync="placeName"
-        :prepend-icon='mdiMapMarker'
-        persistent-hint
-        :value="value.name"
-        :items="filteredPlaces"
-        no-filter
-        item-text='name'
-        @change='selectPlace')
-        template(v-slot:item="{ item, attrs, on }")
-          v-list-item(v-bind='attrs' v-on='on')
-            v-list-item-content(two-line v-if='item.create')
-              v-list-item-title <v-icon color='primary' v-text='mdiPlus' :aria-label='add'></v-icon> {{item.name}}
-            v-list-item-content(two-line v-else)
-              v-list-item-title(v-text='item.name')
-              v-list-item-subtitle(v-text='item.address')
+v-row
+  v-col(cols=12 md=6)
+    v-combobox(ref='place'
+      :rules="[$validators.required('common.where')]"
+      :label="$t('common.where')"
+      :hint="$t('event.where_description')"
+      :search-input.sync="placeName"
+      :prepend-icon='mdiMapMarker'
+      persistent-hint
+      :value="value.name"
+      :items="filteredPlaces"
+      no-filter
+      item-text='name'
+      @change='selectPlace')
+      template(v-slot:item="{ item, attrs, on }")
+        v-list-item(v-bind='attrs' v-on='on')
+          v-list-item-content(two-line v-if='item.create')
+            v-list-item-title <v-icon color='primary' v-text='mdiPlus' :aria-label='$t("common.add")'></v-icon> {{item.name}}
+          v-list-item-content(two-line v-else)
+            v-list-item-title(v-text='item.name')
+            v-list-item-subtitle(v-text='item.address')
 
-    v-col(cols=12 md=6)
-      v-text-field(ref='address'
-        :prepend-icon='mdiMap'
-        :disabled='disableAddress'
-        :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
-        :label="$t('common.address')"
-        @change="changeAddress"
-        :value="value.address")
+  v-col(cols=12 md=6)
+    v-text-field(ref='address'
+      :prepend-icon='mdiMap'
+      :disabled='disableAddress'
+      :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
+      :label="$t('common.address')"
+      @change="changeAddress"
+      :value="value.address")
 
 </template>
 <script>
@@ -61,8 +61,7 @@ export default {
           if (tmpName === placeName) { nameMatch = true }
           return true
         }
-        if (tmpAddress.includes(placeName)) { return true }
-        return false
+        return tmpAddress.includes(placeName)
       })
       if (!nameMatch) {
         matches.unshift({ create: true, name: this.placeName })

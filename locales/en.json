@@ -151,7 +151,7 @@
         "each_month": "Each month",
         "due": "until",
         "from": "From",
-        "image_too_big": "The image can't be bigger than 4 MB",
+        "image_too_big": "The image can't be bigger than 4MB",
         "interact_with_me_at": "Interact with me on fediverse at",
         "follow_me_description": "One of the ways to stay up to date on events published here on {title},\nis following the account <u>{account}</u> from the fediverse, for example via Mastodon, and possibly add resources to an event from there.<br/><br/>\nIf you have never heard of Mastodon and the fediverse we recommend reading <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>this article</a>.<br/><br/>Enter your instance below (e.g. mastodon.social)",
         "interact_with_me": "Follow me",
@@ -159,7 +159,11 @@
         "import_URL": "Import from URL",
         "import_ICS": "Import from ICS",
         "ics": "ICS",
-        "import_description": "You can import events from other platforms and other instances through standard formats (ics and h-event)"
+        "import_description": "You can import events from other platforms and other instances through standard formats (ics and h-event)",
+        "alt_text_description": "Description for people with visual impairments",
+        "choose_focal_point": "Choose the focal point",
+        "remove_media_confirmation": "Do you confirm the image removal?",
+        "download_flyer": "Download flyer"
     },
     "admin": {
         "place_description": "If you have gotten the place or address wrong, you can change it.<br/>All current and past events associated with this place will change address.",

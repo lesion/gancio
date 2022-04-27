@@ -11,13 +11,7 @@ v-container#event.pa-0.pa-sm-2
       v-row
         v-col.col-12.col-lg-8
           //- fake image to use u-featured in h-event microformat
-          img.u-featured(v-show='false' v-if='hasMedia' :src='event | mediaURL' itemprop="image")
-          v-img.main_image.mb-3(
-            contain
-            :alt='event | mediaURL("alt")'
-            :src='event | mediaURL'
-            :lazy-src='event | mediaURL("thumb")'
-            v-if='hasMedia')
+          MyPicture(v-if='hasMedia' :event='event')
           .p-description.text-body-1.pa-3.rounded(v-if='!hasMedia && event.description' itemprop='description' v-html='event.description')
 
         v-col.col-12.col-lg-4
@@ -55,6 +49,9 @@ v-container#event.pa-0.pa-sm-2
               v-btn.ml-2(large icon :title="$t('common.add_to_calendar')" color='primary' :aria-label="$t('common.add_to_calendar')"
                 :href='`/api/event/${event.slug || event.id}.ics`')
                 v-icon(v-text='mdiCalendarExport')
+              v-btn.ml-2(v-if='hasMedia' large icon :title="$t('event.download_flyer')" color='primary' :aria-label="$t('event.download_flyer')"
+                :href='event | mediaURL')
+                v-icon(v-text='mdiFileDownloadOutline')                
 
       .p-description.text-body-1.pa-3.rounded(v-if='hasMedia && event.description' itemprop='description' v-html='event.description')
 
@@ -133,10 +130,11 @@ import { mapState } from 'vuex'
 import get from 'lodash/get'
 import moment from 'dayjs'
 import clipboard from '../../assets/clipboard'
+import MyPicture from '~/components/MyPicture'
 const htmlToText = require('html-to-text')
 
 import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose,
-  mdiEye, mdiEyeOff, mdiDelete, mdiRepeat, mdiLock,
+  mdiEye, mdiEyeOff, mdiDelete, mdiRepeat, mdiLock, mdiFileDownloadOutline,
   mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker } from '@mdi/js'
 
 export default {
@@ -145,8 +143,9 @@ export default {
   components: {
     EventAdmin: () => import(/* webpackChunkName: "event" */'./eventAdmin'),
     EmbedEvent: () => import(/* webpackChunkName: "event" */'./embedEvent'),
+    MyPicture
   },
-  async asyncData ({ $axios, params, error, store }) {
+  async asyncData ({ $axios, params, error }) {
     try {
       const event = await $axios.$get(`/event/${params.slug}`)
       return { event }
@@ -156,7 +155,7 @@ export default {
   },
   data () {
     return {
-      mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar,
+      mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar, mdiFileDownloadOutline,
       mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat, mdiLock,
       currentAttachment: 0,
       event: {},
@@ -331,10 +330,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-.main_image {
-  margin: 0 auto;
-  border-radius: 5px;
-  transition: max-height 0.2s;
-}
-</style>
