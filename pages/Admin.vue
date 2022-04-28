@@ -82,6 +82,7 @@ export default {
   },
   data () {
     return {
+      users: [],
       mdiAlert,
       description: '',
       unconfirmedEvents: [],
