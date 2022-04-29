@@ -84,6 +84,8 @@ export default {
       if (!ret) { return }
       await this.$axios.delete(`/event/${this.event.id}`)
       this.$emit('destroy', this.event.id)
+      this.$root.$message('admin.event_remove_ok')
+      
     }
   }
 }
