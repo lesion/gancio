@@ -8,6 +8,7 @@
         :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
         :items='unconfirmedEvents'
         :headers='headers')
+        template(v-slot:item.when='{ item }') {{item|when}}
         template(v-slot:item.actions='{ item }')
           v-btn(text small @click='confirm(item)' color='success') {{$t('common.confirm')}}
           v-btn(text small :to='`/event/${item.slug || item.id}`' color='success') {{$t('common.preview')}}
@@ -31,6 +32,8 @@ export default {
       editing: false,
       headers: [
         { value: 'title', text: 'Title' },
+        { value: 'place.name', text: 'Place' },
+        { value: 'when', text: 'When' },
         { value: 'actions', text: 'Actions', align: 'right' }
       ]
     }
