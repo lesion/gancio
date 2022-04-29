@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     backgroundPreview () {
-      if (this.media) {
+      if (this.media && this.media.preview) {
         return {
           backgroundPosition: this.thumbnailPosition,
           backgroundImage: "url('data:image/png;base64," + this.media.preview + "')" }
