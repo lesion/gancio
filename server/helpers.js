@@ -112,7 +112,7 @@ module.exports = {
     return router
   },
 
-  logRequest (req, res, next) {
+  logRequest (req, _res, next) {
     log.debug(`${req.method} ${req.path}`)
     next()
   },
