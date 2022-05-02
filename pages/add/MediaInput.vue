@@ -11,15 +11,12 @@
                 @mouseup='handleStop' @touchend='handleStop'
               )
               div.focalPoint(:style="{ top, left }")
-              picture(v-if='hasMedia')
-                source(:srcset='mediaPreview("webp")')
-                img(:src='mediaPreview("jpg")')
+              img(v-if='mediaPreview' :src='mediaPreview')
 
             v-col.col-12.col-sm-4
               p {{$t('event.choose_focal_point')}}
-              picture(v-if='hasMedia')
-                source(:srcset='mediaPreview("webp")')
-                img.mediaPreview.d-none.d-sm-block(:src='mediaPreview("jpg")' :style="{ 'object-position': position }")              
+              img.mediaPreview.d-none.d-sm-block(v-if='mediaPreview'
+                :src='mediaPreview' :style="{ 'object-position': position }")
 
               v-textarea.mt-4(type='text'
                 label='Alternative text'
@@ -32,12 +29,12 @@
                 v-btn(text @click='openMediaDetails=false' color='warning') Cancel
                 v-btn(text color='primary' @click='save') Save
 
-    h3.mb-3.font-weight-regular(v-if='hasMedia') {{$t('common.media')}}
-    v-card-actions(v-if='hasMedia')
+    h3.mb-3.font-weight-regular(v-if='mediaPreview') {{$t('common.media')}}
+    v-card-actions(v-if='mediaPreview')
       v-spacer
       v-btn(text color='primary' @click='openMediaDetails = true') {{$t('common.edit')}}
       v-btn(text color='error' @click='remove') {{$t('common.remove')}}
-    div.col-12.ml-3(v-if='hasMedia')
+    div.col-12.ml-3(v-if='mediaPreview')
       picture
         source(:srcset='mediaPreview("webp")')
         img.mediaPreview(:src='mediaPreview("jpg")' :style="{ 'object-position': savedPosition }")
@@ -70,9 +67,6 @@ export default {
     }
   },
   computed: {
-    hasMedia () {
-      return (this.value.url || this.value.image)
-    },
     top () {
       return ((this.focalpoint[1] + 1) * 50) + '%'
     },
