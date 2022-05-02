@@ -34,10 +34,8 @@
       v-spacer
       v-btn(text color='primary' @click='openMediaDetails = true') {{$t('common.edit')}}
       v-btn(text color='error' @click='remove') {{$t('common.remove')}}
-    div.col-12.ml-3(v-if='mediaPreview')
-      picture
-        source(:srcset='mediaPreview("webp")')
-        img.mediaPreview(:src='mediaPreview("jpg")' :style="{ 'object-position': savedPosition }")
+    div(v-if='mediaPreview')
+      img.mediaPreview.col-12.ml-3(:src='mediaPreview' :style="{ 'object-position': savedPosition }")
       span.float-right {{event.media[0].name}}
     v-file-input(
       v-else
@@ -67,6 +65,13 @@ export default {
     }
   },
   computed: {
+    mediaPreview () {
+      if (!this.value.url && !this.value.image) {
+        return false
+      }
+      const url = this.value.image ? URL.createObjectURL(this.value.image) : /^https?:\/\//.test(this.value.url) ? this.value.url : `/media/thumb/${this.value.url}`
+      return url
+    },
     top () {
       return ((this.focalpoint[1] + 1) * 50) + '%'
     },
@@ -83,27 +88,6 @@ export default {
     }
   },
   methods: {
-    mediaPreview (format) {
-      if (!this.value.url && !this.value.image) {
-        return false
-      }
-
-      // just uploaded image
-      if (this.value.image) {
-        return URL.createObjectURL(this.value.image)
-      }
-
-      // remote image
-      if (/^https?:\/\//.test(this.value.url)) {
-        return this.value.url
-      }
-       
-      if (format === 'jpg') {
-        return `/media/thumb/${this.value.url}`
-      } else {
-        return `/media/thumb/${this.value.url.replace(/.jpg$/, '.webp')}`
-      }
-    },
     save () {
       this.$emit('input', { url: this.value.url, image: this.value.image, name: this.name || (this.event.title) || '', focalpoint: [...this.focalpoint] })
       this.openMediaDetails = false
