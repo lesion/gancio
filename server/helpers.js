@@ -95,8 +95,8 @@ module.exports = {
 
   serveStatic () {
     const router = express.Router()
-    // serve event's images/thumb
-    router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' } ))
+    // serve images/thumb
+    router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' } ), (_req, res) => res.sendStatus(404))
     router.use('/noimg.svg', express.static('./static/noimg.svg'))
     
     router.use('/logo.png', (req, res, next) => {
