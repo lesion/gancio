@@ -15,13 +15,11 @@ const DiskStorage = {
     const filename = crypto.randomBytes(16).toString('hex')
     const sharpStream = sharp({ failOnError: true })
     const promises = [
-      sharpStream.clone().resize(500, null, { withoutEnlargement: true }).jpeg({ quality: 90, mozjpeg: true }).toFile(path.resolve(config.upload_path, 'thumb', filename + '.jpg')),
-      sharpStream.clone().resize(500).webp({ quality: 90, alphaQuality: 0, effort: 6 }).toFile(path.resolve(config.upload_path, 'thumb', filename + '.webp')),
-      sharpStream.clone().resize(1200, null, { withoutEnlargement: true } ).jpeg({ quality: 98, mozjpeg: true }).toFile(path.resolve(config.upload_path, filename + '.jpg')),
-      sharpStream.clone().resize(1200).webp({ quality: 98, alphaQuality: 0, effor: 6 }).toFile(path.resolve(config.upload_path, filename + '.webp')),
+      sharpStream.clone().resize(500, null, { withoutEnlargement: true }).jpeg({ effort: 6, mozjpeg: true }).toFile(path.resolve(config.upload_path, 'thumb', filename + '.jpg')),
+      sharpStream.clone().resize(1200, null, { withoutEnlargement: true } ).jpeg({ quality: 95, effort: 6, mozjpeg: true}).toFile(path.resolve(config.upload_path, filename + '.jpg')),
       sharpStream.clone()
-        .resize(6)
-        .png({ quality: 20, palette: true, alphaQuality: 0, effort: 6})
+        .resize(5)
+        .png({ quality: 10, palette: true, effort: 6})
         .toBuffer()
         .then(buffer => buffer.toString('base64'))
     ]
@@ -29,9 +27,8 @@ const DiskStorage = {
     file.stream.pipe(sharpStream)
     Promise.all(promises)
       .then(res => {
-        const info = res[2]
-        const preview = res[4]
-        console.error(preview)
+        const info = res[1]
+        const preview = res[2]
         cb(null, {
           destination: config.upload_path,
           filename: filename + '.jpg',

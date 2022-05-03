@@ -8,7 +8,6 @@ const linkifyHtml = require('linkify-html')
 const Sequelize = require('sequelize')
 const dayjs = require('dayjs')
 const helpers = require('../../helpers')
-const settingsController = require('./settings')
 
 const Event = require('../models/event')
 const Resource = require('../models/resource')
@@ -290,7 +289,7 @@ const eventController = {
     res.sendStatus(200)
   },
 
-  async isAnonEventAllowed (req, res, next) {
+  async isAnonEventAllowed (_req, res, next) {
     if (!res.locals.settings.allow_anon_event) {
       return res.sendStatus(403)
     }
@@ -317,7 +316,7 @@ const eventController = {
 
       const eventDetails = {
         title: body.title,
-        // remove html tags
+        // sanitize and linkify html
         description: helpers.sanitizeHTML(linkifyHtml(body.description || '')),
         multidate: body.multidate,
         start_datetime: body.start_datetime,
@@ -328,17 +327,17 @@ const eventController = {
       }
 
       if (req.file || body.image_url) {
-        let url
-        if (req.file) {
-          url = req.file.filename
-        } else {
-          url = await helpers.getImageFromURL(body.image_url)
+        if (body.image_url) {
+          req.file = await helpers.getImageFromURL(body.image_url)
         }
 
         let focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
         focalpoint = [parseFloat(focalpoint[0]).toFixed(2), parseFloat(focalpoint[1]).toFixed(2)]
         eventDetails.media = [{
-          url,
+          url: req.file.filename,
+          preview: req.file.preview,
+          height: req.file.height,
+          width: req.file.width,
           name: body.image_name || body.title || '',
           focalpoint: [parseFloat(focalpoint[0]), parseFloat(focalpoint[1])]
         }]
@@ -405,41 +404,39 @@ const eventController = {
 
       const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
       const eventDetails = {
-        title: body.title,
-        // remove html tags
-        description: helpers.sanitizeHTML(linkifyHtml(body.description, { target: '_blank' })),
+        title: body.title || event.title,
+        // sanitize and linkify html
+        description: helpers.sanitizeHTML(linkifyHtml(body.description, { target: '_blank' })) || event.description,
         multidate: body.multidate,
         start_datetime: body.start_datetime,
         end_datetime: body.end_datetime,
         recurrent
       }
 
+      // remove old media in case a new one is uploaded
       if ((req.file || /^https?:\/\//.test(body.image_url)) && !event.recurrent && event.media && event.media.length) {
-        const old_path = path.resolve(config.upload_path, event.media[0].url)
-        const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.media[0].url)
         try {
+          const old_path = path.resolve(config.upload_path, event.media[0].url)
+          const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.media[0].url)
           fs.unlinkSync(old_path)
           fs.unlinkSync(old_thumb_path)
         } catch (e) {
           log.info(e.toString())
         }
       }
-      let url
-      if (req.file) {
-        url = req.file.filename
-      } else if (body.image_url) {
-        if (/^https?:\/\//.test(body.image_url)) {
-          url = await helpers.getImageFromURL(body.image_url)
-        } else {
-          url = body.image_url
-        }
-      }
 
-      if (url && !event.recurrent) {
+      if (req.file || body.image_url) {
+        if (body.image_url) {
+          req.file = await helpers.getImageFromURL(body.image_url)
+        }
+
         const focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
         eventDetails.media = [{
-          url,
-          name: body.image_name || '',
+          url: req.file.filename,
+          preview: req.file?.preview,
+          height: req.file?.height,
+          width: req.file?.width,
+          name: body.image_name || body.title || '',
           focalpoint: [parseFloat(focalpoint[0].slice(0, 6)), parseFloat(focalpoint[1].slice(0, 6))]
         }]
       } else {
@@ -481,9 +478,9 @@ const eventController = {
     // check if event is mine (or user is admin)
     if (event && (res.locals.user.is_admin || res.locals.user.id === event.userId)) {
       if (event.media && event.media.length && !event.recurrent) {
-        const old_path = path.join(config.upload_path, event.media[0].url)
-        const old_thumb_path = path.join(config.upload_path, 'thumb', event.media[0].url)
         try {
+          const old_path = path.join(config.upload_path, event.media[0].url)
+          const old_thumb_path = path.join(config.upload_path, 'thumb', event.media[0].url)
           fs.unlinkSync(old_thumb_path)
           fs.unlinkSync(old_path)
         } catch (e) {

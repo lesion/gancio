@@ -32,12 +32,8 @@
         })
   }
 
-  function thumbnail(event, format) {
-    const imgPath = event.media[0].url
-    if (format === 'webp') {
-      return `${baseurl}/media/thumb/${imgPath.replace(/.jpg$/, '.webp')}`
-    }
-    return `${baseurl}/media/thumb/${imgPath}`
+  function thumbnail(event) {
+    return `${baseurl}/media/thumb/${event.media[0].url}`
   }
 
   function position(event) {
@@ -53,11 +49,7 @@
 {#if event}
 <a href='{baseurl}/event/{event.slug || event.id}' class='card' target='_blank'>
   {#if event.media.length}
-
-  <picture>
-    <source srcset="{thumbnail(event, 'webp')}" type='image/webp' />
-    <img src="{thumbnail(event)}" alt="{event.media[0].name}" style="object-position: {position(event)}; aspect-ratio=1.7778;">
-  </picture>  
+  <img src="{thumbnail(event)}" alt="{event.media[0].name}" style="object-position: {position(event)}; aspect-ratio=1.7778;">
   {/if}
   <div class="container">
     <strong>{event.title}</strong>
