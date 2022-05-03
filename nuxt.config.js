@@ -26,7 +26,7 @@ module.exports = {
     }
   },
 
-  css: ['./assets/style.less'],
+  css: ['./assets/style.css'],
 
   /*
    ** Customize the progress-bar component

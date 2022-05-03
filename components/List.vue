@@ -61,12 +61,12 @@ export default {
   }
 }
 </script>
-<style lang='less'>
-  #list {
-    max-width: 500px;
-    margin: 0 auto;
-    .v-list-item__title {
-      white-space: normal !important;
-    }
-  }
+<style>
+#list {
+  max-width: 500px;
+  margin: 0 auto;
+}
+#list .v-list-item__title {
+  white-space: normal !important;
+}
 </style>

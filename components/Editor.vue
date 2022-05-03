@@ -176,7 +176,7 @@ export default {
   }
 }
 </script>
-<style lang='less'>
+<style lang='scss'>
 
 .editor {
   margin-top: 4px;
