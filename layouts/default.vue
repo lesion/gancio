@@ -1,14 +1,17 @@
-<template lang='pug'>
-  v-app(app)
-    Snackbar
-    Confirm
-    Nav
+<template>
+  <v-app app>
+    <Snackbar/>
+    <Confirm/>
+    <Nav/>
+    <v-main app>
+      <v-fade-transition hide-on-leave>
+        <nuxt/>
+      </v-fade-transition>
+    </v-main>
+    <Footer/>
 
-    v-main(app)
-      v-fade-transition(hide-on-leave)
-        nuxt
+  </v-app>
 
-    Footer
 
 </template>
 <script>
