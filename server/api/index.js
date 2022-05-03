@@ -72,7 +72,7 @@ if (config.status !== 'READY') {
 
   // delete user
   api.delete('/user/:id', isAdmin, userController.remove)
-  api.delete('/user', isAdmin, userController.remove)
+  api.delete('/user', isAuth, userController.remove)
 
   // get all users
   api.get('/users', isAdmin, userController.getAll)
