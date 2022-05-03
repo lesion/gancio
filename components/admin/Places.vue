@@ -44,12 +44,12 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-import { mdiPencil, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
+import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify } from '@mdi/js'
 
 export default {
   data () {
     return {
-      mdiPencil, mdiChevronRight, mdiChevronLeft,
+      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify,
       loading: false,
       dialog: false,
       valid: false,
