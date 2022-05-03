@@ -159,7 +159,11 @@
         "edit_recurrent": "Edita l'activitat periòdica:",
         "updated": "S'ha actualitzat l'activitat",
         "saved": "S'ha desat l'activitat",
-        "import_description": "Pots importar activitats des d'altres instàncies o plataformes que facin servir formats estàndards (ics o h-event)"
+        "import_description": "Pots importar activitats des d'altres instàncies o plataformes que facin servir formats estàndards (ics o h-event)",
+        "remove_media_confirmation": "Confirmeu l'eliminació de la imatge?",
+        "download_flyer": "Baixa el flyer",
+        "alt_text_description": "Descripció per a persones amb discapacitat visual",
+        "choose_focal_point": "Tria el punt focal"
     },
     "admin": {
         "place_description": "En el cas que un lloc és incorrecte o l'adreça ha de canviar, pots arreglar-ho.<br/>Tingues en compte que totes les activitats passades i futures associades amb aquest lloc també canviaran d'adreça.",
@@ -226,7 +230,8 @@
         "smtp_hostname": "Amfitrió SMTP (hostname)",
         "smtp_description": "<ul><li>L'admin hauria de rebre un correu cada cop que es pengi alguna una activitat anònima (si estan activades).</li><li>L'admin hauria de rebre un correu per cada soŀlicitud de registre (si estan actives).</li><li>La usuària hauria de rebre un correu després de soŀlicitar registrar-se.</li><li>La usuària hauria de rebre un correu quan se li hagi confirmat el registre.</li><li>La usuària hauria de rebre un correu si l'admin la registra directament.</li><li>La usuària hauria de rebre un correu de restabliment de contrasenya si ho demana</li></ul>",
         "smtp_test_button": "Envia un correu de prova",
-        "widget": "Giny"
+        "widget": "Giny",
+        "wrong_domain_warning": "La url base configurada a config.json <b>({baseurl})</b> difereix de la que esteu visitant <b>({url})</b>"
     },
     "auth": {
         "not_confirmed": "Encara no s'ha confirmat…",
@@ -272,6 +277,8 @@
     "setup": {
         "completed": "S'ha completat la configuració inicial",
         "completed_description": "<p>Ara ja pots entrar amb aquesta usuària:<br/><br/>Nom: <b>{email}</b><br/>Contrasenya: <b>{password}<b/></p>",
-        "start": "Comença"
+        "start": "Comença",
+        "copy_password_dialog": "Sí, has de copiar la contrasenya!",
+        "https_warning": "Esteu visitant des d'HTTP, recordeu canviar baseurl a config.json si canvieu a HTTPS!"
     }
 }
