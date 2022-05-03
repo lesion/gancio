@@ -52,7 +52,7 @@ export default {
     ...mapState(['places']),
     filteredPlaces () {
       if (!this.placeName) { return this.places }
-      const placeName = this.placeName.toLowerCase()
+      const placeName = this.placeName.trim().toLowerCase()
       let nameMatch = false
       const matches = this.places.filter(p => {
         const tmpName = p.name.toLowerCase()
@@ -73,14 +73,16 @@ export default {
     selectPlace (p) {
       if (!p) { return }
       if (typeof p === 'object' && !p.create) {
-        this.place.name = p.name
+        this.place.name = p.name.trim()
         this.place.address = p.address
         this.disableAddress = true
       } else { // this is a new place
         this.place.name = p.name || p
+        const tmpPlace = this.place.name.trim().toLowerCase()
         // search for a place with the same name
-        const place = this.places.find(p => p.name === this.place.name)
+        const place = this.places.find(p => p.name.toLowerCase() === tmpPlace)
         if (place) {
+          this.place.name = place.name
           this.place.address = place.address
           this.disableAddress = true
         } else {
