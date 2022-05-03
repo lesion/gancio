@@ -426,7 +426,7 @@ const eventController = {
       }
 
       if (req.file || body.image_url) {
-        if (body.image_url) {
+        if (body.image_url && /^https?:\/\//.test(body.image_url)) {
           req.file = await helpers.getImageFromURL(body.image_url)
         }
 
