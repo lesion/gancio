@@ -12,7 +12,8 @@
     "doc": "cd docs && bundle exec jekyll b",
     "doc:dev": "cd docs && bundle exec jekyll s --drafts",
     "migrate": "NODE_ENV=production sequelize db:migrate",
-    "migrate:dev": "sequelize db:migrate"
+    "migrate:dev": "sequelize db:migrate",
+    "build:wc": "cd webcomponents; yarn build:lib; cd .."
   },
   "files": [
     "server/",
