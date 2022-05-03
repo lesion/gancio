@@ -126,6 +126,7 @@ export default {
         if (!this.instance_url.startsWith('http')) {
           this.instance_url = `https://${this.instance_url}`
         }
+        this.instance_url = this.instance_url.replace(/\/$/, '')
         const instance = await axios.get(`${this.instance_url}/.well-known/nodeinfo/2.1`)
         this.setSetting({
           key: 'trusted_instances',
