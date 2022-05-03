@@ -131,7 +131,7 @@ import get from 'lodash/get'
 import moment from 'dayjs'
 import clipboard from '../../assets/clipboard'
 import MyPicture from '~/components/MyPicture'
-const htmlToText = require('html-to-text')
+const { htmlToText } = require('html-to-text')
 
 import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose,
   mdiEye, mdiEyeOff, mdiDelete, mdiRepeat, mdiLock, mdiFileDownloadOutline,
@@ -246,7 +246,7 @@ export default {
       return this.event.media && this.event.media.length
     },
     plainDescription () {
-      return htmlToText.fromString(this.event.description.replace('\n', '').slice(0, 1000))
+      return htmlToText(this.event.description.replace('\n', '').slice(0, 1000))
     },
     currentAttachmentLabel () {
       return get(this.selectedResource, `data.attachment[${this.currentAttachment}].name`, '')
