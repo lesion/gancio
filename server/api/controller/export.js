@@ -2,6 +2,7 @@ const Event = require('../models/event')
 const Place = require('../models/place')
 const Tag = require('../models/tag')
 
+const { htmlToText } = require('html-to-text')
 const { Op, literal } = require('sequelize')
 const moment = require('dayjs')
 const ics = require('ics')
@@ -88,13 +89,16 @@ const exportController = {
       const end = tmpEnd.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
       return {
         start,
-        // startOutputType: 'utc',
+        startOutputType: 'local',
         end,
-        // endOutputType: 'utc',
+        endOutputType: 'local',
         title: `[${settings.title}] ${e.title}`,
-        description: e.description,
+        description: htmlToText(e.description),
+        htmlContent: e.description,
         location: `${e.place.name} - ${e.place.address}`,
         url: `${settings.baseurl}/event/${e.slug || e.id}`,
+        status: 'CONFIRMED',
+        categories: e.tags,
         alarms
       }
     })
