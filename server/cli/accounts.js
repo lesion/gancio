@@ -26,6 +26,7 @@ async function modify (args) {
 }
 
 async function add (args) {
+  
 }
 
 async function list () {
@@ -33,7 +34,7 @@ async function list () {
   const User = require('../api/models/user')
   const users = await User.findAll()
   console.log()
-  users.forEach(u => console.log(`${u.id}\tadmin: ${u.is_admin}\tenabled: ${u.is_active}\temail: ${u.email} - ${u.password}`))
+  users.forEach(u => console.log(`${u.id}\tadmin: ${u.is_admin}\tenabled: ${u.is_active}\temail: ${u.email}`))
   console.log()
 }
 
@@ -42,13 +43,19 @@ const accountsCLI = yargs => {
   .command('list', 'List all accounts', list)
   .command('modify', 'Modify', {
     account: {
-      describe: 'Account to modify'
+      describe: 'Account to modify',
+      type: 'string',
+      demandOption: true
     },
     'reset-password': {
-        describe: 'Resets the password of the given accoun '
+        describe: 'Resets the password of the given accoun ',
+        type: 'boolean'
     }
   }, modify)
   .command('add', 'Add an account', {}, add)
+  .recommendCommands()
+  .strict()
+  .demandCommand(1, '')
 }
 
 module.exports = accountsCLI
