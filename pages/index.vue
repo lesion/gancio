@@ -10,7 +10,7 @@ v-container#home(fluid)
     #calh.col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-4.pa-sm-3
       //- this is needed as v-calendar does not support SSR
       //- https://github.com/nathanreyes/v-calendar/issues/336
-      client-only(placeholder='Calendar unavailable without js')
+      client-only(placeholder='Loading...')
         Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='filteredEvents')
 
     .col.pt-0.pt-md-2

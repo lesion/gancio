@@ -51,8 +51,10 @@
                 v-combobox(v-model='event.tags'
                   :prepend-icon="mdiTagMultiple"
                   chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
+                  no-filter
+                  :search-input.sync="tagName"
                   :delimiters="[',', ';']"
-                  :items="tags.map(t => t.tag)"
+                  :items="filteredTags"
                   :label="$t('common.tags')")
                   template(v-slot:selection="{ item, on, attrs, selected, parent}")
                     v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
@@ -131,6 +133,7 @@ export default {
         tags: [],
         media: []
       },
+      tagName: '',
       page: { month, year },
       fileList: [],
       id: null,
@@ -145,7 +148,14 @@ export default {
       title: `${this.settings.title} - ${this.$t('common.add_event')}`
     }
   },
-  computed: mapState(['tags', 'places', 'settings']),
+  computed: {
+    ...mapState(['tags', 'settings']),
+    filteredTags () {
+      if (!this.tagName) { return this.tags.slice(0, 10).map(t => t.tag) }
+      const tagName = this.tagName.trim().toLowerCase()
+      return this.tags.filter(t => t.tag.toLowerCase().includes(tagName)).map(t => t.tag)
+    }    
+  },
   methods: {
     ...mapActions(['updateMeta']),
     eventImported (event) {
