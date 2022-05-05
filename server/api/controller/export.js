@@ -69,7 +69,7 @@ const exportController = {
     }
   },
 
-  feed (req, res, events) {
+  feed (_req, res, events) {
     const settings = res.locals.settings
     res.type('application/rss+xml; charset=UTF-8')
     res.render('feed/rss.pug', { events, settings, moment })
@@ -80,7 +80,7 @@ const exportController = {
    * @param {*} events array of events from sequelize
    * @param {*} alarms https://github.com/adamgibbons/ics#attributes (alarms)
    */
-  ics (req, res, events, alarms = []) {
+  ics (_req, res, events, alarms = []) {
     const settings = res.locals.settings
     const eventsMap = events.map(e => {
       const tmpStart = moment.unix(e.start_datetime)
