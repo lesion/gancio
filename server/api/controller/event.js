@@ -327,7 +327,7 @@ const eventController = {
       }
 
       if (req.file || body.image_url) {
-        if (body.image_url) {
+        if (!req.file && body.image_url) {
           req.file = await helpers.getImageFromURL(body.image_url)
         }
 
@@ -345,7 +345,7 @@ const eventController = {
         eventDetails.media = []
       }
 
-      const event = await Event.create(eventDetails)
+      let event = await Event.create(eventDetails)
 
       const [place] = await Place.findOrCreate({
         where: { name: body.place_name },
@@ -355,14 +355,13 @@ const eventController = {
       })
 
       await event.setPlace(place)
-      event.place = place
 
       // create/assign tags
       if (body.tags) {
+        body.tags = body.tags.map(t => t.trim())
         await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
         const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
         await event.addTags(tags)
-        event.tags = tags
       }
 
       // associate user to event and reverse
@@ -371,6 +370,9 @@ const eventController = {
         await event.setUser(res.locals.user)
       }
 
+      event = event.get()
+      event.tags = body.tags
+      event.place = place
       // return created event to the client
       res.json(event)
 
