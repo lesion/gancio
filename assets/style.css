@@ -77,6 +77,7 @@ li {
   -webkit-box-orient: vertical;
   font-size: 1.1em !important;
   line-height: 1.2em !important;
+  text-decoration: none;
 }
 
 .event .body {
@@ -89,7 +90,7 @@ li {
   text-overflow: ellipsis;
 }
 
-.event .place a {
+.event a {
   text-decoration: none;
 }
 
