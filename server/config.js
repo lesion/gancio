@@ -7,8 +7,8 @@ let config = {
   baseurl: '',
   hostname: '',
   server: {
-    host: '0.0.0.0',
-    port: 13120
+    host: process.env.GANCIO_HOST || '0.0.0.0',
+    port: process.env.GANCIO_PORT || 13120
   },
   log_level: 'debug',
   log_path: path.resolve(process.env.cwd || '', 'logs'),
