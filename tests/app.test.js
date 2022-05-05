@@ -1,5 +1,6 @@
 const request = require('supertest')
 const fs = require('fs')
+const dayjs = require('dayjs')
 
 const admin = { username: 'admin', password: 'JqFuXEnkTyOR', grant_type: 'password', client_id: 'self' }
 let token
@@ -57,34 +58,30 @@ describe('Authentication / Authorization', () => {
   })
 
   test('should not change settings when not allowed', async () => {
-    let response
-    response = await request(app).post('/api/settings')
+    return request(app).post('/api/settings')
       .send({ key: 'allow_anon_event', value: false })
       .expect(403)
   })
 
   test('should create anon event only when allowed', async () => {
-    let response
-    response = await request(app).post('/api/settings')
+    
+    await request(app).post('/api/settings')
     .send({ key: 'allow_anon_event', value: false })
     .auth(token.access_token, { type: 'bearer' })
       .expect(200)
     
-    response = await request(app).post('/api/event')
+    await request(app).post('/api/event')
       .expect(403)
 
-    response = await request(app).post('/api/settings')
+    await request(app).post('/api/settings')
       .send({ key: 'allow_anon_event', value: true })
       .auth(token.access_token, { type: 'bearer' })
         .expect(200)
   
-    response = await request(app).post('/api/event')
+    return request(app).post('/api/event')
       .send({ title: 'test title', place_name: 'place name', start_datetime: new Date().getTime() * 1000 })
       .expect(200)
         
-    // expect(response.statusCode).toBe(200)
-    // response = await request(app).post('/api/settings')
-    //   .send({ key: 'allow_anon_event', value: false })
   })
 
 })
@@ -103,9 +100,23 @@ describe('Events', () => {
       const response = await request(app).post('/api/event').send(required_fields[field])
         .expect(400)
       expect(response.text).toBe(`${field} is required`)
-      return
     })
     
     return Promise.all(promises)
+  })
+
+  test('should trim tags', async () => {
+    const event = {
+      title: 'test title',
+      place_name: 'test place name',
+      start_datetime: dayjs().unix(),
+      tags: [' test tag ']
+    }
+    
+    const response = await request(app).post('/api/event')
+      .send(event)
+      .expect(200)
+      .expect('Content-Type', /json/)
+    expect(response.body.tags[0]).toBe('test tag')
   })
 })
