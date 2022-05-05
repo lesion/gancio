@@ -38,8 +38,7 @@ async function list () {
   console.log()
 }
 
-const accountsCLI = yargs => {
-  return yargs
+const accountsCLI = yargs => yargs
   .command('list', 'List all accounts', list)
   .command('modify', 'Modify', {
     account: {
@@ -48,7 +47,7 @@ const accountsCLI = yargs => {
       demandOption: true
     },
     'reset-password': {
-        describe: 'Resets the password of the given accoun ',
+        describe: 'Resets the password of the given account ',
         type: 'boolean'
     }
   }, modify)
@@ -56,6 +55,6 @@ const accountsCLI = yargs => {
   .recommendCommands()
   .strict()
   .demandCommand(1, '')
-}
+  .argv
 
 module.exports = accountsCLI
