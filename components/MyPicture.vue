@@ -5,14 +5,14 @@
 
     <img 
       v-if='media' 
-      :class='{ "u-featured": true, loading }'
+      :class='{ "u-featured": true, loading: true }'
       :alt='media.name' :loading='lazy?"lazy":"eager"'
       :src="src"
       :srcset="srcset"
       itemprop="image"
       :height="height" :width="width"
       :style="{ 'object-position': thumbnailPosition }"
-      @load="loaded">
+      onload="this.classList.remove('loading')">
 
     <img v-else-if='!media && thumb' class='thumb' src="noimg.svg" alt=''>
 
@@ -27,9 +27,6 @@ export default {
     thumb: { type: Boolean, default: false },
     lazy: { type: Boolean, default: false },
     showPreview: { type: Boolean, default: true }
-  },
-  data () {
-    return { loading: true }
   },
   computed: {
     backgroundPreview () {
@@ -67,11 +64,6 @@ export default {
       }
       return 'center center'
     },
-  },
-  methods: {
-    loaded () {
-      this.loading = false
-    }
   }
 }
 </script>
@@ -83,10 +75,12 @@ export default {
   position: relative;
   overflow: hidden;
   display: flex;
-  background-size: cover;
+  background-size: contain;
 }
 
 .img img {
+  object-fit: contain;
+  max-height: 125vh;
   display: flex;
   width: 100%;
   max-width: 100%;
@@ -107,7 +101,7 @@ export default {
 }
 
 .img img.loading {
-  opacity: 0;
+  opacity: 0.1;
 }
 
 </style>

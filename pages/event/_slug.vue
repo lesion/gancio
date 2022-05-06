@@ -9,12 +9,12 @@ v-container#event.pa-0.pa-sm-2
     v-card-text
 
       v-row
-        v-col.col-12.col-lg-8
+        v-col.col-12.col-md-8
           //- fake image to use u-featured in h-event microformat
           MyPicture(v-if='hasMedia' :event='event')
           .p-description.text-body-1.pa-3.rounded(v-if='!hasMedia && event.description' itemprop='description' v-html='event.description')
 
-        v-col.col-12.col-lg-4
+        v-col.col-12.col-md-4
           v-card(outlined)
             v-card-text
               v-icon.float-right(v-if='event.parentId' color='success' v-text='mdiRepeat')
