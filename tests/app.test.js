@@ -63,6 +63,28 @@ describe('Authentication / Authorization', () => {
       .expect(403)
   })
 
+})
+
+describe('Events', () => {
+
+
+  test('should not allow event creation without required fields', async () => {
+    const required_fields = {
+      'title': {},
+      'start_datetime': { title: 'test title' },
+      'place_id or place_name and place_address': { title: 'test title', start_datetime: new Date().getTime() * 1000, place_name: 'test place name'},
+    }
+
+    const promises = Object.keys(required_fields).map(async field => {
+      const response = await request(app).post('/api/event').send(required_fields[field])
+        .expect(400)
+      expect(response.text).toBe(`${field} required`)
+    })
+    
+    return Promise.all(promises)
+  })
+
+
   test('should create anon event only when allowed', async () => {
     
     await request(app).post('/api/settings')
@@ -73,42 +95,28 @@ describe('Authentication / Authorization', () => {
     await request(app).post('/api/event')
       .expect(403)
 
+    await  request(app).post('/api/event')
+      .send({ title: 'test title', place_name: 'place name', place_address: 'address', start_datetime: new Date().getTime() * 1000 })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
     await request(app).post('/api/settings')
       .send({ key: 'allow_anon_event', value: true })
       .auth(token.access_token, { type: 'bearer' })
         .expect(200)
   
     return request(app).post('/api/event')
-      .send({ title: 'test title', place_name: 'place name', start_datetime: new Date().getTime() * 1000 })
+      .send({ title: 'test title', place_name: 'place name', place_address: 'address', start_datetime: new Date().getTime() * 1000 })
       .expect(200)
-        
+
   })
 
-})
 
-describe('Events', () => {
-
-
-  test('should not allow event creation without required fields', async () => {
-    const required_fields = {
-      'title': {},
-      'place_name': { title: 'test title' },
-      'start_datetime': { title: 'test title', 'place_name': 'test place name'}
-    }
-
-    const promises = Object.keys(required_fields).map(async field => {
-      const response = await request(app).post('/api/event').send(required_fields[field])
-        .expect(400)
-      expect(response.text).toBe(`${field} is required`)
-    })
-    
-    return Promise.all(promises)
-  })
 
   test('should trim tags', async () => {
     const event = {
       title: 'test title',
-      place_name: 'test place name',
+      place_id: 1,
       start_datetime: dayjs().unix(),
       tags: [' test tag ']
     }
