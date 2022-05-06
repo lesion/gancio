@@ -175,7 +175,7 @@ export default {
       if (!this.$refs.form.validate()) {
         this.$nextTick(() => {
           const el = document.querySelector('.v-input.error--text:first-of-type')
-          el.scrollIntoView()
+          el.scrollIntoView(false)
         })
         return
       }

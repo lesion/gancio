@@ -82,7 +82,7 @@ export default {
         if (this.filters.show_recurrent) {
           return this.events
         }
-        events = events.filter(e => !e.parentId)
+        return events.filter(e => !e.parentId)
       }
 
       return events.filter(e => {
