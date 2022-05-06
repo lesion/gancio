@@ -187,12 +187,15 @@ export default {
 
       if (this.event.media.length) {
         formData.append('image', this.event.media[0].image)
-        formData.append('image_url', this.event.media[0].url)
+        // formData.append('image_url', this.event.media[0].url)
         formData.append('image_name', this.event.media[0].name)
         formData.append('image_focalpoint', this.event.media[0].focalpoint)
       }
 
       formData.append('title', this.event.title)
+      if (this.event.place.id) {
+        formData.append('place_id', this.event.place.id)
+      }
       formData.append('place_name', this.event.place.name)
       formData.append('place_address', this.event.place.address)
       formData.append('description', this.event.description)

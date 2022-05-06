@@ -75,6 +75,7 @@ export default {
       if (typeof p === 'object' && !p.create) {
         this.place.name = p.name.trim()
         this.place.address = p.address
+        this.place.id = p.id
         this.disableAddress = true
       } else { // this is a new place
         this.place.name = p.name || p
@@ -83,9 +84,11 @@ export default {
         const place = this.places.find(p => p.name.toLowerCase() === tmpPlace)
         if (place) {
           this.place.name = place.name
+          this.place.id = place.id
           this.place.address = place.address
           this.disableAddress = true
         } else {
+          delete this.place.id
           this.place.address = ''
           this.disableAddress = false
           this.$refs.place.blur()

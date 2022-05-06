@@ -290,7 +290,7 @@ const eventController = {
   },
 
   async isAnonEventAllowed (_req, res, next) {
-    if (!res.locals.settings.allow_anon_event) {
+    if (!res.locals.settings.allow_anon_event && !res.locals.user) {
       return res.sendStatus(403)
     }
     next()
@@ -307,11 +307,28 @@ const eventController = {
       const body = req.body
       const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
 
-      const required_fields = [ 'title', 'place_name', 'start_datetime']
-      const missing_field = required_fields.find(required_field => !body[required_field])
+      const required_fields = [ 'title', 'start_datetime']
+      let missing_field = required_fields.find(required_field => !body[required_field])
       if (missing_field) {
-        log.warn(`${missing_field} is required`)
-        return res.status(400).send(`${missing_field} is required`)
+        log.warn(`${missing_field} required`)
+        return res.status(400).send(`${missing_field} required`)
+      }
+
+      // find or create the place
+      let place
+      if (body.place_id) {
+        place = await Place.findByPk(body.place_id)
+      } else {
+        place = await Place.findOne({ where: { name: body.place_name.trim() }})
+        if (!place) {
+          if (!body.place_address || !body.place_name) {
+            return res.status(400).send(`place_id or place_name and place_address required`)
+          }
+          place = await Place.create({
+            name: body.place_name,
+            address: body.place_address
+          })
+        }
       }
 
       const eventDetails = {
@@ -346,13 +363,6 @@ const eventController = {
       }
 
       let event = await Event.create(eventDetails)
-
-      const [place] = await Place.findOrCreate({
-        where: { name: body.place_name },
-        defaults: {
-          address: body.place_address
-        }
-      })
 
       await event.setPlace(place)
 
@@ -427,8 +437,9 @@ const eventController = {
         }
       }
 
-      if (req.file || body.image_url) {
-        if (body.image_url && /^https?:\/\//.test(body.image_url)) {
+      // modify associated media only if a new file is uploaded or remote image_url is used
+      if (req.file || (body.image_url && /^https?:\/\//.test(body.image_url))) {
+        if (body.image_url) {
           req.file = await helpers.getImageFromURL(body.image_url)
         }
 
@@ -441,10 +452,9 @@ const eventController = {
           name: body.image_name || body.title || '',
           focalpoint: [parseFloat(focalpoint[0].slice(0, 6)), parseFloat(focalpoint[1].slice(0, 6))]
         }]
-      } else {
+      } else if (!body.image) {
         eventDetails.media = []
       }
-
       await event.update(eventDetails)
       const [place] = await Place.findOrCreate({
         where: { name: body.place_name },
