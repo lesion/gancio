@@ -17,18 +17,12 @@ const DiskStorage = {
     const promises = [
       sharpStream.clone().resize(500, null, { withoutEnlargement: true }).jpeg({ mozjpeg: true, progressive: true }).toFile(path.resolve(config.upload_path, 'thumb', filename + '.jpg')),
       sharpStream.clone().resize(1200, null, { withoutEnlargement: true } ).jpeg({ quality: 95, mozjpeg: true, progressive: true }).toFile(path.resolve(config.upload_path, filename + '.jpg')),
-      sharpStream.clone()
-        .resize(5)
-        .png({ quality: 10, palette: true, effort: 6})
-        .toBuffer()
-        .then(buffer => buffer.toString('base64'))
     ]
 
     file.stream.pipe(sharpStream)
     Promise.all(promises)
       .then(res => {
         const info = res[1]
-        const preview = res[2]
         cb(null, {
           destination: config.upload_path,
           filename: filename + '.jpg',
@@ -36,7 +30,6 @@ const DiskStorage = {
           height: info.height,
           width: info.width,
           size: info.size,
-          preview
         })
       })
       .catch(err => {

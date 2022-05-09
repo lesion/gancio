@@ -352,7 +352,6 @@ const eventController = {
         focalpoint = [parseFloat(focalpoint[0]).toFixed(2), parseFloat(focalpoint[1]).toFixed(2)]
         eventDetails.media = [{
           url: req.file.filename,
-          preview: req.file.preview,
           height: req.file.height,
           width: req.file.width,
           name: body.image_name || body.title || '',
@@ -446,9 +445,8 @@ const eventController = {
         const focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
         eventDetails.media = [{
           url: req.file.filename,
-          preview: req.file?.preview,
-          height: req.file?.height,
-          width: req.file?.width,
+          height: req.file.height,
+          width: req.file.width,
           name: body.image_name || body.title || '',
           focalpoint: [parseFloat(focalpoint[0].slice(0, 6)), parseFloat(focalpoint[1].slice(0, 6))]
         }]
