@@ -133,7 +133,10 @@
         "edit_recurrent": "Modifier l’évènement récurrent :",
         "updated": "Évènement mis à jour",
         "import_description": "Vous pouvez importer des événements depuis d'autres plateformes ou d'autres instances à travers des formats standards (ics et h-event)",
-        "saved": "Événement enregistré"
+        "saved": "Événement enregistré",
+        "alt_text_description": "Description pour les personnes avec une déficience visuelle",
+        "remove_media_confirmation": "Confirmer la suppression de l'image ?",
+        "download_flyer": "Télécharger le flyer"
     },
     "register": {
         "description": "Les mouvements sociaux doivent s'organiser et s'autofinancer.<br/>\n<br/>Avant de pouvoir publier, <strong> le compte doit être approuvé</strong>, considérez que <strong> derrière ce site vous trouverez de vraies personnes</strong>, à qui vous pouvez écrire en deux lignes pour exprimer les évènements que vous souhaiteriez publier.",
@@ -273,6 +276,7 @@
         "check_db": "Vérifier la base de données",
         "completed": "Configuration terminée",
         "completed_description": "<p>Vous pouvez désormais vous connectez avec le compte utilisateur suivant :<br/><br/>Identifiant : <b>{email}</b><br/>Mot de passe : <b>{password}<b/></p>",
-        "start": "Commencer"
+        "start": "Commencer",
+        "copy_password_dialog": "Oui, vous devez copier le mot de passe !"
     }
 }

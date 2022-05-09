@@ -145,12 +145,16 @@
         "normal_description": "Elixe o día.",
         "recurrent_1w_days": "Cada {days}",
         "recurrent_1m_ordinal": "O {n} {days} de cada mes",
-        "image_too_big": "A imaxe non pode superar os 4 MB",
+        "image_too_big": "A imaxe non pode superar os 4MB",
         "recurrent_1m_days": "|O {days} de cada mes|{days} de cada mes",
         "each_2w": "Cada dúas semanas",
         "follow_me_description": "Un dos xeitos de recibir actualizacións dos eventos que se publican aquí en {title},\né seguindo a conta <u>{account}</u> no fediverso, por exemplo a través de Mastodon, e posiblemente tamén engadir recursos para un evento desde alí.<br/><br/>\nSe nunco escoitaches falar de Mastodon e o fediverso recomendámosche ler <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>este artigo</a>.<br/><br/>Escribe aquí a túa instancia (ex. mastodon.social)",
         "ics": "ICS",
-        "import_description": "Podes importar eventos desde outras plataformas e outras instancias usando formatos estándar (ics e h-event)"
+        "import_description": "Podes importar eventos desde outras plataformas e outras instancias usando formatos estándar (ics e h-event)",
+        "alt_text_description": "Descrición para persoas con problemas de visión",
+        "choose_focal_point": "Elixe onde centrar a atención",
+        "remove_media_confirmation": "Confirmas a eliminación da imaxe?",
+        "download_flyer": "Descargar folleto"
     },
     "admin": {
         "place_description": "Se escribiches mal o lugar ou enderezo, podes cambialo.<br/>Cambiará o enderezo de tódolos eventos actuais e pasados asociados a este lugar.",
@@ -217,7 +221,8 @@
         "show_smtp_setup": "Axustes do email",
         "smtp_hostname": "Servidor SMTP",
         "new_announcement": "Novo anuncio",
-        "smtp_description": "<ul><li>Admin debería recibir un email cando se engade un evento anónimo (se está activo)</li><li>Admin debería recibir un email coas solicitudes de rexistro (se activo).</li><li>A usuaria debería recibir un email coa solicitude de rexistro.</li><li>A usuaria debería recibir un email confirmando o rexistro.</li><li>A usuaria debería recibir un email de confirmación cando fose subscrita directamente por Admin</li><li>As usuarias deberían recibir un email para restablecer o contrasinal se o esquecen</li></ul>"
+        "smtp_description": "<ul><li>Admin debería recibir un email cando se engade un evento anónimo (se está activo)</li><li>Admin debería recibir un email coas solicitudes de rexistro (se activo).</li><li>A usuaria debería recibir un email coa solicitude de rexistro.</li><li>A usuaria debería recibir un email confirmando o rexistro.</li><li>A usuaria debería recibir un email de confirmación cando fose subscrita directamente por Admin</li><li>As usuarias deberían recibir un email para restablecer o contrasinal se o esquecen</li></ul>",
+        "wrong_domain_warning": "O url base configurado en config.json <b>({baseurl)</b> é diferente ao que estás a visitar <b>({url})</b>"
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",
@@ -263,7 +268,9 @@
     "setup": {
         "completed": "Configuración completada",
         "completed_description": "<p>Xa podes acceder con estas credenciais:<br/><br/>Identificador: <b>{email}</b><br/>Contrasinal: <b>{password}</b></p>",
-        "start": "Comezar"
+        "start": "Comezar",
+        "https_warning": "Estás entrando con HTTP, lembra cambiar baseurl no config.json se cambias a HTTPS!",
+        "copy_password_dialog": "Si, tes que copiar o contrasinal!"
     },
     "login": {
         "forgot_password": "Esqueceches o contrasinal?",
