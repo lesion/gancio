@@ -1,23 +1,17 @@
 <template>
-<div :class='{ thumb, img: true }' 
-    :height="height" :width="width"
-    :style="backgroundPreview">
-
+  <div :class='{ img: true, thumb }'>
     <img 
       v-if='media' 
-      :class='{ "u-featured": true, loading: true }'
+      :class='{ "u-featured": true }'
       :alt='media.name' :loading='lazy?"lazy":"eager"'
       :src="src"
       :srcset="srcset"
       itemprop="image"
       :height="height" :width="width"
-      :style="{ 'object-position': thumbnailPosition }"
-      onload="this.classList.remove('loading')">
+      :style="{ 'object-position': thumbnailPosition }">
 
     <img v-else-if='!media && thumb' class='thumb' src="noimg.svg" alt=''>
-
-
-</div>
+  </div>
 </template>
 <script>
 
@@ -98,10 +92,6 @@ export default {
   object-fit: cover;
   object-position: top;
   aspect-ratio: 1.7778;
-}
-
-.img img.loading {
-  opacity: 0.1;
 }
 
 </style>
