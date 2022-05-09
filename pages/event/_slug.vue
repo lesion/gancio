@@ -2,6 +2,7 @@
 v-container#event.pa-0.pa-sm-2
   //- EVENT PAGE
   //- gancio supports microformats (http://microformats.org/wiki/h-event)
+  //- and microdata https://schema.org/Event
   v-card.h-event(itemscope itemtype="https://schema.org/Event")
     v-card-actions
       //- admin controls
@@ -10,7 +11,6 @@ v-container#event.pa-0.pa-sm-2
 
       v-row
         v-col.col-12.col-md-8
-          //- fake image to use u-featured in h-event microformat
           MyPicture(v-if='hasMedia' :event='event')
           .p-description.text-body-1.pa-3.rounded(v-if='!hasMedia && event.description' itemprop='description' v-html='event.description')
 
