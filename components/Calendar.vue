@@ -9,7 +9,6 @@
       @update:from-page='updatePage'
       :locale='$i18n.locale'
       :attributes='attributes'
-      :timezone='settings.instance_timezone'
       transition='fade'
       aria-label='Calendar'
       is-expanded
