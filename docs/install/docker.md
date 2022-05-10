@@ -66,5 +66,6 @@ You'll need to [setup nginx as a proxy]({% link install/nginx.md %}) then you ca
 
 ```bash
 cd /opt/gancio
+wget https://gancio.org/docker/Dockerfile -O Dockerfile
 docker-compose up -d --no-deps --build
 ```

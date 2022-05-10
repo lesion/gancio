@@ -4,7 +4,7 @@ services:
   gancio:
     build: .
     restart: always
-    image: node:17.4-slim
+    image: gancio
     container_name: gancio
     environment:
       - PATH=$PATH:/home/node/.yarn/bin
