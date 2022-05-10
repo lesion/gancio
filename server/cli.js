@@ -34,6 +34,5 @@ require('yargs')
   .alias('h', 'help')
   .epilog('Made with ❤ by underscore hacklab - https://gancio.org')
   .recommendCommands()
-  .strict()
   .demandCommand(1, '')
   .argv
