@@ -55,7 +55,7 @@
     "minify-css-string": "^1.0.0",
     "mkdirp": "^1.0.4",
     "multer": "^1.4.3",
-    "nuxt-edge": "^2.16.0-27305297.ab1c6cb4",
+    "nuxt-edge": "^2.16.0-27358576.777a4b7f",
     "pg": "^8.6.0",
     "sequelize": "^6.17.0",
     "sequelize-slugify": "^1.6.1",
