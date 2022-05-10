@@ -1,16 +1,38 @@
 ---
 layout: default
 title: Admin
-permalink: /admin
-nav_order: 5
+permalink: /usage/admin
+nav_order: 1
+parent: Usage
 ---
 
 
-# Admin
-{: .no_toc }
+### CLI
 
-1. TOC
-{:toc}
+#### Manage accounts
+
+
+```bash
+$ gancio accounts
+
+Manage accounts
+
+Commands:
+  gancio accounts list    List all accounts
+
+```
+
+#### List accounts
+
+```
+$ gancio accounts list
+📅 gancio - v1.4.3 - A shared agenda for local communities (nodejs: v16.13.0)
+> Reading configuration from: ./config.json
+
+1	admin: true	enabled: true	email: admin
+2	admin: false	enabled: true	email: lesion@autistici.org
+```
+
 
 ## Basics
 ## Add user

@@ -13,7 +13,7 @@
     "doc:dev": "cd docs && bundle exec jekyll s --drafts",
     "migrate": "NODE_ENV=production sequelize db:migrate",
     "migrate:dev": "sequelize db:migrate",
-    "build:wc": "cd webcomponents; yarn build:lib; cd .."
+    "build:wc": "cd webcomponents; yarn build:lib; cp dist/gancio-events.es.js ../wp-plugin/js/; cp dist/gancio-events.es.js ../assets/; cp dist/gancio-events.es.js ../docs/assets/js/"
   },
   "files": [
     "server/",
