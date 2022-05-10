@@ -8,7 +8,7 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
-### 1.4.4 - 10 mag '22
+### 1.4.4 - 10 may '22
   - better img rendering, make it easier to download flyer #153
   - avoid place and tags duplication (remove white space, match case insensitive)
   - show date and place to unconfirmed events
