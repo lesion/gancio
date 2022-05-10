@@ -1,7 +1,23 @@
 All notable changes to this project will be documented in this file.
 
-### UNRELEASED
-  - add CLI support to manage accounts (list / modify / add accounts)
+### 1.4.4 - 10 mag '22
+  - better img rendering, make it easier to download flyer #153
+  - avoid place and tags duplication (remove white space, match case insensitive)
+  - show date and place to unconfirmed events
+  - add warning when visiting from different hostname or protocol #149
+  - add tags and fix html description in ics export
+  - add git dependency in Dockerfile #148
+  - add external_style param to gancio-events webcomponent
+  - add GANCIO_HOST and GANCIO_PORT environment vars
+  - fix place and address when importing from url #147
+  - fix user account removal
+  - fix timezone issue #151
+  - fix scrolling behavior
+  - fix adding event on disabled anon posting
+  - fix plain description meta
+  - fix recurrent events always shown #150
+  - remove `less` and `less-loader` dependency
+  
 ### 1.4.3 - 10 mar '22
   - fix [#140](https://framagit.org/les/gancio/-/issues/140) - Invalid date
   - fix [#141](https://framagit.org/les/gancio/-/issues/141) - Cannot change logo

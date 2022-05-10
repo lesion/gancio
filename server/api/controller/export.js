@@ -89,9 +89,7 @@ const exportController = {
       const end = tmpEnd.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
       return {
         start,
-        startOutputType: 'local',
         end,
-        endOutputType: 'local',
         title: `[${settings.title}] ${e.title}`,
         description: htmlToText(e.description),
         htmlContent: e.description,

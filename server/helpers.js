@@ -135,7 +135,6 @@ module.exports = {
     return Promise.all(promises)
       .then(res => {
         const info = res[1]
-        const preview = res[2]
         return {
           destination: config.upload_path,
           filename: filename + '.jpg',
@@ -143,7 +142,6 @@ module.exports = {
           height: info.height,
           width: info.width,
           size: info.size,
-          preview
         }
       })
       .catch(err => {
