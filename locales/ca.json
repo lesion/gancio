@@ -231,7 +231,8 @@
         "smtp_description": "<ul><li>L'admin hauria de rebre un correu cada cop que es pengi alguna una activitat anònima (si estan activades).</li><li>L'admin hauria de rebre un correu per cada soŀlicitud de registre (si estan actives).</li><li>La usuària hauria de rebre un correu després de soŀlicitar registrar-se.</li><li>La usuària hauria de rebre un correu quan se li hagi confirmat el registre.</li><li>La usuària hauria de rebre un correu si l'admin la registra directament.</li><li>La usuària hauria de rebre un correu de restabliment de contrasenya si ho demana</li></ul>",
         "smtp_test_button": "Envia un correu de prova",
         "widget": "Giny",
-        "wrong_domain_warning": "La url base configurada a config.json <b>({baseurl})</b> difereix de la que esteu visitant <b>({url})</b>"
+        "wrong_domain_warning": "La url base configurada a config.json <b>({baseurl})</b> difereix de la que esteu visitant <b>({url})</b>",
+        "event_remove_ok": "S'ha suprimit l'esdeveniment"
     },
     "auth": {
         "not_confirmed": "Encara no s'ha confirmat…",
