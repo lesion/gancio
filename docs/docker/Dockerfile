@@ -1,4 +1,4 @@
-FROM  node:17.4-slim
+FROM  node:17.7-slim
 RUN yarn global remove gancio || true
 RUN yarn cache clean
 RUN yarn global add --latest --production --silent https://gancio.org/latest.tgz
