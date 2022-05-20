@@ -26,7 +26,6 @@ add_filter('tiny_mce_before_init', 'tinymce_init');
 
 /** ADD SHORTCODES */
 function gancio_event_handler_function( $atts, $content, $tag) {
-  var_dump('asdfaoisdfo iajsdofij');
   $a = shortcode_atts( array(
     'baseurl' => 'https://demo.gancio.org',
     'id' => 0
