@@ -25,6 +25,11 @@
         v-tab-item
           Places
 
+        //- Cohorts
+        v-tab {{$t('common.cohorts')}}
+        v-tab-item
+          Cohorts
+
         //- EVENTS
         v-tab
           v-badge(:value='!!unconfirmedEvents.length' :content='unconfirmedEvents.length') {{$t('common.events')}}
@@ -58,6 +63,7 @@ export default {
     Users:  () => import(/* webpackChunkName: "admin" */'../components/admin/Users'),
     Events: () => import(/* webpackChunkName: "admin" */'../components/admin/Events'),
     Places: () => import(/* webpackChunkName: "admin" */'../components/admin/Places'),
+    Cohorts: () => import(/* webpackChunkName: "admin" */'../components/admin/Cohorts'),
     Settings: () => import(/* webpackChunkName: "admin" */'../components/admin/Settings'),
     Federation: () => import(/* webpackChunkName: "admin" */'../components/admin/Federation.vue'),
     Moderation: () => import(/* webpackChunkName: "admin" */'../components/admin/Moderation.vue'),
