@@ -5,6 +5,9 @@ v-container#home(fluid)
   #announcements.mx-1.mt-1(v-if='announcements.length')
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
+  .mb-1.mt-3
+    v-btn(v-for='cohort in cohorts' text color='primary' :key='cohort.id' :to='`g/${cohort.name}`' v-text='cohort.name')
+
   //- Calendar and search bar
   v-row.pt-0.pt-sm-2.pl-0.pl-sm-2
     #calh.col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-4.pa-sm-3
@@ -48,6 +51,7 @@ export default {
     return {
       mdiCloseCircle,
       first: true,
+      cohorts: [],
       isCurrentMonth: true,
       now: dayjs().unix(),
       date: dayjs.tz().format('YYYY-MM-DD'),
@@ -56,6 +60,9 @@ export default {
       end: null,
       selectedDay: null
     }
+  },
+  async fetch () {
+    this.cohorts = await this.$axios.$get('cohorts')
   },
   head () {
     return {
@@ -73,7 +80,6 @@ export default {
       ]
     }
   },
-
   computed: {
     ...mapState(['settings', 'announcements', 'filters']),
     filteredEvents () {
