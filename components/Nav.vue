@@ -4,11 +4,11 @@
     //- logo, title and description
     v-list-item(:to='$route.name==="index"?"/about":"/"')
       v-list-item-avatar(tile)
-        v-img(src='/logo.png' alt='home')
-      v-list-item-content.d-none.d-sm-flex
-        v-list-item-title
-          h2 {{settings.title}}
-        v-list-item-subtitle {{settings.description}}
+        img(src='/logo.png' height='40')
+      v-list-item-content.d-flex
+        v-list-item-title.d-flex
+          h2 {{settings.title}} sf sd dsdf
+        v-list-item-subtitle.d-none.d-sm-flex {{settings.description}}
 
     v-spacer
     v-btn(v-if='$auth.loggedIn || settings.allow_anon_event' icon nuxt to='/add' :aria-label='$t("common.add_event")' :title='$t("common.add_event")')
