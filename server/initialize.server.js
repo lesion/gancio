@@ -52,7 +52,9 @@ module.exports = function () {
       await sequelize.close()
       process.off('SIGTERM', shutdown)
       process.off('SIGINT', shutdown)
-      nuxt.close()
+      if (nuxt) {
+        nuxt.close()
+      }
       process.exit()
     }
     process.on('SIGTERM', shutdown)
