@@ -530,22 +530,22 @@ const eventController = {
     if (!show_recurrent) {
       where.parentId = null
     }
+
     if (end) {
       where.start_datetime = { [Op.lte]: end }
     }
 
+    const replacements = []
     if (tags && places) {
       where[Op.or] = {
         placeId: places ? places.split(',') : [],
-        '$tags.tag$': tags.split(',')
+        // '$tags.tag$': Sequelize.literal(`EXISTS (SELECT 1 FROM event_tags WHERE tagTag in ( ${Sequelize.QueryInterface.escape(tags)} ) )`)
       }
-    }
-
-    if (tags) {
-      where['$tags.tag$'] = tags.split(',')
-    }
-
-    if (places) {
+    } else if (tags) {
+      // where[Op.and] = Sequelize.literal(`EXISTS (SELECT 1 FROM event_tags WHERE eventId=event.id AND tagTag in (?))`)
+      where[Op.and] = Sequelize.fn('EXISTS', Sequelize.literal('SELECT 1 FROM event_tags WHERE "event_tags"."eventId"="event".id AND "tagTag" in (?)'))
+      replacements.push(tags)
+    } else if (places) {
       where.placeId = places.split(',')
     }
 
@@ -561,12 +561,12 @@ const eventController = {
           model: Tag,
           order: [Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
           attributes: ['tag'],
-          required: !!tags,
           through: { attributes: [] }
         },
         { model: Place, required: true, attributes: ['id', 'name', 'address'] }
       ],
-      limit: max
+      limit: max,
+      replacements
     }).catch(e => {
       log.error('[EVENT]', e)
       return []
