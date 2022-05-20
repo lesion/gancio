@@ -20,6 +20,7 @@ module.exports = function () {
           dialect: process.env.GANCIO_DB_DIALECT,
           storage: process.env.GANCIO_DB_STORAGE,
           host: process.env.GANCIO_DB_HOST,
+          port: process.env.GANCIO_DB_PORT,
           database: process.env.GANCIO_DB_DATABASE,
           username: process.env.GANCIO_DB_USERNAME,
           password: process.env.GANCIO_DB_PASSWORD,
