@@ -28,7 +28,7 @@ router.get('/webfinger', allowFederation, (req, res) => {
   }
 
   const resource = req.query.resource
-  const domain = (new url.URL(settings.baseurl)).host
+  const domain = (new url.URL(res.locals.settings.baseurl)).host
   const [, name, req_domain] = resource.match(/acct:(.*)@(.*)/)
   if (domain !== req_domain) {
     log.warn(`Bad webfinger request, requested domain "${req_domain}" instead of "${domain}"`)
