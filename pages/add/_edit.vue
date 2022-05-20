@@ -154,7 +154,7 @@ export default {
       if (!this.tagName) { return this.tags.slice(0, 10).map(t => t.tag) }
       const tagName = this.tagName.trim().toLowerCase()
       return this.tags.filter(t => t.tag.toLowerCase().includes(tagName)).map(t => t.tag)
-    }    
+    }
   },
   methods: {
     ...mapActions(['updateMeta']),

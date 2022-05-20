@@ -13,8 +13,8 @@
 
     v-card-actions.pt-0.actions.justify-space-between
       .tags
-        v-chip.ml-1.mt-1(v-for='tag in event.tags.slice(0,6)' small
-          :key='tag' outlined color='primary' @click="$emit('tagclick', tag)") {{tag}}
+        v-chip.ml-1.mt-1(v-for='tag in event.tags.slice(0,6)' small :to='`/tag/${tag}`'
+          :key='tag' outlined color='primary' v-text='tag')
 
       client-only
         v-menu(offset-y)
