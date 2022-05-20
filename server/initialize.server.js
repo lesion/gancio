@@ -1,7 +1,6 @@
 
 module.exports = function () {
   const config = require('../server/config')
-  config.load()
   const log = require('../server/log')
   const settingsController = require('./api/controller/settings')
   const db = require('./api/models/index')
@@ -10,7 +9,7 @@ module.exports = function () {
   dayjs.extend(timezone)
 
   async function start (nuxt) {
-
+    config.load()
     if (config.status == 'READY') {
       await db.initialize()
     } else {
@@ -20,6 +19,7 @@ module.exports = function () {
           dialect: process.env.GANCIO_DB_DIALECT,
           storage: process.env.GANCIO_DB_STORAGE,
           host: process.env.GANCIO_DB_HOST,
+          port: process.env.GANCIO_DB_PORT,
           database: process.env.GANCIO_DB_DATABASE,
           username: process.env.GANCIO_DB_USERNAME,
           password: process.env.GANCIO_DB_PASSWORD,
@@ -48,12 +48,13 @@ module.exports = function () {
       await sequelize.close()
       process.off('SIGTERM', shutdown)
       process.off('SIGINT', shutdown)
-      nuxt.close()
+      if (nuxt) {
+        nuxt.close()
+      }
       process.exit()
     }
     process.on('SIGTERM', shutdown)
     process.on('SIGINT', shutdown)
   }
-
   return start(this.nuxt)
 }
