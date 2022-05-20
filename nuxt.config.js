@@ -51,7 +51,7 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@/server/initialize.server.js'
+    // '@/server/initialize.server.js'
   ],
 
   serverMiddleware: ['server/routes'],
