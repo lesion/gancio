@@ -7,7 +7,7 @@
     "build": "nuxt build --modern",
     "start:inspect": "NODE_ENV=production node --inspect node_modules/.bin/nuxt start --modern",
     "dev": "nuxt dev",
-    "test": "cd tests/seeds; jest; cd ../..",
+    "test": "cd tests/seeds; jest ; cd ../..",
     "start": "nuxt start --modern",
     "doc": "cd docs && bundle exec jekyll b",
     "doc:dev": "cd docs && bundle exec jekyll s --drafts",
@@ -38,7 +38,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dayjs": "^1.11.2",
-    "dompurify": "^2.3.6",
+    "dompurify": "^2.3.8",
     "email-templates": "^8.0.9",
     "express": "^4.18.1",
     "express-oauth-server": "lesion/express-oauth-server#master",
@@ -71,7 +71,7 @@
     "vuetify": "npm:@vuetify/nightly@dev",
     "winston": "^3.7.2",
     "winston-daily-rotate-file": "^4.6.1",
-    "yargs": "^17.4.1"
+    "yargs": "^17.5.0"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.3",
