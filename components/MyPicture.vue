@@ -10,7 +10,7 @@
       :height="height" :width="width"
       :style="{ 'object-position': thumbnailPosition }">
 
-    <img v-else-if='!media && thumb' class='thumb' src="noimg.svg" alt=''>
+    <img v-else-if='!media && thumb' class='thumb' src="/noimg.svg" alt=''>
   </div>
 </template>
 <script>
@@ -35,7 +35,7 @@ export default {
       return `/media/thumb/${this.media.url} 500w, /media/${this.media.url} 1200w`
     },
     media () {
-      return this.event.media[0]
+      return this.event.media && this.event.media[0]
     },
     height () {
       return this.media ? this.media.height : 'auto'
