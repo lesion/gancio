@@ -26,6 +26,7 @@ services:
       - NODE_ENV=production
       - GANCIO_DB_DIALECT=postgres
       - GANCIO_DB_HOST=db
+      - GANCIO_DB_PORT=5432
       - GANCIO_DB_DATABASE=gancio
       - GANCIO_DB_USERNAME=gancio
       - GANCIO_DB_PASSWORD=gancio      
