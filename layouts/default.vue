@@ -5,7 +5,8 @@
     <Nav/>
     <v-main app>
       <v-fade-transition hide-on-leave>
-        <nuxt/>
+        <nuxt keep-alive :keep-alive-props="{ max: 10, include: ['Index'] }"/>
+        <!-- <nuxt /> -->
       </v-fade-transition>
     </v-main>
     <Footer/>
