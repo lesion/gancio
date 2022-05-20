@@ -1,6 +1,8 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
 
+const initialize = require('./initialize.server')
+initialize()
 // const metricsController = require('./metrics')
 // const promBundle = require('express-prom-bundle')
 // const metricsMiddleware = promBundle({ includeMethod: true })
@@ -57,7 +59,7 @@ app.use('/api', api)
 // // Handle 500
 app.use((error, _req, res, _next) => {
   log.error('[ERROR]', error)
-  res.status(500).send('500: Internal Server Error')
+  return res.status(500).send('500: Internal Server Error')
 })
 
 // remaining request goes to nuxt
