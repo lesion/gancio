@@ -39,7 +39,8 @@ describe('Authentication / Authorization', () => {
   })
 
   test('should authenticate with correct user/password', async () => {
-    const response = await request(app).post('/oauth/login')
+    const response = await request(app)
+      .post('/oauth/login')
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .send(admin)
       .expect(200)
@@ -66,7 +67,6 @@ describe('Authentication / Authorization', () => {
 })
 
 describe('Events', () => {
-
 
   test('should not allow event creation without required fields', async () => {
     const required_fields = {
@@ -106,7 +106,7 @@ describe('Events', () => {
         .expect(200)
   
     return request(app).post('/api/event')
-      .send({ title: 'test title', place_name: 'place name', place_address: 'address', start_datetime: new Date().getTime() * 1000 })
+      .send({ title: 'test title', place_name: 'place name 2', place_address: 'address 2', tags: ['test'], start_datetime: new Date().getTime() * 1000 })
       .expect(200)
 
   })
@@ -127,4 +127,105 @@ describe('Events', () => {
       .expect('Content-Type', /json/)
     expect(response.body.tags[0]).toBe('test tag')
   })
+})
+
+describe('Tags', () => {
+  test('should create event with tags', async () => {
+    const event = await request(app).post('/api/event')
+      .send({ title: 'test tags', place_id: 2, start_datetime: new Date().getTime() * 1000, tags: ['tag1', 'tag2', 'tag3'] })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
+    expect(event.body.tags.length).toBe(3)
+  })
+
+  test('should return events searching for tags', async () => {
+    const response = await request(app).get('/api/events?tags=tag1')
+      .expect(200)
+    
+    console.error(response.body)
+    console.error(response.body[0].tags)
+    expect(response.body.length).toBe(1)
+    expect(response.body[0].title).toBe('test tags')
+    expect(response.body[0].tags.length).toBe(3)
+  })
+})
+
+describe ('Cohort', () => {
+  test('should not create a new cohort if not allowed', () => {
+    return request(app).post('/api/cohorts')
+      .send({ name: 'test cohort' })
+      .expect(403)
+  })
+
+  test('should create a new cohort', async () => {
+    const response = await request(app).post('/api/cohorts')
+      .send({ name: 'test cohort' })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+    expect(response.body.id).toBe(1)
+  })
+
+  test('should add a new filter', async () => {
+    await request(app)
+      .post('/api/filter')
+      .expect(403)
+
+    const response = await request(app).post('/api/filter')
+      .send({ cohortId: 1, places: [1] })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
+    expect(response.body.id).toBe(1)
+
+  })
+
+  test('should get cohort events', async () => {
+    const response = await request(app)
+      .get('/api/cohorts/1')
+      .expect(200)
+
+    expect(response.body.length).toBe(2)
+  })
+
+  test('should remove filter', async () => {
+    await request(app)
+      .delete('/api/filter/1')
+      .expect(403)
+
+    await request(app)
+      .delete('/api/filter/1')
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
+    const response = await request(app)
+      .get('/api/filter/1')
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+    
+    expect(response.body.length).toBe(0)
+  })
+
+  test('shoud filter for tags', async () => {
+    await request(app)
+      .post('/api/filter')
+      .send({ cohortId: 1, tags: ['test'] })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
+
+    let response = await request(app)
+    .get('/api/filter/1')
+    .auth(token.access_token, { type: 'bearer' })
+    .expect(200)
+  
+    expect(response.body.length).toBe(1)
+    response = await request(app)
+      .get('/api/cohorts/1')
+      .expect(200)
+
+    expect(response.body.length).toBe(1)
+
+  })
+
 })
