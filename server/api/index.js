@@ -31,6 +31,7 @@ if (config.status !== 'READY') {
   const resourceController = require('./controller/resource')
   const oauthController = require('./controller/oauth')
   const announceController = require('./controller/announce')
+  const cohortController = require('./controller/cohort')
   const helpers = require('../helpers')
   const storage = require('./storage')
   const upload = multer({ storage })
@@ -163,6 +164,15 @@ if (config.status !== 'READY') {
   api.post('/announcements', isAdmin, announceController.add)
   api.put('/announcements/:announce_id', isAdmin, announceController.update)
   api.delete('/announcements/:announce_id', isAdmin, announceController.remove)
+
+  // - COHORT
+  api.get('/cohorts/:name', cohortController.getEvents)
+  api.get('/cohorts', cohortController.getAll)
+  api.post('/cohorts', isAdmin, cohortController.add)
+  api.delete('/cohort/:id', isAdmin, cohortController.remove)
+  api.get('/filter/:cohort_id', isAdmin, cohortController.getFilters)
+  api.post('/filter', isAdmin, cohortController.addFilter)
+  api.delete('/filter/:id', isAdmin, cohortController.removeFilter)
 
   // OAUTH
   api.get('/clients', isAuth, oauthController.getClients)
