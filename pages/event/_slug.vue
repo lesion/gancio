@@ -36,7 +36,7 @@ v-container#event.pa-0.pa-sm-2
             //- tags, hashtags
             v-card-text(v-if='event.tags.length')
               v-chip.p-category.ml-1.mt-3(v-for='tag in event.tags' color='primary'
-                outlined :key='tag')
+                outlined :key='tag' :to='`/tag/${tag}`')
                 span(v-text='tag')
 
             //- info & actions

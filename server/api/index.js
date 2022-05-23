@@ -23,6 +23,7 @@ if (config.status !== 'READY') {
 
   const { isAuth, isAdmin } = require('./auth')
   const eventController = require('./controller/event')
+  const placeController = require('./controller/place')
   const settingsController = require('./controller/settings')
   const exportController = require('./controller/export')
   const userController = require('./controller/user')
@@ -121,6 +122,8 @@ if (config.status !== 'READY') {
   // allow anyone to add an event (anon event has to be confirmed, TODO: flood protection)
   api.post('/event', eventController.isAnonEventAllowed, upload.single('image'), eventController.add)
 
+  api.get('/event/search', eventController.search)
+
   api.put('/event', isAuth, upload.single('image'), eventController.update)
   api.get('/event/import', isAuth, helpers.importURL)
 
@@ -151,6 +154,10 @@ if (config.status !== 'READY') {
   // export events (rss/ics)
   api.get('/export/:type', cors, exportController.export)
 
+
+  api.get('/place/:placeName/events', cors, placeController.getEvents)
+
+  // - FEDIVERSE INSTANCES, MODERATION, RESOURCES
   api.get('/instances', isAdmin, instanceController.getAll)
   api.get('/instances/:instance_domain', isAdmin, instanceController.get)
   api.post('/instances/toggle_block', isAdmin, instanceController.toggleBlock)
