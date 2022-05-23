@@ -1,9 +1,8 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
 
-
 const initialize = require('./initialize.server')
-initialize()
+initialize.start()
 
 // const metricsController = require('./metrics')
 // const promBundle = require('express-prom-bundle')
@@ -79,4 +78,16 @@ app.use(async (req, res, next) => {
   next()
 })
 
-module.exports = app
+module.exports = {
+  handler: app,
+  load () {
+    console.error('dentro load !')
+  },
+  unload: initialize.shutdown
+  // async unload () {
+  //   const db = require('./api/models/index')
+  //   await db.close()
+    // process.off('SIGTERM')
+    // process.off('SIGINT')    
+  // }
+}
