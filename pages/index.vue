@@ -5,8 +5,8 @@ v-container#home(fluid)
   #announcements.mx-1.mt-1(v-if='announcements.length')
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
-  .mb-1.mt-3
-    v-btn(v-for='cohort in cohorts' text color='primary' :key='cohort.id' :to='`g/${cohort.name}`' v-text='cohort.name')
+  .mb-1.mt-3.ml-2
+    v-btn(v-for='cohort in cohorts' text color='primary' :key='cohort.id' :to='`g/${cohort.name}`') {{cohort.name}}
 
   //- Calendar and search bar
   v-row.pt-0.pt-sm-2.pl-0.pl-sm-2
