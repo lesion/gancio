@@ -17,7 +17,7 @@ v-container#home(fluid)
         Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='filteredEvents')
 
     .col.pt-0.pt-md-2
-      Search(:filters='filters' @update='updateFilters')
+      Search(@tag:selected="tag => $router.push(`/tag/${tag.tag}`)")
       v-chip(v-if='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange()') {{selectedDay}}
 
   //- Events
