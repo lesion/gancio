@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require('sequelize')
+const Cohort = require('./cohort')
 const sequelize = require('./index').sequelize
 
 class Filter extends Model {}
@@ -9,16 +10,6 @@ Filter.init({
     primaryKey: true,
     autoIncrement: true,
   },
-  cohortId: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    references: {
-      model: 'cohorts',
-      key: 'id'
-    },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
-  },
   tags: {
     type: DataTypes.JSON,
   },
@@ -27,5 +18,7 @@ Filter.init({
   }
 }, { sequelize, modelName: 'filter', timestamps: false })
 
+Filter.belongsTo(Cohort)
+Cohort.hasMany(Filter)
 
 module.exports = Filter
