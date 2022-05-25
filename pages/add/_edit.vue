@@ -52,9 +52,9 @@
                   :prepend-icon="mdiTagMultiple"
                   chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
                   no-filter
-                  :search-input.sync="tagName"
+                  @input.native='searchTags'
                   :delimiters="[',', ';']"
-                  :items="filteredTags"
+                  :items="tags"
                   :label="$t('common.tags')")
                   template(v-slot:selection="{ item, on, attrs, selected, parent}")
                     v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
@@ -68,7 +68,8 @@
 
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
+import debounce from 'lodash/debounce'
 import dayjs from 'dayjs'
 
 import { mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle } from '@mdi/js'
@@ -133,7 +134,7 @@ export default {
         tags: [],
         media: []
       },
-      tagName: '',
+      tags: [],
       page: { month, year },
       fileList: [],
       id: null,
@@ -149,7 +150,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['tags', 'settings']),
+    ...mapState(['settings']),
     filteredTags () {
       if (!this.tagName) { return this.tags.slice(0, 10).map(t => t.tag) }
       const tagName = this.tagName.trim().toLowerCase()
@@ -157,7 +158,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateMeta']),
+    searchTags: debounce( async function(ev) {
+      const search = ev.target.value
+      this.tags = await this.$axios.$get(`/tag?search=${search}`)
+    }),
     eventImported (event) {
       this.event = Object.assign(this.event, event)
       this.$refs.where.selectPlace({ name: event.place.name, create: true })
@@ -213,7 +217,6 @@ export default {
         } else {
           await this.$axios.$post('/event', formData)
         }
-        this.updateMeta()
         this.$router.push('/')
         this.$nextTick(() => {
           this.$root.$message(this.$auth.loggedIn ? (this.edit ? 'event.saved' : 'event.added') : 'event.added_anon', { color: 'success' })
