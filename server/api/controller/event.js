@@ -49,6 +49,66 @@ const eventController = {
     res.json(await eventController._getMeta())
   },
 
+  async search (req, res) {
+    const search = req.query.search
+
+    // search for events
+    const events = Event.findAll({
+      logging: console.log, 
+      order: [['start_datetime', 'DESC']],
+      attributes: {
+        include: [[Sequelize.fn('LOWER', Sequelize.col('title')), 't']],
+      },      
+      include: [Place],
+      where: {
+        recurrent: null,
+        parentId: null,
+        title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', '%' + search + '%'),
+      },
+      limit: 3
+    })
+
+    // search for tags
+    const tags = Tag.findAll({
+      order: [[Sequelize.literal('w'), 'DESC']],
+      attributes: {
+        include: [[Sequelize.fn('COUNT', Sequelize.col('tag.tag')), 'w']],
+      },
+      where: { tag: { [Op.substring]: search } },
+      include: [{ model: Event, where: { is_visible: true, recurrent: null, parentId: null }, attributes: [], through: { attributes: [] }, required: true }],
+      group: ['tag.tag'],
+      limit: 3
+    })
+
+    // let places
+    // try {
+    //   places = await Place.findAll({
+    //     logging: console.log,
+    //     where: { name: { [Op.substring]: search } },
+    //     order: [[Sequelize.literal('weigth'), 'DESC']],
+    //     attributes: {
+    //       include: [[Sequelize.fn('count', Sequelize.col('events.placeId')), 'weigth']],
+    //     //   exclude: ['createdAt', 'updatedAt']
+    //     },
+    //     include: [{ model: Event, where: { is_visible: true }, through: { attributes: [] }, attributes: [] }],
+    //     limit: 3,
+    //     group: ['place.id'],
+    //   })
+    // } catch (e) {
+    //   console.error(e)
+    // }
+
+
+    const [ tmpevents, tmptags] = await Promise.all([events, tags])
+
+    let ret = tmpevents 
+      .map(e => ({ ...e.get(), type: 'event' }))
+      .concat(tmptags.map(t => ({ ...t.get(), type: 'tag' })))
+
+
+    return res.json(ret)
+  },
+
   async getNotifications (event, action) {
     log.debug(`getNotifications ${event.title} ${action}`)
     function match (event, filters) {
@@ -74,8 +134,7 @@ const eventController = {
     const notifications = await Notification.findAll({ where: { action }, include: [Event] })
 
     // get notification that matches with selected event
-    const ret = notifications.filter(notification => match(event, notification.filters))
-    return ret
+    return notifications.filter(notification => match(event, notification.filters))
   },
 
   async updatePlace (req, res) {
