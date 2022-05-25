@@ -83,7 +83,7 @@ module.exports = {
   load () {
     console.error('dentro load !')
   },
-  unload: initialize.shutdown
+  unload: () => initialize.shutdown(false)
   // async unload () {
   //   const db = require('./api/models/index')
   //   await db.close()

@@ -1,15 +1,29 @@
+const config = require('../server/config')
+config.load()
 
-module.exports = function () {
-  const config = require('../server/config')
-  const log = require('../server/log')
-  const settingsController = require('./api/controller/settings')
-  const db = require('./api/models/index')
-  const dayjs = require('dayjs')
-  const timezone = require('dayjs/plugin/timezone')
-  dayjs.extend(timezone)
+const initialize = {
+  // close connections/port/unix socket
+  async shutdown (exit = true) {
+    const log = require('../server/log')
+    const TaskManager = require('../server/taskManager').TaskManager
+    if (TaskManager) { TaskManager.stop() }
+    log.info('Closing DB')
+    const sequelize = require('../server/api/models')
+    await sequelize.close()
+    process.off('SIGTERM', initialize.shutdown)
+    process.off('SIGINT', initialize.shutdown)
+    if (exit) {
+      process.exit()
+    }
+  },
 
-  async function start (nuxt) {
-    config.load()
+  async start () {
+    const log = require('../server/log')
+    const settingsController = require('./api/controller/settings')
+    const db = require('./api/models/index')
+    const dayjs = require('dayjs')
+    const timezone = require('dayjs/plugin/timezone')
+    dayjs.extend(timezone)
     if (config.status == 'READY') {
       await db.initialize()
     } else {
@@ -33,31 +47,19 @@ module.exports = function () {
       }
       await settingsController.load()
     }
-
+  
     dayjs.tz.setDefault(settingsController.settings.instance_timezone)
-
+  
     let TaskManager
     if (config.status === 'READY' && process.env.NODE_ENV == 'production') {
       TaskManager = require('../server/taskManager').TaskManager
       TaskManager.start()
     }
-    log.info(`Listen on ${config.server.host}:${config.server.port}`)
-
-    // close connections/port/unix socket
-    async function shutdown () {
-      if (TaskManager) { TaskManager.stop() }
-      log.info('Closing DB')
-      const sequelize = require('../server/api/models')
-      await sequelize.close()
-      process.off('SIGTERM', shutdown)
-      process.off('SIGINT', shutdown)
-      if (nuxt) {
-        nuxt.close()
-      }
-      process.exit()
-    }
-    process.on('SIGTERM', shutdown)
-    process.on('SIGINT', shutdown)
+  
+    process.on('SIGTERM', initialize.shutdown)
+    process.on('SIGINT', initialize.shutdown)
   }
-  return start(this.nuxt)
 }
+
+
+module.exports = initialize
