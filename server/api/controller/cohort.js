@@ -9,20 +9,31 @@ const dayjs = require('dayjs')
 // const { sequelize } = require('../models/index')
 
 
-const { Op, literal, QueryTypes, SequelizeScopeError, Sequelize } = require('sequelize')
+const { Op, Sequelize } = require('sequelize')
 
 const cohortController = {
 
   async getAll (req, res) {
-    const cohorts = await Cohort.findAll({ raw: true })
+    const withFilters = req.query.withFilters
+    let cohorts
+    if (withFilters) {
+      cohorts = await Cohort.findAll({ include: [Filter] })
+
+    } else {
+      cohorts = await Cohort.findAll()
+    }
+
     return res.json(cohorts)
   },
 
   // return events from cohort
   async getEvents (req, res) {
     const name = req.params.name
-    const cohort = await Cohort.findOne({ where: { name } })
 
+    const cohort = await Cohort.findOne({ where: { name } })
+    if (!cohort) { 
+      return res.sendStatus(404)
+    }
     const filters = await Filter.findAll({ where: { cohortId: cohort.id } })
 
     const start = dayjs().unix()
