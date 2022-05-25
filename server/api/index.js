@@ -24,6 +24,7 @@ if (config.status !== 'READY') {
   const { isAuth, isAdmin } = require('./auth')
   const eventController = require('./controller/event')
   const placeController = require('./controller/place')
+  const tagController = require('./controller/tag')
   const settingsController = require('./controller/settings')
   const exportController = require('./controller/export')
   const userController = require('./controller/user')
@@ -156,6 +157,10 @@ if (config.status !== 'READY') {
 
 
   api.get('/place/:placeName/events', cors, placeController.getEvents)
+  // api.get('/place', cors, placeController.)
+
+  api.get('/tag', cors, tagController.get)
+
 
   // - FEDIVERSE INSTANCES, MODERATION, RESOURCES
   api.get('/instances', isAdmin, instanceController.getAll)
