@@ -51,7 +51,26 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
+    '@nuxtjs/sitemap'    
   ],
+
+  sitemap: {
+    hostname: config.baseurl,
+    gzip: true,
+    exclude: [
+      '/Admin',
+      '/settings',
+      '/export',
+      '/setup'
+    ],
+    routes: async () => {
+      if (config.status === 'READY') {
+        const Event = require('./server/api/models/event')
+        const events = await Event.findAll({where: { is_visible: true }})
+        return events.map(e => `/event/${e.slug}`)
+      }
+    }
+  },
 
   serverMiddleware: ['server/routes'],
 

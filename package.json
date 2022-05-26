@@ -31,6 +31,7 @@
     "@mdi/js": "^6.6.96",
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.13.5",
+    "@nuxtjs/sitemap": "^2.4.0",
     "accept-language": "^3.0.18",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
