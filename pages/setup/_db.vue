@@ -18,9 +18,9 @@ v-container.pa-6
         Completed(ref='completed' :isHttp='isHttp')
 </template>
 <script>
-import DbStep from './DbStep'
-import Settings from '../../components/admin/Settings'
-import Completed from './Completed'
+import DbStep from '@/components/DbStep'
+import Settings from '@/components/admin/Settings'
+import Completed from '@/components/Completed'
 
 export default {
   components: { DbStep, Settings, Completed },

@@ -141,8 +141,8 @@ export default {
   name: 'Event',
   mixins: [clipboard],
   components: {
-    EventAdmin: () => import(/* webpackChunkName: "event" */'./eventAdmin'),
-    EmbedEvent: () => import(/* webpackChunkName: "event" */'./embedEvent'),
+    EventAdmin: () => import(/* webpackChunkName: "event" */'@/components/eventAdmin'),
+    EmbedEvent: () => import(/* webpackChunkName: "event" */'@/components/embedEvent'),
     MyPicture
   },
   async asyncData ({ $axios, params, error }) {

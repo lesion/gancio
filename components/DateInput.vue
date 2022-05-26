@@ -52,7 +52,7 @@ v-col(cols=12)
 import dayjs from 'dayjs'
 import { mapState } from 'vuex'
 import List from '@/components/List'
-import { attributesFromEvents } from '../../assets/helper'
+import { attributesFromEvents } from '../assets/helper'
 
 export default {
   name: 'DateInput',

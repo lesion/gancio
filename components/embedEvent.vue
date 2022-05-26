@@ -16,7 +16,7 @@ v-card
 </template>
 <script>
 import { mapState } from 'vuex'
-import clipboard from '../../assets/clipboard'
+import clipboard from '../assets/clipboard'
 import { mdiContentCopy, mdiInformation } from '@mdi/js'
 
 export default {
