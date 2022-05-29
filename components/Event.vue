@@ -17,7 +17,7 @@
           :key='tag' outlined color='primary') {{tag}}
 
       client-only
-        v-menu(offset-y)
+        v-menu(offset-y eager)
           template(v-slot:activator="{on}")
             v-btn.align-self-end(icon v-on='on' color='primary' title='more' aria-label='more')
               v-icon(v-text='mdiDotsVertical')
