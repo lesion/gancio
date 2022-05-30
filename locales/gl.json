@@ -222,7 +222,8 @@
         "smtp_hostname": "Servidor SMTP",
         "new_announcement": "Novo anuncio",
         "smtp_description": "<ul><li>Admin debería recibir un email cando se engade un evento anónimo (se está activo)</li><li>Admin debería recibir un email coas solicitudes de rexistro (se activo).</li><li>A usuaria debería recibir un email coa solicitude de rexistro.</li><li>A usuaria debería recibir un email confirmando o rexistro.</li><li>A usuaria debería recibir un email de confirmación cando fose subscrita directamente por Admin</li><li>As usuarias deberían recibir un email para restablecer o contrasinal se o esquecen</li></ul>",
-        "wrong_domain_warning": "O url base configurado en config.json <b>({baseurl)</b> é diferente ao que estás a visitar <b>({url})</b>"
+        "wrong_domain_warning": "O url base configurado en config.json <b>({baseurl)</b> é diferente ao que estás a visitar <b>({url})</b>",
+        "event_remove_ok": "Evento eliminado"
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",
