@@ -1,8 +1,9 @@
 <template lang="pug">
   v-container.container.pa-0.pa-md-3
     v-card
-      v-alert(v-if='url!==settings.baseurl' outlined type='warning' color='red' show-icon :icon='mdiAlert' v-html="$t('admin.wrong_domain_warning', { url, baseurl: settings.baseurl })")
-      v-tabs(v-model='selectedTab' show-arrows)
+      v-alert(v-if='url!==settings.baseurl' outlined type='warning' color='red' show-icon :icon='mdiAlert')
+        span(v-html="$t('admin.wrong_domain_warning', { url, baseurl: settings.baseurl })")
+      v-tabs(v-model='selectedTab' show-arrows :next-icon='mdiChevronRight' :prev-icon='mdiChevronLeft')
 
         //- SETTINGS
         v-tab {{$t('common.settings')}}
@@ -55,7 +56,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { mdiAlert } from '@mdi/js'
+import { mdiAlert, mdiChevronRight, mdiChevronLeft } from '@mdi/js'
 
 export default {
   name: 'Admin',
@@ -64,7 +65,7 @@ export default {
     Events: () => import(/* webpackChunkName: "admin" */'../components/admin/Events'),
     Places: () => import(/* webpackChunkName: "admin" */'../components/admin/Places'),
     Cohorts: () => import(/* webpackChunkName: "admin" */'../components/admin/Cohorts'),
-    Settings: () => import(/* webpackChunkName: "admin" */'../components/admin/Settings'),
+    Settings: () => import('../components/admin/Settings'),
     Federation: () => import(/* webpackChunkName: "admin" */'../components/admin/Federation.vue'),
     Moderation: () => import(/* webpackChunkName: "admin" */'../components/admin/Moderation.vue'),
     Announcement: () => import(/* webpackChunkName: "admin" */'../components/admin/Announcement.vue'),
@@ -88,8 +89,8 @@ export default {
   },
   data () {
     return {
+      mdiAlert, mdiChevronRight, mdiChevronLeft,
       users: [],
-      mdiAlert,
       description: '',
       unconfirmedEvents: [],
       selectedTab: 0
