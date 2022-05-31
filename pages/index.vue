@@ -9,25 +9,28 @@ v-container#home(fluid)
     v-btn(v-for='cohort in cohorts' text color='primary' :key='cohort.id' :to='`g/${cohort.name}`') {{cohort.name}}
 
   //- Calendar and search bar
-  v-row.pt-0.pt-sm-2.pl-0.pl-sm-2
-    #calh.col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-4.pa-sm-3
+  v-row.ma-2
+    #calh.col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-0.ma-0
       //- this is needed as v-calendar does not support SSR
       //- https://github.com/nathanreyes/v-calendar/issues/336
       client-only(placeholder='Loading...')
-        Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='filteredEvents')
+        Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='events')
 
     .col.pt-0.pt-md-2
-      Search(@tag:selected="tag => $router.push(`/tag/${tag.tag}`)")
-      v-chip(v-if='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange()') {{selectedDay}}
+      //- v-btn(to='/search' color='primary' ) {{$t('common.search')}}
+      v-form(to='/search' action='/search' method='GET')
+        v-text-field(:label='$t("common.search")')
+        v-btn(type='submit')
+      //- Search(@tag:selected="tag => $router.push(`/tag/${tag.tag}`)")
+      //- v-chip(v-if='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange()') {{selectedDay}}
 
   //- Events
   #events.mb-2.mt-1.pl-1.pl-sm-2
-    Event(:event='event' @destroy='destroy' v-for='(event, idx) in visibleEvents' :lazy='idx>2' :key='event.id' @tagclick='tagClick' @placeclick='placeClick')
+    Event(:event='event' @destroy='destroy' v-for='(event, idx) in visibleEvents' :lazy='idx>2' :key='event.id')
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import intersection from 'lodash/intersection'
+import { mapState } from 'vuex'
 import dayjs from 'dayjs'
 import Event from '@/components/Event'
 import Announcement from '@/components/Announcement'
@@ -81,45 +84,21 @@ export default {
     }
   },
   computed: {
-    ...mapState(['settings', 'announcements', 'filters']),
-    filteredEvents () {
-      let events = this.events
-      if (!this.filters.places.length && !this.filters.tags.length) {
-        if (this.filters.show_recurrent) {
-          return this.events
-        }
-        return events.filter(e => !e.parentId)
-      }
-
-      return events.filter(e => {
-        // check tags intersection
-        if (this.filters.tags.length) {
-          const ret = intersection(this.filters.tags, e.tags)
-          if (!ret.length) { return false }
-        }
-        // check if place is in filtered places
-        if (this.filters.places.length && !this.filters.places.includes(e.place.id)) {
-          return false
-        }
-        return true
-      })
-    },
+    ...mapState(['settings', 'announcements']),
     visibleEvents () {
       const now = dayjs().unix()
       if (this.selectedDay) {
         const min = dayjs(this.selectedDay).startOf('day').unix()
         const max = dayjs(this.selectedDay).endOf('day').unix()
-        return this.filteredEvents.filter(e => (e.start_datetime <= max && e.start_datetime >= min))
+        return this.events.filter(e => (e.start_datetime <= max && e.start_datetime >= min))
       } else if (this.isCurrentMonth) {
-        return this.filteredEvents.filter(e => e.end_datetime ? e.end_datetime > now : e.start_datetime + 2 * 60 * 60 > now)
+        return this.events.filter(e => e.end_datetime ? e.end_datetime > now : e.start_datetime + 2 * 60 * 60 > now)
       } else {
-        return this.filteredEvents
+        return this.events
       }
     }
   },
   methods: {
-    ...mapActions(['setFilters']),
-
     destroy (id) {
       this.events = this.events.filter(e => e.id !== id)
     },
@@ -133,20 +112,6 @@ export default {
         this.events = events
         this.$nuxt.$loading.finish()
       })
-    },
-    placeClick (place_id) {
-      if (this.filters.places.includes(place_id)) {
-        this.setFilters({ ...this.filters, places: this.filters.places.filter(p_id => p_id !== place_id) })
-      } else {
-        this.setFilters({ ...this.filters, places: [].concat(this.filters.places, place_id) })
-      }
-    },
-    tagClick (tag) {
-      if (this.filters.tags.includes(tag)) {
-        this.setFilters({ ...this.filters, tags: this.filters.tags.filter(t => t !== tag) })
-      } else {
-        this.setFilters({ ...this.filters, tags: [].concat(this.filters.tags, tag) })
-      }
     },
     monthChange ({ year, month }) {
       // avoid first time monthChange event (onload)
@@ -172,9 +137,6 @@ export default {
       }
       this.end = dayjs().year(year).month(month).endOf('month').unix() // .endOf('week').unix()
       this.updateEvents()
-    },
-    updateFilters (filters) {
-      this.setFilters(filters)
     },
     dayChange (day) {
       this.selectedDay = day ? dayjs.tz(day).format('YYYY-MM-DD') : null
