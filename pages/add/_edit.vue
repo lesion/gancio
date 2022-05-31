@@ -51,10 +51,11 @@
                 v-combobox(v-model='event.tags'
                   :prepend-icon="mdiTagMultiple"
                   chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-                  no-filter
+                  cache-items
                   @input.native='searchTags'
                   :delimiters="[',', ';']"
                   :items="tags"
+                  :menu-props="{ maxWidth: 400, eager: true }"
                   :label="$t('common.tags')")
                   template(v-slot:selection="{ item, on, attrs, selected, parent}")
                     v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
@@ -79,10 +80,10 @@ export default {
   components: {
     List: () => import(/* webpackChunkName: "add" */'@/components/List'),
     Editor: () => import(/* webpackChunkName: "add" */'@/components/Editor'), 
-    ImportDialog: () => import(/* webpackChunkName: "add" */'./ImportDialog.vue'),
-    MediaInput: () => import(/* webpackChunkName: "add" */'./MediaInput.vue'),
-    WhereInput: () => import(/* webpackChunkName: "add" */'./WhereInput.vue'),
-    DateInput: () => import(/* webpackChunkName: "add" */'./DateInput.vue')
+    ImportDialog: () => import(/* webpackChunkName: "add" */'@/components/ImportDialog.vue'),
+    MediaInput: () => import(/* webpackChunkName: "add" */'@/components/MediaInput.vue'),
+    WhereInput: () => import(/* webpackChunkName: "add" */'@/components/WhereInput.vue'),
+    DateInput: () => import(/* webpackChunkName: "add" */'@/components/DateInput.vue')
   },
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
@@ -160,8 +161,9 @@ export default {
   methods: {
     searchTags: debounce( async function(ev) {
       const search = ev.target.value
+      if (!search) return
       this.tags = await this.$axios.$get(`/tag?search=${search}`)
-    }),
+    }, 100),
     eventImported (event) {
       this.event = Object.assign(this.event, event)
       this.$refs.where.selectPlace({ name: event.place.name, create: true })
