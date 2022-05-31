@@ -13,8 +13,6 @@ v-container.pt-0.pt-md-2
     cache-items
     hide-details
     color='primary'
-    clearable
-    :clear-icon='mdiCloseCircle'
     hide-selected
     small-chips
     :items='items'
