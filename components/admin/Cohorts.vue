@@ -14,7 +14,7 @@ v-container
     v-card(color='secondary')
       v-card-title {{$t('admin.edit_cohort')}}
       v-card-text
-        v-form(v-model='valid' ref='form' lazy-validation)
+        v-form(v-model='valid' ref='form')
           v-text-field(
             v-if='!cohort.id'
             :rules="[$validators.required('common.name')]"
@@ -29,45 +29,53 @@ v-container
         v-row
           v-col(cols=5)
             v-autocomplete(v-model='filterTags'
+              cache-items
               :prepend-icon="mdiTagMultiple"
+              
               chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-              no-filter
               :disabled="!cohort.id"
               placeholder='Tutte'
-              :search-input.sync="tagName"
+              @input.native='searchTags'
               :delimiters="[',', ';']"
-              :items="filteredTags"
+              :items="tags"
               :label="$t('common.tags')")
 
           v-col(cols=5)
             v-autocomplete(v-model='filterPlaces'
+              cache-items
               :prepend-icon="mdiMapMarker"
               chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-              no-filter
-              item-text='name'
+              auto-select-first
+              clearable
               return-object
+              item-text='name'
               :disabled="!cohort.id"
-              :search-input.sync="placeName"
+              @input.native="searchPlaces"
               :delimiters="[',', ';']"
-              :items="filteredPlaces"
+              :items="places"
               :label="$t('common.places')")
+                //- template(v-slot:item="{ item, attrs, on }")
+                //-   v-list-item(v-bind='attrs' v-on='on')
+                //-     v-list-item-content(two-line)
+                //-       v-list-item-title(v-text='item.name')
+                //-       v-list-item-subtitle(v-text='item.address')
             
           v-col(cols=2)
             v-btn(color='primary' text @click='addFilter' :disabled='!cohort.id || !filterPlaces.length && !filterTags.length') add <v-icon v-text='mdiPlus'></v-icon>
             
 
         v-data-table(
-        :headers='filterHeaders'
-        :items='filters'
-        :hide-default-footer='filters.length<5'
-        :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }')
-          template(v-slot:item.actions='{item}')
-            v-btn(@click='removeFilter(item)' color='error' icon)
-              v-icon(v-text='mdiDeleteForever')
-          template(v-slot:item.tags='{item}')
-            v-chip.ma-1(small v-for='tag in item.tags' v-text='tag' :key='tag')
-          template(v-slot:item.places='{item}')
-            v-chip.ma-1(small v-for='place in item.places' v-text='place.name' :key='place.id' )
+          :headers='filterHeaders'
+          :items='filters'
+          :hide-default-footer='filters.length<5'
+          :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }')
+            template(v-slot:item.actions='{item}')
+              v-btn(@click='removeFilter(item)' color='error' icon)
+                v-icon(v-text='mdiDeleteForever')
+            template(v-slot:item.tags='{item}')
+              v-chip.ma-1(small v-for='tag in item.tags' v-text='tag' :key='tag')
+            template(v-slot:item.places='{item}')
+              v-chip.ma-1(small v-for='place in item.places' v-text='place.name' :key='place.id' )
             
 
 
@@ -95,7 +103,7 @@ v-container
 </template>
 <script>
 import get from 'lodash/get'
-import { mapActions, mapState } from 'vuex'
+import debounce from 'lodash/debounce'
 import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle } from '@mdi/js'
 
 export default {
@@ -109,6 +117,8 @@ export default {
       cohort: { name: '', id: null },
       filterTags: [],
       filterPlaces: [],
+      tags: [],
+      places: [],
       cohorts: [],
       filters: [],
       tagName: '',
@@ -125,38 +135,17 @@ export default {
       ]
     }
   },
-  computed:{
-    ...mapState(['tags', 'settings', 'places']),
-    filteredTags () {
-      if (!this.tagName) { return this.tags.slice(0, 10).map(t => t.tag) }
-      const tagName = this.tagName.trim().toLowerCase()
-      return this.tags.filter(t => t.tag.toLowerCase().includes(tagName)).map(t => t.tag)
-    },
-    filteredPlaces () {
-      if (!this.placeName) { return this.places }
-      const placeName = this.placeName.trim().toLowerCase()
-      let nameMatch = false
-      const matches = this.places.filter(p => {
-        const tmpName = p.name.toLowerCase()
-        const tmpAddress = p.address.toLowerCase()
-        if (tmpName.includes(placeName)) {
-          if (tmpName === placeName) { nameMatch = true }
-          return true
-        }
-        return tmpAddress.includes(placeName)
-      })
-      if (!nameMatch) {
-        matches.unshift({ create: true, name: this.placeName })
-      }
-      return matches
-    }    
-  },
   async fetch () {
     this.cohorts = await this.$axios.$get('/cohorts?withFilters=true')
   },
 
   methods: {
-    ...mapActions(['updateMeta']),
+    searchTags: debounce(async function (ev) {
+      this.tags = await this.$axios.$get(`/tag?search=${ev.target.value}`)
+    }, 100),
+    searchPlaces: debounce(async function (ev) {
+      this.places = await this.$axios.$get(`/place?search=${ev.target.value}`)
+    }, 100),
     cohortFilters (cohort) {
       return cohort.filters.map(f => {
         return '(' + f.tags?.join(', ') + f.places?.map(p => p.name).join(', ') + ')'
