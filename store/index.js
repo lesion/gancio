@@ -1,13 +1,6 @@
-// const dayjs = require('dayjs')
-// const timezone = require('dayjs/plugin/timezone')
-// dayjs.extend(timezone)
-
 export const state = () => ({
   locale: '',
   user_locale: {},
-  filters: { tags: [], places: [], show_recurrent: false },
-  tags: [],
-  places: [],
   settings: {
     instance_timezone: 'Europe/Rome',
     instance_name: '',
@@ -26,13 +19,8 @@ export const state = () => ({
 })
 
 export const mutations = {
-  update (state, { tags, places }) {
-    state.tags = tags
-    state.places = places
-  },
   setSettings (state, settings) {
     state.settings = settings
-    state.filters.show_recurrent = settings.recurrent_event_visible
   },
   setSetting (state, setting) {
     state.settings[setting.key] = setting.value
@@ -43,11 +31,6 @@ export const mutations = {
   setUserlocale (state, messages) {
     state.user_locale = messages
   },
-  setFilters (state, filters) {
-    state.filters.tags = [...filters.tags]
-    state.filters.places = [...filters.places]
-    state.filters.show_recurrent = filters.show_recurrent
-  },
   setAnnouncements (state, announcements) {
     state.announcements = announcements
   }
@@ -56,24 +39,16 @@ export const mutations = {
 export const actions = {
   // this method is called server side only for each request for nuxt
   // we use it to get configuration from db, set locale, etc...
-  nuxtServerInit ({ commit }, { req, res }) {
+  nuxtServerInit ({ commit }, { _req, res }) {
     commit('setSettings', res.locals.settings)
-    // dayjs.tz.(res.locals.settings.instance_timezone)    
+    // dayjs.tz.(res.locals.settings.instance_timezone)
     if (res.locals.status === 'READY') {
       commit('setAnnouncements', res.locals.announcements)
-      commit('update', res.locals.meta)
     }
   },
   async updateAnnouncements ({ commit }) {
     const announcements = await this.$axios.$get('/announcements')
     commit('setAnnouncements', announcements)
-  },
-  async updateMeta ({ commit }) {
-    const { tags, places } = await this.$axios.$get('/event/meta')
-    commit('update', { tags, places })
-  },
-  setFilters ({ commit }, filters) {
-    commit('setFilters', filters)
   },
   setAnnouncements ({ commit }, announcements) {
     commit('setAnnouncements', announcements)

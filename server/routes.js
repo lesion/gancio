@@ -69,9 +69,7 @@ app.use((error, _req, res, _next) => {
 app.use(async (req, res, next) => {
   if (config.status === 'READY') {
 
-    const eventController = require('./api/controller/event')
     const announceController = require('./api/controller/announce')    
-    res.locals.meta = await eventController._getMeta()
     res.locals.announcements = await announceController._getVisible()
   }
   res.locals.status = config.status
