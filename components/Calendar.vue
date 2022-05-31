@@ -16,7 +16,7 @@
 
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import dayjs from 'dayjs'
 import { attributesFromEvents } from '../assets/helper'
 
@@ -34,13 +34,12 @@ export default {
     }
   },
   computed: {
-    ...mapState(['tags', 'filters', 'in_past', 'settings']),
+    ...mapState(['settings']),
     attributes () {
-      return attributesFromEvents(this.events, this.tags)
+      return attributesFromEvents(this.events)
     }
   },
   methods: {
-    ...mapActions(['updateEvents', 'showPastEvents']),
     updatePage (page) {
         this.$emit('monthchange', page)
     },
