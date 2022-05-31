@@ -22,38 +22,51 @@ const log = require('../../log')
 
 const eventController = {
 
-  async _getMeta () {
+  async searchMeta (req, res) {
+    const search = req.query.search
+
     const places = await Place.findAll({
-      order: [[Sequelize.literal('weigth'), 'DESC']],
-      attributes: {
-        include: [[Sequelize.fn('count', Sequelize.col('events.placeId')), 'weigth']],
-        exclude: ['createdAt', 'updatedAt']
+      order: [[Sequelize.col('w'), 'DESC']],
+      where: {
+        [Op.or]: [
+          { name: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%' )},
+          { address: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('address')), 'LIKE', '%' + search + '%')},
+        ]
       },
+      attributes: [['name', 'label'], 'address', 'id', [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('events.placeId')),'INTEGER'), 'w']],
       include: [{ model: Event, where: { is_visible: true }, required: true, attributes: [] }],
-      group: ['place.id']
+      group: ['place.id'],
+      raw: true
     })
 
     const tags = await Tag.findAll({
-      order: [[Sequelize.literal('w'), 'DESC']],
-      attributes: {
-        include: [[Sequelize.fn('COUNT', Sequelize.col('tag.tag')), 'w']]
-      },
+      order: [[Sequelize.col('w'), 'DESC']],
+      where: {
+        tag: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('tag')), 'LIKE', '%' + search + '%'),
+      },      
+      attributes: [['tag','label'], [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('tag.tag')), 'INTEGER'), 'w']],
       include: [{ model: Event, where: { is_visible: true }, attributes: [], through: { attributes: [] }, required: true }],
-      group: ['tag.tag']
+      group: ['tag.tag'],
+      raw: true
     })
 
-    return { places, tags }
+    const ret = places.map(p => {
+      p.type = 'place'
+      return p
+    }).concat(tags.map(t => {
+      t.type = 'tag'
+      return t
+    })).sort( (a, b) => b.w - a.w).slice(0, 10)
+
+    return res.json(ret)
   },
 
-  async getMeta (req, res) {
-    res.json(await eventController._getMeta())
-  },
 
   async search (req, res) {
     const search = req.query.search
 
     // search for events
-    const events = Event.findAll({
+    const events = await Event.findAll({
       logging: console.log, 
       order: [['start_datetime', 'DESC']],
       attributes: {
@@ -65,48 +78,11 @@ const eventController = {
         parentId: null,
         title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', '%' + search + '%'),
       },
-      limit: 3
+      limit: 10
     })
 
-    // search for tags
-    const tags = Tag.findAll({
-      order: [[Sequelize.literal('w'), 'DESC']],
-      attributes: {
-        include: [[Sequelize.fn('COUNT', Sequelize.col('tag.tag')), 'w']],
-      },
-      where: { tag: { [Op.substring]: search } },
-      include: [{ model: Event, where: { is_visible: true, recurrent: null, parentId: null }, attributes: [], through: { attributes: [] }, required: true }],
-      group: ['tag.tag'],
-      limit: 3
-    })
 
-    // let places
-    // try {
-    //   places = await Place.findAll({
-    //     logging: console.log,
-    //     where: { name: { [Op.substring]: search } },
-    //     order: [[Sequelize.literal('weigth'), 'DESC']],
-    //     attributes: {
-    //       include: [[Sequelize.fn('count', Sequelize.col('events.placeId')), 'weigth']],
-    //     //   exclude: ['createdAt', 'updatedAt']
-    //     },
-    //     include: [{ model: Event, where: { is_visible: true }, through: { attributes: [] }, attributes: [] }],
-    //     limit: 3,
-    //     group: ['place.id'],
-    //   })
-    // } catch (e) {
-    //   console.error(e)
-    // }
-
-
-    const [ tmpevents, tmptags] = await Promise.all([events, tags])
-
-    let ret = tmpevents 
-      .map(e => ({ ...e.get(), type: 'event' }))
-      .concat(tmptags.map(t => ({ ...t.get(), type: 'tag' })))
-
-
-    return res.json(ret)
+    return res.json(events)
   },
 
   async getNotifications (event, action) {
@@ -135,12 +111,6 @@ const eventController = {
 
     // get notification that matches with selected event
     return notifications.filter(notification => match(event, notification.filters))
-  },
-
-  async updatePlace (req, res) {
-    const place = await Place.findByPk(req.body.id)
-    await place.update(req.body)
-    res.json(place)
   },
 
   async _get(slug) {

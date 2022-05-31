@@ -10,7 +10,7 @@ export default ({ $axios }, inject) => {
      *    end_datetime:   unix_timestamp
      *    tags: [tag, list],
      *    places: [place_id],
-     *    limit: (default ∞)
+     *    max: (default ∞)
      * }
      *
      */
@@ -22,7 +22,8 @@ export default ({ $axios }, inject) => {
             end: params.end,
             places: params.places && params.places.join(','),
             tags: params.tags && params.tags.join(','),
-            show_recurrent: !!params.show_recurrent
+            show_recurrent: !!params.show_recurrent,
+            max: params.maxs
           }
         })
         return events.map(e => Object.freeze(e))

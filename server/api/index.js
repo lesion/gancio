@@ -80,9 +80,6 @@ if (config.status !== 'READY') {
   // get all users
   api.get('/users', isAdmin, userController.getAll)
 
-  // update a place (modify address..)
-  api.put('/place', isAdmin, eventController.updatePlace)
-
   /**
    * Get events
    * @category Event
@@ -132,7 +129,7 @@ if (config.status !== 'READY') {
   api.delete('/event/:id', isAuth, eventController.remove)
 
   // get tags/places
-  api.get('/event/meta', eventController.getMeta)
+  api.get('/event/meta', eventController.searchMeta)
 
   // get unconfirmed events
   api.get('/event/unconfirmed', isAdmin, eventController.getUnconfirmed)
@@ -157,10 +154,10 @@ if (config.status !== 'READY') {
 
 
   api.get('/place/:placeName/events', cors, placeController.getEvents)
-  // api.get('/place', cors, placeController.)
+  api.get('/place', cors, placeController.get)
+  api.put('/place', isAdmin, placeController.updatePlace)
 
   api.get('/tag', cors, tagController.get)
-
 
   // - FEDIVERSE INSTANCES, MODERATION, RESOURCES
   api.get('/instances', isAdmin, instanceController.getAll)
@@ -192,10 +189,10 @@ if (config.status !== 'READY') {
   api.post('/client', oauthController.createClient)
 }
 
-api.use((req, res) => res.sendStatus(404))
+api.use((_req, res) => res.sendStatus(404))
 
 // Handle 500
-api.use((error, req, res, next) => {
+api.use((error, _req, res, _next) => {
   log.error('[API ERROR]', error)
   res.status(500).send('500: Internal Server Error')
 })
