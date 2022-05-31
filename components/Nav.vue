@@ -21,7 +21,7 @@
       v-icon(v-text='mdiLogin')
 
     client-only
-      v-menu(v-if='$auth.loggedIn' offset-y)
+      v-menu(v-if='$auth.loggedIn' offset-y eager)
         template(v-slot:activator="{ on, attrs }")
           v-btn(icon v-bind='attrs' v-on='on' title='Menu' aria-label='Menu')
             v-icon(v-text='mdiDotsVertical')
@@ -48,7 +48,7 @@
           v-icon(v-text='mdiDotsVertical')
 
 
-    v-btn(icon target='_blank' :href='feedLink' title='RSS' aria-label='RSS')
+    v-btn(icon target='_blank' :href='`${settings.baseurl}/feed/rss`' title='RSS' aria-label='RSS')
       v-icon(color='orange' v-text='mdiRss')
 
 </template>
@@ -64,25 +64,7 @@ export default {
     return { mdiPlus, mdiShareVariant, mdiLogout, mdiLogin, mdiDotsVertical, mdiAccount, mdiCog, mdiRss }
   },
   mixins: [clipboard],
-  computed: {
-    ...mapState(['filters', 'settings']),
-    feedLink () {
-      const tags = this.filters.tags && this.filters.tags.map(encodeURIComponent).join(',')
-      const places = this.filters.places && this.filters.places.join(',')
-      let query = ''
-      if (tags || places) {
-        query = '?'
-        if (tags) {
-          query += 'tags=' + tags
-          if (places) { query += '&places=' + places }
-        } else {
-          query += 'places=' + places
-        }
-      }
-
-      return `${this.settings.baseurl}/feed/rss${query}`
-    },
-  },
+  computed: mapState(['settings']),
   methods: {
     logout () {
       this.$root.$message('common.logout_ok')
