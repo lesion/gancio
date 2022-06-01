@@ -5,13 +5,13 @@ v-row
       :rules="[$validators.required('common.where')]"
       :label="$t('common.where')"
       :hint="$t('event.where_description')"
-      :search-input.sync="placeName"
       :prepend-icon='mdiMapMarker'
-      persistent-hint
-      :value="value.name"
-      :items="filteredPlaces"
       no-filter
-      item-text='name'
+      :value='value.name'
+      hide-no-data
+      @input.native='search'
+      persistent-hint
+      :items="places"
       @change='selectPlace')
       template(v-slot:item="{ item, attrs, on }")
         v-list-item(v-bind='attrs' v-on='on')
@@ -32,24 +32,24 @@ v-row
 
 </template>
 <script>
-import { mapState } from 'vuex'
 import { mdiMap, mdiMapMarker, mdiPlus } from '@mdi/js'
+import debounce from 'lodash/debounce'
 
 export default {
   name: 'WhereInput',
   props: {
-    value: { type: Object, default: () => {} }
+    value: { type: Object, default: () => ({}) }
   },
   data () {
     return {
       mdiMap, mdiMapMarker, mdiPlus,
       place: { },
       placeName: '',
+      places: [],
       disableAddress: true
     }
   },
   computed: {
-    ...mapState(['places']),
     filteredPlaces () {
       if (!this.placeName) { return this.places }
       const placeName = this.placeName.trim().toLowerCase()
@@ -70,6 +70,15 @@ export default {
     }
   },
   methods: {
+    search: debounce(async function(ev) {
+      const search = ev.target.value.trim().toLowerCase()
+      this.places = await this.$axios.$get(`place?search=${search}`)
+      if (!search) { return this.places }
+      const matches = this.places.find(p => search === p.name.toLocaleLowerCase())
+      if (!matches) {
+        this.places.unshift({ create: true, name: ev.target.value.trim() })
+      }
+    }, 100),
     selectPlace (p) {
       if (!p) { return }
       if (typeof p === 'object' && !p.create) {
@@ -79,9 +88,9 @@ export default {
         this.disableAddress = true
       } else { // this is a new place
         this.place.name = p.name || p
-        const tmpPlace = this.place.name.trim().toLowerCase()
+        const tmpPlace = this.place.name.trim().toLocaleLowerCase()
         // search for a place with the same name
-        const place = this.places.find(p => p.name.toLowerCase() === tmpPlace)
+        const place = this.places.find(p => !p.create && p.name.trim().toLocaleLowerCase() === tmpPlace)
         if (place) {
           this.place.name = place.name
           this.place.id = place.id
