@@ -3,7 +3,7 @@ const Place = require('../models/place')
 const Event = require('../models/event')
 const eventController = require('./event')
 const log = require('../../log')
-const { Op, where, col, fn } = require('sequelize')
+const { Op, where, col, fn, cast } = require('sequelize')
 
 module.exports = {
   async getEvents (req, res) {
@@ -26,18 +26,34 @@ module.exports = {
     res.json(place)
   },
 
-  async get (req, res) {
-    const search = req.query.search
+  async getAll (_req, res) {
     const places = await Place.findAll({
+      order: [[cast(fn('COUNT', col('events.placeId')),'INTEGER'), 'DESC']],
+      include: [{ model: Event, where: { is_visible: true }, required: true, attributes: [] }],
+      group: ['place.id'],
+      raw: true
+    })
+    return res.json(places)
+  },
+
+  async get (req, res) {
+    const search = req.query.search.toLocaleLowerCase()
+    const places = await Place.findAll({
+      order: [[cast(fn('COUNT', col('events.placeId')),'INTEGER'), 'DESC']],
       where: {
         [Op.or]: [
-          { name: where(fn('LOWER', col('name')), 'LIKE', '%' + search + '%') },
-          { address: where(fn('LOWER', col('address')), 'LIKE', '%' + search + '%') },
+          { name: where(fn('LOWER', col('name')), 'LIKE', '%' + search + '%' )},
+          { address: where(fn('LOWER', col('address')), 'LIKE', '%' + search + '%')},
         ]
-      }
+      },
+      attributes: ['name', 'address', 'id'],
+      include: [{ model: Event, where: { is_visible: true }, required: true, attributes: [] }],
+      group: ['place.id'],
+      raw: true
     })
 
-    return res.json(places)
+    // TOFIX: don't know why limit does not work
+    return res.json(places.slice(0, 10))
   }  
 
 }
