@@ -95,10 +95,10 @@ export default ({ app, store }) => {
 
     // multidate
     if (event.multidate) {
-      return `${start.format('ddd, D MMM HH:mm')} - ${end.format('ddd, D MMM')}`
+      return `${start.format('ddd, D MMM HH:mm')} - ${end.format('ddd, D MMM HH:mm')}`
     }
 
     // normal event
-    return start.format('ddd, D MMMM HH:mm')
+    return `${start.format('ddd, D MMM HH:mm')} - ${end.format('HH:mm')}`
   })
 }
