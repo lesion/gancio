@@ -5,9 +5,6 @@ v-container#home(fluid)
   #announcements.mx-1.mt-1(v-if='announcements.length')
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
-  .mb-1.mt-3.ml-2
-    v-btn(v-for='cohort in cohorts' text color='primary' :key='cohort.id' :to='`g/${cohort.name}`') {{cohort.name}}
-
   //- Calendar and search bar
   v-row.ma-2
     #calh.col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-0.ma-0
@@ -16,13 +13,10 @@ v-container#home(fluid)
       client-only(placeholder='Loading...')
         Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='events')
 
-    .col.pt-0.pt-md-2
+    .col.pt-0.pt-md-2.mt-4.pb-0
       //- v-btn(to='/search' color='primary' ) {{$t('common.search')}}
       v-form(to='/search' action='/search' method='GET')
-        v-text-field(:label='$t("common.search")')
-        v-btn(type='submit')
-      //- Search(@tag:selected="tag => $router.push(`/tag/${tag.tag}`)")
-      //- v-chip(v-if='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange()') {{selectedDay}}
+        v-text-field(name='search' :label='$t("common.search")' outlined rounded hide-details :append-icon='mdiMagnify')
 
   //- Events
   #events.mb-2.mt-1.pl-1.pl-sm-2
@@ -34,13 +28,12 @@ import { mapState } from 'vuex'
 import dayjs from 'dayjs'
 import Event from '@/components/Event'
 import Announcement from '@/components/Announcement'
-import Search from '@/components/Search'
 import Calendar from '@/components/Calendar'
-import { mdiCloseCircle } from '@mdi/js'
+import { mdiMagnify } from '@mdi/js'
 
 export default {
   name: 'Index',
-  components: { Event, Search, Announcement, Calendar },
+  components: { Event, Announcement, Calendar },
   middleware: 'setup',
   async asyncData ({ $api }) {
     const events = await $api.getEvents({
@@ -52,9 +45,8 @@ export default {
   },
   data () {
     return {
-      mdiCloseCircle,
+      mdiMagnify,
       first: true,
-      cohorts: [],
       isCurrentMonth: true,
       now: dayjs().unix(),
       date: dayjs.tz().format('YYYY-MM-DD'),
@@ -63,9 +55,6 @@ export default {
       end: null,
       selectedDay: null
     }
-  },
-  async fetch () {
-    this.cohorts = await this.$axios.$get('cohorts')
   },
   head () {
     return {
