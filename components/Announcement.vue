@@ -1,6 +1,6 @@
 <template>
   <nuxt-link :to='`/announcement/${announcement.id}`'>
-    <v-alert class='mb-1' border='left' type='info' color="primary" :icon='mdiInformation'>{{announcement.title}}</v-alert>
+    <v-alert class='mb-1' outlined type='info' color="primary" :icon='mdiInformation'>{{announcement.title}}</v-alert>
   </nuxt-link>
 </template>
 <script>
