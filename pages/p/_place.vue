@@ -1,8 +1,5 @@
 <template>
   <v-container id='home' fluid>
-    <div class="mt-3 mb-1 ml-1">
-      <v-btn text color='primary' to='/'><v-icon v-text='mdiChevronLeft'/></v-btn>
-    </div>
 
     <h1 class='d-block text-h4 font-weight-black text-center text-uppercase mt-5 mx-auto w-100 text-underline'><u>{{place.name}}</u></h1>
     <span class="d-block text-subtitle text-center w-100 mb-14">{{place.address}}</span>
@@ -15,15 +12,11 @@
 </template>
 <script>
 
-import { mdiChevronLeft } from '@mdi/js'
 import Event from '@/components/Event'
 
 export default {
   name: 'Tag',
   components: { Event },
-  data () {
-    return { mdiChevronLeft }
-  },
   asyncData ({ $axios, params, error }) {
     try {
       const place = params.place
