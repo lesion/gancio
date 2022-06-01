@@ -74,14 +74,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(['settings', 'tags']),
+    ...mapState(['settings']),
     todayEvents () {
       const start = dayjs(this.value.from).startOf('day').unix()
       const end = dayjs(this.value.from).endOf('day').unix()
       return this.events.filter(e => e.start_datetime >= start && e.start_datetime <= end)
     },
     attributes () {
-      return attributesFromEvents(this.events, this.tags)
+      return attributesFromEvents(this.events)
     },
     fromDate () {
       if (this.value.multidate) {
