@@ -2,7 +2,7 @@
   v-app-bar(app aria-label='Menu' height=64)
 
     //- logo, title and description
-    v-list-item.pa-0.pa-md-2(:to='$route.name==="index"?"/about":"/"')
+    v-list-item.pa-0(:to='$route.name==="index"?"/about":"/"')
       v-list-item-avatar.ma-xs-1(tile)
         img(src='/logo.png' height='40')
       v-list-item-content.d-flex

@@ -31,7 +31,8 @@ li {
 }
 
 #calh {
-  height: 292px;
+  /* this is to avoid content shift layout as v-calendar does not support SSR */
+  height: 268px;
 }
 
 .container {
