@@ -18,14 +18,14 @@ v-container#event.pa-0.pa-sm-2
           v-card(outlined)
             v-card-text
               v-icon.float-right(v-if='event.parentId' color='success' v-text='mdiRepeat')
-              .title.text-h5
-                b.p-name(itemprop="name") {{event.title}}
-
+              .title.text-h5.mb-5
+                strong.p-name.text--primary(itemprop="name") {{event.title}}
+              
               time.dt-start.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")' itemprop="startDate" :content="event.start_datetime|unixFormat('YYYY-MM-DDTHH:mm')")
                 v-icon(v-text='mdiCalendar')
-                b.ml-2 {{event|when}}
+                strong.ml-2 {{event|when}}
                 .d-none.dt-end(itemprop="endDate" :content="event.end_datetime|unixFormat('YYYY-MM-DDTHH:mm')") {{event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
-              div.text-subtitle-1 {{event.start_datetime|from}}
+              div.text-subtitle-1.mb-5 {{event.start_datetime|from}}
                 small(v-if='event.parentId')  ({{event|recurrentDetail}})
 
               .text-h6.p-location.h-adr(itemprop="location" itemscope itemtype="https://schema.org/Place")
@@ -34,10 +34,9 @@ v-container#event.pa-0.pa-sm-2
                 .text-subtitle-1.p-street-address(itemprop='address') {{event.place && event.place.address}}
 
             //- tags, hashtags
-            v-card-text(v-if='event.tags.length')
+            v-card-text.pt-0(v-if='event.tags && event.tags.length')
               v-chip.p-category.ml-1.mt-3(v-for='tag in event.tags' color='primary'
-                outlined :key='tag' :to='`/tag/${tag}`')
-                span(v-text='tag')
+                outlined :key='tag' :to='`/tag/${tag}`') {{tag}}
 
             //- info & actions
             v-toolbar
@@ -131,6 +130,9 @@ import get from 'lodash/get'
 import moment from 'dayjs'
 import clipboard from '../../assets/clipboard'
 import MyPicture from '~/components/MyPicture'
+import EventAdmin from '@/components/eventAdmin'
+import EmbedEvent from '@/components/embedEvent'
+
 const { htmlToText } = require('html-to-text')
 
 import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose,
@@ -141,8 +143,8 @@ export default {
   name: 'Event',
   mixins: [clipboard],
   components: {
-    EventAdmin: () => import('@/components/eventAdmin'),
-    EmbedEvent: () => import('@/components/embedEvent'),
+    EventAdmin,
+    EmbedEvent,
     MyPicture
   },
   async asyncData ({ $axios, params, error }) {
@@ -168,7 +170,7 @@ export default {
     if (!this.event) {
       return {}
     }
-    const tags_feed = this.event.tags.map(tag => ({
+    const tags_feed = this.event.tags && this.event.tags.map(tag => ({
       rel: 'alternate',
       type: 'application/rss+xml',
       title: `${this.settings.title} events tagged ${tag}`,
@@ -246,7 +248,7 @@ export default {
       return this.event.media && this.event.media.length
     },
     plainDescription () {
-      return htmlToText(this.event.description.replace('\n', '').slice(0, 1000))
+      return htmlToText(this.event.description && this.event.description.replace('\n', '').slice(0, 1000))
     },
     currentAttachmentLabel () {
       return get(this.selectedResource, `data.attachment[${this.currentAttachment}].name`, '')
