@@ -224,7 +224,8 @@ module.exports = {
   },
  
   async APRedirect (req, res, next) {
-    if (!req.accepts('html')) {
+    const acceptJson = req.accepts('html', 'application/activity+json') === 'application/activity+json'
+    if (acceptJson) {
       const eventController = require('../server/api/controller/event')
       const event = await eventController._get(req.params.slug)
       if (event) {

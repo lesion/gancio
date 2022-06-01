@@ -154,6 +154,7 @@ if (config.status !== 'READY') {
 
 
   api.get('/place/:placeName/events', cors, placeController.getEvents)
+  api.get('/place/all', isAdmin, placeController.getAll)
   api.get('/place', cors, placeController.get)
   api.put('/place', isAdmin, placeController.updatePlace)
 
