@@ -63,26 +63,69 @@ const eventController = {
 
 
   async search (req, res) {
-    const search = req.query.search
+    const search = req.query.search.trim().toLocaleLowerCase()
+    const show_recurrent = req.query.show_recurrent || false
+    const end = req.query.end
+    const replacements = []
 
-    // search for events
+    const where = {
+      // do not include parent recurrent event
+      recurrent: null,
+
+      // confirmed event only
+      is_visible: true,
+
+    }
+
+    if (!show_recurrent) {
+      where.parentId = null
+    }
+
+    if (end) {
+      where.start_datetime = { [Op.lte]: end }
+    }
+
+    if (search) {
+      replacements.push(search)
+      where[Op.or] =
+      [
+        { title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', '%' + search + '%') },
+        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%'),
+        Sequelize.fn('EXISTS', Sequelize.literal('SELECT 1 FROM event_tags WHERE "event_tags"."eventId"="event".id AND "tagTag" = ?'))
+      ]
+    }
+
+
     const events = await Event.findAll({
-      logging: console.log, 
-      order: [['start_datetime', 'DESC']],
+      where,
       attributes: {
-        include: [[Sequelize.fn('LOWER', Sequelize.col('title')), 't']],
-      },      
-      include: [Place],
-      where: {
-        recurrent: null,
-        parentId: null,
-        title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', '%' + search + '%'),
+        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'description', 'resources']
       },
-      limit: 10
+      order: [['start_datetime', 'DESC']],
+      include: [
+        {
+          model: Tag,
+          order: [Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
+          attributes: ['tag'],
+          through: { attributes: [] }
+        },
+        { model: Place, required: true, attributes: ['id', 'name', 'address'] }
+      ],
+      replacements,
+      limit: 30,
+    }).catch(e => {
+      log.error('[EVENT]', e)
+      return res.json([])
     })
 
+    const ret = events.map(e => {
+      e = e.get()
+      e.tags = e.tags ? e.tags.map(t => t && t.tag) : []
+      return e
+    })
 
-    return res.json(events)
+    return res.json(ret)
+
   },
 
   async getNotifications (event, action) {
