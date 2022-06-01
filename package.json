@@ -28,7 +28,7 @@
     "yarn.lock"
   ],
   "dependencies": {
-    "@mdi/js": "^6.6.96",
+    "@mdi/js": "^6.7.96",
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.13.5",
     "@nuxtjs/sitemap": "^2.4.0",
@@ -55,10 +55,10 @@
     "microformat-node": "^2.0.1",
     "minify-css-string": "^1.0.0",
     "mkdirp": "^1.0.4",
-    "multer": "^1.4.3",
+    "multer": "^1.4.5-lts.1",
     "nuxt-edge": "^2.16.0-27358576.777a4b7f",
     "pg": "^8.6.0",
-    "sequelize": "^6.17.0",
+    "sequelize": "^6.20.1",
     "sequelize-slugify": "^1.6.1",
     "sharp": "^0.27.2",
     "sqlite3": "mapbox/node-sqlite3#918052b",
@@ -71,7 +71,7 @@
     "vue-template-compiler": "^2.6.14",
     "vuetify": "npm:@vuetify/nightly@dev",
     "winston": "^3.7.2",
-    "winston-daily-rotate-file": "^4.6.1",
+    "winston-daily-rotate-file": "^4.7.1",
     "yargs": "^17.5.0"
   },
   "devDependencies": {
@@ -80,7 +80,7 @@
     "prettier": "^2.6.2",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
-    "sass": "^1.51.0",
+    "sass": "^1.52.1",
     "sequelize-cli": "^6.3.0",
     "supertest": "^6.2.2",
     "webpack": "4",
