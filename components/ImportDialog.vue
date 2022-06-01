@@ -45,7 +45,6 @@ export default {
       event: {}
     }
   },
-  computed: mapState(['places']),
   methods: {
     importGeneric () {
       if (this.file) {
