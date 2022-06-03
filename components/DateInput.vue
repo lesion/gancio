@@ -34,16 +34,55 @@ v-col(cols=12)
 
   v-row.mt-3.col-md-6.mx-auto
     v-col.col-12.col-sm-6
-      v-select(dense :label="$t('event.from')" :value='fromHour' clearable
-        :disabled='!value.from'
-        :rules="[$validators.required('event.from')]"
-        :items='hourList' @change='hr => change("fromHour", hr)')
+      v-menu(
+        v-model="menuFromHour"
+        :close-on-content-click="false"
+        offset-y
+        :value="fromHour"
+        transition="scale-transition")
+        template(v-slot:activator="{ on, attrs }")
+          v-text-field(
+            :label="$t('event.from')"
+            :value="fromHour"
+            :disabled='!value.from'
+            :prepend-icon="mdiClockTimeFourOutline"
+            :rules="[$validators.required('event.from')]"
+            readonly
+            v-bind="attrs"
+            v-on="on")
+        v-time-picker(
+          v-if="menuFromHour"
+          :value="fromHour"
+          :allowedMinutes='allowedMinutes'
+          format='24hr'
+          @click:minute='menuFromHour=false'
+          @change='hr => change("fromHour", hr)')
+
 
     v-col.col-12.col-sm-6
-      v-select(dense :label="$t('event.due')"
-        :disabled='!fromHour'
-        :value='dueHour' clearable
-        :items='hourList' @change='hr => change("dueHour", hr)')
+      v-menu(
+        v-model="menuDueHour"
+        :close-on-content-click="false"
+        offset-y
+        :value="dueHour"
+        transition="scale-transition")
+        template(v-slot:activator="{ on, attrs }")
+          v-text-field(
+            :label="$t('event.due')"
+            :value="dueHour"
+            :disabled='!fromHour'
+            :prepend-icon="mdiClockTimeEightOutline"
+            :rules="[$validators.required('event.due')]"
+            readonly
+            v-bind="attrs"
+            v-on="on")
+        v-time-picker(
+          v-if="menuDueHour"
+          :value="dueHour"
+          :allowedMinutes='allowedMinutes'
+          format='24hr'
+          @click:minute='menuDueHour=false'
+          @change='hr => change("dueHour", hr)')
 
   List(v-if='type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
 
@@ -53,6 +92,7 @@ import dayjs from 'dayjs'
 import { mapState } from 'vuex'
 import List from '@/components/List'
 import { attributesFromEvents } from '../assets/helper'
+import { mdiClockTimeFourOutline, mdiClockTimeEightOutline  } from '@mdi/js'
 
 export default {
   name: 'DateInput',
@@ -63,6 +103,10 @@ export default {
   },
   data () {
     return {
+      mdiClockTimeFourOutline, mdiClockTimeEightOutline,
+      allowedMinutes: [0, 15, 30, 45],
+      menuFromHour: false,
+      menuDueHour: false,
       type: 'normal',
       page: null,
       events: [],
@@ -95,17 +139,6 @@ export default {
     },
     dueHour () {
       return this.value.due && this.value.dueHour ? dayjs.tz(this.value.due).format('HH:mm') : null
-    },
-    hourList () {
-      const hourList = []
-      const leftPad = h => ('00' + h).slice(-2)
-      for (let h = 0; h < 24; h++) {
-        const textHour = leftPad(h < 13 ? h : h - 12)
-        hourList.push({ text: textHour + ':00 ' + (h <= 12 ? 'AM' : 'PM'), value: leftPad(h) + ':00' })
-        hourList.push({ text: textHour + ':30 ' + (h <= 12 ? 'AM' : 'PM'), value: leftPad(h) + ':30' })
-      }
-
-      return hourList
     },
     whenPatterns () {
       if (!this.value.from) { return }
