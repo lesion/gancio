@@ -72,7 +72,6 @@ v-col(cols=12)
             :value="dueHour"
             :disabled='!fromHour'
             :prepend-icon="mdiClockTimeEightOutline"
-            :rules="[$validators.required('event.due')]"
             readonly
             v-bind="attrs"
             v-on="on")
