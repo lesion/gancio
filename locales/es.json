@@ -148,7 +148,7 @@
         "from": "Desde las",
         "image_too_big": "La imagén es demasiado grande! Tamaño máx 4M",
         "interact_with_me_at": "Sígueme en el fediverso en",
-        "show_recurrent": "Eventos recurrientes",
+        "show_recurrent": "Eventos recurrentes",
         "show_past": "eventos pasados",
         "follow_me_description": "Entre las diversas formas de mantenerse al día con los eventos publicados aquí en {title},\npuedes seguir la cuenta <u>{account}</u> desde el fediverso, por ejemplo, a través de un Mastodon, y posiblemente añadir recursos a un evento desde allí.<br/><br/>\nSi nunca has oído hablar del Mastodon y el fediverso te sugerimos que leas <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>este artículo</a>.<br/><br/> Introduce tu instancia abajo (por ejemplo mastodon.cisti.org o mastodon.bida.im)",
         "interact_with_me": "Sigueme en el fediverso",
