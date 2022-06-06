@@ -29,7 +29,7 @@ require('yargs')
       return absolute_config_path
     }})
   .command(['start', 'run', '$0'], 'Start gancio', {}, start)
-  // .command(['accounts'], 'Manage accounts', accountsCLI)
+  .command(['accounts'], 'Manage accounts', accountsCLI)
   .help('h')
   .alias('h', 'help')
   .epilog('Made with ❤ by underscore hacklab - https://gancio.org')
