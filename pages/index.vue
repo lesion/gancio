@@ -13,7 +13,7 @@ v-container#home(fluid)
       client-only(placeholder='Loading...')
         Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='events')
 
-    .col.pt-0.pt-md-2.mt-4.pb-0
+    .col.pt-0.pt-md-2.mt-4.ma-md-0.pb-0
       //- v-btn(to='/search' color='primary' ) {{$t('common.search')}}
       v-form(to='/search' action='/search' method='GET')
         v-text-field(name='search' :label='$t("common.search")' outlined rounded hide-details :append-icon='mdiMagnify')

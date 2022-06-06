@@ -75,15 +75,22 @@ import dayjs from 'dayjs'
 
 import { mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle } from '@mdi/js'
 
+import List from '@/components/List'
+import Editor from '@/components/Editor'
+import ImportDialog from '@/components/ImportDialog'
+import MediaInput from '@/components/MediaInput'
+import WhereInput from '@/components/WhereInput'
+import DateInput from '@/components/DateInput'
+
 export default {
   name: 'NewEvent',
   components: {
-    List: () => import(/* webpackChunkName: "add" */'@/components/List'),
-    Editor: () => import(/* webpackChunkName: "add" */'@/components/Editor'), 
-    ImportDialog: () => import(/* webpackChunkName: "add" */'@/components/ImportDialog.vue'),
-    MediaInput: () => import(/* webpackChunkName: "add" */'@/components/MediaInput.vue'),
-    WhereInput: () => import(/* webpackChunkName: "add" */'@/components/WhereInput.vue'),
-    DateInput: () => import(/* webpackChunkName: "add" */'@/components/DateInput.vue')
+    List,
+    Editor,
+    ImportDialog,
+    MediaInput,
+    WhereInput,
+    DateInput
   },
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
