@@ -27,7 +27,7 @@
           Places
 
         //- Cohorts
-        v-tab {{$t('common.cohorts')}}
+        v-tab {{$t('common.blobs')}}
         v-tab-item
           Cohorts
 
@@ -57,15 +57,16 @@
 <script>
 import { mapState } from 'vuex'
 import { mdiAlert, mdiChevronRight, mdiChevronLeft } from '@mdi/js'
+import Settings from '@/components/admin/Settings'
 
 export default {
   name: 'Admin',
   components: { 
+    Settings,
     Users:  () => import(/* webpackChunkName: "admin" */'../components/admin/Users'),
     Events: () => import(/* webpackChunkName: "admin" */'../components/admin/Events'),
     Places: () => import(/* webpackChunkName: "admin" */'../components/admin/Places'),
     Cohorts: () => import(/* webpackChunkName: "admin" */'../components/admin/Cohorts'),
-    Settings: () => import('../components/admin/Settings'),
     Federation: () => import(/* webpackChunkName: "admin" */'../components/admin/Federation.vue'),
     Moderation: () => import(/* webpackChunkName: "admin" */'../components/admin/Moderation.vue'),
     Announcement: () => import(/* webpackChunkName: "admin" */'../components/admin/Announcement.vue'),
