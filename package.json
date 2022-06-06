@@ -13,9 +13,7 @@
     "doc:dev": "cd docs && bundle exec jekyll s --drafts",
     "migrate": "NODE_ENV=production sequelize db:migrate",
     "migrate:dev": "sequelize db:migrate",
-    "build:wc": "cd webcomponents; yarn build:lib; cp dist/gancio-events.es.js ../wp-plugin/js/; cp dist/gancio-events.es.js ../assets/; cp dist/gancio-events.es.js ../docs/assets/js/",
-    "prepare": "yarn run snyk-protect",
-    "snyk-protect": "snyk-protect"
+    "build:wc": "cd webcomponents; yarn build:lib; cp dist/gancio-events.es.js ../wp-plugin/js/; cp dist/gancio-events.es.js ../assets/; cp dist/gancio-events.es.js ../docs/assets/js/"
   },
   "files": [
     "server/",
@@ -34,6 +32,7 @@
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.13.5",
     "@nuxtjs/sitemap": "^2.4.0",
+    "@snyk/protect": "latest",
     "accept-language": "^3.0.18",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
@@ -74,8 +73,7 @@
     "vuetify": "npm:@vuetify/nightly@dev",
     "winston": "^3.7.2",
     "winston-daily-rotate-file": "^4.7.1",
-    "yargs": "^17.5.0",
-    "@snyk/protect": "latest"
+    "yargs": "^17.5.0"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.3",
