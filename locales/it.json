@@ -86,7 +86,8 @@
         "reset": "Reset",
         "import": "Importa",
         "max_events": "N. massimo eventi",
-        "label": "Etichetta"
+        "label": "Etichetta",
+        "blobs": "Bolle"
     },
     "login": {
         "description": "Entrando puoi pubblicare nuovi eventi.",

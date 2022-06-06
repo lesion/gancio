@@ -86,7 +86,8 @@
         "reset": "Reset",
         "import": "Import",
         "max_events": "N. max events",
-        "label": "Label"
+        "label": "Label",
+        "blobs": "Blobs"
     },
     "login": {
         "description": "By logging in you can publish new events.",
