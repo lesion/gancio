@@ -86,7 +86,8 @@
         "reset": "Reset",
         "import": "Import",
         "max_events": "N. max events",
-        "label": "Label"
+        "label": "Label",
+        "blobs": "Blobs"
     },
     "login": {
         "description": "By logging in you can publish new events.",
@@ -151,7 +152,7 @@
         "each_month": "Each month",
         "due": "until",
         "from": "From",
-        "image_too_big": "The image can't be bigger than 4 MB",
+        "image_too_big": "The image can't be bigger than 4MB",
         "interact_with_me_at": "Interact with me on fediverse at",
         "follow_me_description": "One of the ways to stay up to date on events published here on {title},\nis following the account <u>{account}</u> from the fediverse, for example via Mastodon, and possibly add resources to an event from there.<br/><br/>\nIf you have never heard of Mastodon and the fediverse we recommend reading <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>this article</a>.<br/><br/>Enter your instance below (e.g. mastodon.social)",
         "interact_with_me": "Follow me",
@@ -159,7 +160,11 @@
         "import_URL": "Import from URL",
         "import_ICS": "Import from ICS",
         "ics": "ICS",
-        "import_description": "You can import events from other platforms and other instances through standard formats (ics and h-event)"
+        "import_description": "You can import events from other platforms and other instances through standard formats (ics and h-event)",
+        "alt_text_description": "Description for people with visual impairments",
+        "choose_focal_point": "Choose the focal point",
+        "remove_media_confirmation": "Do you confirm the image removal?",
+        "download_flyer": "Download flyer"
     },
     "admin": {
         "place_description": "If you have gotten the place or address wrong, you can change it.<br/>All current and past events associated with this place will change address.",
@@ -170,6 +175,7 @@
         "delete_user_confirm": "Are you sure you want to remove {user}?",
         "user_remove_ok": "User removed",
         "user_create_ok": "User created",
+        "event_remove_ok": "Event removed",
         "allow_registration_description": "Allow open registrations?",
         "allow_anon_event": "Allow anonymous events (has to be confirmed)?",
         "allow_recurrent_event": "Allow recurring events",
@@ -226,7 +232,8 @@
         "smtp_test_success": "A test email is sent to {admin_email}, please check your inbox",
         "smtp_test_button": "Send a test email",
         "admin_email": "Admin e-mail",
-        "widget": "Widget"
+        "widget": "Widget",
+        "wrong_domain_warning": "The baseurl configured in config.json <b>({baseurl})</b> differs from the one you're visiting <b>({url})</b>"
     },
     "auth": {
         "not_confirmed": "Not confirmed yet…",
@@ -273,6 +280,7 @@
         "completed": "Setup completed",
         "completed_description": "<p>You can now login with the following user:<br/><br/>User: <b>{email}</b><br/>Password: <b>{password}<b/></p>",
         "copy_password_dialog": "Yes, you have to copy the password!",
-        "start": "Start"
+        "start": "Start",
+        "https_warning": "You're visiting from HTTP, remember to change baseurl in config.json if you switch to HTTPS!"
     }
 }

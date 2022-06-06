@@ -41,18 +41,21 @@
         template(v-slot:item.actions='{item}')
           v-btn(@click='editPlace(item)' color='primary' icon)
             v-icon(v-text='mdiPencil')
+          nuxt-link(:to='`/p/${item.name}`')
+            v-icon(v-text='mdiEye')
+
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
-import { mdiPencil, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
+import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiEye } from '@mdi/js'
 
 export default {
   data () {
     return {
-      mdiPencil, mdiChevronRight, mdiChevronLeft,
+      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiEye,
       loading: false,
       dialog: false,
       valid: false,
+      places: [],
       search: '',
       place: { name: '', address: '', id: null },
       headers: [
@@ -62,9 +65,10 @@ export default {
       ]
     }
   },
-  computed: mapState(['places']),
+  async fetch () {
+    this.places = await this.$axios.$get('/place/all')
+  },
   methods: {
-    ...mapActions(['updateMeta']),
     editPlace (item) {
       this.place.name = item.name
       this.place.address = item.address

@@ -1,6 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
 
 ### Gancio dev configuration
+tests/seeds/testdb.sqlite
+preso.md
 gancio.sqlite
 db.sqlite
 releases

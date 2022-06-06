@@ -11,7 +11,7 @@
             Search(
               :filters='filters'
               @update='f => filters = f')
-      v-tabs(v-model='type' show-arrows)
+      v-tabs(v-model='type' show-arrows :next-icon='mdiChevronRight' :prev-icon='mdiChevronLeft')
 
         //- TOFIX
         //- v-tab {{$t('common.email')}}
@@ -86,7 +86,7 @@ import { mapState } from 'vuex'
 import FollowMe from '../components/FollowMe'
 import Search from '@/components/Search'
 import clipboard from '../assets/clipboard'
-import { mdiContentCopy } from '@mdi/js'
+import { mdiContentCopy, mdiChevronRight, mdiChevronLeft } from '@mdi/js'
 
 export default {
   name: 'Exports',
@@ -104,7 +104,7 @@ export default {
   },
   data ({ $store }) {
     return {
-      mdiContentCopy,
+      mdiContentCopy, mdiChevronLeft, mdiChevronRight,
       type: 'rss',
       notification: { email: '' },
       list: {

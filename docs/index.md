@@ -24,14 +24,14 @@ nowhere on gancio does the identity of who posted an event appear, not even unde
 
 - **Anonymous events**: optionally a visitor can create events without being registered (an administrator must confirm them)
 
-- **We don't care about making hits** so we export events in many ways: via RSS feeds, via global or individual ics, allowing you to embed list of events or single event via [iframe or webcomponent]({% link embed.md %}) on other websites, via [AP]({% link federation.md %}), [microdata](https://developer.mozilla.org/en-US/docs/Web/HTML/Microdata) and [microformat](https://developer.mozilla.org/en-US/docs/Web/HTML/microformats#h-event)
+- **We don't care about making hits** so we export events in many ways: via RSS feeds, via global or individual ics, allowing you to embed list of events or single event via [iframe or webcomponent]({% link usage/embed.md %}) on other websites, via [AP]({% link federation.md %}), [microdata](https://developer.mozilla.org/en-US/docs/Web/HTML/Microdata) and [microformat](https://developer.mozilla.org/en-US/docs/Web/HTML/microformats#h-event)
 
 - Very easy UI
 - Multi-day events (festival, conferences...)
 - Recurring events (each monday, each two monday, each monday and friday, each two saturday, etc.)
 - Filter events for tags or places
 - RSS and ICS export (with filters)
-- embed your events in your website with [webcomponents]({% link embed.md %}) or iframe ([example](https://gancio.cisti.org/embed/list?title=Upcoming events))
+- embed your events in your website with [webcomponents]({% link usage/embed.md %}) or iframe ([example](https://gancio.cisti.org/embed/list?title=Upcoming events))
 - boost / bookmark / comment events from the fediverse!
 - Lot of configurations available (dark/light theme, user registration open/close, enable federation, enable recurring events)
 

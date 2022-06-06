@@ -23,6 +23,8 @@ if (config.status !== 'READY') {
 
   const { isAuth, isAdmin } = require('./auth')
   const eventController = require('./controller/event')
+  const placeController = require('./controller/place')
+  const tagController = require('./controller/tag')
   const settingsController = require('./controller/settings')
   const exportController = require('./controller/export')
   const userController = require('./controller/user')
@@ -31,6 +33,7 @@ if (config.status !== 'READY') {
   const resourceController = require('./controller/resource')
   const oauthController = require('./controller/oauth')
   const announceController = require('./controller/announce')
+  const cohortController = require('./controller/cohort')
   const helpers = require('../helpers')
   const storage = require('./storage')
   const upload = multer({ storage })
@@ -72,13 +75,10 @@ if (config.status !== 'READY') {
 
   // delete user
   api.delete('/user/:id', isAdmin, userController.remove)
-  api.delete('/user', isAdmin, userController.remove)
+  api.delete('/user', isAuth, userController.remove)
 
   // get all users
   api.get('/users', isAdmin, userController.getAll)
-
-  // update a place (modify address..)
-  api.put('/place', isAdmin, eventController.updatePlace)
 
   /**
    * Get events
@@ -120,6 +120,8 @@ if (config.status !== 'READY') {
   // allow anyone to add an event (anon event has to be confirmed, TODO: flood protection)
   api.post('/event', eventController.isAnonEventAllowed, upload.single('image'), eventController.add)
 
+  api.get('/event/search', eventController.search)
+
   api.put('/event', isAuth, upload.single('image'), eventController.update)
   api.get('/event/import', isAuth, helpers.importURL)
 
@@ -127,7 +129,7 @@ if (config.status !== 'READY') {
   api.delete('/event/:id', isAuth, eventController.remove)
 
   // get tags/places
-  api.get('/event/meta', eventController.getMeta)
+  api.get('/event/meta', eventController.searchMeta)
 
   // get unconfirmed events
   api.get('/event/unconfirmed', isAdmin, eventController.getUnconfirmed)
@@ -150,6 +152,15 @@ if (config.status !== 'READY') {
   // export events (rss/ics)
   api.get('/export/:type', cors, exportController.export)
 
+
+  api.get('/place/:placeName/events', cors, placeController.getEvents)
+  api.get('/place/all', isAdmin, placeController.getAll)
+  api.get('/place', cors, placeController.get)
+  api.put('/place', isAdmin, placeController.updatePlace)
+
+  api.get('/tag', cors, tagController.get)
+
+  // - FEDIVERSE INSTANCES, MODERATION, RESOURCES
   api.get('/instances', isAdmin, instanceController.getAll)
   api.get('/instances/:instance_domain', isAdmin, instanceController.get)
   api.post('/instances/toggle_block', isAdmin, instanceController.toggleBlock)
@@ -164,16 +175,25 @@ if (config.status !== 'READY') {
   api.put('/announcements/:announce_id', isAdmin, announceController.update)
   api.delete('/announcements/:announce_id', isAdmin, announceController.remove)
 
+  // - COHORT
+  api.get('/cohorts/:name', cohortController.getEvents)
+  api.get('/cohorts', cohortController.getAll)
+  api.post('/cohorts', isAdmin, cohortController.add)
+  api.delete('/cohort/:id', isAdmin, cohortController.remove)
+  api.get('/filter/:cohort_id', isAdmin, cohortController.getFilters)
+  api.post('/filter', isAdmin, cohortController.addFilter)
+  api.delete('/filter/:id', isAdmin, cohortController.removeFilter)
+
   // OAUTH
   api.get('/clients', isAuth, oauthController.getClients)
   api.get('/client/:client_id', isAuth, oauthController.getClient)
   api.post('/client', oauthController.createClient)
 }
 
-api.use((req, res) => res.sendStatus(404))
+api.use((_req, res) => res.sendStatus(404))
 
 // Handle 500
-api.use((error, req, res, next) => {
+api.use((error, _req, res, _next) => {
   log.error('[API ERROR]', error)
   res.status(500).send('500: Internal Server Error')
 })

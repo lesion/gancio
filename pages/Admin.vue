@@ -1,7 +1,9 @@
 <template lang="pug">
   v-container.container.pa-0.pa-md-3
     v-card
-      v-tabs(v-model='selectedTab' show-arrows)
+      v-alert(v-if='url!==settings.baseurl' outlined type='warning' color='red' show-icon :icon='mdiAlert')
+        span(v-html="$t('admin.wrong_domain_warning', { url, baseurl: settings.baseurl })")
+      v-tabs(v-model='selectedTab' show-arrows :next-icon='mdiChevronRight' :prev-icon='mdiChevronLeft')
 
         //- SETTINGS
         v-tab {{$t('common.settings')}}
@@ -23,6 +25,11 @@
         v-tab {{$t('common.places')}}
         v-tab-item
           Places
+
+        //- Cohorts
+        v-tab {{$t('common.blobs')}}
+        v-tab-item
+          Cohorts
 
         //- EVENTS
         v-tab
@@ -49,32 +56,42 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { mdiAlert, mdiChevronRight, mdiChevronLeft } from '@mdi/js'
+import Settings from '@/components/admin/Settings'
 
 export default {
   name: 'Admin',
   components: { 
+    Settings,
     Users:  () => import(/* webpackChunkName: "admin" */'../components/admin/Users'),
     Events: () => import(/* webpackChunkName: "admin" */'../components/admin/Events'),
     Places: () => import(/* webpackChunkName: "admin" */'../components/admin/Places'),
-    Settings: () => import(/* webpackChunkName: "admin" */'../components/admin/Settings'),
+    Cohorts: () => import(/* webpackChunkName: "admin" */'../components/admin/Cohorts'),
     Federation: () => import(/* webpackChunkName: "admin" */'../components/admin/Federation.vue'),
     Moderation: () => import(/* webpackChunkName: "admin" */'../components/admin/Moderation.vue'),
     Announcement: () => import(/* webpackChunkName: "admin" */'../components/admin/Announcement.vue'),
     Theme: () => import(/* webpackChunkName: "admin" */'../components/admin/Theme.vue')
   },
   middleware: ['auth'],
-  async asyncData ({ $axios, params, store }) {
+  async asyncData ({ $axios, req }) {
+    let url
+    if (process.client) {
+      url = window.location.protocol + '//' + window.location.host
+    } else {
+      url = req.protocol + '://' + req.headers.host
+    }
     try {
       const users = await $axios.$get('/users')
       const unconfirmedEvents = await $axios.$get('/event/unconfirmed')
-      return { users, unconfirmedEvents, selectedTab: 0 }
+      return { users, unconfirmedEvents, selectedTab: 0, url }
     } catch (e) {
-      console.error(e)
-      return { users: [], unconfirmedEvents: [], selectedTab: 0 }
+      return { users: [], unconfirmedEvents: [], selectedTab: 0, url }
     }
   },
   data () {
     return {
+      mdiAlert, mdiChevronRight, mdiChevronLeft,
+      users: [],
       description: '',
       unconfirmedEvents: [],
       selectedTab: 0
@@ -100,7 +117,7 @@ export default {
       this.loading = true
       await this.$axios.$get(`/event/confirm/${id}`)
       this.loading = false
-      this.$root.$message('event.confirmed', { color: 'succes' })
+      this.$root.$message('event.confirmed', { color: 'success' })
       this.unconfirmedEvents = this.unconfirmedEvents.filter(e => e.id !== id)
     }
   }

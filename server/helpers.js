@@ -7,7 +7,6 @@ const dayjs = require('dayjs')
 const config = require('./config')
 const log = require('./log')
 const pkg = require('../package.json')
-const fs = require('fs')
 const path = require('path')
 const sharp = require('sharp')
 const axios = require('axios')
@@ -95,8 +94,8 @@ module.exports = {
 
   serveStatic () {
     const router = express.Router()
-    // serve event's images/thumb
-    router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' } ))
+    // serve images/thumb
+    router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' } ), (_req, res) => res.sendStatus(404))
     router.use('/noimg.svg', express.static('./static/noimg.svg'))
     
     router.use('/logo.png', (req, res, next) => {
@@ -112,7 +111,7 @@ module.exports = {
     return router
   },
 
-  logRequest (req, res, next) {
+  logRequest (req, _res, next) {
     log.debug(`${req.method} ${req.path}`)
     next()
   },
@@ -122,41 +121,34 @@ module.exports = {
     if(!/^https?:\/\//.test(url)) {
       throw Error('Hacking attempt?')
     }
-    const filename = crypto.randomBytes(16).toString('hex') + '.jpg'
-    const finalPath = path.resolve(config.upload_path, filename)
-    const thumbPath = path.resolve(config.upload_path, 'thumb', filename)
-    const outStream = fs.createWriteStream(finalPath)
-    const thumbStream = fs.createWriteStream(thumbPath)
 
-    const resizer = sharp().resize(1200).jpeg({ quality: 95 })
-    const thumbnailer = sharp().resize(400).jpeg({ quality: 90 })
+    const filename = crypto.randomBytes(16).toString('hex')
+    const sharpStream = sharp({ failOnError: true })
+    const promises = [
+      sharpStream.clone().resize(500, null, { withoutEnlargement: true }).jpeg({ effort: 6, mozjpeg: true }).toFile(path.resolve(config.upload_path, 'thumb', filename + '.jpg')),
+      sharpStream.clone().resize(1200, null, { withoutEnlargement: true } ).jpeg({ quality: 95, effort: 6, mozjpeg: true}).toFile(path.resolve(config.upload_path, filename + '.jpg')),
+    ]
 
-    const response = await axios({ method: 'GET', url, responseType: 'stream' })
+    const response = await axios({ method: 'GET', url: encodeURI(url), responseType: 'stream' })
 
-    return new Promise((resolve, reject) => {
-      let onError = false
-      const err = e => {
-        if (onError) {
-          return
+    response.data.pipe(sharpStream)
+    return Promise.all(promises)
+      .then(res => {
+        const info = res[1]
+        return {
+          destination: config.upload_path,
+          filename: filename + '.jpg',
+          path: path.resolve(config.upload_path, filename + '.jpg'),
+          height: info.height,
+          width: info.width,
+          size: info.size,
         }
-        onError = true
-        reject(e)
-      }
-
-      response.data
-        .pipe(thumbnailer)
-        .on('error', err)
-        .pipe(thumbStream)
-        .on('error', err)
-
-      response.data
-        .pipe(resizer)
-        .on('error', err)
-        .pipe(outStream)
-        .on('error', err)
-
-      outStream.on('finish', () => resolve(filename))
-    })
+      })
+      .catch(err => {
+        log.error(err)
+        req.err = err
+        cb(null)
+      })
   },
 
   /**
@@ -232,7 +224,8 @@ module.exports = {
   },
  
   async APRedirect (req, res, next) {
-    if (!req.accepts('html')) {
+    const acceptJson = req.accepts('html', 'application/activity+json') === 'application/activity+json'
+    if (acceptJson) {
       const eventController = require('../server/api/controller/event')
       const event = await eventController._get(req.params.slug)
       if (event) {

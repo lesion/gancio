@@ -15,6 +15,17 @@ const db = {
   connect (dbConf = config.db) {
     log.debug(`Connecting to DB: ${JSON.stringify(dbConf)}`)
     dbConf.dialectOptions = { autoJsonMap: false }
+    if (dbConf.dialect === 'sqlite') {
+      dbConf.retry = {
+        match: [
+            Sequelize.ConnectionError,
+            Sequelize.ConnectionTimedOutError,
+            Sequelize.TimeoutError,
+            /Deadlock/i,
+            /SQLITE_BUSY/],
+        max: 15
+      }
+    }
     db.sequelize = new Sequelize(dbConf)
     return db.sequelize.authenticate()
   },
@@ -39,7 +50,7 @@ const db = {
         path: path.resolve(__dirname, '..', '..', 'migrations')
       }
     })
-    return await umzug.up()    
+    return umzug.up()    
   },
   async initialize () {
     if (config.status === 'READY') {

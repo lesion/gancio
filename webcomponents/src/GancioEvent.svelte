@@ -22,14 +22,14 @@
 
   function when (event) {
     return new Date(event.start_datetime*1000)
-            .toLocaleDateString(undefined,
-              {
-                weekday: 'long',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })    
+      .toLocaleDateString(undefined,
+        {
+          weekday: 'long',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
   }
 
   function thumbnail(event) {

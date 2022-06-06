@@ -4,7 +4,7 @@ services:
   gancio:
     build: .
     restart: always
-    image: node:17.4-slim
+    image: gancio
     container_name: gancio
     environment:
       - PATH=$PATH:/home/node/.yarn/bin
@@ -13,7 +13,7 @@ services:
       - GANCIO_DB_DIALECT=sqlite
       - GANCIO_DB_STORAGE=./gancio.sqlite
     entrypoint: /entrypoint.sh
-    command: gancio start --docker
+    command: gancio start
     volumes:
       - ./data:/home/node/data
     ports:

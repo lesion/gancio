@@ -16,7 +16,7 @@
 
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import dayjs from 'dayjs'
 import { attributesFromEvents } from '../assets/helper'
 
@@ -26,25 +26,22 @@ export default {
     events: { type: Array, default: () => [] }
   },
   data () {
-    const month = dayjs().month() + 1
-    const year = dayjs().year()
+    const month = dayjs.tz().month() + 1
+    const year = dayjs.tz().year()
     return {
       selectedDate: null,
       page: { month, year }
     }
   },
   computed: {
-    ...mapState(['tags', 'filters', 'in_past', 'settings']),
+    ...mapState(['settings']),
     attributes () {
-      return attributesFromEvents(this.events, this.tags)
+      return attributesFromEvents(this.events)
     }
   },
   methods: {
-    ...mapActions(['updateEvents', 'showPastEvents']),
     updatePage (page) {
-      return new Promise((resolve, reject) => {
         this.$emit('monthchange', page)
-      })
     },
     click (day) {
       this.$emit('dayclick', day)

@@ -1,5 +1,4 @@
 const config = require('../../config')
-const moment = require('dayjs')
 const { htmlToText } = require('html-to-text')
 
 const { Model, DataTypes } = require('sequelize')
@@ -14,9 +13,12 @@ const Place = require('./place')
 const User = require('./user')
 const Tag = require('./tag')
 
-const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')
+const timezone = require('dayjs/plugin/timezone')
+const utc = require('dayjs/plugin/utc')
+
 dayjs.extend(utc)
+dayjs.extend(timezone)
 
 class Event extends Model {}
 
@@ -76,7 +78,7 @@ Event.prototype.toAP = function (username, locale, to = []) {
   const plainDescription = htmlToText(this.description && this.description.replace('\n', '').slice(0, 1000))
   const content = `
     📍 ${this.place && this.place.name}
-    📅 ${moment.unix(this.start_datetime).locale(locale).format('dddd, D MMMM (HH:mm)')}
+    📅 ${dayjs.unix(this.start_datetime).tz().locale(locale).format('dddd, D MMMM (HH:mm)')}
 
     ${plainDescription}
   `
@@ -99,8 +101,8 @@ Event.prototype.toAP = function (username, locale, to = []) {
     name: this.title,
     url: `${config.baseurl}/event/${this.slug || this.id}`,
     type: 'Event',
-    startTime: moment.unix(this.start_datetime).locale(locale).format(),
-    endTime: this.end_datetime ? moment.unix(this.end_datetime).locale(locale).format() : null,
+    startTime: dayjs.unix(this.start_datetime).tz().locale(locale).format(),
+    endTime: this.end_datetime ? dayjs.unix(this.end_datetime).tz().locale(locale).format() : null,
     location: {
       name: this.place.name,
       address: this.place.address

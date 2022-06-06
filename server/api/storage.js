@@ -12,48 +12,33 @@ try {
 
 const DiskStorage = {
   _handleFile (req, file, cb) {
-    const filename = crypto.randomBytes(16).toString('hex') + '.jpg'
-    const finalPath = path.resolve(config.upload_path, filename)
-    const thumbPath = path.resolve(config.upload_path, 'thumb', filename)
-    const outStream = fs.createWriteStream(finalPath)
-    const thumbStream = fs.createWriteStream(thumbPath)
+    const filename = crypto.randomBytes(16).toString('hex')
+    const sharpStream = sharp({ failOnError: true })
+    const promises = [
+      sharpStream.clone().resize(500, null, { withoutEnlargement: true }).jpeg({ mozjpeg: true, progressive: true }).toFile(path.resolve(config.upload_path, 'thumb', filename + '.jpg')),
+      sharpStream.clone().resize(1200, null, { withoutEnlargement: true } ).jpeg({ quality: 95, mozjpeg: true, progressive: true }).toFile(path.resolve(config.upload_path, filename + '.jpg')),
+    ]
 
-    const resizer = sharp().resize(1200).jpeg({ quality: 98 })
-    const thumbnailer = sharp().resize(500).jpeg({ quality: 98 })
-    let onError = false
-    const err = e => {
-      if (onError) {
-        log.error('[UPLOAD]', err)
-        return
-      }
-      onError = true
-      log.error('[UPLOAD]', e)
-      req.err = e
-      cb(null)
-    }
-
-    file.stream
-      .pipe(thumbnailer)
-      .on('error', err)
-      .pipe(thumbStream)
-      .on('error', err)
-
-    file.stream
-      .pipe(resizer)
-      .on('error', err)
-      .pipe(outStream)
-      .on('error', err)
-
-    outStream.on('finish', () => {
-      cb(null, {
-        destination: config.upload_path,
-        filename,
-        path: finalPath,
-        size: outStream.bytesWritten
+    file.stream.pipe(sharpStream)
+    Promise.all(promises)
+      .then(res => {
+        const info = res[1]
+        cb(null, {
+          destination: config.upload_path,
+          filename: filename + '.jpg',
+          path: path.resolve(config.upload_path, filename + '.jpg'),
+          height: info.height,
+          width: info.width,
+          size: info.size,
+        })
       })
-    })
+      .catch(err => {
+        console.error(err)
+        req.err = err
+        cb(null)
+      })
   },
-  _removeFile (req, file, cb) {
+  _removeFile (_req, file, cb) {
     delete file.destination
     delete file.filename
     fs.unlink(file.path, cb)

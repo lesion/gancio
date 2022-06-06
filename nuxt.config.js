@@ -14,7 +14,6 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' }
     ],
     link: [{ rel: 'icon', type: 'image/png', href: '/logo.png' }],
-    link: [{ rel: 'preload', type: 'image/png', href: '/logo.png', as: 'image' }],
     script: [{ src: '/gancio-events.es.js', async: true, body: true }],
   },
   dev: isDev,
@@ -27,13 +26,12 @@ module.exports = {
     }
   },
 
-  css: ['./assets/style.less'],
+  css: ['./assets/style.css'],
 
   /*
    ** Customize the progress-bar component
    */
-  loading: '~/components/Loading.vue',
-
+  loading:  '~/components/Loading.vue',
   /*
    ** Plugins to load before mounting the App
    */
@@ -53,8 +51,26 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@/server/initialize.server.js'
+    '@nuxtjs/sitemap'    
   ],
+
+  sitemap: {
+    hostname: config.baseurl,
+    gzip: true,
+    exclude: [
+      '/Admin',
+      '/settings',
+      '/export',
+      '/setup'
+    ],
+    routes: async () => {
+      if (config.status === 'READY') {
+        const Event = require('./server/api/models/event')
+        const events = await Event.findAll({where: { is_visible: true }})
+        return events.map(e => `/event/${e.slug}`)
+      }
+    }
+  },
 
   serverMiddleware: ['server/routes'],
 
@@ -93,7 +109,6 @@ module.exports = {
   },
   buildModules: ['@nuxtjs/vuetify'],
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
     treeShake: true,
     theme: {
       options: {

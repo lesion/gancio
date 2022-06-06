@@ -109,7 +109,7 @@
         "list_description": "Si tens una web i vols encastar una llista d'activitats, pots fer servir el codi de sota"
     },
     "register": {
-        "description": "Els moviments socials necessitem organitzar-nos i auto-finançar-nos.\n<br/> Abans que puguis publicar, <strong> hem d'aprovar el teu compte </strong>, tingues en comtpe que <strong> darrere d'aquesta web hi ha persones </strong> de carn i ossos, així que escriviu dues línies per fer-nos saber quins esdeveniments voleu publicar.",
+        "description": "Els moviments socials necessitem organitzar-nos i auto-finançar-nos.<br/>\n<br/>Abans que puguis publicar, <strong> hem d'aprovar el teu compte </strong>, tingues en compte que <strong> darrere d'aquesta web hi ha persones </strong> de carn i ossos, així que escriviu dues línies per fer-nos saber quins esdeveniments voleu publicar.",
         "error": "Error: ",
         "complete": "El registre ha de ser confirmat.",
         "first_user": "S'ha creat i activat un compte administrador"
@@ -124,7 +124,7 @@
         "media_description": "Pots adjuntar un cartell (opcional)",
         "added": "S'ha afegit l'activitat",
         "added_anon": "S'ha afegit l'activitat però encara ha de ser confirmada.",
-        "where_description": "On es farà? Si no està posat, escriu-ho i <b>prem Enter</b>.",
+        "where_description": "On es farà? Si no està posat, escriu-ho i prem Enter.",
         "confirmed": "S'ha confirmat l'activitat",
         "not_found": "No s'ha trobat l'activitat",
         "remove_confirmation": "Segur que vols esborrar l'activitat?",
@@ -150,7 +150,7 @@
         "from": "Des de les",
         "image_too_big": "La imatge és massa gran! Max 4 MB",
         "interact_with_me_at": "Interacciona amb mi a",
-        "follow_me_description": "Entre les diverses maneres d'estar al dia de les activitats que es publiquen aquí a {title},\n pots seguir-nos al compte <u>{account}</u> des de Mastodon o altres, i afegir recursos des d'allà. <br/> <br/>\nSi no has sentit mai sobre «Mastodon» o «Fedivers», recomanem mirar <a href='https://peertube.social/videos/watch/d9bd2ee9-b7a4-44e3-8d65-61badd15c6e6'> aquest vídeo (subtitulat en català)</a>. <br/> <br/> Introdueix la teva instància a sota (ex: red.confederac.io o mastodont.cat)",
+        "follow_me_description": "Entre les diverses maneres d'estar al dia de les activitats que es publiquen aquí a {title},\n pots seguir-nos al compte <u>{account}</u> des de Mastodon o altres, i afegir recursos des d'allà. <br/> <br/>\nSi no has sentit mai sobre «Mastodon» o «Fedivers», recomanem fer un cop d'ull a <a href='https://equipamentslliures.cat/divulgacio/fediverse'>aquesta breu introducció al Fedivers</a>. <br/> <br/> Introdueix la teva instància a sota (ex: kolektiva.social o mastodont.cat)",
         "interact_with_me": "Segueix-nos al fedivers",
         "remove_recurrent_confirmation": "Estàs segur/a d'esborrar aquesta activitat periòdica?\nNo s'esborraran les ocurrències antigues, només es deixaran de crear les futures.",
         "ics": "ICS",
@@ -159,7 +159,11 @@
         "edit_recurrent": "Edita l'activitat periòdica:",
         "updated": "S'ha actualitzat l'activitat",
         "saved": "S'ha desat l'activitat",
-        "import_description": "Pots importar activitats des d'altres instàncies o plataformes que facin servir formats estàndards (ics o h-event)"
+        "import_description": "Pots importar activitats des d'altres instàncies o plataformes que facin servir formats estàndards (ics o h-event)",
+        "remove_media_confirmation": "Confirmeu l'eliminació de la imatge?",
+        "download_flyer": "Baixa el flyer",
+        "alt_text_description": "Descripció per a persones amb discapacitat visual",
+        "choose_focal_point": "Tria el punt focal"
     },
     "admin": {
         "place_description": "En el cas que un lloc és incorrecte o l'adreça ha de canviar, pots arreglar-ho.<br/>Tingues en compte que totes les activitats passades i futures associades amb aquest lloc també canviaran d'adreça.",
@@ -226,7 +230,9 @@
         "smtp_hostname": "Amfitrió SMTP (hostname)",
         "smtp_description": "<ul><li>L'admin hauria de rebre un correu cada cop que es pengi alguna una activitat anònima (si estan activades).</li><li>L'admin hauria de rebre un correu per cada soŀlicitud de registre (si estan actives).</li><li>La usuària hauria de rebre un correu després de soŀlicitar registrar-se.</li><li>La usuària hauria de rebre un correu quan se li hagi confirmat el registre.</li><li>La usuària hauria de rebre un correu si l'admin la registra directament.</li><li>La usuària hauria de rebre un correu de restabliment de contrasenya si ho demana</li></ul>",
         "smtp_test_button": "Envia un correu de prova",
-        "widget": "Giny"
+        "widget": "Giny",
+        "wrong_domain_warning": "La url base configurada a config.json <b>({baseurl})</b> difereix de la que esteu visitant <b>({url})</b>",
+        "event_remove_ok": "S'ha suprimit l'esdeveniment"
     },
     "auth": {
         "not_confirmed": "Encara no s'ha confirmat…",
@@ -272,6 +278,8 @@
     "setup": {
         "completed": "S'ha completat la configuració inicial",
         "completed_description": "<p>Ara ja pots entrar amb aquesta usuària:<br/><br/>Nom: <b>{email}</b><br/>Contrasenya: <b>{password}<b/></p>",
-        "start": "Comença"
+        "start": "Comença",
+        "copy_password_dialog": "Sí, has de copiar la contrasenya!",
+        "https_warning": "Esteu visitant des d'HTTP, recordeu canviar baseurl a config.json si canvieu a HTTPS!"
     }
 }

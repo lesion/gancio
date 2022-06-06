@@ -51,8 +51,11 @@
                 v-combobox(v-model='event.tags'
                   :prepend-icon="mdiTagMultiple"
                   chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
+                  cache-items
+                  @input.native='searchTags'
                   :delimiters="[',', ';']"
-                  :items="tags.map(t => t.tag)"
+                  :items="tags"
+                  :menu-props="{ maxWidth: 400, eager: true }"
                   :label="$t('common.tags')")
                   template(v-slot:selection="{ item, on, attrs, selected, parent}")
                     v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
@@ -66,25 +69,33 @@
 
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
+import debounce from 'lodash/debounce'
 import dayjs from 'dayjs'
 
 import { mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle } from '@mdi/js'
 
+import List from '@/components/List'
+import Editor from '@/components/Editor'
+import ImportDialog from '@/components/ImportDialog'
+import MediaInput from '@/components/MediaInput'
+import WhereInput from '@/components/WhereInput'
+import DateInput from '@/components/DateInput'
+
 export default {
   name: 'NewEvent',
   components: {
-    List: () => import(/* webpackChunkName: "add" */'@/components/List'),
-    Editor: () => import(/* webpackChunkName: "add" */'@/components/Editor'), 
-    ImportDialog: () => import(/* webpackChunkName: "add" */'./ImportDialog.vue'),
-    MediaInput: () => import(/* webpackChunkName: "add" */'./MediaInput.vue'),
-    WhereInput: () => import(/* webpackChunkName: "add" */'./WhereInput.vue'),
-    DateInput: () => import(/* webpackChunkName: "add" */'./DateInput.vue')
+    List,
+    Editor,
+    ImportDialog,
+    MediaInput,
+    WhereInput,
+    DateInput
   },
   validate ({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
-  async asyncData ({ params, $axios, error, store }) {
+  async asyncData ({ params, $axios, error }) {
     if (params.edit) {
       const data = { event: { place: {}, media: [] } }
       data.id = params.edit
@@ -101,8 +112,8 @@ export default {
       data.event.place.address = event.place.address || ''
       data.date = {
         recurrent: event.recurrent,
-        from: new Date(dayjs.unix(event.start_datetime)),
-        due: new Date(dayjs.unix(event.end_datetime)),
+        from: dayjs.unix(event.start_datetime).toDate(),
+        due: dayjs.unix(event.end_datetime).toDate(),
         multidate: event.multidate,
         fromHour: true,
         dueHour: true
@@ -118,8 +129,8 @@ export default {
     return {}
   },
   data () {
-    const month = dayjs().month() + 1
-    const year = dayjs().year()
+    const month = dayjs.tz().month() + 1
+    const year = dayjs.tz().year()
     return {
       mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle,
       valid: false,
@@ -131,6 +142,7 @@ export default {
         tags: [],
         media: []
       },
+      tags: [],
       page: { month, year },
       fileList: [],
       id: null,
@@ -145,9 +157,20 @@ export default {
       title: `${this.settings.title} - ${this.$t('common.add_event')}`
     }
   },
-  computed: mapState(['tags', 'places', 'settings']),
+  computed: {
+    ...mapState(['settings']),
+    filteredTags () {
+      if (!this.tagName) { return this.tags.slice(0, 10).map(t => t.tag) }
+      const tagName = this.tagName.trim().toLowerCase()
+      return this.tags.filter(t => t.tag.toLowerCase().includes(tagName)).map(t => t.tag)
+    }
+  },
   methods: {
-    ...mapActions(['updateMeta']),
+    searchTags: debounce( async function(ev) {
+      const search = ev.target.value
+      if (!search) return
+      this.tags = await this.$axios.$get(`/tag?search=${search}`)
+    }, 100),
     eventImported (event) {
       this.event = Object.assign(this.event, event)
       this.$refs.where.selectPlace({ name: event.place.name, create: true })
@@ -165,7 +188,9 @@ export default {
       if (!this.$refs.form.validate()) {
         this.$nextTick(() => {
           const el = document.querySelector('.v-input.error--text:first-of-type')
-          el.scrollIntoView()
+          if (el) {
+            el.scrollIntoView(false)
+          }
         })
         return
       }
@@ -177,12 +202,15 @@ export default {
 
       if (this.event.media.length) {
         formData.append('image', this.event.media[0].image)
-        formData.append('image_url', this.event.media[0].url)
+        // formData.append('image_url', this.event.media[0].url)
         formData.append('image_name', this.event.media[0].name)
         formData.append('image_focalpoint', this.event.media[0].focalpoint)
       }
 
       formData.append('title', this.event.title)
+      if (this.event.place.id) {
+        formData.append('place_id', this.event.place.id)
+      }
       formData.append('place_name', this.event.place.name)
       formData.append('place_address', this.event.place.address)
       formData.append('description', this.event.description)
@@ -200,7 +228,6 @@ export default {
         } else {
           await this.$axios.$post('/event', formData)
         }
-        this.updateMeta()
         this.$router.push('/')
         this.$nextTick(() => {
           this.$root.$message(this.$auth.loggedIn ? (this.edit ? 'event.saved' : 'event.added') : 'event.added_anon', { color: 'success' })

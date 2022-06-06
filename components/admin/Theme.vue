@@ -9,7 +9,7 @@
         accept='image/*')
         template(slot='append-outer')
           v-btn(color='warning' text @click='resetLogo') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
-          v-img(:src='`${settings.baseurl}/logo.png?${logoKey}`'
+          v-img(:src='`/logo.png?${logoKey}`'
             max-width="60px" max-height="60px" contain)
 
       v-switch.mt-5(v-model='is_dark'
@@ -54,25 +54,27 @@
       v-btn(color='warning' text @click='reset') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
       v-card
         v-list.mt-1(two-line subheader)
-          v-list-item(v-for='link in settings.footerLinks'
+          v-list-item(v-for='(link, idx) in settings.footerLinks'
             :key='`${link.label}`' @click='editFooterLink(link)')
             v-list-item-content
               v-list-item-title {{link.label}}
               v-list-item-subtitle {{link.href}}
             v-list-item-action
-              v-btn(icon color='error' @click.stop='removeFooterLink(link)')
+              v-btn.left(v-if='idx !== 0' icon color='warn' @click.stop='moveUpFooterLink(link, idx)')
+                v-icon(v-text='mdiChevronUp')
+              v-btn.float-right(icon color='error' @click.stop='removeFooterLink(link)')
                 v-icon(v-text='mdiDeleteForever')
 
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import { mdiDeleteForever, mdiRestore, mdiPlus } from '@mdi/js'
+import { mdiDeleteForever, mdiRestore, mdiPlus, mdiChevronUp } from '@mdi/js'
 
 export default {
   name: 'Theme',
   data () {
     return {
-      mdiDeleteForever, mdiRestore, mdiPlus,
+      mdiDeleteForever, mdiRestore, mdiPlus, mdiChevronUp,
       valid: false,
       logoKey: 0,
       link: { href: '', label: '' },
@@ -150,6 +152,12 @@ export default {
       const ret = await this.$root.$confirm('admin.delete_footer_link_confirm')
       if (!ret) { return }
       const footerLinks = this.settings.footerLinks.filter(l => l.label !== item.label)
+      this.setSetting({ key: 'footerLinks', value: footerLinks })
+    },
+    async moveUpFooterLink (item, idx) {
+      const footerLinks = [...this.settings.footerLinks]
+      footerLinks[idx] = footerLinks[idx-1]
+      footerLinks[idx-1] = this.settings.footerLinks[idx]
       this.setSetting({ key: 'footerLinks', value: footerLinks })
     },
     editFooterLink (item) {

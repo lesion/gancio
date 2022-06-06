@@ -34,16 +34,54 @@ v-col(cols=12)
 
   v-row.mt-3.col-md-6.mx-auto
     v-col.col-12.col-sm-6
-      v-select(dense :label="$t('event.from')" :value='fromHour' clearable
-        :disabled='!value.from'
-        :rules="[$validators.required('event.from')]"
-        :items='hourList' @change='hr => change("fromHour", hr)')
+      v-menu(
+        v-model="menuFromHour"
+        :close-on-content-click="false"
+        offset-y
+        :value="fromHour"
+        transition="scale-transition")
+        template(v-slot:activator="{ on, attrs }")
+          v-text-field(
+            :label="$t('event.from')"
+            :value="fromHour"
+            :disabled='!value.from'
+            :prepend-icon="mdiClockTimeFourOutline"
+            :rules="[$validators.required('event.from')]"
+            readonly
+            v-bind="attrs"
+            v-on="on")
+        v-time-picker(
+          v-if="menuFromHour"
+          :value="fromHour"
+          :allowedMinutes='allowedMinutes'
+          format='24hr'
+          @click:minute='menuFromHour=false'
+          @change='hr => change("fromHour", hr)')
+
 
     v-col.col-12.col-sm-6
-      v-select(dense :label="$t('event.due')"
-        :disabled='!fromHour'
-        :value='dueHour' clearable
-        :items='hourList' @change='hr => change("dueHour", hr)')
+      v-menu(
+        v-model="menuDueHour"
+        :close-on-content-click="false"
+        offset-y
+        :value="dueHour"
+        transition="scale-transition")
+        template(v-slot:activator="{ on, attrs }")
+          v-text-field(
+            :label="$t('event.due')"
+            :value="dueHour"
+            :disabled='!fromHour'
+            :prepend-icon="mdiClockTimeEightOutline"
+            readonly
+            v-bind="attrs"
+            v-on="on")
+        v-time-picker(
+          v-if="menuDueHour"
+          :value="dueHour"
+          :allowedMinutes='allowedMinutes'
+          format='24hr'
+          @click:minute='menuDueHour=false'
+          @change='hr => change("dueHour", hr)')
 
   List(v-if='type==="normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
 
@@ -52,7 +90,8 @@ v-col(cols=12)
 import dayjs from 'dayjs'
 import { mapState } from 'vuex'
 import List from '@/components/List'
-import { attributesFromEvents } from '../../assets/helper'
+import { attributesFromEvents } from '../assets/helper'
+import { mdiClockTimeFourOutline, mdiClockTimeEightOutline  } from '@mdi/js'
 
 export default {
   name: 'DateInput',
@@ -63,6 +102,10 @@ export default {
   },
   data () {
     return {
+      mdiClockTimeFourOutline, mdiClockTimeEightOutline,
+      allowedMinutes: [0, 15, 30, 45],
+      menuFromHour: false,
+      menuDueHour: false,
       type: 'normal',
       page: null,
       events: [],
@@ -74,15 +117,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(['settings', 'tags']),
+    ...mapState(['settings']),
     todayEvents () {
       const start = dayjs(this.value.from).startOf('day').unix()
       const end = dayjs(this.value.from).endOf('day').unix()
-      const events = this.events.filter(e => e.start_datetime >= start && e.start_datetime <= end)
-      return events
+      return this.events.filter(e => e.start_datetime >= start && e.start_datetime <= end)
     },
     attributes () {
-      return attributesFromEvents(this.events, this.tags)
+      return attributesFromEvents(this.events)
     },
     fromDate () {
       if (this.value.multidate) {
@@ -92,21 +134,10 @@ export default {
     },
 
     fromHour () {
-      return this.value.from && this.value.fromHour ? dayjs(this.value.from).format('HH:mm') : null
+      return this.value.from && this.value.fromHour ? dayjs.tz(this.value.from).format('HH:mm') : null
     },
     dueHour () {
-      return this.value.due && this.value.dueHour ? dayjs(this.value.due).format('HH:mm') : null
-    },
-    hourList () {
-      const hourList = []
-      const leftPad = h => ('00' + h).slice(-2)
-      for (let h = 0; h < 24; h++) {
-        const textHour = leftPad(h < 13 ? h : h - 12)
-        hourList.push({ text: textHour + ':00 ' + (h <= 12 ? 'AM' : 'PM'), value: leftPad(h) + ':00' })
-        hourList.push({ text: textHour + ':30 ' + (h <= 12 ? 'AM' : 'PM'), value: leftPad(h) + ':30' })
-      }
-
-      return hourList
+      return this.value.due && this.value.dueHour ? dayjs.tz(this.value.due).format('HH:mm') : null
     },
     whenPatterns () {
       if (!this.value.from) { return }
@@ -196,7 +227,7 @@ export default {
       } else if (what === 'fromHour') {
         if (value) {
           const [hour, minute] = value.split(':')
-          const from = dayjs(this.value.from).hour(hour).minute(minute).second(0)
+          const from = dayjs.tz(this.value.from).hour(hour).minute(minute).second(0)
           this.$emit('input', { ...this.value, from, fromHour: true })
         } else {
           this.$emit('input', { ...this.value, fromHour: false })
@@ -204,7 +235,7 @@ export default {
       } else if (what === 'dueHour') {
         if (value) {
           const [hour, minute] = value.split(':')
-          const fromHour = dayjs(this.value.from).hour()
+          const fromHour = dayjs.tz(this.value.from).hour()
 
           // add a day
           let due = dayjs(this.value.from)
@@ -226,20 +257,20 @@ export default {
           let from = value.start
           let due = value.end
           if (this.value.fromHour) {
-            from = dayjs(value.start).hour(dayjs(this.value.from).hour())
+            from = dayjs.tz(value.start).hour(dayjs.tz(this.value.from).hour())
           }
           if (this.value.dueHour) {
-            due = dayjs(value.end).hour(dayjs(this.value.due).hour())
+            due = dayjs.tz(value.end).hour(dayjs.tz(this.value.due).hour())
           }
           this.$emit('input', { ...this.value, from, due })
         } else {
           let from = value
           let due = this.value.due
           if (this.value.fromHour) {
-            from = dayjs(value).hour(dayjs(this.value.from).hour())
+            from = dayjs.tz(value).hour(dayjs.tz(this.value.from).hour())
           }
           if (this.value.dueHour && this.value.due) {
-            due = dayjs(value).hour(dayjs(this.value.due).hour())
+            due = dayjs.tz(value).hour(dayjs.tz(this.value.due).hour())
           }
           this.$emit('input', { ...this.value, from, due })
         }

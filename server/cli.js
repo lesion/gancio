@@ -22,16 +22,17 @@ require('yargs')
   .option('config', {
     alias: 'c',
     describe: 'Configuration file',
-    default: path.resolve(process.env.cwd, 'config.json')
-  })
-  .coerce('config', config_path => {
-    const absolute_config_path = path.resolve(process.env.cwd, config_path)
-    process.env.config_path = absolute_config_path
-    return absolute_config_path
-  })
-  .command(['accounts'], 'Manage accounts', accountsCLI)
+    default: path.resolve(process.env.cwd, 'config.json'),
+    coerce: config_path => {
+      const absolute_config_path = path.resolve(process.env.cwd, config_path)
+      process.env.config_path = absolute_config_path
+      return absolute_config_path
+    }})
   .command(['start', 'run', '$0'], 'Start gancio', {}, start)
+  .command(['accounts'], 'Manage accounts', accountsCLI)
   .help('h')
   .alias('h', 'help')
   .epilog('Made with ❤ by underscore hacklab - https://gancio.org')
+  .recommendCommands()
+  .demandCommand(1, '')
   .argv

@@ -1,23 +1,23 @@
 <template lang="pug">
   v-card.h-event.event.d-flex(itemscope itemtype="https://schema.org/Event")
     nuxt-link(:to='`/event/${event.slug || event.id}`' itemprop="url")
-      img.img.u-featured(:src='thumbnail' :alt='alt' :loading='this.lazy?"lazy":"eager"' itemprop="image" :style="{ 'object-position': thumbnailPosition }")
+      MyPicture(:event='event' thumb :lazy='lazy')
       v-icon.float-right.mr-1(v-if='event.parentId' color='success' v-text='mdiRepeat')
       .title.p-name(itemprop="name") {{event.title}}
 
     v-card-text.body.pt-0.pb-0
       time.dt-start.subtitle-1(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")' itemprop="startDate" :content="event.start_datetime|unixFormat('YYYY-MM-DDTHH:mm')")  <v-icon v-text='mdiCalendar'></v-icon> {{ event|when }}
       .d-none.dt-end(itemprop="endDate" :content="event.end_datetime|unixFormat('YYYY-MM-DDTHH:mm')") {{event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
-      a.place.d-block.p-location.pl-0(text color='primary' @click="$emit('placeclick', event.place.id)" itemprop="location" :content="event.place.name") <v-icon v-text='mdiMapMarker'></v-icon> {{event.place.name}}
+      nuxt-link.place.d-block.p-location.pl-0(text color='primary' :to='`/p/${event.place.name}`' itemprop="location" :content="event.place.name") <v-icon v-text='mdiMapMarker'></v-icon> {{event.place.name}}
       .d-none(itemprop='location.address') {{event.place.address}}
 
     v-card-actions.pt-0.actions.justify-space-between
       .tags
-        v-chip.ml-1.mt-1(v-for='tag in event.tags.slice(0,6)' small
-          :key='tag' outlined color='primary' @click="$emit('tagclick', tag)") {{tag}}
+        v-chip.ml-1.mt-1(v-for='tag in event.tags.slice(0,6)' small :to='`/tag/${tag}`'
+          :key='tag' outlined color='primary') {{tag}}
 
       client-only
-        v-menu(offset-y)
+        v-menu(offset-y eager)
           template(v-slot:activator="{on}")
             v-btn.align-self-end(icon v-on='on' color='primary' title='more' aria-label='more')
               v-icon(v-text='mdiDotsVertical')
@@ -50,6 +50,7 @@
 <script>
 import { mapState } from 'vuex'
 import clipboard from '../assets/clipboard'
+import MyPicture from '~/components/MyPicture'
 import { mdiRepeat, mdiPencil, mdiDotsVertical, mdiContentCopy,
   mdiCalendarExport, mdiDeleteForever, mdiCalendar, mdiMapMarker } from '@mdi/js'
 
@@ -58,6 +59,9 @@ export default {
     return { mdiRepeat, mdiPencil, mdiDotsVertical, mdiContentCopy, mdiCalendarExport,
       mdiDeleteForever, mdiMapMarker, mdiCalendar }
   },
+  components: {
+    MyPicture
+  },
   props: {
     event: { type: Object, default: () => ({}) },
     lazy: Boolean
@@ -65,25 +69,6 @@ export default {
   mixins: [clipboard],
   computed: {
     ...mapState(['settings']),
-    thumbnail () {
-      let path
-      if (this.event.media && this.event.media.length) {
-        path = '/media/thumb/' + this.event.media[0].url
-      } else {
-        path = '/noimg.svg'
-      }
-      return path
-    },
-    alt () {
-      return this.event.media && this.event.media.length ? this.event.media[0].name : ''
-    },
-    thumbnailPosition () {
-      if (this.event.media && this.event.media.length && this.event.media[0].focalpoint) {
-        const focalpoint = this.event.media[0].focalpoint
-        return `${(focalpoint[0] + 1) * 50}% ${(focalpoint[1] + 1) * 50}%`
-      }
-      return 'center center'
-    },
     is_mine () {
       if (!this.$auth.user) {
         return false
@@ -99,6 +84,8 @@ export default {
       if (!ret) { return }
       await this.$axios.delete(`/event/${this.event.id}`)
       this.$emit('destroy', this.event.id)
+      this.$root.$message('admin.event_remove_ok')
+      
     }
   }
 }

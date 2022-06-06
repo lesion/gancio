@@ -1,8 +1,9 @@
+let db
 function _initializeDB () {
   const config = require('../config')
   config.load()
   config.log_level = 'error'
-  const db = require('../api/models/index')
+  db = require('../api/models/index')
   return db.initialize()
 }
 
@@ -25,7 +26,30 @@ async function modify (args) {
   }
 }
 
-async function add (args) {
+async function create (args) {
+  await _initializeDB()
+  const User = require('../api/models/user')  
+  console.error(args)
+  const user = await User.create({
+    email: args.email,
+    is_active: true,
+    is_admin: args.admin || false
+  })
+  console.error(user)
+  await db.close()
+}
+
+
+async function remove (args) {
+  await _initializeDB()
+  const User = require('../api/models/user')  
+  const user = await User.findOne({
+    where: { email: args.email }
+  })
+  if (user) {
+    await user.destroy()
+  }
+  await db.close()
 }
 
 async function list () {
@@ -33,22 +57,31 @@ async function list () {
   const User = require('../api/models/user')
   const users = await User.findAll()
   console.log()
-  users.forEach(u => console.log(`${u.id}\tadmin: ${u.is_admin}\tenabled: ${u.is_active}\temail: ${u.email} - ${u.password}`))
+  users.forEach(u => console.log(`${u.id}\tadmin: ${u.is_admin}\tenabled: ${u.is_active}\temail: ${u.email}`))
   console.log()
+  await db.close()
 }
 
-const accountsCLI = yargs => {
-  return yargs
+const accountsCLI = yargs => yargs
   .command('list', 'List all accounts', list)
   .command('modify', 'Modify', {
     account: {
-      describe: 'Account to modify'
+      describe: 'Account to modify',
+      type: 'string',
+      demandOption: true
     },
     'reset-password': {
-        describe: 'Resets the password of the given accoun '
+        describe: 'Resets the password of the given account ',
+        type: 'boolean'
     }
   }, modify)
-  .command('add', 'Add an account', {}, add)
-}
+  .command('create <email|username>', 'Create an account', { 
+    admin: { describe: 'Define this account as administrator', type: 'boolean' }
+    }, create)
+  .positional('email', { describe: '', type: 'string', demandOption: true })
+  .command('remove <email|username>', 'Remove an account', {}, remove)
+  .recommendCommands()
+  .demandCommand(1, '')
+  .argv
 
 module.exports = accountsCLI

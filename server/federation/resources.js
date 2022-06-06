@@ -5,6 +5,7 @@ const APUser = require('../api/models/ap_user')
 const log = require('../log')
 const helpers = require('../helpers')
 const linkifyHtml = require('linkify-html')
+const get = require('lodash/get')
 
 module.exports = {
 
@@ -59,7 +60,7 @@ module.exports = {
 
   async remove (req, res) {
     const resource = await Resource.findOne({
-      where: { activitypub_id: req.body.object.id },
+      where: { activitypub_id: get(req.body, 'object.id', req.body.object) },
       include: [{ model: APUser, required: true, attributes: ['ap_id'] }]
     })
     if (!resource) {

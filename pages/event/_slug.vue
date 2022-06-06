@@ -2,6 +2,7 @@
 v-container#event.pa-0.pa-sm-2
   //- EVENT PAGE
   //- gancio supports microformats (http://microformats.org/wiki/h-event)
+  //- and microdata https://schema.org/Event
   v-card.h-event(itemscope itemtype="https://schema.org/Event")
     v-card-actions
       //- admin controls
@@ -9,41 +10,33 @@ v-container#event.pa-0.pa-sm-2
     v-card-text
 
       v-row
-        v-col.col-12.col-lg-8
-          //- fake image to use u-featured in h-event microformat
-          img.u-featured(v-show='false' v-if='hasMedia' :src='event | mediaURL' itemprop="image")
-          v-img.main_image.mb-3(
-            contain
-            :alt='event | mediaURL("alt")'
-            :src='event | mediaURL'
-            :lazy-src='event | mediaURL("thumb")'
-            v-if='hasMedia')
+        v-col.col-12.col-md-8
+          MyPicture(v-if='hasMedia' :event='event')
           .p-description.text-body-1.pa-3.rounded(v-if='!hasMedia && event.description' itemprop='description' v-html='event.description')
 
-        v-col.col-12.col-lg-4
+        v-col.col-12.col-md-4
           v-card(outlined)
             v-card-text
               v-icon.float-right(v-if='event.parentId' color='success' v-text='mdiRepeat')
-              .title.text-h5
-                b.p-name(itemprop="name") {{event.title}}
-
+              .title.text-h5.mb-5
+                strong.p-name.text--primary(itemprop="name") {{event.title}}
+              
               time.dt-start.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")' itemprop="startDate" :content="event.start_datetime|unixFormat('YYYY-MM-DDTHH:mm')")
                 v-icon(v-text='mdiCalendar')
-                b.ml-2 {{event|when}}
+                strong.ml-2 {{event|when}}
                 .d-none.dt-end(itemprop="endDate" :content="event.end_datetime|unixFormat('YYYY-MM-DDTHH:mm')") {{event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
-              div.text-subtitle-1 {{event.start_datetime|from}}
+              div.text-subtitle-1.mb-5 {{event.start_datetime|from}}
                 small(v-if='event.parentId')  ({{event|recurrentDetail}})
 
-              .text-h6.p-location(itemprop="location" itemscope itemtype="https://schema.org/Place")
+              .text-h6.p-location.h-adr(itemprop="location" itemscope itemtype="https://schema.org/Place")
                 v-icon(v-text='mdiMapMarker')
-                b.vcard.ml-2(itemprop="name") {{event.place && event.place.name}}
-                .text-subtitle-1.adr(itemprop='address') {{event.place && event.place.address}}
+                b.vcard.ml-2.p-name(itemprop="name") {{event.place && event.place.name}}
+                .text-subtitle-1.p-street-address(itemprop='address') {{event.place && event.place.address}}
 
             //- tags, hashtags
-            v-card-text(v-if='event.tags.length')
+            v-card-text.pt-0(v-if='event.tags && event.tags.length')
               v-chip.p-category.ml-1.mt-3(v-for='tag in event.tags' color='primary'
-                outlined :key='tag')
-                span(v-text='tag')
+                outlined :key='tag' :to='`/tag/${tag}`') {{tag}}
 
             //- info & actions
             v-toolbar
@@ -55,6 +48,9 @@ v-container#event.pa-0.pa-sm-2
               v-btn.ml-2(large icon :title="$t('common.add_to_calendar')" color='primary' :aria-label="$t('common.add_to_calendar')"
                 :href='`/api/event/${event.slug || event.id}.ics`')
                 v-icon(v-text='mdiCalendarExport')
+              v-btn.ml-2(v-if='hasMedia' large icon :title="$t('event.download_flyer')" color='primary' :aria-label="$t('event.download_flyer')"
+                :href='event | mediaURL')
+                v-icon(v-text='mdiFileDownloadOutline')                
 
       .p-description.text-body-1.pa-3.rounded(v-if='hasMedia && event.description' itemprop='description' v-html='event.description')
 
@@ -133,20 +129,25 @@ import { mapState } from 'vuex'
 import get from 'lodash/get'
 import moment from 'dayjs'
 import clipboard from '../../assets/clipboard'
-const htmlToText = require('html-to-text')
+import MyPicture from '~/components/MyPicture'
+import EventAdmin from '@/components/eventAdmin'
+import EmbedEvent from '@/components/embedEvent'
+
+const { htmlToText } = require('html-to-text')
 
 import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose,
-  mdiEye, mdiEyeOff, mdiDelete, mdiRepeat, mdiLock,
+  mdiEye, mdiEyeOff, mdiDelete, mdiRepeat, mdiLock, mdiFileDownloadOutline,
   mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker } from '@mdi/js'
 
 export default {
   name: 'Event',
   mixins: [clipboard],
   components: {
-    EventAdmin: () => import(/* webpackChunkName: "event" */'./eventAdmin'),
-    EmbedEvent: () => import(/* webpackChunkName: "event" */'./embedEvent'),
+    EventAdmin,
+    EmbedEvent,
+    MyPicture
   },
-  async asyncData ({ $axios, params, error, store }) {
+  async asyncData ({ $axios, params, error }) {
     try {
       const event = await $axios.$get(`/event/${params.slug}`)
       return { event }
@@ -156,7 +157,7 @@ export default {
   },
   data () {
     return {
-      mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar,
+      mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar, mdiFileDownloadOutline,
       mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat, mdiLock,
       currentAttachment: 0,
       event: {},
@@ -169,7 +170,7 @@ export default {
     if (!this.event) {
       return {}
     }
-    const tags_feed = this.event.tags.map(tag => ({
+    const tags_feed = this.event.tags && this.event.tags.map(tag => ({
       rel: 'alternate',
       type: 'application/rss+xml',
       title: `${this.settings.title} events tagged ${tag}`,
@@ -247,7 +248,7 @@ export default {
       return this.event.media && this.event.media.length
     },
     plainDescription () {
-      return htmlToText.fromString(this.event.description.replace('\n', '').slice(0, 1000))
+      return htmlToText(this.event.description && this.event.description.replace('\n', '').slice(0, 1000))
     },
     currentAttachmentLabel () {
       return get(this.selectedResource, `data.attachment[${this.currentAttachment}].name`, '')
@@ -331,10 +332,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-.main_image {
-  margin: 0 auto;
-  border-radius: 5px;
-  transition: max-height 0.2s;
-}
-</style>

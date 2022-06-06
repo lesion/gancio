@@ -33,7 +33,7 @@ export default {
 
 // <iframe src='http://localhost:13120/embed/1' class='embedded_gancio'></iframe>
 </script>
-<style lang='less'>
+<style lang='scss'>
 .embed_event {
   display: flex;
   transition: margin .1s;

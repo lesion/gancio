@@ -2,6 +2,7 @@ const Event = require('../models/event')
 const Place = require('../models/place')
 const Tag = require('../models/tag')
 
+const { htmlToText } = require('html-to-text')
 const { Op, literal } = require('sequelize')
 const moment = require('dayjs')
 const ics = require('ics')
@@ -68,7 +69,7 @@ const exportController = {
     }
   },
 
-  feed (req, res, events) {
+  feed (_req, res, events) {
     const settings = res.locals.settings
     res.type('application/rss+xml; charset=UTF-8')
     res.render('feed/rss.pug', { events, settings, moment })
@@ -79,7 +80,7 @@ const exportController = {
    * @param {*} events array of events from sequelize
    * @param {*} alarms https://github.com/adamgibbons/ics#attributes (alarms)
    */
-  ics (req, res, events, alarms = []) {
+  ics (_req, res, events, alarms = []) {
     const settings = res.locals.settings
     const eventsMap = events.map(e => {
       const tmpStart = moment.unix(e.start_datetime)
@@ -88,13 +89,14 @@ const exportController = {
       const end = tmpEnd.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
       return {
         start,
-        // startOutputType: 'utc',
         end,
-        // endOutputType: 'utc',
         title: `[${settings.title}] ${e.title}`,
-        description: e.description,
+        description: htmlToText(e.description),
+        htmlContent: e.description,
         location: `${e.place.name} - ${e.place.address}`,
         url: `${settings.baseurl}/event/${e.slug || e.id}`,
+        status: 'CONFIRMED',
+        categories: e.tags.map(t => t.tag),
         alarms
       }
     })

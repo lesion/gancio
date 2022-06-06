@@ -123,7 +123,12 @@ const userController = {
 
   async remove (req, res) {
     try {
-      const user = await User.findByPk(req.params.id)
+      let user
+      if (res.locals.user.is_admin && req.params.id) {
+        user = await User.findByPk(req.params.id)
+      } else {
+        user = await User.findByPk(res.locals.user.id)  
+      }
       await user.destroy()
       log.warn(`User ${user.email} removed!`)
       res.sendStatus(200)

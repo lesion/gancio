@@ -109,7 +109,7 @@
         "list_description": "Webgune bat baduzu eta ekitaldien zerrenda erakutsi nahi baduzu, ondorengo kodea erabili"
     },
     "register": {
-        "description": "Herri mugimenduek autoantolaketaren bidean diru-iturrien beharrak dauzkatela badakigu.<br/>Honako hauxe oparitxoa da, hortaz erabili ezazue ekitaldi ez-komertzialak iragartzeko, eta esan gabe doa, ekitaldi antifaxistak, antisexistak eta antiarriztetarako :) .\n<br/>Argitaratzen hasi baino lehen<strong> zure kontu berriak onarpena jaso beharko du </strong>beraz, <strong>webgune honen atzean hezur-haragizko pertsonak gaudela jakinda </strong>, (momenutz euskal 'AI'-rik ez daukagu baina adi, agertuko direla) idatzi iezaguzu lerro batzuk argitaratu nahi dituzun ekitaldiei buruz.",
+        "description": "Gizarte mugimenduak beraien kabuz antolatu behar dira.<br/>\n<br/>Argitaratzen hasi baino lehen <strong>zure kontu berria onartua izan behar da</strong>, beraz, <strong>webgune honen atzean hezur-haragizko pertsonak</strong> gaudela kontuan izanik, azal iezaguzu mesedez pare bat lerrotan zer nolako ekitaldiak argitaratu nahi dituzun.",
         "error": "Errorea: ",
         "complete": "Izen-ematea baieztatua izan behar da.",
         "first_user": "Administratzailea sortu da"
@@ -159,7 +159,11 @@
         "only_future": "datozen ekitaldiak bakarrik",
         "edit_recurrent": "Editatu ekitaldi errepikaria:",
         "updated": "Ekitaldia eguneratu da",
-        "saved": "Ekitaldia gorde da"
+        "saved": "Ekitaldia gorde da",
+        "remove_media_confirmation": "Irudiaren ezabaketa baieztatzen duzu?",
+        "alt_text_description": "Ikusmen-urritasunak dituztenentzako deskripzioa",
+        "choose_focal_point": "Aukeratu arretagunea",
+        "download_flyer": "Deskargatu eskuorria"
     },
     "admin": {
         "place_description": "Helbidea oker badago, alda dezakezu.<br/>Leku honekin lotutako iraganeko eta etorkizuneko ekitaldien helbidea aldatuko da.",
@@ -225,7 +229,10 @@
         "smtp_test_success": "Probako eposta bidali da {admin_email}-(e)ra, begiratu zure sarrera-ontzia",
         "admin_email": "Administratzailearen eposta",
         "smtp_hostname": "SMTP hostname",
-        "smtp_description": "<ul><li>Administratzaileak eposta bat jaso beharko luke anonimo batek ekitaldi bat gehitzen duenean (gaituta badago).</li><li>Administratzaileak eposta bat jaso beharko luke izena emateko eskari bakoitzeko (gaituta badago).</li><li>Erabiltzaileak eposta bat jaso beharko luke izena emateko eskariarekin.</li><li>Erabiltzaileak eposta bat jaso beharko luke izen ematea baieztatzean.</li><li>Erabiltzaileak eposta bat jaso beharko luke administratzaileak zuzenean izena emanez gero.</li><li>Erabiltzaileek eposta bat jaso beharko lukete pasahitza ahazten dutenean.</li></ul>"
+        "smtp_description": "<ul><li>Administratzaileak eposta bat jaso beharko luke anonimo batek ekitaldi bat gehitzen duenean (gaituta badago).</li><li>Administratzaileak eposta bat jaso beharko luke izena emateko eskari bakoitzeko (gaituta badago).</li><li>Erabiltzaileak eposta bat jaso beharko luke izena emateko eskariarekin.</li><li>Erabiltzaileak eposta bat jaso beharko luke izen ematea baieztatzean.</li><li>Erabiltzaileak eposta bat jaso beharko luke administratzaileak zuzenean izena emanez gero.</li><li>Erabiltzaileek eposta bat jaso beharko lukete pasahitza ahazten dutenean.</li></ul>",
+        "widget": "Tresna",
+        "event_remove_ok": "Ekitaldia ezabatu da",
+        "wrong_domain_warning": "config.json-en konfiguratuta dagoen baseurl <b>({baseurl})</b> ez da bisitatzen ari zaren berbera <b>({url})</b>"
     },
     "auth": {
         "not_confirmed": "Oraindik baieztatu gabe dago…",
@@ -271,6 +278,8 @@
     "setup": {
         "start": "Hasi",
         "completed": "Instalazioa bukatu da",
-        "completed_description": "<p>Erabiltzaile honekin saioa has dezakezu orain:<br/><br/>Erabiltzailea: <b>{email}</b><br/>Pasahitza: <b>{password}<b/></p>"
+        "completed_description": "<p>Erabiltzaile honekin saioa has dezakezu orain:<br/><br/>Erabiltzailea: <b>{email}</b><br/>Pasahitza: <b>{password}<b/></p>",
+        "copy_password_dialog": "Bai, pasahitza kopiatu behar duzu!",
+        "https_warning": "HTTP bidez ari zarela kontuan izan. HTTPSra pasatzen bazara gogoratu config.json-en baseurl aldatzeaz!"
     }
 }

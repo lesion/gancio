@@ -5,7 +5,6 @@ const crypto = require('crypto')
 const { promisify } = require('util')
 const sharp = require('sharp')
 const config = require('../../config')
-const pkg = require('../../../package.json')
 const generateKeyPair = promisify(crypto.generateKeyPair)
 const log = require('../../log')
 const locales = require('../../../locales/index')
@@ -42,7 +41,7 @@ const defaultSettings = {
     { href: '/about', label: 'about' }
   ],
   admin_email: config.admin_email || '',
-  smtp: config.smtp || false
+  smtp: config.smtp || {}
 }
 
 /**
@@ -185,7 +184,7 @@ const settingsController = {
     return sharp(uploadedPath)
       .resize(400)
       .png({ quality: 90 })
-      .toFile(baseImgPath + '.png', (err, info) => {
+      .toFile(baseImgPath + '.png', (err) => {
         if (err) {
           log.error('[LOGO] ' + err)
         }

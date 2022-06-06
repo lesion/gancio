@@ -31,7 +31,8 @@ li {
 }
 
 #calh {
-  height: 292px;
+  /* this is to avoid content shift layout as v-calendar does not support SSR */
+  height: 268px;
 }
 
 .container {
@@ -55,7 +56,6 @@ li {
   scrollbar-color: #FF4511 #111;
 }
 
-// EVENT
 .event {
   display: flex;
   position: relative;
@@ -67,42 +67,32 @@ li {
   margin-right: .4em;
   transition: all .5s;
   overflow: hidden;
+}
 
-  .title {
-    display: -webkit-box;
-    overflow: hidden;
-    margin: 0.5rem 1rem 0.5rem 1rem;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    font-size: 1.1em !important;
-    line-height: 1.2em !important;
-  }
+.event  .title {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0.5rem 1rem 0.5rem 1rem;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  font-size: 1.1em !important;
+  line-height: 1.2em !important;
+  text-decoration: none;
+}
 
-  .body {
-    flex: 1 1 auto;
-  }
+.event .body {
+  flex: 1 1 auto;
+}
 
-  .img {
-    width: 100%;
-    max-height: 250px;
-    min-height: 160px;
-    object-fit: cover;
-    object-position: top;
-    aspect-ratio: 1.7778;
-  }
+.event .place span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  .place {
-    max-width: 100%;
-    span {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
-  a {
-    text-decoration: none;
-  }
+.event a {
+  text-decoration: none;
 }
 
 .vc-past {
