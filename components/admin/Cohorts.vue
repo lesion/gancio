@@ -1,18 +1,18 @@
 <template lang='pug'>
 v-container
-  v-card-title {{$t('common.cohort')}}
+  v-card-title {{$t('common.blobs')}}
     v-spacer
     v-text-field(v-model='search'
     :append-icon='mdiMagnify' outlined rounded
     label='Search'
     single-line hide-details)
-  v-card-subtitle(v-html="$t('admin.cohort_description')")
+  v-card-subtitle(v-html="$t('admin.blobs_description')")
 
-  v-btn(color='primary' text @click='newCohort') <v-icon v-text='mdiPlus'></v-icon> {{$t('common.new')}}
+  v-btn(color='primary' text @click='newCohort') <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.new_blob')}}
 
   v-dialog(v-model='dialog' width='800' destroy-on-close :fullscreen='$vuetify.breakpoint.xsOnly')
     v-card(color='secondary')
-      v-card-title {{$t('admin.edit_cohort')}}
+      v-card-title {{$t('admin.edit_blob')}}
       v-card-text
         v-form(v-model='valid' ref='form')
           v-text-field(
@@ -39,6 +39,9 @@ v-container
               :delimiters="[',', ';']"
               :items="tags"
               :label="$t('common.tags')")
+                template(v-slot:selection="{ item, on, attrs, selected, parent}")
+                  v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+                    :input-value="selected" label small) {{item}}
 
           v-col(cols=5)
             v-autocomplete(v-model='filterPlaces'
@@ -54,6 +57,10 @@ v-container
               :delimiters="[',', ';']"
               :items="places"
               :label="$t('common.places')")
+                template(v-slot:selection="{ item, on, attrs, selected, parent}")
+                  v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+                    :input-value="selected" label small) {{item.name}}
+
                 //- template(v-slot:item="{ item, attrs, on }")
                 //-   v-list-item(v-bind='attrs' v-on='on')
                 //-     v-list-item-content(two-line)
@@ -76,14 +83,11 @@ v-container
               v-chip.ma-1(small v-for='tag in item.tags' v-text='tag' :key='tag')
             template(v-slot:item.places='{item}')
               v-chip.ma-1(small v-for='place in item.places' v-text='place.name' :key='place.id' )
-            
 
 
       v-card-actions
           v-spacer
           v-btn(text @click='dialog=false' color='warning') {{$t('common.close')}}
-          //- v-btn(text @click='saveCohort' color='primary' :loading='loading'
-          //-     :disable='!valid || loading') {{$t('common.save')}}
 
   v-card-text
     v-data-table(
@@ -168,13 +172,14 @@ export default {
       this.dialog = true
     },
     newCohort () {
-      this.cohort = { name: '', id: null },
+      this.cohort = { name: '', id: null }
       this.filters = []
       this.dialog = true
     },
     async saveCohort () {
       if (!this.$refs.form.validate()) return
       this.loading = true
+      this.cohort.name = this.cohort.name.trim()
       this.cohort = await this.$axios.$post('/cohorts', this.cohort)
       this.$fetch()
       this.loading = false

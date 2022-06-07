@@ -87,7 +87,8 @@
         "import": "Import",
         "max_events": "N. max events",
         "label": "Label",
-        "blobs": "Blobs"
+        "blobs": "Blobs",
+        "close": "Close"
     },
     "login": {
         "description": "By logging in you can publish new events.",
@@ -233,7 +234,10 @@
         "smtp_test_button": "Send a test email",
         "admin_email": "Admin e-mail",
         "widget": "Widget",
-        "wrong_domain_warning": "The baseurl configured in config.json <b>({baseurl})</b> differs from the one you're visiting <b>({url})</b>"
+        "wrong_domain_warning": "The baseurl configured in config.json <b>({baseurl})</b> differs from the one you're visiting <b>({url})</b>",
+        "new_blob": "New blob",
+        "blobs_description": "Blobs are groupings of events by tags and places. They will be displayed on the home page",
+        "edit_blob": "Edit Blob"
     },
     "auth": {
         "not_confirmed": "Not confirmed yet…",
