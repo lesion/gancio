@@ -76,8 +76,8 @@ sudo systemctl start gancio
 > Don't be lazy and [backup]({% link install/backup.md %}) your data!
 
 ```bash
-yarn global remove gancio
-yarn cache clean
-yarn global add --silent {{site.url}}/latest.tgz
+sudo yarn global remove gancio
+sudo yarn cache clean
+sudo yarn global add --silent {{site.url}}/latest.tgz
 sudo systemctl restart gancio
 ```
