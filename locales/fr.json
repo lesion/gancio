@@ -217,7 +217,8 @@
         "show_smtp_setup": "Paramètres d'e-mail",
         "smtp_test_success": "Un e-mail de test a été envoyé à {admin_email}, veuillez vérifier votre boîte de réception",
         "admin_email": "E-mail de l'administrateur",
-        "widget": "Vignette active"
+        "widget": "Vignette active",
+        "event_remove_ok": "Événement supprimé"
     },
     "oauth": {
         "scopes": {
