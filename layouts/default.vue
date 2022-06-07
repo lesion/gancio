@@ -4,13 +4,15 @@
     <Confirm/>
     <Nav/>
     <v-main app>
-      <div class="ml-1 mb-1 mt-1" v-if='showCohorts || showBack'>
-        <v-btn v-show='showBack' text color='primary' to='/'><v-icon v-text='mdiChevronLeft'/></v-btn>
-        <v-btn v-for='cohort in cohorts' text color='primary' :key='cohort.id' :to='`/g/${cohort.name}`'>{{cohort.name}}</v-btn>
-      </div>      
-      <v-fade-transition hide-on-leave>
-        <nuxt />
-      </v-fade-transition>
+      <v-container fluid class='pa-0'>
+        <div v-if='showCohorts || showBack'>
+          <v-btn class='ml-2 mt-2' v-if='showBack' outlined color='primary' to='/'><v-icon v-text='mdiChevronLeft'></v-icon></v-btn>
+          <v-btn class='ml-2 mt-2' outlined v-for='cohort in cohorts' color='primary' :key='cohort.id' :to='`/g/${cohort.name}`'>{{cohort.name}}</v-btn>
+        </div>
+        <v-fade-transition hide-on-leave>
+          <nuxt />
+        </v-fade-transition>
+      </v-container>
     </v-main>
     <Footer/>
 

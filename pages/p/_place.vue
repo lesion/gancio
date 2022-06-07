@@ -1,7 +1,6 @@
 <template>
-  <v-container id='home' fluid>
-
-    <h1 class='d-block text-h4 font-weight-black text-center text-uppercase mt-5 mx-auto w-100 text-underline'><u>{{place.name}}</u></h1>
+  <v-container class='px-0' fluid>
+    <h1 class='d-block text-h4 font-weight-black text-center text-uppercase mt-10 mx-auto w-100 text-underline'><u>{{place.name}}</u></h1>
     <span class="d-block text-subtitle text-center w-100 mb-14">{{place.address}}</span>
 
     <!-- Events -->

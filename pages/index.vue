@@ -1,8 +1,8 @@
 <template lang="pug">
-v-container#home(fluid)
+v-container.pa-0
 
   //- Announcements
-  #announcements.mx-1.mt-1(v-if='announcements.length')
+  #announcements.ma-2(v-if='announcements.length')
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
   //- Calendar and search bar

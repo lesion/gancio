@@ -1,7 +1,7 @@
 <template>
-  <v-container id='home' fluid>
+  <v-container class='px-0' fluid>
 
-    <h1 class='d-block text-h3 font-weight-black text-center align-center text-uppercase mt-5 mb-16 mx-auto w-100 text-underline'><u>{{tag}}</u></h1>
+    <h1 class='d-block text-h3 font-weight-black text-center text-uppercase mt-10 mb-16 mx-auto w-100 text-underline'><u>{{tag}}</u></h1>
 
     <!-- Events -->
     <div class="mb-2 mt-1 pl-1 pl-sm-2" id="events">

@@ -31,7 +31,7 @@ const cohortController = {
     const name = req.params.name
 
     const cohort = await Cohort.findOne({ where: { name } })
-    if (!cohort) { 
+    if (!cohort) {
       return res.sendStatus(404)
     }
     const filters = await Filter.findAll({ where: { cohortId: cohort.id } })

@@ -1,5 +1,5 @@
 <template>
-  <v-container id='home' fluid>
+  <v-container class='px-0' fluid>
 
     <h1 class='d-block text-h3 font-weight-black text-center align-center text-uppercase mt-10 mb-12 mx-auto w-100 text-underline'><u>{{cohort}}</u></h1>
 
