@@ -611,10 +611,8 @@ const eventController = {
     if (tags && places) {
       where[Op.or] = {
         placeId: places ? places.split(',') : [],
-        // '$tags.tag$': Sequelize.literal(`EXISTS (SELECT 1 FROM event_tags WHERE tagTag in ( ${Sequelize.QueryInterface.escape(tags)} ) )`)
       }
     } else if (tags) {
-      // where[Op.and] = Sequelize.literal(`EXISTS (SELECT 1 FROM event_tags WHERE eventId=event.id AND tagTag in (?))`)
       where[Op.and] = Sequelize.fn('EXISTS', Sequelize.literal('SELECT 1 FROM event_tags WHERE "event_tags"."eventId"="event".id AND "tagTag" in (?)'))
       replacements.push(tags)
     } else if (places) {

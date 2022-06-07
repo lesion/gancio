@@ -14,7 +14,7 @@ function wpgancio_delete_post ($post_id) {
     $gancio_id = get_post_meta($post_id, 'wpgancio_gancio_id', TRUE);
     if ($gancio_id) {
       $http = _wp_http_get_object();
-      $response = $http->request( "${instance_url}/api/event/${gancio_id}", array(
+      $http->request( "${instance_url}/api/event/${gancio_id}", array(
         'method' => 'DELETE',
         'headers' => array (
           'Authorization' => 'Bearer ' . get_option('wpgancio_token')
@@ -30,6 +30,7 @@ function wpgancio_save_event ($post_id) {
     return sanitize_title($tag->name);
   }
 
+  // TODO: merge event tags with post tags
   $tmp_tags = get_the_terms( $event, 'event-tag' );
   $tags = array_map('tagName', $tmp_tags);
 

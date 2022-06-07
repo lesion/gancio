@@ -6,9 +6,6 @@ const Place = require('../models/place')
 const log = require('../../log')
 const dayjs = require('dayjs')
 
-// const { sequelize } = require('../models/index')
-
-
 const { Op, Sequelize } = require('sequelize')
 
 const cohortController = {
@@ -91,14 +88,12 @@ const cohortController = {
     }
 
     const events = await Event.findAll({
-      logging: console.log,
       where,
       attributes: {
         exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'description', 'resources']
       },
       order: ['start_datetime'],
       include: [
-        // { model: Resource, required: false, attributes: ['id'] },
         {
           model: Tag,
           order: [Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
