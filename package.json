@@ -60,7 +60,7 @@
     "pg": "^8.6.0",
     "sequelize": "^6.20.1",
     "sequelize-slugify": "^1.6.1",
-    "sharp": "^0.27.2",
+    "sharp": "^0.29.3",
     "sqlite3": "^5.0.8",
     "tiptap": "^1.32.0",
     "tiptap-extensions": "^1.35.0",
