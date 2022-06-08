@@ -12397,15 +12397,15 @@ vuetify-loader@^1.7.3:
     file-loader "^6.2.0"
     loader-utils "^2.0.0"
 
+vuetify@2.6.6:
+  version "2.6.6"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.6.6.tgz#7af178fece5ccd561639eba425fe6c0a5803b37e"
+  integrity sha512-H4KtxDFmDN8QiTRiGfBySyjMhVaHAJTKB0llGGKZT5jKxtnx9gvEtMWXKtVuRP0NJJP0H6xBPJHNOH7nT18qiQ==
+
 vuetify@^2.6:
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.6.3.tgz#b33ede2da958a40c6ced0ad1f4eda737984b3967"
   integrity sha512-Zfiz2DZnp1DvxqGaSCGqGjv4mPNAurJJ5Xwy7bzNzIySGLlRdlO8UH6aNWnSgfaAsLP3voxadSGDm6tKM8Ys7w==
-
-"vuetify@npm:@vuetify/nightly@dev":
-  version "2.6.0-dev-20211110.0"
-  resolved "https://registry.yarnpkg.com/@vuetify/nightly/-/nightly-2.6.0-dev-20211110.0.tgz#161e078b674d8350ae316a574a304caecab53849"
-  integrity sha512-0CSbtDP68YZM9yenPsr8b3fe9d8YHxxJvPD0jzMDM/bm6ksVT+qKeb4Wwi9h8zPIphFG2vKICG21yLByg0+5Kg==
 
 vuex@^3.6.2:
   version "3.6.2"
