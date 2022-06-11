@@ -20,7 +20,7 @@ rss(version='2.0' xmlns:atom="http://www.w3.org/2005/Atom")
                     | <small>(#{moment.unix(event.start_datetime).format("dddd, D MMMM HH:mm")})</small><br/>
                     if (event.media && event.media.length)
                         | <img alt="#{event.media[0].name || ''}" src="#{settings.baseurl}/media/#{event.media[0].url}"/>
-                    | <pre>!{event.description}</pre>
+                    | !{event.description}
                     | ]]>
                 pubDate= new Date(event.updatedAt).toUTCString()
                 guid #{settings.baseurl}/event/#{event.slug || event.id}
