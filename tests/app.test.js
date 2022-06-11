@@ -14,8 +14,8 @@ let token
 let app
 beforeAll( async () => {
   fs.copyFileSync('./starter.sqlite', './testdb.sqlite')
-  await require('../server/initialize.server.js')()
-  app = require('../server/routes.js')
+  await require('../server/initialize.server.js').start()
+  app = require('../server/routes.js').handler
 })
 
 describe('Basic', () => {
@@ -96,7 +96,7 @@ describe('Events', () => {
       .expect(403)
 
     await  request(app).post('/api/event')
-      .send({ title: 'test title', place_name: 'place name', place_address: 'address', start_datetime: new Date().getTime() * 1000 })
+      .send({ title: 'test title', place_name: 'place name', place_address: 'address', tags: ['test'], start_datetime: new Date().getTime() * 1000 })
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
@@ -172,7 +172,7 @@ describe ('Cohort', () => {
       .expect(403)
 
     const response = await request(app).post('/api/filter')
-      .send({ cohortId: 1, places: [1] })
+      .send({ cohortId: 1, tags: ['test'] })
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
@@ -182,10 +182,10 @@ describe ('Cohort', () => {
 
   test('should get cohort events', async () => {
     const response = await request(app)
-      .get('/api/cohorts/1')
+      .get(`/api/cohorts/test cohort`)
       .expect(200)
 
-    expect(response.body.length).toBe(2)
+    expect(response.body.length).toBe(1)
   })
 
   test('should remove filter', async () => {
@@ -220,8 +220,8 @@ describe ('Cohort', () => {
     .expect(200)
   
     expect(response.body.length).toBe(1)
-    response = await request(app)
-      .get('/api/cohorts/1')
+    response = await request(app) 
+      .get(`/api/cohorts/test cohort`)
       .expect(200)
 
     expect(response.body.length).toBe(1)
