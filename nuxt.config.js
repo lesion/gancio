@@ -1,4 +1,5 @@
 const config = require('./server/config.js')
+config.load()
 const minifyTheme = require('minify-css-string').default
 
 const isDev = (process.env.NODE_ENV !== 'production')
@@ -13,7 +14,7 @@ module.exports = {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' }
     ],
-    link: [{ rel: 'icon', type: 'image/png', href: '/logo.png' }],
+    link: [{ rel: 'icon', type: 'image/png', href: config.baseurl + '/logo.png' }],
     script: [{ src: '/gancio-events.es.js', async: true, body: true }],
   },
   dev: isDev,
