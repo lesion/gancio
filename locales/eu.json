@@ -86,7 +86,8 @@
         "import": "Inportatu",
         "reset": "Berrezarri",
         "theme": "Itxura",
-        "tags": "Etiketak"
+        "tags": "Etiketak",
+        "close": "Itxi"
     },
     "login": {
         "description": "Saioa hasten baduzu ekitaldi berriak sortu ahal izango dituzu.",
