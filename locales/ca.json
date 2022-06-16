@@ -86,7 +86,9 @@
         "theme": "Tema",
         "tags": "Etiquetes",
         "label": "Etiqueta",
-        "max_events": "Nre. màx. d'activitats"
+        "max_events": "Nre. màx. d'activitats",
+        "close": "Tanca",
+        "blobs": "Blobs"
     },
     "login": {
         "description": "Amb la sessió iniciada pots afegir activitats noves.",
@@ -232,7 +234,10 @@
         "smtp_test_button": "Envia un correu de prova",
         "widget": "Giny",
         "wrong_domain_warning": "La url base configurada a config.json <b>({baseurl})</b> difereix de la que esteu visitant <b>({url})</b>",
-        "event_remove_ok": "S'ha suprimit l'esdeveniment"
+        "event_remove_ok": "S'ha suprimit l'esdeveniment",
+        "new_blob": "Nou blob",
+        "blobs_description": "Els blobs són agrupacions d'activitats per etiquetes i llocs. Es mostren a la pàgina principal",
+        "edit_blob": "Edita el blob"
     },
     "auth": {
         "not_confirmed": "Encara no s'ha confirmat…",
