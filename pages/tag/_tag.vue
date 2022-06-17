@@ -11,11 +11,24 @@
 </template>
 <script>
 
+import { mapState } from 'vuex'
 import Event from '@/components/Event'
 
 export default {
   name: 'Tag',
   components: { Event },
+  head ({ $route }) {
+    const tag = $route.params.tag
+    const title = `${this.settings.title} #${tag}`
+    return {
+      title,
+      link: [
+        { rel: 'alternate', type: 'application/rss+xml', title, href: this.settings.baseurl + `/feed/rss/tag/${tag}` },
+        { rel: 'alternate', type: 'text/calendar', title, href: this.settings.baseurl + `/feed/ics/tag/${tag}` }
+      ]
+    }
+  },
+  computed: mapState(['settings']),
   async asyncData ({ $axios, params, error }) {
     try {
       const tag = params.tag
