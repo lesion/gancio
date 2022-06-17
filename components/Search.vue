@@ -25,11 +25,12 @@ v-container.pt-0.pt-md-2
     multiple)
     template(v-slot:selection="{ attrs, item }")
       v-chip(v-bind="attrs"
+        small
         close
         @click:close='remove(item)'
         :close-icon='mdiCloseCircle')
         v-avatar(left)
-          v-icon(v-text="item.type === 'place' ? mdiMapMarker : mdiTag")
+          v-icon(small v-text="item.type === 'place' ? mdiMapMarker : mdiTag")
         span {{ item.label }}
     template(v-slot:item='{ item }')
         v-list-item-avatar
@@ -76,7 +77,7 @@ export default {
       this.items = await this.$axios.$get(`/event/meta?search=${search.target.value}`)
     }, 100),
     remove (item) {
-      this.meta = this.meta.filter(m => m.type !== item.type || m.type === 'place' ? m.id !== item.id : m.tag !== item.tag)
+      this.meta = this.meta.filter(m => m.type !== item.type || m.type === 'place' ? m.id !== item.id : m.label !== item.label)
       this.change()
     },
     change (show_recurrent) {
