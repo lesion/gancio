@@ -5,9 +5,9 @@
     <Nav/>
     <v-main app>
       <v-container fluid class='pa-0'>
-        <div v-if='showCohorts || showBack'>
+        <div v-if='showCollections || showBack'>
           <v-btn class='ml-2 mt-2' v-if='showBack' outlined color='primary' to='/'><v-icon v-text='mdiChevronLeft'></v-icon></v-btn>
-          <v-btn class='ml-2 mt-2' outlined v-for='cohort in cohorts' color='primary' :key='cohort.id' :to='`/g/${cohort.name}`'>{{cohort.name}}</v-btn>
+          <v-btn class='ml-2 mt-2' outlined v-for='collection in collections' color='primary' :key='collection.id' :to='`/collection/${collection.name}`'>{{collection.name}}</v-btn>
         </div>
         <v-fade-transition hide-on-leave>
           <nuxt />
@@ -37,21 +37,21 @@ export default {
     }
   },
   data () {
-    return { cohorts: [], mdiChevronLeft }
+    return { collections: [], mdiChevronLeft }
   },  
   async fetch () {
-    this.cohorts = await this.$axios.$get('cohorts')
+    this.collections = await this.$axios.$get('collections')
   },  
   name: 'Default',
   components: { Nav, Snackbar, Footer, Confirm },
   computed: {
     ...mapState(['settings', 'locale']),
     showBack () {
-      return ['tag-tag', 'g-cohort', 'p-place', 'search', 'announcement-id'].includes(this.$route.name)
+      return ['tag-tag', 'collection-collection', 'place-place', 'search', 'announcement-id'].includes(this.$route.name)
     },
-    showCohorts () {
-      if (!this.cohorts || this.cohorts.length === 0) return false
-      return ['tag-tag', 'index', 'g-cohort', 'p-place'].includes(this.$route.name)
+    showCollections () {
+      if (!this.collections || this.collections.length === 0) return false
+      return ['tag-tag', 'index', 'g-collection', 'p-place'].includes(this.$route.name)
     }
   },
   created () {
