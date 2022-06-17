@@ -11,15 +11,27 @@
 </template>
 <script>
 
+import { mapState } from 'vuex'
 import Event from '@/components/Event'
 
 export default {
-  name: 'Tag',
+  name: 'Place',
   components: { Event },
+  head () {
+    const title = `${this.settings.title} - ${this.place.name}`
+    return {
+      title,
+      link: [
+        { rel: 'alternate', type: 'application/rss+xml', title, href: this.settings.baseurl + `/feed/rss/place/${this.place.name}` },
+        { rel: 'alternate', type: 'text/calendar', title, href: this.settings.baseurl + `/feed/ics/place/${this.place.name}` }
+      ]
+    }
+  },
+  computed: mapState(['settings']),  
   asyncData ({ $axios, params, error }) {
     try {
       const place = params.place
-      return $axios.$get(`/place/${place}/events`)
+      return $axios.$get(`/place/${place}`)
     } catch (e) {
       error({ statusCode: 400, message: 'Error!' })
     }

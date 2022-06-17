@@ -8,7 +8,7 @@
     v-card-text.body.pt-0.pb-0
       time.dt-start.subtitle-1(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")' itemprop="startDate" :content="event.start_datetime|unixFormat('YYYY-MM-DDTHH:mm')")  <v-icon v-text='mdiCalendar'></v-icon> {{ event|when }}
       .d-none.dt-end(itemprop="endDate" :content="event.end_datetime|unixFormat('YYYY-MM-DDTHH:mm')") {{event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
-      nuxt-link.place.d-block.p-location.pl-0(text color='primary' :to='`/p/${event.place.name}`' itemprop="location" :content="event.place.name") <v-icon v-text='mdiMapMarker'></v-icon> {{event.place.name}}
+      nuxt-link.place.d-block.p-location.pl-0(text color='primary' :to='`/place/${event.place.name}`' itemprop="location" :content="event.place.name") <v-icon v-text='mdiMapMarker'></v-icon> {{event.place.name}}
       .d-none(itemprop='location.address') {{event.place.address}}
 
     v-card-actions.pt-0.actions.justify-space-between
