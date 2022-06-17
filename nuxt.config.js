@@ -1,5 +1,4 @@
 const config = require('./server/config.js')
-config.load()
 const minifyTheme = require('minify-css-string').default
 
 const isDev = (process.env.NODE_ENV !== 'production')

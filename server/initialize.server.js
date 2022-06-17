@@ -1,5 +1,4 @@
 const config = require('../server/config')
-config.load()
 
 const initialize = {
   // close connections/port/unix socket

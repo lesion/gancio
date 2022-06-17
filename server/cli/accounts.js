@@ -1,7 +1,6 @@
 let db
 function _initializeDB () {
   const config = require('../config')
-  config.load()
   config.log_level = 'error'
   db = require('../api/models/index')
   return db.initialize()
