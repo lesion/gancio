@@ -87,7 +87,7 @@
         "import": "Import",
         "max_events": "N. max events",
         "label": "Label",
-        "blobs": "Blobs",
+        "collections": "Collections",
         "close": "Close"
     },
     "login": {
@@ -235,9 +235,9 @@
         "admin_email": "Admin e-mail",
         "widget": "Widget",
         "wrong_domain_warning": "The baseurl configured in config.json <b>({baseurl})</b> differs from the one you're visiting <b>({url})</b>",
-        "new_blob": "New blob",
-        "blobs_description": "Blobs are groupings of events by tags and places. They will be displayed on the home page",
-        "edit_blob": "Edit Blob"
+        "new_collection": "New collection",
+        "collections_description": "Collections are groupings of events by tags and places. They will be displayed on the home page",
+        "edit_collection": "Edit Collection"
     },
     "auth": {
         "not_confirmed": "Not confirmed yet…",
