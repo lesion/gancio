@@ -32,7 +32,7 @@ export default {
   async asyncData ({ $axios, params, error }) {
     try {
       const tag = params.tag
-      const events = await $axios.$get(`/events?tags=${tag}`)
+      const events = await $axios.$get(`/tag/${tag}`)
       return { events, tag }
     } catch (e) {
       error({ statusCode: 400, message: 'Error!' })
