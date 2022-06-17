@@ -33,7 +33,7 @@ if (config.status !== 'READY') {
   const resourceController = require('./controller/resource')
   const oauthController = require('./controller/oauth')
   const announceController = require('./controller/announce')
-  const cohortController = require('./controller/cohort')
+  const collectionController = require('./controller/collection')
   const helpers = require('../helpers')
   const storage = require('./storage')
   const upload = multer({ storage })
@@ -58,8 +58,8 @@ if (config.status !== 'READY') {
   }
   ```
   */
-  api.get('/ping', (req, res) => res.sendStatus(200))
-  api.get('/user', isAuth, (req, res) => res.json(res.locals.user))
+  api.get('/ping', (_req, res) => res.sendStatus(200))
+  api.get('/user', isAuth, (_req, res) => res.json(res.locals.user))
 
 
   api.post('/user/recover', userController.forgotPassword)
@@ -88,9 +88,11 @@ if (config.status !== 'READY') {
    * @param {integer} [start] - start timestamp (default: now)
    * @param {integer} [end] - end timestamp (optional)
    * @param {array} [tags] - List of tags
-   * @param {array} [places] - List of places
-   * @param {integer} [max] - Max events 
+   * @param {array} [places] - List of places id
+   * @param {integer} [max] - Limit events 
    * @param {boolean} [show_recurrent] - Show also recurrent events (default: as choosen in admin settings)
+   * @param {integer} [page] - Pagination
+   * @param {boolean} [older] - select <= start instead of >=
    * @example ***Example***  
    * [https://demo.gancio.org/api/events](https://demo.gancio.org/api/events)  
    * [usage example](https://framagit.org/les/gancio/-/blob/master/webcomponents/src/GancioEvents.svelte#L18-42)
@@ -131,9 +133,6 @@ if (config.status !== 'READY') {
   // get tags/places
   api.get('/event/meta', eventController.searchMeta)
 
-  // get unconfirmed events
-  api.get('/event/unconfirmed', isAdmin, eventController.getUnconfirmed)
-
   // add event notification TODO
   api.post('/event/notification', eventController.addNotification)
   api.delete('/event/notification/:code', eventController.delNotification)
@@ -142,7 +141,10 @@ if (config.status !== 'READY') {
   api.post('/settings/logo', isAdmin, multer({ dest: config.upload_path }).single('logo'), settingsController.setLogo)
   api.post('/settings/smtp', isAdmin, settingsController.testSMTP)
 
-  // confirm event
+  // get unconfirmed events
+  api.get('/event/unconfirmed', isAdmin, eventController.getUnconfirmed)
+
+  // [un]confirm event
   api.put('/event/confirm/:event_id', isAuth, eventController.confirm)
   api.put('/event/unconfirm/:event_id', isAuth, eventController.unconfirm)
 
@@ -153,12 +155,13 @@ if (config.status !== 'READY') {
   api.get('/export/:type', cors, exportController.export)
 
 
-  api.get('/place/:placeName/events', cors, placeController.getEvents)
   api.get('/place/all', isAdmin, placeController.getAll)
-  api.get('/place', cors, placeController.get)
+  api.get('/place/:placeName', cors, placeController.getEvents)
+  api.get('/place', cors, placeController.search)
   api.put('/place', isAdmin, placeController.updatePlace)
 
-  api.get('/tag', cors, tagController.get)
+  api.get('/tag', cors, tagController.search)
+  api.get('/tag/:tag', cors, tagController.getEvents)
 
   // - FEDIVERSE INSTANCES, MODERATION, RESOURCES
   api.get('/instances', isAdmin, instanceController.getAll)
@@ -175,14 +178,14 @@ if (config.status !== 'READY') {
   api.put('/announcements/:announce_id', isAdmin, announceController.update)
   api.delete('/announcements/:announce_id', isAdmin, announceController.remove)
 
-  // - COHORT
-  api.get('/cohorts/:name', cohortController.getEvents)
-  api.get('/cohorts', cohortController.getAll)
-  api.post('/cohorts', isAdmin, cohortController.add)
-  api.delete('/cohort/:id', isAdmin, cohortController.remove)
-  api.get('/filter/:cohort_id', isAdmin, cohortController.getFilters)
-  api.post('/filter', isAdmin, cohortController.addFilter)
-  api.delete('/filter/:id', isAdmin, cohortController.removeFilter)
+  // - COLLECTIONS
+  api.get('/collections/:name', cors, collectionController.getEvents)
+  api.get('/collections', collectionController.getAll)
+  api.post('/collections', isAdmin, collectionController.add)
+  api.delete('/collection/:id', isAdmin, collectionController.remove)
+  api.get('/filter/:collection_id', isAdmin, collectionController.getFilters)
+  api.post('/filter', isAdmin, collectionController.addFilter)
+  api.delete('/filter/:id', isAdmin, collectionController.removeFilter)
 
   // OAUTH
   api.get('/clients', isAuth, oauthController.getClients)

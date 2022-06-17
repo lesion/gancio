@@ -10,7 +10,7 @@ const ics = require('ics')
 const exportController = {
 
   async export (req, res) {
-    const type = req.params.type
+    const format = req.params.format
     const tags = req.query.tags
     const places = req.query.places
     const show_recurrent = !!req.query.show_recurrent
@@ -43,7 +43,7 @@ const exportController = {
       attributes: { exclude: ['is_visible', 'recurrent', 'createdAt', 'likes', 'boost', 'userId', 'placeId'] },
       where: {
         is_visible: true,
-        recurrent: { [Op.eq]: null },
+        recurrent: null,
         start_datetime: { [Op.gte]: yesterday },
         ...where
       },
@@ -58,7 +58,7 @@ const exportController = {
         { model: Place, attributes: ['name', 'id', 'address'] }]
     })
 
-    switch (type) {
+    switch (format) {
       case 'rss':
       case 'feed':
         return exportController.feed(req, res, events.slice(0, 20))
@@ -69,10 +69,10 @@ const exportController = {
     }
   },
 
-  feed (_req, res, events) {
+  feed (_req, res, events, title = res.locals.settings.title, link = `${res.locals.settings.baseurl}/feed/rss`) {
     const settings = res.locals.settings
     res.type('application/rss+xml; charset=UTF-8')
-    res.render('feed/rss.pug', { events, settings, moment })
+    res.render('feed/rss.pug', { events, settings, moment, title, link })
   },
 
   /**

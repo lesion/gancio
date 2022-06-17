@@ -1,31 +1,37 @@
 const Tag = require('../models/tag')
 const Event = require('../models/event')
+
 const { where, fn, col, Op } = require('sequelize')
 const exportController = require('./export')
-const eventController = require('./event')
 
 module.exports = {
-  // async getEvents (req, res) {
-  //   const name = req.params.placeName
-  //   const place = await Place.findOne({ where: { name }})
-  //   if (!place) {
-  //     log.warn(`Place ${name} not found`)
-  //     return res.sendStatus(404)
-  //   }
-  //   const start = dayjs().unix()
-  //   const events = await eventController._select({ start, places: `${place.id}`, show_recurrent: true})
 
-  //   return res.json({ events, place })
-  // },
+  async _findOrCreate (tags) {
+    // trim tags
+    const trimmedTags = tags.map(t => t.trim())
+    const lowercaseTags = trimmedTags.map(t => t.toLocaleLowerCase())
 
-  // /feed/rss/tag/tagname
-  // /feed/ics/tag/tagname
-  // /feed/json/tag/tagname
+    // search for already existing tags (tag is the same as TaG)
+    const existingTags = await Tag.findAll({ where: { [Op.and]: where(fn('LOWER', col('tag')), { [Op.in]: lowercaseTags }) } })
+    const lowercaseExistingTags = existingTags.map(t => t.tag.toLocaleLowerCase())
+    const remainingTags = trimmedTags.filter(t => ! lowercaseExistingTags.includes(t.toLocaleLowerCase()))
+
+    // create remaining tags (cannot use updateOnDuplicate or manage conflicts)
+    return [].concat(
+      existingTags,
+      await Tag.bulkCreate(remainingTags.map(t => ({ tag: t })))
+    )
+  },
+
+  // /feed/rss/tag/:tagname
+  // /feed/ics/tag/:tagname
+  // /feed/json/tag/:tagname
+  // tag/:tag
   async getEvents (req, res) {
+    const eventController = require('./event')
     const format = req.params.format || 'json'
     const tags = req.params.tag
-    const events = await eventController._select({ tags, show_recurrent: true })
-
+    const events = await eventController._select({ tags: tags.toLocaleLowerCase(), show_recurrent: true })
     switch (format) {
       case 'rss':
         return exportController.feed(req, res, events,
