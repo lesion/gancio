@@ -87,7 +87,8 @@
         "reset": "Berrezarri",
         "theme": "Itxura",
         "tags": "Etiketak",
-        "close": "Itxi"
+        "close": "Itxi",
+        "blobs": "Mordoak"
     },
     "login": {
         "description": "Saioa hasten baduzu ekitaldi berriak sortu ahal izango dituzu.",
@@ -233,7 +234,10 @@
         "smtp_description": "<ul><li>Administratzaileak eposta bat jaso beharko luke anonimo batek ekitaldi bat gehitzen duenean (gaituta badago).</li><li>Administratzaileak eposta bat jaso beharko luke izena emateko eskari bakoitzeko (gaituta badago).</li><li>Erabiltzaileak eposta bat jaso beharko luke izena emateko eskariarekin.</li><li>Erabiltzaileak eposta bat jaso beharko luke izen ematea baieztatzean.</li><li>Erabiltzaileak eposta bat jaso beharko luke administratzaileak zuzenean izena emanez gero.</li><li>Erabiltzaileek eposta bat jaso beharko lukete pasahitza ahazten dutenean.</li></ul>",
         "widget": "Tresna",
         "event_remove_ok": "Ekitaldia ezabatu da",
-        "wrong_domain_warning": "config.json-en konfiguratuta dagoen baseurl <b>({baseurl})</b> ez da bisitatzen ari zaren berbera <b>({url})</b>"
+        "wrong_domain_warning": "config.json-en konfiguratuta dagoen baseurl <b>({baseurl})</b> ez da bisitatzen ari zaren berbera <b>({url})</b>",
+        "new_blob": "Mordo berria",
+        "blobs_description": "Mordoak etiketen eta lekuen arabera multzokatutako ekitaldiak dira. Hasiera-orrialdean bistaratzen dira",
+        "edit_blob": "Editatu mordoa"
     },
     "auth": {
         "not_confirmed": "Oraindik baieztatu gabe dago…",
