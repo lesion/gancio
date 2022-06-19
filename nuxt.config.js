@@ -68,6 +68,8 @@ module.exports = {
         const Event = require('./server/api/models/event')
         const events = await Event.findAll({where: { is_visible: true }})
         return events.map(e => `/event/${e.slug}`)
+      } else {
+        return []
       }
     }
   },
