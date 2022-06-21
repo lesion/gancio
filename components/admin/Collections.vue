@@ -54,6 +54,7 @@ v-container
               item-text='name'
               :disabled="!collection.id"
               @input.native="searchPlaces"
+              @focus='searchPlaces'
               :delimiters="[',', ';']"
               :items="places"
               :label="$t('common.places')")
