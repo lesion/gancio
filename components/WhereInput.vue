@@ -16,7 +16,7 @@ v-row
       @change='selectPlace')
       template(v-slot:item="{ item, attrs, on }")
         v-list-item(v-bind='attrs' v-on='on')
-          v-list-item-content(two-line v-if='item.create')
+          v-list-item-content(two-line v-if='item.create && search')
             v-list-item-title <v-icon color='primary' v-text='mdiPlus' :aria-label='$t("common.add")'></v-icon> {{item.name}}
           v-list-item-content(two-line v-else)
             v-list-item-title(v-text='item.name')
