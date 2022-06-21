@@ -1,44 +1,47 @@
 <template lang='pug'>
 v-container
-  v-card-title {{$t('common.cohort')}}
+  v-card-title {{$t('common.collections')}}
     v-spacer
     v-text-field(v-model='search'
     :append-icon='mdiMagnify' outlined rounded
     label='Search'
     single-line hide-details)
-  v-card-subtitle(v-html="$t('admin.cohort_description')")
+  v-card-subtitle(v-html="$t('admin.collections_description')")
 
-  v-btn(color='primary' text @click='newCohort') <v-icon v-text='mdiPlus'></v-icon> {{$t('common.new')}}
+  v-btn(color='primary' text @click='newCollection') <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.new_collection')}}
 
   v-dialog(v-model='dialog' width='800' destroy-on-close :fullscreen='$vuetify.breakpoint.xsOnly')
     v-card(color='secondary')
-      v-card-title {{$t('admin.edit_cohort')}}
+      v-card-title {{$t('admin.edit_collection')}}
       v-card-text
         v-form(v-model='valid' ref='form')
           v-text-field(
-            v-if='!cohort.id'
+            v-if='!collection.id'
             :rules="[$validators.required('common.name')]"
             :label="$t('common.name')"
-            v-model='cohort.name'
+            v-model='collection.name'
             :placeholder='$t("common.name")')
-              template(v-slot:append-outer v-if='!cohort.id')
-                v-btn(text @click='saveCohort' color='primary' :loading='loading'
-                  :disabled='!valid || loading || !!cohort.id') {{$t('common.save')}}
-          h3(v-else class='text-h5' v-text='cohort.name')
+              template(v-slot:append-outer v-if='!collection.id')
+                v-btn(text @click='saveCollection' color='primary' :loading='loading'
+                  :disabled='!valid || loading || !!collection.id') {{$t('common.save')}}
+          h3(v-else class='text-h5' v-text='collection.name')
 
         v-row
           v-col(cols=5)
             v-autocomplete(v-model='filterTags'
               cache-items
               :prepend-icon="mdiTagMultiple"
-              
               chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-              :disabled="!cohort.id"
+              :disabled="!collection.id"
               placeholder='Tutte'
               @input.native='searchTags'
+              @focus='searchTags'
               :delimiters="[',', ';']"
               :items="tags"
               :label="$t('common.tags')")
+                template(v-slot:selection="{ item, on, attrs, selected, parent}")
+                  v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+                    :input-value="selected" label small) {{item}}
 
           v-col(cols=5)
             v-autocomplete(v-model='filterPlaces'
@@ -49,11 +52,16 @@ v-container
               clearable
               return-object
               item-text='name'
-              :disabled="!cohort.id"
+              :disabled="!collection.id"
               @input.native="searchPlaces"
+              @focus='searchPlaces'
               :delimiters="[',', ';']"
               :items="places"
               :label="$t('common.places')")
+                template(v-slot:selection="{ item, on, attrs, selected, parent}")
+                  v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+                    :input-value="selected" label small) {{item.name}}
+
                 //- template(v-slot:item="{ item, attrs, on }")
                 //-   v-list-item(v-bind='attrs' v-on='on')
                 //-     v-list-item-content(two-line)
@@ -61,7 +69,7 @@ v-container
                 //-       v-list-item-subtitle(v-text='item.address')
             
           v-col(cols=2)
-            v-btn(color='primary' text @click='addFilter' :disabled='!cohort.id || !filterPlaces.length && !filterTags.length') add <v-icon v-text='mdiPlus'></v-icon>
+            v-btn(color='primary' text @click='addFilter' :disabled='!collection.id || !filterPlaces.length && !filterTags.length') add <v-icon v-text='mdiPlus'></v-icon>
             
 
         v-data-table(
@@ -76,28 +84,25 @@ v-container
               v-chip.ma-1(small v-for='tag in item.tags' v-text='tag' :key='tag')
             template(v-slot:item.places='{item}')
               v-chip.ma-1(small v-for='place in item.places' v-text='place.name' :key='place.id' )
-            
 
 
       v-card-actions
           v-spacer
           v-btn(text @click='dialog=false' color='warning') {{$t('common.close')}}
-          //- v-btn(text @click='saveCohort' color='primary' :loading='loading'
-          //-     :disable='!valid || loading') {{$t('common.save')}}
 
   v-card-text
     v-data-table(
-    :headers='cohortHeaders'
-    :items='cohorts'
-    :hide-default-footer='cohorts.length<5'
+    :headers='collectionHeaders'
+    :items='collections'
+    :hide-default-footer='collections.length<5'
     :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
     :search='search')
       template(v-slot:item.filters='{item}')
-        span {{cohortFilters(item)}}
+        span {{collectionFilters(item)}}
       template(v-slot:item.actions='{item}')
-          v-btn(@click='editCohort(item)' color='primary' icon)
+          v-btn(@click='editCollection(item)' color='primary' icon)
             v-icon(v-text='mdiPencil')
-          v-btn(@click='removeCohort(item)' color='error' icon)
+          v-btn(@click='removeCollection(item)' color='error' icon)
             v-icon(v-text='mdiDeleteForever')
 
 </template>
@@ -114,16 +119,16 @@ export default {
       dialog: false,
       valid: false,
       search: '',
-      cohort: { name: '', id: null },
+      collection: { name: '', id: null },
       filterTags: [],
       filterPlaces: [],
       tags: [],
       places: [],
-      cohorts: [],
+      collections: [],
       filters: [],
       tagName: '',
       placeName: '',
-      cohortHeaders: [
+      collectionHeaders: [
         { value: 'name', text: 'Name' },
         { value: 'filters', text: 'Filters' },
         { value: 'actions', text: 'Actions', align: 'right' }
@@ -136,7 +141,7 @@ export default {
     }
   },
   async fetch () {
-    this.cohorts = await this.$axios.$get('/cohorts?withFilters=true')
+    this.collections = await this.$axios.$get('/collections?withFilters=true')
   },
 
   methods: {
@@ -146,8 +151,8 @@ export default {
     searchPlaces: debounce(async function (ev) {
       this.places = await this.$axios.$get(`/place?search=${ev.target.value}`)
     }, 100),
-    cohortFilters (cohort) {
-      return cohort.filters.map(f => {
+    collectionFilters (collection) {
+      return collection.filters.map(f => {
         return '(' + f.tags?.join(', ') + f.places?.map(p => p.name).join(', ') + ')'
       }).join(' - ')
     },
@@ -155,27 +160,28 @@ export default {
       this.loading = true
       const tags = this.filterTags
       const places = this.filterPlaces.map(p => ({ id: p.id, name: p.name }))
-      const filter = await this.$axios.$post('/filter', { cohortId: this.cohort.id, tags, places })
+      const filter = await this.$axios.$post('/filter', { collectionId: this.collection.id, tags, places })
       this.$fetch()
       this.filters.push(filter)
       this.filterTags = []
       this.filterPlaces = []
       this.loading = false
     },
-    async editCohort (cohort) {
-      this.cohort = { ...cohort }
-      this.filters = await this.$axios.$get(`/filter/${cohort.id}`)
+    async editCollection (collection) {
+      this.collection = { ...collection }
+      this.filters = await this.$axios.$get(`/filter/${collection.id}`)
       this.dialog = true
     },
-    newCohort () {
-      this.cohort = { name: '', id: null },
+    newCollection () {
+      this.collection = { name: '', id: null }
       this.filters = []
       this.dialog = true
     },
-    async saveCohort () {
+    async saveCollection () {
       if (!this.$refs.form.validate()) return
       this.loading = true
-      this.cohort = await this.$axios.$post('/cohorts', this.cohort)
+      this.collection.name = this.collection.name.trim()
+      this.collection = await this.$axios.$post('/collections', this.collection)
       this.$fetch()
       this.loading = false
     },
@@ -190,12 +196,12 @@ export default {
         this.loading = false
       }
     },
-    async removeCohort (cohort) {
-      const ret = await this.$root.$confirm('admin.delete_cohort_confirm', { cohort: cohort.name })
+    async removeCollection (collection) {
+      const ret = await this.$root.$confirm('admin.delete_collection_confirm', { collection: collection.name })
       if (!ret) { return }
       try {
-        await this.$axios.$delete(`/cohort/${cohort.id}`)
-        this.cohorts = this.cohorts.filter(c => c.id !== cohort.id)
+        await this.$axios.$delete(`/collection/${collection.id}`)
+        this.collections = this.collections.filter(c => c.id !== collection.id)
       } catch (e) {
         const err = get(e, 'response.data.errors[0].message', e)
         this.$root.$message(this.$t(err), { color: 'error' })

@@ -12,10 +12,11 @@ v-row
       @input.native='search'
       persistent-hint
       :items="places"
+      @focus='search'
       @change='selectPlace')
       template(v-slot:item="{ item, attrs, on }")
         v-list-item(v-bind='attrs' v-on='on')
-          v-list-item-content(two-line v-if='item.create')
+          v-list-item-content(two-line v-if='item.create && search')
             v-list-item-title <v-icon color='primary' v-text='mdiPlus' :aria-label='$t("common.add")'></v-icon> {{item.name}}
           v-list-item-content(two-line v-else)
             v-list-item-title(v-text='item.name')
@@ -73,7 +74,7 @@ export default {
     search: debounce(async function(ev) {
       const search = ev.target.value.trim().toLowerCase()
       this.places = await this.$axios.$get(`place?search=${search}`)
-      if (!search) { return this.places }
+      if (!search && this.places.length) { return this.places }
       const matches = this.places.find(p => search === p.name.toLocaleLowerCase())
       if (!matches) {
         this.places.unshift({ create: true, name: ev.target.value.trim() })

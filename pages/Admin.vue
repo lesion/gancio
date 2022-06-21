@@ -26,10 +26,10 @@
         v-tab-item
           Places
 
-        //- Cohorts
-        v-tab {{$t('common.blobs')}}
+        //- Collections
+        v-tab {{$t('common.collections')}}
         v-tab-item
-          Cohorts
+          Collections
 
         //- EVENTS
         v-tab
@@ -66,7 +66,7 @@ export default {
     Users:  () => import(/* webpackChunkName: "admin" */'../components/admin/Users'),
     Events: () => import(/* webpackChunkName: "admin" */'../components/admin/Events'),
     Places: () => import(/* webpackChunkName: "admin" */'../components/admin/Places'),
-    Cohorts: () => import(/* webpackChunkName: "admin" */'../components/admin/Cohorts'),
+    Collections: () => import(/* webpackChunkName: "admin" */'../components/admin/Collections'),
     Federation: () => import(/* webpackChunkName: "admin" */'../components/admin/Federation.vue'),
     Moderation: () => import(/* webpackChunkName: "admin" */'../components/admin/Moderation.vue'),
     Announcement: () => import(/* webpackChunkName: "admin" */'../components/admin/Announcement.vue'),

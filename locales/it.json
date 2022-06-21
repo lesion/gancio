@@ -87,7 +87,7 @@
         "import": "Importa",
         "max_events": "N. massimo eventi",
         "label": "Etichetta",
-        "blobs": "Bolle"
+        "collections": "Bolle"
     },
     "login": {
         "description": "Entrando puoi pubblicare nuovi eventi.",
@@ -231,7 +231,11 @@
         "smtp_hostname": "SMTP Hostname",
         "smtp_test_success": "Una mail di test è stata inviata all'indirizzo {admin_email}, controlla la tua casella di posta",
         "smtp_test_button": "Invia una mail di prova",
-        "admin_email": "E-mail dell'admin"
+        "admin_email": "E-mail dell'admin",
+        "new_collection": "Crea bolla",
+        "wrong_domain_warning": "Il \"baseurl\" configurato in config.json <b>({baseurl})</b> è diverso da quello che stai visitando <b>({url})</b>",
+        "collections_description": "Le bolle sono raggruppamenti di eventi per tag e posti.",
+        "edit_collection": "Modifica bolla"
     },
     "auth": {
         "not_confirmed": "Non ancora confermato…",

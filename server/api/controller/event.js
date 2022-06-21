@@ -8,7 +8,7 @@ const linkifyHtml = require('linkify-html')
 const Sequelize = require('sequelize')
 const dayjs = require('dayjs')
 const helpers = require('../../helpers')
-
+const Col = helpers.col
 const Event = require('../models/event')
 const Resource = require('../models/resource')
 const Tag = require('../models/tag')
@@ -17,6 +17,7 @@ const Notification = require('../models/notification')
 const APUser = require('../models/ap_user')
 
 const exportController = require('./export')
+const tagController = require('./tag')
 
 const log = require('../../log')
 
@@ -29,8 +30,8 @@ const eventController = {
       order: [[Sequelize.col('w'), 'DESC']],
       where: {
         [Op.or]: [
-          { name: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%' )},
-          { address: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('address')), 'LIKE', '%' + search + '%')},
+          Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%' ),
+          Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('address')), 'LIKE', '%' + search + '%')
         ]
       },
       attributes: [['name', 'label'], 'address', 'id', [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('events.placeId')),'INTEGER'), 'w']],
@@ -91,7 +92,7 @@ const eventController = {
       [
         { title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', '%' + search + '%') },
         Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%'),
-        Sequelize.fn('EXISTS', Sequelize.literal('SELECT 1 FROM event_tags WHERE "event_tags"."eventId"="event".id AND "tagTag" = ?'))
+        Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND LOWER(${Col('tagTag')}) = ?`))
       ]
     }
 
@@ -105,7 +106,7 @@ const eventController = {
       include: [
         {
           model: Tag,
-          order: [Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
+          // order: [Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
           attributes: ['tag'],
           through: { attributes: [] }
         },
@@ -247,7 +248,6 @@ const eventController = {
       order: [['start_datetime', 'DESC'], ['id', 'DESC']]
     })
 
-    // TODO: also check if event is mine
     if (event && (event.is_visible || is_admin)) {
       event = event.get()
       event.next = next && (next.slug || next.id)
@@ -278,7 +278,7 @@ const eventController = {
       return res.sendStatus(404)
     }
     if (!res.locals.user.is_admin && res.locals.user.id !== event.userId) {
-      log.warn(`Someone unallowed is trying to confirm -> "${event.title} `)
+      log.warn(`Someone not allowed is trying to confirm -> "${event.title} `)
       return res.sendStatus(403)
     }
 
@@ -304,6 +304,7 @@ const eventController = {
     const event = await Event.findByPk(id)
     if (!event) { return req.sendStatus(404) }
     if (!res.locals.user.is_admin && res.locals.user.id !== event.userId) {
+      log.warn(`Someone not allowed is trying to unconfirm -> "${event.title} `)
       return res.sendStatus(403)
     }
 
@@ -317,7 +318,7 @@ const eventController = {
   },
 
   /** get all unconfirmed events */
-  async getUnconfirmed (req, res) {
+  async getUnconfirmed (_req, res) {
     try {
       const events = await Event.findAll({
         where: {
@@ -391,7 +392,7 @@ const eventController = {
       if (body.place_id) {
         place = await Place.findByPk(body.place_id)
       } else {
-        place = await Place.findOne({ where: { name: body.place_name.trim() }})
+        place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Op.eq, body.place_name.trim().toLocaleLowerCase() )})
         if (!place) {
           if (!body.place_address || !body.place_name) {
             return res.status(400).send(`place_id or place_name and place_address required`)
@@ -427,6 +428,7 @@ const eventController = {
           height: req.file.height,
           width: req.file.width,
           name: body.image_name || body.title || '',
+          size: req.file.size || 0,
           focalpoint: [parseFloat(focalpoint[0]), parseFloat(focalpoint[1])]
         }]
       } else {
@@ -438,11 +440,10 @@ const eventController = {
       await event.setPlace(place)
 
       // create/assign tags
+      let tags = []
       if (body.tags) {
-        body.tags = body.tags.map(t => t.trim())
-        await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
-        const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
-        await event.addTags(tags)
+        tags = await tagController._findOrCreate(body.tags)
+        await event.setTags(tags)
       }
 
       // associate user to event and reverse
@@ -452,7 +453,7 @@ const eventController = {
       }
 
       event = event.get()
-      event.tags = body.tags
+      event.tags = tags.map(t => t.tag)
       event.place = place
       // return created event to the client
       res.json(event)
@@ -520,6 +521,7 @@ const eventController = {
           height: req.file.height,
           width: req.file.width,
           name: body.image_name || body.title || '',
+          size: req.file.size || 0,
           focalpoint: [parseFloat(focalpoint[0].slice(0, 6)), parseFloat(focalpoint[1].slice(0, 6))]
         }]
       } else if (!body.image) {
@@ -532,12 +534,14 @@ const eventController = {
       })
 
       await event.setPlace(place)
-      await event.setTags([])
+      
+      // create/assign tags
+      let tags = []
       if (body.tags) {
-        await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
-        const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
-        await event.addTags(tags)
+        tags = await tagController._findOrCreate(body.tags)
+        await event.setTags(tags)
       }
+
       const newEvent = await Event.findByPk(event.id, { include: [Tag, Place] })
       res.json(newEvent)
 
@@ -584,60 +588,85 @@ const eventController = {
     }
   },
 
-  async _select ({ start, end, tags, places, show_recurrent, max }) {
+  /**
+   * Method to search for events with pagination and filtering
+   * @returns 
+   */
+  async _select ({
+    start = dayjs().unix(),
+    end,
+    tags,
+    places,
+    show_recurrent,
+    limit,
+    page,
+    older }) {
 
     const where = {
-      // do not include parent recurrent event
+      // do not include _parent_ recurrent event
       recurrent: null,
 
       // confirmed event only
       is_visible: true,
 
       [Op.or]: {
-        start_datetime: { [Op.gte]: start },
-        end_datetime: { [Op.gte]: start }
+        start_datetime: { [older ? Op.lte : Op.gte]: start },
+        end_datetime: { [older ? Op.lte : Op.gte]: start }
       }
     }
 
+    // include recurrent events?
     if (!show_recurrent) {
       where.parentId = null
     }
 
     if (end) {
-      where.start_datetime = { [Op.lte]: end }
+      where.start_datetime = { [older ? Op.gte : Op.lte]: end }
+    }
+
+    // normalize tags
+    if (tags) {
+      tags = tags.split(',').map(t => t.trim().toLocaleLowerCase())
     }
 
     const replacements = []
     if (tags && places) {
-      where[Op.or] = {
-        placeId: places ? places.split(',') : [],
-        // '$tags.tag$': Sequelize.literal(`EXISTS (SELECT 1 FROM event_tags WHERE tagTag in ( ${Sequelize.QueryInterface.escape(tags)} ) )`)
-      }
+      where[Op.and] = [ 
+        { placeId: places ? places.split(',') : []},
+        Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=event.id AND LOWER(${Col('tagTag')}) in (?)`))
+      ]
+      replacements.push(tags)
     } else if (tags) {
-      // where[Op.and] = Sequelize.literal(`EXISTS (SELECT 1 FROM event_tags WHERE eventId=event.id AND tagTag in (?))`)
-      where[Op.and] = Sequelize.fn('EXISTS', Sequelize.literal('SELECT 1 FROM event_tags WHERE "event_tags"."eventId"="event".id AND "tagTag" in (?)'))
+      where[Op.and] = Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=event.id AND LOWER(${Col('tagTag')}) in (?)`))
       replacements.push(tags)
     } else if (places) {
       where.placeId = places.split(',')
     }
 
+    let pagination = {}
+    if (limit) {
+      pagination = { 
+        limit,
+        offset: limit * page,
+      } 
+    }
+
     const events = await Event.findAll({
       where,
       attributes: {
-        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'description', 'resources']
+        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'description', 'resources', 'recurrent', 'placeId', 'parentId']
       },
-      order: ['start_datetime'],
+      order: [['start_datetime', older ? 'DESC' : 'ASC' ]],
       include: [
-        { model: Resource, required: false, attributes: ['id'] },
         {
           model: Tag,
-          order: [Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
+          // order: [Sequelize.literal('(SELECT COUNT(tagTag) FROM event_tags WHERE tagTag = tag) DESC')],
           attributes: ['tag'],
           through: { attributes: [] }
         },
         { model: Place, required: true, attributes: ['id', 'name', 'address'] }
       ],
-      limit: max,
+      ...pagination,
       replacements
     }).catch(e => {
       log.error('[EVENT]', e)
@@ -660,13 +689,15 @@ const eventController = {
     const end = req.query.end
     const tags = req.query.tags
     const places = req.query.places
-    const max = req.query.max
+    const limit = req.query.max
+    const page = req.query.page = 0
+    const older = req.query.older || false
 
     const show_recurrent = settings.allow_recurrent_event &&
       typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settings.recurrent_event_visible
 
     res.json(await eventController._select({
-      start, end, places, tags, show_recurrent, max
+      start, end, places, tags, show_recurrent, limit, page, older
     }))
   },
 

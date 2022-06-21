@@ -1,22 +1,36 @@
-const dayjs = require('dayjs')
 const Place = require('../models/place')
 const Event = require('../models/event')
 const eventController = require('./event')
+const exportController = require('./export')
+
 const log = require('../../log')
 const { Op, where, col, fn, cast } = require('sequelize')
 
 module.exports = {
+
   async getEvents (req, res) {
-    const name = req.params.placeName
-    const place = await Place.findOne({ where: { name }})
+    const placeName = req.params.placeName
+    const place = await Place.findOne({ where: { name: placeName }})
     if (!place) {
-      log.warn(`Place ${name} not found`)
+      log.warn(`Place ${placeName} not found`)
       return res.sendStatus(404)
     }
-    const start = dayjs().unix()
-    const events = await eventController._select({ start, places: `${place.id}`, show_recurrent: true})
 
-    return res.json({ events, place })
+    const format = req.params.format || 'json'
+    log.debug(`Events for place: ${placeName}`)
+    const events = await eventController._select({ places: String(place.id), show_recurrent: true })
+
+    switch (format) {
+      case 'rss':
+        return exportController.feed(req, res, events,
+            `${res.locals.settings.title} - Place @${place.name}`,
+            `${res.locals.settings.baseurl}/feed/rss/place/${place.name}`)
+      case 'ics':
+        return exportController.ics(req, res, events)
+      default:
+        return res.json({ events, place })
+    }
+
   },
 
 
@@ -36,7 +50,7 @@ module.exports = {
     return res.json(places)
   },
 
-  async get (req, res) {
+  async search (req, res) {
     const search = req.query.search.toLocaleLowerCase()
     const places = await Place.findAll({
       order: [[cast(fn('COUNT', col('events.placeId')),'INTEGER'), 'DESC']],
@@ -49,7 +63,9 @@ module.exports = {
       attributes: ['name', 'address', 'id'],
       include: [{ model: Event, where: { is_visible: true }, required: true, attributes: [] }],
       group: ['place.id'],
-      raw: true
+      raw: true,
+      limit: 10,
+      subQuery: false
     })
 
     // TOFIX: don't know why limit does not work

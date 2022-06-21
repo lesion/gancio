@@ -80,6 +80,9 @@ function wpgancio_options_page() {
 function wpgancio_instance_url_cb( $args ) {
   // get the value of the setting we've registered with register_setting()
   $instance_url = get_option( 'wpgancio_instance_url' );
+  if (empty($instance_url)) {
+    $instance_url = WP_GANCIO_DEFAULT_INSTANCEURL;
+  }
   // output the field
   ?>
 

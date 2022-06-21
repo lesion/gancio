@@ -1,8 +1,8 @@
 <template lang="pug">
-v-container#home(fluid)
+v-container.pa-0
 
   //- Announcements
-  #announcements.mx-1.mt-1(v-if='announcements.length')
+  #announcements.ma-2(v-if='announcements.length')
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
   //- Calendar and search bar
@@ -68,7 +68,8 @@ export default {
         { property: 'og:image', content: this.settings.baseurl + '/logo.png' }
       ],
       link: [
-        { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' }
+        { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' },
+        { rel: 'alternate', type: 'text/calendar', title: this.settings.title, href: this.settings.baseurl + '/feed/ics' }
       ]
     }
   },

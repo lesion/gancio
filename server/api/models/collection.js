@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize')
 const sequelize = require('./index').sequelize
 
-class Cohort extends Model {}
+class Collection extends Model {}
 
-Cohort.init({
+Collection.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -21,7 +21,7 @@ Cohort.init({
   isTop: {
     type: DataTypes.BOOLEAN
   }
-}, { sequelize, modelName: 'cohort', timestamps: false })
+}, { sequelize, modelName: 'collection', timestamps: false })
 
 
-module.exports = Cohort
+module.exports = Collection

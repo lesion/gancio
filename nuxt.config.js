@@ -13,7 +13,7 @@ module.exports = {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' }
     ],
-    link: [{ rel: 'icon', type: 'image/png', href: '/logo.png' }],
+    link: [{ rel: 'icon', type: 'image/png', href: config.baseurl + '/logo.png' }],
     script: [{ src: '/gancio-events.es.js', async: true, body: true }],
   },
   dev: isDev,
@@ -68,6 +68,8 @@ module.exports = {
         const Event = require('./server/api/models/event')
         const events = await Event.findAll({where: { is_visible: true }})
         return events.map(e => `/event/${e.slug}`)
+      } else {
+        return []
       }
     }
   },

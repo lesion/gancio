@@ -42,9 +42,10 @@ li {
 .v-dialog {
   width: 600px;
   max-width: 800px;
-  &.v-dialog--fullscreen {
-    max-width: 100%;
-  }
+}
+
+.v-dialog .v-dialog--fullscreen {
+  max-width: 100%;
 }
 
 .theme--dark.v-list {

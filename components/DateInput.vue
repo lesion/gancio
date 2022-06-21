@@ -47,7 +47,6 @@ v-col(cols=12)
             :disabled='!value.from'
             :prepend-icon="mdiClockTimeFourOutline"
             :rules="[$validators.required('event.from')]"
-            readonly
             v-bind="attrs"
             v-on="on")
         v-time-picker(
@@ -72,7 +71,6 @@ v-col(cols=12)
             :value="dueHour"
             :disabled='!fromHour'
             :prepend-icon="mdiClockTimeEightOutline"
-            readonly
             v-bind="attrs"
             v-on="on")
         v-time-picker(
@@ -103,7 +101,7 @@ export default {
   data () {
     return {
       mdiClockTimeFourOutline, mdiClockTimeEightOutline,
-      allowedMinutes: [0, 15, 30, 45],
+      allowedMinutes: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
       menuFromHour: false,
       menuDueHour: false,
       type: 'normal',

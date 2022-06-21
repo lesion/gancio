@@ -116,6 +116,14 @@ module.exports = {
     next()
   },
 
+  col (field) {
+    if (config.db.dialect === 'postgres') {
+      return '"' + field.split('.').join('"."') + '"'
+    } else {
+      return field
+    }
+  },
+
   async getImageFromURL (url) {
     log.debug(`getImageFromURL ${url}`)
     if(!/^https?:\/\//.test(url)) {
@@ -231,6 +239,14 @@ module.exports = {
       if (event) {
         return res.redirect(`/federation/m/${event.id}`)
       }
+    }
+    next()
+  },
+
+  async feedRedirect (req, res, next) {
+    const accepted = req.accepts('html', 'application/rss+xml', 'text/calendar')
+    if (['application/rss+xml', 'text/calendar'].includes(accepted) && /^\/(tag|place|collection)\/.*/.test(req.path)) {
+      return res.redirect((accepted === 'application/rss+xml' ? '/feed/rss' : '/feed/ics') + req.path)
     }
     next()
   }

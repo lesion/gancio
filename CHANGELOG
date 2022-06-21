@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
   - new Tag page!
   - new Place page!
   - new search flow
-  - new meta-tag-place / group / cohort page!
+  - new meta-tag-place / group / collection page!
   - allow footer links reordering
   - new Docker image
   - add GANCIO_DB_PORT environment
@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
   - add dynamic sitemap.xml !
   - calendar attributes refactoring (a dot each day, colors represents n. events)
   - fix event mime type response
+  - new **undocumented** gancio CLI accounts management (list / create / remove / modify accounts)
   
 
 ### 1.4.4 - 10 may '22

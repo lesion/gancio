@@ -34,9 +34,17 @@ if (config.status === 'READY') {
   const federation = require('./federation')
   const webfinger = require('./federation/webfinger')
   const exportController = require('./api/controller/export')
+  const tagController = require('./api/controller/tag')
+  const placeController = require('./api/controller/place')
+  const collectionController = require('./api/controller/collection')
 
-  // rss/ics/atom feed
-  app.get('/feed/:type', cors(), exportController.export)
+  // rss / ics feed
+  app.use(helpers.feedRedirect)
+  app.get('/feed/:format/tag/:tag', cors(), tagController.getEvents)
+  app.get('/feed/:format/place/:placeName', cors(), placeController.getEvents)
+  app.get('/feed/:format/collection/:name', cors(), collectionController.getEvents)
+  app.get('/feed/:format', cors(), exportController.export)
+
   
   app.use('/event/:slug', helpers.APRedirect)
   
@@ -59,7 +67,7 @@ app.use('/api', api)
 
 // // Handle 500
 app.use((error, _req, res, _next) => {
-  log.error('[ERROR]', error)
+  log.error('[ERROR]' + error)
   return res.status(500).send('500: Internal Server Error')
 })
 

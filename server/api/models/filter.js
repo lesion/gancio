@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize')
-const Cohort = require('./cohort')
+const Collection = require('./collection')
 const sequelize = require('./index').sequelize
 
 class Filter extends Model {}
@@ -18,7 +18,7 @@ Filter.init({
   }
 }, { sequelize, modelName: 'filter', timestamps: false })
 
-Filter.belongsTo(Cohort)
-Cohort.hasMany(Filter)
+Filter.belongsTo(Collection)
+Collection.hasMany(Filter)
 
 module.exports = Filter
