@@ -28,13 +28,12 @@ async function modify (args) {
 async function create (args) {
   await _initializeDB()
   const User = require('../api/models/user')  
-  console.error(args)
   const user = await User.create({
     email: args.email,
     is_active: true,
     is_admin: args.admin || false
-  })
-  console.error(user)
+  }).catch(e => console.error(String(e)))
+  console.error(JSON.stringify(user, null, 2))
   await db.close()
 }
 
