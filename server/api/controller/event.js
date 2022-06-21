@@ -534,12 +534,14 @@ const eventController = {
       })
 
       await event.setPlace(place)
-      await event.setTags([])
+      
+      // create/assign tags
+      let tags = []
       if (body.tags) {
-        await Tag.bulkCreate(body.tags.map(t => ({ tag: t })), { ignoreDuplicates: true })
-        const tags = await Tag.findAll({ where: { tag: { [Op.in]: body.tags } } })
-        await event.addTags(tags)
+        tags = await tagController._findOrCreate(body.tags)
+        await event.setTags(tags)
       }
+
       const newEvent = await Event.findByPk(event.id, { include: [Tag, Place] })
       res.json(newEvent)
 
