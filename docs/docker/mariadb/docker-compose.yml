@@ -14,9 +14,8 @@ services:
       - MARIADB_RANDOM_ROOT_PASSWORD=yes
     restart: always
   gancio:
-    build: .
     restart: always
-    image: gancio
+    image: cisti/gancio
     container_name: gancio
     environment:
       - PATH=$PATH:/home/node/.yarn/bin
@@ -28,8 +27,6 @@ services:
       - GANCIO_DB_DATABASE=gancio
       - GANCIO_DB_USERNAME=gancio
       - GANCIO_DB_PASSWORD=gancio
-    command: gancio start
-    entrypoint: /entrypoint.sh
     volumes:
       - ./data:/home/node/data
     ports:
