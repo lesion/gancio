@@ -4775,16 +4775,16 @@ elliptic@^6.5.3:
     minimalistic-assert "^1.0.1"
     minimalistic-crypto-utils "^1.0.1"
 
-email-templates@^8.0.9:
-  version "8.0.9"
-  resolved "https://registry.yarnpkg.com/email-templates/-/email-templates-8.0.9.tgz#6c5d229079239efdc67f55752fb2efcb88797cb9"
-  integrity sha512-xuoE9RtCsVFDOykvvZu6m0cefV1XiHKRnbg48CZ3BTkQTBTn+7EaZC5phJoieWku4I3/gGX8rqHJW/DKmnfEPw==
+email-templates@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/email-templates/-/email-templates-8.1.0.tgz#837fc3d4e2bc1b0ca7da9d8ceac5d9407d2a04ca"
+  integrity sha512-TbUIfPrbMSqhVry6H9vt+BjjzKx2E9L0B2pSB25cZpMPP5DjP/KV3XCHN1mMnOc4iqVbhv5T7K2fcPuf5tYu8w==
   dependencies:
     "@ladjs/i18n" "^7.2.6"
     consolidate "^0.16.0"
-    debug "^4.3.3"
+    debug "^4.3.4"
     get-paths "^0.0.7"
-    html-to-text "^6.0.0"
+    html-to-text "^8.1.0"
     juice "^7.0.0"
     lodash "^4.17.21"
     nodemailer "^6.7.2"
@@ -6001,16 +6001,17 @@ html-to-text@8.0.0:
     minimist "^1.2.5"
     selderee "^0.6.0"
 
-html-to-text@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/html-to-text/-/html-to-text-6.0.0.tgz#8b48adb1b781a8378f374c5bb481864a169f59f4"
-  integrity sha512-r0KNC5aqCAItsjlgtirW6RW25c92Ee3ybQj8z//4Sl4suE3HIPqM4deGpYCUJULLjtVPEP1+Ma+1ZeX1iMsCiA==
+html-to-text@^8.1.0:
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/html-to-text/-/html-to-text-8.2.0.tgz#8b35e280ba7fc27710b7aa76d4500aab30731924"
+  integrity sha512-CLXExYn1b++Lgri+ZyVvbUEFwzkLZppjjZOwB7X1qv2jIi8MrMEvxWX5KQ7zATAzTvcqgmtO00M2kCRMtEdOKQ==
   dependencies:
+    "@selderee/plugin-htmlparser2" "^0.6.0"
     deepmerge "^4.2.2"
     he "^1.2.0"
-    htmlparser2 "^4.1.0"
-    lodash "^4.17.20"
-    minimist "^1.2.5"
+    htmlparser2 "^6.1.0"
+    minimist "^1.2.6"
+    selderee "^0.6.0"
 
 html-webpack-plugin@^4.5.1:
   version "4.5.2"
@@ -6039,7 +6040,7 @@ htmlparser2@^3.9.1:
     inherits "^2.0.1"
     readable-stream "^3.1.1"
 
-htmlparser2@^4.0.0, htmlparser2@^4.1.0:
+htmlparser2@^4.0.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-4.1.0.tgz#9a4ef161f2e4625ebf7dfbe6c0a2f52d18a59e78"
   integrity sha512-4zDq1a1zhE4gQso/c5LP1OtrhYTncXNSpvJYtWJBtXAETPlMfi3IFNjGuQbYLuVY4ZR0QMqRVvo4Pdy9KLyP8Q==
@@ -8036,7 +8037,7 @@ minimatch@^3.0.4:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5:
+minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5, minimist@^1.2.6:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
   integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
