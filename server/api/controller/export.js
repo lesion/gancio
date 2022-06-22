@@ -96,7 +96,7 @@ const exportController = {
         location: `${e.place.name} - ${e.place.address}`,
         url: `${settings.baseurl}/event/${e.slug || e.id}`,
         status: 'CONFIRMED',
-        categories: e.tags.map(t => t.tag),
+        categories: e.tags,
         alarms
       }
     })

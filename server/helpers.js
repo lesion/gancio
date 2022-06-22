@@ -19,7 +19,7 @@ const DOMPurify = require('dompurify')
 const { JSDOM } = require('jsdom')
 const { window } = new JSDOM('<!DOCTYPE html>')
 const domPurify = DOMPurify(window)
-const URL = require('url')
+const url = require('url')
 const locales = require('../locales')
 
 domPurify.addHook('beforeSanitizeElements', node => {
@@ -30,7 +30,7 @@ domPurify.addHook('beforeSanitizeElements', node => {
     // remove FB tracking param
     if (href.includes('fbclid=')) {
       try {
-        const url = new URL.URL(href)
+        const url = new url.URL(href)
         url.searchParams.delete('fbclid')
         node.setAttribute('href', url.href)
         if (text.includes('fbclid=')) {
@@ -176,18 +176,21 @@ module.exports = {
           }
           const events = data.items.map(e => {
             const props = e.properties
-            const media = get(props, 'featured[0]')
+            let media = get(props, 'featured[0]')
+            if (media) {
+              media = url.resolve(URL, media)
+            }
             return {
               title: get(props, 'name[0]', ''),
               description: get(props, 'description[0]', ''),
               place: {
-                name: get(props, 'location[0].properties.name', '') || get(props, 'location[0]'),
-                address: get(props, 'location[0].properties.street-address')
+                name: get(props, 'location[0].properties.name[0].value', '') || get(props, 'location[0].properties.name', '') || get(props, 'location[0]'),
+                address: get(props, 'location[0].properties.street-address[0]') || get(props, 'location[0].properties.street-address')
               },
               start_datetime: dayjs(get(props, 'start[0]', '')).unix(),
               end_datetime: dayjs(get(props, 'end[0]', '')).unix(),
               tags: get(props, 'category', []),
-              media: media ? [{ name: get(props, 'name[0]', ''), url: get(props, 'featured[0]'), focalpoint: [0, 0] }] : []
+              media: media ? [{ name: get(props, 'name[0]', ''), url: media, focalpoint: [0, 0] }] : []
             }
           })
           return res.json(events)
@@ -201,9 +204,9 @@ module.exports = {
           return {
             title: get(event, 'summary', ''),
             description: get(event, 'description', ''),
-            place: get(event, 'location', ''),
-            start: get(event, 'dtstart', ''),
-            end: get(event, 'dtend', '')
+            place: { name: get(event, 'location', '') },
+            start_datetime: dayjs(get(event, 'startDate', null)).unix(),
+            end_datetime: dayjs(get(event, 'endDate', null)).unix()
           }
         }))
       }
