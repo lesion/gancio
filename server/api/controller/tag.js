@@ -1,5 +1,6 @@
 const Tag = require('../models/tag')
 const Event = require('../models/event')
+const uniq = require('lodash/uniq')
 
 const { where, fn, col, Op } = require('sequelize')
 const exportController = require('./export')
@@ -14,7 +15,7 @@ module.exports = {
     // search for already existing tags (tag is the same as TaG)
     const existingTags = await Tag.findAll({ where: { [Op.and]: where(fn('LOWER', col('tag')), { [Op.in]: lowercaseTags }) } })
     const lowercaseExistingTags = existingTags.map(t => t.tag.toLocaleLowerCase())
-    const remainingTags = trimmedTags.filter(t => ! lowercaseExistingTags.includes(t.toLocaleLowerCase()))
+    const remainingTags = uniq(trimmedTags.filter(t => ! lowercaseExistingTags.includes(t.toLocaleLowerCase())))
 
     // create remaining tags (cannot use updateOnDuplicate or manage conflicts)
     return [].concat(
