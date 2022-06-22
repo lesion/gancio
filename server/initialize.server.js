@@ -3,12 +3,14 @@ const config = require('../server/config')
 const initialize = {
   // close connections/port/unix socket
   async shutdown (exit = true) {
-    const log = require('../server/log')
-    const TaskManager = require('../server/taskManager').TaskManager
-    if (TaskManager) { TaskManager.stop() }
-    log.info('Closing DB')
-    const sequelize = require('../server/api/models')
-    await sequelize.close()
+    if (config.status == 'READY') {
+      const log = require('../server/log')
+      const TaskManager = require('../server/taskManager').TaskManager
+      if (TaskManager) { TaskManager.stop() }
+      log.info('Closing DB')
+      const sequelize = require('../server/api/models')
+      await sequelize.close()
+    }
     process.off('SIGTERM', initialize.shutdown)
     process.off('SIGINT', initialize.shutdown)
     if (exit) {
