@@ -64,7 +64,7 @@
 
       v-card-actions
         v-spacer
-        v-btn(@click='done' :loading='loading' :disabled='!valid || loading'
+        v-btn(@click='done' :loading='loading' :disabled='!valid || loading' outlined
           color='primary') {{edit?$t('common.save'):$t('common.send')}}
 
 </template>
@@ -173,7 +173,7 @@ export default {
     }, 100),
     eventImported (event) {
       this.event = Object.assign(this.event, event)
-      this.$refs.where.selectPlace({ name: event.place.name, create: true })
+      this.$refs.where.selectPlace({ name: event.place.name || event.place, create: true })
       this.date = {
         recurrent: this.event.recurrent || null,
         from: new Date(dayjs.unix(this.event.start_datetime)),
