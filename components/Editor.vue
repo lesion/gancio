@@ -57,7 +57,7 @@
         v-btn(icon text tabindex='-1' :class='{ primary: isActive.link() }'
           @click='commands.link({href: getMarkAttrs("link") && getMarkAttrs("link").href ? "" : "https://"}); $refs.link.focus();')
             v-icon(v-text='mdiLink')
-        v-text-field.pt-0.ml-1(v-show='isActive.link()' ref='link' @focus='focus' @blur='blur' hide-details
+        v-text-field.pt-0.ml-1(v-show='isActive.link()' ref='link' @focus='focus' @blur='e => { blur(); commands.link({ href: e.target.value}) }' hide-details
             :value='isActive.link() && getMarkAttrs("link") && getMarkAttrs("link").href || ""'
             @keypress.enter='commands.link({ href: $event.target.value}); editor.focus()')
 
