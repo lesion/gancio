@@ -86,7 +86,9 @@
         "send": "Envoyer",
         "export": "Exporter",
         "label": "Nom",
-        "max_events": "Nb. max d'événements"
+        "max_events": "Nb. max d'événements",
+        "blobs": "Blobs",
+        "close": "Fermer"
     },
     "event": {
         "follow_me_description": "Une des manières de rester informé sur les évènements publiés ici sur {title}\nest de suivre le compte <u>{account}</u> sur le fediverse, par exemple via Mastodon, et pourquoi pas d'ajouter des ressources à un évènement à partir de là.<br/><br/>\nSi vous n'avez jamais entendu parler de Mastodon and du fediverse, nous vous recommandons de lire <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>cet article (en anglais)</a>.<br/><br/>Saisissez votre nom d'instance ci-dessous (par ex. mastodon.social)",
@@ -218,7 +220,10 @@
         "smtp_test_success": "Un e-mail de test a été envoyé à {admin_email}, veuillez vérifier votre boîte de réception",
         "admin_email": "E-mail de l'administrateur",
         "widget": "Vignette active",
-        "event_remove_ok": "Événement supprimé"
+        "event_remove_ok": "Événement supprimé",
+        "new_blob": "Nouveau blob",
+        "edit_blob": "Modifier le blob",
+        "blobs_description": "Les blobs sont des regroupements d'événements par étiquette et par lieu. Ils seront affichés sur la page d'accueil"
     },
     "oauth": {
         "scopes": {
@@ -278,6 +283,7 @@
         "completed": "Configuration terminée",
         "completed_description": "<p>Vous pouvez désormais vous connectez avec le compte utilisateur suivant :<br/><br/>Identifiant : <b>{email}</b><br/>Mot de passe : <b>{password}<b/></p>",
         "start": "Commencer",
-        "copy_password_dialog": "Oui, vous devez copier le mot de passe !"
+        "copy_password_dialog": "Oui, vous devez copier le mot de passe !",
+        "https_warning": "Vous consultez le site en HTTP, n'oubliez pas de modifier la valeur de baseurl dans config.json si vous passez en HTTPS !"
     }
 }
