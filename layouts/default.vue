@@ -33,7 +33,8 @@ export default {
     return {
       htmlAttrs: {
         lang: this.locale
-      }
+      },
+      link: [{ rel: 'icon', type: 'image/png', href: this.settings.baseurl + '/logo.png' }],
     }
   },
   data () {
