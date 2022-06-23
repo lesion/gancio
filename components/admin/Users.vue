@@ -23,8 +23,8 @@
           v-alert(type='info' :closable='false' :icon='mdiInformation') {{$t('admin.user_add_help')}}
           v-card-actions
             v-spacer
-            v-btn(@click='newUserDialog=false' color='error') {{$t('common.cancel')}}
-            v-btn(@click='createUser' :disabled='!valid' color='primary') {{$t('common.send')}}
+            v-btn(@click='newUserDialog=false' color='error' outlined) {{$t('common.cancel')}}
+            v-btn(@click='createUser' :disabled='!valid' color='primary' outlined) {{$t('common.send')}}
 
     v-card-text
       //- USERS LIST
@@ -101,6 +101,9 @@ export default {
     },
     async toggleAdmin (user) {
       try {
+        const configMsg = user.is_admin ? 'admin.disable_admin_user_confirm' : 'admin.enable_admin_user_confirm'
+        const ret = await this.$root.$confirm(configMsg, { user: user.email })
+        if (!ret) { return }
         user.is_admin = !user.is_admin
         await this.$axios.$put('/user', user)
       } catch (e) {

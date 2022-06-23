@@ -33,7 +33,7 @@
                 color='orange') {{$t('login.not_registered')}}
 
               v-btn(color='success'
-                type='submit'
+                type='submit' outlined
                 :disabled='!valid || loading' :loading='loading') {{$t('common.login')}}
 
 </template>

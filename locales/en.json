@@ -174,6 +174,8 @@
         "remove_admin": "Remove admin",
         "disable_user_confirm": "Are you sure you want to disable {user}?",
         "delete_user_confirm": "Are you sure you want to remove {user}?",
+        "disable_admin_user_confirm": "Are you sure to remove admin permissions from {user}?",
+        "enable_admin_user_confirm": "Are sure to add admin permissions to {user}",
         "user_remove_ok": "User removed",
         "user_create_ok": "User created",
         "event_remove_ok": "Event removed",
