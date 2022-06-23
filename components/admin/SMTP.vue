@@ -13,30 +13,33 @@
         v-switch(v-model='smtp.sendmail'
           :label="$t('admin.smtp_use_sendmail')")
 
-        template(v-if='!smtp.sendmail')
+        v-row(v-show='!smtp.sendmail')
+          v-col(cols=12 md=9)
+            v-text-field(v-model='smtp.host'
+              :label="$t('admin.smtp_hostname')"
+              :rules="[$validators.required('admin.smtp_hostname')]")
+          v-col(cols=12 md=3)
+            v-text-field(v-model='smtp.port'
+              :label="$t('admin.smtp_port')"
+              :rules="[$validators.required('admin.smtp_port')]")
 
-          v-text-field(v-model='smtp.host'
-            :label="$t('admin.smtp_hostname')"
-            :rules="[$validators.required('admin.smtp_hostname')]")
+          v-col(cols=12)
+            v-switch(v-model='smtp.secure'
+              :label="$t('admin.smtp_secure')")
+          
+          v-col(md=6)
+            v-text-field(v-model='smtp.auth.user'
+              :label="$t('common.user')")
 
-          v-text-field(v-model='smtp.port'
-            :label="$t('admin.smtp_port')"
-            :rules="[$validators.required('admin.smtp_port')]")
-
-          v-switch(v-model='smtp.secure'
-            :label="$t('admin.smtp_secure')")
-
-          v-text-field(v-model='smtp.auth.user'
-            :label="$t('common.user')")
-
-          v-text-field(v-model='smtp.auth.pass'
-            :label="$t('common.password')"
-            type='password')
+          v-col(md=6)
+            v-text-field(v-model='smtp.auth.pass'
+              :label="$t('common.password')"
+              type='password')
 
     v-card-actions
       v-spacer
-      v-btn(color='primary' @click='testSMTP' :loading='loading' :disabled='loading || !isValid') {{$t('admin.smtp_test_button')}}
-      v-btn(color='warning' @click="done") {{$t("common.ok")}}
+      v-btn(color='primary' @click='testSMTP' :loading='loading' :disabled='loading || !isValid' outlined) {{$t('admin.smtp_test_button')}}
+      v-btn(color='warning' @click="done" outlined) {{$t("common.ok")}}
   
 </template>
 <script>
@@ -72,9 +75,7 @@ export default {
       this.loading = true
       try {
         const smtp = JSON.parse(JSON.stringify(this.smtp))
-        console.error(smtp)
         if (!smtp.auth.user) {
-          console.error('ma non sono qui dentro !??!')
           delete smtp.auth
         }
         if (!smtp.secure) {
