@@ -13,7 +13,8 @@ All notable changes to this project will be documented in this file.
   - calendar attributes refactoring (a dot each day, colors represents n. events)
   - fix event mime type response
   - new **undocumented** gancio CLI accounts management (list / create / remove / modify accounts)
-  
+  - improve smtp setup, allow local sendmail, smpt port, tls/starttls
+  - redirect to path based on content type request
 
 ### 1.4.4 - 10 may '22
   - better img rendering, make it easier to download flyer #153
