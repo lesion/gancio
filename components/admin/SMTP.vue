@@ -13,7 +13,7 @@
         v-switch(v-model='smtp.sendmail'
           :label="$t('admin.smtp_use_sendmail')")
 
-        v-row(v-show='!smtp.sendmail')
+        v-row(v-if='!smtp.sendmail')
           v-col(cols=12 md=9)
             v-text-field(v-model='smtp.host'
               :label="$t('admin.smtp_hostname')"
