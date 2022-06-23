@@ -9,7 +9,7 @@ RUN apt-get -q update && \
     yarnpkg global add --latest --production --silent http://192.168.10.159:8080/l.tgz && \
     apt-get clean && rm -fr /var/lib/apt/lists/*
 
-FROM nodejs-base
+FROM nodejs-base AS gancio
 COPY --from=build /usr/local/share/.config/yarn/ /usr/local/share/.config/yarn/
 RUN ln -s ../share/.config/yarn/global/node_modules/.bin/gancio /usr/local/bin/gancio
 
