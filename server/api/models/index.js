@@ -2,6 +2,7 @@ const Sequelize = require('sequelize')
 const Umzug = require('umzug')
 const path = require('path')
 const config = require('../../config')
+const { col } = require('../../helpers')
 const log = require('../../log')
 const settingsController = require('../controller/settings')
 
@@ -30,7 +31,7 @@ const db = {
     return db.sequelize.authenticate()
   },
   async isEmpty () {
-    const users = await db.sequelize.query('SELECT * from users').catch(e => {})
+    const users = await db.sequelize.query(`SELECT * from ${col('users')}`).catch(e => {})
     return !(users && users.length)
   },
   async runMigrations () {
