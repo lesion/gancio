@@ -40,7 +40,7 @@ const initialize = {
           password: process.env.GANCIO_DB_PASSWORD,
         }
     
-        setupController._setupDb(dbConf)
+        await setupController._setupDb(dbConf)
           .catch(e => {
             log.warn(String(e))
             process.exit(1)
