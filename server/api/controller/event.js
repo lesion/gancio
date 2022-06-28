@@ -422,14 +422,14 @@ const eventController = {
         }
 
         let focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
-        focalpoint = [parseFloat(focalpoint[0]).toFixed(2), parseFloat(focalpoint[1]).toFixed(2)]
+        focalpoint = [parseFloat(parseFloat(focalpoint[0]).toFixed(2)), parseFloat(parseFloat(focalpoint[1]).toFixed(2))]
         eventDetails.media = [{
           url: req.file.filename,
           height: req.file.height,
           width: req.file.width,
           name: body.image_name || body.title || '',
           size: req.file.size || 0,
-          focalpoint: [parseFloat(focalpoint[0]), parseFloat(focalpoint[1])]
+          focalpoint
         }]
       } else {
         eventDetails.media = []
@@ -474,8 +474,9 @@ const eventController = {
   },
 
   async update (req, res) {
-    if (res.locals.err) {
-      return res.status(400).json(res.locals.err.toString())
+    if (res.err) {
+      log.warn(req.err)
+      return res.status(400).json(req.err.toString())
     }
 
     try {
@@ -510,22 +511,27 @@ const eventController = {
       }
 
       // modify associated media only if a new file is uploaded or remote image_url is used
-      if (req.file || (body.image_url && /^https?:\/\//.test(body.image_url))) {
-        if (body.image_url) {
+      if (req.file || body.image_url) {
+        if (!req.file && body.image_url) {
           req.file = await helpers.getImageFromURL(body.image_url)
         }
 
-        const focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
+        let focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
+        focalpoint = [parseFloat(parseFloat(focalpoint[0]).toFixed(2)), parseFloat(parseFloat(focalpoint[1]).toFixed(2))]
         eventDetails.media = [{
           url: req.file.filename,
           height: req.file.height,
           width: req.file.width,
           name: body.image_name || body.title || '',
           size: req.file.size || 0,
-          focalpoint: [parseFloat(focalpoint[0].slice(0, 6)), parseFloat(focalpoint[1].slice(0, 6))]
+          focalpoint
         }]
       } else if (!body.image) {
         eventDetails.media = []
+      } else if (body.image_focalpoint && event.media.length) {
+        let focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
+        focalpoint = [parseFloat(parseFloat(focalpoint[0]).toFixed(2)), parseFloat(parseFloat(focalpoint[1]).toFixed(2))]
+        eventDetails.media = [ { ...event.media[0], focalpoint } ] // [0].focalpoint = focalpoint
       }
       await event.update(eventDetails)
       const [place] = await Place.findOrCreate({
