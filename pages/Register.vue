@@ -25,7 +25,7 @@ v-container.pa-0.pa-md-3
 
         v-card-actions
           v-spacer
-          v-btn(@click='register'
+          v-btn(@click='register' outlined
             :disabled='!valid || loading' :loading='loading'
             color='primary') {{$t('common.send')}}
             v-icon(v-text='mdiChevronRight')
@@ -53,10 +53,6 @@ export default {
   },
   computed: {
     ...mapState(['settings'])
-    // disabled () {
-    //   if (process.server) { return false }
-    //   return !this.user.password || !this.user.email || !this.user.description
-    // }
   },
   mounted () {
     this.$refs.email.focus()
