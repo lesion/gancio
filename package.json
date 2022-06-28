@@ -56,9 +56,9 @@
     "minify-css-string": "^1.0.0",
     "mkdirp": "^1.0.4",
     "multer": "^1.4.5-lts.1",
-    "nuxt-edge": "^2.16.0-27358576.777a4b7f",
+    "nuxt-edge": "^2.16.0-27604820.123206cb",
     "pg": "^8.6.0",
-    "sequelize": "^6.20.1",
+    "sequelize": "^6.21.1",
     "sequelize-slugify": "^1.6.1",
     "sharp": "^0.27.2",
     "sqlite3": "^5.0.8",
@@ -70,21 +70,27 @@
     "vue-i18n": "^8.26.7",
     "vue-template-compiler": "^2.6.14",
     "vuetify": "2.6.6",
-    "winston": "^3.7.2",
+    "winston": "^3.8.0",
     "winston-daily-rotate-file": "^4.7.1",
     "yargs": "^17.5.0"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.3",
     "jest": "^28.1.1",
-    "prettier": "^2.6.2",
+    "prettier": "^2.7.1",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
-    "sass": "^1.52.2",
+    "sass": "^1.53.0",
     "sequelize-cli": "^6.3.0",
     "supertest": "^6.2.2",
     "webpack": "4",
-    "webpack-cli": "^4.7.2"
+    "webpack-cli": "^4.10.0"
+  },
+  "resolutions": {
+    "nth-check": "^2.0.1",
+    "express-oauth-server/**/lodash": "^4.17.21",
+    "glob-parent": "^5.1.2",
+    "moment": "^2.29.2"
   },
   "bin": {
     "gancio": "server/cli.js"
