@@ -1,21 +1,21 @@
 <template lang="pug">
-  nuxt-link.embed_event(:to='`/event/${event.slug || event.id}`' target='_blank' :class='{ withImg: event.media }')
+nuxt-link.embed_event(:to='`/event/${event.slug || event.id}`' target='_blank' :class='{ withImg: event.media }')
 
-    //- image
-    img.float-left(:src='event | mediaURL("thumb")')
-    .event-info
-      //-  title
-      .date {{event|when}}<br/>
-      h4 {{event.title}}
+  //- image
+  img.float-left(:src='event | mediaURL("thumb")')
+  .event-info
+    //-  title
+    .date {{event|when}}<br/>
+    h4 {{event.title}}
 
-      //- date / place
-      .date {{event.place.name}}
+    //- date / place
+    .date {{event.place.name}}
 </template>
 <script>
 
 export default {
   layout: 'iframe',
-  async asyncData ({ $axios, params, error, store }) {
+  async asyncData ({ $axios, params, error }) {
     try {
       const event = await $axios.$get(`/event/${params.event_id}`)
       return { event }

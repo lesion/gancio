@@ -1,16 +1,16 @@
 <template lang='pug'>
-  v-snackbar(
-    v-model="active"
-    :color="color"
-    :bottom="bottom"
-    :top="top"
-    :left="left"
-    :right="right"
-    :timeout="timeout")
-    v-icon.mr-3(color="white" v-text='icon')
-    span {{ message }}
-    template(v-slot:action="{ }")
-      v-icon(size="16" @click="active = false" v-text='mdiCloseCircle')
+v-snackbar(
+  v-model="active"
+  :color="color"
+  :bottom="bottom"
+  :top="top"
+  :left="left"
+  :right="right"
+  :timeout="timeout")
+  v-icon.mr-3(color="white" v-text='icon')
+  span {{ message }}
+  template(v-slot:action="{ }")
+    v-icon(size="16" @click="active = false" v-text='mdiCloseCircle')
 </template>
 
 <script>
@@ -19,7 +19,7 @@ import { mdiAlert, mdiCloseCircle, mdiInformation } from '@mdi/js'
 export default {
   data () {
     return {
-      mdiAlert, mdiAlert, mdiCloseCircle, mdiInformation,
+      mdiAlert, mdiCloseCircle, mdiInformation,
       icon: mdiInformation,
       color: 'secondary',
       bottom: true,

@@ -1,51 +1,51 @@
 <template lang="pug">
-  span
-    v-dialog(v-model='openMediaDetails' :fullscreen="$vuetify.breakpoint.xsOnly" width='1000px')
-      v-card
-        v-card-title {{$t('common.media')}}
-        v-card-text
-          v-row.mt-1
-            v-col#focalPointSelector(
-                @mousedown='handleStart' @touchstart='handleStart'
-                @mousemove='handleMove' @touchmove='handleMove'
-                @mouseup='handleStop' @touchend='handleStop'
-              )
-              div.focalPoint(:style="{ top, left }")
-              img(v-if='mediaPreview' :src='mediaPreview')
+span
+  v-dialog(v-model='openMediaDetails' :fullscreen="$vuetify.breakpoint.xsOnly" width='1000px')
+    v-card
+      v-card-title {{$t('common.media')}}
+      v-card-text
+        v-row.mt-1
+          v-col#focalPointSelector(
+              @mousedown='handleStart' @touchstart='handleStart'
+              @mousemove='handleMove' @touchmove='handleMove'
+              @mouseup='handleStop' @touchend='handleStop'
+            )
+            div.focalPoint(:style="{ top, left }")
+            img(v-if='mediaPreview' :src='mediaPreview')
 
-            v-col.col-12.col-sm-4
-              p {{$t('event.choose_focal_point')}}
-              img.mediaPreview.d-none.d-sm-block(v-if='mediaPreview'
-                :src='mediaPreview' :style="{ 'object-position': position }")
+          v-col.col-12.col-sm-4
+            p {{$t('event.choose_focal_point')}}
+            img.mediaPreview.d-none.d-sm-block(v-if='mediaPreview'
+              :src='mediaPreview' :style="{ 'object-position': position }")
 
-              v-textarea.mt-4(type='text'
-                label='Alternative text'
-                persistent-hint
-                @input='v => name=v'
-                :value='value.name' filled
-                :hint='$t("event.alt_text_description")')
-              br
-              v-card-actions.justify-space-between
-                v-btn(text @click='openMediaDetails=false' color='warning') Cancel
-                v-btn(text color='primary' @click='save') Save
+            v-textarea.mt-4(type='text'
+              label='Alternative text'
+              persistent-hint
+              @input='v => name=v'
+              :value='value.name' filled
+              :hint='$t("event.alt_text_description")')
+            br
+            v-card-actions.justify-space-between
+              v-btn(text @click='openMediaDetails=false' color='warning') Cancel
+              v-btn(text color='primary' @click='save') Save
 
-    h3.mb-3.font-weight-regular(v-if='mediaPreview') {{$t('common.media')}}
-    v-card-actions(v-if='mediaPreview')
-      v-spacer
-      v-btn(text color='primary' @click='openMediaDetails = true') {{$t('common.edit')}}
-      v-btn(text color='error' @click='remove') {{$t('common.remove')}}
-    div(v-if='mediaPreview')
-      img.mediaPreview.col-12.ml-3(:src='mediaPreview' :style="{ 'object-position': savedPosition }")
-      span.float-right {{event.media[0].name}}
-    v-file-input(
-      v-else
-      :label="$t('common.media')"
-      :hint="$t('event.media_description')"
-      :prepend-icon="mdiCamera"
-      :value='value.image'
-      @change="selectMedia"
-      persistent-hint
-      accept='image/*')
+  h3.mb-3.font-weight-regular(v-if='mediaPreview') {{$t('common.media')}}
+  v-card-actions(v-if='mediaPreview')
+    v-spacer
+    v-btn(text color='primary' @click='openMediaDetails = true') {{$t('common.edit')}}
+    v-btn(text color='error' @click='remove') {{$t('common.remove')}}
+  div(v-if='mediaPreview')
+    img.mediaPreview.col-12.ml-3(:src='mediaPreview' :style="{ 'object-position': savedPosition }")
+    span.float-right {{event.media[0].name}}
+  v-file-input(
+    v-else
+    :label="$t('common.media')"
+    :hint="$t('event.media_description')"
+    :prepend-icon="mdiCamera"
+    :value='value.image'
+    @change="selectMedia"
+    persistent-hint
+    accept='image/*')
 </template>
 <script>
 import { mdiCamera } from '@mdi/js'

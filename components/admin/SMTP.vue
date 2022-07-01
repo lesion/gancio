@@ -1,46 +1,46 @@
 <template lang="pug">
-  v-card
-    v-card-title SMTP Email configuration
-    v-card-text
-      p(v-html="$t('admin.smtp_description')")
-      v-form(v-model='isValid')
+v-card
+  v-card-title SMTP Email configuration
+  v-card-text
+    p(v-html="$t('admin.smtp_description')")
+    v-form(v-model='isValid')
 
-        v-text-field(v-model='admin_email'
-          @blur="save('admin_email', admin_email )"
-          :label="$t('admin.sender_email')"
-          :rules="$validators.email")
+      v-text-field(v-model='admin_email'
+        @blur="save('admin_email', admin_email )"
+        :label="$t('admin.sender_email')"
+        :rules="$validators.email")
 
-        v-switch(v-model='smtp.sendmail'
-          :label="$t('admin.smtp_use_sendmail')")
+      v-switch(v-model='smtp.sendmail'
+        :label="$t('admin.smtp_use_sendmail')")
 
-        v-row(v-if='!smtp.sendmail')
-          v-col(cols=12 md=9)
-            v-text-field(v-model='smtp.host'
-              :label="$t('admin.smtp_hostname')"
-              :rules="[$validators.required('admin.smtp_hostname')]")
-          v-col(cols=12 md=3)
-            v-text-field(v-model='smtp.port'
-              :label="$t('admin.smtp_port')"
-              :rules="[$validators.required('admin.smtp_port')]")
+      v-row(v-if='!smtp.sendmail')
+        v-col(cols=12 md=9)
+          v-text-field(v-model='smtp.host'
+            :label="$t('admin.smtp_hostname')"
+            :rules="[$validators.required('admin.smtp_hostname')]")
+        v-col(cols=12 md=3)
+          v-text-field(v-model='smtp.port'
+            :label="$t('admin.smtp_port')"
+            :rules="[$validators.required('admin.smtp_port')]")
 
-          v-col(cols=12)
-            v-switch(v-model='smtp.secure'
-              :label="$t('admin.smtp_secure')")
-          
-          v-col(md=6)
-            v-text-field(v-model='smtp.auth.user'
-              :label="$t('common.user')")
+        v-col(cols=12)
+          v-switch(v-model='smtp.secure'
+            :label="$t('admin.smtp_secure')")
+        
+        v-col(md=6)
+          v-text-field(v-model='smtp.auth.user'
+            :label="$t('common.user')")
 
-          v-col(md=6)
-            v-text-field(v-model='smtp.auth.pass'
-              :label="$t('common.password')"
-              type='password')
+        v-col(md=6)
+          v-text-field(v-model='smtp.auth.pass'
+            :label="$t('common.password')"
+            type='password')
 
-    v-card-actions
-      v-spacer
-      v-btn(color='primary' @click='testSMTP' :loading='loading' :disabled='loading || !isValid' outlined) {{$t('admin.smtp_test_button')}}
-      v-btn(color='warning' @click="done" outlined) {{$t("common.ok")}}
-  
+  v-card-actions
+    v-spacer
+    v-btn(color='primary' @click='testSMTP' :loading='loading' :disabled='loading || !isValid' outlined) {{$t('admin.smtp_test_button')}}
+    v-btn(color='warning' @click="done" outlined) {{$t("common.ok")}}
+
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'

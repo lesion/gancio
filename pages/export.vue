@@ -1,83 +1,83 @@
 <template lang="pug">
-  v-container.pa-0.pa-md-3
-    v-card
-      v-card-title {{$t('common.share')}}
-      v-card-text
-        p.text-body-1 {{$t('export.intro')}}
-        v-row
-          v-col(:md='2' :cols='12')
-            v-card-title.py-0 {{$t('common.filter')}}
-          v-col
-            Search(
-              :filters='filters'
-              @update='f => filters = f')
-      v-tabs(v-model='type' show-arrows :next-icon='mdiChevronRight' :prev-icon='mdiChevronLeft')
+v-container.pa-0.pa-md-3
+  v-card
+    v-card-title {{$t('common.share')}}
+    v-card-text
+      p.text-body-1 {{$t('export.intro')}}
+      v-row
+        v-col(:md='2' :cols='12')
+          v-card-title.py-0 {{$t('common.filter')}}
+        v-col
+          Search(
+            :filters='filters'
+            @update='f => filters = f')
+    v-tabs(v-model='type' show-arrows :next-icon='mdiChevronRight' :prev-icon='mdiChevronLeft')
 
+      //- TOFIX
+      //- v-tab {{$t('common.email')}}
+      //- v-tab-item
+        v-card
+          v-card-text
+            p(v-html='$t(`export.email_description`)')
+            v-switch.mt-0(inset :label="$t('notify_on_insert')")
+            v-switch.mt-0(inset :label="$t('morning_notification')")
+            v-text-field(v-model='notification.email' :placeholder="$t('export.insert_your_address')" ref='email')
+              v-btn(slot='prepend' text color='primary' @click='add_notification') {{$t('common.send')}} <v-icon>mdi-email</v-icon>
+
+      v-tab {{$t('common.feed')}}
+      v-tab-item
+        v-card
+          v-card-text
+            p(v-html='$t(`export.feed_description`)')
+            v-text-field(v-model='link' readonly)
+              v-btn(slot='prepend' text color='primary' @click='clipboard(link)') {{$t("common.copy")}}
+                v-icon.ml-1(v-text='mdiContentCopy')
+
+      v-tab ics/ical
+      v-tab-item
+        v-card
+          v-card-text
+            p(v-html='$t(`export.ical_description`)')
+            v-text-field(v-model='link')
+              v-btn(slot='prepend' text color='primary' @click='clipboard(link)') {{$t("common.copy")}}
+                v-icon.ml-1(v-text='mdiContentCopy')
+
+      v-tab List
+      v-tab-item
+        v-card
+          v-card-text
+            p(v-html='$t(`export.list_description`)')
+
+            v-row
+              v-col.col-12.col-lg-4
+                v-text-field(v-model='list.title' :label='$t("common.title")')
+                v-text-field(v-model='list.maxEvents' type='number' min='1' :label='$t("common.max_events")')
+                v-switch(v-model='list.theme' inset true-value='dark' false-value='light' :label="$t('admin.is_dark')")
+                v-switch(v-model='list.sidebar' inset true-value='true' false-value='false' :label="$t('admin.widget')")
+              v-col.col-12.col-lg-8
+                gancio-events(:baseurl='settings.baseurl'
+                  :maxlength='list.maxEvents &&  Number(list.maxEvents)'
+                  :title='list.title'
+                  :theme='list.theme'
+                  :places='filters.places.join(",")'
+                  :tags='filters.tags.join(",")'
+                  :show_recurrent='filters.show_recurrent'
+                  :sidebar="list.sidebar")
+            v-alert.pa-5.my-4.blue-grey.darken-4.text-body-1.lime--text.text--lighten-3 <pre>{{code}}</pre>
+              v-btn.float-end(text color='primary' @click='clipboard(code)') {{$t("common.copy")}}
+                v-icon.ml-1(v-text='mdiContentCopy')
+
+      v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
+      v-tab-item(v-if='settings.enable_federation')
+        FollowMe
         //- TOFIX
-        //- v-tab {{$t('common.email')}}
+        //- v-tab.pt-1(label='calendar' name='calendar')
         //- v-tab-item
-          v-card
-            v-card-text
-              p(v-html='$t(`export.email_description`)')
-              v-switch.mt-0(inset :label="$t('notify_on_insert')")
-              v-switch.mt-0(inset :label="$t('morning_notification')")
-              v-text-field(v-model='notification.email' :placeholder="$t('export.insert_your_address')" ref='email')
-                v-btn(slot='prepend' text color='primary' @click='add_notification') {{$t('common.send')}} <v-icon>mdi-email</v-icon>
-
-        v-tab {{$t('common.feed')}}
-        v-tab-item
-          v-card
-            v-card-text
-              p(v-html='$t(`export.feed_description`)')
-              v-text-field(v-model='link' readonly)
-                v-btn(slot='prepend' text color='primary' @click='clipboard(link)') {{$t("common.copy")}}
-                  v-icon.ml-1(v-text='mdiContentCopy')
-
-        v-tab ics/ical
-        v-tab-item
-          v-card
-            v-card-text
-              p(v-html='$t(`export.ical_description`)')
-              v-text-field(v-model='link')
-                v-btn(slot='prepend' text color='primary' @click='clipboard(link)') {{$t("common.copy")}}
-                  v-icon.ml-1(v-text='mdiContentCopy')
-
-        v-tab List
-        v-tab-item
-          v-card
-            v-card-text
-              p(v-html='$t(`export.list_description`)')
-
-              v-row
-                v-col.col-12.col-lg-4
-                  v-text-field(v-model='list.title' :label='$t("common.title")')
-                  v-text-field(v-model='list.maxEvents' type='number' min='1' :label='$t("common.max_events")')
-                  v-switch(v-model='list.theme' inset true-value='dark' false-value='light' :label="$t('admin.is_dark')")
-                  v-switch(v-model='list.sidebar' inset true-value='true' false-value='false' :label="$t('admin.widget')")
-                v-col.col-12.col-lg-8
-                  gancio-events(:baseurl='settings.baseurl'
-                    :maxlength='list.maxEvents &&  Number(list.maxEvents)'
-                    :title='list.title'
-                    :theme='list.theme'
-                    :places='filters.places.join(",")'
-                    :tags='filters.tags.join(",")'
-                    :show_recurrent='filters.show_recurrent'
-                    :sidebar="list.sidebar")
-              v-alert.pa-5.my-4.blue-grey.darken-4.text-body-1.lime--text.text--lighten-3 <pre>{{code}}</pre>
-                v-btn.float-end(text color='primary' @click='clipboard(code)') {{$t("common.copy")}}
-                  v-icon.ml-1(v-text='mdiContentCopy')
-
-        v-tab(v-if='settings.enable_federation') {{$t('common.fediverse')}}
-        v-tab-item(v-if='settings.enable_federation')
-          FollowMe
-          //- TOFIX
-          //- v-tab.pt-1(label='calendar' name='calendar')
-          //- v-tab-item
-          //-   p(v-html='$t(`export.calendar_description`)')
-          //-   //- no-ssr
-          //-     Calendar.mb-1
-          //-   v-text-field.mb-1(type='textarea' v-model='script')
-          //-   el-button.float-right(plain type="primary" icon='el-icon-document') Copy
+        //-   p(v-html='$t(`export.calendar_description`)')
+        //-   //- no-ssr
+        //-     Calendar.mb-1
+        //-   v-text-field.mb-1(type='textarea' v-model='script')
+        //-   el-button.float-right(plain type="primary" icon='el-icon-document') Copy
 
 </template>
 <script>

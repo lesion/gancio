@@ -1,35 +1,34 @@
 <template lang='pug'>
-  v-container
-    v-card-title {{$t('common.announcements')}}
-    v-card-subtitle(v-html="$t('admin.announcement_description')")
-    v-dialog(v-model='dialog' width='800px' :fullscreen='$vuetify.breakpoint.xsOnly')
-      v-card
-        v-card-title {{$t('admin.new_announcement')}}
-        v-card-text.px-0
-          v-form(v-model='valid' ref='announcement' @submit.prevent='save' lazy-validation)
-            v-text-field.col-12(v-model='announcement.title'
-              :rules="[$validators.required('common.title')]"
-              :label='$t("common.title")')
-            Editor.col-12(v-model='announcement.announcement'
-              border no-save max-height='400px' :placeholder="$t('common.description')")
-        v-card-actions
-          v-spacer
-          v-btn(@click='dialog=false' color='error') {{$t('common.cancel')}}
-          v-btn(@click='save' color='primary' :disabled='!valid || loading' :loading='loading') {{$t(`common.${editing?'save':'send'}`)}}
+v-container
+  v-card-title {{$t('common.announcements')}}
+  v-card-subtitle(v-html="$t('admin.announcement_description')")
+  v-dialog(v-model='dialog' width='800px' :fullscreen='$vuetify.breakpoint.xsOnly')
+    v-card
+      v-card-title {{$t('admin.new_announcement')}}
+      v-card-text.px-0
+        v-form(v-model='valid' ref='announcement' @submit.prevent='save' lazy-validation)
+          v-text-field.col-12(v-model='announcement.title'
+            :rules="[$validators.required('common.title')]"
+            :label='$t("common.title")')
+          Editor.col-12(v-model='announcement.announcement'
+            border no-save max-height='400px' :placeholder="$t('common.description')")
+      v-card-actions
+        v-spacer
+        v-btn(@click='dialog=false' color='error') {{$t('common.cancel')}}
+        v-btn(@click='save' color='primary' :disabled='!valid || loading' :loading='loading') {{$t(`common.${editing?'save':'send'}`)}}
 
-    v-btn(@click='openDialog' text color='primary') <v-icon v-text='mdiPlus'></v-icon> {{$t('common.add')}}
-    v-card-text
-      v-data-table(
-          v-if='announcements.length'
-          :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
-          :headers='headers'
-          :items='announcements')
-        template(v-slot:item.actions='{ item }')
-          v-btn(text small @click.stop='toggle(item)'
-            :color='item.visible?"warning":"success"') {{item.visible?$t('common.disable'):$t('common.enable')}}
-          v-btn(text small @click='edit(item)' color='primary') {{$t('common.edit')}}
-          v-btn(text small @click='remove(item)' color='error') {{$t('common.delete')}}
-
+  v-btn(@click='openDialog' text color='primary') <v-icon v-text='mdiPlus'></v-icon> {{$t('common.add')}}
+  v-card-text
+    v-data-table(
+        v-if='announcements.length'
+        :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
+        :headers='headers'
+        :items='announcements')
+      template(v-slot:item.actions='{ item }')
+        v-btn(text small @click.stop='toggle(item)'
+          :color='item.visible?"warning":"success"') {{item.visible?$t('common.disable'):$t('common.enable')}}
+        v-btn(text small @click='edit(item)' color='primary') {{$t('common.edit')}}
+        v-btn(text small @click='remove(item)' color='error') {{$t('common.delete')}}
 </template>
 <script>
 import { mapActions } from 'vuex'

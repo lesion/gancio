@@ -1,62 +1,61 @@
 <template lang="pug">
-  v-container
-    v-card-title {{$t('common.settings')}}
-    v-card-text
+v-container
+  v-card-title {{$t('common.settings')}}
+  v-card-text
 
-      v-text-field(v-model='title'
-        :label="$t('common.title')"
-        :hint="$t('admin.title_description')"
-        @blur='save("title", title)'
-        persistent-hint)
+    v-text-field(v-model='title'
+      :label="$t('common.title')"
+      :hint="$t('admin.title_description')"
+      @blur='save("title", title)'
+      persistent-hint)
 
-      v-text-field.mt-5(v-model='description'
-        :label="$t('common.description')"
-        :hint="$t('admin.description_description')"
-        persistent-hint
-        @blur='save("description", description)')
+    v-text-field.mt-5(v-model='description'
+      :label="$t('common.description')"
+      :hint="$t('admin.description_description')"
+      persistent-hint
+      @blur='save("description", description)')
 
-      //- select timezone
-      v-autocomplete.mt-5(v-model='instance_timezone'
-        :label="$t('admin.select_instance_timezone')"
-        :hint="$t('admin.instance_timezone_description')"
-        :items="filteredTimezones"
-        persistent-hint
-        placeholder='Timezone, type to search')
+    //- select timezone
+    v-autocomplete.mt-5(v-model='instance_timezone'
+      :label="$t('admin.select_instance_timezone')"
+      :hint="$t('admin.instance_timezone_description')"
+      :items="filteredTimezones"
+      persistent-hint
+      placeholder='Timezone, type to search')
 
-      v-select.mt-5(
-        v-model='instance_locale'
-        :label="$t('admin.instance_locale')"
-        :hint="$t('admin.instance_locale_description')"
-        persistent-hint
-        :items='locales'
-      )
+    v-select.mt-5(
+      v-model='instance_locale'
+      :label="$t('admin.instance_locale')"
+      :hint="$t('admin.instance_locale_description')"
+      persistent-hint
+      :items='locales'
+    )
 
-      v-switch.mt-4(v-model='allow_registration'
-        inset
-        :label="$t('admin.allow_registration_description')")
+    v-switch.mt-4(v-model='allow_registration'
+      inset
+      :label="$t('admin.allow_registration_description')")
 
-      v-switch.mt-1(v-model='allow_anon_event'
-        inset
-        :label="$t('admin.allow_anon_event')")
+    v-switch.mt-1(v-model='allow_anon_event'
+      inset
+      :label="$t('admin.allow_anon_event')")
 
-      v-switch.mt-1(v-model='allow_recurrent_event'
-        inset
-        :label="$t('admin.allow_recurrent_event')")
+    v-switch.mt-1(v-model='allow_recurrent_event'
+      inset
+      :label="$t('admin.allow_recurrent_event')")
 
-      v-switch.mt-1(v-if='allow_recurrent_event'
-        v-model='recurrent_event_visible'
-        inset
-        :label="$t('admin.recurrent_event_visible')")
+    v-switch.mt-1(v-if='allow_recurrent_event'
+      v-model='recurrent_event_visible'
+      inset
+      :label="$t('admin.recurrent_event_visible')")
 
-    v-dialog(v-model='showSMTP' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
-      SMTP(@close='showSMTP = false')
+  v-dialog(v-model='showSMTP' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
+    SMTP(@close='showSMTP = false')
 
-    v-card-actions
-      v-btn(text @click='showSMTP=true')
-        <v-icon v-if='showSMTPAlert' color='error' v-text='mdiAlert'></v-icon> {{$t('admin.show_smtp_setup')}}
-      v-btn(text @click='$emit("complete")' color='primary' v-if='setup') {{$t('common.next')}}
-        v-icon(v-text='mdiArrowRight')
-
+  v-card-actions
+    v-btn(text @click='showSMTP=true')
+      <v-icon v-if='showSMTPAlert' color='error' v-text='mdiAlert'></v-icon> {{$t('admin.show_smtp_setup')}}
+    v-btn(text @click='$emit("complete")' color='primary' v-if='setup') {{$t('common.next')}}
+      v-icon(v-text='mdiArrowRight')
 
 </template>
 <script>

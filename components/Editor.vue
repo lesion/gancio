@@ -1,67 +1,67 @@
 <template lang='pug'>
-  .editor(:class='focused')
-    .label {{label}}
-    editor-menu-bar.menubar.is-hidden(:editor='editor'
-      :keep-in-bounds='true' v-slot='{ commands, isActive, getMarkAttrs, focused }')
-      v-btn-toggle(dense)
-        v-btn(icon text tabindex='-1'
-          :class="{ primary: isActive.bold() }"
-          @click="commands.bold")
-          v-icon(v-text='mdiFormatBold')
+.editor(:class='focused')
+  .label {{label}}
+  editor-menu-bar.menubar.is-hidden(:editor='editor'
+    :keep-in-bounds='true' v-slot='{ commands, isActive, getMarkAttrs, focused }')
+    v-btn-toggle(dense)
+      v-btn(icon text tabindex='-1'
+        :class="{ primary: isActive.bold() }"
+        @click="commands.bold")
+        v-icon(v-text='mdiFormatBold')
 
-        v-btn(icon text tabindex='-1'
-          :class="{ primary: isActive.underline() }"
-          @click="commands.underline")
-          v-icon(v-text='mdiFormatUnderline')
+      v-btn(icon text tabindex='-1'
+        :class="{ primary: isActive.underline() }"
+        @click="commands.underline")
+        v-icon(v-text='mdiFormatUnderline')
 
-        v-btn(icon text tabindex='-1'
-          :class="{ primary: isActive.strike() }"
-          @click="commands.strike")
-          v-icon(v-text='mdiFormatStrikethroughVariant')
+      v-btn(icon text tabindex='-1'
+        :class="{ primary: isActive.strike() }"
+        @click="commands.strike")
+        v-icon(v-text='mdiFormatStrikethroughVariant')
 
-        v-btn(icon text tabindex='-1'
-          :class="{ primary: isActive.italic() }"
-          @click="commands.italic")
-          v-icon(v-text='mdiFormatItalic')
+      v-btn(icon text tabindex='-1'
+        :class="{ primary: isActive.italic() }"
+        @click="commands.italic")
+        v-icon(v-text='mdiFormatItalic')
 
-        v-btn(icon text tabindex='-1'
-          :class="{ primary: isActive.heading({level: 1}) }"
-          @click="commands.heading({level: 1})")
-          v-icon(v-text='mdiFormatHeader1')
+      v-btn(icon text tabindex='-1'
+        :class="{ primary: isActive.heading({level: 1}) }"
+        @click="commands.heading({level: 1})")
+        v-icon(v-text='mdiFormatHeader1')
 
-        v-btn(icon text tabindex='-1'
-          :class="{ primary: isActive.heading({level: 2}) }"
-          @click="commands.heading({level: 2})")
-          v-icon(v-text='mdiFormatHeader2')
+      v-btn(icon text tabindex='-1'
+        :class="{ primary: isActive.heading({level: 2}) }"
+        @click="commands.heading({level: 2})")
+        v-icon(v-text='mdiFormatHeader2')
 
-        v-btn(icon text tabindex='-1'
-          :class="{ primary: isActive.heading({level: 3}) }"
-          @click="commands.heading({level: 3})")
-          v-icon(v-text='mdiFormatHeader3')
+      v-btn(icon text tabindex='-1'
+        :class="{ primary: isActive.heading({level: 3}) }"
+        @click="commands.heading({level: 3})")
+        v-icon(v-text='mdiFormatHeader3')
 
-        v-btn(icon text tabindex='-1'
-          :class="{ primary: isActive.code() }"
-          @click="commands.code")
-          v-icon(v-text='mdiCodeTags')
+      v-btn(icon text tabindex='-1'
+        :class="{ primary: isActive.code() }"
+        @click="commands.code")
+        v-icon(v-text='mdiCodeTags')
 
-        v-btn(icon text tabindex='-1'
-          :class="{ primary: isActive.blockquote() }"
-          @click="commands.blockquote")
-          v-icon(v-text='mdiFormatQuoteOpen')
+      v-btn(icon text tabindex='-1'
+        :class="{ primary: isActive.blockquote() }"
+        @click="commands.blockquote")
+        v-icon(v-text='mdiFormatQuoteOpen')
 
-        v-btn(icon text tabindex='-1'
-          :class="{ primary: isActive.bullet_list() }"
-          @click="commands.bullet_list")
-          v-icon(v-text='mdiFormatListBulleted')
+      v-btn(icon text tabindex='-1'
+        :class="{ primary: isActive.bullet_list() }"
+        @click="commands.bullet_list")
+        v-icon(v-text='mdiFormatListBulleted')
 
-        v-btn(icon text tabindex='-1' :class='{ primary: isActive.link() }'
-          @click='commands.link({href: getMarkAttrs("link") && getMarkAttrs("link").href ? "" : "https://"}); $refs.link.focus();')
-            v-icon(v-text='mdiLink')
-        v-text-field.pt-0.ml-1(v-show='isActive.link()' ref='link' @focus='focus' @blur='e => { blur(); commands.link({ href: e.target.value}) }' hide-details
-            :value='isActive.link() && getMarkAttrs("link") && getMarkAttrs("link").href || ""'
-            @keypress.enter='commands.link({ href: $event.target.value}); editor.focus()')
+      v-btn(icon text tabindex='-1' :class='{ primary: isActive.link() }'
+        @click='commands.link({href: getMarkAttrs("link") && getMarkAttrs("link").href ? "" : "https://"}); $refs.link.focus();')
+          v-icon(v-text='mdiLink')
+      v-text-field.pt-0.ml-1(v-show='isActive.link()' ref='link' @focus='focus' @blur='e => { blur(); commands.link({ href: e.target.value}) }' hide-details
+          :value='isActive.link() && getMarkAttrs("link") && getMarkAttrs("link").href || ""'
+          @keypress.enter='commands.link({ href: $event.target.value}); editor.focus()')
 
-    editor-content.content(:editor='editor' spellcheck='false' :style="{ 'max-height': maxHeight }" :aria-label='label' :label='label')
+  editor-content.content(:editor='editor' spellcheck='false' :style="{ 'max-height': maxHeight }" :aria-label='label' :label='label')
 </template>
 <script>
 import debounce from 'lodash/debounce'

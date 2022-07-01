@@ -1,19 +1,19 @@
 
 <template lang="pug">
-  v-dialog(v-model='show'
-    :fullscreen='$vuetify.breakpoint.xsOnly'
-    :color='options.color'
-    :title='title'
-    :max-width='options.width'
-    :style="{ zIndex: options.zIndex, position: 'absolute' }"
-    @keydown.esc='cancel')
-    v-card
-      v-card-title {{ title }}
-      v-card-text(v-show='!!message') {{ message }}
-      v-card-actions
-        v-spacer
-        v-btn(text color='error' @click='cancel') {{$t('common.cancel')}}
-        v-btn(text color='primary' @click='agree') {{$t('common.ok')}}
+v-dialog(v-model='show'
+  :fullscreen='$vuetify.breakpoint.xsOnly'
+  :color='options.color'
+  :title='title'
+  :max-width='options.width'
+  :style="{ zIndex: options.zIndex, position: 'absolute' }"
+  @keydown.esc='cancel')
+  v-card
+    v-card-title {{ title }}
+    v-card-text(v-show='!!message') {{ message }}
+    v-card-actions
+      v-spacer
+      v-btn(text color='error' @click='cancel') {{$t('common.cancel')}}
+      v-btn(text color='primary' @click='agree') {{$t('common.ok')}}
 </template>
 
 <script>

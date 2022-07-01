@@ -1,21 +1,20 @@
 <template lang='pug'>
-  v-container
-    v-card-title {{$t('common.events')}}
-    v-card-subtitle {{$t('admin.event_confirm_description')}}
-    v-card-text
-      v-data-table(
-        :hide-default-footer='unconfirmedEvents.length<10'
-        :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
-        :items='unconfirmedEvents'
-        :headers='headers')
-        template(v-slot:item.when='{ item }') {{item|when}}
-        template(v-slot:item.actions='{ item }')
-          v-btn(text small @click='confirm(item)' color='success') {{$t('common.confirm')}}
-          v-btn(text small :to='`/event/${item.slug || item.id}`' color='success') {{$t('common.preview')}}
-          v-btn(text small :to='`/add/${item.id}`' color='warning') {{$t('common.edit')}}
-          v-btn(text small @click='remove(item)'
-            color='error') {{$t('common.delete')}}
-
+v-container
+  v-card-title {{$t('common.events')}}
+  v-card-subtitle {{$t('admin.event_confirm_description')}}
+  v-card-text
+    v-data-table(
+      :hide-default-footer='unconfirmedEvents.length<10'
+      :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
+      :items='unconfirmedEvents'
+      :headers='headers')
+      template(v-slot:item.when='{ item }') {{item|when}}
+      template(v-slot:item.actions='{ item }')
+        v-btn(text small @click='confirm(item)' color='success') {{$t('common.confirm')}}
+        v-btn(text small :to='`/event/${item.slug || item.id}`' color='success') {{$t('common.preview')}}
+        v-btn(text small :to='`/add/${item.id}`' color='warning') {{$t('common.edit')}}
+        v-btn(text small @click='remove(item)'
+          color='error') {{$t('common.delete')}}
 </template>
 <script>
 import { mdiChevronLeft, mdiChevronRight } from '@mdi/js'

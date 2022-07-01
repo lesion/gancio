@@ -1,16 +1,15 @@
 <template lang="pug">
-  v-container
-    v-card
-      v-card-title {{announcement.title}}
-      v-card-text(v-html='announcement.announcement')
-
+v-container
+  v-card
+    v-card-title {{announcement.title}}
+    v-card-text(v-html='announcement.announcement')
 </template>
 <script>
 import { mapState } from 'vuex'
 
 export default {
   name: 'Announcement',
-  asyncData ({ $axios, params, error, store }) {
+  asyncData ({ params, error, store }) {
     try {
       const id = Number(params.id)
       const announcement = store.state.announcements.find(a => a.id === id)
