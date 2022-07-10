@@ -1,6 +1,6 @@
 {
   "name": "gancio",
-  "version": "1.5.0-rc.11",
+  "version": "1.5.0-rc.12",
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
@@ -31,7 +31,7 @@
     "node": ">=12 <=16"
   },
   "dependencies": {
-    "@mdi/js": "^6.7.96",
+    "@mdi/js": "^6.9.96",
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.13.5",
     "@nuxtjs/sitemap": "^2.4.0",
@@ -61,7 +61,7 @@
     "multer": "^1.4.5-lts.1",
     "nuxt-edge": "2.16.0-27358576.777a4b7f",
     "pg": "^8.6.0",
-    "sequelize": "^6.21.1",
+    "sequelize": "^6.21.2",
     "sequelize-slugify": "^1.6.1",
     "sharp": "^0.27.2",
     "sqlite3": "^5.0.8",
@@ -72,14 +72,14 @@
     "vue": "^2.6.14",
     "vue-i18n": "^8.26.7",
     "vue-template-compiler": "^2.6.14",
-    "vuetify": "2.6.6",
-    "winston": "^3.8.0",
+    "vuetify": "2.6.7",
+    "winston": "^3.8.1",
     "winston-daily-rotate-file": "^4.7.1",
     "yargs": "^17.5.0"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.3",
-    "jest": "^28.1.1",
+    "jest": "^28.1.2",
     "prettier": "^2.7.1",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
