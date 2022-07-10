@@ -50,7 +50,7 @@ sudo adduser --group --system --shell /bin/false --home /opt/gancio gancio
 ```
 1. Install Gancio
 ```bash
-sudo yarn global add --silent {{site.url}}/latest.tgz
+sudo yarn global add --network-timeout 1000000000 --silent {{site.url}}/latest.tgz
 ```
 
 1. Setup systemd service and reload systemd
@@ -78,14 +78,6 @@ sudo systemctl start gancio
 ```bash
 sudo yarn global remove gancio
 sudo yarn cache clean
-sudo yarn global add --silent {{site.url}}/latest.tgz
-  if the ESOCKETTIMEDOUT error occurred, run the following command  
-    sudo yarn config set network-timeout 300000
-  then re-run the command
-    sudo yarn global add --silent {{site.url}}/latest.tgz
+sudo yarn global add --network-timeout 1000000000 --silent {{site.url}}/latest.tgz
 sudo systemctl restart gancio
-  if the 502 Bad Gataway error occurred, run the following command
-    sudo systemctl reload nginx
-  then re-run the command
-    sudo systemctl restart gancio
 ```
