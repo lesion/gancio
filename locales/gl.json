@@ -88,7 +88,8 @@
         "import": "Importar",
         "tags": "Cancelos",
         "close": "Pechar",
-        "blobs": "Blobs"
+        "blobs": "Blobs",
+        "collections": "Coleccións"
     },
     "recover": {
         "not_valid_code": "Algo fallou."
@@ -228,7 +229,16 @@
         "event_remove_ok": "Evento eliminado",
         "edit_blob": "Editar Blob",
         "new_blob": "Novo blob",
-        "blobs_description": "Blobs son agrupamentos de eventos por etiquetas e lugares. Mostraranse na páxina de inicio"
+        "blobs_description": "Blobs son agrupamentos de eventos por etiquetas e lugares. Mostraranse na páxina de inicio",
+        "smtp_port": "Porto SMTP",
+        "smtp_secure": "SMTP Seguro (TLS ou STARTTLS)",
+        "new_collection": "Nova colección",
+        "edit_collection": "Editar Colección",
+        "disable_admin_user_confirm": "Tes certeza de querer retirar os permisos de administración a {user}?",
+        "sender_email": "Remitente",
+        "collections_description": "As coleccións son agrupamentos de eventos por etiqueta ou lugar. Pode ser mostrado na páxina de inicio",
+        "enable_admin_user_confirm": "Tes a certeza de querer darlle permisos de administración a {user}?",
+        "smtp_use_sendmail": "Usar sendmail"
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",
