@@ -40,6 +40,7 @@ const defaultSettings = {
     { href: '/', label: 'home' },
     { href: '/about', label: 'about' }
   ],
+  plugins: [],
   admin_email: config.admin_email || '',
   smtp: config.smtp || {}
 }
@@ -117,6 +118,7 @@ const settingsController = {
           const plugin = require(path.resolve(plugins_path, pluginFile))
           if (typeof plugin.load !== 'function') return
           plugin.load({ settings: settingsController.settings })
+          settingsController.settings.plugins.push(plugin)
           log.info(`Plugin ${pluginFile} loaded!`)
           if (typeof plugin.onEventCreate === 'function') {
             notifier.emitter.on('Create', plugin.onEventCreate)
