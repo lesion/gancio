@@ -41,7 +41,7 @@ export default {
     return { collections: [], mdiChevronLeft }
   },  
   async fetch () {
-    this.collections = await this.$axios.$get('collections')
+    this.collections = await this.$axios.$get('collections').catch(_e => [])
   },  
   name: 'Default',
   components: { Nav, Snackbar, Footer, Confirm },

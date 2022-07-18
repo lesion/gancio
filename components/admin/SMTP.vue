@@ -63,7 +63,7 @@ export default {
     }
   },
   async fetch () {
-    this.smtp = await this.$axios.$get('/settings/smtp')
+    this.smtp = await this.$axios.$get('/settings/smtp').catch(_e => ({ auth: {} }))
   },
   computed: mapState(['settings']),
   watch: {

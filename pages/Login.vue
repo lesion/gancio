@@ -51,9 +51,7 @@ export default {
       valid: false
     }
   },
-  computed: {
-    ...mapState(['settings'])
-  },
+  computed: mapState(['settings']),
   methods: {
     async forgot () {
       if (!this.email) {
