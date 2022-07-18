@@ -9,4 +9,5 @@ export default {
   it: 'Italiano',
   nb: 'Norwegian Bokmål',
   pl: 'Polski',
+  sk: 'Slovak'
 }
