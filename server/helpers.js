@@ -69,24 +69,16 @@ module.exports = {
     next()
   },
 
-  async initSettings (req, res, next) {
+  async initSettings (_req, res, next) {
     // initialize settings
     res.locals.settings = cloneDeep(settingsController.settings)
-
-    if (res.locals.settings.smtp && res.locals.settings.smtp.auth) {
-      if (res.locals.user && res.locals.user.is_admin) {
-        delete res.locals.settings.smtp.auth.pass
-      } else {
-        delete res.locals.settings.smtp
-      }
-    }
+    delete res.locals.settings.smtp
     delete res.locals.settings.publicKey
     res.locals.settings.baseurl = config.baseurl
     res.locals.settings.hostname = config.hostname
     res.locals.settings.title = res.locals.settings.title || config.title
     res.locals.settings.description = res.locals.settings.description || config.description
     res.locals.settings.version = pkg.version
-
     // set user locale
     res.locals.user_locale = settingsController.user_locale[res.locals.acceptedLocale]
     next()

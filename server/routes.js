@@ -74,7 +74,7 @@ app.use((error, _req, res, _next) => {
 // remaining request goes to nuxt
 // first nuxt component is ./pages/index.vue (with ./layouts/default.vue)
 // prefill current events, tags, places and announcements (used in every path)
-app.use(async (req, res, next) => {
+app.use(async (_req, res, next) => {
   if (config.status === 'READY') {
 
     const announceController = require('./api/controller/announce')    
@@ -86,14 +86,5 @@ app.use(async (req, res, next) => {
 
 module.exports = {
   handler: app,
-  load () {
-    console.error('dentro load !')
-  },
   unload: () => initialize.shutdown(false)
-  // async unload () {
-  //   const db = require('./api/models/index')
-  //   await db.close()
-    // process.off('SIGTERM')
-    // process.off('SIGINT')    
-  // }
 }

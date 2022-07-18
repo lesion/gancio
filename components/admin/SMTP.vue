@@ -46,7 +46,6 @@ v-card
 import { mapActions, mapState } from 'vuex'
 export default {
   data ({ $store }) {
-    const smtp = { auth: {}, ...$store.state.settings.smtp }
     // if ($store.state.settings.smtp) {
     //   smtp.host = $store.state.settings.smtp.host
     //   if ($store.state.settings.smtp.auth) {
@@ -59,9 +58,12 @@ export default {
     return {
       isValid: false,
       loading: false,
-      smtp,
+      smtp: { auth: {} },
       admin_email: $store.state.settings.admin_email || ''
     }
+  },
+  async fetch () {
+    this.smtp = await this.$axios.$get('/settings/smtp')
   },
   computed: mapState(['settings']),
   watch: {
