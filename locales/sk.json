@@ -125,6 +125,9 @@
         "added_anon": "Podujatie pridané, ale ešte musí byť potvrdené.",
         "updated": "Podujatie upravené",
         "where_description": "Kde je podujatie? Ak nie je prítomné tak to môžte vytvorit.",
-        "confirmed": "Podujatie potvrdené"
+        "confirmed": "Podujatie potvrdené",
+        "not_found": "Nenašlo sa podujatie",
+        "remove_confirmation": "Ste si istý že chcete odstrániť toto podujatie?",
+        "recurrent": "Opakovaný"
     }
 }
