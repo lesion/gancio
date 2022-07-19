@@ -1,7 +1,7 @@
 {
     "common": {
         "title": "Titel",
-        "user": "Nutzer:in",
+        "user": "nutzende Person",
         "moderation": "Moderation",
         "follow": "Folgen",
         "feed_url_copied": "Öffne die kopierte Feed-URL in deinem RSS-Reader",
@@ -23,7 +23,7 @@
         "enable": "Aktiviere",
         "cancel": "Abbrechen",
         "ok": "OK",
-        "new_user": "Neue:r Nutzer:in",
+        "new_user": "Neue nutzende Person",
         "new_password": "Neues Passwort",
         "recover_password": "Passwort wiederherstellen",
         "copy": "Kopieren",
@@ -42,7 +42,7 @@
         "settings": "Einstellungen",
         "places": "Orte",
         "events": "Veranstaltungen",
-        "users": "Nutzer:innen",
+        "users": "nutzende Personen",
         "admin": "Admin",
         "confirm": "Bestätigen",
         "edit": "Bearbeiten",
@@ -100,43 +100,43 @@
         "edit_place": "Ort bearbeiten",
         "enable_resources": "Ressourcen freischalten",
         "hide_boost_bookmark_help": "Versteckt die kleinen Icons, die die Anzahl der eingehenden Boosts und Lesezeichen aus dem Fediverse anzeigen",
-        "user_add_help": "Es wird eine E-Mail an den neuen Benutzer mit einem Hinweis auf die Bestätigung der Registrierung und die Wahl eines Passworts gesendet",
-        "block_user": "Nutzer sperren",
+        "user_add_help": "Es wird eine E-Mail an die neue nutzende Person mit einem Hinweis auf die Bestätigung der Registrierung und die Wahl eines Passworts gesendet",
+        "block_user": "nutzende Person sperren",
         "filter_instances": "Instanzen filtern",
-        "filter_users": "Benutzer filtern",
+        "filter_users": "nutzende Person filtern",
         "resources": "Ressourcen",
-        "user_blocked": "Der Benutzer {user} kann keine Ressourcen mehr hinzufügen",
-        "user_block_confirm": "Bestätige, dass du den Benutzer {user} sperren möchtest?",
+        "user_blocked": "Die nutzende Person {user} kann keine Ressourcen mehr hinzufügen",
+        "user_block_confirm": "Bestätige, dass du die nutzende Person {user} sperren möchtest?",
         "instance_locale": "Vorgegebene Sprache",
         "instance_place": "Vorläufiger Ort dieser Instanz",
         "enable_trusted_instances": "Freigabe von befreundeten Instanzen",
         "smtp_port": "SMTP-Port",
         "smtp_secure": "SMTP Secure (TLS oder STARTTLS)",
         "smtp_use_sendmail": "Sendmail verwenden",
-        "sender_email": "E-Mail des Absenders",
+        "sender_email": "E-Mail der absendenden Person",
         "widget": "Widget",
         "new_collection": "Bubble anlegen",
         "edit_collection": "Bubble bearbeiten",
         "wrong_domain_warning": "Die \"baseurl\" die in config.json konfiguriert ist <b>({baseurl})</b> unterscheidet sich von derjenigen <b>({url})</b> die du besuchst",
         "instance_place_help": "Diese Textzeile wird im Menü der anderen freundlichen Instanzen angezeigt",
         "place_description": "Falls ein Ort falsch ist oder sich die Adresse ändert, kannst du ihn ändern.<br/>Bitte beachte, dass alle Veranstaltungen, die mit diesem Ort verbunden sind, die Adresse ändern (auch zurückliegende).",
-        "enable_admin_user_confirm": "Achte darauf, dass du dem {Benutzer} Admin-Rechte hinzufügst",
+        "enable_admin_user_confirm": "Achte darauf, dass du der nutzenden Person {user} Admin-Rechte hinzufügst",
         "trusted_instances_help": "Befreundete Instanzen werden in der Navigationsleiste oben auf der Seite angezeigt",
         "delete_announcement_confirm": "Möchtest du diesen Hinweis entfernen?",
         "instance_timezone_description": "Gancio wurde dazu entwickelt, um die Veranstaltungen eines bestimmten Ortes, z. B. einer Stadt, zu erfassen. Wenn du die Zeitzone dieses Ortes eingibst und auswählst, werden alle Zeiten angezeigt und wie ausgewählt eingegeben.",
-        "instance_locale_description": "Die Sprache, in der die Seiten angezeigt werden, ist die vom Benutzer bevorzugte Sprache. In einigen Fällen ist es jedoch erforderlich, die Meldungen für alle auf dieselbe Weise anzuzeigen (z. B. bei der Veröffentlichung über ActivityPub oder beim Versand bestimmter E-Mails). In diesen Fällen wird die oben gewählte Sprache verwendet.",
+        "instance_locale_description": "Die Sprache, in der die Seiten angezeigt werden, ist die von der nutzenden Person bevorzugte Sprache. In einigen Fällen ist es jedoch erforderlich, die Meldungen für alle auf dieselbe Weise anzuzeigen (z. B. bei der Veröffentlichung über ActivityPub oder beim Versand bestimmter E-Mails). In diesen Fällen wird die oben gewählte Sprache verwendet.",
         "add_trusted_instance": "Hinzufügen einer befreundeten Instanz",
         "collections_description": "Bubbles sind Gruppierungen von Ereignissen nach Tags und Orten",
-        "disable_admin_user_confirm": "Möchtest du dem Benutzer {user} die Adminrechte entziehen?",
+        "disable_admin_user_confirm": "Möchtest du der nutzenden Person {user} die Adminrechte entziehen?",
         "announcement_description": "In diesem Bereich kannst du Hinweise schalten, die auf der Homepage bleiben",
         "instance_name_help": "Name des ActivityPub-Kontos dem gefolgt werden soll",
         "event_confirm_description": "Hier kannst du von anonymen Nutzern eingetragene Veranstaltungen bestätigen",
         "disable_user_confirm": "Möchtest du {user} deaktivieren?",
         "delete_user": "Lösche",
         "remove_admin": "Admin entfernen",
-        "user_remove_ok": "Gelöschte Benutzer",
+        "user_remove_ok": "Gelöschte nutzende Personen",
         "select_instance_timezone": "Zeitzone",
-        "user_create_ok": "Benutzer angelegt",
+        "user_create_ok": "nutzende Person angelegt",
         "event_remove_ok": "Veranstaltung entfernt",
         "hide_boost_bookmark": "Versteckt Boost/Lesezeichen",
         "unblock": "Entsperre",
@@ -153,7 +153,7 @@
         "allow_recurrent_event": "Wiederkehrende Veranstaltungen erlauben",
         "recurrent_event_visible": "Wiederkehrende Veranstaltungen sind standardmäßig sichtbar",
         "enable_federation": "Federation aktivieren",
-        "allow_anon_event": "Kann man auch anonyme Veranstaltungen (vorausgesetzt, sie werden genehmigt) eintragen?",
+        "allow_anon_event": "Kann man auch anonyme Veranstaltungen (vorausgesetzt, diese werden genehmigt) eintragen?",
         "allow_registration_description": "Möchtest du die Registrierung aktivieren?",
         "federation": "Föderation / ActivityPub",
         "enable_federation_help": "Es wird möglich sein, diese Instanz vom Fediverse aus zu verfolgen",
@@ -163,7 +163,7 @@
         "delete_user_confirm": "Möchtest du {user} entfernen?",
         "show_smtp_setup": "E-Mail-Einstellungen",
         "smtp_hostname": "SMTP-Hostname",
-        "smtp_description": "<ul><li>Der Administrator erhält eine E-Mail, wenn ein anonymes Ereignis hinzugefügt wird (falls aktiviert).</li><li>Der Administrator erhält E-Mails mit der Aufforderung zur Registrierung (falls aktiviert).</li><li>Die Benutzer erhalten eine E-Mail zur Bestätigung der angeforderten Registrierung.</li><li>Die Benutzer erhalten eine E-Mail mit der Anmeldebestätigung.</li><li>Benutzer erhalten eine E-Mail-Benachrichtigung, wenn sie direkt vom Administrator registriert werden.</li><li>Benutzer erhalten eine E-Mail, um ihr Passwort zu ändern, wenn sie es vergessen haben</li></ul>",
+        "smtp_description": "<ul><li>Der Admin erhält eine E-Mail, wenn ein anonymes Ereignis hinzugefügt wird (falls aktiviert).</li><li>Der Admin erhält E-Mails mit der Aufforderung zur Registrierung (falls aktiviert).</li><li>Die nutzenden Personen erhalten eine E-Mail zur Bestätigung der angeforderten Registrierung.</li><li>Die nutzenden Personen erhalten eine E-Mail mit der Anmeldebestätigung.</li><li>Nutzende Personen erhalten eine E-Mail-Benachrichtigung, wenn sie direkt vom Admin registriert werden.</li><li>Nutzende Personen erhalten eine E-Mail, um ihr Passwort zu ändern, wenn sie es vergessen haben</li></ul>",
         "smtp_test_button": "Versenden einer Test-E-Mail",
         "smtp_test_success": "Eine Test-E-Mail wurde an {admin_email} gesendet, überprüfe deine Mailbox"
     },
@@ -172,8 +172,8 @@
         "password_updated": "Passwort geändert.",
         "change_password": "Passwort ändern",
         "remove_account_confirm": "Du bist dabei, dein Konto endgültig zu löschen",
-        "remove_account": "Durch Drücken der folgenden Schaltfläche wird dein Benutzerkonto gelöscht. Die von dir veröffentlichten Ereignisse werden nicht veröffentlicht.",
-        "danger_section": "Gefährlicher Abschnitt"
+        "remove_account": "Durch Drücken der folgenden Schaltfläche wird dein Konto als nutzende Person gelöscht. Die von dir veröffentlichten Ereignisse werden nicht veröffentlicht.",
+        "danger_section": "Gefährlicher Bereich"
     },
     "auth": {
         "fail": "Die Anmeldung ist fehlgeschlagen. Bist du sicher, dass das Passwort korrekt ist?",
@@ -181,10 +181,10 @@
     },
     "error": {
         "email_taken": "Diese E-Mail-Adresse wird schon verwendet.",
-        "nick_taken": "Dieser Benutzername wird bereits verwendet."
+        "nick_taken": "Dieser Name wird bereits für eine nutzende Person verwendet."
     },
     "confirm": {
-        "title": "Bestätigung des Benutzers",
+        "title": "Bestätigung der nutzenden Person",
         "valid": "Dein Konto ist bestätigt; du kannst dich sich jetzt <a href=\"/login\">anmelden</a>",
         "not_valid": "Etwas ist schief gelaufen."
     },
@@ -249,7 +249,7 @@
         "recurrent_2m_ordinal": "Jeden {n} {days} im Monat",
         "each_month": "Jeden Monat",
         "due": "bis",
-        "from": "Von",
+        "from": "von",
         "interact_with_me_at": "Tausche dich mit mir auf dem Fediverse aus unter",
         "interact_with_me": "Folge mir",
         "import_ICS": "Einlesen von ICS",
@@ -259,18 +259,18 @@
         "choose_focal_point": "Auswahl des Schwerpunkts"
     },
     "register": {
-        "first_user": "Administrator erstellt",
+        "first_user": "Admin erstellt",
         "complete": "Die Registrierung muss bestätigt werden.",
         "error": "Fehler: ",
-        "description": "Soziale Bewegungen sollten sich organisieren und durch sich selbst finanzieren.<br/>\n<br/>Vor deiner Veröffentlichung, <strong> muss dein Nutzer-Konto freigeschaltet werden. </strong>Bitte denke daran, dass <strong>hinter dieser Seite echte Menschen zu finden sind</strong>, also schreibe zwei Zeilen, um uns mitzuteilen, welche Veranstaltungen du veröffentlichen möchtest."
+        "description": "Soziale Bewegungen sollten sich organisieren und durch sich selbst finanzieren.<br/>\n<br/>Vor deiner Veröffentlichung, <strong> muss dein Nutzer:innen-Konto freigeschaltet werden. </strong>Bitte denke daran, dass <strong>hinter dieser Seite echte Menschen zu finden sind</strong>, also schreibe zwei Zeilen, um uns mitzuteilen, welche Veranstaltungen du veröffentlichen möchtest."
     },
     "export": {
-        "list_description": "Wenn Sie eine Website haben und eine Liste von Ereignissen anzeigen möchten, verwenden Sie den folgenden Code",
+        "list_description": "Wenn Du eine Website hast und eine Liste von Ereignissen anzeigen möchtest, verwende den folgenden Code",
         "ical_description": "Computer und Smartphones sind üblicherweise mit einer Kalenderanwendung ausgestattet, mit der ein Fernkalender importiert werden kann.",
         "insert_your_address": "Gib deine E-Mail-Adresse ein",
-        "email_description": "Sie können interessante Ereignisse per E-Mail erhalten.",
+        "email_description": "Du kannst interessante Veranstaltungen per E-Mail erhalten.",
         "feed_description": "Um Updates auf deinem Computer oder Smartphone zu erhalten, ohne regelmäßig diese Seite zu öffnen, kannst du RSS-Feeds benutzen. </p>\n\n<p> Mit RSS-Feeds nutzt du eine spezielle App, um Updates von den Seiten, die dich interessieren, zu erhalten. Damit kannst du rasch vielen Seiten folgen, ohne einen\nAccount erstellen zu müssen und ohne sonstige Komplikationen. </p>\n\n<li> Für Android-Geräte empfehlen wir <a href=\"https://f-droid.org/en/packages/net.frju.flym/\">Flym</a> oder Feeder </li>\n<li> Auf iPhones / iPads kannst du <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\"> Feed4U </a> nutzen</li>\n<li> Auf Desktop-PCs oder Laptops empfehlen wir Feedbro, den du in <a href=\"https://addons.mozilla.org/en-GB/firefox/addon/feedbroreader/\"> Firefox </a> oder <a \nref=\"https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa\"> Chrome </a> installieren kannst. </li>\n<br/>\nIndem du diesen Link deinem RSS-Feed-Reader hinzufügst, wirst du auf dem Laufenden gehalten.",
-        "intro": "Anders als unsoziale Netzwerke, die alles unternehmen, um Nutzer und deren Daten bei sich zu (be)halten, glauben wir, dass Informationen und Leute gleichermaßen frei sein müssen. Deshalb kannst du dich über Veranstaltungen auf dem Laufenden halten, ohne zwangsläufig über diese Seite zu gehen."
+        "intro": "Anders als unsoziale Netzwerke, die alles unternehmen, um nutzende Personen und deren Daten bei sich zu (be)halten, glauben wir, dass Informationen und Menschen gleichermaßen frei sein müssen. Deshalb kannst du dich über Veranstaltungen aktuell informieren, ohne zwangsläufig über diese Seite zu gehen."
     },
     "recover": {
         "not_valid_code": "Etwas ist schief gelaufen."
@@ -286,8 +286,8 @@
     },
     "setup": {
         "completed": "Einrichtung abgeschlossen",
-        "completed_description": "<p>Du kannst dich mit den folgenden Anmeldedaten einloggen:<br/><br/>Benutzer: <b>{email}</b><br/>Passwort: <b>{password}<b/></p>",
-        "https_warning": "Du rufst gerade das Setup über HTTP auf, denke daran, die baseurl in der config.json zu ändern, wenn du zu HTTPS wechselst!",
+        "completed_description": "<p>Du kannst dich mit den folgenden Anmeldedaten einloggen:<br/><br/>nutzende Person: <b>{email}</b><br/>Passwort: <b>{password}<b/></p>",
+        "https_warning": "Du rufst gerade das Setup über HTTP auf; denke daran, die baseurl in der config.json zu ändern, wenn du zu HTTPS wechselst!",
         "copy_password_dialog": "Ja, du musst das Passwort kopieren!",
         "start": "Start"
     },
