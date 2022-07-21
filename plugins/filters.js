@@ -16,6 +16,7 @@ import 'dayjs/locale/nb'
 import 'dayjs/locale/fr'
 import 'dayjs/locale/de'
 import 'dayjs/locale/gl'
+import 'dayjs/locale/sk'
 
 dayjs.extend(relativeTime)
 dayjs.extend(utc)
@@ -99,6 +100,6 @@ export default ({ app, store }) => {
     }
 
     // normal event
-    return `${start.format('ddd, D MMM HH:mm')} - ${end.format('HH:mm')}`
+    return `${start.format('dddd, D MMMM HH:mm')} - ${end.format('HH:mm')}`
   })
 }
