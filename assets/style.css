@@ -48,6 +48,23 @@ li {
   max-width: 100%;
 }
 
+.v-application p {
+  margin-bottom: 6px;
+}
+
+.v-application blockquote {
+  font-style: italic;
+  padding: 15px;
+}
+
+.editor .content {
+  background-color: #f7f7f7;
+}
+
+.theme--dark .editor .content {
+  background-color: #333;
+}
+
 .theme--dark.v-list {
   background-color: #333;
 }

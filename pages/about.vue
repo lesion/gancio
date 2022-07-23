@@ -2,7 +2,7 @@
 v-container
   v-card
     v-card-text(v-if='$auth.user && $auth.user.is_admin')
-      Editor(v-model='about' label="About")
+      Editor.px-3.ma-0(v-model='about' label="About")
     v-card-text(v-else v-html='about')
     v-card-actions(v-if='$auth.user && $auth.user.is_admin')
       v-spacer
