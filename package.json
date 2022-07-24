@@ -58,7 +58,7 @@
     "multer": "^1.4.5-lts.1",
     "nuxt-edge": "^2.16.0-27358576.777a4b7f",
     "pg": "^8.6.0",
-    "sequelize": "^6.20.1",
+    "sequelize": "^6.21.2",
     "sequelize-slugify": "^1.6.1",
     "sharp": "^0.27.2",
     "sqlite3": "^5.0.8",
