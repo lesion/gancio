@@ -14,7 +14,7 @@ v-container
     v-card(color='secondary')
       v-card-title {{$t('admin.edit_collection')}}
       v-card-text
-        v-form(v-model='valid' ref='form')
+        v-form(v-model='valid' ref='form' @submit.prevent.native='saveCollection')
           v-text-field(
             v-if='!collection.id'
             :rules="[$validators.required('common.name')]"
@@ -71,7 +71,6 @@ v-container
           v-col(cols=2)
             v-btn(color='primary' text @click='addFilter' :disabled='!collection.id || !filterPlaces.length && !filterTags.length') add <v-icon v-text='mdiPlus'></v-icon>
             
-
         v-data-table(
           :headers='filterHeaders'
           :items='filters'
