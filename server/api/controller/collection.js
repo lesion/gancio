@@ -14,8 +14,7 @@ const collectionController = {
     const withFilters = req.query.withFilters
     let collections
     if (withFilters) {
-      collections = await Collection.findAll({ include: [Filter] })
-
+      collections = await Collection.findAll({ include: [ Filter ] })
     } else {
       collections = await Collection.findAll()
     }
@@ -109,9 +108,14 @@ const collectionController = {
     }
 
     // TODO: validation
-    log.info('Create collection: ' + req.body.name)
-    const collection = await Collection.create(collectionDetail)
-    res.json(collection)
+    log.info(`Create collection: ${req.body.name}`)
+    try {
+      const collection = await Collection.create(collectionDetail)
+      res.json(collection)
+    } catch (e) {
+      log.error(`Create collection failed ${e}`)
+      res.sendStatus(400)
+    }
   },
 
   async remove (req, res) {
@@ -122,7 +126,7 @@ const collectionController = {
       await collection.destroy()
       res.sendStatus(200)
     } catch (e) {
-      log.error('Remove collection failed:', e)
+      log.error('Remove collection failed:' + String(e))
       res.sendStatus(404)
     }
   },
@@ -148,9 +152,12 @@ const collectionController = {
 
   async removeFilter (req, res) {
     const filter_id = req.params.id
-    log.info('Remove filter', filter_id)
+    log.info(`Remove filter ${filter_id}`)
     try {
       const filter = await Filter.findByPk(filter_id)
+      if (!filter) {
+        return res.sendStatus(404)
+      }
       await filter.destroy()
       res.sendStatus(200)
     } catch (e) {

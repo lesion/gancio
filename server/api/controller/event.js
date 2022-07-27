@@ -391,7 +391,13 @@ const eventController = {
       let place
       if (body.place_id) {
         place = await Place.findByPk(body.place_id)
+        if (!place) {
+          return res.status(400).send(`Place not found`)
+        }
       } else {
+        if (!body.place_name) {
+          return res.status(400).send(`Place not found`)
+        }
         place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Op.eq, body.place_name.trim().toLocaleLowerCase() )})
         if (!place) {
           if (!body.place_address || !body.place_name) {
@@ -639,11 +645,11 @@ const eventController = {
     if (tags && places) {
       where[Op.and] = [ 
         { placeId: places ? places.split(',') : []},
-        Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=event.id AND LOWER(${Col('tagTag')}) in (?)`))
+        Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND LOWER(${Col('tagTag')}) in (?)`))
       ]
       replacements.push(tags)
     } else if (tags) {
-      where[Op.and] = Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=event.id AND LOWER(${Col('tagTag')}) in (?)`))
+      where[Op.and] = Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND LOWER(${Col('tagTag')}) in (?)`))
       replacements.push(tags)
     } else if (places) {
       where.placeId = places.split(',')
