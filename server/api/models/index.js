@@ -19,7 +19,7 @@ const db = {
   },
   connect (dbConf = config.db) {
     log.debug(`Connecting to DB: ${JSON.stringify(dbConf)}`)
-    // dbConf.dialectOptions = { autoJsonMap: false }
+    dbConf.dialectOptions = { autoJsonMap: true }
     if (dbConf.dialect === 'sqlite') {
       dbConf.retry = {
         match: [
