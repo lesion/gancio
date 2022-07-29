@@ -60,7 +60,6 @@ v-container.container.pa-0.pa-md-3
                 template(v-slot:selection="{ item, on, attrs, selected, parent}")
                   v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
                     :input-value="selected" label small) {{item}}
-      </v-chip>
 
     v-card-actions
       v-spacer
@@ -202,7 +201,9 @@ export default {
 
       if (this.event.media.length) {
         formData.append('image', this.event.media[0].image)
-        // formData.append('image_url', this.event.media[0].url)
+        if (this.event.media[0].url) {
+          formData.append('image_url', this.event.media[0].url)
+        }
         formData.append('image_name', this.event.media[0].name)
         formData.append('image_focalpoint', this.event.media[0].focalpoint)
       }
