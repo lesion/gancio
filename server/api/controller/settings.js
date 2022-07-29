@@ -175,6 +175,10 @@ const settingsController = {
     return res.json(settingsController['settings']['smtp'])
   },
 
+  getAll (_req, res) {
+    return res.json(settingsController.settings)
+  },
+
   setLogo (req, res) {
     if (!req.file) {
       settingsController.set('logo', false)
