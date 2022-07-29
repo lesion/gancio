@@ -29,6 +29,7 @@ beforeAll( async () => {
   await sequelize.query('DELETE FROM tags')
   await sequelize.query('DELETE FROM places')
   await sequelize.query('DELETE FROM collections')
+  await sequelize.query('DELETE FROM filters')
 })
 
 afterAll( async () => {
@@ -56,12 +57,13 @@ describe('Authentication / Authorization', () => {
       .expect(500)
   })
 
-  test('shoud register an admin as first user', async () => {
+  test('should register an admin as first user', async () => {
     const response = await request(app)
       .post('/api/user/register')
       .send({ email: 'admin', password: 'test' })
       .expect(200)
     expect(response.body.id).toBeDefined()
+    return response
   })
 
   test('should authenticate with correct user/password', async () => {
@@ -83,12 +85,67 @@ describe('Authentication / Authorization', () => {
     expect(response.body.email).toBe(admin.username)
     expect(response.body.is_admin).toBe(true)
   })
+})
+
+describe('Settings', () => {
 
   test('should not change settings when not allowed', async () => {
     return request(app).post('/api/settings')
       .send({ key: 'allow_anon_event', value: false })
       .expect(403)
   })
+
+  test('should change settings when allowed', () => {
+    return request(app).post('/api/settings')
+      .send({ key: 'allow_anon_event', value: true })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+  })
+
+  test('should retrieve stored array settings', async () => {
+    await request(app).post('/api/settings')
+      .auth(token.access_token, { type: 'bearer' })
+      .send({ key: 'test', value: [1,2,'test'] })
+      .expect(200)
+
+    const response = await request(app)
+      .get('/api/settings')
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+    
+    expect(response.body.test.length).toBe(3)
+    expect(response.body.test).toStrictEqual([1,2,'test'])
+  })
+
+
+  test('should retrieve stored object settings', async () => {
+    await request(app).post('/api/settings')
+      .auth(token.access_token, { type: 'bearer' })
+      .send({ key: 'test', value: { name: 'test object' } })
+      .expect(200)
+
+    const response = await request(app)
+      .get('/api/settings')
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+    
+    expect(response.body.test.name).toBe('test object')
+  })
+
+
+  test('should retrieve stored string settings', async () => {
+    await request(app).post('/api/settings')
+      .auth(token.access_token, { type: 'bearer' })
+      .send({ key: 'test', value: 'test string' })
+      .expect(200)
+
+    const response = await request(app)
+      .get('/api/settings')
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+    
+    expect(response.body.test).toBe('test string')
+  })  
 
 })
 
@@ -247,7 +304,6 @@ describe ('Collection', () => {
       expect(response.body.length).toBe(0)
     })
 
-
   test('should add a new filter', async () => {
     await request(app)
       .post('/api/filter')
@@ -262,6 +318,18 @@ describe ('Collection', () => {
     expect(response.body.id).toBeDefined()
     filters.push(response.body.id)
 
+  })
+
+  test('shoud get collection\'s filters using withFilters parameter', async () => {
+    const response = await request(app)
+      .get('/api/collections?withFilters=true')
+      .expect(200)
+
+    expect(response.body.length).toBe(1)
+    expect(response.body[0].name).toBe('test collection')
+    expect(response.body[0].filters.length).toBe(1)
+    expect(response.body[0].filters[0].tags.length).toBe(1)
+    expect(response.body[0].filters[0].tags[0]).toBe('test')
   })
 
   test('should get collection events', async () => {
