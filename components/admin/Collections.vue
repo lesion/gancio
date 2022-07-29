@@ -152,7 +152,9 @@ export default {
     }, 100),
     collectionFilters (collection) {
       return collection.filters.map(f => {
-        return '(' + f.tags?.join(', ') + f.places?.map(p => p.name).join(', ') + ')'
+        const tags = f.tags?.join(', ') 
+        const places = f.places?.map(p => p.name).join(', ')
+        return '(' + (tags && places ? tags + ' - ' + places : tags + places) + ')'
       }).join(' - ')
     },
     async addFilter () {
