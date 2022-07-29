@@ -1,4 +1,9 @@
 const Sequelize = require('sequelize')
+
+// this is an hack: https://github.com/sequelize/sequelize/pull/14800
+const livePatchMariaDBDialect = require('sequelize/lib/dialects/mariadb/query')
+livePatchMariaDBDialect.prototype.handleJsonSelectQuery = () => null
+
 const Umzug = require('umzug')
 const path = require('path')
 const config = require('../../config')
@@ -14,7 +19,7 @@ const db = {
   },
   connect (dbConf = config.db) {
     log.debug(`Connecting to DB: ${JSON.stringify(dbConf)}`)
-    dbConf.dialectOptions = { autoJsonMap: false }
+    // dbConf.dialectOptions = { autoJsonMap: false }
     if (dbConf.dialect === 'sqlite') {
       dbConf.retry = {
         match: [
