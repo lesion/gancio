@@ -41,7 +41,12 @@ export default {
     return { collections: [], mdiChevronLeft }
   },  
   async fetch () {
-    this.collections = await this.$axios.$get('collections').catch(_e => [])
+    if (this.$route.name && ['tag-tag', 'index', 'g-collection', 'p-place'].includes(this.$route.name)) {
+      this.collections = await this.$axios.$get('collections').catch(_e => [])
+    } else {
+      this.collections = []
+    }
+
   },  
   name: 'Default',
   components: { Nav, Snackbar, Footer, Confirm },
