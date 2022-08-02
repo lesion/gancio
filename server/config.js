@@ -26,7 +26,7 @@ let config = {
     if (fs.existsSync(config_path)) {
       const configContent = fs.readFileSync(config_path)
       config = Object.assign(config, JSON.parse(configContent))
-      config.status = 'READY'
+      config.status = 'CONFIGURED'
       if (!config.hostname) {
         config.hostname = new URL.URL(config.baseurl).hostname
       }

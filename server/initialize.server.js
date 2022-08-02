@@ -25,8 +25,9 @@ const initialize = {
     const dayjs = require('dayjs')
     const timezone = require('dayjs/plugin/timezone')
     dayjs.extend(timezone)
-    if (config.status == 'READY') {
+    if (config.status == 'CONFIGURED') {
       await db.initialize()
+      config.status = 'READY'
     } else {
       if (process.env.GANCIO_DB_DIALECT) {
         const setupController = require('./api/controller/setup')

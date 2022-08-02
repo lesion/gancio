@@ -62,7 +62,7 @@ const db = {
     return umzug.up()    
   },
   async initialize () {
-    if (config.status === 'READY') {
+    if (config.status === 'CONFIGURED') {
       try {
         await db.connect()
         log.debug('Running migrations')

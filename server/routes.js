@@ -3,29 +3,27 @@ const cookieParser = require('cookie-parser')
 const app = express()
 const initialize = require('./initialize.server')
 
+const config = require('./config')
+const helpers = require('./helpers')
+app.use(helpers.setUserLocale)
+app.use(helpers.initSettings)
+app.use(helpers.logRequest)
+app.use(helpers.serveStatic())
+app.use(cookieParser())
+
 async function main () {
 
   await initialize.start()
-
+  
   // const metricsController = require('./metrics')
   // const promBundle = require('express-prom-bundle')
   // const metricsMiddleware = promBundle({ includeMethod: true })
-
-  const config = require('./config')
-
-  const helpers = require('./helpers')
+  
+  
   const log = require('./log')
   const api = require('./api')
-
+  
   app.enable('trust proxy')
-  app.use(helpers.logRequest)
-
-  app.use(helpers.initSettings)
-  app.use(helpers.setUserLocale)
-  app.use(helpers.serveStatic())
-
-  app.use(cookieParser())
-
 
   // do not handle all routes on setup
   if (config.status === 'READY') {
