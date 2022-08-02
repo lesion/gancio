@@ -497,9 +497,9 @@ const eventController = {
       const eventDetails = {
         title: body.title || event.title,
         // sanitize and linkify html
-        description: helpers.sanitizeHTML(linkifyHtml(body.description, { target: '_blank' })) || event.description,
+        description: helpers.sanitizeHTML(linkifyHtml(body.description || '', { target: '_blank' })) || event.description,
         multidate: body.multidate,
-        start_datetime: body.start_datetime,
+        start_datetime: body.start_datetime || event.start_datetime,
         end_datetime: body.end_datetime,
         recurrent
       }
@@ -517,7 +517,7 @@ const eventController = {
       }
 
       // modify associated media only if a new file is uploaded or remote image_url is used
-      if (req.file || body.image_url) {
+      if (req.file || (body.image_url && /^https?:\/\//.test(body.image_url))) {
         if (!req.file && body.image_url) {
           req.file = await helpers.getImageFromURL(body.image_url)
         }
@@ -540,10 +540,29 @@ const eventController = {
         eventDetails.media = [ { ...event.media[0], focalpoint } ] // [0].focalpoint = focalpoint
       }
       await event.update(eventDetails)
-      const [place] = await Place.findOrCreate({
-        where: { name: body.place_name },
-        defaults: { address: body.place_address }
-      })
+
+      // find or create the place
+      let place
+      if (body.place_id) {
+        place = await Place.findByPk(body.place_id)
+        if (!place) {
+          return res.status(400).send(`Place not found`)
+        }
+      } else {
+        if (!body.place_name) {
+          return res.status(400).send(`Place not found`)
+        }
+        place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Op.eq, body.place_name.trim().toLocaleLowerCase() )})
+        if (!place) {
+          if (!body.place_address || !body.place_name) {
+            return res.status(400).send(`place_id or place_name and place_address required`)
+          }
+          place = await Place.create({
+            name: body.place_name,
+            address: body.place_address
+          })
+        }
+      }
 
       await event.setPlace(place)
       
@@ -554,7 +573,10 @@ const eventController = {
         await event.setTags(tags)
       }
 
-      const newEvent = await Event.findByPk(event.id, { include: [Tag, Place] })
+      let newEvent = await Event.findByPk(event.id, { include: [Tag, Place] })
+      newEvent = newEvent.get()
+      newEvent.tags = tags.map(t => t.tag)
+      newEvent.place = place
       res.json(newEvent)
 
       // create recurrent instances of event if needed
