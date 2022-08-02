@@ -217,26 +217,38 @@ describe('Events', () => {
   })
 })
 
+let event = {}
 describe('Tags', () => {
   test('should create event with tags', async () => {
-    const event = await request(app).post('/api/event')
+    event = await request(app).post('/api/event')
       .send({ title: 'test tags', place_id: places[1], start_datetime: dayjs().unix()+1000 , tags: ['tag1', 'Tag2', 'tAg3'] })
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
     expect(event.body.tags.length).toBe(3)
+    expect(event.body.tags).toStrictEqual(['tag1', 'Tag2', 'tAg3'])
   })
 
   test('should create event trimming tags / ignore sensitiviness', async () => {
-    const event = await request(app).post('/api/event')
+    const ret = await request(app).post('/api/event')
       .send({ title: 'test trimming tags', place_id: places[1], start_datetime: dayjs().unix()+1000, tags: ['Tag1', 'taG2 '] })
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
-    expect(event.body.tags.length).toBe(2)
-    expect(event.body.tags[0]).toBe('tag1')
-    expect(event.body.tags[1]).toBe('Tag2')
-  })  
+    expect(ret.body.tags.length).toBe(2)
+    // expect(ret.body.tags).toStrictEqual(['Tag1', 'taG2'])
+    expect(ret.body.tags[0]).toBe('tag1')
+    expect(ret.body.tags[1]).toBe('Tag2')
+  })
+
+  test('should modify event tags', async () => {
+    const ret = await request(app).put('/api/event')
+    .send({ id: event.body.id, tags: ['tag1', 'tag3', 'tag4'], place_id: places[1] })
+    .auth(token.access_token, { type: 'bearer' })
+    .expect(200)
+
+    expect(ret.body.tags).toStrictEqual(['tag1', 'tAg3', 'tag4'])
+  })
 
   test('should return events searching for tags', async () => {
     const response = await request(app).get('/api/events?tags=tAg3')
