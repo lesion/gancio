@@ -14,15 +14,15 @@ app.use(cookieParser())
 async function main () {
 
   await initialize.start()
-  
+
   // const metricsController = require('./metrics')
   // const promBundle = require('express-prom-bundle')
   // const metricsMiddleware = promBundle({ includeMethod: true })
-  
-  
+
+
   const log = require('./log')
   const api = require('./api')
-  
+
   app.enable('trust proxy')
 
   // do not handle all routes on setup
