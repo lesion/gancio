@@ -54,7 +54,7 @@ const settingsController = {
   secretSettings: {},
 
   async load () {
-    if (config.status !== 'READY') {
+    if (config.status !== 'CONFIGURED') {
       settingsController.settings = defaultSettings
       return
     }
