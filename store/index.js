@@ -41,7 +41,7 @@ export const actions = {
   // we use it to get configuration from db, set locale, etc...
   nuxtServerInit ({ commit }, { _req, res }) {
     commit('setSettings', res.locals.settings)
-    // dayjs.tz.(res.locals.settings.instance_timezone)
+    dayjs.tz(res.locals.settings.instance_timezone)
     if (res.locals.status === 'READY') {
       commit('setAnnouncements', res.locals.announcements)
     }
