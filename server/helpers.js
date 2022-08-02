@@ -120,9 +120,6 @@ module.exports = {
 
   async getImageFromURL (url) {
     log.debug(`getImageFromURL ${url}`)
-    if(!/^https?:\/\//.test(url)) {
-      throw Error('Hacking attempt?')
-    }
 
     const filename = crypto.randomBytes(16).toString('hex')
     const sharpStream = sharp({ failOnError: true })
