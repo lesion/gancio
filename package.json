@@ -68,7 +68,7 @@
     "sequelize": "^6.21.3",
     "sequelize-slugify": "^1.6.1",
     "sharp": "^0.27.2",
-    "sqlite3": "^5.0.10",
+    "sqlite3": "^5.0.11",
     "tiptap": "^1.32.0",
     "tiptap-extensions": "^1.35.0",
     "umzug": "^2.3.0",
@@ -76,7 +76,7 @@
     "vue": "2.7.8",
     "vue-i18n": "^8.26.7",
     "vue-template-compiler": "2.7.8",
-    "vuetify": "2.6.7",
+    "vuetify": "2.6.8",
     "winston": "^3.8.1",
     "winston-daily-rotate-file": "^4.7.1",
     "yargs": "^17.5.0"

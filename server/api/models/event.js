@@ -111,7 +111,7 @@ Event.prototype.toAP = function (username, locale, to = []) {
     tag: tags && tags.map(tag => ({
       type: 'Hashtag',
       name: '#' + tag,
-      href: '/tags/' + tag
+      href: `${config.baseurl}/tag/${tag}`
     })),
     published: dayjs(this.createdAt).utc().format(),
     attributedTo: `${config.baseurl}/federation/u/${username}`,
