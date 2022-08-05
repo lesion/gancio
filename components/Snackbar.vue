@@ -35,7 +35,7 @@ export default {
     this.$root.$message = (message, opts = {}) => {
       this.active = true
       this.message = this.$t(message, opts)
-      this.color = opts.color || 'secondary'
+      this.color = opts.color || 'primary'
       this.icon = opts.icon || (this.color === 'success' ? mdiInformation : mdiAlert)
     }
   }
