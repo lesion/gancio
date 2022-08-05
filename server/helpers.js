@@ -3,6 +3,8 @@ const settingsController = require('./api/controller/settings')
 const acceptLanguage = require('accept-language')
 const express = require('express')
 const dayjs = require('dayjs')
+const timezone = require('dayjs/plugin/timezone')
+dayjs.extend(timezone)
 
 const config = require('./config')
 const log = require('./log')
@@ -81,6 +83,7 @@ module.exports = {
     res.locals.settings.version = pkg.version
     // set user locale
     res.locals.user_locale = settingsController.user_locale[res.locals.acceptedLocale]
+    dayjs.tz.setDefault(res.locals.settings.instance_timezone)
     next()
   },
 
