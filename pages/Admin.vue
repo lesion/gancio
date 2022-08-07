@@ -1,58 +1,57 @@
 <template lang="pug">
-  v-container.container.pa-0.pa-md-3
-    v-card
-      v-alert(v-if='url!==settings.baseurl' outlined type='warning' color='red' show-icon :icon='mdiAlert')
-        span(v-html="$t('admin.wrong_domain_warning', { url, baseurl: settings.baseurl })")
-      v-tabs(v-model='selectedTab' show-arrows :next-icon='mdiChevronRight' :prev-icon='mdiChevronLeft')
+v-container.container.pa-0.pa-md-3
+  v-card
+    v-alert(v-if='url!==settings.baseurl' outlined type='warning' color='red' show-icon :icon='mdiAlert')
+      span(v-html="$t('admin.wrong_domain_warning', { url, baseurl: settings.baseurl })")
+    v-tabs(v-model='selectedTab' show-arrows :next-icon='mdiChevronRight' :prev-icon='mdiChevronLeft')
 
-        //- SETTINGS
-        v-tab {{$t('common.settings')}}
-        v-tab-item
-          Settings
+      //- SETTINGS
+      v-tab {{$t('common.settings')}}
+      v-tab-item
+        Settings
 
-        //- THEME
-        v-tab {{$t('common.theme')}}
-        v-tab-item
-          Theme
+      //- THEME
+      v-tab {{$t('common.theme')}}
+      v-tab-item
+        Theme
 
-        //- USERS
-        v-tab
-          v-badge(:value='!!unconfirmedUsers.length' :content='unconfirmedUsers.length') {{$t('common.users')}}
-        v-tab-item
-          Users(:users='users' @update='updateUsers')
+      //- USERS
+      v-tab
+        v-badge(:value='!!unconfirmedUsers.length' :content='unconfirmedUsers.length') {{$t('common.users')}}
+      v-tab-item
+        Users(:users='users' @update='updateUsers')
 
-        //- PLACES
-        v-tab {{$t('common.places')}}
-        v-tab-item
-          Places
+      //- PLACES
+      v-tab {{$t('common.places')}}
+      v-tab-item
+        Places
 
-        //- Collections
-        v-tab {{$t('common.collections')}}
-        v-tab-item
-          Collections
+      //- Collections
+      v-tab {{$t('common.collections')}}
+      v-tab-item
+        Collections
 
-        //- EVENTS
-        v-tab
-          v-badge(:value='!!unconfirmedEvents.length' :content='unconfirmedEvents.length') {{$t('common.events')}}
-        v-tab-item
-          Events(:unconfirmedEvents='unconfirmedEvents'
-            @confirmed='id => { unconfirmedEvents = unconfirmedEvents.filter(e => e.id !== id)}')
+      //- EVENTS
+      v-tab
+        v-badge(:value='!!unconfirmedEvents.length' :content='unconfirmedEvents.length') {{$t('common.events')}}
+      v-tab-item
+        Events(:unconfirmedEvents='unconfirmedEvents'
+          @confirmed='id => { unconfirmedEvents = unconfirmedEvents.filter(e => e.id !== id)}')
 
-        //- ANNOUNCEMENTS
-        v-tab {{$t('common.announcements')}}
-        v-tab-item
-          Announcement
+      //- ANNOUNCEMENTS
+      v-tab {{$t('common.announcements')}}
+      v-tab-item
+        Announcement
 
-        //- FEDERATION
-        v-tab {{$t('common.federation')}}
-        v-tab-item
-          Federation
+      //- FEDERATION
+      v-tab {{$t('common.federation')}}
+      v-tab-item
+        Federation
 
-        //- MODERATION
-        v-tab(v-if='settings.enable_federation') {{$t('common.moderation')}}
-        v-tab-item
-          Moderation
-
+      //- MODERATION
+      v-tab(v-if='settings.enable_federation') {{$t('common.moderation')}}
+      v-tab-item
+        Moderation
 </template>
 <script>
 import { mapState } from 'vuex'

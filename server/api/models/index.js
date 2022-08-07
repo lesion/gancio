@@ -1,4 +1,9 @@
 const Sequelize = require('sequelize')
+
+// this is an hack: https://github.com/sequelize/sequelize/pull/14800
+const livePatchMariaDBDialect = require('sequelize/lib/dialects/mariadb/query')
+livePatchMariaDBDialect.prototype.handleJsonSelectQuery = () => null
+
 const Umzug = require('umzug')
 const path = require('path')
 const config = require('../../config')
@@ -13,8 +18,8 @@ const db = {
     }
   },
   connect (dbConf = config.db) {
+    dbConf.dialectOptions = { autoJsonMap: true }
     log.debug(`Connecting to DB: ${JSON.stringify(dbConf)}`)
-    dbConf.dialectOptions = { autoJsonMap: false }
     if (dbConf.dialect === 'sqlite') {
       dbConf.retry = {
         match: [
@@ -30,8 +35,12 @@ const db = {
     return db.sequelize.authenticate()
   },
   async isEmpty () {
-    const users = await db.sequelize.query('SELECT * from users').catch(e => {})
-    return !(users && users.length)
+    try {
+      const users = await db.sequelize.query('SELECT * from users')
+      return !(users && users.length)
+    } catch (e) {
+      return true
+    }
   },
   async runMigrations () {
     const logging = config.status !== 'READY' ? false : log.debug.bind(log)
@@ -53,7 +62,7 @@ const db = {
     return umzug.up()    
   },
   async initialize () {
-    if (config.status === 'READY') {
+    if (config.status === 'CONFIGURED') {
       try {
         await db.connect()
         log.debug('Running migrations')

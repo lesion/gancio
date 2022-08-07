@@ -2,20 +2,20 @@
 v-container
   v-row.mt-5(align='center' justify='center')
     v-col(cols='12' md="6" lg="5" xl="4")
-      v-card
-        v-card-title {{$t('common.set_password')}}
-        template(v-if='user')
-          v-card-subtitle {{user.email}}
-          v-card-text
-            v-form
+      v-form(ref='form' @submit.prevent='change_password')
+        v-card
+          v-card-title {{$t('common.set_password')}}
+          template(v-if='user')
+            v-card-subtitle {{user.email}}
+            v-card-text
               v-text-field(type='password' v-model='new_password' :label="$t('common.new_password')" :rules='$validators.password' autofocus)
 
-          v-card-actions
-            v-spacer
-            v-btn(text color="primary" :disabled='!new_password' @click='change_password') {{$t('common.send')}}
+            v-card-actions
+              v-spacer
+              v-btn(color="primary" type='submit' :disabled='!new_password' @click='change_password' outlined) {{$t('common.send')}}
 
-        v-card-text(v-else)
-          v-alert.ma-5(type='error') {{$t('recover.not_valid_code')}}
+          v-card-text(v-else)
+            v-alert.ma-5(type='error') {{$t('recover.not_valid_code')}}
 
 </template>
 <script>
@@ -36,10 +36,11 @@ export default {
   },
   methods: {
     async change_password () {
+      if (!this.$refs.form.validate()) return
       try {
         await this.$axios.$post('/user/recover_password', { recover_code: this.code, password: this.new_password })
         this.$root.$message('common.password_updated', { color: 'success' })
-        this.$router.replace('/login')
+        this.$router.push('/login')
       } catch (e) {
         this.$root.$message(e, { color: 'warning' })
       }

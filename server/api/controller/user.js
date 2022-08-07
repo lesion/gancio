@@ -80,7 +80,6 @@ const userController = {
     if (!settingsController.settings.allow_registration) { return res.sendStatus(404) }
     const n_users = await User.count()
     try {
-      req.body.recover_code = crypto.randomBytes(16).toString('hex')
 
       // the first registered user will be an active admin
       if (n_users === 0) {
@@ -104,7 +103,7 @@ const userController = {
       res.sendStatus(200)
     } catch (e) {
       log.error('Registration error:', e)
-      res.status(404).json(e)
+      res.status(400).json(e)
     }
   },
 

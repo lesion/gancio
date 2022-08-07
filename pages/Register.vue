@@ -25,7 +25,7 @@ v-container.pa-0.pa-md-3
 
         v-card-actions
           v-spacer
-          v-btn(@click='register'
+          v-btn(@click='register' outlined
             :disabled='!valid || loading' :loading='loading'
             color='primary') {{$t('common.send')}}
             v-icon(v-text='mdiChevronRight')
@@ -53,10 +53,6 @@ export default {
   },
   computed: {
     ...mapState(['settings'])
-    // disabled () {
-    //   if (process.server) { return false }
-    //   return !this.user.password || !this.user.email || !this.user.description
-    // }
   },
   mounted () {
     this.$refs.email.focus()
@@ -70,7 +66,7 @@ export default {
         const user = await this.$axios.$post('/user/register', this.user)
         // this is the first user registered
         const first_user = user && user.is_admin && user.is_active
-        this.$root.$message(first_user ? 'register.first_user': 'register.complete')
+        this.$root.$message(first_user ? 'register.first_user': 'register.complete', { color: 'success' })
         this.$router.replace('/')
       } catch (e) {
         const error = get(e, 'response.data.errors[0].message', String(e))

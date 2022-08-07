@@ -1,23 +1,23 @@
 <template lang='pug'>
-  v-card
-    v-card-title(v-text="$t('common.follow_me_title')")
-    v-card-text
-      p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${settings.hostname}`})")
-      v-text-field(
-        :rules="[$validators.required('common.url')]"
-        :loading='loading'
-        :label="$t('common.url')"
-        v-model='instance_hostname')
-        v-btn(v-if='!isDialog' slot='prepend' text :disabled='(!couldGo || !proceed)' :href='link' target='_blank'
-          :loading='loading' color="primary") {{$t("common.follow")}}
-
-        p(slot='append') <img class='instance_thumb' :src="instance.thumbnail"/> {{instance.title}}
-
-    v-card-actions(v-if='isDialog')
-      v-spacer
-      v-btn(v-if='isDialog' color='warning' @click="$emit('close')") {{$t("common.cancel")}}
-      v-btn(:disabled='(!couldGo || !proceed)' :href='link' target='_blank'
+v-card
+  v-card-title(v-text="$t('common.follow_me_title')")
+  v-card-text
+    p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${settings.hostname}`})")
+    v-text-field(
+      :rules="[$validators.required('common.url')]"
+      :loading='loading'
+      :label="$t('common.url')"
+      v-model='instance_hostname')
+      v-btn(v-if='!isDialog' slot='prepend' text :disabled='(!couldGo || !proceed)' :href='link' target='_blank'
         :loading='loading' color="primary") {{$t("common.follow")}}
+
+      p(slot='append') <img class='instance_thumb' :src="instance.thumbnail"/> {{instance.title}}
+
+  v-card-actions(v-if='isDialog')
+    v-spacer
+    v-btn(v-if='isDialog' color='warning' @click="$emit('close')") {{$t("common.cancel")}}
+    v-btn(:disabled='(!couldGo || !proceed)' :href='link' target='_blank'
+      :loading='loading' color="primary") {{$t("common.follow")}}
 </template>
 <script>
 import { mapState } from 'vuex'

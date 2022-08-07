@@ -13,7 +13,6 @@ module.exports = {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' }
     ],
-    link: [{ rel: 'icon', type: 'image/png', href: config.baseurl + '/logo.png' }],
     script: [{ src: '/gancio-events.es.js', async: true, body: true }],
   },
   dev: isDev,
@@ -51,7 +50,7 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/sitemap'    
+    '@nuxtjs/sitemap'
   ],
 
   sitemap: {
@@ -65,9 +64,13 @@ module.exports = {
     ],
     routes: async () => {
       if (config.status === 'READY') {
-        const Event = require('./server/api/models/event')
-        const events = await Event.findAll({where: { is_visible: true }})
-        return events.map(e => `/event/${e.slug}`)
+        try {
+          const Event = require('./server/api/models/event')
+          const events = await Event.findAll({where: { is_visible: true }})
+          return events.map(e => `/event/${e.slug}`)
+        } catch (e) {
+          return []
+        }
       } else {
         return []
       }

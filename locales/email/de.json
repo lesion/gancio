@@ -18,5 +18,12 @@
     "register": {
         "content": "Wir haben die Registrierungsanfrage erhalten. Wir werden sie so bald wie möglich bestätigen.",
         "subject": "Registrierungsanfrage erhalten"
+    },
+    "event_confirm": {
+        "content": "Du kannst diese Veranstaltung auf <a href='{{url}}'>dieser Seite</a> bestätigen"
+    },
+    "test": {
+        "content": "Dieses ist eine Test-E-Mail. Wenn du das hier lesen kannst, dann funktioniert deine Konfiguration richtig.",
+        "subject": "Deine SMTP Konfiguration funktioniert"
     }
 }

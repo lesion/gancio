@@ -3,12 +3,14 @@ const config = require('../server/config')
 const initialize = {
   // close connections/port/unix socket
   async shutdown (exit = true) {
-    const log = require('../server/log')
-    const TaskManager = require('../server/taskManager').TaskManager
-    if (TaskManager) { TaskManager.stop() }
-    log.info('Closing DB')
-    const sequelize = require('../server/api/models')
-    await sequelize.close()
+    if (config.status == 'READY') {
+      const log = require('../server/log')
+      const TaskManager = require('../server/taskManager').TaskManager
+      if (TaskManager) { TaskManager.stop() }
+      log.info('Closing DB')
+      const sequelize = require('../server/api/models')
+      await sequelize.close()
+    }
     process.off('SIGTERM', initialize.shutdown)
     process.off('SIGINT', initialize.shutdown)
     if (exit) {
@@ -23,8 +25,9 @@ const initialize = {
     const dayjs = require('dayjs')
     const timezone = require('dayjs/plugin/timezone')
     dayjs.extend(timezone)
-    if (config.status == 'READY') {
+    if (config.status == 'CONFIGURED') {
       await db.initialize()
+      config.status = 'READY'
     } else {
       if (process.env.GANCIO_DB_DIALECT) {
         const setupController = require('./api/controller/setup')
@@ -38,7 +41,7 @@ const initialize = {
           password: process.env.GANCIO_DB_PASSWORD,
         }
     
-        setupController._setupDb(dbConf)
+        await setupController._setupDb(dbConf)
           .catch(e => {
             log.warn(String(e))
             process.exit(1)

@@ -1,69 +1,69 @@
 <template lang="pug">
-  v-container
-    v-card-title {{$t('common.theme')}}
-    v-card-text
-      //- LOGO
-      v-file-input.mt-5(ref='upload'
-        :label="$t('admin.favicon')"
-        @change='uploadLogo'
-        accept='image/*')
-        template(slot='append-outer')
-          v-btn(color='warning' text @click='resetLogo') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
-          v-img(:src='`/logo.png?${logoKey}`'
-            max-width="60px" max-height="60px" contain)
+v-container
+  v-card-title {{$t('common.theme')}}
+  v-card-text
+    //- LOGO
+    v-file-input.mt-5(ref='upload'
+      :label="$t('admin.favicon')"
+      @change='uploadLogo'
+      accept='image/*')
+      template(slot='append-outer')
+        v-btn(color='warning' text @click='resetLogo') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
+        v-img(:src='`/logo.png?${logoKey}`'
+          max-width="60px" max-height="60px" contain)
 
-      v-switch.mt-5(v-model='is_dark'
-        inset
-        :label="$t('admin.is_dark')")
+    v-switch.mt-5(v-model='is_dark'
+      inset
+      :label="$t('admin.is_dark')")
 
-      //- TODO choose theme colors
-      //- v-row
-      //-   v-col(v-for='(color, i) in colors' :key='i')
-      //-     v-menu(v-model='menu[i]'
-      //-         :close-on-content-click="false"
-      //-         transition="slide-x-transition"
-      //-         offset-y
-      //-         absolute
-      //-         bottom
-      //-         max-width="290px"
-      //-         min-width="290px")
-      //-       template(v-slot:activator='{ on }')
-      //-         v-btn(:color='i' small
-      //-           v-on='on') {{i}}
-      //-       v-color-picker(light @update:color='c => updateColor(i, c)')
+    //- TODO choose theme colors
+    //- v-row
+    //-   v-col(v-for='(color, i) in colors' :key='i')
+    //-     v-menu(v-model='menu[i]'
+    //-         :close-on-content-click="false"
+    //-         transition="slide-x-transition"
+    //-         offset-y
+    //-         absolute
+    //-         bottom
+    //-         max-width="290px"
+    //-         min-width="290px")
+    //-       template(v-slot:activator='{ on }')
+    //-         v-btn(:color='i' small
+    //-           v-on='on') {{i}}
+    //-       v-color-picker(light @update:color='c => updateColor(i, c)')
 
-      v-dialog(v-model='linkModal' width='500' :fullscreen='$vuetify.breakpoint.xsOnly')
-        v-card
-          v-card-title {{$t('admin.footer_links')}}
-          v-card-text
-            v-form(v-model='valid' ref='linkModalForm')
-              v-text-field(v-model='link.label'
-                :rules="[$validators.required('common.label')]"
-                label='Label')
-              v-text-field(v-model='link.href'
-                :rules="[$validators.required('common.url')]"
-                :label="$t('common.url')")
-          v-card-actions
-            v-spacer
-            v-btn(link @click='linkModal=false' color='error') {{$t('common.cancel')}}
-            v-btn(link @click='addFooterLink' color='primary' :disabled='!valid') {{$t('common.add')}}
-
-    v-card-title {{$t('admin.footer_links')}}
-    v-card-text
-      v-btn(color='primary' text @click='openLinkModal') <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.add_link')}}
-      v-btn(color='warning' text @click='reset') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
+    v-dialog(v-model='linkModal' width='500' :fullscreen='$vuetify.breakpoint.xsOnly')
       v-card
-        v-list.mt-1(two-line subheader)
-          v-list-item(v-for='(link, idx) in settings.footerLinks'
-            :key='`${link.label}`' @click='editFooterLink(link)')
-            v-list-item-content
-              v-list-item-title {{link.label}}
-              v-list-item-subtitle {{link.href}}
-            v-list-item-action
-              v-btn.left(v-if='idx !== 0' icon color='warn' @click.stop='moveUpFooterLink(link, idx)')
-                v-icon(v-text='mdiChevronUp')
-              v-btn.float-right(icon color='error' @click.stop='removeFooterLink(link)')
-                v-icon(v-text='mdiDeleteForever')
+        v-card-title {{$t('admin.footer_links')}}
+        v-card-text
+          v-form(v-model='valid' ref='linkModalForm')
+            v-text-field(v-model='link.label'
+              :rules="[$validators.required('common.label')]"
+              label='Label')
+            v-text-field(v-model='link.href'
+              :rules="[$validators.required('common.url')]"
+              :label="$t('common.url')")
+        v-card-actions
+          v-spacer
+          v-btn(link @click='linkModal=false' color='error') {{$t('common.cancel')}}
+          v-btn(link @click='addFooterLink' color='primary' :disabled='!valid') {{$t('common.add')}}
+
+  v-card-title {{$t('admin.footer_links')}}
+  v-card-text
+    v-btn(color='primary' text @click='openLinkModal') <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.add_link')}}
+    v-btn(color='warning' text @click='reset') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
+    v-card
+      v-list.mt-1(two-line subheader)
+        v-list-item(v-for='(link, idx) in settings.footerLinks'
+          :key='`${link.label}`' @click='editFooterLink(link)')
+          v-list-item-content
+            v-list-item-title {{link.label}}
+            v-list-item-subtitle {{link.href}}
+          v-list-item-action
+            v-btn.left(v-if='idx !== 0' icon color='warn' @click.stop='moveUpFooterLink(link, idx)')
+              v-icon(v-text='mdiChevronUp')
+            v-btn.float-right(icon color='error' @click.stop='removeFooterLink(link)')
+              v-icon(v-text='mdiDeleteForever')
 
 </template>
 <script>

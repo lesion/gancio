@@ -1,0 +1,16 @@
+{
+  "baseurl": "http://localhost:13120",
+  "hostname": "127.0.0.1",
+  "server": {
+    "host": "0.0.0.0",
+    "port": 13120
+  },
+  "log_level": "warn",
+  "log_path": "./logs",
+  "db": {
+    "dialect": "sqlite",
+    "storage": "./tests/seeds/testdb.sqlite",
+    "logging": false
+  },
+  "upload_path": "./uploads"
+}

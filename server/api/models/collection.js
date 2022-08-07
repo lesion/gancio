@@ -3,6 +3,7 @@ const sequelize = require('./index').sequelize
 
 class Collection extends Model {}
 
+// TODO: slugify!
 Collection.init({
   id: {
     type: DataTypes.INTEGER,

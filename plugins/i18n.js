@@ -7,9 +7,11 @@ Vue.use(VueI18n)
 export default async ({ app, store, res }) => {
   const messages = {}
   if (process.server) {
-    store.commit('setLocale', res.locals.acceptedLocale)
-    if (res.locals.user_locale) {
-      store.commit('setUserLocale', res.locals.user_locale)
+    if (res.locals) {
+      store.commit('setLocale', res.locals.acceptedLocale)
+      if (res.locals.user_locale) {
+        store.commit('setUserLocale', res.locals.user_locale)
+      }
     }
   }
 

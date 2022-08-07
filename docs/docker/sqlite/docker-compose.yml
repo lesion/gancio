@@ -2,9 +2,8 @@ version: '3'
 
 services:
   gancio:
-    build: .
     restart: always
-    image: gancio
+    image: cisti/gancio
     container_name: gancio
     environment:
       - PATH=$PATH:/home/node/.yarn/bin
@@ -12,8 +11,6 @@ services:
       - NODE_ENV=production
       - GANCIO_DB_DIALECT=sqlite
       - GANCIO_DB_STORAGE=./gancio.sqlite
-    entrypoint: /entrypoint.sh
-    command: gancio start
     volumes:
       - ./data:/home/node/data
     ports:

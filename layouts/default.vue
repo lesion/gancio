@@ -33,14 +33,20 @@ export default {
     return {
       htmlAttrs: {
         lang: this.locale
-      }
+      },
+      link: [{ rel: 'icon', type: 'image/png', href: this.settings.baseurl + '/logo.png' }],
     }
   },
   data () {
     return { collections: [], mdiChevronLeft }
   },  
   async fetch () {
-    this.collections = await this.$axios.$get('collections')
+    if (this.$route.name && ['tag-tag', 'index', 'g-collection', 'p-place'].includes(this.$route.name)) {
+      this.collections = await this.$axios.$get('collections').catch(_e => [])
+    } else {
+      this.collections = []
+    }
+
   },  
   name: 'Default',
   components: { Nav, Snackbar, Footer, Confirm },

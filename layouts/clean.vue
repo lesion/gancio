@@ -1,11 +1,11 @@
 <template lang='pug'>
-  v-app(app)
-    Snackbar
-    Confirm
+v-app(app)
+  Snackbar
+  Confirm
 
-    v-main(app)
-      v-fade-transition(hide-on-leave)
-        nuxt
+  v-main(app)
+    v-fade-transition(hide-on-leave)
+      nuxt
 
 </template>
 <script>

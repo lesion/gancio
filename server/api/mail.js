@@ -9,7 +9,7 @@ const locales = require('../../locales')
 const mail = {
   send (addresses, template, locals, locale) {
     locale = locale || settingsController.settings.instance_locale
-    if (process.env.NODE_ENV === 'production' && (!settingsController.settings.admin_email || !settingsController.settings.smtp || !settingsController.settings.smtp.user)) {
+    if (process.env.NODE_ENV === 'production' && (!settingsController.settings.admin_email || !settingsController.settings.smtp)) {
       log.error(`Cannot send any email: SMTP Email configuration not completed!`)
       return
     }

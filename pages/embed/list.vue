@@ -1,5 +1,5 @@
-<template lang="pug">
-  List(:events="events" :title='title')
+<template>
+  <List :events="events" :title='title'/>
 </template>
 <script>
 import List from '../../components/List'

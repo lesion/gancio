@@ -15,7 +15,7 @@ has_children: true
 - Express
 - Node.js
 - [Sequelize](https://sequelize.org/)
-- [Vuetify](vuetifyjs.com/)
+- [Vuetify](https://vuetifyjs.com/)
 
 ### Testing on your own machine
 

@@ -25,12 +25,6 @@ mkdir -p /opt/gancio
 cd /opt/gancio
 ```
 
-Download `Dockerfile` and `entrypoint.sh`:
-```bash
-wget {{site.url}}{% link /docker/Dockerfile %}
-wget {{site.url}}{% link /docker/entrypoint.sh %}
-```
-
 Download `docker-compose.yml` choosing your preferred database dialect between `sqlite`, `postgres` and `mariadb`:
 ```bash
 DB=sqlite

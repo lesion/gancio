@@ -45,6 +45,7 @@ v-col(cols=12)
             :label="$t('event.from')"
             :value="fromHour"
             :disabled='!value.from'
+            readonly
             :prepend-icon="mdiClockTimeFourOutline"
             :rules="[$validators.required('event.from')]"
             v-bind="attrs"
@@ -70,6 +71,7 @@ v-col(cols=12)
             :label="$t('event.due')"
             :value="dueHour"
             :disabled='!fromHour'
+            readonly
             :prepend-icon="mdiClockTimeEightOutline"
             v-bind="attrs"
             v-on="on")

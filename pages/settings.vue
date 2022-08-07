@@ -1,10 +1,10 @@
 <template lang="pug">
-  v-container
-    v-card
-      v-card-title.text-h5 {{$auth.user.email}}
-      v-card-text
-        p {{$t('settings.remove_account')}}
-        v-btn.black--text(color='warning' @click='remove_account') {{$t('common.remove')}}
+v-container
+  v-card
+    v-card-title.text-h5 {{$auth.user.email}}
+    v-card-text
+      p {{$t('settings.remove_account')}}
+      v-btn.black--text(color='warning' @click='remove_account') {{$t('common.remove')}}
 </template>
 <script>
 import { mapState } from 'vuex'

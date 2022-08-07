@@ -1,6 +1,6 @@
 <template lang='pug'>
-  .loading-page(:class='{ loading }')
-    v-progress-circular(:size="100" :width="10" style='color: orangered;' indeterminate)
+.loading-page(:class='{ loading }')
+  v-progress-circular(:size="100" :width="10" style='color: orangered;' indeterminate)
 </template>
 
 <script>

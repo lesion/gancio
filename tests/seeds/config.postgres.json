@@ -1,0 +1,19 @@
+{
+  "baseurl": "http://localhost:13120",
+  "hostname": "localhost",
+  "server": {
+    "host": "0.0.0.0",
+    "port": 13120
+  },
+  "log_level": "warn",
+  "log_path": "./logs",
+  "db": {
+    "dialect": "postgres",
+    "host": "localhost",
+    "database": "gancio",
+    "username": "gancio",
+    "password": "gancio",
+    "logging": false
+  },
+  "upload_path": "./uploads"
+}

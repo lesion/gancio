@@ -138,8 +138,10 @@ if (config.status !== 'READY') {
   api.delete('/event/notification/:code', eventController.delNotification)
 
   api.post('/settings', isAdmin, settingsController.setRequest)
+  api.get('/settings', isAdmin, settingsController.getAll)
   api.post('/settings/logo', isAdmin, multer({ dest: config.upload_path }).single('logo'), settingsController.setLogo)
   api.post('/settings/smtp', isAdmin, settingsController.testSMTP)
+  api.get('/settings/smtp', isAdmin, settingsController.getSMTPSettings)
 
   // get unconfirmed events
   api.get('/event/unconfirmed', isAdmin, eventController.getUnconfirmed)

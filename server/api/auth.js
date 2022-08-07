@@ -21,7 +21,7 @@ const Auth = {
     })
   },
 
-  isAuth (req, res, next) {
+  isAuth (_req, res, next) {
     if (res.locals.user) {
       next()
     } else {

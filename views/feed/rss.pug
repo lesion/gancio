@@ -9,7 +9,7 @@ rss(version='2.0' xmlns:atom="http://www.w3.org/2005/Atom")
             item
                 if (event.media && event.media.length)
                   <enclosure url="#{settings.baseurl}/media/#{event.media[0].url}" type='image/jpeg' length="#{event.media[0].size||1}"></enclosure>
-                title [#{moment.unix(event.start_datetime).format("YY-MM-DD")}] #{event.title} @#{event.place.name}
+                title [#{moment.unix(event.start_datetime).format("YY-MM-DD")}] #{event.title} @ #{event.place.name}
                 link #{settings.baseurl}/event/#{event.slug || event.id}
                 each tag in event.tags
                   category #{tag}

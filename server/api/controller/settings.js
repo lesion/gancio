@@ -54,7 +54,7 @@ const settingsController = {
   secretSettings: {},
 
   async load () {
-    if (config.status !== 'READY') {
+    if (config.status !== 'CONFIGURED') {
       settingsController.settings = defaultSettings
       return
     }
@@ -169,6 +169,14 @@ const settingsController = {
       console.error(e)
       return res.status(400).send(escape(String(e)))
     }
+  },
+
+  getSMTPSettings (_req, res) {
+    return res.json(settingsController['settings']['smtp'])
+  },
+
+  getAll (_req, res) {
+    return res.json(settingsController.settings)
   },
 
   setLogo (req, res) {

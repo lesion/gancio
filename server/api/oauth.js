@@ -12,7 +12,7 @@ const oauthServer = new OAuthServer({
   debug: true,
   requireClientAuthentication: { password: false },
   authenticateHandler: {
-    handle (req, res) {
+    handle (_req, res) {
       if (!res.locals.user) {
         throw new Error('Not authenticated!')
       }

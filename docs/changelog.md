@@ -8,6 +8,32 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.5.0 - UNRELEASED
+##### :warning:  **BREAKING CHANGES**:
+- supported nodejs version >=14 <=16 (nodejs 12 reached End-of-Life on 30 April 2022)
+- minimum mariadb supported version >= 10.5.2
+
+##### **CHANGES**:
+  - new Tag page
+  - new Place page
+  - new search flow
+  - new meta-tag-place / group / collection page
+  - new time selection widget
+  - allow footer links reordering
+  - new Docker image (smaller and faster)
+  - add GANCIO_DB_PORT environment
+  - restrict new tag entropy (trim, merge case insensitive)
+  - add dynamic sitemap.xml
+  - calendar attributes refactoring (a dot each day, colors represents n. events)
+  - fix event mime type response
+  - fix mariadb JSON fields
+  - new gancio CLI accounts management (list / create / remove / modify accounts)
+  - improve smtp setup, allow local sendmail, smpt port, tls/starttls
+  - redirect to path based on content type request
+  - add Slovak translation
+  - lot of fixes
+
+
 ### 1.4.4 - 10 may '22
   - better img rendering, make it easier to download flyer #153
   - avoid place and tags duplication (remove white space, match case insensitive)

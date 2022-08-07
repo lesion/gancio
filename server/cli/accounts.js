@@ -23,6 +23,12 @@ async function modify (args) {
     await user.save()
     console.log(`New password for user ${user.email} is '${password}'`)
   }
+
+  if (args.admin) {
+    user.is_admin = true
+    await user.save()
+  }
+  await db.close()
 }
 
 async function create (args) {
@@ -71,13 +77,14 @@ const accountsCLI = yargs => yargs
     'reset-password': {
         describe: 'Resets the password of the given account ',
         type: 'boolean'
-    }
+    },
+    admin: { describe: 'Define this account as administrator', type: 'boolean' }
   }, modify)
-  .command('create <email|username>', 'Create an account', { 
+  .command('create <email|username> [admin]', 'Create an account', { 
     admin: { describe: 'Define this account as administrator', type: 'boolean' }
     }, create)
-  .positional('email', { describe: '', type: 'string', demandOption: true })
-  .command('remove <email|username>', 'Remove an account', {}, remove)
+    .command('remove <email|username>', 'Remove an account', {}, remove)
+    .positional('email', { describe: 'account email or username', type: 'string', demandOption: true })
   .recommendCommands()
   .demandCommand(1, '')
   .argv
