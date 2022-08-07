@@ -1,10 +1,10 @@
-FROM debian:stable-slim AS nodejs-base
+FROM node:16-slim AS nodejs-base
 RUN apt-get -q update && \
-    env DEBIAN_FRONTEND=noninteractive apt-get -y install git nodejs yarnpkg && \
+    env DEBIAN_FRONTEND=noninteractive apt-get -y install git && \
     apt-get clean && rm -fr /var/lib/apt/lists/*
 
 FROM nodejs-base AS build
-RUN yarnpkg global add --network-timeout 1000000000 --latest --production --silent http://192.168.0.178:8080/l.tgz && \
+RUN yarnpkg global add --network-timeout 1000000000 --latest --production --silent https://gancio.org/latest.tgz && \
     apt-get clean && rm -fr /var/lib/apt/lists/* && \
     yarnpkg cache clean
 
