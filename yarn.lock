@@ -2221,6 +2221,11 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
+"@snyk/protect@^1.946.0":
+  version "1.946.0"
+  resolved "https://registry.yarnpkg.com/@snyk/protect/-/protect-1.946.0.tgz#4960ad4079145615d16fcbf2644ef016f08a7fdc"
+  integrity sha512-LdqVSuI3gFX87dLfZsUvlb5lp7XuURa22uY2oDuOyNxk4Z0gsSOoYxYrFXUW2RreH+mch1T6rU5HztQkoL38YQ==
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
