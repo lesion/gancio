@@ -9,7 +9,7 @@ const generateKeyPair = promisify(crypto.generateKeyPair)
 const log = require('../../log')
 const locales = require('../../../locales/index')
 const escape = require('lodash/escape')
-
+const pluginController = require('./plugins')
 
 let defaultHostname
 try {
@@ -108,32 +108,7 @@ const settingsController = {
       })
     }
 
-    // load custom plugins
-    const plugins_path = path.resolve(process.env.cwd || '', 'plugins')
-    if (process.env.NODE_ENV === 'production' && fs.existsSync(plugins_path)) {
-      const notifier = require('../../notifier')
-      const pluginsFile = fs.readdirSync(plugins_path).filter(e => path.extname(e).toLowerCase() === '.js')
-      pluginsFile.forEach( pluginFile => {
-        try {
-          const plugin = require(path.resolve(plugins_path, pluginFile))
-          if (typeof plugin.load !== 'function') return
-          plugin.load({ settings: settingsController.settings })
-          settingsController.settings.plugins.push(plugin)
-          log.info(`Plugin ${pluginFile} loaded!`)
-          if (typeof plugin.onEventCreate === 'function') {
-            notifier.emitter.on('Create', plugin.onEventCreate)
-          }
-          if (typeof plugin.onEventDelete === 'function') {
-            notifier.emitter.on('Delete', plugin.onEventDelete)
-          }
-          if (typeof plugin.onEventUpdate === 'function') {
-            notifier.emitter.on('Update', plugin.onEventUpdate)
-          }
-        } catch (e) {
-          log.warn(`Unable to load plugin ${pluginFile}: ${String(e)}`)
-        }
-      })
-    }
+    pluginController._load()
   },
 
   async set (key, value, is_secret = false) {

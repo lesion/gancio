@@ -34,6 +34,7 @@ if (config.status !== 'READY') {
   const oauthController = require('./controller/oauth')
   const announceController = require('./controller/announce')
   const collectionController = require('./controller/collection')
+  const pluginController = require('./controller/plugins')
   const helpers = require('../helpers')
   const storage = require('./storage')
   const upload = multer({ storage })
@@ -188,6 +189,9 @@ if (config.status !== 'READY') {
   api.get('/filter/:collection_id', isAdmin, collectionController.getFilters)
   api.post('/filter', isAdmin, collectionController.addFilter)
   api.delete('/filter/:id', isAdmin, collectionController.removeFilter)
+
+  // - PLUGINS
+  api.get('/plugins', isAdmin, pluginController.getAll)
 
   // OAUTH
   api.get('/clients', isAuth, oauthController.getClients)
