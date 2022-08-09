@@ -16,12 +16,12 @@ v-col(cols=12)
         v-input(:value='fromDate'
             :rules="[$validators.required('common.when')]")
           vc-date-picker(
-            :value='fromDate'
-            @input="date => change('date', date)"
+            v-model='fromDate'
             :is-range='type === "multidate"'
+            @input="date => change('date', fromDate)"
+            :timezone='settings.instance_timezone'
             :attributes='attributes'
             :locale='$i18n.locale'
-            :from-page.sync='page'
             :is-dark="settings['theme.is_dark']"
             is-inline
             is-expanded
@@ -52,7 +52,7 @@ v-col(cols=12)
             v-on="on")
         v-time-picker(
           v-if="menuFromHour"
-          :value="fromHour"
+          v-model="fromHour"
           :allowedMinutes='allowedMinutes'
           format='24hr'
           @click:minute='menuFromHour=false'
@@ -77,7 +77,7 @@ v-col(cols=12)
             v-on="on")
         v-time-picker(
           v-if="menuDueHour"
-          :value="dueHour"
+          v-model="dueHour"
           :allowedMinutes='allowedMinutes'
           format='24hr'
           @click:minute='menuDueHour=false'
@@ -101,13 +101,23 @@ export default {
     event: { type: Object, default: () => null }
   },
   data () {
+    let fromDate
+    if (this.value.from) {
+      if (this.value.multidate) {
+        fromDate = ({ start: dayjs(this.value.from).toDate(), end: dayjs(this.value.due).toDate() })
+      } else {
+        fromDate = new Date(this.value.from)
+      }
+    }
     return {
       mdiClockTimeFourOutline, mdiClockTimeEightOutline,
       allowedMinutes: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
       menuFromHour: false,
+      fromDate,
+      fromHour: this.value.from && dayjs.tz(this.value.from).format('HH:mm'),
+      dueHour: this.value.due && dayjs.tz(this.value.due).format('HH:mm'),
       menuDueHour: false,
-      type: 'normal',
-      page: null,
+      type: this.value.type || 'normal',
       events: [],
       frequencies: [
         { value: '1w', text: this.$t('event.each_week') },
@@ -119,25 +129,12 @@ export default {
   computed: {
     ...mapState(['settings']),
     todayEvents () {
-      const start = dayjs(this.value.from).startOf('day').unix()
-      const end = dayjs(this.value.from).endOf('day').unix()
+      const start = dayjs.tz(this.value.from).startOf('day').unix()
+      const end = dayjs.tz(this.value.from).endOf('day').unix()
       return this.events.filter(e => e.start_datetime >= start && e.start_datetime <= end)
     },
     attributes () {
       return attributesFromEvents(this.events)
-    },
-    fromDate () {
-      if (this.value.multidate) {
-        return ({ start: dayjs(this.value.from).toDate(), end: dayjs(this.value.due).toDate() })
-      }
-      return this.value.from ? dayjs(this.value.from).toDate() : null
-    },
-
-    fromHour () {
-      return this.value.from && this.value.fromHour ? dayjs.tz(this.value.from).format('HH:mm') : null
-    },
-    dueHour () {
-      return this.value.due && this.value.dueHour ? dayjs.tz(this.value.due).format('HH:mm') : null
     },
     whenPatterns () {
       if (!this.value.from) { return }
@@ -227,7 +224,7 @@ export default {
       } else if (what === 'fromHour') {
         if (value) {
           const [hour, minute] = value.split(':')
-          const from = dayjs.tz(this.value.from).hour(hour).minute(minute).second(0)
+          let from = dayjs.tz(this.value.from).hour(hour).minute(minute).second(0)
           this.$emit('input', { ...this.value, from, fromHour: true })
         } else {
           this.$emit('input', { ...this.value, fromHour: false })
@@ -235,11 +232,10 @@ export default {
       } else if (what === 'dueHour') {
         if (value) {
           const [hour, minute] = value.split(':')
-          const fromHour = dayjs.tz(this.value.from).hour()
+          let due = dayjs.tz(this.value.due).hour(hour).minute(minute).second(0)
 
           // add a day
-          let due = dayjs(this.value.from)
-          if (fromHour > Number(hour) && !this.value.multidate) {
+          if (dayjs.tz(this.value.from).hour() > Number(hour) && !this.value.multidate) {
             due = due.add(1, 'day')
           }
           due = due.hour(hour).minute(minute).second(0)
@@ -256,21 +252,25 @@ export default {
         if (this.value.multidate) {
           let from = value.start
           let due = value.end
-          if (this.value.fromHour) {
-            from = dayjs.tz(value.start).hour(dayjs.tz(this.value.from).hour())
+          if (this.fromHour) {
+            const [ hour, minute ] = this.fromHour.split(':')
+            from = dayjs.tz(from).hour(hour).minute(minute)
           }
-          if (this.value.dueHour) {
-            due = dayjs.tz(value.end).hour(dayjs.tz(this.value.due).hour())
+          if (this.dueHour) {
+            const [ hour, minute ] = this.dueHour.split(':')
+            due = dayjs.tz(due).hour(hour).minute(minute)
           }
           this.$emit('input', { ...this.value, from, due })
         } else {
           let from = value
           let due = this.value.due
-          if (this.value.fromHour) {
-            from = dayjs.tz(value).hour(dayjs.tz(this.value.from).hour())
+          if (this.fromHour) {
+            const [ hour, minute ] = this.fromHour.split(':')
+            from = dayjs.tz(value).hour(hour).minute(minute)
           }
-          if (this.value.dueHour && this.value.due) {
-            due = dayjs.tz(value).hour(dayjs.tz(this.value.due).hour())
+          if (this.dueHour) {
+            const [ hour, minute ] = this.dueHour.split(':')
+            due = dayjs.tz(value).hour(hour).minute(minute)
           }
           this.$emit('input', { ...this.value, from, due })
         }
