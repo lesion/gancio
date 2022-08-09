@@ -7,7 +7,7 @@ export function attributesFromEvents (_events) {
   let attributes = []
   const now = dayjs().unix()
   for(let e of _events) {
-    const key = dayjs.unix(e.start_datetime).format('YYYYMMDD')
+    const key = dayjs.unix(e.start_datetime).tz().format('YYYYMMDD')
     const c = e.start_datetime < now ? 'vc-past' : ''
 
     const i = attributes.find(a => a.day === key)
