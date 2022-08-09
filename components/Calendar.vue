@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     updatePage (page) {
-        this.$emit('monthchange', page)
+      this.$emit('monthchange', page)
     },
     click (day) {
       this.$emit('dayclick', day)
