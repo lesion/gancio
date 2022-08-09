@@ -43,6 +43,11 @@ v-container.container.pa-0.pa-md-3
       v-tab-item
         Announcement
 
+      //- PLUGINS
+      v-tab {{$t('common.plugins')}}
+      v-tab-item
+        Plugin
+
       //- FEDERATION
       v-tab {{$t('common.federation')}}
       v-tab-item
@@ -68,6 +73,7 @@ export default {
     Collections: () => import(/* webpackChunkName: "admin" */'../components/admin/Collections'),
     Federation: () => import(/* webpackChunkName: "admin" */'../components/admin/Federation.vue'),
     Moderation: () => import(/* webpackChunkName: "admin" */'../components/admin/Moderation.vue'),
+    Plugin: () => import(/* webpackChunkName: "admin" */'../components/admin/Plugin.vue'),
     Announcement: () => import(/* webpackChunkName: "admin" */'../components/admin/Announcement.vue'),
     Theme: () => import(/* webpackChunkName: "admin" */'../components/admin/Theme.vue')
   },
