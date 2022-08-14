@@ -16,7 +16,17 @@ v-container.pa-0
     .col.pt-0.pt-md-2.mt-4.ma-md-0.pb-0
       //- v-btn(to='/search' color='primary' ) {{$t('common.search')}}
       v-form(to='/search' action='/search' method='GET')
-        v-text-field(name='search' :label='$t("common.search")' outlined rounded hide-details :append-icon='mdiMagnify')
+        v-col(cols=12)
+          v-switch(
+            v-if='settings.allow_recurrent_event'
+            v-model='show_recurrent'
+            inset color='primary'
+            hide-details
+            :label="$t('event.show_recurrent')")      
+        v-col.mb-4(cols=12)
+          v-text-field(name='search' :label='$t("common.search")' outlined rounded hide-details :append-icon='mdiMagnify')
+      v-chip(v-if='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange()') {{selectedDay}}
+
 
   //- Events
   #events.mb-2.mt-1.pl-1.pl-sm-2
@@ -29,7 +39,7 @@ import dayjs from 'dayjs'
 import Event from '@/components/Event'
 import Announcement from '@/components/Announcement'
 import Calendar from '@/components/Calendar'
-import { mdiMagnify } from '@mdi/js'
+import { mdiMagnify, mdiCloseCircle } from '@mdi/js'
 
 export default {
   name: 'Index',
@@ -43,9 +53,9 @@ export default {
     })
     return { events }
   },
-  data () {
+  data ({ $store }) {
     return {
-      mdiMagnify,
+      mdiMagnify, mdiCloseCircle,
       first: true,
       isCurrentMonth: true,
       now: dayjs().unix(),
@@ -53,7 +63,8 @@ export default {
       events: [],
       start: dayjs().startOf('month').unix(),
       end: null,
-      selectedDay: null
+      selectedDay: null,
+      show_recurrent: $store.state.settings.recurrent_event_visible
     }
   },
   head () {
@@ -80,11 +91,11 @@ export default {
       if (this.selectedDay) {
         const min = dayjs.tz(this.selectedDay).startOf('day').unix()
         const max = dayjs.tz(this.selectedDay).endOf('day').unix()
-        return this.events.filter(e => (e.start_datetime <= max && e.end_datetime >= min))
+        return this.events.filter(e => (e.start_datetime <= max && e.end_datetime >= min) && (this.show_recurrent || !e.parentId))
       } else if (this.isCurrentMonth) {
-        return this.events.filter(e => e.end_datetime ? e.end_datetime > now : e.start_datetime + 2 * 60 * 60 > now)
+          return this.events.filter(e => ((e.end_datetime ? e.end_datetime > now : e.start_datetime + 2 * 60 * 60 > now) && (this.show_recurrent || !e.parentId)))
       } else {
-        return this.events
+        return this.events.filter(e => this.show_recurrent || !e.parentId)
       }
     }
   },
