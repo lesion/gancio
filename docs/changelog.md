@@ -8,6 +8,10 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.5.1 - 14 aug '22
+  - fix regression with hidden recurrent events
+
+
 ### 1.5.0 - 8 aug '22
 ##### :warning:  **BREAKING CHANGES**:
 - supported nodejs version >=14 <=16 (nodejs 12 reached End-of-Life on 30 April 2022)
