@@ -30,7 +30,7 @@ module.exports = {
   /*
    ** Customize the progress-bar component
    */
-  loading:  '~/components/Loading.vue',
+  loading: '~/components/Loading.vue',
   /*
    ** Plugins to load before mounting the App
    */
@@ -66,7 +66,7 @@ module.exports = {
       if (config.status === 'READY') {
         try {
           const Event = require('./server/api/models/event')
-          const events = await Event.findAll({where: { is_visible: true }})
+          const events = await Event.findAll({ where: { is_visible: true } })
           return events.map(e => `/event/${e.slug}`)
         } catch (e) {
           return []
@@ -118,7 +118,7 @@ module.exports = {
     theme: {
       options: {
         customProperties: false,
-        variations: false, 
+        variations: false,
         minifyTheme,
       },
       dark: true,
@@ -129,11 +129,23 @@ module.exports = {
         light: {
           primary: '#FF4500'
         }
-      }      
+      }
     },
     defaultAssets: false
   },
   build: {
+    extend(config, { isDev, isClient }) {
+      // ..
+      config.module.rules.push({
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: "javascript/auto"
+      })
+      // Sets webpack's mode to development if `isDev` is true.
+      if (isDev) {
+        config.mode = 'development'
+      }
+    },
     corejs: 3,
     cache: true,
     hardSource: !isDev,

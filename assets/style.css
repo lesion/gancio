@@ -57,11 +57,11 @@ li {
   padding: 15px;
 }
 
-.editor .content {
+.editor .ProseMirror {
   background-color: #f7f7f7;
 }
 
-.theme--dark .editor .content {
+.theme--dark .editor .ProseMirror {
   background-color: #292929;
 }
 
