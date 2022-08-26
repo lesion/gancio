@@ -19,8 +19,8 @@
         "activate_user": "Bestätigt",
         "password_updated": "Passwort geändert.",
         "me": "Du",
-        "disable": "Deaktiviere",
-        "enable": "Aktiviere",
+        "disable": "Ausschalten",
+        "enable": "Einschalten",
         "cancel": "Abbrechen",
         "ok": "OK",
         "new_user": "Neue nutzende Person",
@@ -118,7 +118,7 @@
         "new_collection": "Bubble anlegen",
         "edit_collection": "Bubble bearbeiten",
         "wrong_domain_warning": "Die \"baseurl\" die in config.json konfiguriert ist <b>({baseurl})</b> unterscheidet sich von derjenigen <b>({url})</b> die du besuchst",
-        "instance_place_help": "Diese Textzeile wird im Menü der anderen freundlichen Instanzen angezeigt",
+        "instance_place_help": "Diese Textzeile wird im Menü der anderen befreundeten Instanzen angezeigt",
         "place_description": "Falls ein Ort falsch ist oder sich die Adresse ändert, kannst du ihn ändern.<br/>Bitte beachte, dass alle Veranstaltungen, die mit diesem Ort verbunden sind, die Adresse ändern (auch zurückliegende).",
         "enable_admin_user_confirm": "Achte darauf, dass du der nutzenden Person {user} Admin-Rechte hinzufügst",
         "trusted_instances_help": "Befreundete Instanzen werden in der Navigationsleiste oben auf der Seite angezeigt",
@@ -148,7 +148,7 @@
         "announcement_remove_ok": "Hinweis entfernt",
         "instance_block_confirm": "Bestätige, dass du die Instanz {instance} blockieren möchtest?",
         "favicon": "Logo",
-        "title_description": "Es wird im Seitentitel, in der Betreffzeile von E-Mails, beim Export von RSS-Feeds und ICS verwendet.",
+        "title_description": "Dieses wird im Seitentitel, in der Betreffzeile von E-Mails, beim Export von RSS-Feeds und ICS angezeigt.",
         "description_description": "Erscheint in der Kopfzeile neben dem Titel",
         "allow_recurrent_event": "Wiederkehrende Veranstaltungen erlauben",
         "recurrent_event_visible": "Wiederkehrende Veranstaltungen sind standardmäßig sichtbar",
@@ -156,7 +156,7 @@
         "allow_anon_event": "Kann man auch anonyme Veranstaltungen (vorausgesetzt, diese werden genehmigt) eintragen?",
         "allow_registration_description": "Möchtest du die Registrierung aktivieren?",
         "federation": "Föderation / ActivityPub",
-        "enable_federation_help": "Es wird möglich sein, diese Instanz vom Fediverse aus zu verfolgen",
+        "enable_federation_help": "Bei Aktivierung kann diese Instanz vom Fediverse aus verfolgt werden",
         "add_instance": "Instanz hinzufügen",
         "block": "Sperre",
         "show_resource": "Ressource anzeigen",
@@ -229,7 +229,7 @@
         "remove_recurrent_confirmation": "Bist du dir sicher, dass du diese wiederkehrende Veranstaltung entfernen möchtest?\nFrühere Veranstaltungen werden beibehalten, aber es werden keine zukünftigen Veranstaltungen mehr hinzugefügt.",
         "anon_description": "Du kannst eine Veranstaltung hinzufügen, ohne dich zu registrieren oder anzumelden,\nmusst dann aber warten, bis jemand es liest und bestätigt, dass es eine zulässige Veranstaltung ist.\nEs ist nicht möglich, den Eintrag zu verändern.<br/><br/>\nDu kannst dich stattdessen <a href='/login'>anmelden</a> oder <a href='/register'>registrieren</a>. In diesem Fall solltest du so schnell wie möglich eine Antwort erhalten. ",
         "where_description": "Wo ist die Veranstaltung? Wenn der Ort noch nicht beschrieben wurde, kannst du ihn selbst eintragen.",
-        "follow_me_description": "Eine Möglichkeit, über die hier auf {title} veröffentlichten Veranstaltungen auf dem Laufenden zu bleiben, besteht darin, dem Account <u>{account}</u> aus dem Fediverse zu folgen, zum Beispiel über Mastodon, und von dort aus eventuell Ressourcen für eine Veranstaltung hinzuzufügen.<br/><br/>\nWenn Du noch nie von Mastodon und dem Fediverse gehört hast, empfehlen wir dir, diesen Artikel<a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>zu lesen</a>.<br/><br/>Gib unten deine Instanz ein (z.B. mastodon.social)",
+        "follow_me_description": "Eine Möglichkeit, über die hier auf {title} veröffentlichten Veranstaltungen auf dem Laufenden zu bleiben, besteht darin, dem Account <u>{account}</u> aus dem Fediverse zu folgen, zum Beispiel über Mastodon, und von dort aus eventuell Ressourcen für eine Veranstaltung hinzuzufügen.<br/><br/>\nWenn Du noch nie von Mastodon und dem Fediverse gehört hast, empfehlen wir dir, diesen Artikel <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'> zu lesen</a>.<br/><br/>Gib unten deine Instanz ein (z.B. mastodon.social)",
         "media_description": "Du kannst (optional) einen Flyer hinzufügen",
         "edit_recurrent": "Bearbeite eine sich wiederholende Veranstaltung :",
         "show_recurrent": "regelmäßige Veranstaltungen",
@@ -278,7 +278,7 @@
     "login": {
         "ok": "Angemeldet",
         "insert_email": "Gib deine E-Mail-Adresse ein",
-        "error": "Eine Anmeldung ist nicht möglich. Bitte überprüfe deine Informationen zur Anmeldung.",
+        "error": "Anmeldung nicht möglich. Bitte überprüfe deine Informationen zur Anmeldung.",
         "forgot_password": "Passwort vergessen?",
         "not_registered": "Nicht registriert?",
         "check_email": "Überprüfe deinen E-Mail-Posteingang und Spam.",
@@ -291,5 +291,5 @@
         "copy_password_dialog": "Ja, du musst das Passwort kopieren!",
         "start": "Start"
     },
-    "about": "\n  <p><a href='https://gancio.org'>Gancio</a> ist eine gemeinsamer Veranstaltungsalender für lokale und regionale Gemeinschaften.</p>\n  "
+    "about": "\n  <p><a href='https://gancio.org'>Gancio</a> ist ein gemeinsamer Veranstaltungsalender für lokale und regionale Gemeinschaften.</p>\n  "
 }
