@@ -8,9 +8,11 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.5.2 - 26 aug '22
+  - fix Editor background color
+
 ### 1.5.1 - 14 aug '22
   - fix regression with hidden recurrent events
-
 
 ### 1.5.0 - 8 aug '22
 ##### :warning:  **BREAKING CHANGES**:
