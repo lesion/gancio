@@ -1,5 +1,8 @@
 All notable changes to this project will be documented in this file.
 
+### 1.5.3 - 30 aug '22
+  - Fix end time selection when it's in the next day
+
 ### 1.5.2 - 26 aug '22
   - fix Editor background color
 
