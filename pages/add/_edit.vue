@@ -2,12 +2,12 @@
 v-container.container.pa-0.pa-md-3
   v-card
     v-card-title
-      h4 {{edit?$t('common.edit_event'):$t('common.add_event')}}
+      h4 {{ edit ? $t('common.edit_event') : $t('common.add_event') }}
       v-spacer
-      v-btn(link text color='primary' @click='openImportDialog=true')
-        <v-icon v-text='mdiFileImport'></v-icon> {{$t('common.import')}}
+      v-btn(link text color='primary' @click='openImportDialog = true')
+        <v-icon v-text='mdiFileImport'></v-icon> {{ $t('common.import') }}
     v-dialog(v-model='openImportDialog' :fullscreen='$vuetify.breakpoint.xsOnly')
-      ImportDialog(@close='openImportDialog=false' @imported='eventImported')
+      ImportDialog(@close='openImportDialog = false' @imported='eventImported')
 
     v-card-text.px-0.px-xs-2
       v-form(v-model='valid' ref='form' lazy-validation)
@@ -44,7 +44,7 @@ v-container.container.pa-0.pa-md-3
 
             //- MEDIA / FLYER / POSTER
             v-col(cols=12 md=6)
-              MediaInput(v-model='event.media[0]' :event='event' @remove='event.media=[]')
+              MediaInput(v-model='event.media[0]' :event='event' @remove='event.media = []')
 
             //- tags
             v-col(cols=12 md=6)
@@ -57,14 +57,14 @@ v-container.container.pa-0.pa-md-3
                 :items="tags"
                 :menu-props="{ maxWidth: 400, eager: true }"
                 :label="$t('common.tags')")
-                template(v-slot:selection="{ item, on, attrs, selected, parent}")
+                template(v-slot:selection="{ item, on, attrs, selected, parent }")
                   v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
-                    :input-value="selected" label small) {{item}}
+                    :input-value="selected" label small) {{ item }}
 
     v-card-actions
       v-spacer
       v-btn(@click='done' :loading='loading' :disabled='!valid || loading' outlined
-        color='primary') {{edit?$t('common.save'):$t('common.send')}}
+        color='primary') {{ edit ? $t('common.save') : $t('common.send') }}
 
 </template>
 <script>
@@ -91,10 +91,10 @@ export default {
     WhereInput,
     DateInput
   },
-  validate ({ store }) {
+  validate({ store }) {
     return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
   },
-  async asyncData ({ params, $axios, error }) {
+  async asyncData({ params, $axios, error }) {
     if (params.edit) {
       const data = { event: { place: {}, media: [] } }
       data.id = params.edit
@@ -127,7 +127,7 @@ export default {
     }
     return {}
   },
-  data () {
+  data() {
     const month = dayjs.tz().month() + 1
     const year = dayjs.tz().year()
     return {
@@ -151,26 +151,26 @@ export default {
       disableAddress: false
     }
   },
-  head () {
+  head() {
     return {
       title: `${this.settings.title} - ${this.$t('common.add_event')}`
     }
   },
   computed: {
     ...mapState(['settings']),
-    filteredTags () {
+    filteredTags() {
       if (!this.tagName) { return this.tags.slice(0, 10).map(t => t.tag) }
       const tagName = this.tagName.trim().toLowerCase()
       return this.tags.filter(t => t.tag.toLowerCase().includes(tagName)).map(t => t.tag)
     }
   },
   methods: {
-    searchTags: debounce( async function(ev) {
+    searchTags: debounce(async function (ev) {
       const search = ev.target.value
       if (!search) return
       this.tags = await this.$axios.$get(`/tag?search=${search}`)
     }, 100),
-    eventImported (event) {
+    eventImported(event) {
       this.event = Object.assign(this.event, event)
       this.$refs.where.selectPlace({ name: event.place.name || event.place, create: true })
       this.date = {
@@ -183,7 +183,7 @@ export default {
       }
       this.openImportDialog = false
     },
-    async done () {
+    async done() {
       if (!this.$refs.form.validate()) {
         this.$nextTick(() => {
           const el = document.querySelector('.v-input.error--text:first-of-type')
@@ -217,7 +217,7 @@ export default {
       formData.append('description', this.event.description)
       formData.append('multidate', !!this.date.multidate)
       formData.append('start_datetime', dayjs(this.date.from).unix())
-      formData.append('end_datetime', this.date.due ? dayjs(this.date.due).unix() : this.date.from.add(2, 'hour').unix())
+      formData.append('end_datetime', this.date.due ? dayjs(this.date.due).unix() : dayjs(this.date.from).add(2, 'hour').unix())
 
       if (this.edit) {
         formData.append('id', this.event.id)
