@@ -99,7 +99,7 @@ if (config.status !== 'READY') {
    * [usage example](https://framagit.org/les/gancio/-/blob/master/webcomponents/src/GancioEvents.svelte#L18-42)
    */
 
-   api.get('/events', cors, eventController.select)  
+  api.get('/events', cors, eventController.select)
 
   /**
    * Add a new event
@@ -192,6 +192,7 @@ if (config.status !== 'READY') {
 
   // - PLUGINS
   api.get('/plugins', isAdmin, pluginController.getAll)
+  api.put('/plugin/:plugin', isAdmin, pluginController.togglePlugin)
 
   // OAUTH
   api.get('/clients', isAuth, oauthController.getClients)

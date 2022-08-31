@@ -48,14 +48,14 @@ domPurify.addHook('beforeSanitizeElements', node => {
 
 module.exports = {
 
-  randomString (length = 12) {
+  randomString(length = 12) {
     const wishlist = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
     return Array.from(crypto.randomFillSync(new Uint32Array(length)))
       .map(x => wishlist[x % wishlist.length])
       .join('')
   },
 
-  sanitizeHTML (html) {
+  sanitizeHTML(html) {
     return domPurify.sanitize(html, {
       ALLOWED_TAGS: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'br', 'i', 'span',
         'h6', 'b', 'a', 'li', 'ul', 'ol', 'code', 'blockquote', 'u', 's', 'strong'],
@@ -63,7 +63,7 @@ module.exports = {
     })
   },
 
-  async setUserLocale (req, res, next) {
+  async setUserLocale(req, res, next) {
     // select locale based on cookie? and accept-language header
     acceptLanguage.languages(Object.keys(locales))
     res.locals.acceptedLocale = acceptLanguage.get(req.headers['accept-language'])
@@ -71,28 +71,45 @@ module.exports = {
     next()
   },
 
-  async initSettings (_req, res, next) {
+  async initSettings(_req, res, next) {
     // initialize settings
-    res.locals.settings = cloneDeep(settingsController.settings)
-    delete res.locals.settings.smtp
-    delete res.locals.settings.publicKey
-    res.locals.settings.baseurl = config.baseurl
-    res.locals.settings.hostname = config.hostname
-    res.locals.settings.title = res.locals.settings.title || config.title
-    res.locals.settings.description = res.locals.settings.description || config.description
-    res.locals.settings.version = pkg.version
+    // res.locals.settings = cloneDeep(settingsController.settings)
+    const settings = settingsController.settings
+    res.locals.settings = {
+      title: settings.title || config.title,
+      description: settings.description || config.description,
+      baseurl: config.baseurl,
+      hostname: config.hostname,
+      version: pkg.version,
+      instance_timezone: settings.instance_timezone,
+      instance_locale: settings.instance_locale,
+      instance_name: settings.instance_name,
+      instance_place: settings.instance_place,
+      allow_registration: settings.allow_registration,
+      allow_anon_event: settings.allow_anon_event,
+      allow_recurrent_event: settings.allow_recurrent_event,
+      recurrent_event_visible: settings.recurrent_event_visible,
+      enable_federation: settings.enable_federation,
+      enable_resources: settings.enable_resources,
+      hide_boosts: settings.hide_boosts,
+      enable_trusted_instances: settings.enable_trusted_instances,
+      trusted_instances: settings.trusted_instances,
+      'theme.is_dark': settings['theme.is_dark'],
+      'theme.primary': settings['theme.primary'],
+      footerLinks: settings.footerLinks
+    }
     // set user locale
     res.locals.user_locale = settingsController.user_locale[res.locals.acceptedLocale]
     dayjs.tz.setDefault(res.locals.settings.instance_timezone)
     next()
   },
 
-  serveStatic () {
+  serveStatic() {
     const router = express.Router()
     // serve images/thumb
-    router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' } ), (_req, res) => res.sendStatus(404))
+    router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' }), (_req, res) => res.sendStatus(404))
     router.use('/noimg.svg', express.static('./static/noimg.svg'))
-    
+
     router.use('/logo.png', (req, res, next) => {
       const logoPath = res.locals.settings.logo || './static/gancio'
       return express.static(logoPath + '.png')(req, res, next)
@@ -106,12 +123,12 @@ module.exports = {
     return router
   },
 
-  logRequest (req, _res, next) {
+  logRequest(req, _res, next) {
     log.debug(`${req.method} ${req.path}`)
     next()
   },
 
-  col (field) {
+  col(field) {
     if (config.db.dialect === 'postgres') {
       return '"' + field.split('.').join('"."') + '"'
     } else if (config.db.dialect === 'mariadb') {
@@ -121,14 +138,14 @@ module.exports = {
     }
   },
 
-  async getImageFromURL (url) {
+  async getImageFromURL(url) {
     log.debug(`getImageFromURL ${url}`)
 
     const filename = crypto.randomBytes(16).toString('hex')
     const sharpStream = sharp({ failOnError: true })
     const promises = [
       sharpStream.clone().resize(500, null, { withoutEnlargement: true }).jpeg({ effort: 6, mozjpeg: true }).toFile(path.resolve(config.upload_path, 'thumb', filename + '.jpg')),
-      sharpStream.clone().resize(1200, null, { withoutEnlargement: true } ).jpeg({ quality: 95, effort: 6, mozjpeg: true}).toFile(path.resolve(config.upload_path, filename + '.jpg')),
+      sharpStream.clone().resize(1200, null, { withoutEnlargement: true }).jpeg({ quality: 95, effort: 6, mozjpeg: true }).toFile(path.resolve(config.upload_path, filename + '.jpg')),
     ]
 
     const response = await axios({ method: 'GET', url: encodeURI(url), responseType: 'stream' })
@@ -157,7 +174,7 @@ module.exports = {
    * Import events from url
    * It does supports ICS and H-EVENT
    */
-  async importURL (req, res) {
+  async importURL(req, res) {
     const URL = req.query.URL
     try {
       const response = await axios.get(URL)
@@ -210,7 +227,7 @@ module.exports = {
     }
   },
 
-  getWeekdayN (date, n, weekday) {
+  getWeekdayN(date, n, weekday) {
     let cursor
     if (n === -1) {
       cursor = date.endOf('month')
@@ -227,8 +244,8 @@ module.exports = {
     log.debug(cursor)
     return cursor
   },
- 
-  async APRedirect (req, res, next) {
+
+  async APRedirect(req, res, next) {
     const acceptJson = req.accepts('html', 'application/activity+json') === 'application/activity+json'
     if (acceptJson) {
       const eventController = require('../server/api/controller/event')
@@ -240,7 +257,7 @@ module.exports = {
     next()
   },
 
-  async feedRedirect (req, res, next) {
+  async feedRedirect(req, res, next) {
     const accepted = req.accepts('html', 'application/rss+xml', 'text/calendar')
     if (['application/rss+xml', 'text/calendar'].includes(accepted) && /^\/(tag|place|collection)\/.*/.test(req.path)) {
       return res.redirect((accepted === 'application/rss+xml' ? '/feed/rss' : '/feed/ics') + req.path)

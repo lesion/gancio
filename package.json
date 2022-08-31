@@ -69,7 +69,7 @@
     "sequelize-slugify": "^1.6.1",
     "sharp": "^0.27.2",
     "sqlite3": "^5.0.11",
-    "telegraf": "^4.9.0",
+    "telegraf": "^4.9.1",
     "tiptap": "^1.32.0",
     "tiptap-extensions": "^1.35.0",
     "umzug": "^2.3.0",

@@ -4846,11 +4846,6 @@ es-array-method-boxes-properly@^1.0.0:
   resolved "https://registry.yarnpkg.com/es-array-method-boxes-properly/-/es-array-method-boxes-properly-1.0.0.tgz#873f3e84418de4ee19c5be752990b2e44718d09e"
   integrity sha512-wd6JXUmyHmt8T5a2xreUwKcGPq6f1f+WwIJkijUqiGcJz1qqnZgP6XIK+QyIWU5lT7imeNxUll48bziG+TSYcA==
 
-es-main@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/es-main/-/es-main-1.2.0.tgz#b85954f1d9d9f542fcb08685ec19515f969bad16"
-  integrity sha512-A4tCSY43O/mH4rHjG1n0mI4DhK2BmKDr8Lk8PXK/GBB6zxGFGmIW4bbkbTQ2Gi9iNamMZ9vbGrwjZOIeiM7vMw==
-
 es-to-primitive@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/es-to-primitive/-/es-to-primitive-1.2.1.tgz#e55cd4c9cdc188bcefb03b366c736323fc5c898a"
@@ -8109,11 +8104,6 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-module-alias@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/module-alias/-/module-alias-2.2.2.tgz#151cdcecc24e25739ff0aa6e51e1c5716974c0e0"
-  integrity sha512-A/78XjoX2EmNvppVWEhM2oGk3x4lLxnkEA4jTbaK97QKSDjkIoOsKQlfylt/d3kKKi596Qy3NP5XrXJ6fZIC9Q==
-
 moment-timezone@^0.5.34:
   version "0.5.37"
   resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.37.tgz#adf97f719c4e458fdb12e2b4e87b8bec9f4eef1e"
@@ -8142,6 +8132,11 @@ move-concurrently@^1.0.1:
     mkdirp "^0.5.1"
     rimraf "^2.5.4"
     run-queue "^1.0.3"
+
+mri@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/mri/-/mri-1.2.0.tgz#6721480fec2a11a4889861115a48b6cbe7cc8f0b"
+  integrity sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==
 
 mrmime@^1.0.0:
   version "1.0.1"
@@ -11672,21 +11667,19 @@ tar@^6.0.2, tar@^6.1.11, tar@^6.1.2:
     mkdirp "^1.0.3"
     yallist "^4.0.0"
 
-telegraf@^4.9.0:
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/telegraf/-/telegraf-4.9.0.tgz#30997bf6cbc941bff0bb698b13154647fc918032"
-  integrity sha512-fL+KLaYRElo4aNtrqAHmFdVsAMHHOHbmdTsAAzMJafhXJu1oYKTRMNipJ/YUvwNd5DnZY+zmGMgVVe1M/dkN4w==
+telegraf@^4.9.1:
+  version "4.9.1"
+  resolved "https://registry.yarnpkg.com/telegraf/-/telegraf-4.9.1.tgz#bc12e98ea75f2aaf72c5c4a8a0d49c68837bf0b7"
+  integrity sha512-MukWpKvAZ6/HpT3yHXz+jwUf2HsPa9TcsqPLQjJ+kHNGUS2PLgaNX690ExdWmWPuxjVjC4wNHmZ9JetO3C/tVA==
   dependencies:
     abort-controller "^3.0.0"
     debug "^4.3.3"
-    es-main "^1.2.0"
-    minimist "^1.2.6"
-    module-alias "^2.2.2"
+    mri "^1.2.0"
     node-fetch "^2.6.7"
     p-timeout "^4.1.0"
     safe-compare "^1.1.4"
     sandwich-stream "^2.0.2"
-    typegram "github:MKRhere/typegram#e2ba9f01f14b96c6dbb1c617e66692a3cc776cf6"
+    typegram "^3.11.0"
 
 terminal-link@^2.0.0:
   version "2.1.1"
@@ -12069,9 +12062,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
 
-"typegram@github:MKRhere/typegram#e2ba9f01f14b96c6dbb1c617e66692a3cc776cf6":
-  version "3.10.0"
-  resolved "https://codeload.github.com/MKRhere/typegram/tar.gz/e2ba9f01f14b96c6dbb1c617e66692a3cc776cf6"
+typegram@^3.11.0:
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/typegram/-/typegram-3.11.0.tgz#72e3a8ed0d77864916af465d2c809adf2353ee96"
+  integrity sha512-4p6u+AFognlsDgBue8Hla2jO7Ax+UQXcLa27LC7xDdAeR9LTe+Cr4vJrYpoO1wgj/BFWgXTeboaH/+1YgWyfpA==
 
 ua-parser-js@^1.0.2:
   version "1.0.2"
