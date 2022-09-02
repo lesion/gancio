@@ -135,7 +135,7 @@ export default {
       valid: false,
       openImportDialog: false,
       event: {
-        place: { name: '', address: '' },
+        place: { name: '', address: '', details: {} },
         title: '',
         description: '',
         tags: [],
@@ -214,6 +214,7 @@ export default {
       }
       formData.append('place_name', this.event.place.name)
       formData.append('place_address', this.event.place.address)
+      formData.append('place_details', this.event.place.details)
       formData.append('description', this.event.description)
       formData.append('multidate', !!this.date.multidate)
       formData.append('start_datetime', dayjs(this.date.from).unix())

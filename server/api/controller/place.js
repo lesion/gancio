@@ -5,6 +5,7 @@ const exportController = require('./export')
 
 const log = require('../../log')
 const { Op, where, col, fn, cast } = require('sequelize')
+const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search?limit=3&format=geocodejson&accept-language=it&q='
 
 module.exports = {
 
@@ -60,7 +61,7 @@ module.exports = {
           { address: where(fn('LOWER', col('address')), 'LIKE', '%' + search + '%')},
         ]
       },
-      attributes: ['name', 'address', 'id'],
+      attributes: ['name', 'address', 'details', 'id'],
       include: [{ model: Event, where: { is_visible: true }, required: true, attributes: [] }],
       group: ['place.id'],
       raw: true,
@@ -70,6 +71,16 @@ module.exports = {
 
     // TOFIX: don't know why limit does not work
     return res.json(places.slice(0, 10))
-  }  
+  },
+
+  // async _nominatim (req, res) {
+  //   const details = req.params.place_details
+  //   const ret = await axios.get(`${NOMINATIM_URL}${details}`, { headers: { 'User-Agent': 'gancio 0.20' } })
+  //   debug(`${NOMINATIM_URL}${details}`)
+  //   debug(ret.status)
+  //   debug(ret.statusText)
+  //   debug(ret.data)
+  //   return ret
+  // },
 
 }

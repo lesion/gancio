@@ -25,6 +25,13 @@ v-container
             v-model='place.address'
             :placeholder='$t("common.address")')
 
+          v-textarea(v-if="settings.allow_geolocalization"
+            row-height="15"
+            :disabled="true"
+            :label="$t('common.details')"
+            v-model='place.details'
+            :placeholder='$t("common.details")')
+
       v-card-actions
           v-spacer
           v-btn(@click='dialog=false' color='warning') {{$t('common.cancel')}}
@@ -47,6 +54,7 @@ v-container
 </template>
 <script>
 import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiEye } from '@mdi/js'
+import { mapState } from 'vuex'
 
 export default {
   data () {
@@ -68,10 +76,16 @@ export default {
   async fetch () {
     this.places = await this.$axios.$get('/place/all')
   },
+  computed: {
+    ...mapState(['settings']),
+  },
   methods: {
     editPlace (item) {
       this.place.name = item.name
       this.place.address = item.address
+      if (this.settings.allow_geolocalization) {
+        this.place.details = JSON.parse(item.details)
+      }
       this.place.id = item.id
       this.dialog = true
     },

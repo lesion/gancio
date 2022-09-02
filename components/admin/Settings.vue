@@ -48,6 +48,10 @@ v-container
       inset
       :label="$t('admin.recurrent_event_visible')")
 
+    v-switch.mt-1(v-model='allow_geolocalization'
+      inset
+      :label="$t('admin.allow_geolocalization')")
+
   v-dialog(v-model='showSMTP' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
     SMTP(@close='showSMTP = false')
 
@@ -106,6 +110,10 @@ export default {
     recurrent_event_visible: {
       get () { return this.settings.recurrent_event_visible },
       set (value) { this.setSetting({ key: 'recurrent_event_visible', value }) }
+    },
+    allow_geolocalization: {
+      get () { return this.settings.allow_geolocalization },
+      set (value) { this.setSetting({ key: 'allow_geolocalization', value }) }
     },
     filteredTimezones () {
       const current_timezone = moment.tz.guess()

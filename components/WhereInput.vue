@@ -30,11 +30,30 @@ v-row
       :label="$t('common.address')"
       @change="changeAddress"
       :value="value.address")
+    v-combobox.mr-4(ref='detailsView' v-if='settings.allow_geolocalization'
+      :prepend-icon='mdiMapSearch'
+      :disabled='disableDetails'
+      @input.native='searchCoordinates'
+      :label="$t('common.coordinates')"
+      :value='value.detailsView'
+      persistent-hint hide-no-data clearable no-filter
+      :loading='loading'
+      @change='selectDetails'
+      @focus='searchCoordinates'
+      :items="detailsList"
+      :hint="$t('event.coordinates_description')")
+      template(v-slot:item="{ item, attrs, on  }")
+        v-list-item(v-bind='attrs' v-on='on')
+          v-list-item-content(two-line v-if='item')
+            v-list-item-title(v-text='item.display_name')
+            v-list-item-subtitle(v-text='`${item.lat}`+`,`+`${item.lon}`')
+    v-text-field(ref='details' v-show='false' v-if='settings.allow_geolocalization')
 
 </template>
 <script>
-import { mdiMap, mdiMapMarker, mdiPlus } from '@mdi/js'
+import { mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch } from '@mdi/js'
 import debounce from 'lodash/debounce'
+import { mapState } from 'vuex'
 
 export default {
   name: 'WhereInput',
@@ -43,14 +62,20 @@ export default {
   },
   data () {
     return {
-      mdiMap, mdiMapMarker, mdiPlus,
+      mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch,
       place: { },
       placeName: '',
       places: [],
-      disableAddress: true
+      disableAddress: true,
+      details: { },
+      detailsView: '',
+      detailsList: [],
+      disableDetails: true,
+      loading: false
     }
   },
   computed: {
+    ...mapState(['settings']),
     filteredPlaces () {
       if (!this.placeName) { return this.places }
       const placeName = this.placeName.trim().toLowerCase()
@@ -85,6 +110,9 @@ export default {
       if (typeof p === 'object' && !p.create) {
         this.place.name = p.name.trim()
         this.place.address = p.address
+        if (this.settings.allow_geolocalization) {
+          this.place.details = p.details
+        }
         this.place.id = p.id
         this.disableAddress = true
       } else { // this is a new place
@@ -100,6 +128,9 @@ export default {
         } else {
           delete this.place.id
           this.place.address = ''
+          if (this.settings.allow_geolocalization) {
+            this.place.details = p.details
+          }
           this.disableAddress = false
           this.$refs.place.blur()
           this.$refs.address.focus()
@@ -110,7 +141,30 @@ export default {
     changeAddress (v) {
       this.place.address = v
       this.$emit('input', { ...this.place })
-    }
+      this.disableDetails = false
+    },
+    selectDetails (v) {
+      if (!v) { return }
+      if (typeof v === 'object') {
+        this.place.detailsView = v.lat+', '+v.lon
+        let c = {}
+        c.lat = v.lat
+        c.lon = v.lon
+        if (typeof c === 'object') {
+          this.place.details = JSON.stringify(c)
+        }
+      }
+      this.$emit('input', { ...this.place })
+    },
+    searchCoordinates: debounce(async function(ev) {
+      this.loading = true
+      const searchCoordinates = ev.target.value.trim().toLowerCase()
+      // this.detailsList = await this.$axios.$get(`placeNominatim?search=${searchCoordinates}`)
+      this.detailsList = await this.$axios.$get(`https://nominatim.openstreetmap.org/search?limit=3&format=json&namedetails=1&q=${searchCoordinates}` )
+      if (this.detailsList) {
+        this.loading = false;
+      }
+    }, 300),
   }
 }
 </script>

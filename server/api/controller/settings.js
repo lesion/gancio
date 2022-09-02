@@ -29,6 +29,7 @@ const defaultSettings = {
   allow_anon_event: true,
   allow_recurrent_event: false,
   recurrent_event_visible: false,
+  allow_geolocalization: false,
   enable_federation: true,
   enable_resources: false,
   hide_boosts: true,

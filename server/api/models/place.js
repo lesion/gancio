@@ -10,7 +10,8 @@ Place.init({
     index: true,
     allowNull: false
   },
-  address: DataTypes.STRING
+  address: DataTypes.STRING,
+  details: DataTypes.JSON
 }, { sequelize, modelName: 'place' })
 
 module.exports = Place
