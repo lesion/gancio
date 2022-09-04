@@ -272,7 +272,7 @@ export default {
           this.$emit('input', { ...this.value, from, due })
         } else {
           let from = value
-          let due = this.value.due || from
+          let due = this.value.due
           if (this.fromHour) {
             const [hour, minute] = this.fromHour.split(':')
             from = dayjs.tz(value).hour(hour).minute(minute).second(0).toDate()
