@@ -49,7 +49,7 @@ v-container#event.pa-0.pa-sm-2
                 :href='`/api/event/${event.slug || event.id}.ics`')
                 v-icon(v-text='mdiCalendarExport')
               v-btn.ml-2(v-if='hasMedia' large icon :title="$t('event.download_flyer')" color='primary' :aria-label="$t('event.download_flyer')"
-                :href='event | mediaURL')
+                :href='event | mediaURL("download")')
                 v-icon(v-text='mdiFileDownloadOutline')                
 
       .p-description.text-body-1.pa-3.rounded(v-if='hasMedia && event.description' itemprop='description' v-html='event.description')
