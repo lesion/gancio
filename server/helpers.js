@@ -48,14 +48,14 @@ domPurify.addHook('beforeSanitizeElements', node => {
 
 module.exports = {
 
-  randomString (length = 12) {
+  randomString(length = 12) {
     const wishlist = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
     return Array.from(crypto.randomFillSync(new Uint32Array(length)))
       .map(x => wishlist[x % wishlist.length])
       .join('')
   },
 
-  sanitizeHTML (html) {
+  sanitizeHTML(html) {
     return domPurify.sanitize(html, {
       ALLOWED_TAGS: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'br', 'i', 'span',
         'h6', 'b', 'a', 'li', 'ul', 'ol', 'code', 'blockquote', 'u', 's', 'strong'],
@@ -63,7 +63,7 @@ module.exports = {
     })
   },
 
-  async setUserLocale (req, res, next) {
+  async setUserLocale(req, res, next) {
     // select locale based on cookie? and accept-language header
     acceptLanguage.languages(Object.keys(locales))
     res.locals.acceptedLocale = acceptLanguage.get(req.headers['accept-language'])
@@ -71,7 +71,7 @@ module.exports = {
     next()
   },
 
-  async initSettings (_req, res, next) {
+  async initSettings(_req, res, next) {
     // initialize settings
     res.locals.settings = cloneDeep(settingsController.settings)
     delete res.locals.settings.smtp
@@ -87,12 +87,12 @@ module.exports = {
     next()
   },
 
-  serveStatic () {
+  serveStatic() {
     const router = express.Router()
     // serve images/thumb
-    router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' } ), (_req, res) => res.sendStatus(404))
+    router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' }), (_req, res) => res.sendStatus(404))
     router.use('/noimg.svg', express.static('./static/noimg.svg'))
-    
+
     router.use('/logo.png', (req, res, next) => {
       const logoPath = res.locals.settings.logo || './static/gancio'
       return express.static(logoPath + '.png')(req, res, next)
@@ -106,12 +106,12 @@ module.exports = {
     return router
   },
 
-  logRequest (req, _res, next) {
+  logRequest(req, _res, next) {
     log.debug(`${req.method} ${req.path}`)
     next()
   },
 
-  col (field) {
+  col(field) {
     if (config.db.dialect === 'postgres') {
       return '"' + field.split('.').join('"."') + '"'
     } else if (config.db.dialect === 'mariadb') {
@@ -121,14 +121,14 @@ module.exports = {
     }
   },
 
-  async getImageFromURL (url) {
+  async getImageFromURL(url) {
     log.debug(`getImageFromURL ${url}`)
 
     const filename = crypto.randomBytes(16).toString('hex')
     const sharpStream = sharp({ failOnError: true })
     const promises = [
       sharpStream.clone().resize(500, null, { withoutEnlargement: true }).jpeg({ effort: 6, mozjpeg: true }).toFile(path.resolve(config.upload_path, 'thumb', filename + '.jpg')),
-      sharpStream.clone().resize(1200, null, { withoutEnlargement: true } ).jpeg({ quality: 95, effort: 6, mozjpeg: true}).toFile(path.resolve(config.upload_path, filename + '.jpg')),
+      sharpStream.clone().resize(1200, null, { withoutEnlargement: true }).jpeg({ quality: 95, effort: 6, mozjpeg: true }).toFile(path.resolve(config.upload_path, filename + '.jpg')),
     ]
 
     const response = await axios({ method: 'GET', url: encodeURI(url), responseType: 'stream' })
@@ -157,7 +157,7 @@ module.exports = {
    * Import events from url
    * It does supports ICS and H-EVENT
    */
-  async importURL (req, res) {
+  async importURL(req, res) {
     const URL = req.query.URL
     try {
       const response = await axios.get(URL)
@@ -210,7 +210,7 @@ module.exports = {
     }
   },
 
-  getWeekdayN (date, n, weekday) {
+  getWeekdayN(date, n, weekday) {
     let cursor
     if (n === -1) {
       cursor = date.endOf('month')
@@ -227,8 +227,8 @@ module.exports = {
     log.debug(cursor)
     return cursor
   },
- 
-  async APRedirect (req, res, next) {
+
+  async APRedirect(req, res, next) {
     const acceptJson = req.accepts('html', 'application/activity+json') === 'application/activity+json'
     if (acceptJson) {
       const eventController = require('../server/api/controller/event')
@@ -240,7 +240,7 @@ module.exports = {
     next()
   },
 
-  async feedRedirect (req, res, next) {
+  async feedRedirect(req, res, next) {
     const accepted = req.accepts('html', 'application/rss+xml', 'text/calendar')
     if (['application/rss+xml', 'text/calendar'].includes(accepted) && /^\/(tag|place|collection)\/.*/.test(req.path)) {
       return res.redirect((accepted === 'application/rss+xml' ? '/feed/rss' : '/feed/ics') + req.path)

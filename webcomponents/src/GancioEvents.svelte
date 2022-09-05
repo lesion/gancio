@@ -2,6 +2,7 @@
 
 <script>
   import { onMount } from 'svelte'
+  import { when } from './helpers'
   export let baseurl = ''
   export let title = ''
   export let maxlength = false
@@ -49,31 +50,6 @@
       return `${(focalpoint[0] + 1) * 50}% ${(focalpoint[1] + 1) * 50}%`
     }
     return 'center center'
-  }
-
-  function _when(unix_timestamp, type = 'long') {
-    const options =
-      type === 'long'
-        ? {
-            weekday: 'long',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-          }
-        : { hour: '2-digit', minute: '2-digit' }
-    const d = new Date(unix_timestamp * 1000).toLocaleString(undefined, options)
-    return d
-  }
-
-  function when(event) {
-    if (event.multidate) {
-      return _when(event.start_datetime) + ' - ' + _when(event.end_datetime)
-    }
-    return (
-      _when(event.start_datetime) +
-      (event.end_datetime ? '-' + _when(event.end_datetime, 'short') : '')
-    )
   }
 
   onMount(() => {
