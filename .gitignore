@@ -8,7 +8,6 @@
 _*.js
 config*.json
 tests/seeds/testdb.sqlite
-preso.md
 gancio.sqlite
 db.sqlite
 releases
