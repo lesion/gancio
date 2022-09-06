@@ -723,8 +723,8 @@ const eventController = {
     const end = req.query.end
     const tags = req.query.tags
     const places = req.query.places
-    const limit = req.query.max
-    const page = req.query.page = 0
+    const limit = Number(req.query.max) || 0
+    const page = Number(req.query.page) || 0
     const older = req.query.older || false
 
     const show_recurrent = settings.allow_recurrent_event &&
