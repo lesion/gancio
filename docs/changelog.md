@@ -8,6 +8,16 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.5.4 - 6 set '22
+  - Update webcomponent deps
+  - Refactor datime display in webcomponent
+  - Force flyer download
+  - Restore range events on calendar
+  - Fix limit/max events for mariadb #183
+  - Fix endtime selection
+  - Fix microdata address
+
+
 ### 1.5.3 - 30 aug '22
   - Fix end time selection when it's in the next day
 
