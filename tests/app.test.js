@@ -258,6 +258,17 @@ describe('Tags', () => {
     // expect(response.body[0].title).toBe('test tags')
     expect(response.body[0].tags.length).toBe(3)
   })
+
+  test('should return limited events', async () => {
+    let response = await request(app).get('/api/events?max=1')
+      .expect(200)
+
+    expect(response.body.length).toBe(1)
+    response = await request(app).get('/api/events?max=2')
+      .expect(200)
+
+    expect(response.body.length).toBe(2)
+  })
 })
 
 describe('Place', () => {
