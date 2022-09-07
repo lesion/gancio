@@ -1,6 +1,6 @@
 <template lang='pug'>
 v-container
-  v-card-title {{$t('common.collections')}}
+  v-card-title {{ $t('common.collections') }}
     v-spacer
     v-text-field(v-model='search'
     :append-icon='mdiMagnify' outlined rounded
@@ -8,11 +8,11 @@ v-container
     single-line hide-details)
   v-card-subtitle(v-html="$t('admin.collections_description')")
 
-  v-btn(color='primary' text @click='newCollection') <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.new_collection')}}
+  v-btn(color='primary' text @click='newCollection') <v-icon v-text='mdiPlus'></v-icon> {{ $t('admin.new_collection') }}
 
   v-dialog(v-model='dialog' width='800' destroy-on-close :fullscreen='$vuetify.breakpoint.xsOnly')
-    v-card(color='secondary')
-      v-card-title {{$t('admin.edit_collection')}}
+    v-card
+      v-card-title {{ $t('admin.edit_collection') }}
       v-card-text
         v-form(v-model='valid' ref='form' @submit.prevent.native='saveCollection')
           v-text-field(
@@ -23,7 +23,7 @@ v-container
             :placeholder='$t("common.name")')
               template(v-slot:append-outer v-if='!collection.id')
                 v-btn(text @click='saveCollection' color='primary' :loading='loading'
-                  :disabled='!valid || loading || !!collection.id') {{$t('common.save')}}
+                  :disabled='!valid || loading || !!collection.id') {{ $t('common.save') }}
           h3(v-else class='text-h5' v-text='collection.name')
 
         v-row
@@ -39,9 +39,9 @@ v-container
               :delimiters="[',', ';']"
               :items="tags"
               :label="$t('common.tags')")
-                template(v-slot:selection="{ item, on, attrs, selected, parent}")
+                template(v-slot:selection="{ item, on, attrs, selected, parent }")
                   v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
-                    :input-value="selected" label small) {{item}}
+                    :input-value="selected" label small) {{ item }}
 
           v-col(cols=5)
             v-autocomplete(v-model='filterPlaces'
@@ -58,51 +58,51 @@ v-container
               :delimiters="[',', ';']"
               :items="places"
               :label="$t('common.places')")
-                template(v-slot:selection="{ item, on, attrs, selected, parent}")
+                template(v-slot:selection="{ item, on, attrs, selected, parent }")
                   v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
-                    :input-value="selected" label small) {{item.name}}
+                    :input-value="selected" label small) {{ item.name }}
 
                 //- template(v-slot:item="{ item, attrs, on }")
                 //-   v-list-item(v-bind='attrs' v-on='on')
                 //-     v-list-item-content(two-line)
                 //-       v-list-item-title(v-text='item.name')
                 //-       v-list-item-subtitle(v-text='item.address')
-            
+
           v-col(cols=2)
             v-btn(color='primary' text @click='addFilter' :disabled='!collection.id || !filterPlaces.length && !filterTags.length') add <v-icon v-text='mdiPlus'></v-icon>
-            
+
         v-data-table(
           :headers='filterHeaders'
           :items='filters'
-          :hide-default-footer='filters.length<5'
+          :hide-default-footer='filters.length < 5'
           :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }')
-            template(v-slot:item.actions='{item}')
+            template(v-slot:item.actions='{ item }')
               v-btn(@click='removeFilter(item)' color='error' icon)
                 v-icon(v-text='mdiDeleteForever')
-            template(v-slot:item.tags='{item}')
+            template(v-slot:item.tags='{ item }')
               v-chip.ma-1(small v-for='tag in item.tags' v-text='tag' :key='tag')
-            template(v-slot:item.places='{item}')
+            template(v-slot:item.places='{ item }')
               v-chip.ma-1(small v-for='place in item.places' v-text='place.name' :key='place.id' )
 
 
       v-card-actions
-          v-spacer
-          v-btn(text @click='dialog=false' color='warning') {{$t('common.close')}}
+        v-spacer
+        v-btn(@click='dialog = false' outlined color='warning') {{ $t('common.close') }}
 
   v-card-text
     v-data-table(
     :headers='collectionHeaders'
     :items='collections'
-    :hide-default-footer='collections.length<5'
+    :hide-default-footer='collections.length < 5'
     :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
     :search='search')
-      template(v-slot:item.filters='{item}')
-        span {{collectionFilters(item)}}
-      template(v-slot:item.actions='{item}')
-          v-btn(@click='editCollection(item)' color='primary' icon)
-            v-icon(v-text='mdiPencil')
-          v-btn(@click='removeCollection(item)' color='error' icon)
-            v-icon(v-text='mdiDeleteForever')
+      template(v-slot:item.filters='{ item }')
+        span {{ collectionFilters(item) }}
+      template(v-slot:item.actions='{ item }')
+        v-btn(@click='editCollection(item)' color='primary' icon)
+          v-icon(v-text='mdiPencil')
+        v-btn(@click='removeCollection(item)' color='error' icon)
+          v-icon(v-text='mdiDeleteForever')
 
 </template>
 <script>
@@ -111,7 +111,7 @@ import debounce from 'lodash/debounce'
 import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle } from '@mdi/js'
 
 export default {
-  data () {
+  data() {
     return {
       mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle,
       loading: false,
@@ -139,7 +139,7 @@ export default {
       ]
     }
   },
-  async fetch () {
+  async fetch() {
     this.collections = await this.$axios.$get('/collections?withFilters=true')
   },
 
@@ -150,14 +150,14 @@ export default {
     searchPlaces: debounce(async function (ev) {
       this.places = await this.$axios.$get(`/place?search=${ev.target.value}`)
     }, 100),
-    collectionFilters (collection) {
+    collectionFilters(collection) {
       return collection.filters.map(f => {
-        const tags = f.tags?.join(', ') 
+        const tags = f.tags?.join(', ')
         const places = f.places?.map(p => p.name).join(', ')
         return '(' + (tags && places ? tags + ' - ' + places : tags + places) + ')'
       }).join(' - ')
     },
-    async addFilter () {
+    async addFilter() {
       this.loading = true
       const tags = this.filterTags
       const places = this.filterPlaces.map(p => ({ id: p.id, name: p.name }))
@@ -168,17 +168,17 @@ export default {
       this.filterPlaces = []
       this.loading = false
     },
-    async editCollection (collection) {
+    async editCollection(collection) {
       this.collection = { ...collection }
       this.filters = await this.$axios.$get(`/filter/${collection.id}`)
       this.dialog = true
     },
-    newCollection () {
+    newCollection() {
       this.collection = { name: '', id: null }
       this.filters = []
       this.dialog = true
     },
-    async saveCollection () {
+    async saveCollection() {
       if (!this.$refs.form.validate()) return
       this.loading = true
       this.collection.name = this.collection.name.trim()
@@ -197,7 +197,7 @@ export default {
         this.loading = false
       }
     },
-    async removeCollection (collection) {
+    async removeCollection(collection) {
       const ret = await this.$root.$confirm('admin.delete_collection_confirm', { collection: collection.name })
       if (!ret) { return }
       try {
