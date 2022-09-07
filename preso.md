@@ -85,10 +85,11 @@ per comunicare.
 --
 ## focus on content
 
-nowhere on gancio appears the identity of who published the event, not even under a nickname, not even to administrators (except in the db).
-This is not an ego-friendly platform.
+nowhere on gancio appears the identity of who published the event, not even under a nickname, not even to administrators (except in the db).  
+This is not an ego-friendly platform, gamification is not aided.
 
-note: altre scelte, non c'e' scritto da nessuna parte chi ha postato l'evento..
+note: altre scelte, non c'e' scritto da nessuna parte chi ha postato l'evento.   
+gamification non e' agevolata.
 
 --
 
@@ -99,19 +100,20 @@ People don't have to register to use it, not even to publish events.
 note: eventi anonimi, gli eventi vanno confermati, possibilita' di modificare gli eventi?
 --
 ## fuck walled garden 
-We are not interested in making hits, monitor user activities, sell data or ads: we export events in many ways, via RSS feeds, via global or individual ics, incorporating lists of events or single event via iframe on other websites, via h-event (microformat), via microdata, via ActivityPub, via API.
+We are not interested in making hits, monitor user activities, sell data or ads: we export events in many ways, via RSS feeds, via global or individual ics calendar, embedding lists of events or single event via iframe or webcomponents on other websites, via h-event (microformat), via microdata, via ActivityPub, via API.
 
 ---
 
 ### 3 years later...
 
+note: questo e' da dove siamo partiti...
+
 --
 
 ### Status & Last Updates
 
-- 25 instances
+- 25 known instances
 - 11 languages
-- 16k events (3k from gancio.cisti.org) 
 
 -- 
 
@@ -136,39 +138,46 @@ ma anche istanze tematiche:
     and nobody wants to do maintenance.<br/>
         - Kurt Vonnegut       
           
-note: debito tecnico, la roba viene aggiornata, si scoprono bugs frequentemente e aggiornando di scoprono altri bug!
+note: cosa ho fatto in questo tempo? principalmente c'e' un debito tecnico, la roba viene aggiornata, si scoprono bugs frequentemente,
+aggiornando di scoprono altri bug! ogni feature si porta gatte da pelare notevoli.
 
 
 --
 Flyer download
 
-note: anche qui sono scelte, [il componente](https://vuetifyjs.com/en/components/images/) della libreria che sto usando ha fatto altre scelte.
-
---
-new time selection widget
-
---
-
-- tag page
-- place page
+note: non si poteva scaricare l'immagine associata ad un evento.
+anche qui sono conseguenze indirette, [il componente](https://vuetifyjs.com/en/components/images/) della libreria che sto usando ha fatto altre scelte.
 
 --
 
-### collection page
+New time selection widget
+
+--
+ 
+Improve Recurrent events
 
 --
 
-### restrict new tag entropy
+Tag page
 
 --
 
-### Improve Recurrent events
+restrict new tag entropy
+
+note: su questo c'e' ancora da fare per i po', debito tecnico
 
 --
 
-### Redirect based on content-type
+Place page
 
-note: feed rss, ics, AP
+--
+
+Redirect based on content-type
+note: content-type cos'e' feed rss, ics, AP
+--
+
+Collection page
+
 --
 
 - Add microdata support
