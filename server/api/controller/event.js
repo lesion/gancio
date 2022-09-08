@@ -23,18 +23,18 @@ const log = require('../../log')
 
 const eventController = {
 
-  async searchMeta (req, res) {
+  async searchMeta(req, res) {
     const search = req.query.search
 
     const places = await Place.findAll({
       order: [[Sequelize.col('w'), 'DESC']],
       where: {
         [Op.or]: [
-          Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%' ),
+          Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%'),
           Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('address')), 'LIKE', '%' + search + '%')
         ]
       },
-      attributes: [['name', 'label'], 'address', 'id', [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('events.placeId')),'INTEGER'), 'w']],
+      attributes: [['name', 'label'], 'address', 'id', [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('events.placeId')), 'INTEGER'), 'w']],
       include: [{ model: Event, where: { is_visible: true }, required: true, attributes: [] }],
       group: ['place.id'],
       raw: true
@@ -45,7 +45,7 @@ const eventController = {
       where: {
         tag: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('tag')), 'LIKE', '%' + search + '%'),
       },
-      attributes: [['tag','label'], [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('tag.tag')), 'INTEGER'), 'w']],
+      attributes: [['tag', 'label'], [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('tag.tag')), 'INTEGER'), 'w']],
       include: [{ model: Event, where: { is_visible: true }, attributes: [], through: { attributes: [] }, required: true }],
       group: ['tag.tag'],
       raw: true
@@ -57,13 +57,13 @@ const eventController = {
     }).concat(tags.map(t => {
       t.type = 'tag'
       return t
-    })).sort( (a, b) => b.w - a.w).slice(0, 10)
+    })).sort((a, b) => b.w - a.w).slice(0, 10)
 
     return res.json(ret)
   },
 
 
-  async search (req, res) {
+  async search(req, res) {
     const search = req.query.search.trim().toLocaleLowerCase()
     const show_recurrent = req.query.show_recurrent || false
     const end = req.query.end
@@ -89,11 +89,11 @@ const eventController = {
     if (search) {
       replacements.push(search)
       where[Op.or] =
-      [
-        { title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', '%' + search + '%') },
-        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%'),
-        Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND LOWER(${Col('tagTag')}) = ?`))
-      ]
+        [
+          { title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', '%' + search + '%') },
+          Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%'),
+          Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND LOWER(${Col('tagTag')}) = ?`))
+        ]
     }
 
 
@@ -110,7 +110,7 @@ const eventController = {
           attributes: ['tag'],
           through: { attributes: [] }
         },
-        { model: Place, required: true, attributes: ['id', 'name', 'address', 'details'] }
+        { model: Place, required: true, attributes: ['id', 'name', 'address'] }
       ],
       replacements,
       limit: 30,
@@ -129,9 +129,9 @@ const eventController = {
 
   },
 
-  async getNotifications (event, action) {
+  async getNotifications(event, action) {
     log.debug(`getNotifications ${event.title} ${action}`)
-    function match (event, filters) {
+    function match(event, filters) {
       // matches if no filter specified
       if (!filters) { return true }
 
@@ -170,7 +170,7 @@ const eventController = {
     })
   },
 
-  async get (req, res) {
+  async get(req, res) {
     const format = req.params.format || 'json'
     const is_admin = res.locals.user && res.locals.user.is_admin
     const slug = req.params.event_slug
@@ -192,7 +192,7 @@ const eventController = {
         },
         include: [
           { model: Tag, required: false, attributes: ['tag'], through: { attributes: [] } },
-          { model: Place, attributes: ['name', 'address', 'details', 'id'] },
+          { model: Place, attributes: ['name', 'address', 'id'] },
           {
             model: Resource,
             where: !is_admin && { hidden: false },
@@ -270,7 +270,7 @@ const eventController = {
   /** confirm an anonymous event
    * and send related notifications
    */
-  async confirm (req, res) {
+  async confirm(req, res) {
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id, { include: [Place, Tag] })
     if (!event) {
@@ -299,7 +299,7 @@ const eventController = {
     }
   },
 
-  async unconfirm (req, res) {
+  async unconfirm(req, res) {
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
     if (!event) { return req.sendStatus(404) }
@@ -318,7 +318,7 @@ const eventController = {
   },
 
   /** get all unconfirmed events */
-  async getUnconfirmed (_req, res) {
+  async getUnconfirmed(_req, res) {
     try {
       const events = await Event.findAll({
         where: {
@@ -336,7 +336,7 @@ const eventController = {
     }
   },
 
-  async addNotification (req, res) {
+  async addNotification(req, res) {
     try {
       const notification = {
         filters: { is_visible: true },
@@ -351,7 +351,7 @@ const eventController = {
     }
   },
 
-  async delNotification (req, res) {
+  async delNotification(req, res) {
     const remove_code = req.params.code
     try {
       const notification = await Notification.findOne({ where: { remove_code } })
@@ -362,14 +362,14 @@ const eventController = {
     res.sendStatus(200)
   },
 
-  async isAnonEventAllowed (_req, res, next) {
+  async isAnonEventAllowed(_req, res, next) {
     if (!res.locals.settings.allow_anon_event && !res.locals.user) {
       return res.sendStatus(403)
     }
     next()
   },
 
-  async add (req, res) {
+  async add(req, res) {
     // req.err comes from multer streaming error
     if (req.err) {
       log.warn(req.err)
@@ -380,7 +380,7 @@ const eventController = {
       const body = req.body
       const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
 
-      const required_fields = [ 'title', 'start_datetime']
+      const required_fields = ['title', 'start_datetime']
       let missing_field = required_fields.find(required_field => !body[required_field])
       if (missing_field) {
         log.warn(`${missing_field} required`)
@@ -398,7 +398,7 @@ const eventController = {
         if (!body.place_name) {
           return res.status(400).send(`Place not found`)
         }
-        place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Op.eq, body.place_name.trim().toLocaleLowerCase() )})
+        place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Op.eq, body.place_name.trim().toLocaleLowerCase()) })
         if (!place) {
           if (!body.place_address || !body.place_name) {
             return res.status(400).send(`place_id or place_name and place_address required`)
@@ -480,7 +480,7 @@ const eventController = {
     }
   },
 
-  async update (req, res) {
+  async update(req, res) {
     if (res.err) {
       log.warn(req.err)
       return res.status(400).json(req.err.toString())
@@ -538,7 +538,7 @@ const eventController = {
       } else if (body.image_focalpoint && event.media.length) {
         let focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
         focalpoint = [parseFloat(parseFloat(focalpoint[0]).toFixed(2)), parseFloat(parseFloat(focalpoint[1]).toFixed(2))]
-        eventDetails.media = [ { ...event.media[0], focalpoint } ] // [0].focalpoint = focalpoint
+        eventDetails.media = [{ ...event.media[0], focalpoint }] // [0].focalpoint = focalpoint
       }
       await event.update(eventDetails)
 
@@ -553,7 +553,7 @@ const eventController = {
         if (!body.place_name) {
           return res.status(400).send(`Place not found`)
         }
-        place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Op.eq, body.place_name.trim().toLocaleLowerCase() )})
+        place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Op.eq, body.place_name.trim().toLocaleLowerCase()) })
         if (!place) {
           if (!body.place_address || !body.place_name) {
             return res.status(400).send(`place_id or place_name and place_address required`)
@@ -595,7 +595,7 @@ const eventController = {
     }
   },
 
-  async remove (req, res) {
+  async remove(req, res) {
     const event = await Event.findByPk(req.params.id)
     // check if event is mine (or user is admin)
     if (event && (res.locals.user.is_admin || res.locals.user.id === event.userId)) {
@@ -626,9 +626,9 @@ const eventController = {
 
   /**
    * Method to search for events with pagination and filtering
-   * @returns
+   * @returns 
    */
-  async _select ({
+  async _select({
     start = dayjs().unix(),
     end,
     tags,
@@ -668,7 +668,7 @@ const eventController = {
     const replacements = []
     if (tags && places) {
       where[Op.and] = [
-        { placeId: places ? places.split(',') : []},
+        { placeId: places ? places.split(',') : [] },
         Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND LOWER(${Col('tagTag')}) in (?)`))
       ]
       replacements.push(tags)
@@ -692,7 +692,7 @@ const eventController = {
       attributes: {
         exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'description', 'resources', 'recurrent', 'placeId', 'image_path']
       },
-      order: [['start_datetime', older ? 'DESC' : 'ASC' ]],
+      order: [['start_datetime', older ? 'DESC' : 'ASC']],
       include: [
         {
           model: Tag,
@@ -700,7 +700,7 @@ const eventController = {
           attributes: ['tag'],
           through: { attributes: [] }
         },
-        { model: Place, required: true, attributes: ['id', 'name', 'address', 'details'] }
+        { model: Place, required: true, attributes: ['id', 'name', 'address'] }
       ],
       ...pagination,
       replacements
@@ -719,14 +719,14 @@ const eventController = {
   /**
    * Select events based on params
    */
-  async select (req, res) {
+  async select(req, res) {
     const settings = res.locals.settings
     const start = req.query.start || dayjs().unix()
     const end = req.query.end
     const tags = req.query.tags
     const places = req.query.places
-    const limit = req.query.max
-    const page = req.query.page = 0
+    const limit = Number(req.query.max) || 0
+    const page = Number(req.query.page) || 0
     const older = req.query.older || false
 
     const show_recurrent = settings.allow_recurrent_event &&
@@ -740,7 +740,7 @@ const eventController = {
   /**
    * Ensure we have the next instance of a recurrent event
    */
-  async _createRecurrentOccurrence (e, startAt) {
+  async _createRecurrentOccurrence(e, startAt) {
     log.debug(`Create recurrent event [${e.id}] ${e.title}"`)
     const event = {
       parentId: e.id,
@@ -800,12 +800,12 @@ const eventController = {
   /**
    * Create instances of recurrent events
    */
-  async _createRecurrent (start_datetime = dayjs().unix()) {
+  async _createRecurrent(start_datetime = dayjs().unix()) {
     // select recurrent events and its childs
     const events = await Event.findAll({
       where: { is_visible: true, recurrent: { [Op.ne]: null } },
       include: [{ model: Tag, required: false },
-        { model: Event, as: 'child', required: false, where: { start_datetime: { [Op.gte]: start_datetime } }}],
+      { model: Event, as: 'child', required: false, where: { start_datetime: { [Op.gte]: start_datetime } } }],
       order: [['child', 'start_datetime', 'DESC']]
     })
 
@@ -813,7 +813,7 @@ const eventController = {
     const creations = events.map(e => {
       if (e.child.length) {
         if (e.child.find(c => c.is_visible)) return
-        return eventController._createRecurrentOccurrence(e, dayjs.unix(e.child[0].start_datetime+1))
+        return eventController._createRecurrentOccurrence(e, dayjs.unix(e.child[0].start_datetime + 1))
       }
       return eventController._createRecurrentOccurrence(e, dayjs())
     })
