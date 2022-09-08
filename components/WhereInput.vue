@@ -30,7 +30,7 @@ v-row
       :label="$t('common.address')"
       @change="changeAddress"
       :value="value.address")
-    v-combobox.mr-4(ref='detailsView' v-if='settings.allow_geolocalization'
+    v-combobox.mr-4(ref='detailsView' v-if='settings.allow_geolocation'
       :prepend-icon='mdiMapSearch'
       :disabled='disableDetails'
       @input.native='searchCoordinates'
@@ -47,7 +47,7 @@ v-row
           v-list-item-content(two-line v-if='item')
             v-list-item-title(v-text='item.display_name')
             v-list-item-subtitle(v-text='`${item.lat}`+`,`+`${item.lon}`')
-    v-text-field(ref='details' v-show='false' v-if='settings.allow_geolocalization')
+    v-text-field(ref='details' v-show='false' v-if='settings.allow_geolocation')
 
 </template>
 <script>
@@ -110,7 +110,7 @@ export default {
       if (typeof p === 'object' && !p.create) {
         this.place.name = p.name.trim()
         this.place.address = p.address
-        if (this.settings.allow_geolocalization) {
+        if (this.settings.allow_geolocation) {
           this.place.details = p.details
         }
         this.place.id = p.id
@@ -128,7 +128,7 @@ export default {
         } else {
           delete this.place.id
           this.place.address = ''
-          if (this.settings.allow_geolocalization) {
+          if (this.settings.allow_geolocation) {
             this.place.details = p.details
           }
           this.disableAddress = false
@@ -158,9 +158,12 @@ export default {
     },
     searchCoordinates: debounce(async function(ev) {
       this.loading = true
-      const searchCoordinates = ev.target.value.trim().toLowerCase()
-      // this.detailsList = await this.$axios.$get(`placeNominatim?search=${searchCoordinates}`)
-      this.detailsList = await this.$axios.$get(`https://nominatim.openstreetmap.org/search?limit=3&format=json&namedetails=1&q=${searchCoordinates}` )
+      const pre_searchCoordinates = ev.target.value.trim().toLowerCase()
+      // allow pasting coordinates lat/lon
+      const searchCoordinates = pre_searchCoordinates.replace('/', ',')
+      if (searchCoordinates.length) {
+        this.detailsList = await this.$axios.$get(`placeNominatim/${searchCoordinates}`)
+      }
       if (this.detailsList) {
         this.loading = false;
       }

@@ -185,7 +185,7 @@
         "allow_registration_description": "Allow open registrations?",
         "allow_anon_event": "Allow anonymous events (has to be confirmed)?",
         "allow_recurrent_event": "Allow recurring events",
-        "allow_geolocalization": "Allow geolocalization of events",
+        "allow_geolocation": "Allow geolocation of events",
         "recurrent_event_visible": "Show recurring events by default",
         "federation": "Federation / ActivityPub",
         "enable_federation": "Turn on federation",

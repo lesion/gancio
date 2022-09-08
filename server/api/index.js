@@ -161,7 +161,7 @@ if (config.status !== 'READY') {
   api.get('/place/all', isAdmin, placeController.getAll)
   api.get('/place/:placeName', cors, placeController.getEvents)
   api.get('/place', cors, placeController.search)
-  // api.get('/placeNominatim/:place_details', cors, placeController._nominatim)
+  api.get('/placeNominatim/:place_details', cors, placeController._nominatim)
   api.put('/place', isAdmin, placeController.updatePlace)
 
   api.get('/tag', cors, tagController.search)

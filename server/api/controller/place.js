@@ -5,7 +5,8 @@ const exportController = require('./export')
 
 const log = require('../../log')
 const { Op, where, col, fn, cast } = require('sequelize')
-const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search?limit=3&format=geocodejson&accept-language=it&q='
+const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search?limit=3&format=json&namedetails=1&q='
+const axios = require('axios')
 
 module.exports = {
 
@@ -73,14 +74,10 @@ module.exports = {
     return res.json(places.slice(0, 10))
   },
 
-  // async _nominatim (req, res) {
-  //   const details = req.params.place_details
-  //   const ret = await axios.get(`${NOMINATIM_URL}${details}`, { headers: { 'User-Agent': 'gancio 0.20' } })
-  //   debug(`${NOMINATIM_URL}${details}`)
-  //   debug(ret.status)
-  //   debug(ret.statusText)
-  //   debug(ret.data)
-  //   return ret
-  // },
+  async _nominatim (req, res) {
+    const details = req.params.place_details
+    const ret = await axios.get(`${NOMINATIM_URL}${details}`, { headers: { 'User-Agent': 'gancio 0.20' } })
+    return res.json(ret.data)
+  },
 
 }

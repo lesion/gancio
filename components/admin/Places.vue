@@ -25,7 +25,7 @@ v-container
             v-model='place.address'
             :placeholder='$t("common.address")')
 
-          v-textarea(v-if="settings.allow_geolocalization"
+          v-textarea(v-if="settings.allow_geolocation"
             row-height="15"
             :disabled="true"
             :label="$t('common.details')"
@@ -83,7 +83,7 @@ export default {
     editPlace (item) {
       this.place.name = item.name
       this.place.address = item.address
-      if (this.settings.allow_geolocalization) {
+      if (this.settings.allow_geolocation) {
         this.place.details = JSON.parse(item.details)
       }
       this.place.id = item.id
