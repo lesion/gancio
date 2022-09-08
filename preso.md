@@ -180,46 +180,63 @@ Collection page
 
 --
 
-- Add microdata support
-- sitemap
-
----
-### Admin side
-
-- CLI!
+Add microdata support
 
 --
 
-- Add MariaDB supports
---
-
-- Improve SMTP configuration
-- footer links reordering
-- Unit Testing
-- lot of fixes!!
-
+sitemap
 
 ---
 
-### Dev side
+CLI
 
 --
 
-### API
+Add MariaDB supports
 
 --
+
+Improve SMTP configuration
+
+--
+
+footer links reordering
+
+--
+
+Unit Testing
+--
+
+Lot of fixes....
+
+--
+
+[API](https://gancio.org/dev/api)
+
+--
+
 ### Webcomponent
 <gancio-events baseurl='https://gancio.cisti.org' title='eventi' maxlength=4 theme='dark'/>
 
+--
+
+<gancio-events baseurl='https://gancio.cisti.org' title='eventi' maxlength=2 theme='dark' sidebar="false"/>
 --
 ### WPGancio
 
 ---
 
-## where we are going
+## where are we going
 
 --
 ### Plugins!
+
+--
+
+OSM integration
+
+--
+Generate
 
 ---
 
