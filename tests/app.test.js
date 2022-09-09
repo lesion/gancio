@@ -8,7 +8,7 @@ let token
 let app
 let places = []
 
-beforeAll( async () => {
+beforeAll(async () => {
   switch (process.env.DB) {
     case 'mariadb':
       process.env.config_path = path.resolve(__dirname, './seeds/config.mariadb.json')
@@ -32,7 +32,7 @@ beforeAll( async () => {
   await sequelize.query('DELETE FROM filters')
 })
 
-afterAll( async () => {
+afterAll(async () => {
   await require('../server/initialize.server.js').shutdown(false)
 })
 
@@ -77,7 +77,7 @@ describe('Authentication / Authorization', () => {
     expect(response.body.token_type).toBe('Bearer')
     token = response.body
   })
-  
+
   test('should get user when authenticated', async () => {
     const response = await request(app).get('/api/user')
       .auth(token.access_token, { type: 'bearer' })
@@ -105,16 +105,16 @@ describe('Settings', () => {
   test('should retrieve stored array settings', async () => {
     await request(app).post('/api/settings')
       .auth(token.access_token, { type: 'bearer' })
-      .send({ key: 'test', value: [1,2,'test'] })
+      .send({ key: 'test', value: [1, 2, 'test'] })
       .expect(200)
 
     const response = await request(app)
       .get('/api/settings')
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
-    
+
     expect(response.body.test.length).toBe(3)
-    expect(response.body.test).toStrictEqual([1,2,'test'])
+    expect(response.body.test).toStrictEqual([1, 2, 'test'])
   })
 
 
@@ -128,7 +128,7 @@ describe('Settings', () => {
       .get('/api/settings')
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
-    
+
     expect(response.body.test.name).toBe('test object')
   })
 
@@ -143,9 +143,9 @@ describe('Settings', () => {
       .get('/api/settings')
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
-    
+
     expect(response.body.test).toBe('test string')
-  })  
+  })
 
 })
 
@@ -155,7 +155,7 @@ describe('Events', () => {
     const required_fields = {
       'title': {},
       'start_datetime': { title: 'test title' },
-      'place_id or place_name and place_address': { title: 'test title', start_datetime: dayjs().unix()+1000, place_name: 'test place name'},
+      'place_id or place_name and place_address': { title: 'test title', start_datetime: dayjs().unix() + 1000, place_name: 'test place name' },
     }
 
     const promises = Object.keys(required_fields).map(async field => {
@@ -171,15 +171,15 @@ describe('Events', () => {
   test('should create anon event only when allowed', async () => {
 
     await request(app).post('/api/settings')
-    .send({ key: 'allow_anon_event', value: false })
-    .auth(token.access_token, { type: 'bearer' })
+      .send({ key: 'allow_anon_event', value: false })
+      .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
     await request(app).post('/api/event')
       .expect(403)
 
     let response = await request(app).post('/api/event')
-      .send({ title: 'test title 2', place_name: 'place name', place_address: 'address', tags: ['test'], start_datetime: dayjs().unix()+1000 })
+      .send({ title: 'test title 2', place_name: 'place name', place_address: 'address', tags: ['test'], start_datetime: dayjs().unix() + 1000 })
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
@@ -189,10 +189,10 @@ describe('Events', () => {
     await request(app).post('/api/settings')
       .send({ key: 'allow_anon_event', value: true })
       .auth(token.access_token, { type: 'bearer' })
-        .expect(200)
+      .expect(200)
 
     response = await request(app).post('/api/event')
-      .send({ title: 'test title 3', place_name: 'place name 2', place_address: 'address 2', tags: ['test'], start_datetime: dayjs().unix()+1000 })
+      .send({ title: 'test title 3', place_name: 'place name 2', place_address: 'address 2', tags: ['test'], start_datetime: dayjs().unix() + 1000 })
       .expect(200)
 
     expect(response.body.place.id).toBeDefined()
@@ -204,7 +204,7 @@ describe('Events', () => {
     const event = {
       title: 'test title 4',
       place_id: places[0],
-      start_datetime: dayjs().unix()+1000,
+      start_datetime: dayjs().unix() + 1000,
       tags: [' test tag ']
     }
 
@@ -221,7 +221,7 @@ let event = {}
 describe('Tags', () => {
   test('should create event with tags', async () => {
     event = await request(app).post('/api/event')
-      .send({ title: 'test tags', place_id: places[1], start_datetime: dayjs().unix()+1000 , tags: ['tag1', 'Tag2', 'tAg3'] })
+      .send({ title: 'test tags', place_id: places[1], start_datetime: dayjs().unix() + 1000, tags: ['tag1', 'Tag2', 'tAg3'] })
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
@@ -231,7 +231,7 @@ describe('Tags', () => {
 
   test('should create event trimming tags / ignore sensitiviness', async () => {
     const ret = await request(app).post('/api/event')
-      .send({ title: 'test trimming tags', place_id: places[1], start_datetime: dayjs().unix()+1000, tags: ['Tag1', 'taG2 '] })
+      .send({ title: 'test trimming tags', place_id: places[1], start_datetime: dayjs().unix() + 1000, tags: ['Tag1', 'taG2 '] })
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
@@ -243,9 +243,9 @@ describe('Tags', () => {
 
   test('should modify event tags', async () => {
     const ret = await request(app).put('/api/event')
-    .send({ id: event.body.id, tags: ['tag1', 'tag3', 'tag4'], place_id: places[1] })
-    .auth(token.access_token, { type: 'bearer' })
-    .expect(200)
+      .send({ id: event.body.id, tags: ['tag1', 'tag3', 'tag4'], place_id: places[1] })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
 
     expect(ret.body.tags).toStrictEqual(['tag1', 'tAg3', 'tag4'])
   })
@@ -253,10 +253,21 @@ describe('Tags', () => {
   test('should return events searching for tags', async () => {
     const response = await request(app).get('/api/events?tags=tAg3')
       .expect(200)
-    
+
     expect(response.body.length).toBe(1)
     // expect(response.body[0].title).toBe('test tags')
     expect(response.body[0].tags.length).toBe(3)
+  })
+
+  test('should return limited events', async () => {
+    let response = await request(app).get('/api/events?max=1')
+      .expect(200)
+
+    expect(response.body.length).toBe(1)
+    response = await request(app).get('/api/events?max=2')
+      .expect(200)
+
+    expect(response.body.length).toBe(2)
   })
 })
 
@@ -264,7 +275,7 @@ describe('Place', () => {
   test('should get events by place', async () => {
     const response = await request(app).get('/api/place/place name 2')
       .expect(200)
-      
+
     expect(response.body.place.name).toBe('place name 2')
     expect(response.body.events.length).toBe(2)
     expect(response.body.events[0].place.name).toBe('place name 2')
@@ -277,7 +288,7 @@ describe('Place', () => {
     const response = await request(app).get('/api/place/all')
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
-    
+
 
     expect(response.body.length).toBe(2)
   })
@@ -285,7 +296,7 @@ describe('Place', () => {
   test('should search for a place', async () => {
     const response = await request(app).get('/api/place?search=place')
       .expect(200)
-    
+
     expect(response.body.length).toBe(2)
   })
 
@@ -293,7 +304,7 @@ describe('Place', () => {
 
 let collections = []
 let filters = []
-describe ('Collection', () => {
+describe('Collection', () => {
   test('should not create a new collection if not allowed', () => {
     return request(app).post('/api/collections')
       .send({ name: 'test collection' })
@@ -313,8 +324,8 @@ describe ('Collection', () => {
     const response = await request(app).get('/api/collections/test collection')
       .expect(200)
 
-      expect(response.body.length).toBe(0)
-    })
+    expect(response.body.length).toBe(0)
+  })
 
   test('should add a new filter', async () => {
     await request(app)
@@ -384,7 +395,7 @@ describe ('Collection', () => {
     // .expect(200)
     // expect(response.body.length).toBe(1)
 
-    response = await request(app) 
+    response = await request(app)
       .get(`/api/collections/test collection`)
       .expect(200)
 

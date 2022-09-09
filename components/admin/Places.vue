@@ -1,6 +1,6 @@
 <template lang='pug'>
 v-container
-  v-card-title {{$t('common.places')}}
+  v-card-title {{ $t('common.places') }}
     v-spacer
     v-text-field(v-model='search'
       :append-icon='mdiMagnify' outlined rounded
@@ -9,8 +9,8 @@ v-container
   v-card-subtitle(v-html="$t('admin.place_description')")
 
   v-dialog(v-model='dialog' width='600' :fullscreen='$vuetify.breakpoint.xsOnly')
-    v-card(color='secondary')
-      v-card-title {{$t('admin.edit_place')}}
+    v-card
+      v-card-title {{ $t('admin.edit_place') }}
       v-card-text
         v-form(v-model='valid' ref='form' lazy-validation)
           v-text-field(
@@ -26,19 +26,19 @@ v-container
             :placeholder='$t("common.address")')
 
       v-card-actions
-          v-spacer
-          v-btn(@click='dialog=false' color='warning') {{$t('common.cancel')}}
-          v-btn(@click='savePlace' color='primary' :loading='loading'
-            :disable='!valid || loading') {{$t('common.save')}}
+        v-spacer
+        v-btn(@click='dialog = false' outlined color='warning') {{ $t('common.cancel') }}
+        v-btn(@click='savePlace' color='primary' outlined :loading='loading'
+          :disable='!valid || loading') {{ $t('common.save') }}
 
   v-card-text
     v-data-table(
       :headers='headers'
       :items='places'
-      :hide-default-footer='places.length<5'
+      :hide-default-footer='places.length < 5'
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
       :search='search')
-      template(v-slot:item.actions='{item}')
+      template(v-slot:item.actions='{ item }')
         v-btn(@click='editPlace(item)' color='primary' icon)
           v-icon(v-text='mdiPencil')
         nuxt-link(:to='`/place/${item.name}`')
@@ -49,7 +49,7 @@ v-container
 import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiEye } from '@mdi/js'
 
 export default {
-  data () {
+  data() {
     return {
       mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiEye,
       loading: false,
@@ -65,17 +65,17 @@ export default {
       ]
     }
   },
-  async fetch () {
+  async fetch() {
     this.places = await this.$axios.$get('/place/all')
   },
   methods: {
-    editPlace (item) {
+    editPlace(item) {
       this.place.name = item.name
       this.place.address = item.address
       this.place.id = item.id
       this.dialog = true
     },
-    async savePlace () {
+    async savePlace() {
       if (!this.$refs.form.validate()) return
       this.loading = true
       await this.$axios.$put('/place', this.place)

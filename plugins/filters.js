@@ -42,14 +42,15 @@ export default ({ app, store }) => {
   // shown in mobile homepage
   Vue.filter('day', value => dayjs.unix(value).tz().locale(store.state.locale).format('dddd, D MMM'))
   Vue.filter('mediaURL', (event, type, format = '.jpg') => {
+    const mediaPath = type === 'download' ? '/download/' : '/media/'
     if (event.media && event.media.length) {
       if (type === 'alt') {
         return event.media[0].name
       } else {
-        return store.state.settings.baseurl + '/media/' + (type === 'thumb' ? 'thumb/' : '') + event.media[0].url.replace(/.jpg$/, format)
+        return store.state.settings.baseurl + mediaPath + (type === 'thumb' ? 'thumb/' : '') + event.media[0].url.replace(/.jpg$/, format)
       }
     } else if (type !== 'alt') {
-      return store.state.settings.baseurl + '/media/' + (type === 'thumb' ? 'thumb/' : '') + 'logo.svg'
+      return store.state.settings.baseurl + mediaPath + (type === 'thumb' ? 'thumb/' : '') + 'logo.svg'
     }
     return ''
   })
