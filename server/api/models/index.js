@@ -12,29 +12,29 @@ const settingsController = require('../controller/settings')
 
 const db = {
   sequelize: null,
-  close () {
+  close() {
     if (db.sequelize) {
       return db.sequelize.close()
     }
   },
-  connect (dbConf = config.db) {
+  connect(dbConf = config.db) {
     dbConf.dialectOptions = { autoJsonMap: true }
     log.debug(`Connecting to DB: ${JSON.stringify(dbConf)}`)
     if (dbConf.dialect === 'sqlite') {
       dbConf.retry = {
         match: [
-            Sequelize.ConnectionError,
-            Sequelize.ConnectionTimedOutError,
-            Sequelize.TimeoutError,
-            /Deadlock/i,
-            /SQLITE_BUSY/],
+          Sequelize.ConnectionError,
+          Sequelize.ConnectionTimedOutError,
+          Sequelize.TimeoutError,
+          /Deadlock/i,
+          /SQLITE_BUSY/],
         max: 15
       }
     }
     db.sequelize = new Sequelize(dbConf)
     return db.sequelize.authenticate()
   },
-  async isEmpty () {
+  async isEmpty() {
     try {
       const users = await db.sequelize.query('SELECT * from users')
       return !(users && users.length)
@@ -42,7 +42,7 @@ const db = {
       return true
     }
   },
-  async runMigrations () {
+  async runMigrations() {
     const logging = config.status !== 'READY' ? false : log.debug.bind(log)
     const umzug = new Umzug({
       storage: 'sequelize',
@@ -59,9 +59,9 @@ const db = {
         path: path.resolve(__dirname, '..', '..', 'migrations')
       }
     })
-    return umzug.up()    
+    return umzug.up()
   },
-  async initialize () {
+  async initialize() {
     if (config.status === 'CONFIGURED') {
       try {
         await db.connect()
