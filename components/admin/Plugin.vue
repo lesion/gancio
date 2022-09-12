@@ -5,7 +5,7 @@ v-container
   v-card-subtitle(v-html="$t('admin.plugins_description')")
 
   v-dialog(v-model='dialog' width='600' :fullscreen='$vuetify.breakpoint.xsOnly')
-    v-card(color='secondary')
+    v-card
       v-card-title {{ $t('admin.config_plugin') }} - {{ selectedPlugin.name }}
       v-card-text
         v-form(v-model='valid' ref='form' lazy-validation)
