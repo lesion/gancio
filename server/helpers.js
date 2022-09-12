@@ -108,6 +108,9 @@ module.exports = {
     const router = express.Router()
     // serve images/thumb
     router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' }), (_req, res) => res.sendStatus(404))
+    router.use('/download/:filename', (req, res, next) => {
+      return res.download(req.params.filename, undefined, { root: config.upload_path }, err => res.status(404).send('Not found (but nice try 😊)'))
+    })
     router.use('/noimg.svg', express.static('./static/noimg.svg'))
 
     router.use('/logo.png', (req, res, next) => {
