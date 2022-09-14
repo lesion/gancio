@@ -570,8 +570,8 @@ const eventController = {
       let tags = []
       if (body.tags) {
         tags = await tagController._findOrCreate(body.tags)
-        await event.setTags(tags)
       }
+      await event.setTags(tags)
 
       let newEvent = await Event.findByPk(event.id, { include: [Tag, Place] })
       newEvent = newEvent.get()
