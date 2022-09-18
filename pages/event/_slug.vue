@@ -20,7 +20,7 @@ v-container#event.pa-0.pa-sm-2
               v-icon.float-right(v-if='event.parentId' color='success' v-text='mdiRepeat')
               .title.text-h5.mb-5
                 strong.p-name.text--primary(itemprop="name") {{event.title}}
-              
+
               time.dt-start.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")' itemprop="startDate" :content="event.start_datetime|unixFormat('YYYY-MM-DDTHH:mm')")
                 v-icon(v-text='mdiCalendar')
                 strong.ml-2 {{event|when}}
@@ -32,6 +32,11 @@ v-container#event.pa-0.pa-sm-2
                 v-icon(v-text='mdiMapMarker')
                 nuxt-link.vcard.ml-2.p-name.text-decoration-none(itemprop="name" :to='`/place/${event.place.name}`') {{event.place && event.place.name}}
                 .text-subtitle-1.p-street-address(itemprop='address') {{event.place && event.place.address}}
+                v-btn.mt-2(small v-text="$t('common.show_map')" :aria-label="$t('common.show_map')" @click="mapModal = true")
+                v-dialog(v-model='mapModal' :fullscreen='$vuetify.breakpoint.xsOnly' destroy-on-close)
+                  v-card
+                    client-only(placeholder='Loading...' )
+                      Map(:event='event')
 
             //- tags, hashtags
             v-card-text.pt-0(v-if='event.tags && event.tags.length')
@@ -50,7 +55,7 @@ v-container#event.pa-0.pa-sm-2
                 v-icon(v-text='mdiCalendarExport')
               v-btn.ml-2(v-if='hasMedia' large icon :title="$t('event.download_flyer')" color='primary' :aria-label="$t('event.download_flyer')"
                 :href='event | mediaURL("download")')
-                v-icon(v-text='mdiFileDownloadOutline')                
+                v-icon(v-text='mdiFileDownloadOutline')
 
       .p-description.text-body-1.pa-3.rounded(v-if='hasMedia && event.description' itemprop='description' v-html='event.description')
 
@@ -145,7 +150,8 @@ export default {
   components: {
     EventAdmin,
     EmbedEvent,
-    MyPicture
+    MyPicture,
+    [process.client && 'Map']: () => import('@/components/Map.vue')
   },
   async asyncData ({ $axios, params, error }) {
     try {
@@ -163,7 +169,8 @@ export default {
       event: {},
       showEmbed: false,
       showResources: false,
-      selectedResource: { data: { attachment: [] } }
+      selectedResource: { data: { attachment: [] } },
+      mapModal: false
     }
   },
   head () {

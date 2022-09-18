@@ -34,7 +34,7 @@ const eventController = {
           Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('address')), 'LIKE', '%' + search + '%')
         ]
       },
-      attributes: [['name', 'label'], 'address', 'id', [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('events.placeId')), 'INTEGER'), 'w']],
+      attributes: [['name', 'label'], 'address', 'details', 'id', [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('events.placeId')), 'INTEGER'), 'w']],
       include: [{ model: Event, where: { is_visible: true }, required: true, attributes: [] }],
       group: ['place.id'],
       raw: true
@@ -110,7 +110,7 @@ const eventController = {
           attributes: ['tag'],
           through: { attributes: [] }
         },
-        { model: Place, required: true, attributes: ['id', 'name', 'address'] }
+        { model: Place, required: true, attributes: ['id', 'name', 'address', 'details'] }
       ],
       replacements,
       limit: 30,
@@ -192,7 +192,7 @@ const eventController = {
         },
         include: [
           { model: Tag, required: false, attributes: ['tag'], through: { attributes: [] } },
-          { model: Place, attributes: ['name', 'address', 'id'] },
+          { model: Place, attributes: ['name', 'address', 'details', 'id'] },
           {
             model: Resource,
             where: !is_admin && { hidden: false },
@@ -626,7 +626,7 @@ const eventController = {
 
   /**
    * Method to search for events with pagination and filtering
-   * @returns 
+   * @returns
    */
   async _select({
     start = dayjs().unix(),
@@ -700,7 +700,7 @@ const eventController = {
           attributes: ['tag'],
           through: { attributes: [] }
         },
-        { model: Place, required: true, attributes: ['id', 'name', 'address'] }
+        { model: Place, required: true, attributes: ['id', 'name', 'address', 'details'] }
       ],
       ...pagination,
       replacements

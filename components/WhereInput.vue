@@ -47,7 +47,7 @@ v-row
           v-list-item-content(two-line v-if='item')
             v-list-item-title(v-text='item.display_name')
             v-list-item-subtitle(v-text='`${item.lat}`+`,`+`${item.lon}`')
-    v-text-field(ref='details' v-show='false' v-if='settings.allow_geolocation')
+    v-text-field(ref='details' v-if='settings.allow_geolocation')
 
 </template>
 <script>

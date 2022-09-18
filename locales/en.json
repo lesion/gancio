@@ -90,7 +90,8 @@
         "max_events": "N. max events",
         "label": "Label",
         "collections": "Collections",
-        "close": "Close"
+        "close": "Close",
+        "show_map": "Show map"
     },
     "login": {
         "description": "By logging in you can publish new events.",
