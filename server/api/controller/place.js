@@ -62,7 +62,7 @@ module.exports = {
           { address: where(fn('LOWER', col('address')), 'LIKE', '%' + search + '%')},
         ]
       },
-      attributes: ['name', 'address', 'details', 'id'],
+      attributes: ['name', 'address', 'latitude', 'longitude', 'id'],
       include: [{ model: Event, where: { is_visible: true }, required: true, attributes: [] }],
       group: ['place.id'],
       raw: true,

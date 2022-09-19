@@ -30,28 +30,38 @@ v-row
       :label="$t('common.address')"
       @change="changeAddress"
       :value="value.address")
-    v-combobox.mr-4(ref='detailsView' v-if='settings.allow_geolocation'
-      :prepend-icon='mdiMapSearch'
-      :disabled='disableDetails'
-      @input.native='searchCoordinates'
-      :label="$t('common.coordinates')"
-      :value='value.detailsView'
-      persistent-hint hide-no-data clearable no-filter
-      :loading='loading'
-      @change='selectDetails'
-      @focus='searchCoordinates'
-      :items="detailsList"
-      :hint="$t('event.coordinates_description')")
-      template(v-slot:item="{ item, attrs, on  }")
-        v-list-item(v-bind='attrs' v-on='on')
-          v-list-item-content(two-line v-if='item')
-            v-list-item-title(v-text='item.display_name')
-            v-list-item-subtitle(v-text='`${item.lat}`+`,`+`${item.lon}`')
-    v-text-field(ref='details' v-if='settings.allow_geolocation')
+  v-col(cols=12 md=6 v-if='settings.allow_geolocation')
+    v-combobox.mr-4(ref='detailsView'
+          :prepend-icon='mdiMapSearch'
+          :disabled='disableDetails'
+          @input.native='searchCoordinates'
+          :label="$t('common.coordinates')"
+          :value='value.detailsView'
+          persistent-hint hide-no-data clearable no-filter
+          :loading='loading'
+          @change='selectDetails'
+          @focus='searchCoordinates'
+          :items="detailsList"
+          :hint="$t('event.coordinates_description')")
+          template(v-slot:item="{ item, attrs, on  }")
+            v-list-item(v-bind='attrs' v-on='on')
+              v-list-item-content(two-line v-if='item')
+                v-list-item-title(v-text='item.display_name')
+                v-list-item-subtitle(v-text='`${item.lat}`+`,`+`${item.lon}`')
+  v-col(cols=12 md=3 v-if='settings.allow_geolocation')
+    v-text-field(ref='latitude' :value='value.latitude'
+          :prepend-icon='mdiLatitude'
+          :disabled='disableDetails'
+          :label="$t('common.latitude')" )
+  v-col(cols=12 md=3 v-if='settings.allow_geolocation')
+    v-text-field(ref='longitude' :value='value.longitude'
+          :prepend-icon='mdiLongitude'
+          :disabled='disableDetails'
+          :label="$t('common.longitude')")
 
 </template>
 <script>
-import { mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch } from '@mdi/js'
+import { mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiLatitude, mdiLongitude } from '@mdi/js'
 import debounce from 'lodash/debounce'
 import { mapState } from 'vuex'
 
@@ -62,7 +72,7 @@ export default {
   },
   data () {
     return {
-      mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch,
+      mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiLatitude, mdiLongitude,
       place: { },
       placeName: '',
       places: [],
@@ -112,6 +122,8 @@ export default {
         this.place.address = p.address
         if (this.settings.allow_geolocation) {
           this.place.details = p.details
+          this.place.latitude = p.latitude
+          this.place.longitude = p.longitude
         }
         this.place.id = p.id
         this.disableAddress = true
@@ -130,6 +142,8 @@ export default {
           this.place.address = ''
           if (this.settings.allow_geolocation) {
             this.place.details = p.details
+            this.place.latitude = p.latitude
+            this.place.longitude = p.longitude
           }
           this.disableAddress = false
           this.$refs.place.blur()
@@ -152,6 +166,8 @@ export default {
         c.lon = v.lon
         if (typeof c === 'object') {
           this.place.details = JSON.stringify(c)
+          this.place.latitude = v.lat
+          this.place.longitude = v.lon
         }
       }
       this.$emit('input', { ...this.place })
@@ -161,6 +177,36 @@ export default {
       const pre_searchCoordinates = ev.target.value.trim().toLowerCase()
       // allow pasting coordinates lat/lon
       const searchCoordinates = pre_searchCoordinates.replace('/', ',')
+      // console.log(pre_searchCoordinates)
+
+      var regex_coords_comma = "-?[1-9][0-9]*(\\.[0-9]+)?,\\s*-?[1-9][0-9]*(\\.[0-9]+)?";
+      var regex_coords_slash = "-?[1-9][0-9]*(\\.[0-9]+)?/\\s*-?[1-9][0-9]*(\\.[0-9]+)?";
+
+      const setCoords = (v) => {
+        this.place.latitude = v[0].trim()
+        this.place.longitude = v[1].trim()
+
+        if (this.place.latitude < -90 || this.place.latitude > 90) {
+          // non existent
+        }
+        if (this.place.latitude < -180 || this.place.latitude > 180) {
+          // non existent
+        }
+        
+        this.loading = false;
+      }
+
+      if (pre_searchCoordinates.match(regex_coords_comma)) {
+        let v = pre_searchCoordinates.split(",")
+        setCoords(v)
+        return
+      }
+      if (pre_searchCoordinates.match(regex_coords_slash)) {
+        let v = pre_searchCoordinates.split("/")
+        setCoords(v)
+        return
+      }
+
       if (searchCoordinates.length) {
         this.detailsList = await this.$axios.$get(`placeNominatim/${searchCoordinates}`)
       }

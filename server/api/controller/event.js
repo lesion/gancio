@@ -34,7 +34,7 @@ const eventController = {
           Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('address')), 'LIKE', '%' + search + '%')
         ]
       },
-      attributes: [['name', 'label'], 'address', 'details', 'id', [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('events.placeId')), 'INTEGER'), 'w']],
+      attributes: [['name', 'label'], 'address', 'latitude', 'longitude', 'id', [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('events.placeId')), 'INTEGER'), 'w']],
       include: [{ model: Event, where: { is_visible: true }, required: true, attributes: [] }],
       group: ['place.id'],
       raw: true
@@ -110,7 +110,7 @@ const eventController = {
           attributes: ['tag'],
           through: { attributes: [] }
         },
-        { model: Place, required: true, attributes: ['id', 'name', 'address', 'details'] }
+        { model: Place, required: true, attributes: ['id', 'name', 'address', 'latitude', 'longitude'] }
       ],
       replacements,
       limit: 30,
@@ -192,7 +192,7 @@ const eventController = {
         },
         include: [
           { model: Tag, required: false, attributes: ['tag'], through: { attributes: [] } },
-          { model: Place, attributes: ['name', 'address', 'details', 'id'] },
+          { model: Place, attributes: ['name', 'address', 'latitude', 'longitude', 'id'] },
           {
             model: Resource,
             where: !is_admin && { hidden: false },
@@ -406,7 +406,8 @@ const eventController = {
           place = await Place.create({
             name: body.place_name,
             address: body.place_address,
-            details: body.place_details
+            latitude: body.place_latitude,
+            longitude: body.place_longitude
           })
         }
       }
@@ -561,7 +562,8 @@ const eventController = {
           place = await Place.create({
             name: body.place_name,
             address: body.place_address,
-            details: body.place_details
+            latitude: body.place_latitude,
+            longitude: body.place_longitude
           })
         }
       }
@@ -700,7 +702,7 @@ const eventController = {
           attributes: ['tag'],
           through: { attributes: [] }
         },
-        { model: Place, required: true, attributes: ['id', 'name', 'address', 'details'] }
+        { model: Place, required: true, attributes: ['id', 'name', 'address', 'latitude', 'longitude'] }
       ],
       ...pagination,
       replacements

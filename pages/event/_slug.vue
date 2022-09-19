@@ -35,8 +35,7 @@ v-container#event.pa-0.pa-sm-2
                 v-btn.mt-2(small v-text="$t('common.show_map')" :aria-label="$t('common.show_map')" @click="mapModal = true")
                 v-dialog(v-model='mapModal' :fullscreen='$vuetify.breakpoint.xsOnly' destroy-on-close)
                   v-card
-                    client-only(placeholder='Loading...' )
-                      Map(:event='event')
+                    Map(:event='event')
 
             //- tags, hashtags
             v-card-text.pt-0(v-if='event.tags && event.tags.length')

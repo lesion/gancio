@@ -106,7 +106,8 @@ Event.prototype.toAP = function (username, locale, to = []) {
     location: {
       name: this.place.name,
       address: this.place.address,
-      details: this.place.details
+      latitude: this.place.latitude,
+      longitude: this.place.longitude
     },
     attachment,
     tag: tags && tags.map(tag => ({

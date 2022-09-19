@@ -11,7 +11,8 @@ Place.init({
     allowNull: false
   },
   address: DataTypes.STRING,
-  details: DataTypes.JSON
+  latitude: DataTypes.FLOAT,
+  longitude: DataTypes.FLOAT,
 }, { sequelize, modelName: 'place' })
 
 module.exports = Place

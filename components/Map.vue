@@ -1,40 +1,42 @@
 <template lang="pug">
-v-container
-  LMap(ref="map"
-      id="leaflet-map"
-      :zoom="zoom"
-      :center="center")
-    LTileLayer(
-        :url="url"
-        :attribution="attribution")
-    LMarker(
-      v-for="item in markers"
-      :key="item.id"
-      :lat-lng="item.position"
-      :visible="item.visible"
-      :draggable="item.draggable")
+client-only(placeholder='Loading...' )
+  v-container
+    LMap(ref="map"
+        id="leaflet-map"
+        :zoom="zoom"
+        :center="center")
+      LTileLayer(
+          :url="url"
+          :attribution="attribution")
+      LMarker(
+        v-for="item in markers"
+        @add="openPopup"
+        :key="item.id"
+        :lat-lng="item.coordinates")
+        LPopup(:content="item.address")
 
-  v-row.my-4.d-flex.justify-center
-    v-btn.ml-2(icon large :href="routeByWalk()")
-      v-icon(v-text='mdiWalk' color='white')
-    v-btn.ml-2(icon large :href="routeByBike()")
-      v-icon(v-text='mdiBike' color='white')
-    v-btn.ml-2(icon large :href="routeByBus()")
-      v-icon(v-text='mdiBus' color='white')
-    v-btn.ml-2(icon large :href="routeByCar()")
-      v-icon(v-text='mdiCar' color='white')
-
-
+    v-row.my-4.d-flex.flex-column.align-center
+      .text-h6
+        v-icon(v-text='mdiMapMarker' )
+        nuxt-link.ml-2.p-name.text-decoration-none(v-text="event.place.name" :to='`/place/${event.place.name}`')
+        v-text.mx-2(v-text="`${event.place.address}`")
+      v-text.my-4(v-text="$t('common.getting_there')")
+      v-row
+        v-btn.ml-2(icon large :href="routeByWalk()")
+          v-icon(v-text='mdiWalk' color='white')
+        v-btn.ml-2(icon large :href="routeByBike()")
+          v-icon(v-text='mdiBike' color='white')
+        v-btn.ml-2(icon large :href="routeByCar()")
+          v-icon(v-text='mdiCar' color='white')
 
 </template>
 <script>
 
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LMarker, LPopup } from 'vue2-leaflet';
-import dayjs from 'dayjs';
 import { mapActions, mapState } from 'vuex'
 import { Icon } from 'leaflet';
-import { mdiWalk, mdiBike, mdiCar, mdiBus } from '@mdi/js'
+import { mdiWalk, mdiBike, mdiCar, mdiMapMarker } from '@mdi/js'
 
 export default {
    components: {
@@ -45,21 +47,25 @@ export default {
    },
    data ({ $store }) {
      return {
-       mdiWalk, mdiBike, mdiCar, mdiBus,
+       mdiWalk, mdiBike, mdiCar, mdiMapMarker,
        // url: "https://a.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png",
        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
        attribution:
          '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-       zoom: 10,
-       center: [42, 12],
-       markers: [],
+       zoom: 14,
+       center: [this.event.place.latitude, this.event.place.longitude],
+       markers: [
+         {
+           address: this.event.place.address,
+           coordinates: {lat: this.event.place.latitude, lon: this.event.place.longitude}
+         }
+       ],
        osm_navigation: 'https://www.openstreetmap.org/directions?from=&to=',
-       routingType: [
-         {foot: "engine=fossgis_osrm_foot"},
-         {bike: "engine=fossgis_osrm_bike"},
-         {transit: null},
-         {car: "engine=fossgis_osrm_car"},
-       ]
+       routingType: {
+         foot: "engine=fossgis_osrm_foot",
+         bike: "engine=fossgis_osrm_bike",
+         car: "engine=fossgis_osrm_car"
+       }
      }
    },
    props: {
@@ -82,46 +88,23 @@ export default {
    },
    methods: {
      ...mapActions(['setSetting']),
-
+     openPopup(event) {
+        this.$nextTick(() => {
+          event.target.openPopup();
+        });
+      },
+     route (routingTypes) {
+       return this.osm_navigation+this.event.place.latitude+','+this.event.place.longitude+'&'+routingTypes
+     },
      routeByWalk() {
-       console.log(this.$root.$event)
-       // return this.osm_navigation+this.$root.event.place.details+'&'+this.routingType.bike
+       return this.route(this.routingType.foot)
      },
      routeByBike() {
-       console.log(this.event.place)
-       // return this.osm_navigation+this.$root.event.place.details+'&'+this.routingType.bike
-     },
-     routeByBus() {
-       console.log(this.$root)
-       // return this.osm_navigation+this.$root.event.place.details+'&'+this.routingType.bike
+       return this.route(this.routingType.bike)
      },
      routeByCar() {
-       console.log(this.$root)
-       // return this.osm_navigation+this.$root.event.place.details+'&'+this.routingType.bike
+       return this.route(this.routingType.car)
      },
-     route() {
-
-     }
-     // loadMarker(d) {
-     //   this.event = JSON.stringify(d);
-     //
-     //   let newMarker = [{
-     //     id: d.id,
-     //     title: d.title,
-     //     event: JSON.stringify(d),
-     //     description: d.description,
-     //     place: d.place,
-     //     tags: d.tags,
-     //     multidate: d.multidate,
-     //     start_datetime: d.start_datetime,
-     //     end_datetime: d.end_datetime,
-     //     position: { lat: d.place.details.geometry.coordinates[1], lng: d.place.details.geometry.coordinates[0] },
-     //     draggable: false,
-     //     visible: true
-     //   }]
-     //
-     //   this.markers.push.apply(this.markers, newMarker)
-     // },
 
    }
 }
@@ -131,7 +114,7 @@ export default {
   #leaflet-map {
     height: 55vh;
     width: 100%;
-    border-radius: .5rem;
+    border-radius: .3rem;
     border: 1px solid #fff;
     z-index: 1;
   }

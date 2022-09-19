@@ -25,12 +25,18 @@ v-container
             v-model='place.address'
             :placeholder='$t("common.address")')
 
-          v-textarea(v-if="settings.allow_geolocation"
-            row-height="15"
-            :disabled="true"
-            :label="$t('common.details')"
-            v-model='place.details'
-            :placeholder='$t("common.details")')
+          v-text-field(v-if="settings.allow_geolocation"
+            :rules="[$validators.required('common.latitude')]"
+            :label="$t('common.latitude')"
+            v-model='place.latitude'
+            :placeholder='$t("common.latitude")')
+
+          v-text-field(v-if="settings.allow_geolocation"
+            :rules="[$validators.required('common.longitude')]"
+            :label="$t('common.longitude')"
+            v-model='place.longitude'
+            :placeholder='$t("common.longitude")')
+
 
       v-card-actions
         v-spacer
@@ -84,7 +90,8 @@ export default {
       this.place.name = item.name
       this.place.address = item.address
       if (this.settings.allow_geolocation) {
-        this.place.details = JSON.parse(item.details)
+        this.place.latitude = item.latitude
+        this.place.longitude = item.longitude
       }
       this.place.id = item.id
       this.dialog = true

@@ -110,7 +110,8 @@ if (config.status !== 'READY') {
    * @param {string} description - event's description (html accepted and sanitized)
    * @param {string} place_name - the name of the place
    * @param {string} [place_address] - the address of the place
-   * @param {array} [place_details] - the details of the place
+   * @param {float} [place_latitude] - the latitude of the place
+   * @param {float} [place_longitude] - the longitude of the place
    * @param {integer} start_datetime - start timestamp
    * @param {integer} multidate - is a multidate event?
    * @param {array} tags - List of tags
