@@ -8,6 +8,15 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.5.5 - 21 set '22
+  - fix #185 - wrong res.download api usage 
+  - fix some dialog background on light theme
+  - update sequelize and remove live patch
+  - improve events filtering on selected day
+  - allow tags complete removals
+  - improve homepage performance
+  - docs: add scheme to nginx proxy configuration
+
 ### 1.5.4 - 6 set '22
   - Update webcomponent deps
   - Refactor datime display in webcomponent
