@@ -1,13 +1,11 @@
 import dayjs from 'dayjs'
 
 export function attributesFromEvents(_events) {
-
-  // const colors = ['teal', 'green', 'yellow', 'teal', 'indigo', 'green', 'red', 'purple', 'pink', 'gray']
   // merge events with same date
   let attributes = []
   const now = dayjs().unix()
   for (let e of _events) {
-    const key = dayjs.unix(e.start_datetime).tz().format('YYYYMMDD')
+    const key = Math.floor(e.start_datetime/(3600*24)) // dayjs.unix(e.start_datetime).tz().format('YYYYMMDD')
     const c = (e.end_datetime || e.start_datetime) < now ? 'vc-past' : ''
 
     if (e.multidate) {
