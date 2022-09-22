@@ -5,7 +5,7 @@ export function attributesFromEvents(_events) {
   let attributes = []
   const now = dayjs().unix()
   for (let e of _events) {
-    const key = Math.floor(e.start_datetime/(3600*24)) // dayjs.unix(e.start_datetime).tz().format('YYYYMMDD')
+    const key = dayjs.unix(e.start_datetime).tz().format('MMDD') // Math.floor(e.start_datetime/(3600*24)) // dayjs.unix(e.start_datetime).tz().format('YYYYMMDD')
     const c = (e.end_datetime || e.start_datetime) < now ? 'vc-past' : ''
 
     if (e.multidate) {
