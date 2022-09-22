@@ -20,11 +20,11 @@ v-card.h-event.event.d-flex(itemscope itemtype="https://schema.org/Event")
 <script>
 import { mapState } from 'vuex'
 import MyPicture from '~/components/MyPicture'
-import { mdiRepeat } from '@mdi/js'
+import { mdiRepeat, mdiCalendar, mdiMapMarker } from '@mdi/js'
 
 export default {
   data() {
-    return { mdiRepeat }
+    return { mdiRepeat, mdiMapMarker, mdiCalendar }
   },
   components: {
     MyPicture
