@@ -8,7 +8,40 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
-### 1.5.0 - UNRELEASED
+### 1.5.6 - 22 set '22
+  - update linkifyjs, sequelizem, nuxt deps
+  - improve homepage loading time
+  - restore removed icons
+
+### 1.5.5 - 21 set '22
+  - fix #185 - wrong res.download api usage 
+  - fix some dialog background on light theme
+  - update sequelize and remove live patch
+  - improve events filtering on selected day
+  - allow tags complete removals
+  - improve homepage performance
+  - docs: add scheme to nginx proxy configuration
+
+### 1.5.4 - 6 set '22
+  - Update webcomponent deps
+  - Refactor datime display in webcomponent
+  - Force flyer download
+  - Restore range events on calendar
+  - Fix limit/max events for mariadb #183
+  - Fix endtime selection
+  - Fix microdata address
+
+
+### 1.5.3 - 30 aug '22
+  - Fix end time selection when it's in the next day
+
+### 1.5.2 - 26 aug '22
+  - fix Editor background color
+
+### 1.5.1 - 14 aug '22
+  - fix regression with hidden recurrent events
+
+### 1.5.0 - 8 aug '22
 ##### :warning:  **BREAKING CHANGES**:
 - supported nodejs version >=14 <=16 (nodejs 12 reached End-of-Life on 30 April 2022)
 - minimum mariadb supported version >= 10.5.2

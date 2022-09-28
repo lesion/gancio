@@ -31,11 +31,6 @@ DB=sqlite
 wget {{site.url}}/docker/$DB/docker-compose.yml
 ```
 
-Build docker image
-```bash
-docker-compose build
-```
-
 ## Start gancio
 
 Start your container:
@@ -60,6 +55,5 @@ You'll need to [setup nginx as a proxy]({% link install/nginx.md %}) then you ca
 
 ```bash
 cd /opt/gancio # or where your installation is
-wget https://gancio.org/docker/Dockerfile -O Dockerfile
-docker-compose up -d --no-deps --build
+docker-compose pull && docker-compose restart
 ```

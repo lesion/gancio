@@ -9,7 +9,6 @@
     @update:from-page='updatePage'
     :locale='$i18n.locale'
     :attributes='attributes'
-    :timezone='settings.instance_timezone'
     transition='fade'
     aria-label='Calendar'
     is-expanded
@@ -42,7 +41,7 @@ export default {
   },
   methods: {
     updatePage (page) {
-        this.$emit('monthchange', page)
+      this.$emit('monthchange', page)
     },
     click (day) {
       this.$emit('dayclick', day)

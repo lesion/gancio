@@ -4,6 +4,6 @@ export default () => {
   Vue.use(VCalendar, {
     componentPrefix: 'vc',
     // why is that ?!
-    firstDayOfWeek: 2
+    // firstDayOfWeek: 2
   })
 }

@@ -182,10 +182,6 @@ export default {
   margin-top: 4px;
   padding-top: 12px;
   padding-bottom: 22px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #FF4500 transparent;
-  scroll-behavior: smooth;
   font-family: sans-serif;
   font-size: 1.1em;
 
@@ -231,38 +227,19 @@ export default {
     // position: absolute;
   }
 
-  .focused .ProseMirror::after {
-    width: 100%;
-  }
-  .ProseMirror {
-    padding: 15px;
-    outline: 0;
-    &::before {
-      bottom: 0px;
-      content: "";
-      left: 0;
-      position: absolute;
-      transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
-      width: 100%;
-      border-width: thin 0 0 0;
-      border-style: solid;
-      height: 0px;
-      border-color: rgba(255, 255, 255, 0.7);
-    }
+  // .focused .::after {
+  //   width: 100%;
+  // }
 
-    &::after {
-      bottom: 0px;
-      content: "";
-      left: 0;
-      position: absolute;
-      height: 0px;
-      transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
-      width: 100%;
-      border-width: 2px 0 0 0;
-      border-style: solid;
-      border-color: #FF4500;
-      transform: scaleX(0);
-    }
+  .ProseMirror {
+    padding: 5px 15px 0px 15px;
+    outline: 0;
+    min-height: 100px;
+    max-height: 350px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #FF4500 transparent;
+    overflow-y: auto;
   }
 }
 

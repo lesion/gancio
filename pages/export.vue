@@ -113,7 +113,7 @@ export default {
         theme: $store.state.settings['theme.is_dark'] ? 'dark' : 'light',
         sidebar: 'true'
       },
-      filters: { tags: [], places: [], show_recurrent: false },
+      filters: { tags: [], places: [], show_recurrent: $store.state.settings.recurrent_event_visible },
       events: []
     }
   },
