@@ -133,7 +133,7 @@
         "first_user": "Administrator opprettet",
         "complete": "Registrering må bekreftes.",
         "error": "Feil: ",
-        "description": "Sosiale bevegelser bør organisere og finansiere seg selv.<br/>\n<br/>Før du kan publisere, <strong>må kontoen godkjennes</strong>, ha i minnet <strong> at bak denne siden er det mennesker, så skriv to linjer om hvilke hendelser du ønsker å publisere."
+        "description": "Sosiale bevegelser bør organisere og finansiere seg selv.<br/>\n<br/>Før du kan publisere, <strong>må kontoen godkjennes</strong>, ha i minnet <strong> at bak denne siden er det mennesker</strong>, så skriv to linjer om hvilke hendelser du ønsker å publisere."
     },
     "recover": {
         "not_valid_code": "Noe gikk galt."
