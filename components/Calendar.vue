@@ -41,7 +41,11 @@ export default {
   },
   methods: {
     updatePage (page) {
-      this.$emit('monthchange', page)
+      if (page.month !== this.page.month || page.year !== this.page.year) {
+        this.$emit('monthchange', page)
+        this.page.month = page.month
+        this.page.year = page.year
+      }
     },
     click (day) {
       this.$emit('dayclick', day)

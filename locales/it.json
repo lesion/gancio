@@ -87,7 +87,8 @@
         "import": "Importa",
         "max_events": "N. massimo eventi",
         "label": "Etichetta",
-        "collections": "Bolle"
+        "collections": "Bolle",
+        "help_translate": "Aiuta a tradurre"
     },
     "login": {
         "description": "Entrando puoi pubblicare nuovi eventi.",

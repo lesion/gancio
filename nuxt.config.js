@@ -1,5 +1,6 @@
 const config = require('./server/config.js')
 const minifyTheme = require('minify-css-string').default
+const locales = require('./locales/index')
 
 const isDev = (process.env.NODE_ENV !== 'production')
 module.exports = {
@@ -35,7 +36,6 @@ module.exports = {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    '@/plugins/i18n.js',
     '@/plugins/filters', // text filters, datetime filters, generic transformation helpers etc.
     '@/plugins/axios', // axios baseurl configuration
     '@/plugins/validators', // inject validators
@@ -48,6 +48,7 @@ module.exports = {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
+    'nuxt-i18n',
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/sitemap'
@@ -75,6 +76,23 @@ module.exports = {
         return []
       }
     }
+  },
+  i18n: {
+    locales: Object.keys(locales).map(key => ({
+      code: key,
+      name: locales[key],
+      file: `${key}.json`,
+      iso: key
+    })),
+    vueI18n: {
+      fallbackLocale: 'en'
+    },    
+    langDir: 'locales',
+    lazy: true,
+    strategy: 'no_prefix',
+    baseUrl: config.baseurl,
+    skipSettingLocaleOnNavigate: true,
+    skipNuxtState: true
   },
 
   serverMiddleware: ['server/routes'],

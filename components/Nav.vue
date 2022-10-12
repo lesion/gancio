@@ -21,7 +21,7 @@ v-app-bar(app aria-label='Menu' height=64)
     v-icon(v-text='mdiLogin')
 
   client-only
-    v-menu(v-if='loggedIn' offset-y eager)
+    v-menu(v-if='loggedIn' offset-y transition="slide-y-transition")
       template(v-slot:activator="{ on, attrs }")
         v-btn(icon v-bind='attrs' v-on='on' title='Menu' aria-label='Menu')
           v-icon(v-text='mdiDotsVertical')
@@ -47,12 +47,26 @@ v-app-bar(app aria-label='Menu' height=64)
       v-btn(v-if='loggedIn' icon aria-label='Menu' title='Menu')
         v-icon(v-text='mdiDotsVertical')
 
+  client-only
+    v-menu(offset-y transition="slide-y-transition" min-width='200px' max-height='400px')
+      template(v-slot:activator="{ on, attrs }")
+        v-btn(icon v-bind='attrs' v-on='on' aria-label='Language') {{$i18n.locale}}
+      v-list
+        v-list-item(v-for='locale in $i18n.locales' @click.prevent.stop="$i18n.setLocale(locale.code)" :key='locale.code')
+          v-list-item-content
+            v-list-item-title {{locale.name}}
+        v-list-item(nuxt target='_blank' href='https://hosted.weblate.org/engage/gancio/')
+          v-list-item-content
+            v-list-item-subtitle(v-text='$t("common.help_translate")')
+    template(#placeholder)
+      v-btn(icon aria-label='Language') {{$i18n.locale}}
 
   v-btn(icon target='_blank' :href='`${settings.baseurl}/feed/rss`' title='RSS' aria-label='RSS')
     v-icon(color='orange' v-text='mdiRss')
 
 </template>
 <script>
+const locales = require('../locales/index')
 import { mapState } from 'vuex'
 import clipboard from '../assets/clipboard'
 import { mdiPlus, mdiShareVariant, mdiLogin, mdiDotsVertical, mdiLogout, mdiAccount, mdiCog, mdiRss } from '@mdi/js'
@@ -61,7 +75,7 @@ import { mdiPlus, mdiShareVariant, mdiLogin, mdiDotsVertical, mdiLogout, mdiAcco
 export default {
   name: 'Nav',
   data () {
-    return { mdiPlus, mdiShareVariant, mdiLogout, mdiLogin, mdiDotsVertical, mdiAccount, mdiCog, mdiRss }
+    return { mdiPlus, mdiShareVariant, mdiLogout, mdiLogin, mdiDotsVertical, mdiAccount, mdiCog, mdiRss, locales }
   },
   mixins: [clipboard],
   computed: {

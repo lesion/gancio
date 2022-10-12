@@ -63,8 +63,8 @@ import SMTP from './SMTP.vue'
 import { mapActions, mapState } from 'vuex'
 import moment from 'dayjs'
 import tzNames from './tz.json'
-import locales from '../../locales/esm'
 import { mdiAlert, mdiArrowRight } from '@mdi/js'
+const locales = require('../../locales/index')
 
 export default {
   props: {

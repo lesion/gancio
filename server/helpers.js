@@ -63,13 +63,6 @@ module.exports = {
     })
   },
 
-  async setUserLocale(req, res, next) {
-    // select locale based on cookie? and accept-language header
-    acceptLanguage.languages(Object.keys(locales))
-    res.locals.acceptedLocale = acceptLanguage.get(req.headers['accept-language'])
-    dayjs.locale(res.locals.acceptedLocale)
-    next()
-  },
 
   async initSettings(_req, res, next) {
     // initialize settings

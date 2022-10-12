@@ -5,7 +5,6 @@ const initialize = require('./initialize.server')
 
 const config = require('./config')
 const helpers = require('./helpers')
-app.use(helpers.setUserLocale)
 app.use(helpers.initSettings)
 app.use(helpers.logRequest)
 app.use(helpers.serveStatic())
@@ -73,10 +72,9 @@ async function main () {
 
   // remaining request goes to nuxt
   // first nuxt component is ./pages/index.vue (with ./layouts/default.vue)
-  // prefill current events, tags, places and announcements (used in every path)
   app.use(async (_req, res, next) => {
     if (config.status === 'READY') {
-
+      // TODO: fetch into layout!
       const announceController = require('./api/controller/announce')
       res.locals.announcements = await announceController._getVisible()
     }

@@ -89,7 +89,8 @@
     "label": "Label",
     "collections": "Collections",
     "close": "Close",
-    "plugins": "Plugins"
+    "plugins": "Plugins",
+    "help_translate": "Help Translate"
   },
   "login": {
     "description": "By logging in you can publish new events.",

@@ -1,5 +1,4 @@
 export const state = () => ({
-  locale: '',
   user_locale: {},
   settings: {
     instance_timezone: 'Europe/Rome',
@@ -24,9 +23,6 @@ export const mutations = {
   },
   setSetting (state, setting) {
     state.settings[setting.key] = setting.value
-  },
-  setLocale (state, locale) {
-    state.locale = locale
   },
   setUserlocale (state, messages) {
     state.user_locale = messages

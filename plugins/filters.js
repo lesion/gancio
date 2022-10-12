@@ -26,21 +26,21 @@ export default ({ app, store }) => {
   // set timezone to instance_timezone!!
   // to show local time relative to event's place
   // not where in the world I'm looking at the page from
+  app.i18n.defaultLocale = store.state.settings.instance_locale
   const instance_timezone = store.state.settings.instance_timezone
-  const locale = store.state.locale
   dayjs.tz.setDefault(instance_timezone)
-  dayjs.locale(locale)
+  dayjs.locale(app.i18n.locale || store.state.settings.instance_locale)
 
   // replace links with anchors
   // TODO: remove fb tracking id?
   Vue.filter('linkify', value => value.replace(/(https?:\/\/([^\s]+))/g, '<a href="$1">$2</a>'))
   Vue.filter('url2host', url => url.match(/^https?:\/\/(.[^/:]+)/i)[1])
-  Vue.filter('datetime', value => dayjs.tz(value).locale(locale).format('ddd, D MMMM HH:mm'))
+  Vue.filter('datetime', value => dayjs.tz(value).locale(app.i18n.locale || store.state.settings.instance_locale).format('ddd, D MMMM HH:mm'))
   Vue.filter('dateFormat', (value, format) => dayjs.tz(value).format(format))
   Vue.filter('unixFormat', (timestamp, format) => dayjs.unix(timestamp).tz().format(format))
 
   // shown in mobile homepage
-  Vue.filter('day', value => dayjs.unix(value).tz().locale(store.state.locale).format('dddd, D MMM'))
+  Vue.filter('day', value => dayjs.unix(value).tz().locale(app.i18n.locale || store.state.settings.instance_locale).format('dddd, D MMM'))
   Vue.filter('mediaURL', (event, type, format = '.jpg') => {
     const mediaPath = type === 'download' ? '/download/' : '/media/'
     if (event.media && event.media.length) {
@@ -76,9 +76,8 @@ export default ({ app, store }) => {
   })
 
   Vue.filter('when', (event) => {
-    const start = dayjs.unix(event.start_datetime).tz()
-    const end = dayjs.unix(event.end_datetime).tz()
-
+    const start = dayjs.unix(event.start_datetime).tz().locale(app.i18n.locale || store.state.settings.instance_locale)
+    const end = dayjs.unix(event.end_datetime).tz().locale(app.i18n.locale || store.state.settings.instance_locale)
     // multidate
     if (event.multidate) {
       return `${start.format('dddd D MMMM HH:mm')} - ${end.format('dddd D MMMM HH:mm')}`
