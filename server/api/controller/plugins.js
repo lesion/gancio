@@ -8,11 +8,11 @@ const pluginController = {
   getAll(_req, res) {
     const settingsController = require('./settings')
     // return plugins and inner settings
-    const plugins = pluginController.plugins.map(p => {
-      if (settingsController.settings['plugin_' + p.name]) {
-        p.settingsValue = settingsController.settings['plugin_' + p.name]
+    const plugins = pluginController.plugins.map( ({ configuration }) => {
+      if (settingsController.settings['plugin_' + configuration.name]) {
+        configuration.settingsValue = settingsController.settings['plugin_' + configuration.name]
       }
-      return p
+      return configuration
     })
     return res.json(plugins)
   },
@@ -34,7 +34,7 @@ const pluginController = {
 
   unloadPlugin(pluginName) {
     const settingsController = require('./settings')
-    const plugin = pluginController.plugins.find(p => p.name === pluginName)
+    const plugin = pluginController.plugins.find(p => p.configuration.name === pluginName)
     const settings = settingsController.settings['plugin_' + pluginName]
     if (!plugin) {
       log.warn(`Plugin ${pluginName} not found`)
@@ -60,7 +60,7 @@ const pluginController = {
 
   loadPlugin(pluginName) {
     const settingsController = require('./settings')
-    const plugin = pluginController.plugins.find(p => p.name === pluginName)
+    const plugin = pluginController.plugins.find(p => p.configuration.name === pluginName)
     const settings = settingsController.settings['plugin_' + pluginName]
     if (!plugin) {
       log.warn(`Plugin ${pluginName} not found`)
@@ -78,7 +78,7 @@ const pluginController = {
       notifier.emitter.on('Update', plugin.onEventUpdate)
     }
 
-    if (plugin.unload && typeof plugin.unload === 'function') {
+    if (plugin.load && typeof plugin.load === 'function') {
       plugin.load({ settings: settingsController.settings }, settings)
     }
   },
@@ -95,10 +95,9 @@ const pluginController = {
       plugins.forEach(pluginFile => {
         try {
           const plugin = require(pluginFile)
-          if (typeof plugin.load !== 'function') return
           const name = plugin.configuration.name
           console.log(`Found plugin '${name}'`)
-          pluginController.plugins.push(plugin.configuration)
+          pluginController.plugins.push(plugin)
           console.error(settingsController.settings['plugin_' + name])
           if (settingsController.settings['plugin_' + name]) {
             const pluginSetting = settingsController.settings['plugin_' + name]
