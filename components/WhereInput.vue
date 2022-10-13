@@ -7,11 +7,11 @@ v-row
       :hint="$t('event.where_description')"
       :prepend-icon='mdiMapMarker'
       no-filter
-      :value='value.name'
       hide-no-data
       @input.native='search'
       persistent-hint
       :items="places"
+      item-text='name'
       @focus='search'
       @change='selectPlace')
       template(v-slot:item="{ item, attrs, on }")
@@ -99,6 +99,7 @@ export default {
           this.disableAddress = true
         } else {
           delete this.place.id
+          this.place.name = tmpPlace
           this.place.address = ''
           this.disableAddress = false
           this.$refs.place.blur()
