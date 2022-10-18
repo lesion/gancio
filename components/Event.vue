@@ -16,52 +16,15 @@ v-card.h-event.event.d-flex(itemscope itemtype="https://schema.org/Event")
       v-chip.ml-1.mt-1(v-for='tag in event.tags.slice(0, 6)' small :to='`/tag/${tag}`'
         :key='tag' outlined color='primary') {{ tag }}
 
-    client-only
-      v-menu(offset-y eager)
-        template(v-slot:activator="{ on }")
-          v-btn.align-self-end(icon v-on='on' color='primary' title='more' aria-label='more')
-            v-icon(v-text='mdiDotsVertical')
-        v-list(dense)
-          v-list-item-group
-            v-list-item(@click='clipboard(`${settings.baseurl}/event/${event.slug || event.id}`)')
-              v-list-item-icon
-                v-icon(v-text='mdiContentCopy')
-              v-list-item-content
-                v-list-item-title {{ $t('common.copy_link') }}
-            v-list-item(:href='`/api/event/${event.slug || event.id}.ics`')
-              v-list-item-icon
-                v-icon(v-text='mdiCalendarExport')
-              v-list-item-content
-                v-list-item-title {{ $t('common.add_to_calendar') }}
-            v-list-item(v-if='is_mine' :to='`/add/${event.id}`')
-              v-list-item-icon
-                v-icon(v-text='mdiPencil')
-              v-list-item-content
-                v-list-item-title {{ $t('common.edit') }}
-            v-list-item(v-if='is_mine' @click='remove(false)')
-              v-list-item-icon
-                v-icon(color='error' v-text='mdiDeleteForever')
-              v-list-item-content
-                v-list-item-title {{ $t('common.remove') }}
-      template(#placeholder)
-        v-btn.align-self-end(icon color='primary' aria-label='more')
-          v-icon(v-text='mdiDotsVertical')                
 </template>
 <script>
 import { mapState } from 'vuex'
-import clipboard from '../assets/clipboard'
 import MyPicture from '~/components/MyPicture'
-import {
-  mdiRepeat, mdiPencil, mdiDotsVertical, mdiContentCopy,
-  mdiCalendarExport, mdiDeleteForever, mdiCalendar, mdiMapMarker
-} from '@mdi/js'
+import { mdiRepeat, mdiCalendar, mdiMapMarker } from '@mdi/js'
 
 export default {
   data() {
-    return {
-      mdiRepeat, mdiPencil, mdiDotsVertical, mdiContentCopy, mdiCalendarExport,
-      mdiDeleteForever, mdiMapMarker, mdiCalendar
-    }
+    return { mdiRepeat, mdiMapMarker, mdiCalendar }
   },
   components: {
     MyPicture
@@ -70,27 +33,6 @@ export default {
     event: { type: Object, default: () => ({}) },
     lazy: Boolean
   },
-  mixins: [clipboard],
-  computed: {
-    ...mapState(['settings']),
-    is_mine() {
-      if (!this.$auth.user) {
-        return false
-      }
-      return (
-        this.event.userId === this.$auth.user.id || this.$auth.user.is_admin
-      )
-    }
-  },
-  methods: {
-    async remove() {
-      const ret = await this.$root.$confirm('event.remove_confirmation')
-      if (!ret) { return }
-      await this.$axios.delete(`/event/${this.event.id}`)
-      this.$emit('destroy', this.event.id)
-      this.$root.$message('admin.event_remove_ok')
-
-    }
-  }
+  computed: mapState(['settings'])
 }
 </script>
