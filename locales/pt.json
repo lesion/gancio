@@ -1,1 +1,19 @@
-{}
+{
+    "common": {
+        "add_event": "Adicionar Evento",
+        "description": "Descrição",
+        "send": "Enviar",
+        "address": "Morada",
+        "next": "Próximo",
+        "when": "Quando",
+        "where": "Onde",
+        "login": "Login",
+        "export": "Exportar",
+        "email": "E-mail",
+        "what": "O quê",
+        "media": "Media",
+        "password": "Senha",
+        "register": "Registro",
+        "remove": "Remover"
+    }
+}
