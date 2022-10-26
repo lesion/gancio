@@ -14,6 +14,17 @@
         "media": "Media",
         "password": "Senha",
         "register": "Registro",
-        "remove": "Remover"
+        "remove": "Remover",
+        "confirm": "Confirmar",
+        "events": "Eventos",
+        "settings": "Opções",
+        "actions": "Ações",
+        "edit": "Editar",
+        "admin": "Admin",
+        "places": "Sítios",
+        "hide": "Esconder",
+        "search": "Procurar",
+        "info": "Info",
+        "users": "Utilizadores"
     }
 }
