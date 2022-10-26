@@ -1,5 +1,13 @@
 All notable changes to this project will be documented in this file.
 
+### UNRELEASED
+  - new plugin system
+    - new "publish on telegram" plugin: thanks
+  - i18n refactoring
+  - people can now choose the language displayed - fix #171
+  - fix place "[Object]" issue - #194
+
+
 ### 1.5.6 - 22 set '22
   - update linkifyjs, sequelizem, nuxt deps
   - improve homepage loading time
