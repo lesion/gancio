@@ -18,6 +18,7 @@ nav_order: 7
 - [lakelogaztetxea.net](https://lakelogaztetxea.net)
 - [agenda.eskoria.eus](https://agenda.eskoria.eus/)
 - [lubakiagenda.net](https://lubakiagenda.net/)
+- [eventos.coletivos.org](https://eventos.coletivos.org/)
 
 
 
