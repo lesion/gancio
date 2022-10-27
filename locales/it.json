@@ -236,7 +236,8 @@
         "new_collection": "Crea bolla",
         "wrong_domain_warning": "Il \"baseurl\" configurato in config.json <b>({baseurl})</b> è diverso da quello che stai visitando <b>({url})</b>",
         "collections_description": "Le bolle sono raggruppamenti di eventi per tag e posti.",
-        "edit_collection": "Modifica bolla"
+        "edit_collection": "Modifica bolla",
+        "config_plugin": "Configura plugin"
     },
     "auth": {
         "not_confirmed": "Non ancora confermato…",

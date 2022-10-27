@@ -67,7 +67,7 @@ const pluginController = {
       return
     }
     const notifier = require('../../notifier')
-    log.info('Load plugin ' + plugin)
+    log.info('Load plugin ' + pluginName)
     if (typeof plugin.onEventCreate === 'function') {
       notifier.emitter.on('Create', plugin.onEventCreate)
     }
@@ -98,7 +98,6 @@ const pluginController = {
           const name = plugin.configuration.name
           console.log(`Found plugin '${name}'`)
           pluginController.plugins.push(plugin)
-          console.error(settingsController.settings['plugin_' + name])
           if (settingsController.settings['plugin_' + name]) {
             const pluginSetting = settingsController.settings['plugin_' + name]
             if (pluginSetting.enable) {
