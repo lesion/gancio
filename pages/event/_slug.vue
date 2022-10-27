@@ -20,7 +20,7 @@ v-container#event.pa-0.pa-sm-2
               v-icon.float-right(v-if='event.parentId' color='success' v-text='mdiRepeat')
               .title.text-h5.mb-5
                 strong.p-name.text--primary(itemprop="name") {{event.title}}
-              
+
               time.dt-start.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")' itemprop="startDate" :content="event.start_datetime|unixFormat('YYYY-MM-DDTHH:mm')")
                 v-icon(v-text='mdiCalendar')
                 strong.ml-2 {{event|when}}
@@ -50,7 +50,7 @@ v-container#event.pa-0.pa-sm-2
                 v-icon(v-text='mdiCalendarExport')
               v-btn.ml-2(v-if='hasMedia' large icon :title="$t('event.download_flyer')" color='primary' :aria-label="$t('event.download_flyer')"
                 :href='event | mediaURL("download")')
-                v-icon(v-text='mdiFileDownloadOutline')                
+                v-icon(v-text='mdiFileDownloadOutline')
 
       .p-description.text-body-1.pa-3.rounded(v-if='hasMedia && event.description' itemprop='description' v-html='event.description')
 
@@ -222,7 +222,7 @@ export default {
         { property: 'twitter:title', content: this.event.title },
         {
           property: 'twitter:image',
-          content: this.$options.filters.mediaURL(this.event, 'thumb')
+          content: this.$options.filters.mediaURL(this.event)
         },
         {
           property: 'twitter:description',
@@ -230,7 +230,7 @@ export default {
         }
       ],
       link: [
-        { rel: 'image_src', href: this.$options.filters.mediaURL(this.event, 'thumb') },
+        { rel: 'image_src', href: this.$options.filters.mediaURL(this.event) },
         {
           rel: 'alternate',
           type: 'application/rss+xml',
