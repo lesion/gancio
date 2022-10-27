@@ -33,7 +33,7 @@ export default {
   asyncData({ $axios, params, error }) {
     try {
       const place = params.place
-      return $axios.$get(`/place/${place}`)
+      return $axios.$get(`/place/${encodeURIComponent(place)}`)
     } catch (e) {
       error({ statusCode: 400, message: 'Error!' })
     }

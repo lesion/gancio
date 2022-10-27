@@ -23,6 +23,30 @@ const log = require('../../log')
 
 const eventController = {
 
+  async _findOrCreatePlace (body) {
+    if (body.place_id) {
+      const place = await Place.findByPk(body.place_id)
+      if (!place) {
+        throw new Error(`Place not found`)
+      }
+      return place
+    }
+
+    const place_name = body.place_name && body.place_name.trim()
+    const place_address = body.place_address && body.place_address.trim()
+    if (!place_address || !place_name) {
+      throw new Error(`place_id or place_name and place_address are required`)
+    }    
+    let place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Sequelize.Op.eq, place_name.toLocaleLowerCase()) })
+    if (!place) {
+      place = await Place.create({
+        name: place_name,
+        address: place_address
+      })
+    }
+    return place
+  },
+
   async searchMeta(req, res) {
     const search = req.query.search
 
@@ -389,29 +413,18 @@ const eventController = {
 
       // find or create the place
       let place
-      if (body.place_id) {
-        place = await Place.findByPk(body.place_id)
+      try {
+        place = await eventController._findOrCreatePlace(body)
         if (!place) {
           return res.status(400).send(`Place not found`)
         }
-      } else {
-        if (!body.place_name) {
-          return res.status(400).send(`Place not found`)
-        }
-        place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Op.eq, body.place_name.trim().toLocaleLowerCase()) })
-        if (!place) {
-          if (!body.place_address || !body.place_name) {
-            return res.status(400).send(`place_id or place_name and place_address required`)
-          }
-          place = await Place.create({
-            name: body.place_name,
-            address: body.place_address
-          })
-        }
+      } catch (e) {
+        return res.status(400).send(e.message)
       }
 
+
       const eventDetails = {
-        title: body.title,
+        title: body.title.trim(),
         // sanitize and linkify html
         description: helpers.sanitizeHTML(linkifyHtml(body.description || '')),
         multidate: body.multidate,
@@ -543,27 +556,14 @@ const eventController = {
 
       // find or create the place
       let place
-      if (body.place_id) {
-        place = await Place.findByPk(body.place_id)
+      try {
+        place = await eventController._findOrCreatePlace(body)
         if (!place) {
           return res.status(400).send(`Place not found`)
         }
-      } else {
-        if (!body.place_name) {
-          return res.status(400).send(`Place not found`)
-        }
-        place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Op.eq, body.place_name.trim().toLocaleLowerCase()) })
-        if (!place) {
-          if (!body.place_address || !body.place_name) {
-            return res.status(400).send(`place_id or place_name and place_address required`)
-          }
-          place = await Place.create({
-            name: body.place_name,
-            address: body.place_address
-          })
-        }
+      } catch (e) {
+        return res.status(400).send(e.message)
       }
-
       await event.setPlace(place)
 
       // create/assign tags

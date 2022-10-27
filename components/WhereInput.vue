@@ -10,6 +10,7 @@ v-row
       hide-no-data
       @input.native='search'
       persistent-hint
+      :value='value'
       :items="places"
       item-text='name'
       @focus='search'
@@ -83,13 +84,13 @@ export default {
     selectPlace (p) {
       if (!p) { return }
       if (typeof p === 'object' && !p.create) {
-        this.place.name = p.name.trim()
+        this.place.name = p.name
         this.place.address = p.address
         this.place.id = p.id
         this.disableAddress = true
       } else { // this is a new place
-        this.place.name = p.name || p
-        const tmpPlace = this.place.name.trim().toLocaleLowerCase()
+        this.place.name = (p.name || p).trim()
+        const tmpPlace = this.place.name.toLocaleLowerCase()
         // search for a place with the same name
         const place = this.places.find(p => !p.create && p.name.trim().toLocaleLowerCase() === tmpPlace)
         if (place) {
@@ -99,7 +100,6 @@ export default {
           this.disableAddress = true
         } else {
           delete this.place.id
-          this.place.name = tmpPlace
           this.place.address = ''
           this.disableAddress = false
           this.$refs.place.blur()
