@@ -18,5 +18,11 @@
     "admin_register": {
         "subject": "Nowa rejestracja",
         "content": "{{user.email}} poprosił(a) o rejestrację na {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Zatwierdź ją <a href='{{config.baseurl}}/admin'>tutaj</a>."
+    },
+    "event_confirm": {
+        "content": "Żeby potwierdzić to wydarzenie wejdź w <a href='{{url}}'>ten link</a>"
+    },
+    "test": {
+        "subject": "Serwer SMTP skonfigurowany prawidłowo"
     }
 }
