@@ -246,7 +246,8 @@
     "collections_description": "Collections are groupings of events by tags and places. They will be displayed on the home page",
     "edit_collection": "Edit Collection",
     "config_plugin": "Plugin configuration",
-    "plugins_description": ""
+    "plugins_description": "",
+    "fallbackImage": "Fallback image"
   },
   "auth": {
     "not_confirmed": "Not confirmed yet…",

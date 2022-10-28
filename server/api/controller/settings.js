@@ -176,7 +176,30 @@ const settingsController = {
         settingsController.set('logo', baseImgPath)
         res.sendStatus(200)
       })
+  },
+
+  setFallbackImage (req, res) {
+    if (!req.file) {
+      settingsController.set('fallbackImage', false)
+      return res.status(200)
+    }
+
+    const uploadedPath = path.join(req.file.destination, req.file.filename)
+    const baseImgPath = path.resolve(config.upload_path, 'fallbackImage.png')
+
+    // convert and resize to png
+    return sharp(uploadedPath)
+      .resize(600)
+      .png({ quality: 99 })
+      .toFile(baseImgPath, (err) => {
+        if (err) {
+          log.error('[FALLBACK IMAGE] ' + err)
+        }
+        settingsController.set('fallbackImage', baseImgPath)
+        res.sendStatus(200)
+      })
   }
+
 }
 
 module.exports = settingsController

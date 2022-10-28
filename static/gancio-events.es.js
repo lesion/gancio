@@ -313,13 +313,13 @@ function Le(t) {
   let e, i, n;
   return {
     c() {
-      e = g("img"), a(e, "style", "aspect-ratio=1.7778;"), a(e, "alt", i = t[12].title), G(e.src, n = t[0] + "/noimg.svg") || a(e, "src", n), a(e, "loading", "lazy");
+      e = g("img"), a(e, "style", "aspect-ratio=1.7778;"), a(e, "alt", i = t[12].title), G(e.src, n = t[0] + "/fallbackimage.png") || a(e, "src", n), a(e, "loading", "lazy");
     },
     m(l, o) {
       v(l, e, o);
     },
     p(l, o) {
-      o & 32 && i !== (i = l[12].title) && a(e, "alt", i), o & 1 && !G(e.src, n = l[0] + "/noimg.svg") && a(e, "src", n);
+      o & 32 && i !== (i = l[12].title) && a(e, "alt", i), o & 1 && !G(e.src, n = l[0] + "/fallbackimage.png") && a(e, "src", n);
     },
     d(l) {
       l && x(e);

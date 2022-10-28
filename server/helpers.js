@@ -22,7 +22,6 @@ const { JSDOM } = require('jsdom')
 const { window } = new JSDOM('<!DOCTYPE html>')
 const domPurify = DOMPurify(window)
 const url = require('url')
-const locales = require('../locales')
 
 domPurify.addHook('beforeSanitizeElements', node => {
   if (node.hasAttribute && node.hasAttribute('href')) {
@@ -108,10 +107,14 @@ module.exports = {
         }
       })
     })
-    router.use('/noimg.svg', express.static('./static/noimg.svg'))
+
+    router.use('/fallbackimage.png', (req, res, next) => {
+      const fallbackImagePath =  settingsController.settings.fallbackImage || './static/noimg.svg'
+      return express.static(fallbackImagePath)(req, res, next)      
+    })
 
     router.use('/logo.png', (req, res, next) => {
-      const logoPath = res.locals.settings.logo || './static/gancio'
+      const logoPath = settingsController.settings.logo || './static/gancio'
       return express.static(logoPath + '.png')(req, res, next)
     })
 

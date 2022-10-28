@@ -2,19 +2,32 @@
 v-container
   v-card-title {{$t('common.theme')}}
   v-card-text
-    //- LOGO
-    v-file-input.mt-5(ref='upload'
-      :label="$t('admin.favicon')"
-      @change='uploadLogo'
-      accept='image/*')
-      template(slot='append-outer')
-        v-btn(color='warning' text @click='resetLogo') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
-        v-img(:src='`/logo.png?${logoKey}`'
-          max-width="60px" max-height="60px" contain)
 
     v-switch.mt-5(v-model='is_dark'
       inset
       :label="$t('admin.is_dark')")
+
+    v-row
+      v-col(cols='6')
+        //- LOGO
+        v-file-input.mt-5(ref='upload'
+          :label="$t('admin.favicon')"
+          @change='uploadLogo'
+          accept='image/*')
+          template(slot='append-outer')
+            v-btn(color='warning' text @click='resetLogo') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
+        v-img.mt-2(:src='`/logo.png?${logoKey}`' max-height="60px" contain)
+
+      v-col(cols='6')
+        //- NOIMG
+        v-file-input.mt-5(ref='upload'
+          :label="$t('admin.fallbackImage')"
+          persistent-hint
+          @change='uploadFallbackImage'
+          accept='image/*')
+          template(slot='append-outer')
+            v-btn(color='warning' text @click='resetFallbackImage') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
+        v-img.mt-2(:src='`/fallbackimage.png?${fallbackImageKey}`' max-height="150px" contain)          
 
     //- TODO choose theme colors
     //- v-row
@@ -77,6 +90,7 @@ export default {
       mdiDeleteForever, mdiRestore, mdiPlus, mdiChevronUp,
       valid: false,
       logoKey: 0,
+      fallbackImageKey: 0,
       link: { href: '', label: '' },
       linkModal: false
       // menu: [false, false, false, false]
@@ -127,9 +141,17 @@ export default {
     forceLogoReload () {
       this.logoKey++
     },
+    forceFallbackImageReload () {
+      this.fallbackImageKey++
+    },
     resetLogo (e) {
       this.setSetting({ key: 'logo', value: null })
         .then(this.forceLogoReload)
+      e.stopPropagation()
+    },
+    resetFallbackImage (e) {
+      this.setSetting({ key: 'fallbackImage', value: null })
+        .then(this.forceFallbackImageReload)
       e.stopPropagation()
     },
     updateColor (i, v) {
@@ -176,6 +198,19 @@ export default {
       } catch (e) {
 
       }
+    },
+    async uploadFallbackImage (file) {
+      const formData = new FormData()
+      formData.append('fallbackImage', file)
+      try {
+        await this.$axios.$post('/settings/fallbackImage', formData)
+        this.$root.$emit('message', {
+          message: 'Fallback image updated'
+        })
+        this.forceFallbackImageReload()
+      } catch (e) {
+
+      }    
     },
     save (key, value) {
       if (this.settings[key] !== value) {

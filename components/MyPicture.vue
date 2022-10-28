@@ -10,7 +10,7 @@
       :height="height" :width="width"
       :style="{ 'object-position': thumbnailPosition }">
 
-    <img v-else-if='!media && thumb' class='thumb' src="/noimg.svg" alt=''>
+    <img v-else-if='!media && thumb' class='thumb' src="/fallbackimage.png" alt=''>
   </div>
 </template>
 <script>
