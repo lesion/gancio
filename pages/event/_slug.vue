@@ -228,7 +228,7 @@ export default {
         { property: 'twitter:title', content: this.event.title },
         {
           property: 'twitter:image',
-          content: this.$options.filters.mediaURL(this.event, 'thumb')
+          content: this.$options.filters.mediaURL(this.event)
         },
         {
           property: 'twitter:description',
@@ -236,7 +236,7 @@ export default {
         }
       ],
       link: [
-        { rel: 'image_src', href: this.$options.filters.mediaURL(this.event, 'thumb') },
+        { rel: 'image_src', href: this.$options.filters.mediaURL(this.event) },
         {
           rel: 'alternate',
           type: 'application/rss+xml',
