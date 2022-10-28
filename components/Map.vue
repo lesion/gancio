@@ -22,11 +22,11 @@ client-only(placeholder='Loading...' )
         v-text.mx-2(v-text="`${event.place.address}`")
       v-text.my-4(v-text="$t('common.getting_there')")
       v-row
-        v-btn.ml-2(icon large :href="routeByWalk()")
+        v-btn.ml-2(icon large :href="routeBy('foot')")
           v-icon(v-text='mdiWalk' color='white')
-        v-btn.ml-2(icon large :href="routeByBike()")
+        v-btn.ml-2(icon large :href="routeBy('bike')")
           v-icon(v-text='mdiBike' color='white')
-        v-btn.ml-2(icon large :href="routeByCar()")
+        v-btn.ml-2(icon large :href="routeBy('car')")
           v-icon(v-text='mdiCar' color='white')
 
 </template>
@@ -48,7 +48,6 @@ export default {
    data ({ $store }) {
      return {
        mdiWalk, mdiBike, mdiCar, mdiMapMarker,
-       // url: "https://a.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png",
        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
        attribution:
          '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -60,12 +59,7 @@ export default {
            coordinates: {lat: this.event.place.latitude, lon: this.event.place.longitude}
          }
        ],
-       osm_navigation: 'https://www.openstreetmap.org/directions?from=&to=',
-       routingType: {
-         foot: "engine=fossgis_osrm_foot",
-         bike: "engine=fossgis_osrm_bike",
-         car: "engine=fossgis_osrm_car"
-       }
+       routingProvider: 'openstreetmap'
      }
    },
    props: {
@@ -93,19 +87,31 @@ export default {
           event.target.openPopup();
         });
       },
-     route (routingTypes) {
-       return this.osm_navigation+this.event.place.latitude+','+this.event.place.longitude+'&'+routingTypes
-     },
-     routeByWalk() {
-       return this.route(this.routingType.foot)
-     },
-     routeByBike() {
-       return this.route(this.routingType.bike)
-     },
-     routeByCar() {
-       return this.route(this.routingType.car)
-     },
 
+      routeBy(routingType) {
+        const lat = this.event.place.latitude
+        const lon = this.event.place.longitude
+        switch (this.routingProvider) {
+          case 'google_maps':
+            const routingTypes = {
+              foot: "dirflg=w",
+              bike: "dirflg=b",
+              transit: "dirflg=r",
+              car: "driving"
+            }
+            return `https://maps.google.com/?saddr=Current+Location&daddr=${lat},${lon}&${routingTypes[routingType]}`;
+          case 'openstreetmap':
+          default: {
+            const routingTypes = {
+              foot: "engine=fossgis_osrm_foot",
+              bike: "engine=fossgis_osrm_bike",
+              transit: null,
+              car: "engine=fossgis_osrm_car"
+            }
+            return `https://www.openstreetmap.org/directions?from=&to=${lat},${lon}&${routingTypes[routingType]}#map=14/${lat}/${lon}`
+          }
+        }
+     },
    }
 }
 </script>
