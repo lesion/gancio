@@ -212,7 +212,7 @@ export default {
       if (this.event.place.id) {
         formData.append('place_id', this.event.place.id)
       }
-      formData.append('place_name', this.event.place.name)
+      formData.append('place_name', this.event.place.name.trim())
       formData.append('place_address', this.event.place.address)
       formData.append('place_latitude', this.event.place.latitude)
       formData.append('place_longitude', this.event.place.longitude)
