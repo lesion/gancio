@@ -32,7 +32,7 @@ v-container#event.pa-0.pa-sm-2
                 v-icon(v-text='mdiMapMarker')
                 nuxt-link.vcard.ml-2.p-name.text-decoration-none(itemprop="name" :to='`/place/${event.place.name}`') {{event.place && event.place.name}}
                 .text-subtitle-1.p-street-address(itemprop='address') {{event.place && event.place.address}}
-                v-btn.mt-2(v-if='event.place.latitude && event.place.longitude' small v-text="$t('common.show_map')" :aria-label="$t('common.show_map')" @click="mapModal = true")
+                v-btn.mt-2(v-if='settings.allow_geolocation && event.place.latitude && event.place.longitude' small v-text="$t('common.show_map')" :aria-label="$t('common.show_map')" @click="mapModal = true")
                 v-dialog(v-model='mapModal' :fullscreen='$vuetify.breakpoint.xsOnly' destroy-on-close)
                   v-card
                     Map(:event='event')

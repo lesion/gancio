@@ -173,27 +173,24 @@ export default {
       this.$emit('input', { ...this.place })
     },
     searchCoordinates: debounce(async function(ev) {
-      this.loading = true
       const pre_searchCoordinates = ev.target.value.trim().toLowerCase()
-      // allow pasting coordinates lat/lon
+      // allow pasting coordinates lat/lon and lat,lon
       const searchCoordinates = pre_searchCoordinates.replace('/', ',')
-      // console.log(pre_searchCoordinates)
-
       var regex_coords_comma = "-?[1-9][0-9]*(\\.[0-9]+)?,\\s*-?[1-9][0-9]*(\\.[0-9]+)?";
       var regex_coords_slash = "-?[1-9][0-9]*(\\.[0-9]+)?/\\s*-?[1-9][0-9]*(\\.[0-9]+)?";
 
       const setCoords = (v) => {
-        this.place.latitude = v[0].trim()
-        this.place.longitude = v[1].trim()
-
-        if (this.place.latitude < -90 || this.place.latitude > 90) {
-          // non existent
+        const lat = v[0].trim()
+        const lon = v[1].trim()
+        // check coordinates are valid
+        if ((lat < 90 && lat > -90)
+        && (lon < 180 && lon > -180)) {
+          this.place.latitude = lat
+          this.place.longitude = lon
+        } else {
+          this.$root.$message("Non existent coordinates", { color: 'error' })
+          return
         }
-        if (this.place.latitude < -180 || this.place.latitude > 180) {
-          // non existent
-        }
-        
-        this.loading = false;
       }
 
       if (pre_searchCoordinates.match(regex_coords_comma)) {
@@ -208,10 +205,9 @@ export default {
       }
 
       if (searchCoordinates.length) {
+        this.loading = true
         this.detailsList = await this.$axios.$get(`placeNominatim/${searchCoordinates}`)
-      }
-      if (this.detailsList) {
-        this.loading = false;
+        this.loading = false
       }
     }, 300),
   }
