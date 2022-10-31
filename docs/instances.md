@@ -19,7 +19,7 @@ nav_order: 7
 - [agenda.eskoria.eus](https://agenda.eskoria.eus/)
 - [lubakiagenda.net](https://lubakiagenda.net/)
 - [eventos.coletivos.org](https://eventos.coletivos.org/)
-
+- [calendario.extinctionrebellion.es](https://calendario.extinctionrebellion.es/)
 
 
 <small>Do you want your instance to appear here? [Write us]({% link contact.md %}).</small>

@@ -87,7 +87,7 @@ const oauthController = {
      */
     async getClient (client_id, client_secret) {
       const client = await OAuthClient.findByPk(client_id, { raw: true })
-      if (client_secret && client_secret !== client.client_secret) {
+      if (!client || (client_secret && client_secret !== client.client_secret)) {
         return false
       }
 

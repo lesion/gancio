@@ -2,10 +2,11 @@ All notable changes to this project will be documented in this file.
 
 ### UNRELEASED
   - new plugin system
-    - new "publish on telegram" plugin: thanks
+    - new "publish on telegram" plugin: thanks @fadelkon
   - i18n refactoring
   - people can now choose the language displayed - fix #171
   - fix place "[Object]" issue - #194
+  - admin could choose a custom fallback image - fix #195
 
 
 ### 1.5.6 - 22 set '22

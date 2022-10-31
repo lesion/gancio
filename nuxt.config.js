@@ -105,6 +105,8 @@ module.exports = {
     prefix: '/api'
   },
   auth: {
+    rewriteRedirects: true,
+    fullPathRedirect: true,
     // localStorage: false, // https://github.com/nuxt-community/auth-module/issues/425
     cookie: {
       prefix: 'auth.',
