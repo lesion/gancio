@@ -101,11 +101,16 @@ module.exports = {
     // serve images/thumb
     router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' }), (_req, res) => res.sendStatus(404))
     router.use('/download/:filename', (req, res) => {
-      return res.download(req.params.filename, undefined, { root: config.upload_path }, err => {
+      res.download(req.params.filename, undefined, { root: config.upload_path }, err => {
         if (err) {
-          res.status(404).send('Not found (but nice try 😊)')
+          // Check if headers have been sent
+          if(res.headersSent) {
+            log.warn(err)
+          } else {
+            res.status(404).send('Not found (but nice try 😊)')
+          // }
         }
-      })
+      }})
     })
 
     router.use('/fallbackimage.png', (req, res, next) => {
