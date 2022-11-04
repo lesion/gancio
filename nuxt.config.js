@@ -125,7 +125,7 @@ module.exports = {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
           },
           logout: false,
-          user: { url: '/user', method: 'get', propertyName: false }
+          user: { url: '/user', method: 'get', propertyName: false, autoFetch: false }
         },
         tokenRequired: true,
         tokenType: 'Bearer'

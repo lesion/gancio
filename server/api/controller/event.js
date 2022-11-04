@@ -196,7 +196,7 @@ const eventController = {
 
   async get(req, res) {
     const format = req.params.format || 'json'
-    const is_admin = res.locals.user && res.locals.user.is_admin
+    const is_admin = req.user && req.user.is_admin
     const slug = req.params.event_slug
 
     // retrocompatibility, old events URL does not use slug, use id as fallback
@@ -301,7 +301,7 @@ const eventController = {
       log.warn(`Trying to confirm a unknown event, id: ${id}`)
       return res.sendStatus(404)
     }
-    if (!res.locals.user.is_admin && res.locals.user.id !== event.userId) {
+    if (!req.user.is_admin && req.user.id !== event.userId) {
       log.warn(`Someone not allowed is trying to confirm -> "${event.title} `)
       return res.sendStatus(403)
     }
@@ -327,7 +327,7 @@ const eventController = {
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
     if (!event) { return req.sendStatus(404) }
-    if (!res.locals.user.is_admin && res.locals.user.id !== event.userId) {
+    if (!req.user.is_admin && req.user.id !== event.userId) {
       log.warn(`Someone not allowed is trying to unconfirm -> "${event.title} `)
       return res.sendStatus(403)
     }
@@ -386,8 +386,8 @@ const eventController = {
     res.sendStatus(200)
   },
 
-  async isAnonEventAllowed(_req, res, next) {
-    if (!res.locals.settings.allow_anon_event && !res.locals.user) {
+  async isAnonEventAllowed(req, res, next) {
+    if (!res.locals.settings.allow_anon_event && !req.user) {
       return res.sendStatus(403)
     }
     next()
@@ -432,7 +432,7 @@ const eventController = {
         end_datetime: body.end_datetime,
         recurrent,
         // publish this event only if authenticated
-        is_visible: !!res.locals.user
+        is_visible: !!req.user
       }
 
       if (req.file || body.image_url) {
@@ -466,9 +466,9 @@ const eventController = {
       }
 
       // associate user to event and reverse
-      if (res.locals.user) {
-        await res.locals.user.addEvent(event)
-        await event.setUser(res.locals.user)
+      if (req.user) {
+        await req.user.addEvent(event)
+        await event.setUser(req.user)
       }
 
       event = event.get()
@@ -502,7 +502,7 @@ const eventController = {
       const body = req.body
       const event = await Event.findByPk(body.id)
       if (!event) { return res.sendStatus(404) }
-      if (!res.locals.user.is_admin && event.userId !== res.locals.user.id) {
+      if (!req.user.is_admin && event.userId !== req.user.id) {
         return res.sendStatus(403)
       }
 
@@ -596,7 +596,7 @@ const eventController = {
   async remove(req, res) {
     const event = await Event.findByPk(req.params.id)
     // check if event is mine (or user is admin)
-    if (event && (res.locals.user.is_admin || res.locals.user.id === event.userId)) {
+    if (event && (req.user.is_admin || req.user.id === event.userId)) {
       if (event.media && event.media.length && !event.recurrent) {
         try {
           const old_path = path.join(config.upload_path, event.media[0].url)

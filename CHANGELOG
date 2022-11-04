@@ -1,12 +1,14 @@
 All notable changes to this project will be documented in this file.
 
 ### UNRELEASED
-  - new plugin system
+  - new plugin system - fix #17
     - new "publish on telegram" plugin: thanks @fadelkon
   - i18n refactoring
   - people can now choose the language displayed - fix #171
   - fix place "[Object]" issue - #194
   - admin could choose a custom fallback image - fix #195
+  - it is now possible NOT to enter the end time of an event - fix #188
+
 
 
 ### 1.5.6 - 22 set '22

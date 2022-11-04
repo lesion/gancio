@@ -44,13 +44,13 @@ const userController = {
   },
 
   async current (req, res) {
-    if (!res.locals.user) { return res.status(400).send('Not logged') }
-    const user = await User.scope('withoutPassword').findByPk(res.locals.user.id)
+    if (!req.user) { return res.status(400).send('Not logged') }
+    const user = await User.scope('withoutPassword').findByPk(req.user.id)
     res.json(user)
   },
 
   async getAll (req, res) {
-    const users = await User.scope(res.locals.user.is_admin ? 'withRecover' : 'withoutPassword').findAll({
+    const users = await User.scope(req.user.is_admin ? 'withRecover' : 'withoutPassword').findAll({
       order: [['is_admin', 'DESC'], ['createdAt', 'DESC']]
     })
     res.json(users)
@@ -62,7 +62,7 @@ const userController = {
 
     if (!user) { return res.status(404).json({ success: false, message: 'User not found!' }) }
 
-    if (req.body.id !== res.locals.user.id && !res.locals.user.is_admin) {
+    if (req.body.id !== req.user.id && !req.user.is_admin) {
       return res.status(400).json({ succes: false, message: 'Not allowed' })
     }
 
@@ -123,10 +123,10 @@ const userController = {
   async remove (req, res) {
     try {
       let user
-      if (res.locals.user.is_admin && req.params.id) {
+      if (req.user.is_admin && req.params.id) {
         user = await User.findByPk(req.params.id)
       } else {
-        user = await User.findByPk(res.locals.user.id)  
+        user = await User.findByPk(req.user.id)  
       }
       await user.destroy()
       log.warn(`User ${user.email} removed!`)

@@ -56,7 +56,6 @@ export default {
   data ({ $store }) {
     return {
       mdiMagnify, mdiCloseCircle,
-      first: true,
       isCurrentMonth: true,
       now: dayjs().unix(),
       date: dayjs.tz().format('YYYY-MM-DD'),
@@ -93,7 +92,7 @@ export default {
         const max = dayjs.tz(this.selectedDay).endOf('day').unix()
         return this.events.filter(e => (e.start_datetime <= max && (e.end_datetime || e.start_datetime) >= min) && (this.show_recurrent || !e.parentId))
       } else if (this.isCurrentMonth) {
-          return this.events.filter(e => ((e.end_datetime ? e.end_datetime > now : e.start_datetime + 2 * 60 * 60 > now) && (this.show_recurrent || !e.parentId)))
+          return this.events.filter(e => ((e.end_datetime ? e.end_datetime > now : e.start_datetime + 3 * 60 * 60 > now) && (this.show_recurrent || !e.parentId)))
       } else {
         return this.events.filter(e => this.show_recurrent || !e.parentId)
       }
@@ -115,11 +114,6 @@ export default {
       })
     },
     monthChange ({ year, month }) {
-      // avoid first time monthChange event (onload)
-      if (this.first) {
-        this.first = false
-        return
-      }
 
       this.$nuxt.$loading.start()
 

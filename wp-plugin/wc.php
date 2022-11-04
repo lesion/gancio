@@ -39,10 +39,10 @@ function gancio_events_handler_function( $atts, $content, $tag) {
     'places' => '',
     'tags' => '',
     'theme' => 'dark',
-    'max' => NULL
+    'max' => null
   ), $atts);
   return '<gancio-events baseurl="' . $a['baseurl'] . '" theme="' . $a['theme'] . '" places="' . $a['places'] . '" tags="' . $a['tags'] . '"></gancio-events>';
-};
+}
 
 add_action( 'init', function () {
   global $allowedposttags;

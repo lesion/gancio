@@ -57,7 +57,7 @@
     update()
   })
   $: update(
-    maxlength && title && places && tags && theme && show_recurrent && sidebar
+    maxlength && title && places && tags && theme && show_recurrent && sidebar && baseurl
   )
 </script>
 

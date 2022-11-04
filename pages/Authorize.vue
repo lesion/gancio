@@ -1,18 +1,21 @@
 <template lang='pug'>
-.d-flex.justify-space-around
+v-form.d-flex.justify-space-around(method='post' action='/oauth/authorize')
   v-card.mt-5(max-width='600px')
     v-card-title {{settings.title}} - {{$t('common.authorize')}}
     v-card-text
+      h2 {{$auth.user.email}}
+      input(name='transaction_id' :value='transactionID' type='hidden')
       u {{$auth.user.email}}
+
       div
-        p(v-html="$t('oauth.authorization_request', { app: client.name, instance_name: settings.title })")
+        p(v-html="$t('oauth.authorization_request', { app: client, instance_name: settings.title })")
         ul.mb-2
-          li(v-for="s in scope.split(' ')") {{$t(`oauth.scopes.${scope}`)}}
-        span(v-html="$t('oauth.redirected_to', {url: $route.query.redirect_uri})")
+          li {{$t(`oauth.scopes.${scope}`)}}
+        span(v-html="$t('oauth.redirected_to', {url: redirect_uri})")
     v-card-actions
       v-spacer
-      v-btn(color='error' to='/') {{$t('common.cancel')}}
-      v-btn(:href='authorizeURL' color='success') {{$t('common.authorize')}}
+      v-btn(color='error' to='/' outlined) {{$t('common.cancel')}}
+      v-btn(type='submit' color='success' outlined) {{$t('common.authorize')}}
 </template>
 
 <script>
@@ -23,58 +26,12 @@ export default {
   layout: 'modal',
   middleware: ['auth'],
   async asyncData ({ $axios, query, error, req }) {
-    const { client_id, redirect_uri, scope, response_type } = query
-    let err = ''
-    if (!client_id) {
-      err = 'client_id is missing'
-    }
-    if (!redirect_uri) {
-      err = 'redirect_uri is missing'
-    }
-    if (!scope || scope !== 'event:write') {
-      err = 'scope is missing or wrong'
-    }
-    if (!response_type || response_type !== 'code') {
-      err = 'response_type is missing or wrong'
-    }
-
-    // retrieve client validity
-    try {
-      const client = await $axios.$get(`/client/${client_id}`)
-      if (!client) {
-        err = 'client not found'
-      }
-      if (err) {
-        return error({ statusCode: 404, message: err })
-      }
-      return { client, redirect_uri, scope, response_type }
-    } catch (e) {
-      error({ statusCode: 400, message: 'Something goes wrong with OAuth authorization' })
-    }
+    const { transactionID, client, scope, redirect_uri } = query
+    return { transactionID, client, redirect_uri, scope }
   },
-  data () {
-    return {
-      client: { name: 'Test' }
-    }
-  },
-  computed: {
-    ...mapState(['settings']),
-    authorizeURL () {
-      const { scope, response_type, client_id, redirect_uri, state } = this.$route.query
-      const query = `client_id=${client_id}&response_type=${response_type}&scope=${scope}&redirect_uri=${redirect_uri}&state=${state}`
-      return `oauth/authorize?${query}`
-    }
-  },
+  computed: mapState(['settings']),
   head () {
     return { title: `${this.settings.title} - Authorize` }
   }
 }
 </script>
-<style>
-  h4 img {
-    max-height: 40px;
-    border-radius: 20px;
-    background-color: #333;
-    border: 1px solid #333;
-  }
-</style>

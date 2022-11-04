@@ -48,7 +48,7 @@ domPurify.addHook('beforeSanitizeElements', node => {
 module.exports = {
 
   randomString(length = 12) {
-    const wishlist = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    const wishlist = '0123456789abcdefghijklmnopqrstuvwxyz'
     return Array.from(crypto.randomFillSync(new Uint32Array(length)))
       .map(x => wishlist[x % wishlist.length])
       .join('')

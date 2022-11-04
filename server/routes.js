@@ -1,14 +1,15 @@
 const express = require('express')
-const cookieParser = require('cookie-parser')
 const app = express()
 const initialize = require('./initialize.server')
 
 const config = require('./config')
 const helpers = require('./helpers')
-app.use(helpers.initSettings)
-app.use(helpers.logRequest)
-app.use(helpers.serveStatic())
-app.use(cookieParser())
+
+app.use([
+  helpers.initSettings,
+  helpers.logRequest,
+  helpers.serveStatic()
+])
 
 async function main () {
 
@@ -17,7 +18,6 @@ async function main () {
   // const metricsController = require('./metrics')
   // const promBundle = require('express-prom-bundle')
   // const metricsMiddleware = promBundle({ includeMethod: true })
-
 
   const log = require('./log')
   const api = require('./api')
@@ -28,14 +28,13 @@ async function main () {
   if (config.status === 'READY') {
     const cors = require('cors')
     const { spamFilter } = require('./federation/helpers')
-    const oauth = require('./api/oauth')
-    const auth = require('./api/auth')
     const federation = require('./federation')
     const webfinger = require('./federation/webfinger')
     const exportController = require('./api/controller/export')
     const tagController = require('./api/controller/tag')
     const placeController = require('./api/controller/place')
     const collectionController = require('./api/controller/collection')
+    const authController = require('./api/controller/oauth')
 
     // rss / ics feed
     app.use(helpers.feedRedirect)
@@ -43,7 +42,6 @@ async function main () {
     app.get('/feed/:format/place/:placeName', cors(), placeController.getEvents)
     app.get('/feed/:format/collection/:name', cors(), collectionController.getEvents)
     app.get('/feed/:format', cors(), exportController.export)
-
     
     app.use('/event/:slug', helpers.APRedirect)
     
@@ -54,11 +52,11 @@ async function main () {
     // ignore unimplemented ping url from fediverse
     app.use(spamFilter)
 
-    // fill res.locals.user if request is authenticated
-    app.use(auth.fillUser)
-
-    app.use('/oauth', oauth)
-    // app.use(metricsMiddleware)
+    app.use(authController.authenticate)
+    app.post('/oauth/token', authController.token)
+    app.post('/oauth/login', authController.login)
+    app.get('/oauth/authorize', authController.authorization)    
+    app.post('/oauth/authorize', authController.decision)
   }
 
   // api!
@@ -88,6 +86,8 @@ async function main () {
 if (process.env.NODE_ENV !== 'test') {
   main()
 }
+
+// app.listen(13120)
 
 module.exports = {
   main,

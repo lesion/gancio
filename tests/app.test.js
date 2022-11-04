@@ -54,7 +54,8 @@ describe('Authentication / Authorization', () => {
   test('should not authenticate with wrong user/password', () => {
     return request(app).post('/oauth/login')
       .set('Content-Type', 'application/x-www-form-urlencoded')
-      .expect(500)
+      .send({ email: 'admin', password: 'wrong'})
+      .expect(401)
   })
 
   test('should register an admin as first user', async () => {

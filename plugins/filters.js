@@ -77,13 +77,12 @@ export default ({ app, store }) => {
 
   Vue.filter('when', (event) => {
     const start = dayjs.unix(event.start_datetime).tz().locale(app.i18n.locale || store.state.settings.instance_locale)
-    const end = dayjs.unix(event.end_datetime).tz().locale(app.i18n.locale || store.state.settings.instance_locale)
-    // multidate
-    if (event.multidate) {
-      return `${start.format('dddd D MMMM HH:mm')} - ${end.format('dddd D MMMM HH:mm')}`
-    }
+    const end = event.end_datetime && dayjs.unix(event.end_datetime).tz().locale(app.i18n.locale || store.state.settings.instance_locale)
 
-    // normal event
-    return `${start.format('dddd D MMMM HH:mm')}-${end.format('HH:mm')}`
+    let time = start.format('dddd D MMMM HH:mm')
+    if (end) {
+      time += event.multidate ? `-${end.format('dddd D MMMM HH:mm')}` : `-${end.format('HH:mm')}`
+    }
+    return time
   })
 }

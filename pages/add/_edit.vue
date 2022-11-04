@@ -217,7 +217,9 @@ export default {
       formData.append('description', this.event.description)
       formData.append('multidate', !!this.date.multidate)
       formData.append('start_datetime', dayjs(this.date.from).unix())
-      formData.append('end_datetime', this.date.due ? dayjs(this.date.due).unix() : dayjs(this.date.from).add(2, 'hour').unix())
+      if (this.date.due) {
+        formData.append('end_datetime', dayjs(this.date.due).unix())
+      }
 
       if (this.edit) {
         formData.append('id', this.event.id)

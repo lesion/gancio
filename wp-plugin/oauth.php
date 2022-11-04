@@ -8,7 +8,7 @@ add_action('wp_trash_post', 'wpgancio_delete_post', 15);
 
 function wpgancio_delete_post ($post_id) {
   $post = get_post($post_id);
-  $instance_url = get_option('wpgancio_instance_url');
+  $instance_url = get_option('wpgancio_instance_url', get_site_option('wpgancio_instance_url'));
 
   if ($post->post_type == 'event') {
     $gancio_id = get_post_meta($post_id, 'wpgancio_gancio_id', TRUE);
@@ -17,7 +17,7 @@ function wpgancio_delete_post ($post_id) {
       $http->request( "${instance_url}/api/event/${gancio_id}", array(
         'method' => 'DELETE',
         'headers' => array (
-          'Authorization' => 'Bearer ' . get_option('wpgancio_token')
+          'Authorization' => 'Bearer ' . get_option('wpgancio_token', get_site_option('wpgancio_token'))
         )));
     }
   }
@@ -48,7 +48,8 @@ function wpgancio_save_event ($post_id) {
   $venue_id = eo_get_venue($post_id);
   $place_name = eo_get_venue_name($venue_id);
   $place_address = eo_get_venue_address($venue_id);
-  $instance_url = get_option('wpgancio_instance_url');
+  $instance_url = get_option('wpgancio_instance_url', get_site_option('wpgancio_instance_url'));
+
 
   $body = array (
     'title' => $event->post_title,
@@ -56,7 +57,7 @@ function wpgancio_save_event ($post_id) {
     'description' => $event->post_content,
     'start_datetime' => intval($date),
     'place_name' => $place_name,
-    'place_address' => "${place_address['address']}${place_address['city']}"
+    'place_address' => "${place_address['address']}, ${place_address['city']}"
   );
 
   // add image if specified
@@ -72,13 +73,13 @@ function wpgancio_save_event ($post_id) {
     $response = $http->request( $instance_url . '/api/event', array(
       'method' => 'PUT',
       'headers' => array (
-        'Authorization' => 'Bearer ' . get_option('wpgancio_token'),
+        'Authorization' => 'Bearer ' . get_option('wpgancio_token', get_site_option('wpgancio_token')),
         'Content-Type' => 'application/json'
       ), 'body' => wp_json_encode($body) ));
   } else { // or create
     $response = wp_remote_post($instance_url . '/api/event', array(
       'headers' => array (
-        'Authorization' => 'Bearer ' . get_option('wpgancio_token'),
+        'Authorization' => 'Bearer ' . get_option('wpgancio_token', get_site_option('wpgancio_token')),
         'Content-Type' => 'application/json'
       ), 'body' => wp_json_encode($body) ));
   }

@@ -60,7 +60,7 @@ if (config.status !== 'READY') {
   ```
   */
   api.get('/ping', (_req, res) => res.sendStatus(200))
-  api.get('/user', isAuth, (_req, res) => res.json(res.locals.user))
+  api.get('/user', isAuth, (req, res) => res.json(req.user))
 
 
   api.post('/user/recover', userController.forgotPassword)
