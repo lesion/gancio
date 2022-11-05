@@ -78,6 +78,7 @@ export default {
         { property: 'og:image', content: this.settings.baseurl + '/logo.png' }
       ],
       link: [
+        { rel: 'apple-touch-icon', href: this.settings.baseurl + '/logo.png' },
         { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' },
         { rel: 'alternate', type: 'text/calendar', title: this.settings.title, href: this.settings.baseurl + '/feed/ics' }
       ]
