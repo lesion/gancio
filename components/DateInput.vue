@@ -17,7 +17,7 @@ v-col(cols=12)
           vc-date-picker(
             v-model='fromDate'
             :is-range='type === "multidate"'
-            @input="date => change('date', fromDate)"
+            @input="date => change('date', date)"
             :timezone='settings.instance_timezone'
             :attributes='attributes'
             :locale='$i18n.locale'
@@ -106,21 +106,10 @@ export default {
     event: { type: Object, default: () => null }
   },
   data() {
-    let fromDate
-    if (this.value.from) {
-      if (this.value.multidate) {
-        fromDate = ({ start: dayjs(this.value.from).toDate(), end: dayjs(this.value.due).toDate() })
-      } else {
-        fromDate = new Date(this.value.from)
-      }
-    }
     return {
       mdiClockTimeFourOutline, mdiClockTimeEightOutline, mdiClose,
       allowedMinutes: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
       menuFromHour: false,
-      fromDate,
-      fromHour: this.value.from && dayjs.tz(this.value.from).format('HH:mm'),
-      dueHour: this.value.due && dayjs.tz(this.value.due).format('HH:mm'),
       menuDueHour: false,
       type: this.value.type || 'normal',
       events: [],
@@ -133,6 +122,26 @@ export default {
   },
   computed: {
     ...mapState(['settings']),
+    fromDate: {
+      set: () => {},
+      get: function () {
+        if (this.value.from) {
+          if (this.value.multidate) {
+            return ({ start: dayjs(this.value.from).toDate(), end: dayjs(this.value.due).toDate() })
+          } else {
+            return new Date(this.value.from)
+          }
+        }
+      }
+    },
+    fromHour: {
+      set: () => {},
+      get () { return this.value.from && dayjs.tz(this.value.from).format('HH:mm') || '' }
+    },
+    dueHour: {
+      set: () => {},
+      get () { return this.value.due && dayjs.tz(this.value.due).format('HH:mm') || '' }
+    },
     todayEvents() {
       const start = dayjs.tz(this.value.from).startOf('day').unix()
       const end = dayjs.tz(this.value.from).endOf('day').unix()
@@ -227,16 +236,12 @@ export default {
       } else if (what === 'recurrentType') {
         this.$emit('input', { ...this.value, recurrent: { ...this.value.recurrent, type: value } })
       } else if (what === 'fromHour') {
-        // if (value) {
         const [hour, minute] = value ? value.split(':') : [0, 0]
         let from = dayjs.tz(this.value.from).hour(hour).minute(minute).second(0).toDate()
         this.$emit('input', { ...this.value, from })
         if (!value) {
           this.fromHour = null
         }
-        // } else {
-        // this.$emit('input', { ...this.value })
-        // }
       } else if (what === 'dueHour') {
         if (value) {
           const [hour, minute] = value.split(':')

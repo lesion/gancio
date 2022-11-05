@@ -33,7 +33,7 @@ v-container.container.pa-0.pa-md-3
               WhereInput(ref='where' v-model='event.place')
 
             //- When
-            DateInput(v-model='date' :event='event')
+            DateInput(ref='when' v-model='date' :event='event')
             //- Description
             v-col.px-0(cols='12')
               Editor.px-3.ma-0(
@@ -112,7 +112,7 @@ export default {
       data.date = {
         recurrent: event.recurrent,
         from: dayjs.unix(event.start_datetime).toDate(),
-        due: dayjs.unix(event.end_datetime).toDate(),
+        due: event.end_datetime && dayjs.unix(event.end_datetime).toDate(),
         multidate: event.multidate,
         fromHour: true,
         dueHour: true
@@ -172,11 +172,13 @@ export default {
     }, 100),
     eventImported(event) {
       this.event = Object.assign(this.event, event)
-      this.$refs.where.selectPlace({ name: event.place.name || event.place, create: true })
+
+      this.$refs.where.selectPlace({ name: event.place.name || event.place, address: event.place.address })
+
       this.date = {
         recurrent: this.event.recurrent || null,
-        from: new Date(dayjs.unix(this.event.start_datetime)),
-        due: new Date(dayjs.unix(this.event.end_datetime)),
+        from: dayjs.unix(this.event.start_datetime).toDate(),
+        due: this.event.end_datetime && dayjs.unix(this.event.end_datetime).toDate(),
         multidate: event.multidate,
         fromHour: true,
         dueHour: true

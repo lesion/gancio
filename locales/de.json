@@ -242,7 +242,7 @@
         "normal_description": "Wähle den Tag aus.",
         "recurrent_1w_days": "Jeden {days}",
         "recurrent_2w_days": "Jeden zweiten {days} eine",
-        "recurrent_1m_days": "|Der {days} in jedem Monat|{days} in jedem Monat",
+        "recurrent_1m_days": "Der {days} in jedem Monat",
         "recurrent_2m_days": "Jeder {days} im Monat",
         "recurrent_1m_ordinal": "Jeden {n} {days} im Monat",
         "each_week": "Jede Woche",
