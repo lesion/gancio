@@ -43,7 +43,7 @@ li {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  justify-content: center;
+  /* justify-content: center; */
 }
 
 @media only screen and (max-width: 600px) {
@@ -55,6 +55,7 @@ li {
 .calh {
   /* this is to avoid content shift layout as v-calendar does not support SSR */
   height: 268px;
+  max-width: 600px;
 }
 
 .container {

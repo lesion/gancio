@@ -6,12 +6,13 @@ v-container.pa-0
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
   //- Calendar and search bar
-  v-row.ma-2(v-if='!settings.hide_calendar')
-    .calh.col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.mb-4.pa-0
-      //- this is needed as v-calendar does not support SSR
-      //- https://github.com/nathanreyes/v-calendar/issues/336
-      client-only(placeholder='Loading...')
-        Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='events')
+  //- v-row.ma-2(v-if='!settings.hide_calendar')
+    //- .calh.col-xl-5.col-lg-5.col-md-7.col-sm-10.col-xs-12.pa-0.mx-sm-2.mx-0.my-0.mt-sm-2
+  .calh.mx-2.mx-sm-4.mt-2.mt-sm-4(v-if='!settings.hide_calendar')
+    //- this is needed as v-calendar does not support SSR
+    //- https://github.com/nathanreyes/v-calendar/issues/336
+    client-only(placeholder='Loading...')
+      Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='events')
 
     //- .col.pt-0.pt-md-2.mt-4.ma-md-0.pb-0
     //-   //- v-btn(to='/search' color='primary' ) {{$t('common.search')}}
