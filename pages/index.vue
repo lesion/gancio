@@ -6,30 +6,30 @@ v-container.pa-0
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
   //- Calendar and search bar
-  v-row.ma-2
-    #calh.col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-0.ma-0
+  v-row.ma-2(v-if='!settings.hide_calendar')
+    .calh.col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.mb-4.pa-0
       //- this is needed as v-calendar does not support SSR
       //- https://github.com/nathanreyes/v-calendar/issues/336
       client-only(placeholder='Loading...')
         Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='events')
 
-    .col.pt-0.pt-md-2.mt-4.ma-md-0.pb-0
-      //- v-btn(to='/search' color='primary' ) {{$t('common.search')}}
-      v-form(to='/search' action='/search' method='GET')
-        v-col(cols=12)
-          v-switch(
-            v-if='settings.allow_recurrent_event'
-            v-model='show_recurrent'
-            inset color='primary'
-            hide-details
-            :label="$t('event.show_recurrent')")      
-        v-col.mb-4(cols=12)
-          v-text-field(name='search' :label='$t("common.search")' outlined rounded hide-details :append-icon='mdiMagnify')
+    //- .col.pt-0.pt-md-2.mt-4.ma-md-0.pb-0
+    //-   //- v-btn(to='/search' color='primary' ) {{$t('common.search')}}
+    //-   v-form(to='/search' action='/search' method='GET')
+    //-     v-col(cols=12)
+    //-       v-switch(
+    //-         v-if='settings.allow_recurrent_event'
+    //-         v-model='show_recurrent'
+    //-         inset color='primary'
+    //-         hide-details
+    //-         :label="$t('event.show_recurrent')")      
+    //-     v-col.mb-4(cols=12)
+    //-       v-text-field(name='search' :label='$t("common.search")' outlined rounded hide-details :append-icon='mdiMagnify')
       v-chip(v-if='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange()') {{selectedDay}}
 
 
   //- Events
-  #events.mb-2.mt-1.pl-1.pl-sm-2
+  #events.ma-sm-4.ma-2
     Event(:event='event' @destroy='destroy' v-for='(event, idx) in visibleEvents' :lazy='idx>2' :key='event.id')
 </template>
 

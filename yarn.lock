@@ -2013,9 +2013,9 @@
   integrity sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==
 
 "@types/node@*":
-  version "18.11.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.6.tgz#4f91b0b30d405fdf76e0029b11ef5df6a0da4261"
-  integrity sha512-j3CEDa2vd96K0AXF8Wur7UucACvnjkk8hYyQAHhUNciabZLDl9nfAEVUSwmh245OOZV15bRA3Y590Gi5jUcDJg==
+  version "18.11.9"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.9.tgz#02d013de7058cea16d36168ef2fc653464cfbad4"
+  integrity sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==
 
 "@types/node@^12.0.2":
   version "12.20.55"
@@ -2067,9 +2067,9 @@
     source-map "^0.6.1"
 
 "@types/validator@^13.7.1":
-  version "13.7.9"
-  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.7.9.tgz#9b1d1c534574c89176f770f1c7b95f808cae2c1e"
-  integrity sha512-y5KJ1PjGXPpU4CZ7lThDu31s+FqvzhqwMOR6Go/x6xaQMFjgzwfzfOvCwABsylr/5n8sB1qFQm1Vi7TaCB8P+A==
+  version "13.7.10"
+  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.7.10.tgz#f9763dc0933f8324920afa9c0790308eedf55ca7"
+  integrity sha512-t1yxFAR2n0+VO6hd/FJ9F2uezAZVWHLmpmlJzm1eX03+H7+HsuTAp7L8QJs+2pQCfWkP1+EXsGK9Z9v7o/qPVQ==
 
 "@types/webpack-sources@*":
   version "3.2.0"
@@ -10924,9 +10924,9 @@ sass-loader@^10.2.0:
     semver "^7.3.2"
 
 sass@^1.53.0:
-  version "1.55.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.55.0.tgz#0c4d3c293cfe8f8a2e8d3b666e1cf1bff8065d1c"
-  integrity sha512-Pk+PMy7OGLs9WaxZGJMn7S96dvlyVBwwtToX895WmCpAOr5YiJYEUJfiJidMuKb613z2xNWcXCHEuOvjZbqC6A==
+  version "1.56.0"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.56.0.tgz#134032075a3223c8d49cb5c35e091e5ba1de8e0a"
+  integrity sha512-WFJ9XrpkcnqZcYuLRJh5qiV6ibQOR4AezleeEjTjMsCocYW59dEG19U3fwTTXxzi2Ed3yjPBp727hbbj53pHFw==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
@@ -11074,9 +11074,9 @@ sequelize-slugify@^1.6.2:
     sluglife "^0.9.8"
 
 sequelize@^6.23.0:
-  version "6.25.3"
-  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-6.25.3.tgz#ddbdeb84367a030aef367eeef81859c1557f3144"
-  integrity sha512-sbbvDGft6UfSRdIC0dcZvMxxJYi6g0+IgWvIpTuk6ccEoIyLcr7Sk6nXWwGfkdlDabGeunhhhI4yH8PleVMvtw==
+  version "6.25.4"
+  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-6.25.4.tgz#6ef939ae8e37a66b156bfade60ea678bab78bb99"
+  integrity sha512-gD6RoEVlTKxQh9GC6Qd+pW2A9uhmqeuwBHGMGcZtDg2CchXQhrwS+k6ZnWZ1ggYZ3tUkk4q8fkFL3/XmXnMFFQ==
   dependencies:
     "@types/debug" "^4.1.7"
     "@types/validator" "^13.7.1"

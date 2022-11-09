@@ -10,7 +10,6 @@ All notable changes to this project will be documented in this file.
   - it is now possible NOT to enter the end time of an event - fix #188
 
 
-
 ### 1.5.6 - 22 set '22
   - update linkifyjs, sequelizem, nuxt deps
   - improve homepage loading time
