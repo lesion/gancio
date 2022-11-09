@@ -4,7 +4,7 @@
     v-model='selectedDate'
     title-position='left'
     :is-dark="settings['theme.is_dark']"
-    :columns="$screens({ sm: 2 }, 1)"
+    :columns="!$vuetify.breakpoint.smAndDown ? 2 : 1"
     @input='click'
     @update:from-page='updatePage'
     :locale='$i18n.locale'

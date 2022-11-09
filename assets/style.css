@@ -13,8 +13,23 @@ li {
   background-color: #434343;
 }
 
+.v-application {
+  font-family: sans-serif;
+}
+
 .v-application .p-description.text-body-1 {
   letter-spacing: normal !important;
+}
+
+.v-main {
+  padding-top: 176px !important;
+}
+
+.v-toolbar .v-list-item__subtitle,
+.v-toolbar h4 {
+  white-space: break-spaces;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 #home {
@@ -27,10 +42,17 @@ li {
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
+  gap: 16px;
   justify-content: center;
 }
 
-#calh {
+@media only screen and (max-width: 600px) {
+  #events {
+    gap: 8px;
+  }
+}
+
+.calh {
   /* this is to avoid content shift layout as v-calendar does not support SSR */
   height: 268px;
 }
@@ -81,8 +103,8 @@ li {
   width: 330px;
   max-width: 500px !important;
   flex-grow: 1;
-  margin-top: .4em;
-  margin-right: .4em;
+  /* margin-top: 16px;
+  margin-right: 16px; */
   transition: all .5s;
   overflow: hidden;
 }
@@ -96,7 +118,7 @@ li {
   -webkit-box-orient: vertical;
   font-size: 1.1em !important;
   line-height: 1.2em !important;
-  text-decoration: none;
+  /* text-decoration: none; */
 }
 
 .event .body {
@@ -111,6 +133,11 @@ li {
 
 .event a {
   text-decoration: none;
+}
+
+.event a:hover,
+.event a:focus {
+  text-decoration: underline;
 }
 
 .vc-past {

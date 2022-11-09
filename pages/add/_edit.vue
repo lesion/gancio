@@ -109,13 +109,15 @@ export default {
 
       data.event.place.name = event.place.name
       data.event.place.address = event.place.address || ''
+      const from = dayjs.unix(event.start_datetime)
+      const due = event.end_datetime && dayjs.unix(event.end_datetime)
       data.date = {
         recurrent: event.recurrent,
-        from: dayjs.unix(event.start_datetime).toDate(),
-        due: event.end_datetime && dayjs.unix(event.end_datetime).toDate(),
+        from: from.toDate(),
+        due: due && due.toDate(),
         multidate: event.multidate,
-        fromHour: true,
-        dueHour: true
+        fromHour: from.format('HH:mm'),
+        dueHour: due && due.format('HH:mm')
       }
 
       data.event.title = event.title
@@ -174,14 +176,15 @@ export default {
       this.event = Object.assign(this.event, event)
 
       this.$refs.where.selectPlace({ name: event.place.name || event.place, address: event.place.address })
-
+      const from = dayjs.unix(this.event.start_datetime)
+      const due = this.event.end_datetime && dayjs.unix(this.event.end_datetime)
       this.date = {
         recurrent: this.event.recurrent || null,
-        from: dayjs.unix(this.event.start_datetime).toDate(),
-        due: this.event.end_datetime && dayjs.unix(this.event.end_datetime).toDate(),
+        from: from.toDate(),
+        due: due && due.toDate(),
         multidate: event.multidate,
-        fromHour: true,
-        dueHour: true
+        fromHour: from.format('HH:mm'),
+        dueHour: due && due.format('HH:mm')
       }
       this.openImportDialog = false
     },
@@ -218,9 +221,11 @@ export default {
       formData.append('place_address', this.event.place.address)
       formData.append('description', this.event.description)
       formData.append('multidate', !!this.date.multidate)
-      formData.append('start_datetime', dayjs(this.date.from).unix())
-      if (this.date.due) {
-        formData.append('end_datetime', dayjs(this.date.due).unix())
+      let [hour, minute] = this.date.fromHour.split(':')
+      formData.append('start_datetime', dayjs(this.date.from).hour(Number(hour)).minute(Number(minute)).second(0).unix())
+      if (this.date.dueHour) {
+        [hour, minute] = this.date.dueHour.split(':')
+        formData.append('end_datetime', dayjs(this.date.due).hour(Number(hour)).minute(Number(minute)).second(0).unix())
       }
 
       if (this.edit) {
