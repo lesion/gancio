@@ -247,7 +247,10 @@
     "edit_collection": "Edit Collection",
     "config_plugin": "Plugin configuration",
     "plugins_description": "",
-    "fallbackImage": "Fallback image"
+    "fallback_image": "Fallback image",
+    "header_image": "Header image",
+    "hide_thumbs": "Hide thumbs",
+    "hide_calendar": "Hide calendar"
   },
   "auth": {
     "not_confirmed": "Not confirmed yet…",

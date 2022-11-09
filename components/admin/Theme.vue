@@ -6,9 +6,19 @@ v-container
     v-switch.mt-5(v-model='is_dark'
       inset
       :label="$t('admin.is_dark')")
+      
+    v-switch.mt-5(v-model='hide_thumbs'
+      inset
+      :label="$t('admin.hide_thumbs')")
 
+    v-switch.mt-5(v-model='hide_calendar'
+      inset
+      :label="$t('admin.hide_calendar')")
+
+  v-card-title {{$t('admin.default_images')}}
+  v-card-text
     v-row
-      v-col(cols='6')
+      v-col(cols='4')
         //- LOGO
         v-file-input.mt-5(ref='upload'
           :label="$t('admin.favicon')"
@@ -18,16 +28,29 @@ v-container
             v-btn(color='warning' text @click='resetLogo') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
         v-img.mt-2(:src='`/logo.png?${logoKey}`' max-height="60px" contain)
 
-      v-col(cols='6')
-        //- NOIMG
+      v-col(cols='4')
+        //- FALLBACK IMAGE
         v-file-input.mt-5(ref='upload'
-          :label="$t('admin.fallbackImage')"
+          :label="$t('admin.fallback_image')"
           persistent-hint
           @change='uploadFallbackImage'
           accept='image/*')
           template(slot='append-outer')
             v-btn(color='warning' text @click='resetFallbackImage') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
-        v-img.mt-2(:src='`/fallbackimage.png?${fallbackImageKey}`' max-height="150px" contain)          
+        v-img.mt-2(:src='`/fallbackimage.png?${fallbackImageKey}`' max-height="150px" contain)
+
+      v-col(cols='4')
+        //- HEADER IMAGE
+        v-file-input.mt-5(ref='upload'
+          :label="$t('admin.header_image')"
+          persistent-hint
+          @change='uploadHeaderImage'
+          accept='image/*')
+          template(slot='append-outer')
+            v-btn(color='warning' text @click='resetHeaderImage') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
+        v-img.mt-2(:src='`/headerimage.png?${headerImageKey}`' max-height="150px" contain)          
+
+
 
     //- TODO choose theme colors
     //- v-row
@@ -91,6 +114,7 @@ export default {
       valid: false,
       logoKey: 0,
       fallbackImageKey: 0,
+      headerImageKey: 0,
       link: { href: '', label: '' },
       linkModal: false
       // menu: [false, false, false, false]
@@ -111,7 +135,15 @@ export default {
         this.$vuetify.theme.dark = value
         this.setSetting({ key: 'theme.is_dark', value })
       }
-    }
+    },
+    hide_thumbs: {
+      get () { return this.settings.hide_thumbs },
+      set (value) { this.setSetting({ key: 'hide_thumbs', value }) }
+    },
+    hide_calendar: {
+      get () { return this.settings.hide_calendar },
+      set (value) { this.setSetting({ key: 'hide_calendar', value }) }
+    },
   //   'colors[0]': {
   //     get () {
   //       return this.settings['theme.colors'] || [0, 0]
@@ -144,16 +176,24 @@ export default {
     forceFallbackImageReload () {
       this.fallbackImageKey++
     },
+    forceHeaderImageReload () {
+      this.headerImageKey++
+    },    
     resetLogo (e) {
       this.setSetting({ key: 'logo', value: null })
         .then(this.forceLogoReload)
       e.stopPropagation()
     },
     resetFallbackImage (e) {
-      this.setSetting({ key: 'fallbackImage', value: null })
+      this.setSetting({ key: 'fallback_image', value: null })
         .then(this.forceFallbackImageReload)
       e.stopPropagation()
     },
+    resetHeaderImage (e) {
+      this.setSetting({ key: 'header_image', value: null })
+        .then(this.forceHeaderImageReload)
+      e.stopPropagation()
+    },    
     updateColor (i, v) {
       this.colors[i] = v.hex
       this.$vuetify.theme.themes.dark[i] = v.hex
@@ -210,8 +250,21 @@ export default {
         this.forceFallbackImageReload()
       } catch (e) {
 
-      }    
+      }
     },
+    async uploadHeaderImage (file) {
+      const formData = new FormData()
+      formData.append('headerImage', file)
+      try {
+        await this.$axios.$post('/settings/headerImage', formData)
+        this.$root.$emit('message', {
+          message: 'Header image updated'
+        })
+        this.forceHeaderImageReload()
+      } catch (e) {
+
+      }
+    },    
     save (key, value) {
       if (this.settings[key] !== value) {
         this.setSetting({ key, value })

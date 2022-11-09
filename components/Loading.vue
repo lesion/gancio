@@ -23,7 +23,7 @@ export default {
   .loading-page {
     z-index: -10;
     position: fixed;
-    top: 0;
+    top: 178px;
     left: 0;
     width: 100%;
     height: 100%;

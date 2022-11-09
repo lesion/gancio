@@ -36,6 +36,8 @@ const defaultSettings = {
   trusted_instances: [],
   'theme.is_dark': true,
   'theme.primary': '#FF4500',
+  hide_thumbs: false,
+  hide_calendar: false,
   footerLinks: [
     { href: '/', label: 'home' },
     { href: '/about', label: 'about' }
@@ -180,7 +182,7 @@ const settingsController = {
 
   setFallbackImage (req, res) {
     if (!req.file) {
-      settingsController.set('fallbackImage', false)
+      settingsController.set('fallback_image', false)
       return res.status(200)
     }
 
@@ -195,7 +197,29 @@ const settingsController = {
         if (err) {
           log.error('[FALLBACK IMAGE] ' + err)
         }
-        settingsController.set('fallbackImage', baseImgPath)
+        settingsController.set('fallback_image', baseImgPath)
+        res.sendStatus(200)
+      })
+  },
+
+  setHeaderImage (req, res) {
+    if (!req.file) {
+      settingsController.set('header_image', false)
+      return res.status(200)
+    }
+
+    const uploadedPath = path.join(req.file.destination, req.file.filename)
+    const baseImgPath = path.resolve(config.upload_path, 'fallbackImage.png')
+
+    // convert and resize to png
+    return sharp(uploadedPath)
+      .resize(600)
+      .png({ quality: 99 })
+      .toFile(baseImgPath, (err) => {
+        if (err) {
+          log.error('[HEADER IMAGE] ' + err)
+        }
+        settingsController.set('header_image', baseImgPath)
         res.sendStatus(200)
       })
   }

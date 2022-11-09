@@ -81,7 +81,7 @@ export default ({ app, store }) => {
 
     let time = start.format('dddd D MMMM HH:mm')
     if (end) {
-      time += event.multidate ? `-${end.format('dddd D MMMM HH:mm')}` : `-${end.format('HH:mm')}`
+      time += event.multidate ? ` → ${end.format('dddd D MMMM HH:mm')}` : `-${end.format('HH:mm')}`
     }
     return time
   })

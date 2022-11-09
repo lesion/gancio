@@ -88,7 +88,10 @@ module.exports = {
       trusted_instances: settings.trusted_instances,
       'theme.is_dark': settings['theme.is_dark'],
       'theme.primary': settings['theme.primary'],
-      footerLinks: settings.footerLinks
+      hide_thumbs: settings.hide_thumbs,
+      hide_calendar: settings.hide_calendar,
+      footerLinks: settings.footerLinks,
+      about: settings.about
     }
     // set user locale
     res.locals.user_locale = settingsController.user_locale[res.locals.acceptedLocale]
@@ -114,18 +117,23 @@ module.exports = {
     })
 
     router.use('/fallbackimage.png', (req, res, next) => {
-      const fallbackImagePath =  settingsController.settings.fallbackImage || './static/noimg.svg'
-      return express.static(fallbackImagePath)(req, res, next)      
+      const fallbackImagePath =  settingsController.settings.fallback_image || './static/noimg.svg'
+      return express.static(fallbackImagePath, { maxAge: '1d' })(req, res, next)
     })
+
+    router.use('/headerimage.png', (req, res, next) => {
+      const headerImagePath =  settingsController.settings.header_image || './static/noimg.svg'
+      return express.static(headerImagePath)(req, res, next)
+    })    
 
     router.use('/logo.png', (req, res, next) => {
       const logoPath = settingsController.settings.logo || './static/gancio'
-      return express.static(logoPath + '.png')(req, res, next)
+      return express.static(logoPath + '.png', {maxAge: '1d'})(req, res, next)
     })
 
     router.use('/favicon.ico', (req, res, next) => {
       const faviconPath = res.locals.settings.logo ? res.locals.settings.logo + '.png' : './assets/favicon.ico'
-      return express.static(faviconPath)(req, res, next)
+      return express.static(faviconPath, {maxAge: '1d'})(req, res, next)
     })
 
     return router
