@@ -1,14 +1,16 @@
 <template lang="pug">
-v-container.pa-0
+v-container.px-2.px-sm-6.pt-0
+  div(v-if='collections.length')
+    v-btn.mr-2(outlined v-for='collection in collections' color='primary' :key='collection.id' :to='`/collection/${collection.name}`') {{collection.name}}
 
   //- Announcements
-  #announcements.ma-2(v-if='announcements.length')
+  #announcements.mt-2.mt-sm-4(v-if='announcements.length')
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
   //- Calendar and search bar
   //- v-row.ma-2(v-if='!settings.hide_calendar')
     //- .calh.col-xl-5.col-lg-5.col-md-7.col-sm-10.col-xs-12.pa-0.mx-sm-2.mx-0.my-0.mt-sm-2
-  .calh.mx-2.mx-sm-4.mt-2.mt-sm-4(v-if='!settings.hide_calendar')
+  .calh.mt-2.mt-sm-4(v-if='!settings.hide_calendar')
     //- this is needed as v-calendar does not support SSR
     //- https://github.com/nathanreyes/v-calendar/issues/336
     client-only(placeholder='Loading...')
@@ -30,7 +32,7 @@ v-container.pa-0
 
 
   //- Events
-  #events.ma-sm-4.ma-2
+  #events.mt-sm-4.mt-2
     Event(:event='event' @destroy='destroy' v-for='(event, idx) in visibleEvents' :lazy='idx>2' :key='event.id')
 </template>
 
@@ -46,13 +48,15 @@ export default {
   name: 'Index',
   components: { Event, Announcement, Calendar },
   middleware: 'setup',
-  async asyncData ({ $api }) {
-    const events = await $api.getEvents({
-      start: dayjs().startOf('month').unix(),
-      end: null,
-      show_recurrent: true
-    })
-    return { events }
+  async asyncData ({ $api, $axios }) {
+    const  [collections, events] = await Promise.all([
+        $axios.$get('collections').catch(_e => []),
+        $api.getEvents({
+          start: dayjs().startOf('month').unix(),
+          end: null,
+          show_recurrent: true
+        })])
+    return { events, collections }
   },
   data ({ $store }) {
     return {
@@ -64,7 +68,8 @@ export default {
       start: dayjs().startOf('month').unix(),
       end: null,
       selectedDay: null,
-      show_recurrent: $store.state.settings.recurrent_event_visible
+      show_recurrent: $store.state.settings.recurrent_event_visible,
+      collections: []
     }
   },
   head () {
