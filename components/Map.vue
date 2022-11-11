@@ -15,7 +15,7 @@ client-only(placeholder='Loading...' )
         :lat-lng="item.coordinates")
         LPopup(:content="item.address")
 
-    v-row.my-4.d-flex.flex-column.align-center
+    v-row.my-4.d-flex.flex-column.align-center.text-center
       .text-h6
         v-icon(v-text='mdiMapMarker' )
         nuxt-link.ml-2.p-name.text-decoration-none(v-text="event.place.name" :to='`/place/${event.place.name}`')

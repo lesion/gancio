@@ -1,5 +1,5 @@
-<template lang="pug">
-v-row
+event.coordinates_search<template lang="pug">
+v-row.mb-4
   v-col(cols=12 md=6)
     v-combobox(ref='place'
       :rules="[$validators.required('common.where')]"
@@ -35,14 +35,14 @@ v-row
           :prepend-icon='mdiMapSearch'
           :disabled='disableDetails'
           @input.native='searchCoordinates'
-          :label="$t('common.coordinates')"
+          :label="$t('event.coordinates_search')"
           :value='value.detailsView'
           persistent-hint hide-no-data clearable no-filter
           :loading='loading'
           @change='selectDetails'
           @focus='searchCoordinates'
           :items="detailsList"
-          :hint="$t('event.coordinates_description')")
+          :hint="$t('event.coordinates_search_description')")
           template(v-slot:item="{ item, attrs, on  }")
             v-list-item(v-bind='attrs' v-on='on')
               v-list-item-content(two-line v-if='item')

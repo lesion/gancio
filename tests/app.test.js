@@ -4,11 +4,17 @@ const path = require('path')
 
 const admin = { username: 'admin', password: 'test', grant_type: 'password', client_id: 'self' }
 
+var util= require('util');
+var encoder = new util.TextEncoder('utf-8');
+
+jest.useFakeTimers()
+
 let token
 let app
 let places = []
 
 beforeAll(async () => {
+
   switch (process.env.DB) {
     case 'mariadb':
       process.env.config_path = path.resolve(__dirname, './seeds/config.mariadb.json')

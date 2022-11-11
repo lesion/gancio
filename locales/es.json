@@ -87,7 +87,11 @@
         "reset": "Reset",
         "theme": "Tema",
         "label": "Etiqueta",
-        "max_events": "Número de eventos máximo"
+        "max_events": "Número de eventos máximo",
+        "show_map": "Mostrar mapa",
+        "latitude": "Latitud",
+        "longitude": "Longitud",
+        "getting_there": "Cómo llegar"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
@@ -126,6 +130,8 @@
         "added": "Evento agregado",
         "added_anon": "Evento agregado, será confirmado cuanto antes.",
         "where_description": "¿Dónde es? Si el lugar no está, escribilo.",
+        "coordinates_search": "Buscar coordenadas",
+        "coordinates_search_description": "Puede buscar el lugar por nombre o pegar el par de coordenadas.",
         "confirmed": "Evento confirmado",
         "not_found": "Evento no encontrado",
         "remove_confirmation": "¿Estás seguro/a de querér eliminar este evento?",
@@ -174,6 +180,7 @@
         "allow_anon_event": "¿Se pueden ingresar eventos anónimos (sujeto a confirmación)?",
         "allow_comments": "Habilitar comentarios",
         "allow_recurrent_event": "Habilitar eventos fijos",
+        "allow_geolocation": "Habilitar la geolocalización de eventos",
         "recurrent_event_visible": "Eventos fijos visibles por defecto",
         "federation": "Federación / ActivityPub",
         "enable_federation": "Habilitar la federación",
