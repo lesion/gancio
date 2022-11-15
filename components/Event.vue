@@ -11,10 +11,9 @@ v-card.h-event.event.d-flex(itemscope itemtype="https://schema.org/Event")
     nuxt-link.place.d-block.p-location.pl-0(text :to='`/place/${encodeURIComponent(event.place.name)}`' itemprop="location" itemscope itemtype="https://schema.org/Place") <v-icon v-text='mdiMapMarker'></v-icon> <span itemprop='name'>{{ event.place.name }}</span>
       .d-none(itemprop='address') {{ event.place.address }}
 
-  v-card-actions.pt-0.actions.justify-space-between
-    .tags
-      v-chip.ml-1.mt-1(v-for='tag in event.tags.slice(0, 6)' small :to='`/tag/${encodeURIComponent(tag)}`'
-        :key='tag' outlined color='primary') {{ tag }}
+  v-card-actions
+    v-chip.ml-1.mt-1(v-for='tag in event.tags.slice(0, 6)' small label :to='`/tag/${encodeURIComponent(tag)}`'
+      :key='tag' outlined color='primary') {{ tag }}
 
 </template>
 <script>

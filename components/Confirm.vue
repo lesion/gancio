@@ -12,8 +12,8 @@ v-dialog(v-model='show'
     v-card-text(v-show='!!message') {{ message }}
     v-card-actions
       v-spacer
-      v-btn(text color='error' @click='cancel') {{$t('common.cancel')}}
-      v-btn(text color='primary' @click='agree') {{$t('common.ok')}}
+      v-btn(outlined color='error' @click='cancel') {{$t('common.cancel')}}
+      v-btn(outlined color='primary' @click='agree') {{$t('common.ok')}}
 </template>
 
 <script>

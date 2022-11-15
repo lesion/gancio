@@ -454,7 +454,7 @@ function Re(t, e, i) {
   }), t.$$set = (d) => {
     "baseurl" in d && i(0, n = d.baseurl), "title" in d && i(1, l = d.title), "maxlength" in d && i(6, o = d.maxlength), "tags" in d && i(7, r = d.tags), "places" in d && i(8, f = d.places), "theme" in d && i(2, c = d.theme), "show_recurrent" in d && i(9, s = d.show_recurrent), "sidebar" in d && i(3, k = d.sidebar), "external_style" in d && i(4, m = d.external_style);
   }, t.$$.update = () => {
-    t.$$.dirty & 974 && w();
+    t.$$.dirty & 975 && w();
   }, [
     n,
     l,

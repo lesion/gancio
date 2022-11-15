@@ -105,7 +105,9 @@ Event.prototype.toAP = function (username, locale, to = []) {
     endTime: this.end_datetime ? dayjs.unix(this.end_datetime).tz().locale(locale).format() : null,
     location: {
       name: this.place.name,
-      address: this.place.address
+      address: this.place.address,
+      latitude: this.place.latitude,
+      longitude: this.place.longitude
     },
     attachment,
     tag: tags && tags.map(tag => ({

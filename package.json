@@ -52,10 +52,12 @@
     "https-proxy-agent": "^5.0.1",
     "ical.js": "^1.5.0",
     "ics": "^2.40.0",
-    "jsdom": "^20.0.0",
+    "jest-environment-jsdom": "^29.3.1",
+    "jsdom": "^20.0.2",
     "jsonwebtoken": "^8.5.1",
     "linkify-html": "^4.0.2",
     "linkifyjs": "4.0.2",
+    "leaflet": "^1.8.0",
     "lodash": "^4.17.21",
     "mariadb": "^3.0.1",
     "microformat-node": "^2.0.1",
@@ -83,6 +85,7 @@
     "tiptap-extensions": "^1.35.0",
     "umzug": "^2.3.0",
     "v-calendar": "^2.4.1",
+    "vue2-leaflet": "^2.7.1",
     "vuetify": "2.6.10",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1",
@@ -104,6 +107,9 @@
     "nth-check": "^2.0.1",
     "glob-parent": "^5.1.2",
     "moment": "^2.29.2"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
   },
   "bin": {
     "gancio": "server/cli.js"

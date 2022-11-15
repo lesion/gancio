@@ -1,5 +1,5 @@
 <template lang="pug">
-v-row
+v-row.mb-4
   v-col(cols=12 md=6)
     v-combobox(ref='place'
       :rules="[$validators.required('common.where')]"
@@ -10,9 +10,8 @@ v-row
       hide-no-data
       @input.native='search'
       persistent-hint
-      :value='value'
+      :value='value.name'
       :items="places"
-      item-text='name'
       @focus='search'
       @change='selectPlace')
       template(v-slot:item="{ item, attrs, on }")
@@ -23,19 +22,49 @@ v-row
             v-list-item-title(v-text='item.name')
             v-list-item-subtitle(v-text='item.address')
 
+    //- v-text-field(
+    //-   ref='address'
+    //-   :prepend-icon='mdiMap'
+    //-   :disabled='disableAddress'
+    //-   :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
+    //-   :label="$t('common.address')"
+    //-   @change="changeAddress"
+    //-   :value="value.address")
   v-col(cols=12 md=6)
-    v-text-field(ref='address'
-      :prepend-icon='mdiMap'
+    v-combobox.mr-4(ref='address'
+      :prepend-icon='mdiMapSearch'
       :disabled='disableAddress'
-      :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
-      :label="$t('common.address')"
-      @change="changeAddress"
-      :value="value.address")
+      @input.native='searchCoordinates'
+      :label="$t('event.coordinates_search')"
+      :value='value.address'
+      persistent-hint hide-no-data clearable no-filter
+      :loading='loading'
+      @change='selectDetails'
+      @focus='searchCoordinates'
+      :items="detailsList"
+      :hint="$t('event.coordinates_search_description')")
+      template(v-slot:item="{ item, attrs, on  }")
+        v-list-item(v-bind='attrs' v-on='on')
+          v-list-item-content(two-line v-if='item')
+            v-list-item-title(v-text='item.name')
+            v-list-item-subtitle(v-text='`${item.address}`')
+  //- v-col(cols=12 md=3 v-if='settings.allow_geolocation')
+  //-   v-text-field(ref='latitude' :value='value.latitude'
+  //-         :prepend-icon='mdiLatitude'
+  //-         :disabled='disableDetails'
+  //-         :label="$t('common.latitude')" )
+  //- v-col(cols=12 md=3 v-if='settings.allow_geolocation')
+  //-   v-text-field(ref='longitude' :value='value.longitude'
+  //-         :prepend-icon='mdiLongitude'
+  //-         :disabled='disableDetails'
+  //-         :label="$t('common.longitude')")
 
 </template>
 <script>
-import { mdiMap, mdiMapMarker, mdiPlus } from '@mdi/js'
+import { mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiLatitude, mdiLongitude } from '@mdi/js'
 import debounce from 'lodash/debounce'
+import { mapState } from 'vuex'
+import get from 'lodash/get'
 
 export default {
   name: 'WhereInput',
@@ -44,14 +73,20 @@ export default {
   },
   data () {
     return {
-      mdiMap, mdiMapMarker, mdiPlus,
+      mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiLatitude, mdiLongitude,
       place: { },
       placeName: '',
       places: [],
-      disableAddress: true
+      disableAddress: true,
+      details: { },
+      detailsView: '',
+      detailsList: [],
+      disableDetails: true,
+      loading: false
     }
   },
   computed: {
+    ...mapState(['settings']),
     filteredPlaces () {
       if (!this.placeName) { return this.places }
       const placeName = this.placeName.trim().toLowerCase()
@@ -86,6 +121,11 @@ export default {
       if (typeof p === 'object' && !p.create) {
         this.place.name = p.name
         this.place.address = p.address
+        if (this.settings.allow_geolocation) {
+          this.place.details = p.details
+          this.place.latitude = p.latitude
+          this.place.longitude = p.longitude
+        }
         this.place.id = p.id
         this.disableAddress = true
       } else { // this is a new place
@@ -101,6 +141,11 @@ export default {
         } else {
           delete this.place.id
           this.place.address = ''
+          if (this.settings.allow_geolocation) {
+            this.place.details = p.details
+            this.place.latitude = p.latitude
+            this.place.longitude = p.longitude
+          }
           this.disableAddress = false
           this.$refs.place.blur()
           this.$refs.address.focus()
@@ -111,7 +156,73 @@ export default {
     changeAddress (v) {
       this.place.address = v
       this.$emit('input', { ...this.place })
-    }
+      this.disableDetails = false
+    },
+    selectDetails (v) {
+      if (!v) { return }
+      if (typeof v === 'object') {
+          this.place.latitude = v.lat
+          this.place.longitude = v.lon
+          this.place.address = v.address
+        // }
+      } else {
+        this.place.address = v
+        this.place.latitude = this.place.longitude = null
+      }
+      this.$emit('input', { ...this.place })
+    },
+    searchCoordinates: debounce(async function(ev) {
+      const pre_searchCoordinates = ev.target.value.trim().toLowerCase()
+      // allow pasting coordinates lat/lon and lat,lon
+      const searchCoordinates = pre_searchCoordinates.replace('/', ',')
+      // const regex_coords_comma = "-?[1-9][0-9]*(\\.[0-9]+)?,\\s*-?[1-9][0-9]*(\\.[0-9]+)?";
+      // const regex_coords_slash = "-?[1-9][0-9]*(\\.[0-9]+)?/\\s*-?[1-9][0-9]*(\\.[0-9]+)?";
+
+      // const setCoords = (v) => {
+      //   const lat = v[0].trim()
+      //   const lon = v[1].trim()
+      //   // check coordinates are valid
+      //   if ((lat < 90 && lat > -90)
+      //   && (lon < 180 && lon > -180)) {
+      //     this.place.latitude = lat
+      //     this.place.longitude = lon
+      //   } else {
+      //     this.$root.$message("Non existent coordinates", { color: 'error' })
+      //     return
+      //   }
+      // }
+
+      // if (pre_searchCoordinates.match(regex_coords_comma)) {
+      //   let v = pre_searchCoordinates.split(",")
+      //   setCoords(v)
+      //   return
+      // }
+      // if (pre_searchCoordinates.match(regex_coords_slash)) {
+      //   let v = pre_searchCoordinates.split("/")
+      //   setCoords(v)
+      //   return
+      // }
+
+      if (searchCoordinates.length) {
+        this.loading = true
+        const ret = await this.$axios.$get(`placeNominatim/${searchCoordinates}`)
+        if (ret && ret.length) {
+          this.detailsList = ret.map(v => {
+            const name = get(v.namedetails, 'alt_name', get(v.namedetails, 'name'))
+            const address = v.display_name ? v.display_name.replace(name, '').replace(/^, ?/, '') : ''
+            return {
+              lat: v.lat,
+              lon: v.lon,
+              name,
+              address
+            }
+          })
+        } else {
+          this.detailsList = []
+        }
+        this.loading = false
+      }
+    }, 300)
   }
 }
 </script>

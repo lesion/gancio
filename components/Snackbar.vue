@@ -6,6 +6,7 @@ v-snackbar(
   :top="top"
   :left="left"
   :right="right"
+  transition='scroll-x-reverse-transition'
   :timeout="timeout")
   v-icon.mr-3(color="white" v-text='icon')
   span {{ message }}
@@ -25,7 +26,7 @@ export default {
       bottom: true,
       top: false,
       left: false,
-      right: false,
+      right: true,
       active: false,
       timeout: 5000,
       message: ''

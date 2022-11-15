@@ -89,7 +89,11 @@
         "tags": "Cancelos",
         "close": "Pechar",
         "blobs": "Blobs",
-        "collections": "Coleccións"
+        "collections": "Coleccións",
+        "show_map": "Mostrar mapa",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "getting_there": "Chegar lá"
     },
     "recover": {
         "not_valid_code": "Algo fallou."
@@ -114,6 +118,8 @@
         "saved": "Evento gardado",
         "updated": "Evento actualizado",
         "where_description": "Onde será o evento? Se non existe podes crealo.",
+        "coordinates_search": "Procurar coordenadas",
+        "coordinates_search_description": "Pode procurar o lugar pelo nome ou colar o par de coordenadas.",
         "not_found": "Non atopamos o evento",
         "show_recurrent": "eventos recurrentes",
         "show_past": "tamén eventos previos",
@@ -187,6 +193,7 @@
         "resources": "Recursos",
         "allow_registration_description": "Permitir o rexistro libre?",
         "allow_anon_event": "Permitir eventos anónimos (haberá que confirmalos)?",
+        "allow_geolocation": "Permitir a geolocalização de eventos",
         "event_confirm_description": "Aquí podes confirmar os eventos engadidos por usuarias anónimas",
         "remove_admin": "Eliminar admin",
         "delete_user": "Eliminar",

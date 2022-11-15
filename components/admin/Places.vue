@@ -25,6 +25,19 @@ v-container
             v-model='place.address'
             :placeholder='$t("common.address")')
 
+          v-text-field(v-if="settings.allow_geolocation"
+            :rules="[$validators.required('common.latitude')]"
+            :label="$t('common.latitude')"
+            v-model='place.latitude'
+            :placeholder='$t("common.latitude")')
+
+          v-text-field(v-if="settings.allow_geolocation"
+            :rules="[$validators.required('common.longitude')]"
+            :label="$t('common.longitude')"
+            v-model='place.longitude'
+            :placeholder='$t("common.longitude")')
+
+
       v-card-actions
         v-spacer
         v-btn(@click='dialog = false' outlined color='warning') {{ $t('common.cancel') }}
@@ -47,6 +60,7 @@ v-container
 </template>
 <script>
 import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiEye } from '@mdi/js'
+import { mapState } from 'vuex'
 
 export default {
   data() {
@@ -68,10 +82,17 @@ export default {
   async fetch() {
     this.places = await this.$axios.$get('/place/all')
   },
+  computed: {
+    ...mapState(['settings']),
+  },
   methods: {
     editPlace(item) {
       this.place.name = item.name
       this.place.address = item.address
+      if (this.settings.allow_geolocation) {
+        this.place.latitude = item.latitude
+        this.place.longitude = item.longitude
+      }
       this.place.id = item.id
       this.dialog = true
     },

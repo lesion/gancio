@@ -15,8 +15,8 @@ v-card
 
   v-card-actions(v-if='isDialog')
     v-spacer
-    v-btn(v-if='isDialog' color='warning' @click="$emit('close')") {{$t("common.cancel")}}
-    v-btn(:disabled='(!couldGo || !proceed)' :href='link' target='_blank'
+    v-btn(v-if='isDialog' outlined color='warning' @click="$emit('close')") {{$t("common.cancel")}}
+    v-btn(:disabled='(!couldGo || !proceed)' outlined :href='link' target='_blank'
       :loading='loading' color="primary") {{$t("common.follow")}}
 </template>
 <script>

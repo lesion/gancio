@@ -149,12 +149,12 @@ li {
   max-width: 1200px;
 }
 
-.tags .v-chip .v-chip__content {
+/* .tags .v-chip .v-chip__content {
   max-width: 120px;
   white-space: nowrap;
   overflow: hidden;
   display: block;
-}
+} */
 
 
 .cursorPointer {

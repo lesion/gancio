@@ -88,7 +88,11 @@
         "max_events": "N. massimo eventi",
         "label": "Etichetta",
         "collections": "Bolle",
-        "help_translate": "Aiuta a tradurre"
+        "help_translate": "Aiuta a tradurre",
+        "show_map": "Mostra mappa",
+        "latitude": "Latitudine",
+        "longitude": "Longitudine",
+        "getting_there": "Come arrivare"
     },
     "login": {
         "description": "Entrando puoi pubblicare nuovi eventi.",
@@ -129,6 +133,8 @@
         "added_anon": "Evento aggiunto, verrà confermato quanto prima.",
         "updated": "Evento aggiornato",
         "where_description": "Dov'è il gancio? Se il posto non è presente potrai crearlo.",
+        "coordinates_search": "Ricerca coordinate",
+        "coordinates_search_description": "Puoi ricercare il posto per nome, o incollare la coppia di coordinate.",
         "confirmed": "Evento confermato",
         "not_found": "Evento non trovato",
         "remove_confirmation": "Vuoi eliminare questo evento?",
@@ -179,6 +185,7 @@
         "allow_registration_description": "Vuoi abilitare la registrazione?",
         "allow_anon_event": "Si possono inserire eventi anonimi (previa conferma)?",
         "allow_recurrent_event": "Abilita eventi ricorrenti",
+        "allow_geolocation": "Abilita la geolocalizzazione degli eventi",
         "recurrent_event_visible": "Appuntamenti ricorrenti visibili di default",
         "federation": "Federazione / ActivityPub",
         "enable_federation": "Abilita la federazione",

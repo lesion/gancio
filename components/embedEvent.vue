@@ -11,8 +11,8 @@ v-card
             gancio-event(:id='event.id' :baseurl='settings.baseurl')
   v-card-actions
     v-spacer
-    v-btn(text color='warning' @click="$emit('close')") {{$t("common.cancel")}}
-    v-btn(text @click='clipboard(code)' color="primary") {{$t("common.copy")}}
+    v-btn(outlined color='warning' @click="$emit('close')") {{$t("common.close")}}
+    v-btn(outlined @click='clipboard(code)' color="primary") {{$t("common.copy")}}
 </template>
 <script>
 import { mapState } from 'vuex'

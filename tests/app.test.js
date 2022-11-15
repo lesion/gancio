@@ -9,6 +9,7 @@ let app
 let places = []
 
 beforeAll(async () => {
+
   switch (process.env.DB) {
     case 'mariadb':
       process.env.config_path = path.resolve(__dirname, './seeds/config.mariadb.json')

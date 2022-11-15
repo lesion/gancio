@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar prominent fade-img-on-scroll app hide-on-scroll
+  <v-app-bar absolute prominent app hide-on-scroll
       src="/headerimage.png">
       <template v-slot:img="{ props }">
         <v-img

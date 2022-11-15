@@ -90,12 +90,12 @@ if (config.status !== 'READY') {
    * @param {integer} [end] - end timestamp (optional)
    * @param {array} [tags] - List of tags
    * @param {array} [places] - List of places id
-   * @param {integer} [max] - Limit events 
+   * @param {integer} [max] - Limit events
    * @param {boolean} [show_recurrent] - Show also recurrent events (default: as choosen in admin settings)
    * @param {integer} [page] - Pagination
    * @param {boolean} [older] - select <= start instead of >=
-   * @example ***Example***  
-   * [https://demo.gancio.org/api/events](https://demo.gancio.org/api/events)  
+   * @example ***Example***
+   * [https://demo.gancio.org/api/events](https://demo.gancio.org/api/events)
    * [usage example](https://framagit.org/les/gancio/-/blob/master/webcomponents/src/GancioEvents.svelte#L18-42)
    */
 
@@ -111,6 +111,8 @@ if (config.status !== 'READY') {
    * @param {string} description - event's description (html accepted and sanitized)
    * @param {string} place_name - the name of the place
    * @param {string} [place_address] - the address of the place
+   * @param {float} [place_latitude] - the latitude of the place
+   * @param {float} [place_longitude] - the longitude of the place
    * @param {integer} start_datetime - start timestamp
    * @param {integer} multidate - is a multidate event?
    * @param {array} tags - List of tags
@@ -163,6 +165,7 @@ if (config.status !== 'READY') {
   api.get('/place/all', isAdmin, placeController.getAll)
   api.get('/place/:placeName', cors, placeController.getEvents)
   api.get('/place', cors, placeController.search)
+  api.get('/placeNominatim/:place_details', cors, placeController._nominatim)
   api.put('/place', isAdmin, placeController.updatePlace)
 
   api.get('/tag', cors, tagController.search)

@@ -7,6 +7,7 @@ export const state = () => ({
     allow_anon_event: true,
     allow_recurrent_event: true,
     recurrent_event_visible: false,
+    allow_geolocation: false,
     enable_federation: false,
     enable_resources: false,
     hide_boosts: true,

@@ -8,6 +8,8 @@ v-col(cols=12)
 
     p {{ $t(`event.${type}_description`) }}
 
+    p {{value}}
+
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-if='type === "recurrent"' color='primary' :value='value.recurrent.frequency' @change='fq => change("frequency", fq)')
       v-btn(v-for='f in frequencies' :key='f.value' :value='f.value') {{ f.text }}
 
@@ -232,6 +234,11 @@ export default {
           this.$emit('input', { ...this.value, fromHour: null, dueHour: null })
         }
       } else if (what === 'dueHour') {
+        if (value) {
+          this.value.due = this.value.due ? this.value.due : this.value.from
+        } else {
+          this.value.due = null
+        }
         this.$emit('input', { ...this.value, dueHour: value })
 
         // if (value) {

@@ -4,11 +4,8 @@ v-container#event.pa-0.pa-sm-2
   //- gancio supports microformats (http://microformats.org/wiki/h-event)
   //- and microdata https://schema.org/Event
   v-card.h-event(itemscope itemtype="https://schema.org/Event")
-    v-card-actions
-      //- admin controls
-      EventAdmin.mb-1(v-if='is_mine' :event='event')
-    v-card-text
 
+    v-card-text
       v-row
         v-col.col-12.col-md-8
           MyPicture(v-if='hasMedia' :event='event')
@@ -18,39 +15,74 @@ v-container#event.pa-0.pa-sm-2
           v-card(outlined)
             v-card-text
               v-icon.float-right(v-if='event.parentId' color='success' v-text='mdiRepeat')
-              .title.text-h5.mb-5
+              .title.text-h5
                 strong.p-name.text--primary(itemprop="name") {{event.title}}
-
-              time.dt-start.text-h6(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")' itemprop="startDate" :content="event.start_datetime|unixFormat('YYYY-MM-DDTHH:mm')")
-                v-icon(v-text='mdiCalendar')
+            v-divider
+            v-card-text
+              time.dt-start.text-button(:datetime='event.start_datetime|unixFormat("YYYY-MM-DD HH:mm")' itemprop="startDate" :content="event.start_datetime|unixFormat('YYYY-MM-DDTHH:mm')")
+                v-icon(v-text='mdiCalendar' small)
                 strong.ml-2 {{event|when}}
                 .d-none.dt-end(itemprop="endDate" :content="event.end_datetime|unixFormat('YYYY-MM-DDTHH:mm')") {{event.end_datetime|unixFormat('YYYY-MM-DD HH:mm')}}
-              div.text-subtitle-1.mb-5 {{event.start_datetime|from}}
+              div.text-caption.mb-3 {{event.start_datetime|from}}
                 small(v-if='event.parentId')  ({{event|recurrentDetail}})
 
               .text-h6.p-location.h-adr(itemprop="location" itemscope itemtype="https://schema.org/Place")
-                v-icon(v-text='mdiMapMarker')
-                nuxt-link.vcard.ml-2.p-name.text-decoration-none(itemprop="name" :to='`/place/${event.place.name}`') {{event.place && event.place.name}}
-                .text-subtitle-1.p-street-address(itemprop='address') {{event.place && event.place.address}}
+                v-icon(v-text='mdiMapMarker' small)
+                nuxt-link.vcard.ml-2.p-name.text-decoration-none.text-button(itemprop="name" :to='`/place/${event.place.name}`') {{event.place && event.place.name}}
+                .text-caption.p-street-address(itemprop='address') {{event.place && event.place.address}}
 
             //- tags, hashtags
             v-card-text.pt-0(v-if='event.tags && event.tags.length')
-              v-chip.p-category.ml-1.mt-3(v-for='tag in event.tags' color='primary'
+              v-chip.p-category.ml-1.mt-1(v-for='tag in event.tags' small label color='primary'
                 outlined :key='tag' :to='`/tag/${tag}`') {{tag}}
 
+            v-divider
             //- info & actions
-            v-toolbar
-              v-btn.ml-2(large icon :title="$t('common.copy_link')" :aria-label="$t('common.copy_link')" color='primary'
-                @click='clipboard(`${settings.baseurl}/event/${event.slug || event.id}`)')
-                v-icon(v-text='mdiContentCopy')
-              v-btn.ml-2(large icon :title="$t('common.embed')" :aria-label="$t('common.embed')" @click='showEmbed=true' color='primary')
-                v-icon(v-text='mdiCodeTags')
-              v-btn.ml-2(large icon :title="$t('common.add_to_calendar')" color='primary' :aria-label="$t('common.add_to_calendar')"
-                :href='`/api/event/${event.slug || event.id}.ics`')
-                v-icon(v-text='mdiCalendarExport')
-              v-btn.ml-2(v-if='hasMedia' large icon :title="$t('event.download_flyer')" color='primary' :aria-label="$t('event.download_flyer')"
-                :href='event | mediaURL("download")')
-                v-icon(v-text='mdiFileDownloadOutline')
+            v-list(dense nav)
+              v-list-group(:append-icon='mdiChevronUp' :value='!!$vuetify.breakpoint.smAndUp')
+                template(v-slot:activator)
+                  v-list-item.text-overline Actions
+
+                //- copy link
+                v-list-item(@click='clipboard(`${settings.baseurl}/event/${event.slug || event.id}`)')
+                  v-list-item-icon
+                    v-icon(v-text='mdiContentCopy')
+                  v-list-item-content
+                    v-list-item-title(v-text="$t('common.copy_link')")
+
+                //- map
+                v-list-item(v-if='settings.allow_geolocation && event.place.latitude && event.place.longitude' @click="mapModal = true")
+                  v-list-item-icon
+                    v-icon(v-text='mdiMap')
+                  v-list-item-content
+                    v-list-item-title(v-text="$t('common.show_map')")
+
+                //- embed
+                v-list-item(@click='showEmbed=true')
+                  v-list-item-icon
+                    v-icon(v-text='mdiCodeTags')
+                  v-list-item-content
+                    v-list-item-title(v-text="$t('common.embed')")
+                
+                //- calendar
+                v-list-item(:href='`/api/event/${event.slug || event.id}.ics`')
+                  v-list-item-icon
+                    v-icon(v-text='mdiCalendarExport')
+                  v-list-item-content
+                    v-list-item-title(v-text="$t('common.add_to_calendar')")
+
+                //- download flyer
+                v-list-item(v-if='hasMedia' :href='event | mediaURL("download")')
+                  v-list-item-icon
+                    v-icon(v-text='mdiFileDownloadOutline')
+                  v-list-item-content
+                    v-list-item-title(v-text="$t('event.download_flyer')")
+
+            v-divider
+
+            //- admin actions
+            eventAdmin(v-if='is_mine' :event='event')
+
 
       .p-description.text-body-1.pa-3.rounded(v-if='hasMedia && event.description' itemprop='description' v-html='event.description')
 
@@ -122,6 +154,9 @@ v-container#event.pa-0.pa-sm-2
 
       v-dialog(v-model='showEmbed' width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
         EmbedEvent(:event='event' @close='showEmbed=false')
+      
+      v-dialog(v-show='settings.allow_geolocation && event.place.latitude && event.place.longitude' v-model='mapModal' :fullscreen='$vuetify.breakpoint.xsOnly' destroy-on-close)
+        Map(:event='event' @close='mapModal=false')        
 
 </template>
 <script>
@@ -135,9 +170,9 @@ import EmbedEvent from '@/components/embedEvent'
 
 const { htmlToText } = require('html-to-text')
 
-import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose,
+import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose, mdiMap,
   mdiEye, mdiEyeOff, mdiDelete, mdiRepeat, mdiLock, mdiFileDownloadOutline,
-  mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker } from '@mdi/js'
+  mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker, mdiChevronUp } from '@mdi/js'
 
 export default {
   name: 'Event',
@@ -145,7 +180,8 @@ export default {
   components: {
     EventAdmin,
     EmbedEvent,
-    MyPicture
+    MyPicture,
+    [process.client && 'Map']: () => import('@/components/Map.vue')
   },
   async asyncData ({ $axios, params, error }) {
     try {
@@ -158,12 +194,14 @@ export default {
   data () {
     return {
       mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar, mdiFileDownloadOutline,
-      mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat, mdiLock,
+      mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat, mdiLock, mdiMap, mdiChevronUp,
       currentAttachment: 0,
       event: {},
+      diocane: '',
       showEmbed: false,
       showResources: false,
-      selectedResource: { data: { attachment: [] } }
+      selectedResource: { data: { attachment: [] } },
+      mapModal: false
     }
   },
   head () {

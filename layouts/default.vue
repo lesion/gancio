@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <Snackbar/>
-    <Confirm/>
     <Nav/>
-    <v-main>
+    <v-main >
+      <Snackbar/>
+      <Confirm/>
         <!-- <div v-if='showCollections || showBack'>
           <v-btn class='ml-2 mt-2' v-if='showBack' outlined color='primary' to='/'><v-icon v-text='mdiChevronLeft'></v-icon></v-btn>
           <v-btn class='ml-2 mt-2' outlined v-for='collection in collections' color='primary' :key='collection.id' :to='`/collection/${collection.name}`'>{{collection.name}}</v-btn>
@@ -24,7 +24,6 @@ import Snackbar from '../components/Snackbar'
 import Footer from '../components/Footer'
 import Confirm from '../components/Confirm'
 import { mapState } from 'vuex'
-import { mdiChevronLeft } from '@mdi/js'
 
 export default {
   head () {

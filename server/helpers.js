@@ -90,6 +90,7 @@ module.exports = {
       'theme.primary': settings['theme.primary'],
       hide_thumbs: settings.hide_thumbs,
       hide_calendar: settings.hide_calendar,
+      allow_geolocation: settings.allow_geolocation,
       footerLinks: settings.footerLinks,
       about: settings.about
     }

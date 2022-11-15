@@ -41,7 +41,9 @@ const eventController = {
     if (!place) {
       place = await Place.create({
         name: place_name,
-        address: place_address
+        address: place_address,
+        latitude: body.place_latitude,
+        longitude: body.place_longitude        
       })
     }
     return place
@@ -58,7 +60,7 @@ const eventController = {
           Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('address')), 'LIKE', '%' + search + '%')
         ]
       },
-      attributes: [['name', 'label'], 'address', 'id', [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('events.placeId')), 'INTEGER'), 'w']],
+      attributes: [['name', 'label'], 'address', 'latitude', 'longitude', 'id', [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('events.placeId')), 'INTEGER'), 'w']],
       include: [{ model: Event, where: { is_visible: true }, required: true, attributes: [] }],
       group: ['place.id'],
       raw: true
@@ -134,7 +136,7 @@ const eventController = {
           attributes: ['tag'],
           through: { attributes: [] }
         },
-        { model: Place, required: true, attributes: ['id', 'name', 'address'] }
+        { model: Place, required: true, attributes: ['id', 'name', 'address', 'latitude', 'longitude'] }
       ],
       replacements,
       limit: 30,
@@ -216,7 +218,7 @@ const eventController = {
         },
         include: [
           { model: Tag, required: false, attributes: ['tag'], through: { attributes: [] } },
-          { model: Place, attributes: ['name', 'address', 'id'] },
+          { model: Place, attributes: ['name', 'address', 'latitude', 'longitude', 'id'] },
           {
             model: Resource,
             where: !is_admin && { hidden: false },
@@ -513,7 +515,7 @@ const eventController = {
         description: helpers.sanitizeHTML(linkifyHtml(body.description || '', { target: '_blank' })) || event.description,
         multidate: body.multidate,
         start_datetime: body.start_datetime || event.start_datetime,
-        end_datetime: body.end_datetime,
+        end_datetime: body.end_datetime || null,
         recurrent
       }
 
@@ -624,7 +626,7 @@ const eventController = {
 
   /**
    * Method to search for events with pagination and filtering
-   * @returns 
+   * @returns
    */
   async _select({
     start = dayjs().unix(),
@@ -698,7 +700,7 @@ const eventController = {
           attributes: ['tag'],
           through: { attributes: [] }
         },
-        { model: Place, required: true, attributes: ['id', 'name', 'address'] }
+        { model: Place, required: true, attributes: ['id', 'name', 'address', 'latitude', 'longitude'] }
       ],
       ...pagination,
       replacements
