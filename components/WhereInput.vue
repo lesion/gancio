@@ -46,6 +46,7 @@ v-row.mb-4
       :hint="$t('event.address_description')")
       template(v-slot:item="{ item, attrs, on  }")
         v-list-item(v-bind='attrs' v-on='on')
+          v-icon.pr-4(v-text='loadCoordinatesResultIcon(item)')
           v-list-item-content(two-line v-if='item')
             v-list-item-title(v-text='item.name')
             v-list-item-subtitle(v-text='`${item.address}`')
@@ -62,7 +63,7 @@ v-row.mb-4
 
 </template>
 <script>
-import { mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiLatitude, mdiLongitude } from '@mdi/js'
+import { mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiLatitude, mdiLongitude, mdiRoadVariant, mdiHome, mdiCityVariant } from '@mdi/js'
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 import get from 'lodash/get'
@@ -74,13 +75,20 @@ export default {
   },
   data () {
     return {
-      mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiLatitude, mdiLongitude,
+      mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiLatitude, mdiLongitude, mdiRoadVariant, mdiHome, mdiCityVariant,
       place: { },
       placeName: '',
       places: [],
       disableAddress: true,
       addressList: [],
-      loading: false
+      loading: false,
+      nominatim_osm_type: {
+        way: mdiRoadVariant,
+        house: mdiHome,
+        node: mdiMapMarker,
+        relation: mdiCityVariant,
+      },
+      nominatim_class: ['amenity', 'shop', 'tourism', 'leisure', 'building']
     }
   },
   computed: {
@@ -114,6 +122,12 @@ export default {
         this.places.unshift({ create: true, name: ev.target.value.trim() })
       }
     }, 100),
+    loadCoordinatesResultIcon(item) {
+      if ( this.nominatim_class.includes(item.class)) {
+        return this.mdiHome
+      }
+      return this.nominatim_osm_type[item.type]
+    },
     selectPlace (p) {
       if (!p) { return }
       if (typeof p === 'object' && !p.create) {
@@ -209,6 +223,8 @@ export default {
             const name = get(v.namedetails, 'alt_name', get(v.namedetails, 'name'))
             const address = v.display_name ? v.display_name.replace(name, '').replace(/^, ?/, '') : ''
             return {
+              class: v.class,
+              type: v.osm_type,
               lat: v.lat,
               lon: v.lon,
               name,

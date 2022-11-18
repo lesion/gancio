@@ -24,11 +24,11 @@ client-only(placeholder='Loading...' )
       v-row
         //- p.my-4(v-text="$t('common.getting_there')")
         v-btn.ml-2(icon large :href="routeBy('foot')")
-          v-icon(v-text='mdiWalk' color='white')
+          v-icon(v-text='mdiWalk')
         v-btn.ml-2(icon large :href="routeBy('bike')")
-          v-icon(v-text='mdiBike' color='white')
+          v-icon(v-text='mdiBike')
         v-btn.ml-2(icon large :href="routeBy('car')")
-          v-icon(v-text='mdiCar' color='white')
+          v-icon(v-text='mdiCar')
       v-spacer
       v-btn(@click='$emit("close")' outlined) Close
 </template>
