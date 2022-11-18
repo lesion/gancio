@@ -19,6 +19,8 @@
         "search": "Szukaj",
         "edit": "Edytuj",
         "info": "Informacje",
-        "confirm": "Potwierdź"
+        "confirm": "Potwierdź",
+        "admin": "Admin",
+        "users": "Użytkownik"
     }
 }
