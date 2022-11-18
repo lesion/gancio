@@ -31,18 +31,19 @@ v-row.mb-4
     //-   @change="changeAddress"
     //-   :value="value.address")
   v-col(cols=12 md=6)
-    v-combobox.mr-4(ref='address'
+    v-combobox(ref='address'
       :prepend-icon='mdiMapSearch'
       :disabled='disableAddress'
-      @input.native='searchCoordinates'
-      :label="$t('event.coordinates_search')"
+      @input.native='searchAddress'
+      :label="$t('common.address')"
+      :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
       :value='value.address'
       persistent-hint hide-no-data clearable no-filter
       :loading='loading'
-      @change='selectDetails'
-      @focus='searchCoordinates'
-      :items="detailsList"
-      :hint="$t('event.coordinates_search_description')")
+      @change='selectAddress'
+      @focus='searchAddress'
+      :items="addressList"
+      :hint="$t('event.address_description')")
       template(v-slot:item="{ item, attrs, on  }")
         v-list-item(v-bind='attrs' v-on='on')
           v-list-item-content(two-line v-if='item')
@@ -62,8 +63,8 @@ v-row.mb-4
 </template>
 <script>
 import { mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiLatitude, mdiLongitude } from '@mdi/js'
-import debounce from 'lodash/debounce'
 import { mapState } from 'vuex'
+import debounce from 'lodash/debounce'
 import get from 'lodash/get'
 
 export default {
@@ -78,10 +79,7 @@ export default {
       placeName: '',
       places: [],
       disableAddress: true,
-      details: { },
-      detailsView: '',
-      detailsList: [],
-      disableDetails: true,
+      addressList: [],
       loading: false
     }
   },
@@ -153,12 +151,12 @@ export default {
       }
       this.$emit('input', { ...this.place })
     },
-    changeAddress (v) {
-      this.place.address = v
-      this.$emit('input', { ...this.place })
-      this.disableDetails = false
-    },
-    selectDetails (v) {
+    // changeAddress (v) {
+    //   this.place.address = v
+    //   this.$emit('input', { ...this.place })
+    //   this.disableDetails = false
+    // },
+    selectAddress (v) {
       if (!v) { return }
       if (typeof v === 'object') {
           this.place.latitude = v.lat
@@ -171,7 +169,7 @@ export default {
       }
       this.$emit('input', { ...this.place })
     },
-    searchCoordinates: debounce(async function(ev) {
+    searchAddress: debounce(async function(ev) {
       const pre_searchCoordinates = ev.target.value.trim().toLowerCase()
       // allow pasting coordinates lat/lon and lat,lon
       const searchCoordinates = pre_searchCoordinates.replace('/', ',')
@@ -207,7 +205,7 @@ export default {
         this.loading = true
         const ret = await this.$axios.$get(`placeNominatim/${searchCoordinates}`)
         if (ret && ret.length) {
-          this.detailsList = ret.map(v => {
+          this.addressList = ret.map(v => {
             const name = get(v.namedetails, 'alt_name', get(v.namedetails, 'name'))
             const address = v.display_name ? v.display_name.replace(name, '').replace(/^, ?/, '') : ''
             return {
@@ -218,7 +216,7 @@ export default {
             }
           })
         } else {
-          this.detailsList = []
+          this.addressList = []
         }
         this.loading = false
       }
