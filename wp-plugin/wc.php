@@ -31,7 +31,7 @@ function gancio_event_handler_function( $atts, $content, $tag) {
     'id' => 0
   ), $atts);
   return '<gancio-event baseurl="' . $a['baseurl'] . '" id=' . $a['id'] . '></gancio-event>';
-};
+}
 
 function gancio_events_handler_function( $atts, $content, $tag) {
   $a = shortcode_atts( array(
