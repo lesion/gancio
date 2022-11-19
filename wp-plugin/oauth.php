@@ -26,6 +26,11 @@ function wpgancio_delete_post ($post_id) {
 function wpgancio_save_event ($post_id) {
   $event = get_post( $post_id );
 
+  // do not save if it's a draft
+  if ($event->post_status != 'publish') {
+    return;
+  }
+
   function tagName ($tag) {
     return sanitize_title($tag->name);
   }
@@ -34,15 +39,12 @@ function wpgancio_save_event ($post_id) {
   $tmp_tags = get_the_terms( $event, 'event-tag' );
   $tags = array_map('tagName', $tmp_tags);
 
-  // do not save if it's a draft
-  if ($event->post_status != 'publish') {
-    return;
-  }
 
   $gancio_id = get_post_meta($post_id, 'wpgancio_gancio_id', TRUE);
 
   // when
-  $date = eo_get_schedule_start( 'U', $post_id );
+  $start_datetime = eo_get_the_start( 'U', $post_id );
+  $end_datetime = eo_get_the_end('U', $post_id);
 
   // get place details
   $venue_id = eo_get_venue($post_id);
@@ -55,7 +57,8 @@ function wpgancio_save_event ($post_id) {
     'title' => $event->post_title,
     'tags' => $tags,
     'description' => $event->post_content,
-    'start_datetime' => intval($date),
+    'start_datetime' => intval($start_datetime),
+    'end_datetime' => intval($end_datetime),
     'place_name' => $place_name,
     'place_address' => "${place_address['address']}, ${place_address['city']}"
   );
