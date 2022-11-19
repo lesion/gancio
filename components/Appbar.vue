@@ -1,15 +1,17 @@
 <template>
-  <v-app-bar absolute prominent app hide-on-scroll
-      src="/headerimage.png">
-      <template v-slot:img="{ props }">
-        <v-img
-          v-bind="props"
-          :gradient="gradient"
-        ></v-img>
+  <v-app-bar shrink-on-scroll  promiment app src="/headerimage.png">
+    <template v-slot:img="{ props }">
+      <v-img
+        v-bind="props"
+        :gradient="gradient"></v-img>
       </template>
+
       <v-app-bar-nav-icon to='/'>
         <img src='/logo.png' height='40' />
       </v-app-bar-nav-icon>
+
+      <!-- <v-text-field name='search' :label='$t("common.search")' dense outlined rounded hide-details :append-icon='mdiMagnify'/> -->
+
       <v-list-item class='align-self-end' two-line>
         <v-list-item-content>
           <h4 v-text='settings.title'></h4>
@@ -126,25 +128,26 @@
 <!-- .v-application--is-ltr .v-tabs--align-with-title > .v-tabs-bar:not(.v-tabs-bar--show-arrows):not(.v-slide-group--is-overflowing) > .v-slide-group__wrapper > .v-tabs-bar__content > .v-tab:first-child,
      .v-application--is-ltr .v-tabs--align-with-title > .v-tabs-bar:not(.v-tabs-bar--show-arrows):not(.v-slide-group--is-overflowing) > .v-slide-group__wrapper > .v-tabs-bar__content > .v-tabs-slider-wrapper + .v-tab -->
       <template v-slot:extension>
-        <v-tabs dense icons-and-text :align-with-title='$vuetify.breakpoint.smAndUp' optional>
-          <v-tab to='/'>
-            <span class='d-none d-sm-flex'>Home</span>
-            <v-icon v-text='mdiHome' />
-          </v-tab>
-          <v-tab v-if='loggedIn || settings.allow_anon_event' to='/add'>
-            <span class='d-none d-sm-flex'>{{$t('common.add_event')}}</span>
-            <v-icon color='primary' v-text='mdiPlus' />
-          </v-tab>
-          <v-tab to='/export' >
-            <span class='d-none d-sm-flex'>{{$t('common.share')}}</span>
-            <v-icon v-text='mdiShareVariant' />
-          </v-tab>
-          <v-tab to='/about'>
-            <span class='d-none d-sm-flex'>About</span>
-            <v-icon v-text='mdiInformation' />
-          </v-tab>
-        </v-tabs>
+      <v-tabs v-model='tab' optional dense icons-and-text>
+        <v-tab to='/'>
+          <span class='d-none d-sm-flex'>Home</span>
+          <v-icon v-text='mdiHome' />
+        </v-tab>
+        <v-tab v-if='loggedIn || settings.allow_anon_event' to='/add'>
+          <span class='d-none d-sm-flex'>{{$t('common.add_event')}}</span>
+          <v-icon color='primary' v-text='mdiPlus' />
+        </v-tab>
+        <v-tab to='/export' >
+          <span class='d-none d-sm-flex'>{{$t('common.share')}}</span>
+          <v-icon v-text='mdiShareVariant' />
+        </v-tab>
+        <v-tab to='/about'>
+          <span class='d-none d-sm-flex'>About</span>
+          <v-icon v-text='mdiInformation' />
+        </v-tab>
+      </v-tabs>
       </template>
+
     </v-app-bar>
 
 <!-- //- v-app-bar(app aria-label='Menu' height=64)
@@ -220,9 +223,9 @@ import { mdiPlus, mdiShareVariant, mdiLogin, mdiDotsVertical, mdiLogout, mdiAcco
 
 
 export default {
-  name: 'Nav',
+  name: 'Appbar',
   data () {
-    return { mdiPlus, mdiShareVariant, mdiLogout, mdiLogin, mdiDotsVertical, mdiAccount, mdiCog, mdiRss, mdiHome, mdiInformation, locales }
+    return { mdiPlus, mdiShareVariant, mdiLogout, mdiLogin, mdiDotsVertical, mdiAccount, mdiCog, mdiRss, mdiHome, mdiInformation, locales, tab: '' }
   },
   mixins: [clipboard],
   computed: {

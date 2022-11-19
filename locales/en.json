@@ -90,7 +90,8 @@
     "collections": "Collections",
     "close": "Close",
     "plugins": "Plugins",
-    "help_translate": "Help Translate"
+    "help_translate": "Help Translate",
+    "show_map": "Show map"
   },
   "login": {
     "description": "By logging in you can publish new events.",

@@ -9,6 +9,10 @@ li {
   margin-left: 10px;
 }
 
+.v-main {
+  padding-top: 224px !important;
+}
+
 .v-dialog .theme--dark.v-card {
   background-color: #434343;
 }
@@ -21,8 +25,9 @@ li {
   letter-spacing: normal !important;
 }
 
-.v-main {
-  padding-top: 176px !important;
+/* https://github.com/vuetifyjs/vuetify/issues/8875#issuecomment-559900683 */
+.v-slide-group__prev {
+  display: none !important;
 }
 
 .v-toolbar .v-list-item__subtitle,
@@ -34,8 +39,8 @@ li {
 
 #home {
   max-width: 1400px;
-  padding: 0px;
-  overflow: hidden;
+  /* padding: 0px; */
+  /* overflow: hidden; */
 }
 
 #events {

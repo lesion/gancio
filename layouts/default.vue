@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <Nav/>
-    <v-main >
+    <Appbar/>
+    <v-main>
       <Snackbar/>
       <Confirm/>
         <!-- <div v-if='showCollections || showBack'>
@@ -9,7 +9,9 @@
           <v-btn class='ml-2 mt-2' outlined v-for='collection in collections' color='primary' :key='collection.id' :to='`/collection/${collection.name}`'>{{collection.name}}</v-btn>
         </div> -->
         <!-- <v-fade-transition hide-on-leave> -->
-          <nuxt />
+          <v-container>
+            <nuxt />
+          </v-container>
         <!-- </v-fade-transition> -->
     </v-main>
     <Footer/>
@@ -19,7 +21,7 @@
 
 </template>
 <script>
-import Nav from '~/components/Nav.vue'
+import Appbar from '../components/Appbar.vue'
 import Snackbar from '../components/Snackbar'
 import Footer from '../components/Footer'
 import Confirm from '../components/Confirm'
@@ -42,7 +44,7 @@ export default {
   //   }
   // },  
   name: 'Default',
-  components: { Nav, Snackbar, Footer, Confirm },
+  components: { Appbar, Snackbar, Footer, Confirm },
   computed: {
     ...mapState(['settings']),
     // showBack () {
