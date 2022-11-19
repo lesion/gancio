@@ -1,11 +1,12 @@
 <template lang="pug">
 v-container.px-2.px-sm-6.pt-0
-  div(v-if='collections.length')
-    v-btn.mr-2(outlined v-for='collection in collections' color='primary' :key='collection.id' :to='`/collection/${collection.name}`') {{collection.name}}
 
   //- Announcements
   #announcements.mt-2.mt-sm-4(v-if='announcements.length')
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
+
+  div.mt-2.mt-sm-4(v-if='collections.length')
+    v-btn.mr-2(outlined v-for='collection in collections' color='primary' :key='collection.id' :to='`/collection/${encodeURIComponent(collection.name)}`') {{collection.name}}
 
   //- Calendar and search bar
   //- v-row.ma-2(v-if='!settings.hide_calendar')

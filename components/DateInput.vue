@@ -8,7 +8,6 @@ v-col(cols=12)
 
     p {{ $t(`event.${type}_description`) }}
 
-    p {{value}}
 
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-if='type === "recurrent"' color='primary' :value='value.recurrent.frequency' @change='fq => change("frequency", fq)')
       v-btn(v-for='f in frequencies' :key='f.value' :value='f.value') {{ f.text }}

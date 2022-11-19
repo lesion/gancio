@@ -11,8 +11,8 @@ v-row.mb-4
       @input.native='search'
       persistent-hint
       :value='value.name'
+      item-text='name'
       :items="places"
-      @focus='search'
       @change='selectPlace')
       template(v-slot:item="{ item, attrs, on }")
         v-list-item(v-bind='attrs' v-on='on')
@@ -38,6 +38,7 @@ v-row.mb-4
       :label="$t('common.address')"
       :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
       :value='value.address'
+      item-text='address'
       persistent-hint hide-no-data clearable no-filter
       :loading='loading'
       @change='selectAddress'
@@ -130,11 +131,13 @@ export default {
     },
     selectPlace (p) {
       if (!p) { return }
+      console.error('dentro select place ', p)
       if (typeof p === 'object' && !p.create) {
+        if (p.id === this.value.id) return
+        console.error('quindi sono qui dentro !')
         this.place.name = p.name
         this.place.address = p.address
         if (this.settings.allow_geolocation) {
-          this.place.details = p.details
           this.place.latitude = p.latitude
           this.place.longitude = p.longitude
         }
