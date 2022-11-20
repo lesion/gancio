@@ -13,6 +13,7 @@ export const state = () => ({
     hide_boosts: true,
     enable_trusted_instances: true,
     trusted_instances: [],
+    trusted_instances_label: '',
     footerLinks: []
   },
   announcements: []

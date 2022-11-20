@@ -40,6 +40,13 @@ v-container
         @blur='save("instance_place", instance_place)'
       )
 
+      v-text-field.mt-4(v-model='trusted_instances_label'
+        :label="$t('admin.trusted_instances_label')"
+        persistent-hint inset
+        :hint="$t('admin.trusted_instances_label_help')"
+        @blur='save("trusted_instances_label", trusted_instances_label)'
+      )
+
       v-dialog(v-model='dialogAddInstance' width='500px' :fullscreen='$vuetify.breakpoint.xsOnly')
         v-card
           v-card-title {{$t('admin.add_trusted_instance')}}
@@ -82,6 +89,7 @@ export default {
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
       instance_place: $store.state.settings.instance_place,
+      trusted_instances_label: $store.state.settings.trusted_instances_label,
       url2host: $options.filters.url2host,
       dialogAddInstance: false,
       loading: false,

@@ -12,7 +12,7 @@ v-footer(aria-label='Footer')
   v-menu(v-if='settings.enable_trusted_instances && settings.trusted_instances && settings.trusted_instances.length'
     offset-y bottom open-on-hover transition="slide-y-transition")
     template(v-slot:activator="{ on, attrs }")
-      v-btn.ml-1(v-bind='attrs' v-on='on' color='primary' text) {{$t('common.places')}}
+      v-btn.ml-1(v-bind='attrs' v-on='on' color='primary' text) {{ settings.trusted_instances_label || $t('admin.trusted_instances_label_default')}}
     v-list(subheaders two-lines)
       v-list-item(v-for='instance in settings.trusted_instances'
         :key='instance.name'

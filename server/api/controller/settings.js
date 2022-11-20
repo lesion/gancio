@@ -37,6 +37,7 @@ const defaultSettings = {
   trusted_instances: [],
   'theme.is_dark': true,
   'theme.primary': '#FF4500',
+  trusted_instances_label: '',
   hide_thumbs: false,
   hide_calendar: false,
   footerLinks: [
