@@ -1,25 +1,24 @@
 <template lang="pug">
 client-only(placeholder='Loading...' )
   v-card
-    v-card-text
-      v-container
-        LMap(ref="map"
-            id="leaflet-map"
-            :zoom="zoom"
-            :options="{attributionControl: false}"
-            :center="center")
-          LControlAttribution(position='bottomright' prefix="")
-          LTileLayer(
-              :url="url"
-              :attribution="attribution")
-          LMarker(
-            :lat-lng="marker.coordinates")
+    v-container
+      LMap(ref="map"
+          id="leaflet-map"
+          :zoom="zoom"
+          :options="{attributionControl: false}"
+          :center="center")
+        LControlAttribution(position='bottomright' prefix="")
+        LTileLayer(
+            :url="url"
+            :attribution="attribution")
+        LMarker(
+          :lat-lng="marker.coordinates")
 
-        v-row.my-4.d-flex.flex-column.align-center.text-center
-          .text-h6
-            v-icon(v-text='mdiMapMarker' )
-            nuxt-link.ml-2.text-decoration-none(v-text="event.place.name" :to='`/place/${event.place.name}`')
-            .mx-2(v-text="`${event.place.address}`")
+      v-row.my-4.d-flex.flex-column.align-center.text-center
+        .text-h6
+          v-icon(v-text='mdiMapMarker' )
+          nuxt-link.ml-2.text-decoration-none(v-text="event.place.name" :to='`/place/${event.place.name}`')
+          .mx-2(v-text="`${event.place.address}`")
     v-card-actions
       v-row
         //- p.my-4(v-text="$t('common.getting_there')")

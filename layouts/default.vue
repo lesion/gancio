@@ -9,9 +9,7 @@
           <v-btn class='ml-2 mt-2' outlined v-for='collection in collections' color='primary' :key='collection.id' :to='`/collection/${collection.name}`'>{{collection.name}}</v-btn>
         </div> -->
         <!-- <v-fade-transition hide-on-leave> -->
-          <v-container>
             <nuxt />
-          </v-container>
         <!-- </v-fade-transition> -->
     </v-main>
     <Footer/>

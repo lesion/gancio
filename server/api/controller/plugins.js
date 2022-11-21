@@ -79,7 +79,7 @@ const pluginController = {
     }
 
     if (plugin.load && typeof plugin.load === 'function') {
-      plugin.load({ settings: settingsController.settings }, settings)
+      plugin.load({ helpers: require('../../helpers'), settings: settingsController.settings }, settings)
     }
   },
 

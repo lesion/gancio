@@ -1,24 +1,59 @@
 <template lang='pug'>
-v-list(dense nav)
-  v-list-group(:append-icon='mdiChevronUp' :value='true')
-    template(v-slot:activator)
-      v-list-item.text-overline Admin actions
+span
+  v-list(dense nav)
+    v-list-group(:append-icon='mdiChevronUp' :value='true')
+      template(v-slot:activator)
+        v-list-item.text-overline Admin actions
 
-    //- Hide / confirm event
-    v-list-item(@click='toggle(false)')
-      v-list-item-content
-        v-list-item-title(v-text="$t(`common.${event.is_visible?'hide':'confirm'}`)")
+      //- Hide / confirm event
+      v-list-item(@click='toggle(false)')
+        v-list-item-icon
+          v-icon(v-if='event.is_visible' v-text='mdiEyeOff')
+          v-icon(v-else='event.is_visible' v-text='mdiEye')
+        v-list-item-content
+          v-list-item-title(v-text="$t(`common.${event.is_visible?'hide':'confirm'}`)")
 
-    //- Edit event
-    v-list-item(:to='`/add/${event.id}`')
-      v-list-item-content
-        v-list-item-title(v-text="$t('common.edit')")
+      //- Edit event
+      v-list-item(:to='`/add/${event.id}`')
+        v-list-item-icon
+          v-icon(v-text='mdiCalendarEdit')
+        v-list-item-content
+          v-list-item-title(v-text="$t('common.edit')")
 
-    //- Remove
-    v-list-item(@click='remove(false)')
-      v-list-item-content
-        v-list-item-title(v-text="$t('common.remove')")
-        
+      //- Remove
+      v-list-item(@click='remove(false)')
+        v-list-item-icon
+          v-icon(v-text='mdiDelete')
+        v-list-item-content
+          v-list-item-title(v-text="$t('common.remove')")
+
+
+      template(v-if='event.parentId')
+        v-list-item.text-overline Recurring event actions <a href="https://gancio.org/">?</a>
+
+        //- Pause / Start to generate recurring event
+        v-list-item(@click='toggle(true)')
+          v-list-item-icon
+            v-icon(v-text='event.parent.is_visible ? mdiPause : mdiPlay')
+          v-list-item-content
+            v-list-item-title(v-text="$t(`common.${event.parent.is_visible ? 'pause': 'start'}`)")
+
+
+        //- Edit event
+        v-list-item(:to='`/add/${event.parentId}`')
+          v-list-item-icon
+            v-icon(v-text='mdiCalendarEdit')
+          v-list-item-content
+            v-list-item-title(v-text="$t('common.edit')")
+
+        //- Remove
+        v-list-item(@click='remove(true)')
+          v-list-item-icon
+            v-icon(v-text='mdiDeleteForever')
+          v-list-item-content
+            v-list-item-title(v-text="$t('common.remove')")
+
+
   //- v-btn(text color='primary' v-if='event.is_visible' @click='toggle(false)') {{$t(`common.${event.parentId?'skip':'hide'}`)}}
   //- v-btn(text color='success' v-else @click='toggle(false)') <v-icon color='yellow' v-text='mdiAlert'></v-icon> {{$t('common.confirm')}}
   //- v-btn(text color='primary' @click='$router.push(`/add/${event.id}`)') {{$t('common.edit')}}
@@ -33,11 +68,11 @@ v-list(dense nav)
   //-   v-btn(text color='primary' @click='remove(true)') {{$t('common.remove')}}
 </template>
 <script>
-import { mdiChevronUp, mdiRepeat } from '@mdi/js'
+import { mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever } from '@mdi/js'
 export default {
   name: 'EventAdmin',
   data () {
-    return { mdiChevronUp, mdiRepeat }
+    return { mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever }
   },
   props: {
     event: {

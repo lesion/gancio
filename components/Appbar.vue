@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar shrink-on-scroll  promiment app src="/headerimage.png">
+  <v-app-bar prominent absolute app src="/headerimage.png">
     <template v-slot:img="{ props }">
       <v-img
         v-bind="props"

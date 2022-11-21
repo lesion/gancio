@@ -14,6 +14,7 @@ v-card
             :error-messages='errorMessage')
         .col
           v-file-input(
+            :prepend-icon='mdiAttachment'
             v-model='file'
             accept=".ics"
             :label="$t('event.ics')"
@@ -22,12 +23,13 @@ v-card
 
   v-card-actions
     v-spacer
-    v-btn(text @click='$emit("close")' color='warning') {{$t('common.cancel')}}
-    v-btn(text @click='importGeneric' :loading='loading' :disabled='loading'
+    v-btn(outlined @click='$emit("close")' color='warning') {{$t('common.cancel')}}
+    v-btn(outlined @click='importGeneric' :loading='loading' :disabled='loading'
       color='primary') {{$t('common.import')}}
 
 </template>
 <script>
+import { mdiAttachment } from '@mdi/js'
 import ical from 'ical.js'
 import get from 'lodash/get'
 
@@ -35,6 +37,7 @@ export default {
   name: 'ImportDialog',
   data () {
     return {
+      mdiAttachment,
       file: null,
       errorMessage: '',
       error: false,
