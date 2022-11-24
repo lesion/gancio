@@ -1,40 +1,50 @@
 <template lang="pug">
-#calendar
-  vc-date-picker(
-    v-model='selectedDate'
-    title-position='left'
-    :is-dark="settings['theme.is_dark']"
-    :columns="!$vuetify.breakpoint.smAndDown ? 2 : 1"
-    @input='click'
-    @update:from-page='updatePage'
-    :locale='$i18n.locale'
-    :attributes='attributes'
-    transition='fade'
-    aria-label='Calendar'
-    is-expanded
-    is-inline)
+  client-only
+    vc-date-picker(
+      ref='cal'
+      v-model='selectedDate'
+      title-position='left'
+      :is-dark="settings['theme.is_dark']"
+      :columns="!$vuetify.breakpoint.smAndDown ? 2 : 1"
+      @input='click'
+      @update:from-page='updatePage'
+      :locale='$i18n.locale'
+      :attributes='attributes'
+      transition='fade'
+      aria-label='Calendar'
+      is-expanded
+      is-inline)
+      template(v-slot="{ inputValue, inputEvents }")
+        v-btn#calendarButton(v-on='inputEvents' text tile :color='selectedDate ? "primary" : "" ') {{inputValue || $t('common.calendar')}} 
+          v-icon(v-if='selectedDate' v-text='mdiClose' right small icon @click='selectedDate = null')
+          v-icon(v-else v-text='mdiChevronDown' right small icon)
+    template(v-slot:placeholder)
+      v-btn#calendarButton(text tile :color='selectedDate ? "primary" : "" ') {{selectedDate || $t('common.calendar')}} 
+        v-icon(v-if='selectedDate' v-text='mdiClose' right small icon @click='selectedDate = null')
+        v-icon(v-else v-text='mdiChevronDown' right small icon)
+
+  </template>
 
 </template>
 <script>
 import { mapState } from 'vuex'
 import dayjs from 'dayjs'
+import { mdiChevronDown, mdiClose } from '@mdi/js'
 import { attributesFromEvents } from '../assets/helper'
 
 export default {
   name: 'Calendar',
-  props: {
-    events: { type: Array, default: () => [] }
-  },
   data () {
     const month = dayjs.tz().month() + 1
     const year = dayjs.tz().year()
     return {
+      mdiChevronDown, mdiClose,
       selectedDate: null,
-      page: { month, year }
+      page: { month, year },
     }
   },
   computed: {
-    ...mapState(['settings']),
+    ...mapState(['settings', 'events']),
     attributes () {
       return attributesFromEvents(this.events)
     }
@@ -61,5 +71,10 @@ export default {
 
 .past-event {
   opacity: 0.3;
+}
+
+#calendarButton {
+  margin-top: -6px;
+  margin-left: -10px;
 }
 </style>

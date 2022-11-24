@@ -9,10 +9,6 @@ li {
   margin-left: 10px;
 }
 
-.v-main {
-  padding-top: 176px !important;
-}
-
 .v-dialog .theme--dark.v-card {
   background-color: #434343;
 }
