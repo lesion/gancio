@@ -4,7 +4,7 @@ v-container.container.pa-0.pa-md-3
     v-card-title
       h4 {{ edit ? $t('common.edit_event') : $t('common.add_event') }}
       v-spacer
-      v-btn(link text color='primary' @click='openImportDialog = true')
+      v-btn(outlined  color='primary' @click='openImportDialog = true')
         <v-icon v-text='mdiFileImport'></v-icon> {{ $t('common.import') }}
     v-dialog(v-model='openImportDialog' :fullscreen='$vuetify.breakpoint.xsOnly')
       ImportDialog(@close='openImportDialog = false' @imported='eventImported')
