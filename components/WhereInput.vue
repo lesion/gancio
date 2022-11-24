@@ -44,7 +44,9 @@ v-row.mb-4
       @change='selectAddress'
       @focus='searchAddress'
       :items="addressList"
-      :hint="$t('event.address_description')")
+      :hint="$t('event.address_description' + (settings.allow_geolocation && '_osm'))")
+      template(v-slot:message="{message, key}")
+        span(v-html='message' :key="key") 
       template(v-slot:item="{ item, attrs, on  }")
         v-list-item(v-bind='attrs' v-on='on')
           v-icon.pr-4(v-text='loadCoordinatesResultIcon(item)')
@@ -239,7 +241,7 @@ export default {
         }
         this.loading = false
       }
-    }, 300)
+    }, 1000)
   }
 }
 </script>
