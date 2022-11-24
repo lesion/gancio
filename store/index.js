@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 export const state = () => ({
   user_locale: {},
   settings: {
@@ -15,7 +17,8 @@ export const state = () => ({
     trusted_instances: [],
     footerLinks: []
   },
-  announcements: []
+  announcements: [],
+  events: []
 })
 
 export const mutations = {
@@ -30,6 +33,9 @@ export const mutations = {
   },
   setAnnouncements (state, announcements) {
     state.announcements = announcements
+  },
+  setEvents (state, events) {
+    state.events = events
   }
 }
 
@@ -52,5 +58,14 @@ export const actions = {
   async setSetting ({ commit }, setting) {
     await this.$axios.$post('/settings', setting)
     commit('setSetting', setting)
+  },
+  async getEvents ({ commit }, params = {}) {
+    const events = await this.$api.getEvents({
+      start: params.start || dayjs().startOf('month').unix(),
+      end: params.end || null,
+      show_recurrent: params.show_recurrent
+    })
+    commit('setEvents', events)
+    return events
   }
 }
