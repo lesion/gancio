@@ -9,6 +9,7 @@
       @input='click'
       @update:from-page='updatePage'
       :locale='$i18n.locale'
+      :popover="{ visibility: 'click' }"
       :attributes='attributes'
       transition='fade'
       aria-label='Calendar'
@@ -16,12 +17,11 @@
       is-inline)
       template(v-slot="{ inputValue, inputEvents }")
         v-btn#calendarButton(v-on='inputEvents' text tile :color='selectedDate ? "primary" : "" ') {{inputValue || $t('common.calendar')}} 
-          v-icon(v-if='selectedDate' v-text='mdiClose' right small icon @click='selectedDate = null')
+          v-icon(v-if='selectedDate' v-text='mdiClose' right small icon @click.prevent.stop='selectedDate = null')
           v-icon(v-else v-text='mdiChevronDown' right small icon)
     template(v-slot:placeholder)
-      v-btn#calendarButton(text tile :color='selectedDate ? "primary" : "" ') {{selectedDate || $t('common.calendar')}} 
-        v-icon(v-if='selectedDate' v-text='mdiClose' right small icon @click='selectedDate = null')
-        v-icon(v-else v-text='mdiChevronDown' right small icon)
+      v-btn#calendarButton(text tile) {{$t('common.calendar')}} 
+        v-icon(v-text='mdiChevronDown' right small icon)
 
   </template>
 
@@ -52,13 +52,13 @@ export default {
   methods: {
     updatePage (page) {
       if (page.month !== this.page.month || page.year !== this.page.year) {
-        this.$emit('monthchange', page)
+        this.$root.$emit('monthchange', page)
         this.page.month = page.month
         this.page.year = page.year
       }
     },
     click (day) {
-      this.$emit('dayclick', day)
+      this.$root.$emit('dayclick', day)
     }
   }
 }
