@@ -5,11 +5,11 @@
 
     <!-- title -->
     <div class='text-center'>
-      <nuxt-link class='text-h3 text-decoration-none' v-text='settings.title' to='/' />
+      <nuxt-link id='title' v-text='settings.title' to='/' />
       <div class='text-body-1 font-weight-light' v-text='settings.description' />
     </div>
 
-    <NavSearch/>
+    <NavSearch :class='{ hide: $route.name !== "index" }'/>
 
     <NavBar />
 
@@ -39,5 +39,16 @@ nav {
 
 .theme--light nav {
   background-image: linear-gradient(to bottom, rgba(255,230,230,.95), rgba(250,250,250,.95)), url(/headerimage.png);
+}
+
+#title {
+  font-size: 2rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hide {
+  max-height: 0px !important;
+  visibility: hidden;
 }
 </style>
