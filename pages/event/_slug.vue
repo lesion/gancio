@@ -39,7 +39,7 @@ v-container#event.pa-0.pa-sm-2
             v-divider
             //- info & actions
             v-list(dense nav)
-              v-list-group(:append-icon='mdiChevronUp' :value='!!$vuetify.breakpoint.smAndUp')
+              v-list-group(:append-icon='mdiChevronUp' :value='true')
                 template(v-slot:activator)
                   v-list-item.text-overline Actions
 
@@ -370,3 +370,5 @@ export default {
   }
 }
 </script>
+
+
