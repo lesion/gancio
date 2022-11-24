@@ -92,7 +92,8 @@
         "show_map": "Mostra mappa",
         "latitude": "Latitudine",
         "longitude": "Longitudine",
-        "getting_there": "Come arrivare"
+        "getting_there": "Come arrivare",
+        "calendar": "Calendario"
     },
     "login": {
         "description": "Entrando puoi pubblicare nuovi eventi.",

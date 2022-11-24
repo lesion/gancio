@@ -91,7 +91,9 @@
     "close": "Close",
     "plugins": "Plugins",
     "help_translate": "Help Translate",
-    "show_map": "Show map"
+    "show_map": "Show map",
+    "calendar": "Calendar",
+    "home": "Home"
   },
   "login": {
     "description": "By logging in you can publish new events.",
@@ -132,6 +134,8 @@
     "added_anon": "Event added, but has yet to be confirmed.",
     "updated": "Event updated",
     "where_description": "Where's the event? If not present you can create it.",
+    "address_description": "What is the address?",
+    "address_description_osm": "What is the address? (<a href='http://osm.org/copyright'>OpenStreetMap</a> contributors)",
     "confirmed": "Event confirmed",
     "not_found": "Could not find event",
     "remove_confirmation": "Are you sure you want to remove this event?",

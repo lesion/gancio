@@ -9,5 +9,6 @@ module.exports = {
   it: 'Italiano',
   nb: 'Norwegian Bokmål',
   pl: 'Polski',
-  sk: 'Slovak'
+  sk: 'Slovak',
+  zh: '中国'
 }
