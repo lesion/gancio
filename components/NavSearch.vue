@@ -1,9 +1,9 @@
 <template lang="pug">
-  #navsearch.mt-2.mt-sm-4
-    v-text-field.mx-2(outlined dense hide-details :placeholder='$t("common.search")' :append-icon='mdiMagnify' @input='search' clearable :clear-icon='mdiClose')
+  #navsearch.mt-2.mt-sm-4(v-if='showCollectionsBar || showSearchBar')
+    v-text-field.mx-2(v-if='showSearchBar' outlined dense hide-details :placeholder='$t("common.search")' :append-icon='mdiMagnify' @input='search' clearable :clear-icon='mdiClose')
       template(v-slot:prepend-inner)
         Calendar(v-if='!settings.hide_calendar')
-    v-btn.ml-2.mt-2.gap-2(small outlined v-for='collection in collections' color='primary' :key='collection.id' :to='`/collection/${encodeURIComponent(collection.name)}`') {{collection.name}}
+    v-btn.ml-2.mt-2.gap-2(v-if='showCollectionsBar' small outlined v-for='collection in collections' color='primary' :key='collection.id' :to='`/collection/${encodeURIComponent(collection.name)}`') {{collection.name}}
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -19,7 +19,15 @@ export default {
     this.collections = await this.$axios.$get('collections').catch(_e => [])
   },
   components: { Calendar },
-  computed: mapState(['settings']),
+  computed: {
+    showSearchBar () {
+      return this.$route.name === 'index'
+    },
+    showCollectionsBar () {
+      return ['index', 'collection-collection'].includes(this.$route.name)
+    },
+    ...mapState(['settings'])
+  },
   methods: {
     search (ev) {
       this.$root.$emit('search', ev)

@@ -9,7 +9,7 @@
       <div class='text-body-1 font-weight-light' v-text='settings.description' />
     </div>
 
-    <NavSearch :class='{ hide: $route.name !== "index" }'/>
+    <NavSearch />
 
     <NavBar />
 
@@ -47,8 +47,4 @@ nav {
   text-decoration: none;
 }
 
-.hide {
-  max-height: 0px !important;
-  visibility: hidden;
-}
 </style>
