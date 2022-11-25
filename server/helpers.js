@@ -86,6 +86,7 @@ module.exports = {
       hide_boosts: settings.hide_boosts,
       enable_trusted_instances: settings.enable_trusted_instances,
       trusted_instances: settings.trusted_instances,
+      trusted_instances_label: settings.trusted_instances_label,
       'theme.is_dark': settings['theme.is_dark'],
       'theme.primary': settings['theme.primary'],
       hide_thumbs: settings.hide_thumbs,
@@ -125,7 +126,7 @@ module.exports = {
     router.use('/headerimage.png', (req, res, next) => {
       const headerImagePath =  settingsController.settings.header_image || './static/noimg.svg'
       return express.static(headerImagePath)(req, res, next)
-    })    
+    })
 
     router.use('/logo.png', (req, res, next) => {
       const logoPath = settingsController.settings.logo || './static/gancio'
