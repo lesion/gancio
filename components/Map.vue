@@ -89,7 +89,7 @@ export default {
     //   });
     //   this.$refs.map.mapObject.MyLocate();
     // },
-    routeBy () {
+    routeBy (type) {
       const lat = this.event.place.latitude
       const lon = this.event.place.longitude
       const routingType = {
@@ -98,7 +98,7 @@ export default {
         transit: null,
         car: "engine=fossgis_osrm_car"
       }
-      return `https://www.openstreetmap.org/directions?from=&to=${lat},${lon}&${routingType}#map=14/${lat}/${lon}`
+      return `https://www.openstreetmap.org/directions?from=&to=${lat},${lon}&${routingType[type]}#map=14/${lat}/${lon}`
      },
   }
 }
