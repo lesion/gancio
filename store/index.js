@@ -59,11 +59,11 @@ export const actions = {
     await this.$axios.$post('/settings', setting)
     commit('setSetting', setting)
   },
-  async getEvents ({ commit }, params = {}) {
+  async getEvents ({ commit, state }, params = {}) {
     const events = await this.$api.getEvents({
       start: params.start || dayjs().startOf('month').unix(),
       end: params.end || null,
-      show_recurrent: params.show_recurrent
+      show_recurrent: params.show_recurrent || state.settings.recurrent_event_visible
     })
     commit('setEvents', events)
     return events
