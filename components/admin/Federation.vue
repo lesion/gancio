@@ -60,8 +60,8 @@ v-container
                 :label="$t('common.url')")
           v-card-actions
             v-spacer
-            v-btn(color='error' @click='dialogAddInstance=false') {{$t('common.cancel')}}
-            v-btn(color='primary' :disabled='!valid || loading' :loading='loading' @click='createTrustedInstance') {{$t('common.ok')}}
+            v-btn(outlined color='error' @click='dialogAddInstance=false') {{$t('common.cancel')}}
+            v-btn(outlined color='primary' :disabled='!valid || loading' :loading='loading' @click='createTrustedInstance') {{$t('common.ok')}}
 
       v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.add_instance')}}
       v-data-table(
