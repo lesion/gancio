@@ -27,6 +27,7 @@
     "locales/",
     "store/",
     ".nuxt/",
+    "gancio_plugins",
     "yarn.lock"
   ],
   "engines": {
