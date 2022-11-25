@@ -1,7 +1,7 @@
 All notable changes to this project will be documented in this file.
 
 ### UNRELEASED
-  - new plugin system - fix #17
+  - new plugin system - fix #177
     - new "publish on telegram" plugin: (thanks @fadelkon)
   - i18n refactoring
   - people can now choose the language displayed - fix #171
@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
   - Wordpress plugin now supports MU installation
   - add nominatim / openstreetmap feature (thanks @sedum)
   - improve event import
+  - new chinese translation
+  - new portuguese translation
   - add Apple touch icon - fix #200
   - improve navbar layout
   - improve event layout
