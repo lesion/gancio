@@ -44,7 +44,7 @@ li {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  /* justify-content: center; */
+  justify-content: center;
 }
 
 @media only screen and (max-width: 600px) {
@@ -68,8 +68,8 @@ li {
   max-width: 800px;
 }
 
-.v-dialog .v-dialog--fullscreen {
-  max-width: 100%;
+.v-dialog--fullscreen {
+  max-width: 100% !important;
 }
 
 .v-application p {
