@@ -40,8 +40,8 @@ const defaultSettings = {
   hide_thumbs: false,
   hide_calendar: false,
   footerLinks: [
-    { href: '/', label: 'home' },
-    { href: '/about', label: 'about' }
+    { href: '/', label: 'common.home' },
+    { href: '/about', label: 'common.about' }
   ],
   plugins: [],
   admin_email: config.admin_email || '',

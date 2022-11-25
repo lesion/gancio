@@ -81,8 +81,8 @@ v-container
               :label="$t('common.url')")
         v-card-actions
           v-spacer
-          v-btn(link @click='linkModal=false' color='error') {{$t('common.cancel')}}
-          v-btn(link @click='addFooterLink' color='primary' :disabled='!valid') {{$t('common.add')}}
+          v-btn(outlined @click='linkModal=false' color='error') {{$t('common.cancel')}}
+          v-btn(outlined @click='addFooterLink' color='primary' :disabled='!valid') {{$t('common.add')}}
 
   v-card-title {{$t('admin.footer_links')}}
   v-card-text
@@ -166,8 +166,9 @@ export default {
       this.setSetting({
         key: 'footerLinks',
         value: [
-          { href: '/about', label: 'about' },
-          { href: '/', label: 'home' }]
+          { href: '/', label: 'common.home' },
+          { href: '/about', label: 'common.about' }
+        ]
       })
     },
     forceLogoReload () {

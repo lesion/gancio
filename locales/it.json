@@ -93,7 +93,9 @@
         "latitude": "Latitudine",
         "longitude": "Longitudine",
         "getting_there": "Come arrivare",
-        "calendar": "Calendario"
+        "calendar": "Calendario",
+        "home": "Home",
+        "about": "Cos'è"
     },
     "login": {
         "description": "Entrando puoi pubblicare nuovi eventi.",

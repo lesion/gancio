@@ -46,9 +46,9 @@ export default {
       if (!this.settings || !this.settings.footerLinks) return []
       return this.settings.footerLinks.map(link => {
         if (/^https?:\/\//.test(link.href)) {
-          return { href: link.href, label: link.label }
+          return { href: link.href, label: link.label.startsWith('common.') ? this.$t(link.label) : link.label }
         } else {
-          return { to: link.href, label: link.label }
+          return { to: link.href, label: link.label.startsWith('common.') ? this.$t(link.label) : link.label }
         }
       })
     }
