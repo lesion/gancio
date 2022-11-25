@@ -133,10 +133,8 @@ export default {
     },
     selectPlace (p) {
       if (!p) { return }
-      console.error('dentro select place ', p)
       if (typeof p === 'object' && !p.create) {
         if (p.id === this.value.id) return
-        console.error('quindi sono qui dentro !')
         this.place.name = p.name
         this.place.address = p.address
         if (this.settings.allow_geolocation) {
