@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
   - admin could choose a custom fallback image - fix #195
   - it is now possible NOT to enter the end time of an event - fix #188
   - Wordpress plugin now supports MU installation
-  - add nominatim / openstreetmap feature (thanks @gothos)
+  - add nominatim / openstreetmap feature (thanks @sedum)
   - improve event import
   - add Apple touch icon - fix #200
   - improve navbar layout
