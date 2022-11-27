@@ -32,7 +32,12 @@ export default {
   components: { Appbar, Snackbar, Footer, Confirm },
   computed: mapState(['settings']),
   created () {
-    this.$vuetify.theme.dark = this.settings['theme.is_dark']
+    const theme_is_dark = this.$cookies.get('theme.is_dark')
+    if ( theme_is_dark != null ) {
+      this.$vuetify.theme.dark = theme_is_dark
+    } else {
+      this.$vuetify.theme.dark = this.settings['theme.is_dark']
+    }
   }
 }
 </script>

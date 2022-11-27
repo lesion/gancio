@@ -54,7 +54,8 @@ module.exports = {
     'nuxt-i18n',
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
+    ['cookie-universal-nuxt', { alias: 'cookies' }],
   ],
 
   sitemap: {
@@ -89,7 +90,7 @@ module.exports = {
     })),
     vueI18n: {
       fallbackLocale: 'en'
-    },    
+    },
     langDir: 'locales',
     lazy: true,
     strategy: 'no_prefix',
@@ -135,6 +136,7 @@ module.exports = {
       }
     }
   },
+
   buildModules: ['@nuxtjs/vuetify'],
   vuetify: {
     treeShake: true,

@@ -1,12 +1,16 @@
 <template lang="pug">
 v-container.px-2.px-sm-6.pt-0
 
+  //- View
+  #themeview.mt-sm-4.mt-2
+    ThemeView
+
   //- Announcements
   #announcements.mt-2.mt-sm-4(v-if='announcements.length')
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
   //- Events
-  #events.mt-sm-4.mt-2
+  #events.mt-sm-4.mt-2(:key="reload_events")
     Event(:event='event' v-for='(event, idx) in visibleEvents' :lazy='idx>2' :key='event.id')
 </template>
 
@@ -16,11 +20,12 @@ import debounce from 'lodash/debounce'
 import dayjs from 'dayjs'
 import Event from '@/components/Event'
 import Announcement from '@/components/Announcement'
+import ThemeView from '@/components/ThemeView'
 import { mdiMagnify, mdiCloseCircle } from '@mdi/js'
 
 export default {
   name: 'Index',
-  components: { Event, Announcement },
+  components: { Event, Announcement, ThemeView },
   middleware: 'setup',
   async fetch () {
     return this.getEvents()
@@ -29,7 +34,7 @@ export default {
     if (this.$fetchState.timestamp <= Date.now() - 60000) {
       this.$fetch();
     }
-  },  
+  },
   data ({ $store }) {
     return {
       mdiMagnify, mdiCloseCircle,
@@ -42,7 +47,8 @@ export default {
       tmpEvents: [],
       selectedDay: null,
       show_recurrent: $store.state.settings.recurrent_event_visible,
-    }
+      reload_events: 0
+      }
   },
   head () {
     return {
@@ -84,6 +90,9 @@ export default {
     this.$root.$on('dayclick', this.dayChange)
     this.$root.$on('monthchange', this.monthChange)
     this.$root.$on('search', debounce(this.search, 100))
+    this.$root.$on('layout_loaded', () => {
+        this.reload_events++
+    })
   },
   destroyed () {
     this.$root.$off('dayclick')

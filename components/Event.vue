@@ -1,7 +1,7 @@
 <template lang="pug">
 v-card.h-event.event.d-flex(itemscope itemtype="https://schema.org/Event")
   nuxt-link(:to='`/event/${event.slug || event.id}`' itemprop="url")
-    MyPicture(v-if='!settings.hide_thumbs' :event='event' thumb :lazy='lazy')
+    MyPicture(v-if='!hide_thumbs' :event='event' thumb :lazy='lazy')
     v-icon.float-right.mr-1(v-if='event.parentId' color='success' v-text='mdiRepeat')
     .title.p-name(itemprop="name") {{ event.title }}
 
@@ -22,8 +22,13 @@ import MyPicture from '~/components/MyPicture'
 import { mdiRepeat, mdiCalendar, mdiMapMarker } from '@mdi/js'
 
 export default {
-  data() {
-    return { mdiRepeat, mdiMapMarker, mdiCalendar }
+  data({ $store }) {
+    return { mdiRepeat, mdiMapMarker, mdiCalendar,
+      // user can't see hidden thumbs
+      hide_thumbs: this.$cookies.get('theme.hide_thumbs') || $store.state.settings.hide_thumbs
+      // user can override
+      // hide_thumbs: this.$cookies.get('theme.hide_thumbs')
+    }
   },
   components: {
     MyPicture
