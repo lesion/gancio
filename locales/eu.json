@@ -89,7 +89,13 @@
         "tags": "Etiketak",
         "close": "Itxi",
         "blobs": "Mordoak",
-        "collections": "Bildumak"
+        "collections": "Bildumak",
+        "plugins": "Pluginak",
+        "help_translate": "Lagundu itzultzen",
+        "show_map": "Erakutsi mapa",
+        "calendar": "Egutegia",
+        "home": "Etxea",
+        "about": "Honi buruz"
     },
     "login": {
         "description": "Saioa hasten baduzu ekitaldi berriak sortu ahal izango dituzu.",
@@ -166,7 +172,9 @@
         "remove_media_confirmation": "Irudiaren ezabaketa baieztatzen duzu?",
         "alt_text_description": "Ikusmen-urritasunak dituztenentzako deskripzioa",
         "choose_focal_point": "Aukeratu arretagunea",
-        "download_flyer": "Deskargatu eskuorria"
+        "download_flyer": "Deskargatu eskuorria",
+        "address_description": "Zein da helbidea?",
+        "address_description_osm": "Zein da helbidea? (<a href='http://osm.org/copyright'>OpenStreetMap</a> kolaboratzaileak)"
     },
     "admin": {
         "place_description": "Lekua edo helbidea oker badago, alda dezakezu.<br/>Leku honekin lotutako iraganeko eta etorkizuneko ekitaldien helbidea aldatuko da.",
@@ -249,8 +257,15 @@
         "edit_collection": "Editatu bilduma",
         "disable_admin_user_confirm": "Ziur al zaude {user}(r)i administratzaile baimenak kendu nahi dizkiozula?",
         "collections_description": "Bildumak, etiketen eta lekuen arabera multzokatutako ekitaldiak dira. Hasierako orrialdean bistaratuko dira",
-        "enable_admin_user_confirm": "Ziur zaude {user}-(r)i administratzaile baimenak gehitu nahi dizkiozula",
-        "new_collection": "Bilduma berria"
+        "enable_admin_user_confirm": "Ziur zaude {user}-(r)i administratzaile baimenak gehitu nahi dizkiozula?",
+        "new_collection": "Bilduma berria",
+        "allow_geolocation": "Baimendu ekitaldiak geokokatzea",
+        "hide_thumbs": "Ezkutatu iruditxoak",
+        "hide_calendar": "Ezkutatu egutegia",
+        "config_plugin": "Pluginaren konfigurazioa",
+        "fallback_image": "Lehenetsitako irudia",
+        "header_image": "Goiburuko irudia",
+        "default_images": "Lehenetsitako irudiak"
     },
     "auth": {
         "not_confirmed": "Oraindik baieztatu gabe dago…",
