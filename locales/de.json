@@ -92,7 +92,12 @@
         "show_map": "Karte anzeigen",
         "latitude": "Breite",
         "longitude": "Länge",
-        "getting_there": "Anreise"
+        "getting_there": "Anreise",
+        "calendar": "Kalender",
+        "home": "Startseite",
+        "about": "Über",
+        "plugins": "Plugins",
+        "help_translate": "Hilf beim Übersetzen mit"
     },
     "admin": {
         "delete_footer_link_confirm": "Möchtest du diesen Link löschen?",
@@ -124,7 +129,7 @@
         "wrong_domain_warning": "Die \"baseurl\" die in config.json konfiguriert ist <b>({baseurl})</b> unterscheidet sich von derjenigen <b>({url})</b> die du besuchst",
         "instance_place_help": "Diese Textzeile wird im Menü der anderen befreundeten Instanzen angezeigt",
         "place_description": "Falls ein Ort falsch ist oder sich die Adresse ändert, kannst du ihn ändern.<br/>Bitte beachte, dass alle Veranstaltungen, die mit diesem Ort verbunden sind, die Adresse ändern (auch zurückliegende).",
-        "enable_admin_user_confirm": "Achte darauf, dass du der nutzenden Person {user} Admin-Rechte hinzufügst",
+        "enable_admin_user_confirm": "Achte darauf, dass du der nutzenden Person {user} Admin-Rechte hinzufügst?",
         "trusted_instances_help": "Befreundete Instanzen werden in der Navigationsleiste oben auf der Seite angezeigt",
         "trusted_instances_label": "Navigationsbezeichnung zu Friend-Instanzen",
         "trusted_instances_label_default": "Freundliche Instanzen",
@@ -173,7 +178,13 @@
         "smtp_hostname": "SMTP-Hostname",
         "smtp_description": "<ul><li>Der Admin erhält eine E-Mail, wenn ein anonymes Ereignis hinzugefügt wird (falls aktiviert).</li><li>Der Admin erhält E-Mails mit der Aufforderung zur Registrierung (falls aktiviert).</li><li>Die nutzenden Personen erhalten eine E-Mail zur Bestätigung der angeforderten Registrierung.</li><li>Die nutzenden Personen erhalten eine E-Mail mit der Anmeldebestätigung.</li><li>Nutzende Personen erhalten eine E-Mail-Benachrichtigung, wenn sie direkt vom Admin registriert werden.</li><li>Nutzende Personen erhalten eine E-Mail, um ihr Passwort zu ändern, wenn sie es vergessen haben</li></ul>",
         "smtp_test_button": "Versenden einer Test-E-Mail",
-        "smtp_test_success": "Eine Test-E-Mail wurde an {admin_email} gesendet, überprüfe deine Mailbox"
+        "smtp_test_success": "Eine Test-E-Mail wurde an {admin_email} gesendet, überprüfe deine Mailbox",
+        "fallback_image": "Ersatzbild",
+        "header_image": "Bild der Überschrift",
+        "default_images": "Standard Bilder",
+        "config_plugin": "Plugin Konfiguration",
+        "hide_thumbs": "Vorschaubilder ausblenden",
+        "hide_calendar": "Kalender verstecken"
     },
     "settings": {
         "update_confirm": "Willst du deine Änderung speichern?",
@@ -242,7 +253,7 @@
         "follow_me_description": "Eine Möglichkeit, über die hier auf {title} veröffentlichten Veranstaltungen auf dem Laufenden zu bleiben, besteht darin, dem Account <u>{account}</u> aus dem Fediverse zu folgen, zum Beispiel über Mastodon, und von dort aus eventuell Ressourcen für eine Veranstaltung hinzuzufügen.<br/><br/>\nWenn Du noch nie von Mastodon und dem Fediverse gehört hast, empfehlen wir dir, diesen Artikel <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'> zu lesen</a>.<br/><br/>Gib unten deine Instanz ein (z.B. mastodon.social)",
         "media_description": "Du kannst (optional) einen Flyer hinzufügen",
         "edit_recurrent": "Bearbeite eine sich wiederholende Veranstaltung :",
-        "show_recurrent": "regelmäßige Veranstaltungen",
+        "show_recurrent": "wiederkehrende Termine",
         "show_past": "auch ältere Veranstaltungen",
         "only_future": "nur zukünftige Veranstaltungen",
         "recurrent_description": "Wähle die Häufigkeit und Tage aus",
@@ -253,10 +264,10 @@
         "recurrent_1w_days": "Jeden {days}",
         "recurrent_2w_days": "Jeden zweiten {days} eine",
         "recurrent_1m_days": "Der {days} in jedem Monat",
-        "recurrent_2m_days": "Jeder {days} im Monat",
+        "recurrent_2m_days": "Der {days} jeden zweiten Monat",
         "recurrent_1m_ordinal": "Jeden {n} {days} im Monat",
         "each_week": "Jede Woche",
-        "recurrent_2m_ordinal": "Jeden {n} {days} im Monat",
+        "recurrent_2m_ordinal": "Der {n} {days} jeden zweiten Monat",
         "each_month": "Jeden Monat",
         "due": "bis",
         "from": "von",
@@ -266,7 +277,9 @@
         "download_flyer": "Lade den Flyer herunter",
         "remove_media_confirmation": "Möchtest du das Bild löschen?",
         "alt_text_description": "Beschreibung für Menschen mit Sehbehinderungen",
-        "choose_focal_point": "Auswahl des Schwerpunkts"
+        "choose_focal_point": "Auswahl des Schwerpunkts",
+        "address_description": "Was ist die Adresse?",
+        "address_description_osm": "Wo ist die Adresse? (<a href='http://osm.org/copyright'>OpenStreetMap</a> contributors)"
     },
     "register": {
         "first_user": "Admin erstellt",
