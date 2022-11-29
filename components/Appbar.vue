@@ -32,13 +32,13 @@ export default {
 </script>
 <style>
 nav {
-  background-image: linear-gradient(rgba(59, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/headerimage.png);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(20, 20, 20, 0.7)), url(/headerimage.png);
   background-position: center center;
   background-size: cover;
 }
 
 .theme--light nav {
-  background-image: linear-gradient(to bottom, rgba(255,230,230,.95), rgba(250,250,250,.95)), url(/headerimage.png);
+  background-image: linear-gradient(to bottom, rgba(230,230,230,.95), rgba(250,250,250,.95)), url(/headerimage.png);
 }
 
 #title {
