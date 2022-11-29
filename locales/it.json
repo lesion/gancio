@@ -257,7 +257,12 @@
     "header_image": "Immagine di intestazione",
     "hide_thumbs": "Nascondi immaginine",
     "hide_calendar": "Nascondi calendario",
-    "default_images": "Immagini preimpostate"
+    "default_images": "Immagini preimpostate",
+    "default_images_help": "Devi <a href='/admin?tab=theme'>aggiornare</a> la pagina per vedere le modifiche.",
+    "blocked": "Bloccato",
+    "domain": "Domini",
+    "known_users": "Utenti conosciuti",
+    "created_at": "Creato il"
   },
   "auth": {
     "not_confirmed": "Non ancora confermato…",
