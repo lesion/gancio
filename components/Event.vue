@@ -24,10 +24,7 @@ import { mdiRepeat, mdiCalendar, mdiMapMarker } from '@mdi/js'
 export default {
   data({ $store }) {
     return { mdiRepeat, mdiMapMarker, mdiCalendar,
-      // user can't see hidden thumbs
       hide_thumbs: this.$cookies.get('theme.hide_thumbs') || $store.state.settings.hide_thumbs
-      // user can override
-      // hide_thumbs: this.$cookies.get('theme.hide_thumbs')
     }
   },
   components: {
