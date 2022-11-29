@@ -39,9 +39,9 @@ v-container#event.pa-0.pa-sm-2
             v-divider
             //- info & actions
             v-list(dense nav)
-              v-list-group(:append-icon='mdiChevronUp' :value='true')
-                template(v-slot:activator)
-                  v-list-item.text-overline Actions
+                //- v-list-group(:append-icon='mdiChevronUp' :value='true')
+                //-   template(v-slot:activator)
+                //-     v-list-item.text-overline {{$t('common.actions')}}
 
                 //- copy link
                 v-list-item(@click='clipboard(`${settings.baseurl}/event/${event.slug || event.id}`)')
