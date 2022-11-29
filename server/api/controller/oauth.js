@@ -1,6 +1,6 @@
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const session = require('express-session')
+const session = require('cookie-session')
 
 const OAuthClient = require('../models/oauth_client')
 const OAuthToken = require('../models/oauth_token')
