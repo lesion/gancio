@@ -120,7 +120,7 @@ module.exports = {
 
     router.use('/fallbackimage.png', (req, res, next) => {
       const fallbackImagePath =  settingsController.settings.fallback_image || './static/noimg.svg'
-      return express.static(fallbackImagePath, { maxAge: '1d' })(req, res, next)
+      return express.static(fallbackImagePath)(req, res, next)
     })
 
     router.use('/headerimage.png', (req, res, next) => {
@@ -130,12 +130,12 @@ module.exports = {
 
     router.use('/logo.png', (req, res, next) => {
       const logoPath = settingsController.settings.logo || './static/gancio'
-      return express.static(logoPath + '.png', {maxAge: '1d'})(req, res, next)
+      return express.static(logoPath + '.png')(req, res, next)
     })
 
     router.use('/favicon.ico', (req, res, next) => {
       const faviconPath = res.locals.settings.logo ? res.locals.settings.logo + '.png' : './assets/favicon.ico'
-      return express.static(faviconPath, {maxAge: '1d'})(req, res, next)
+      return express.static(faviconPath)(req, res, next)
     })
 
     return router
