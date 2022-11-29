@@ -15,7 +15,7 @@ export default {
     return {
       mdiViewModule, mdiViewList, mdiContrastCircle,
       hide_thumbs: $store.state.settings.hide_thumbs,
-      hide_thumbs_icon: $store.state.settings.hide_thumbs,
+      hide_thumbs_icon: $store.state.settings.hide_thumbs || this.$cookies.get('theme.hide_thumbs'),
       reload: 0
     }
   },
