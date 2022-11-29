@@ -9,6 +9,7 @@ module.exports = {
   it: 'Italiano',
   nb: 'Norwegian Bokmål',
   pl: 'Polski',
+  pt: 'Português',
   sk: 'Slovak',
   zh: '中国'
 }

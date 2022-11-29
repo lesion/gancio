@@ -2,6 +2,8 @@ const config = require('./server/config.js')
 const minifyTheme = require('minify-css-string').default
 const locales = require('./locales/index')
 
+import { ca, de, en, es, eu, fr, gl, it, nb, pl, pt, sk, zhHans  } from 'vuetify/lib/locale'
+
 const isDev = (process.env.NODE_ENV !== 'production')
 module.exports = {
   telemetry: false,
@@ -43,6 +45,7 @@ module.exports = {
     '@/plugins/axios', // axios baseurl configuration
     '@/plugins/validators', // inject validators
     '@/plugins/api', // api helpers
+    '@/plugins/i18n',
     { src: '@/plugins/v-calendar', ssr: false } // v-calendar
   ],
 
@@ -51,7 +54,7 @@ module.exports = {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    'nuxt-i18n',
+    '@nuxtjs/i18n',
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/sitemap',
@@ -89,8 +92,9 @@ module.exports = {
       iso: key
     })),
     vueI18n: {
-      fallbackLocale: 'en'
-    },
+      fallbackLocale: 'en',
+      silentTranslationWarn: true
+    },    
     langDir: 'locales',
     lazy: true,
     strategy: 'no_prefix',
@@ -136,9 +140,9 @@ module.exports = {
       }
     }
   },
-
   buildModules: ['@nuxtjs/vuetify'],
   vuetify: {
+    lang: { locales: { ca, de, en, es, eu, fr, gl, it, nb, pl, pt, sk, zhHans } },
     treeShake: true,
     theme: {
       options: {

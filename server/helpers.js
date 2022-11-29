@@ -96,7 +96,7 @@ module.exports = {
       about: settings.about
     }
     // set user locale
-    res.locals.user_locale = settingsController.user_locale[res.locals.acceptedLocale]
+    // res.locals.user_locale = settingsController.user_locale[res.locals.acceptedLocale]
     dayjs.tz.setDefault(res.locals.settings.instance_timezone)
     next()
   },

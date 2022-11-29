@@ -4,26 +4,26 @@
         "content": "Recebemos o pedido de registo. Vamos confirmar assim que possível."
     },
     "confirm": {
-        "content": "Olá, sua conta em <a href='{{config.baseurl}}'>{{config.title}}</a> foi confirmada. Escreve-nos para {{config.admin_email}} para qualquer informação.",
-        "subject": "Agora podes começar a publicar eventos"
+        "content": "Olá, sua conta em <a href='{{config.baseurl}}'>{{config.title}}</a> foi confirmada. Escreva para {{config.admin_email}} para obter qualquer informação.",
+        "subject": "Você pode agora começar a publicar eventos"
     },
     "event_confirm": {
-        "content": "Podes confirmar este evento em <a href='{{url}}'>esta página</a>"
+        "content": "Você pode confirmar este evento <a href='{{url}}'>nesta página</a>"
     },
     "test": {
-        "subject": "Sua configuração SMTP está a funcionar",
-        "content": "Este é um e-mail de teste, se estiveres a ler isto, a tua configuração está a funcionar."
+        "subject": "Sua configuração SMTP está funcionando",
+        "content": "Este é um e-mail de teste, se estiver lendo isto, sua configuração está funcionando."
     },
     "user_confirm": {
-        "subject": "Agora podes começar a publicar eventos",
+        "subject": "Você pode agora começar a publicar eventos",
         "content": "Olá, sua conta em <a href='{{config.baseurl}}'>{{config.title}}</a> foi criada. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confirme e escolha uma senha.</a>."
     },
     "admin_register": {
         "subject": "Novo registro",
-        "content": "{{user.email}} pediu o registro em {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confirme <a href='{{ config.baseurl}}/admin'>aqui</a>."
+        "content": "{{user.email}} pediu o registro em {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confirme <a href='{{config.baseurl}}/admin'>aqui</a>."
     },
     "recover": {
         "subject": "Recuperação de senha",
-        "content": "Olá, pediste a recuperação da tua senha em {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Clique aqui</a> para confirmar."
+        "content": "Olá, você solicitou a recuperação de sua senha em {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Clique aqui</a> para confirmar."
     }
 }

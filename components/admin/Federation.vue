@@ -68,6 +68,7 @@ v-container
         v-if='settings.trusted_instances.length'
         :hide-default-footer='settings.trusted_instances.length<10'
         :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
+        :header-props='{ sortIcon: mdiChevronDown }'
         :headers='headers'
         :items='settings.trusted_instances')
         template(v-slot:item.actions="{item}")
@@ -79,13 +80,13 @@ v-container
 import { mapActions, mapState } from 'vuex'
 import get from 'lodash/get'
 import axios from 'axios'
-import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
+import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown } from '@mdi/js'
 
 export default {
   name: 'Federation',
   data ({ $store, $options }) {
     return {
-      mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight,
+      mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown,
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
       instance_place: $store.state.settings.instance_place,

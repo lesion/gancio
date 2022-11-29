@@ -1,7 +1,6 @@
 import dayjs from 'dayjs'
 
 export const state = () => ({
-  user_locale: {},
   settings: {
     instance_timezone: 'Europe/Rome',
     instance_name: '',
@@ -28,9 +27,6 @@ export const mutations = {
   },
   setSetting (state, setting) {
     state.settings[setting.key] = setting.value
-  },
-  setUserlocale (state, messages) {
-    state.user_locale = messages
   },
   setAnnouncements (state, announcements) {
     state.announcements = announcements

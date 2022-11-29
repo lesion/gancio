@@ -3,7 +3,7 @@ span
   v-list(dense nav)
     v-list-group(:append-icon='mdiChevronUp' :value='true')
       template(v-slot:activator)
-        v-list-item.text-overline Admin actions
+        v-list-item.text-overline {{$t('common.admin_actions')}}
 
       //- Hide / confirm event
       v-list-item(@click='toggle(false)')
@@ -29,7 +29,7 @@ span
 
 
       template(v-if='event.parentId')
-        v-list-item.text-overline Recurring event actions <a href="https://gancio.org/">?</a>
+        v-list-item.text-overline(v-html="$t('common.recurring_event_actions')")
 
         //- Pause / Start to generate recurring event
         v-list-item(@click='toggle(true)')
