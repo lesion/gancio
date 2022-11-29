@@ -4,7 +4,7 @@ v-container
     v-spacer
     v-text-field(v-model='search'
     :append-icon='mdiMagnify' outlined rounded
-    label='Search'
+    :label="$t('common.search')"
     single-line hide-details)
   v-card-subtitle(v-html="$t('admin.collections_description')")
 
@@ -75,6 +75,7 @@ v-container
           :headers='filterHeaders'
           :items='filters'
           :hide-default-footer='filters.length < 5'
+          :header-props='{ sortIcon: mdiChevronDown }'
           :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }')
             template(v-slot:item.actions='{ item }')
               v-btn(@click='removeFilter(item)' color='error' icon)
@@ -94,6 +95,7 @@ v-container
     :headers='collectionHeaders'
     :items='collections'
     :hide-default-footer='collections.length < 5'
+    :header-props='{ sortIcon: mdiChevronDown }'
     :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
     :search='search')
       template(v-slot:item.filters='{ item }')
@@ -108,12 +110,12 @@ v-container
 <script>
 import get from 'lodash/get'
 import debounce from 'lodash/debounce'
-import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle } from '@mdi/js'
+import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle, mdiChevronDown } from '@mdi/js'
 
 export default {
   data() {
     return {
-      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle,
+      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle, mdiChevronDown,
       loading: false,
       dialog: false,
       valid: false,
@@ -128,14 +130,14 @@ export default {
       tagName: '',
       placeName: '',
       collectionHeaders: [
-        { value: 'name', text: 'Name' },
-        { value: 'filters', text: 'Filters' },
-        { value: 'actions', text: 'Actions', align: 'right' }
+        { value: 'name', text: this.$t('common.name') },
+        { value: 'filters', text: this.$t('common.filter') },
+        { value: 'actions', text: this.$t('common.actions'), align: 'right' }
       ],
       filterHeaders: [
-        { value: 'tags', text: 'Tags' },
-        { value: 'places', text: 'Places' },
-        { value: 'actions', text: 'Actions', align: 'right' }
+        { value: 'tags', text: this.$t('common.tags') },
+        { value: 'places', text: this.$t('common.places') },
+        { value: 'actions', text: this.$t('common.actions'), align: 'right' }
       ]
     }
   },

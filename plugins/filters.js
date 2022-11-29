@@ -61,7 +61,7 @@ export default ({ app, store }) => {
 
   Vue.filter('recurrentDetail', event => {
     const parent = event.parent
-    if (!parent.frequency || !parent.type) return
+    if (!parent.recurrent.frequency) return
     const { frequency, type } = parent.recurrent
     let recurrent
     if (frequency === '1w' || frequency === '2w') {

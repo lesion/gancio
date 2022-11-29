@@ -22,6 +22,7 @@ v-container
     v-data-table(
       v-if='announcements.length'
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
+      :header-props='{ sortIcon: mdiChevronDown }'
       :headers='headers'
       :items='announcements')
       template(v-slot:item.actions='{ item }')
@@ -35,21 +36,21 @@ import { mapActions } from 'vuex'
 import cloneDeep from 'lodash/cloneDeep'
 import Editor from '../Editor'
 import Announcement from '../Announcement'
-import { mdiPlus, mdiChevronRight, mdiChevronLeft } from '@mdi/js'
+import { mdiPlus, mdiChevronRight, mdiChevronLeft, mdiChevronDown } from '@mdi/js'
 
 export default {
   components: { Editor, Announcement },
   data() {
     return {
-      mdiPlus, mdiChevronRight, mdiChevronLeft,
+      mdiPlus, mdiChevronRight, mdiChevronLeft, mdiChevronDown,
       valid: false,
       dialog: false,
       editing: false,
       announcements: [],
       loading: false,
       headers: [
-        { value: 'title', text: 'Title' },
-        { value: 'actions', text: 'Actions', align: 'right' }
+        { value: 'title', text: this.$t('common.title') },
+        { value: 'actions', text: this.$t('common.actions'), align: 'right' }
       ],
       announcement: { title: '', announcement: '' }
     }

@@ -10,6 +10,7 @@ v-container
           :items-per-page='5'
           :search='instancesFilter'
           :hide-default-footer='instances.length<5'
+          :header-props='{ sortIcon: mdiChevronDown }'
           :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
           dense :headers='instancesHeader'
           @click:row='instanceSelected')
@@ -24,6 +25,7 @@ v-container
           :search='usersFilter'
           :hide-default-footer='users.length<5'
           :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
+          :header-props='{ sortIcon: mdiChevronDown }'
           dense :headers='usersHeader')
           template(v-slot:item.blocked="{ item }")
             v-icon(@click='toggleUserBlock(item)' v-text='item.blocked ? mdiCheckboxIntermediate : mdiCheckboxBlankOutline')
@@ -34,6 +36,7 @@ v-container
         :headers='resourcesHeader'
         :hide-default-footer='resources.length<10'
         :items-per-page='10'
+        :header-props='{ sortIcon: mdiChevronDown }'
         :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }')
         template(v-slot:item.content='{ item }')
           span(v-html='item.data.content')
@@ -62,33 +65,33 @@ v-container
 import { mapState, mapActions } from 'vuex'
 import get from 'lodash/get'
 import { mdiDelete, mdiEye, mdiEyeOff, mdiDotsVertical, mdiCheckboxIntermediate,
-mdiCheckboxBlankOutline, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
+mdiCheckboxBlankOutline, mdiChevronLeft, mdiChevronRight, mdiChevronDown } from '@mdi/js'
 
 export default {
   name: 'Moderation',
   data () {
     return {
       mdiDelete, mdiEye, mdiEyeOff, mdiDotsVertical, mdiCheckboxIntermediate,
-      mdiCheckboxBlankOutline, mdiChevronLeft, mdiChevronRight,
+      mdiCheckboxBlankOutline, mdiChevronLeft, mdiChevronRight, mdiChevronDown,
       instances: [],
       resources: [],
       users: [],
       usersHeader: [
-        { value: 'object.preferredUsername', text: 'Name' },
-        { value: 'blocked', text: 'Blocked' }
+        { value: 'object.preferredUsername', text: this.$t('common.name') },
+        { value: 'blocked', text: this.$t('admin.blocked') }
       ],
       instancesHeader: [
-        { value: 'domain', text: 'Domain' },
-        { value: 'name', text: 'Name' },
-        { value: 'blocked', text: 'Blocked' },
-        { value: 'users', text: 'known users' }
+        { value: 'domain', text: this.$t('admin.domain') },
+        { value: 'name', text: this.$t('common.name') },
+        { value: 'blocked', text: this.$t('admin.blocked') },
+        { value: 'users', text: this.$t('admin.known_users') }
       ],
       resourcesHeader: [
-        { value: 'created', text: 'Created' },
-        { value: 'event', text: 'Event' },
-        { value: 'user', text: 'user' },
-        { value: 'content', text: 'Content' },
-        { value: 'actions', text: 'Actions' }
+        { value: 'created', text: this.$t('admin.created_at') },
+        { value: 'event', text: this.$t('common.event') },
+        { value: 'user', text: this.$t('common.user') },
+        { value: 'content', text: this.$t('common.content') },
+        { value: 'actions', text: this.$t('common.actions') }
       ],
       usersFilter: '',
       instancesFilter: ''

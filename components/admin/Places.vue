@@ -4,7 +4,7 @@ v-container
     v-spacer
     v-text-field(v-model='search'
       :append-icon='mdiMagnify' outlined rounded
-      label='Search'
+      :label="$t('common.search')"
       single-line hide-details)
   v-card-subtitle(v-html="$t('admin.place_description')")
 
@@ -49,6 +49,7 @@ v-container
       :headers='headers'
       :items='places'
       :hide-default-footer='places.length < 5'
+      :header-props='{ sortIcon: mdiChevronDown }'
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
       :search='search')
       template(v-slot:item.map='{ item }')
@@ -61,7 +62,7 @@ v-container
 
 </template>
 <script>
-import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiEye, mdiMapSearch } from '@mdi/js'
+import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiEye, mdiMapSearch, mdiChevronDown } from '@mdi/js'
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 import get from 'lodash/get'
@@ -69,7 +70,7 @@ import get from 'lodash/get'
 export default {
   data() {
     return {
-      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiEye, mdiMapSearch,
+      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiEye, mdiMapSearch, mdiChevronDown,
       loading: false,
       dialog: false,
       valid: false,
@@ -79,10 +80,10 @@ export default {
       search: '',
       place: { name: '', address: '', id: null },
       headers: [
-        { value: 'name', text: 'Name' },
-        { value: 'address', text: 'Address' },
+        { value: 'name', text: this.$t('common.name') },
+        { value: 'address', text: this.$t('common.address') },
         { value: 'map', text: 'Map' },
-        { value: 'actions', text: 'Actions', align: 'right' }
+        { value: 'actions', text: this.$t('common.actions'), align: 'right' }
       ]
     }
   },

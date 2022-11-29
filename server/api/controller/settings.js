@@ -7,7 +7,7 @@ const sharp = require('sharp')
 const config = require('../../config')
 const generateKeyPair = promisify(crypto.generateKeyPair)
 const log = require('../../log')
-const locales = require('../../../locales/index')
+// const locales = require('../../../locales/index')
 const escape = require('lodash/escape')
 const pluginController = require('./plugins')
 
@@ -99,18 +99,18 @@ const settingsController = {
     }
 
     // initialize user_locale
-    if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {
-      const user_locales_files = fs.readdirSync(path.resolve(config.user_locale))
-        user_locales_files.forEach( f => {
-        const locale = path.basename(f ,'.json')
-        if (locales[locale]) {
-          log.info(`Adding custom locale ${locale}`)
-          settingsController.user_locale[locale] = require(path.resolve(config.user_locale, f)).default
-        } else {
-          log.warning(`Unknown custom user locale: ${locale} [valid locales are ${locales}]`)
-        }
-      })
-    }
+    // if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {
+    //   const user_locales_files = fs.readdirSync(path.resolve(config.user_locale))
+    //     user_locales_files.forEach( f => {
+    //     const locale = path.basename(f ,'.json')
+    //     if (locales[locale]) {
+    //       log.info(`Adding custom locale ${locale}`)
+    //       settingsController.user_locale[locale] = require(path.resolve(config.user_locale, f)).default
+    //     } else {
+    //       log.warning(`Unknown custom user locale: ${locale} [valid locales are ${locales}]`)
+    //     }
+    //   })
+    // }
 
     pluginController._load()
   },
