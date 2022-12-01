@@ -25,7 +25,7 @@
         "events": "Ekitaldiak",
         "places": "Lekuak",
         "settings": "Aukerak",
-        "actions": "Ekintzak",
+        "actions": "Eragiketak",
         "deactivate": "Desaktibatu",
         "remove_admin": "Kendu administratzaile baimena",
         "activate": "Aktibatu",
@@ -95,7 +95,10 @@
         "show_map": "Erakutsi mapa",
         "calendar": "Egutegia",
         "home": "Etxea",
-        "about": "Honi buruz"
+        "about": "Honi buruz",
+        "recurring_event_actions": "Ekitaldi errepikarien eragiketak",
+        "content": "Edukia",
+        "admin_actions": "Administratzaile eragiketak"
     },
     "login": {
         "description": "Saioa hasten baduzu ekitaldi berriak sortu ahal izango dituzu.",
@@ -265,7 +268,12 @@
         "config_plugin": "Pluginaren konfigurazioa",
         "fallback_image": "Lehenetsitako irudia",
         "header_image": "Goiburuko irudia",
-        "default_images": "Lehenetsitako irudiak"
+        "default_images": "Lehenetsitako irudiak",
+        "blocked": "Blokeatuta",
+        "domain": "Domeinua",
+        "default_images_help": "Orrialdea <a href='/admin?tab=theme'>freskatu</a> behar duzu aldaketak ikusteko.",
+        "known_users": "Erabiltzaile ezagunak",
+        "created_at": "Noiz sortua:"
     },
     "auth": {
         "not_confirmed": "Oraindik baieztatu gabe dago…",
