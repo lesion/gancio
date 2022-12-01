@@ -9,6 +9,8 @@ export const state = () => ({
     allow_recurrent_event: true,
     recurrent_event_visible: false,
     allow_geolocation: false,
+    // geocoding_provider: '',
+    // tilelayer_provider: '',
     enable_federation: false,
     enable_resources: false,
     hide_boosts: true,

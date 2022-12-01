@@ -30,6 +30,8 @@ const defaultSettings = {
   allow_recurrent_event: false,
   recurrent_event_visible: false,
   allow_geolocation: true,
+  // geocoding_provider: '',
+  // tilelayer_provider: '',
   enable_federation: true,
   enable_resources: false,
   hide_boosts: true,

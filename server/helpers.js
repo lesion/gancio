@@ -92,6 +92,8 @@ module.exports = {
       hide_thumbs: settings.hide_thumbs,
       hide_calendar: settings.hide_calendar,
       allow_geolocation: settings.allow_geolocation,
+      // geocoding_provider: settings.geocoding_provider,
+      // tilelayer_provider: settings.tilelayer_provider,
       footerLinks: settings.footerLinks,
       about: settings.about
     }
