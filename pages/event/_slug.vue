@@ -28,13 +28,13 @@ v-container#event.pa-0.pa-sm-2
 
               .text-h6.p-location.h-adr(itemprop="location" itemscope itemtype="https://schema.org/Place")
                 v-icon(v-text='mdiMapMarker' small)
-                nuxt-link.vcard.ml-2.p-name.text-decoration-none.text-button(itemprop="name" :to='`/place/${event.place.name}`') {{event.place && event.place.name}}
+                nuxt-link.vcard.ml-2.p-name.text-decoration-none.text-button(itemprop="name" :to='`/place/${encodeURIComponent(event.place.name})`') {{event.place && event.place.name}}
                 .text-caption.p-street-address(itemprop='address') {{event.place && event.place.address}}
 
             //- tags, hashtags
             v-card-text.pt-0(v-if='event.tags && event.tags.length')
               v-chip.p-category.ml-1.mt-1(v-for='tag in event.tags' small label color='primary'
-                outlined :key='tag' :to='`/tag/${tag}`') {{tag}}
+                outlined :key='tag' :to='`/tag/${encodeURIComponent(tag)}`') {{tag}}
 
             v-divider
             //- info & actions
