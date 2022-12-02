@@ -60,7 +60,7 @@ v-col(cols=12)
           :allowedMinutes='allowedMinutes'
           format='24hr'
           @click:minute='menuFromHour = false'
-          @change='hr => change("fromHour", hr)')
+          @input='hr => change("fromHour", hr)')
 
 
     v-col.col-12.col-sm-6
@@ -88,7 +88,7 @@ v-col(cols=12)
           :allowedMinutes='allowedMinutes'
           format='24hr'
           @click:minute='menuDueHour = false'
-          @change='hr => change("dueHour", hr)')
+          @input='hr => change("dueHour", hr)')
 
   List(v-if='type === "normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
 
