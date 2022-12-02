@@ -275,7 +275,8 @@
         "domain": "Dominio",
         "created_at": "Creado a las",
         "blocked": "Bloqueado",
-        "known_users": "Usuarios conocidos"
+        "known_users": "Usuarios conocidos",
+        "default_images_help": "Tienes que <a href='/admin?tab=theme'>actualizas</a> la página para ver los cambios."
     },
     "auth": {
         "not_confirmed": "Todavía no hemos confirmado este email…",
