@@ -57,32 +57,41 @@ v-container
 
   v-card-actions
     v-btn(text @click='showSMTP=true')
-      <v-icon v-if='!settings.admin_email' color='error' v-text='mdiAlert'></v-icon> {{$t('admin.show_smtp_setup')}}
+      <v-icon v-if='!settings.admin_email' color='error' class="mr-2" v-text='mdiAlert'></v-icon> {{$t('admin.show_smtp_setup')}}
     v-btn(text @click='$emit("complete")' color='primary' v-if='setup') {{$t('common.next')}}
       v-icon(v-text='mdiArrowRight')
+
+  v-dialog(v-model='showGeolocationConfigs' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
+    Geolocation(@close='showGeolocationConfigs = false')
+
+  v-card-actions
+    v-btn(text @click='showGeolocationConfigs=true')
+      <v-icon v-if='!settings.admin_email' color='primary' class="mr-2" v-text='mdiMap'></v-icon> {{$t('admin.show_geolocation_setup')}}
 
 </template>
 <script>
 import SMTP from './SMTP.vue'
+import Geolocation from './Geolocation.vue'
 import { mapActions, mapState } from 'vuex'
 import moment from 'dayjs'
 import tzNames from './tz.json'
-import { mdiAlert, mdiArrowRight } from '@mdi/js'
+import { mdiAlert, mdiArrowRight, mdiMap } from '@mdi/js'
 const locales = require('../../locales/index')
 
 export default {
   props: {
     setup: { type: Boolean, default: false }
   },
-  components: { SMTP },
+  components: { SMTP, Geolocation },
   name: 'Settings',
   data ({ $store }) {
     return {
-      mdiAlert, mdiArrowRight,
+      mdiAlert, mdiArrowRight, mdiMap,
       title: $store.state.settings.title,
       description: $store.state.settings.description,
       locales: Object.keys(locales).map(locale => ({ value: locale, text: locales[locale] })),
       showSMTP: false,
+      showGeolocationConfigs: false,
     }
   },
   computed: {

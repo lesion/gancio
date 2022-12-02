@@ -268,7 +268,20 @@
     "blocked": "Blocked",
     "domain": "Domain",
     "known_users": "Known users",
-    "created_at": "Created at"
+    "created_at": "Created at",
+    "show_geolocation_setup": "Geolocation and map settings",
+    "geolocation_description": "<b>Define a provider for geocoding service</b>. Currently, among those listed in the <a href=\"https://wiki.openstreetmap.org/wiki/Nominatim#Alternatives_.2F_Third-party_providers\">wiki of OpenStreetMap</a>, there is support for software <b>Nominatim</b> and <b>Photon</b>.<br>You can use one of the related official demos by copying the link in the 'Geocoding provider' field:<ul><li>https://nominatim.openstreetmap.org/ <a href=\"https://operations.osmfoundation.org/policies/nominatim/\">  [TermsofService]</a></li><li>https://photon.komoot.io/api/ <a href=\"https://photon.komoot.io/\">  [TermsofService]</a></li></ul><b>Define a provider for map layers.</b><br>You can find a list of them here: <a href=\"https://leaflet-extras.github.io/leaflet-providers/preview/\">https://leaflet-extras.github.io/leaflet-providers/preview/</a>",
+    "geocoding_provider": "Geocoding provider",
+    "geocoding_provider_help": "The default provider is Nominatim",
+    "geocoding_countrycodes": "Country codes",
+    "geocoding_countrycodes_help": "Allows you to set a filter to searches based on area codes",
+    "geocoding_test_button": "Test geocoding",
+    "geocoding_test_success": "The service {service_name} is available",
+    "tilelayer_provider": "Tilelayer provider",
+    "tilelayer_provider_help": "The default provider is  OpenStreetMap",
+    "tilelayer_provider_attribution": "Attribution",
+    "tilelayer_test_button": "Test tilelayer",
+    "tilelayer_test_success": "The service {service_name} is available"
   },
   "auth": {
     "not_confirmed": "Not confirmed yet…",

@@ -50,8 +50,8 @@ export default {
   data ({ $store }) {
     return {
       mdiWalk, mdiBike, mdiCar, mdiMapMarker,
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      attribution: '<a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      url: $store.state.settings.tilelayer_provider || 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution: $store.state.settings.tilelayer_provider_attribution || "<a target=\"_blank\" href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
       zoom: 14,
       center: [this.event.place.latitude, this.event.place.longitude],
       marker: {
