@@ -235,6 +235,15 @@ export default {
       } else if (what === 'dueHour') {
         if (value) {
           this.value.due = this.value.due ? this.value.due : this.value.from
+          const [hour, minute] = value.split(':')
+          const [fromHour, fromMinute] = this.value.fromHour.split(':')
+          if (!this.value.multidate) {
+            if (hour < fromHour) {
+              this.value.due = dayjs(this.value.from).add(1, 'day').toDate()
+            } else {
+              this.value.due = dayjs(this.value.from).toDate()
+            }
+          }
         } else {
           this.value.due = null
         }
