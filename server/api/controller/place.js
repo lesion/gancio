@@ -6,6 +6,7 @@ const exportController = require('./export')
 const log = require('../../log')
 const { Op, where, col, fn, cast } = require('sequelize')
 const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search'
+const PHOTON_URL = 'https://photon.komoot.io/api/'
 const axios = require('axios')
 
 module.exports = {
@@ -76,15 +77,13 @@ module.exports = {
 
   async _nominatim (req, res) {
     const details = req.params.place_details
-    const countrycodes = res.locals.settings.geocoding_countrycodes
-    const geocoding_provider = res.locals.settings.geocoding_provider
+    const countrycodes = res.locals.settings.geocoding_countrycodes || ''
+    const geocoding_provider = res.locals.settings.geocoding_provider || NOMINATIM_URL
     // ?limit=3&format=json&namedetails=1&addressdetails=1&q=
-    console.log(countrycodes)
-    console.log(geocoding_provider)
 
-    const ret = await axios.get(`${res.locals.settings.geocoding_provider}`, {
+    const ret = await axios.get(`${geocoding_provider}`, {
       params: {
-        countrycodes: countrycodes || '',
+        countrycodes: countrycodes,
         q: details,
         limit: 3,
         format: 'json',
@@ -93,9 +92,25 @@ module.exports = {
       },
       headers: { 'User-Agent': 'gancio 1.6.0' }
     })
-    console.log(countrycodes)
 
-    console.log(ret)
+    // console.log(ret)
+    return res.json(ret.data)
+
+  },
+
+  async _photon (req, res) {
+    const details = req.params.place_details
+    const geocoding_provider = res.locals.settings.geocoding_provider || PHOTON_URL
+
+    const ret = await axios.get(`${geocoding_provider}`, {
+      params: {
+        q: details,
+        limit: 3,
+      },
+      headers: { 'User-Agent': 'gancio 1.6.0' }
+    })
+
+    // console.log(ret)
     return res.json(ret.data)
 
   },

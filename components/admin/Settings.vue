@@ -54,19 +54,18 @@ v-container
 
   v-dialog(v-model='showSMTP' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
     SMTP(@close='showSMTP = false')
-
   v-card-actions
     v-btn(text @click='showSMTP=true')
       <v-icon v-if='!settings.admin_email' color='error' class="mr-2" v-text='mdiAlert'></v-icon> {{$t('admin.show_smtp_setup')}}
-    v-btn(text @click='$emit("complete")' color='primary' v-if='setup') {{$t('common.next')}}
-      v-icon(v-text='mdiArrowRight')
 
   v-dialog(v-model='showGeolocationConfigs' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
-    Geolocation(@close='showGeolocationConfigs = false')
-
+    Geolocation(setup, @close='showGeolocationConfigs = false')
   v-card-actions
     v-btn(text @click='showGeolocationConfigs=true')
       <v-icon v-if='!settings.admin_email' color='primary' class="mr-2" v-text='mdiMap'></v-icon> {{$t('admin.show_geolocation_setup')}}
+
+  v-btn(text @click='$emit("complete")' color='primary' v-if='setup') {{$t('common.next')}}
+    v-icon(v-text='mdiArrowRight')
 
 </template>
 <script>

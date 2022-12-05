@@ -46,7 +46,7 @@ v-row.mb-4
       :items="addressList"
       :hint="$t('event.address_description' + (settings.allow_geolocation && '_osm'))")
       template(v-slot:message="{message, key}")
-        span(v-html='message' :key="key") 
+        span(v-html='message' :key="key")
       template(v-slot:item="{ item, attrs, on  }")
         v-list-item(v-bind='attrs' v-on='on')
           v-icon.pr-4(v-text='loadCoordinatesResultIcon(item)')
@@ -76,7 +76,7 @@ export default {
   props: {
     value: { type: Object, default: () => ({}) }
   },
-  data () {
+  data ( {$store} ) {
     return {
       mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiLatitude, mdiLongitude, mdiRoadVariant, mdiHome, mdiCityVariant,
       place: { },
@@ -91,7 +91,14 @@ export default {
         node: mdiMapMarker,
         relation: mdiCityVariant,
       },
-      nominatim_class: ['amenity', 'shop', 'tourism', 'leisure', 'building']
+      nominatim_class: ['amenity', 'shop', 'tourism', 'leisure', 'building'],
+      photon_osm_key: ['amenity', 'shop', 'tourism', 'leisure', 'building'],
+      photon_osm_type: {
+        'W': mdiRoadVariant,
+        'N': mdiMapMarker,
+        'R': mdiCityVariant,
+      },
+      geocoding_provider_type: $store.state.settings.geocoding_provider_type || 'Nominatim'
     }
   },
   computed: {
@@ -126,10 +133,17 @@ export default {
       }
     }, 100),
     loadCoordinatesResultIcon(item) {
-      if ( this.nominatim_class.includes(item.class)) {
-        return this.mdiHome
+      if (this.geocoding_provider_type == "Nominatim") {
+        if ( this.nominatim_class.includes(item.class)) {
+          return this.mdiHome
+        }
+        return this.nominatim_osm_type[item.type]
+      } else if (this.geocoding_provider_type == "Photon") {
+        if ( this.photon_osm_key.includes(item.class)) {
+          return this.mdiHome
+        }
+        return this.photon_osm_type[item.type]
       }
-      return this.nominatim_osm_type[item.type]
     },
     selectPlace (p) {
       if (!p) { return }
@@ -220,22 +234,55 @@ export default {
 
       if (searchCoordinates.length) {
         this.loading = true
-        const ret = await this.$axios.$get(`placeNominatim/${searchCoordinates}`)
-        if (ret && ret.length) {
-          this.addressList = ret.map(v => {
-            const name = get(v.namedetails, 'alt_name', get(v.namedetails, 'name'))
-            const address = v.display_name ? v.display_name.replace(name, '').replace(/^, ?/, '') : ''
-            return {
-              class: v.class,
-              type: v.osm_type,
-              lat: v.lat,
-              lon: v.lon,
-              name,
-              address
-            }
-          })
-        } else {
-          this.addressList = []
+        const ret = await this.$axios.$get(`placeOSM/${this.geocoding_provider_type}/${searchCoordinates}`)
+        if (this.geocoding_provider_type == "Nominatim") {
+          if (ret && ret.length) {
+            this.addressList = ret.map(v => {
+              const name = get(v.namedetails, 'alt_name', get(v.namedetails, 'name'))
+              const address = v.display_name ? v.display_name.replace(name, '').replace(/^, ?/, '') : ''
+              return {
+                class: v.class,
+                type: v.osm_type,
+                lat: v.lat,
+                lon: v.lon,
+                name,
+                address
+              }
+            })
+          } else {
+            this.addressList = []
+          }
+        } else if (this.geocoding_provider_type == "Photon") {
+          let photon_properties = ['housenumber', 'street', 'district', 'city', 'county', 'state', 'postcode', 'country']
+
+          if (ret) {
+            this.addressList = ret.features.map(v => {
+              let pre_name = v.properties.name || v.properties.street || ''
+              let pre_address = ''
+
+              photon_properties.forEach((item, i) => {
+                let last = i == (photon_properties.length - 1)
+                if (v.properties[item] && !last) {
+                  pre_address += v.properties[item]+', '
+                } else if (v.properties[item]) {
+                  pre_address += v.properties[item]
+                }
+              });
+
+              let name = pre_name
+              let address = pre_address
+              return {
+                class: v.properties.osm_key,
+                type: v.properties.osm_type,
+                lat: v.geometry.coordinates[1],
+                lon: v.geometry.coordinates[0],
+                name,
+                address
+              }
+            })
+          } else {
+            this.addressList = []
+          }
         }
         this.loading = false
       }

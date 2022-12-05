@@ -84,7 +84,8 @@ export default {
         { value: 'address', text: this.$t('common.address') },
         { value: 'map', text: 'Map' },
         { value: 'actions', text: this.$t('common.actions'), align: 'right' }
-      ]
+      ],
+      geocoding_provider_type: $store.state.settings.geocoding_provider_type || 'Nominatim'
     }
   },
   async fetch() {
@@ -124,7 +125,7 @@ export default {
         this.place.latitude = this.place.longitude = null
       }
       this.$emit('input', { ...this.place })
-    },    
+    },
     searchAddress: debounce(async function(ev) {
       const pre_searchCoordinates = ev.target.value.trim().toLowerCase()
       // allow pasting coordinates lat/lon and lat,lon
@@ -159,7 +160,7 @@ export default {
 
       if (searchCoordinates.length) {
         this.loading = true
-        const ret = await this.$axios.$get(`placeNominatim/${searchCoordinates}`)
+        const ret = await this.$axios.$get(`placeOSM/${this.geocoding_provider_type}/${searchCoordinates}`)
         if (ret && ret.length) {
           this.addressList = ret.map(v => {
             const name = get(v.namedetails, 'alt_name', get(v.namedetails, 'name'))
@@ -176,7 +177,7 @@ export default {
         }
         this.loading = false
       }
-    }, 300)    
+    }, 300)
   }
 }
 </script>

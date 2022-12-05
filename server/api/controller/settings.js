@@ -30,6 +30,7 @@ const defaultSettings = {
   allow_recurrent_event: false,
   recurrent_event_visible: false,
   allow_geolocation: true,
+  geocoding_provider_type: 'Nominatim',
   geocoding_provider: 'https://nominatim.openstreetmap.org/',
   geocoding_countrycodes: [],
   tilelayer_provider: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
