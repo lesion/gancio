@@ -16,6 +16,7 @@ v-container
       :label="$t('admin.hide_calendar')")
 
   v-card-title {{$t('admin.default_images')}}
+  v-card-subtitle(v-html="$t('admin.default_images_help')")
   v-card-text
     v-row
       v-col(cols='4')
@@ -109,12 +110,13 @@ import { mdiDeleteForever, mdiRestore, mdiPlus, mdiChevronUp } from '@mdi/js'
 export default {
   name: 'Theme',
   data () {
+    const t = new Date().getMilliseconds()
     return {
       mdiDeleteForever, mdiRestore, mdiPlus, mdiChevronUp,
       valid: false,
-      logoKey: 0,
-      fallbackImageKey: 0,
-      headerImageKey: 0,
+      logoKey: t,
+      fallbackImageKey: t,
+      headerImageKey: t,
       link: { href: '', label: '' },
       linkModal: false
       // menu: [false, false, false, false]

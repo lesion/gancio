@@ -93,7 +93,15 @@
         "show_map": "Mostrar mapa",
         "latitude": "Latitude",
         "longitude": "Longitude",
-        "getting_there": "Chegar lá"
+        "getting_there": "Chegar lá",
+        "plugins": "Complementos",
+        "help_translate": "Axuda coa tradución",
+        "calendar": "Calendario",
+        "home": "Inicio",
+        "about": "Acerca de",
+        "content": "Contido",
+        "admin_actions": "Accións de Admin",
+        "recurring_event_actions": "Accións de eventos recurrentes"
     },
     "recover": {
         "not_valid_code": "Algo fallou."
@@ -163,7 +171,9 @@
         "alt_text_description": "Descrición para persoas con problemas de visión",
         "choose_focal_point": "Elixe onde centrar a atención",
         "remove_media_confirmation": "Confirmas a eliminación da imaxe?",
-        "download_flyer": "Descargar folleto"
+        "download_flyer": "Descargar folleto",
+        "address_description": "Cal é o enderezo?",
+        "address_description_osm": "Cal é o enderezo? (Contribuíntes a <a href='http://osm.org/copyright'>OpenStreetMap</a>)"
     },
     "admin": {
         "place_description": "Se escribiches mal o lugar ou enderezo, podes cambialo.<br/>Cambiará o enderezo de tódolos eventos actuais e pasados asociados a este lugar.",
@@ -247,8 +257,19 @@
         "disable_admin_user_confirm": "Tes certeza de querer retirar os permisos de administración a {user}?",
         "sender_email": "Remitente",
         "collections_description": "As coleccións son agrupamentos de eventos por etiqueta ou lugar. Pode ser mostrado na páxina de inicio",
-        "enable_admin_user_confirm": "Tes a certeza de querer darlle permisos de administración a {user}?",
-        "smtp_use_sendmail": "Usar sendmail"
+        "enable_admin_user_confirm": "Tes a certeza de engadir permiso de admin a {user}?",
+        "smtp_use_sendmail": "Usar sendmail",
+        "config_plugin": "Configuración do complemento",
+        "known_users": "Usuarias coñecidas",
+        "created_at": "Creado o",
+        "fallback_image": "Imaxe por omisión",
+        "header_image": "Imaxe da cabeceira",
+        "hide_thumbs": "Agochar miniaturas",
+        "hide_calendar": "Agochar calendario",
+        "default_images": "Imaxes por defecto",
+        "blocked": "Bloqueado",
+        "domain": "Dominio",
+        "default_images_help": "Tes que <a href='/admin?tab=theme'>actualizar</a> a páxina para ver os cambios."
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",

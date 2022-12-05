@@ -98,7 +98,10 @@
         "about": "Sobre el sitio",
         "close": "Cerrar",
         "help_translate": "Ayuda a traducir",
-        "calendar": "Calendario"
+        "calendar": "Calendario",
+        "content": "Contenido",
+        "admin_actions": "Acciones de administrador",
+        "recurring_event_actions": "Acciones de eventos recurrentes"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
@@ -268,7 +271,12 @@
         "smtp_use_sendmail": "Usar sendmail",
         "wrong_domain_warning": "El parámetro baseurl configurado en config.json <b>({baseurl})</b> difiere del que estás visitando <b>({url})</b>",
         "new_collection": "Nueva colección",
-        "collections_description": "Las colecciones son agrupaciones de eventos por etiquetas y ubicaciones. Serán desplegadas en la página de inicio"
+        "collections_description": "Las colecciones son agrupaciones de eventos por etiquetas y ubicaciones. Serán desplegadas en la página de inicio",
+        "domain": "Dominio",
+        "created_at": "Creado a las",
+        "blocked": "Bloqueado",
+        "known_users": "Usuarios conocidos",
+        "default_images_help": "Tienes que <a href='/admin?tab=theme'>actualizas</a> la página para ver los cambios."
     },
     "auth": {
         "not_confirmed": "Todavía no hemos confirmado este email…",

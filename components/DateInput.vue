@@ -3,11 +3,10 @@ v-col(cols=12)
   .text-center
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-model='type' color='primary' @change='type => change("type", type)')
       v-btn(value='normal' label="normal") {{ $t('event.normal') }}
-      v-btn(value='multidate' label='multidate') {{ $t('event.multidate') }}
+      v-btn(v-if='settings.allow_multidate_event' value='multidate' label='multidate') {{ $t('event.multidate') }}
       v-btn(v-if='settings.allow_recurrent_event' value='recurrent' label="recurrent") {{ $t('event.recurrent') }}
 
     p {{ $t(`event.${type}_description`) }}
-
 
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-if='type === "recurrent"' color='primary' :value='value.recurrent.frequency' @change='fq => change("frequency", fq)')
       v-btn(v-for='f in frequencies' :key='f.value' :value='f.value') {{ f.text }}
@@ -60,7 +59,7 @@ v-col(cols=12)
           :allowedMinutes='allowedMinutes'
           format='24hr'
           @click:minute='menuFromHour = false'
-          @change='hr => change("fromHour", hr)')
+          @input='hr => change("fromHour", hr)')
 
 
     v-col.col-12.col-sm-6
@@ -88,7 +87,7 @@ v-col(cols=12)
           :allowedMinutes='allowedMinutes'
           format='24hr'
           @click:minute='menuDueHour = false'
-          @change='hr => change("dueHour", hr)')
+          @input='hr => change("dueHour", hr)')
 
   List(v-if='type === "normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
 
@@ -235,6 +234,15 @@ export default {
       } else if (what === 'dueHour') {
         if (value) {
           this.value.due = this.value.due ? this.value.due : this.value.from
+          const [hour, minute] = value.split(':')
+          const [fromHour, fromMinute] = this.value.fromHour.split(':')
+          if (!this.value.multidate) {
+            if (hour < fromHour) {
+              this.value.due = dayjs(this.value.from).add(1, 'day').toDate()
+            } else {
+              this.value.due = dayjs(this.value.from).toDate()
+            }
+          }
         } else {
           this.value.due = null
         }

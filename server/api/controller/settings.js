@@ -27,6 +27,7 @@ const defaultSettings = {
   instance_place: '',
   allow_registration: true,
   allow_anon_event: true,
+  allow_multidate_event: true,
   allow_recurrent_event: false,
   recurrent_event_visible: false,
   allow_geolocation: true,
