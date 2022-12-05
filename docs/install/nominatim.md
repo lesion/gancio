@@ -17,8 +17,8 @@ nav_order: 7
 ## Testing
 For testing purposes you could skip the nominatim installation and use one of this geocoding providers that run a server for free:
 
-- [https://photon.komoot.io/](https://photon.komoot.io/) [0]
-- [https://nominatim.openstreetmap.org](https://nominatim.openstreetmap.org) [1]
+- [https://photon.komoot.io/](https://photon.komoot.io/) [Terms of service](https://photon.komoot.io/)
+- [https://nominatim.openstreetmap.org/](https://nominatim.openstreetmap.org/) [Terms of service](https://operations.osmfoundation.org/policies/nominatim/)
 
 ---
 
@@ -137,8 +137,3 @@ docker-compose logs -f
 Try out the search:
 
 [http://0.0.0.0:8080/search?q=building](http://0.0.0.0:8080/search?q=building)
-
----
-Further Links      
-[0] Usage policy at [https://photon.komoot.io/](https://photon.komoot.io/)     
-[1] Usage policy at [https://operations.osmfoundation.org/policies/nominatim/](https://operations.osmfoundation.org/policies/nominatim/)
