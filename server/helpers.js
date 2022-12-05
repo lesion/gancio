@@ -80,6 +80,7 @@ module.exports = {
       allow_registration: settings.allow_registration,
       allow_anon_event: settings.allow_anon_event,
       allow_recurrent_event: settings.allow_recurrent_event,
+      allow_multidate_event: settings.allow_multidate_event,
       recurrent_event_visible: settings.recurrent_event_visible,
       enable_federation: settings.enable_federation,
       enable_resources: settings.enable_resources,
