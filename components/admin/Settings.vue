@@ -39,6 +39,10 @@ v-container
       inset
       :label="$t('admin.allow_anon_event')")
 
+    v-switch.mt-1(v-model='allow_multidate_event'
+      inset
+      :label="$t('admin.allow_multidate_event')")
+
     v-switch.mt-1(v-model='allow_recurrent_event'
       inset
       :label="$t('admin.allow_recurrent_event')")
@@ -114,6 +118,10 @@ export default {
     allow_recurrent_event: {
       get () { return this.settings.allow_recurrent_event },
       set (value) { this.setSetting({ key: 'allow_recurrent_event', value }) }
+    },
+    allow_multidate_event: {
+      get () { return this.settings.allow_multidate_event },
+      set (value) { this.setSetting({ key: 'allow_multidate_event', value }) }
     },
     recurrent_event_visible: {
       get () { return this.settings.recurrent_event_visible },

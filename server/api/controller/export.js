@@ -88,6 +88,7 @@ const exportController = {
       const start = tmpStart.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
       const end = tmpEnd.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
       return {
+        uid: `${e.id}@${settings.hostname}`,
         start,
         end,
         title: `[${settings.title}] ${e.title}`,

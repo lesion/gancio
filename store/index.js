@@ -6,6 +6,7 @@ export const state = () => ({
     instance_name: '',
     allow_registration: true,
     allow_anon_event: true,
+    allow_multidate_event: true,
     allow_recurrent_event: true,
     recurrent_event_visible: false,
     allow_geolocation: false,
