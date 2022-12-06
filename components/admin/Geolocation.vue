@@ -5,60 +5,69 @@ v-card
     p.mb-6(v-html="$t('admin.geolocation_description')")
 
     v-form
-      v-autocomplete.mb-4(v-model='geocoding_provider_type'
-        @blur="save('geocoding_provider_type', geocoding_provider_type )"
-        :label="$t('admin.geocoding_provider_type')"
-        :hint="$t('admin.geocoding_provider_type_help')"
-        persistent-hint
-        :items="geocoding_provider_type_items"
-        :placeholder="geocoding_provider_type_default")
+      v-row
+        v-col(md=3)
+          v-autocomplete.mb-4(v-model='geocoding_provider_type'
+            @blur="save('geocoding_provider_type', geocoding_provider_type )"
+            :label="$t('admin.geocoding_provider_type')"
+            :hint="$t('admin.geocoding_provider_type_help')"
+            persistent-hint
+            :items="geocoding_provider_type_items"
+            :placeholder="geocoding_provider_type_default")
 
-      v-text-field.mb-4(v-model='geocoding_provider'
-        @blur="save('geocoding_provider', geocoding_provider )"
-        :label="$t('admin.geocoding_provider')"
-        :hint="$t('admin.geocoding_provider_help')"
-        persistent-hint
-        :placeholder="geocoding_provider_default")
+        v-col(md=5)
+          v-text-field.mb-4(v-model='geocoding_provider'
+            @blur="save('geocoding_provider', geocoding_provider )"
+            :label="$t('admin.geocoding_provider')"
+            :hint="$t('admin.geocoding_provider_help')"
+            persistent-hint
+            :placeholder="geocoding_provider_default")
 
-      v-autocomplete.mb-6(v-model="geocoding_countrycodes" :disabled="!(geocoding_provider_type === null || geocoding_provider_type === 'Nominatim')"
-        @blur="save('geocoding_countrycodes', geocoding_countrycodes )"
-        :label="$t('admin.geocoding_countrycodes')"
-        :items="countries"
-        multiple chips small-chips persistent-hint
-        item-value="code"
-        item-text="name"
-        :hint="$t('admin.geocoding_countrycodes_help')")
+        v-col(md=4)
+          v-autocomplete.mb-6(v-model="geocoding_countrycodes" :disabled="!(geocoding_provider_type === null || geocoding_provider_type === 'Nominatim')"
+            @blur="save('geocoding_countrycodes', geocoding_countrycodes )"
+            :label="$t('admin.geocoding_countrycodes')"
+            :items="countries"
+            multiple chips small-chips persistent-hint
+            item-value="code"
+            item-text="name"
+            :hint="$t('admin.geocoding_countrycodes_help')")
+      
+      v-row
+        v-col(md=6)
+          v-text-field.mb-4(v-model='tilelayer_provider'
+            @blur="save('tilelayer_provider', tilelayer_provider )"
+            :label="$t('admin.tilelayer_provider')"
+            :hint="$t('admin.tilelayer_provider_help')"
+            persistent-hint
+            :placeholder="tilelayer_provider_default")
 
-      v-text-field.mb-4(v-model='tilelayer_provider'
-        @blur="save('tilelayer_provider', tilelayer_provider )"
-        :label="$t('admin.tilelayer_provider')"
-        :hint="$t('admin.tilelayer_provider_help')"
-        persistent-hint
-        :placeholder="tilelayer_provider_default")
-
-      v-text-field(v-model='tilelayer_provider_attribution'
-        @blur="save('tilelayer_provider_attribution', tilelayer_provider_attribution )"
-        :label="$t('admin.tilelayer_provider_attribution')"
-        :placeholder="tilelayer_provider_attribution_default")
+        v-col(md=6)
+          v-text-field(v-model='tilelayer_provider_attribution'
+            @blur="save('tilelayer_provider_attribution', tilelayer_provider_attribution )"
+            :label="$t('admin.tilelayer_provider_attribution')"
+            :placeholder="tilelayer_provider_attribution_default")
 
       div(id="leaflet-map-preview" max-height='10px')
+      //- Map
 
   v-card-actions
     v-spacer
     v-btn(color='primary' @click='testGeocodingProvider' :loading='testGeocodingLoading' outlined ) {{$t('admin.geocoding_test_button')}}
     v-btn(color='primary' @click='testTileLayerProvider' :loading='testTileLayerLoading' outlined ) {{$t('admin.tilelayer_test_button')}}
-    v-btn(color='warning' @click="done" outlined) {{$t("common.ok")}}
 
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
 import { isoCountries } from '../../server/helpers/geolocation'
+// import Map from '~/components/Map'
 import "leaflet/dist/leaflet.css"
 
 export default {
   props: {
     setup: { type: Boolean, default: false }
   },
+  // components: { Map },
   data ({ $store }) {
     return {
       loading: false,
