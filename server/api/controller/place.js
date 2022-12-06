@@ -3,6 +3,8 @@ const Event = require('../models/event')
 const eventController = require('./event')
 const exportController = require('./export')
 
+const { version } = require('../../../package.json')
+
 const log = require('../../log')
 const { Op, where, col, fn, cast } = require('sequelize')
 const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search'
@@ -78,6 +80,7 @@ module.exports = {
   async _nominatim (req, res) {
     const details = req.params.place_details
     const countrycodes = res.locals.settings.geocoding_countrycodes || ''
+    console.error(countrycodes)
     const geocoding_provider = res.locals.settings.geocoding_provider || NOMINATIM_URL
     // ?limit=3&format=json&namedetails=1&addressdetails=1&q=
 
@@ -90,7 +93,7 @@ module.exports = {
         addressdetails: 1,
         namedetails: 1,
       },
-      headers: { 'User-Agent': 'gancio 1.6.0' }
+      headers: { 'User-Agent': `gancio ${version}` }
     })
 
     // console.log(ret)
@@ -107,7 +110,7 @@ module.exports = {
         q: details,
         limit: 3,
       },
-      headers: { 'User-Agent': 'gancio 1.6.0' }
+      headers: { 'User-Agent': `gancio ${version}` }
     })
 
     // console.log(ret)
