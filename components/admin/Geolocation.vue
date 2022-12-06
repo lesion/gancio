@@ -20,7 +20,7 @@ v-card
         persistent-hint
         :placeholder="geocoding_provider_default")
 
-      v-autocomplete.mb-6(v-model="geocoding_countrycodes" :disabled="geocoding_provider_type != null || geocoding_provider_type != 'Nominatim'"
+      v-autocomplete.mb-6(v-model="geocoding_countrycodes" :disabled="!(geocoding_provider_type === null || geocoding_provider_type === 'Nominatim')"
         @blur="save('geocoding_countrycodes', geocoding_countrycodes )"
         :label="$t('admin.geocoding_countrycodes')"
         :items="countries"
