@@ -1,6 +1,6 @@
 <template lang="pug">
 v-card
-  v-card-title Geolocation and Map settings
+  v-card-title {{$t('admin.geolocation')}}
   v-card-text
     p.mb-6(v-html="$t('admin.geolocation_description')")
 
@@ -25,6 +25,7 @@ v-card
 
         v-col(md=4)
           v-autocomplete.mb-6(v-model="geocoding_countrycodes" :disabled="!(geocoding_provider_type === null || geocoding_provider_type === 'Nominatim')"
+            :append-icon='mdiChevronDown'
             @blur="save('geocoding_countrycodes', geocoding_countrycodes )"
             :label="$t('admin.geocoding_countrycodes')"
             :items="countries"
@@ -60,6 +61,7 @@ v-card
 <script>
 import { mapActions, mapState } from 'vuex'
 import { isoCountries } from '../../server/helpers/geolocation'
+import { mdiChevronDown } from '@mdi/js'
 // import Map from '~/components/Map'
 import "leaflet/dist/leaflet.css"
 
@@ -70,6 +72,7 @@ export default {
   // components: { Map },
   data ({ $store }) {
     return {
+      mdiChevronDown,
       loading: false,
       testGeocodingLoading: false,
       testTileLayerLoading: false,
@@ -161,6 +164,6 @@ export default {
 
 <style>
 #leaflet-map-preview {
-  height: 6rem;
+  height: 20rem;
 }
 </style>

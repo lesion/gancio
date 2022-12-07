@@ -271,7 +271,6 @@
     "domain": "Domain",
     "known_users": "Known users",
     "created_at": "Created at",
-    "show_geolocation_setup": "Geolocation and map settings",
     "geolocation_description": "<b>1. Define a provider for geocoding service</b>.<br>Currently, among those listed in the <a href=\"https://wiki.openstreetmap.org/wiki/Nominatim#Alternatives_.2F_Third-party_providers\">wiki of OpenStreetMap</a>, there is support for software <a href=\"https://github.com/osm-search/Nominatim\">Nominatim</a> and <a href=\"https://github.com/komoot/photon\">Photon</a>.<br>You can use one of the related official demos by copying the link in the 'Geocoding provider' field:<ul><li>https://nominatim.openstreetmap.org/search <a href=\"https://operations.osmfoundation.org/policies/nominatim/\">  [Terms of Service]</a></li><li>https://photon.komoot.io/api/ <a href=\"https://photon.komoot.io/\">  [Terms of Service]</a></li></ul><br><b>2. Define a provider for map layers.</b><br>You can find a list of them here: <a href=\"https://leaflet-extras.github.io/leaflet-providers/preview/\">https://leaflet-extras.github.io/leaflet-providers/preview/</a>",
     "geocoding_provider_type": "Geocoding software",
     "geocoding_provider_type_help": "The default software is Nominatim",
@@ -280,7 +279,6 @@
     "geocoding_countrycodes": "Country codes",
     "geocoding_countrycodes_help": "Allows you to set a filter to searches based on area codes",
     "geocoding_test_button": "Test geocoding",
-    "geocoding_test_success": "The service {service_name} is available",
     "geocoding_test_success": "The geocoding service at {service_name} is working",
     "geocoding_test_error": "The geocoding service is not reachable at {service_name}",
     "tilelayer_provider": "Tilelayer provider",
@@ -288,7 +286,8 @@
     "tilelayer_provider_attribution": "Attribution",
     "tilelayer_test_button": "Test tilelayer",
     "tilelayer_test_success": "The tilelayer service at {service_name} is working",
-    "tilelayer_test_error": "The tilelayer service is not reachable at {service_name}"
+    "tilelayer_test_error": "The tilelayer service is not reachable at {service_name}",
+    "geolocation": "Geolocation"
   },
   "auth": {
     "not_confirmed": "Not confirmed yet…",
