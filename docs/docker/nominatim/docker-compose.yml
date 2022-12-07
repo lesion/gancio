@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  nominatim:
+    container_name: nominatim
+    image: mediagis/nominatim:4.2
+    restart: always
+    ports:
+        - "8080:8080"
+    environment:
+        # see https://github.com/mediagis/nominatim-docker/tree/master/4.2#configuration for more options
+        PBF_PATH: "${PBF_PATH}"
+        PBF_URL: "${PBF_URL}"
+        REPLICATION_URL: "${REPLICATION_URL}"
+        NOMINATIM_PASSWORD: ${NOMINATIM_PASSWORD}
+    volumes:
+        - ./nominatim-data:/var/lib/postgresql/14/main
+        - ./nominatim/data/"${PBF_PATH}":/nominatim/data/"${PBF_PATH}"
+    shm_size: 1gb
