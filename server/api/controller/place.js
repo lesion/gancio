@@ -79,14 +79,13 @@ module.exports = {
 
   async _nominatim (req, res) {
     const details = req.params.place_details
-    const countrycodes = res.locals.settings.geocoding_countrycodes || ''
-    console.error(countrycodes)
+    const countrycodes = res.locals.settings.geocoding_countrycodes || []
     const geocoding_provider = res.locals.settings.geocoding_provider || NOMINATIM_URL
     // ?limit=3&format=json&namedetails=1&addressdetails=1&q=
 
     const ret = await axios.get(`${geocoding_provider}`, {
       params: {
-        countrycodes: countrycodes,
+        countrycodes: countrycodes.join(','),
         q: details,
         limit: 3,
         format: 'json',
@@ -96,7 +95,6 @@ module.exports = {
       headers: { 'User-Agent': `gancio ${version}` }
     })
 
-    // console.log(ret)
     return res.json(ret.data)
 
   },
