@@ -248,6 +248,7 @@
     "smtp_test_success": "Una mail di test è stata inviata all'indirizzo {admin_email}, controlla la tua casella di posta",
     "smtp_test_button": "Invia una mail di prova",
     "admin_email": "E-mail dell'admin",
+    "admin_email_help": "L'indirizzo che usiamo come mittente per inviare le e-mail. È anche l'indirizzo a cui vengono spedite le e-mail di amministrazione",
     "new_collection": "Crea bolla",
     "wrong_domain_warning": "Il \"baseurl\" configurato in config.json <b>({baseurl})</b> è diverso da quello che stai visitando <b>({url})</b>",
     "collections_description": "Le bolle sono raggruppamenti di eventi per tag e posti.",
