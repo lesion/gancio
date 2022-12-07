@@ -98,7 +98,10 @@
         "home": "Inici",
         "help_translate": "Ajuda amb la traducció",
         "calendar": "Calendari",
-        "about": "Sobre aquesta agenda"
+        "about": "Sobre aquesta agenda",
+        "content": "Contingut",
+        "admin_actions": "Accions d'administració",
+        "recurring_event_actions": "Accions d'activitats recorrents"
     },
     "login": {
         "description": "Amb la sessió iniciada pots afegir activitats noves.",
@@ -175,7 +178,7 @@
         "saved": "S'ha desat l'activitat",
         "import_description": "Pots importar activitats des d'altres instàncies o plataformes que facin servir formats estàndards (ics o h-event)",
         "remove_media_confirmation": "Confirmeu l'eliminació de la imatge?",
-        "download_flyer": "Baixa el flyer",
+        "download_flyer": "Baixa el cartell",
         "alt_text_description": "Descripció per a persones amb discapacitat visual",
         "choose_focal_point": "Tria el punt focal",
         "address_description": "Quina és l'adreça completa del lloc?",
@@ -270,7 +273,12 @@
         "fallback_image": "Cartell per defecte",
         "config_plugin": "Configura el complement",
         "header_image": "Imatge de capçalera",
-        "default_images": "Cartell per defecte"
+        "default_images": "Cartell per defecte",
+        "blocked": "Bloquejat/da",
+        "domain": "Domini",
+        "known_users": "Usuàries conegudes",
+        "created_at": "Creada",
+        "default_images_help": "<a href='/admin?tab=theme'>Actualitza la pàgina</a> per veure els canvis."
     },
     "auth": {
         "not_confirmed": "Encara no s'ha confirmat…",
