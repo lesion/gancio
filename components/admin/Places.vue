@@ -68,7 +68,7 @@ import debounce from 'lodash/debounce'
 import get from 'lodash/get'
 
 export default {
-  data() {
+  data( {$store} ) {
     return {
       mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiEye, mdiMapSearch, mdiChevronDown,
       loading: false,
@@ -84,7 +84,8 @@ export default {
         { value: 'address', text: this.$t('common.address') },
         { value: 'map', text: 'Map' },
         { value: 'actions', text: this.$t('common.actions'), align: 'right' }
-      ]
+      ],
+      geocoding_provider_type: $store.state.settings.geocoding_provider_type || 'Nominatim'
     }
   },
   async fetch() {
@@ -124,7 +125,7 @@ export default {
         this.place.latitude = this.place.longitude = null
       }
       this.$emit('input', { ...this.place })
-    },    
+    },
     searchAddress: debounce(async function(ev) {
       const pre_searchCoordinates = ev.target.value.trim().toLowerCase()
       // allow pasting coordinates lat/lon and lat,lon
@@ -159,24 +160,59 @@ export default {
 
       if (searchCoordinates.length) {
         this.loading = true
-        const ret = await this.$axios.$get(`placeNominatim/${searchCoordinates}`)
-        if (ret && ret.length) {
-          this.addressList = ret.map(v => {
-            const name = get(v.namedetails, 'alt_name', get(v.namedetails, 'name'))
-            const address = v.display_name ? v.display_name.replace(name, '').replace(/^, ?/, '') : ''
-            return {
-              lat: v.lat,
-              lon: v.lon,
-              name,
-              address
-            }
-          })
-        } else {
-          this.addressList = []
+        const ret = await this.$axios.$get(`placeOSM/${this.geocoding_provider_type}/${searchCoordinates}`)
+        if (this.geocoding_provider_type == "Nominatim") {
+          if (ret && ret.length) {
+            this.addressList = ret.map(v => {
+              const name = get(v.namedetails, 'alt_name', get(v.namedetails, 'name'))
+              const address = v.display_name ? v.display_name.replace(name, '').replace(/^, ?/, '') : ''
+              return {
+                class: v.class,
+                type: v.osm_type,
+                lat: v.lat,
+                lon: v.lon,
+                name,
+                address
+              }
+            })
+          } else {
+            this.addressList = []
+          }
+        } else if (this.geocoding_provider_type == "Photon") {
+          let photon_properties = ['housenumber', 'street', 'district', 'city', 'county', 'state', 'postcode', 'country']
+
+          if (ret) {
+            this.addressList = ret.features.map(v => {
+              let pre_name = v.properties.name || v.properties.street || ''
+              let pre_address = ''
+
+              photon_properties.forEach((item, i) => {
+                let last = i == (photon_properties.length - 1)
+                if (v.properties[item] && !last) {
+                  pre_address += v.properties[item]+', '
+                } else if (v.properties[item]) {
+                  pre_address += v.properties[item]
+                }
+              });
+
+              let name = pre_name
+              let address = pre_address
+              return {
+                class: v.properties.osm_key,
+                type: v.properties.osm_type,
+                lat: v.geometry.coordinates[1],
+                lon: v.geometry.coordinates[0],
+                name,
+                address
+              }
+            })
+          } else {
+            this.addressList = []
+          }
         }
         this.loading = false
       }
-    }, 300)    
+    }, 300)
   }
 }
 </script>
