@@ -22,16 +22,17 @@ v-row.mb-4
             v-list-item-title(v-text='item.name')
             v-list-item-subtitle(v-text='item.address')
 
-    //- v-text-field(
-    //-   ref='address'
-    //-   :prepend-icon='mdiMap'
-    //-   :disabled='disableAddress'
-    //-   :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
-    //-   :label="$t('common.address')"
-    //-   @change="changeAddress"
-    //-   :value="value.address")
+
   v-col(cols=12 md=6)
-    v-combobox(ref='address'
+    v-text-field(v-if="!settings.allow_geolocation"
+       ref='address'
+       :prepend-icon='mdiMap'
+       :disabled='disableAddress'
+       :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
+       :label="$t('common.address')"
+       @change="changeAddress"
+       :value="value.address")
+    v-combobox(ref='address' v-if="settings.allow_geolocation"
       :prepend-icon='mdiMapSearch'
       :disabled='disableAddress'
       @input.native='searchAddress'
@@ -182,11 +183,11 @@ export default {
       }
       this.$emit('input', { ...this.place })
     },
-    // changeAddress (v) {
-    //   this.place.address = v
-    //   this.$emit('input', { ...this.place })
-    //   this.disableDetails = false
-    // },
+    changeAddress (v) {
+      this.place.address = v
+      this.$emit('input', { ...this.place })
+      this.disableDetails = false
+    },
     selectAddress (v) {
       if (!v) { return }
       if (typeof v === 'object') {
