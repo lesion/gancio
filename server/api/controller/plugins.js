@@ -81,8 +81,7 @@ const pluginController = {
     if (plugin.load && typeof plugin.load === 'function') {
       plugin.load({
         helpers: require('../../helpers'),
-        settings: settingsController.settings,
-        config
+        settings: settingsController.settings
       },
       settings)
     }
