@@ -1,6 +1,6 @@
 All notable changes to this project will be documented in this file.
 
-### 1.6.0 - 30 nov '22
+### 1.6.0 - 11 dec '22
   - new plugin system - fix #177
     - new "publish on telegram" plugin: (thanks @fadelkon)
   - people can now choose the language displayed - fix #171
@@ -18,8 +18,8 @@ All notable changes to this project will be documented in this file.
   - Wordpress plugin now supports MU installation
   - new chinese translation
   - new portuguese translation
-  - improve navbar layout
-  - improve event layout
+  - improved navbar layout
+  - improved event layout
   - complete oauth2 refactoring
   - fix ics unique uuid
   - fix place "[Object]" issue - #194
