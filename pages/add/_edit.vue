@@ -101,9 +101,9 @@ export default {
     if (params.edit && !store.state.auth.loggedIn) {
       return error({ statusCode: 401, message: 'Not allowed'})
     }
-    
+
     return true
-    
+
   },
   async asyncData({ params, $axios, error, $auth, store }) {
     if (params.edit) {
@@ -179,6 +179,7 @@ export default {
     filteredTags() {
       if (!this.tagName) { return this.tags.slice(0, 10).map(t => t.tag) }
       const tagName = this.tagName.trim().toLowerCase()
+      console.log(tagName)
       return this.tags.filter(t => t.tag.toLowerCase().includes(tagName)).map(t => t.tag)
     }
   },
