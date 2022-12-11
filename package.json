@@ -1,6 +1,6 @@
 {
   "name": "gancio",
-  "version": "1.6.0-rc5",
+  "version": "1.6.0",
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
@@ -27,7 +27,6 @@
     "locales/",
     "store/",
     ".nuxt/",
-    "gancio_plugins",
     "yarn.lock"
   ],
   "engines": {
