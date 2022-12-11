@@ -90,7 +90,7 @@ const pluginController = {
   _load() {
     const settingsController = require('./settings')
     // load custom plugins
-    const plugins_path = config.plugins_path || path.resolve(process.env.cwd || '', 'gancio_plugins')
+    const plugins_path = config.plugins_path || path.resolve(process.env.cwd || '', 'plugins')
     log.info(`Loading plugin  ${plugins_path}`)
     if (fs.existsSync(plugins_path)) {
       const plugins = fs.readdirSync(plugins_path)
