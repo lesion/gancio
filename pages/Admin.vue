@@ -26,6 +26,11 @@ v-container.container.pa-0.pa-md-3
       v-tab-item(value='places')
         Places
       
+      //- TAGS
+      v-tab(href='#tags') {{$t('common.tags')}}
+      v-tab-item(value='tags')
+        Tags
+
       //- GEOCODING / MAPS
       v-tab(href='#geolocation' v-if='settings.allow_geolocation') {{$t('admin.geolocation')}}
       v-tab-item(value='geolocation')
@@ -77,6 +82,7 @@ export default {
     Users:  () => import(/* webpackChunkName: "admin" */'../components/admin/Users'),
     Events: () => import(/* webpackChunkName: "admin" */'../components/admin/Events'),
     Places: () => import(/* webpackChunkName: "admin" */'../components/admin/Places'),
+    Tags: () => import(/* webpackChunkName: "admin" */'../components/admin/Tags'),
     Collections: () => import(/* webpackChunkName: "admin" */'../components/admin/Collections'),
     [process.client && 'Geolocation']: () => import(/* webpackChunkName: "admin" */'../components/admin/Geolocation.vue'),
     Federation: () => import(/* webpackChunkName: "admin" */'../components/admin/Federation.vue'),

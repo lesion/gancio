@@ -285,10 +285,10 @@ describe('Place', () => {
   })
 
   test('admin should get all places', async () => {
-    await request(app).get('/api/place/all')
+    await request(app).get('/api/places')
       .expect(403)
 
-    const response = await request(app).get('/api/place/all')
+    const response = await request(app).get('/api/places')
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 

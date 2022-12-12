@@ -82,6 +82,7 @@
     "url": "URL",
     "place": "Place",
     "tags": "Tags",
+    "tag": "Tag",
     "theme": "Theme",
     "reset": "Reset",
     "import": "Import",

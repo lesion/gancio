@@ -1,6 +1,8 @@
 const Tag = require('../models/tag')
 const Event = require('../models/event')
 const uniq = require('lodash/uniq')
+const log = require('../../log')
+
 
 const { where, fn, col, Op } = require('sequelize')
 const exportController = require('./export')
@@ -45,6 +47,20 @@ module.exports = {
     }
   },
 
+
+
+  async getAll (_req, res) {
+    const tags = await Tag.findAll({
+      order: [[fn('COUNT', col('tag.tag')), 'DESC']],
+      attributes: ['tag', [fn('COUNT', col('tag.tag')), 'count']],
+      include: [{ model: Event, where: { is_visible: true }, attributes: [], through: { attributes: [] }, required: true }],
+      group: ['tag.tag'],
+      raw: true,
+    })
+    return res.json(tags)
+  },
+
+
   /** 
    * search for tags by query string
    * sorted by usage
@@ -60,9 +76,30 @@ module.exports = {
       include: [{ model: Event, where: { is_visible: true }, attributes: [], through: { attributes: [] }, required: true }],
       group: ['tag.tag'],
       limit: 10,
-      subQuery:false
+      subQuery: false
     })
 
     return res.json(tags.map(t => t.tag))
+  },
+
+  async updateTag (req, res) {
+    const tag = await Tag.findByPk(req.body.tag)
+    await tag.update(req.body)
+    res.json(place)
+  },
+
+
+  async remove (req, res) {
+    log.info('Remove tag', req.params.tag)
+    const tagName = req.params.tag
+    try {
+      const tag = await Tag.findByPk(tagName)
+      await tag.destroy()
+      res.sendStatus(200)
+    } catch (e) {
+      log.error('Tag removal failed:', e)
+      res.sendStatus(404)
+    }
   }
+
 }
