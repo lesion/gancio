@@ -89,7 +89,7 @@ export default {
     }
   },
   async fetch() {
-    this.places = await this.$axios.$get('/place/all')
+    this.places = await this.$axios.$get('/places')
   },
   computed: {
     ...mapState(['settings']),

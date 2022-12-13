@@ -162,15 +162,21 @@ if (config.status !== 'READY') {
   api.get('/export/:type', cors, exportController.export)
 
 
-  api.get('/place/all', isAdmin, placeController.getAll)
+  // - PLACES
+  api.get('/places', isAdmin, placeController.getAll)
   api.get('/place/:placeName', cors, placeController.getEvents)
   api.get('/place', cors, placeController.search)
   api.get('/placeOSM/Nominatim/:place_details', cors, placeController._nominatim)
   api.get('/placeOSM/Photon/:place_details', cors, placeController._photon)
   api.put('/place', isAdmin, placeController.updatePlace)
 
+  // - TAGS
+  api.get('/tags', isAdmin, tagController.getAll)
   api.get('/tag', cors, tagController.search)
   api.get('/tag/:tag', cors, tagController.getEvents)
+  api.delete('/tag/:tag', isAdmin, tagController.remove)
+  api.put('/tag', isAdmin, tagController.updateTag)
+
 
   // - FEDIVERSE INSTANCES, MODERATION, RESOURCES
   api.get('/instances', isAdmin, instanceController.getAll)
