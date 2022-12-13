@@ -217,7 +217,7 @@ const settingsController = {
     }
 
     const uploadedPath = path.join(req.file.destination, req.file.filename)
-    const baseImgPath = path.resolve(config.upload_path, 'fallbackImage.png')
+    const baseImgPath = path.resolve(config.upload_path, 'headerImage.png')
 
     // convert and resize to png
     return sharp(uploadedPath)
