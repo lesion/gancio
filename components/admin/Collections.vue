@@ -33,7 +33,7 @@ v-container
               :prepend-icon="mdiTagMultiple"
               chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
               :disabled="!collection.id"
-              placeholder='Tutte'
+              placeholder='All'
               @input.native='searchTags'
               @focus='searchTags'
               :delimiters="[',', ';']"

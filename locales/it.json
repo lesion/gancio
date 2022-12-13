@@ -240,6 +240,8 @@
     "footer_links": "Collegamenti del piè di pagina",
     "delete_footer_link_confirm": "Vuoi eliminare questo collegamento?",
     "edit_place": "Modifica luogo",
+    "edit_tag": "Modifica tag",
+    "edit_tag_help": "Puoi cambiare il tag sostituendolo con uno nuovo o unendolo ad uno gia' esistente. Verranno modificati anche i {n} eventi associati",
     "new_announcement": "Nuovo annuncio",
     "show_smtp_setup": "Impostazioni email",
     "widget": "Widget",

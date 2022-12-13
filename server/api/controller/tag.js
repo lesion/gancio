@@ -88,6 +88,24 @@ module.exports = {
     res.json(place)
   },
 
+  async updateTag (req, res) {
+    const oldtag = await Tag.findByPk(req.body.tag)
+    const newtag = await Tag.findByPk(req.body.newTag)
+
+    // if the new tag does not exists, just rename the old one
+    if (!newtag) {
+      oldtag.tag = req.body.newTag
+      await oldtag.update({ tag: req.body.newTag })
+    } else {
+      // in case it exists:
+      // - search for events with old tag
+      const events = await oldtag.getEvents()
+      // - substitute it with the new one
+      await oldtag.removeEvents(events)
+      await newtag.addEvents(events)
+    }
+    res.sendStatus(200)
+  },
 
   async remove (req, res) {
     log.info('Remove tag', req.params.tag)

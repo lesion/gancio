@@ -9,19 +9,28 @@ v-container
 
   v-dialog(v-model='dialog' width='600' :fullscreen='$vuetify.breakpoint.xsOnly')
     v-card
-      v-card-title {{ $t('admin.edit_tag') }}
+      v-card-title {{$t('admin.edit_tag')}} -
+        strong.ml-2 {{tag.tag}}
+      v-card-subtitle {{$tc('admin.edit_tag_help', tag.count)}}
       v-card-text
+        p {{newTag}}
         v-form(v-model='valid' ref='form' lazy-validation)
-          v-text-field(
-            :rules="[$validators.required('common.name')]"
-            :label="$t('common.tag')"
-            v-model='tag.tag'
-            :placeholder='$t("common.tag")')
+          v-combobox(v-model='newTag'
+            :prepend-icon="mdiTag"
+            hide-no-data
+            persistent-hint
+            :items="tags"
+            :return-object='false'
+            item-value='tag'
+            item-text='tag'
+            :label="$t('common.tags')")
+              template(v-slot:item="{ item, on, attrs }")
+                span "{{item.tag}}" <small>({{item.count}})</small>
 
       v-card-actions
         v-spacer
         v-btn(@click='dialog = false' outlined color='warning') {{ $t('common.cancel') }}
-        v-btn(@click='savePlace' color='primary' outlined :loading='loading'
+        v-btn(@click='saveTag' color='primary' outlined :loading='loading'
           :disable='!valid || loading') {{ $t('common.save') }}
 
   v-card-text
@@ -44,7 +53,7 @@ v-container
 
 </template>
 <script>
-import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiEye, mdiMapSearch, mdiChevronDown, mdiDeleteForever } from '@mdi/js'
+import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiEye, mdiMapSearch, mdiChevronDown, mdiDeleteForever, mdiTag } from '@mdi/js'
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 import get from 'lodash/get'
@@ -52,11 +61,12 @@ import get from 'lodash/get'
 export default {
   data( {$store} ) {
     return {
-      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiEye, mdiMapSearch, mdiChevronDown, mdiDeleteForever,
+      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiEye, mdiMapSearch, mdiChevronDown, mdiDeleteForever, mdiTag,
       loading: false,
       dialog: false,
       valid: false,
       tag: {},
+      newTag: '',
       tags: [],
       search: '',
       headers: [
@@ -75,18 +85,21 @@ export default {
   methods: {
     editTag(item) {
       this.tag.tag = item.tag
+      this.tag.count = item.count
       this.dialog = true
     },
     async saveTag() {
       if (!this.$refs.form.validate()) return
       this.loading = true
-      await this.$axios.$put('/tag', this.tag)
-      await this.$fetch()
-      this.loading = false
-      this.dialog = false
+      this.$nextTick( async () => {
+        await this.$axios.$put('/tag', { tag: this.tag.tag, newTag: this.newTag })
+        await this.$fetch()
+        this.loading = false
+        this.dialog = false
+      })
     },
     async removeTag(tag) {
-      const ret = await this.$root.$confirm('admin.delete_tag_confirm', { tag: tag.tag })
+      const ret = await this.$root.$confirm('admin.delete_tag_confirm', { tag: tag.tag, n: tag.count })
       if (!ret) { return }
       try {
         await this.$axios.$delete(`/tag/${encodeURIComponent(tag.tag)}`)
