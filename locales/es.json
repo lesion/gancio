@@ -276,7 +276,12 @@
         "created_at": "Creado a las",
         "blocked": "Bloqueado",
         "known_users": "Usuarios conocidos",
-        "default_images_help": "Tienes que <a href='/admin?tab=theme'>actualizas</a> la página para ver los cambios."
+        "default_images_help": "Tienes que <a href='/admin?tab=theme'>actualizas</a> la página para ver los cambios.",
+        "geocoding_provider": "Proveedor de geocodificación",
+        "admin_email_help": "La dirección que usamos como remitente para enviar emails. Esta es también la dirección a la cual los emails de administración son enviados",
+        "allow_multidate_event": "Permitir eventos de múltiples días",
+        "geocoding_countrycodes": "Códigos de país",
+        "geocoding_provider_help": "El proveedor por defecto es Nominatim"
     },
     "auth": {
         "not_confirmed": "Todavía no hemos confirmado este email…",
