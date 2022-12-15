@@ -8,6 +8,13 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.6.1 - 15 dec '22
+  - allow edit tags in admin panel, fix #170
+  - fix header / fallback image upload, fix #222
+  - fix WPGancio MU
+  - fix recurrent events label
+  - update translations (de, es, eu, gl)
+
 ### 1.6.0 - 11 dec '22
   - new plugin system - fix #177
     - new "publish on telegram" plugin: (thanks @fadelkon)
