@@ -23,6 +23,32 @@ const log = require('../../log')
 
 const eventController = {
 
+  async _findOrCreatePlace (body) {
+    if (body.place_id) {
+      const place = await Place.findByPk(body.place_id)
+      if (!place) {
+        throw new Error(`Place not found`)
+      }
+      return place
+    }
+
+    const place_name = body.place_name && body.place_name.trim()
+    const place_address = body.place_address && body.place_address.trim()
+    if (!place_address || !place_name) {
+      throw new Error(`place_id or place_name and place_address are required`)
+    }    
+    let place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Sequelize.Op.eq, place_name.toLocaleLowerCase()) })
+    if (!place) {
+      place = await Place.create({
+        name: place_name,
+        address: place_address,
+        latitude: body.place_latitude,
+        longitude: body.place_longitude        
+      })
+    }
+    return place
+  },
+
   async searchMeta(req, res) {
     const search = req.query.search
 
@@ -34,7 +60,7 @@ const eventController = {
           Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('address')), 'LIKE', '%' + search + '%')
         ]
       },
-      attributes: [['name', 'label'], 'address', 'id', [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('events.placeId')), 'INTEGER'), 'w']],
+      attributes: [['name', 'label'], 'address', 'latitude', 'longitude', 'id', [Sequelize.cast(Sequelize.fn('COUNT', Sequelize.col('events.placeId')), 'INTEGER'), 'w']],
       include: [{ model: Event, where: { is_visible: true }, required: true, attributes: [] }],
       group: ['place.id'],
       raw: true
@@ -110,7 +136,7 @@ const eventController = {
           attributes: ['tag'],
           through: { attributes: [] }
         },
-        { model: Place, required: true, attributes: ['id', 'name', 'address'] }
+        { model: Place, required: true, attributes: ['id', 'name', 'address', 'latitude', 'longitude'] }
       ],
       replacements,
       limit: 30,
@@ -172,7 +198,7 @@ const eventController = {
 
   async get(req, res) {
     const format = req.params.format || 'json'
-    const is_admin = res.locals.user && res.locals.user.is_admin
+    const is_admin = req.user && req.user.is_admin
     const slug = req.params.event_slug
 
     // retrocompatibility, old events URL does not use slug, use id as fallback
@@ -192,7 +218,7 @@ const eventController = {
         },
         include: [
           { model: Tag, required: false, attributes: ['tag'], through: { attributes: [] } },
-          { model: Place, attributes: ['name', 'address', 'id'] },
+          { model: Place, attributes: ['name', 'address', 'latitude', 'longitude', 'id'] },
           {
             model: Resource,
             where: !is_admin && { hidden: false },
@@ -277,7 +303,7 @@ const eventController = {
       log.warn(`Trying to confirm a unknown event, id: ${id}`)
       return res.sendStatus(404)
     }
-    if (!res.locals.user.is_admin && res.locals.user.id !== event.userId) {
+    if (!req.user.is_admin && req.user.id !== event.userId) {
       log.warn(`Someone not allowed is trying to confirm -> "${event.title} `)
       return res.sendStatus(403)
     }
@@ -303,7 +329,7 @@ const eventController = {
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
     if (!event) { return req.sendStatus(404) }
-    if (!res.locals.user.is_admin && res.locals.user.id !== event.userId) {
+    if (!req.user.is_admin && req.user.id !== event.userId) {
       log.warn(`Someone not allowed is trying to unconfirm -> "${event.title} `)
       return res.sendStatus(403)
     }
@@ -362,8 +388,8 @@ const eventController = {
     res.sendStatus(200)
   },
 
-  async isAnonEventAllowed(_req, res, next) {
-    if (!res.locals.settings.allow_anon_event && !res.locals.user) {
+  async isAnonEventAllowed(req, res, next) {
+    if (!res.locals.settings.allow_anon_event && !req.user) {
       return res.sendStatus(403)
     }
     next()
@@ -389,29 +415,18 @@ const eventController = {
 
       // find or create the place
       let place
-      if (body.place_id) {
-        place = await Place.findByPk(body.place_id)
+      try {
+        place = await eventController._findOrCreatePlace(body)
         if (!place) {
           return res.status(400).send(`Place not found`)
         }
-      } else {
-        if (!body.place_name) {
-          return res.status(400).send(`Place not found`)
-        }
-        place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Op.eq, body.place_name.trim().toLocaleLowerCase()) })
-        if (!place) {
-          if (!body.place_address || !body.place_name) {
-            return res.status(400).send(`place_id or place_name and place_address required`)
-          }
-          place = await Place.create({
-            name: body.place_name,
-            address: body.place_address
-          })
-        }
+      } catch (e) {
+        return res.status(400).send(e.message)
       }
 
+
       const eventDetails = {
-        title: body.title,
+        title: body.title.trim(),
         // sanitize and linkify html
         description: helpers.sanitizeHTML(linkifyHtml(body.description || '')),
         multidate: body.multidate,
@@ -419,7 +434,7 @@ const eventController = {
         end_datetime: body.end_datetime,
         recurrent,
         // publish this event only if authenticated
-        is_visible: !!res.locals.user
+        is_visible: !!req.user
       }
 
       if (req.file || body.image_url) {
@@ -453,9 +468,9 @@ const eventController = {
       }
 
       // associate user to event and reverse
-      if (res.locals.user) {
-        await res.locals.user.addEvent(event)
-        await event.setUser(res.locals.user)
+      if (req.user) {
+        await req.user.addEvent(event)
+        await event.setUser(req.user)
       }
 
       event = event.get()
@@ -489,7 +504,7 @@ const eventController = {
       const body = req.body
       const event = await Event.findByPk(body.id)
       if (!event) { return res.sendStatus(404) }
-      if (!res.locals.user.is_admin && event.userId !== res.locals.user.id) {
+      if (!req.user.is_admin && event.userId !== req.user.id) {
         return res.sendStatus(403)
       }
 
@@ -500,7 +515,7 @@ const eventController = {
         description: helpers.sanitizeHTML(linkifyHtml(body.description || '', { target: '_blank' })) || event.description,
         multidate: body.multidate,
         start_datetime: body.start_datetime || event.start_datetime,
-        end_datetime: body.end_datetime,
+        end_datetime: body.end_datetime || null,
         recurrent
       }
 
@@ -543,27 +558,14 @@ const eventController = {
 
       // find or create the place
       let place
-      if (body.place_id) {
-        place = await Place.findByPk(body.place_id)
+      try {
+        place = await eventController._findOrCreatePlace(body)
         if (!place) {
           return res.status(400).send(`Place not found`)
         }
-      } else {
-        if (!body.place_name) {
-          return res.status(400).send(`Place not found`)
-        }
-        place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Op.eq, body.place_name.trim().toLocaleLowerCase()) })
-        if (!place) {
-          if (!body.place_address || !body.place_name) {
-            return res.status(400).send(`place_id or place_name and place_address required`)
-          }
-          place = await Place.create({
-            name: body.place_name,
-            address: body.place_address
-          })
-        }
+      } catch (e) {
+        return res.status(400).send(e.message)
       }
-
       await event.setPlace(place)
 
       // create/assign tags
@@ -596,7 +598,7 @@ const eventController = {
   async remove(req, res) {
     const event = await Event.findByPk(req.params.id)
     // check if event is mine (or user is admin)
-    if (event && (res.locals.user.is_admin || res.locals.user.id === event.userId)) {
+    if (event && (req.user.is_admin || req.user.id === event.userId)) {
       if (event.media && event.media.length && !event.recurrent) {
         try {
           const old_path = path.join(config.upload_path, event.media[0].url)
@@ -624,7 +626,7 @@ const eventController = {
 
   /**
    * Method to search for events with pagination and filtering
-   * @returns 
+   * @returns
    */
   async _select({
     start = dayjs().unix(),
@@ -698,7 +700,7 @@ const eventController = {
           attributes: ['tag'],
           through: { attributes: [] }
         },
-        { model: Place, required: true, attributes: ['id', 'name', 'address'] }
+        { model: Place, required: true, attributes: ['id', 'name', 'address', 'latitude', 'longitude'] }
       ],
       ...pagination,
       replacements

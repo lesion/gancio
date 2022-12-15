@@ -4,7 +4,7 @@ v-container
     v-spacer
     v-text-field(v-model='search'
       :append-icon='mdiMagnify' outlined rounded
-      label='Search'
+      :label="$t('common.search')"
       single-line hide-details)
 
   v-btn(color='primary' text @click='newUserDialog = true') <v-icon v-text='mdiPlus'></v-icon> {{$t('common.new_user')}}
@@ -32,6 +32,7 @@ v-container
       :headers='headers'
       :items='users'
       :hide-default-footer='users.length<5'
+      :header-props='{ sortIcon: mdiChevronDown }'
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
       :search='search')
       template(v-slot:item.is_active='{item}')
@@ -49,7 +50,7 @@ v-container
 <script>
 import { mapState } from 'vuex'
 import get from 'lodash/get'
-import { mdiClose, mdiMagnify, mdiCheck, mdiPlus, mdiInformation, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
+import { mdiClose, mdiMagnify, mdiCheck, mdiPlus, mdiInformation, mdiChevronLeft, mdiChevronRight, mdiChevronDown } from '@mdi/js'
 
 export default {
   name: 'Users',
@@ -58,7 +59,7 @@ export default {
   },
   data () {
     return {
-      mdiClose, mdiMagnify, mdiCheck, mdiPlus, mdiInformation, mdiChevronLeft, mdiChevronRight,
+      mdiClose, mdiMagnify, mdiCheck, mdiPlus, mdiInformation, mdiChevronLeft, mdiChevronRight, mdiChevronDown,
       newUserDialog: false,
       valid: false,
       new_user: {
@@ -67,10 +68,10 @@ export default {
       },
       search: '',
       headers: [
-        { value: 'email', text: 'Email' },
-        { value: 'description', text: 'Description' },
+        { value: 'email', text: this.$t('common.email') },
+        { value: 'description', text: this.$t('common.description') },
         { value: 'is_active', text: 'Active' },
-        { value: 'actions', text: 'Actions', align: 'right' }
+        { value: 'actions', text: this.$t('common.actions'), align: 'right' }
       ]
     }
   },

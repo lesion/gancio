@@ -61,6 +61,9 @@
         "instance_place_help": "Etikett å vise i andres instanser",
         "add_trusted_instance": "Legg til en vennlig instans",
         "trusted_instances_help": "Liste over vennlige instanser vises i toppteksten",
+        "trusted_instances_label": "Navigasjonsetikett til venneforekomster",
+        "trusted_instances_label_default": "Vennlige tilfeller",
+        "trusted_instances_label_help": "Standardetiketten er 'Vennlige tilfeller'",
         "enable_trusted_instances": "Skru på vennlige instanser",
         "instance_name_help": "ActivityPub-konto å følge",
         "instance_place": "Indiker sted for denne instansen",
@@ -81,6 +84,7 @@
         "allow_recurrent_event": "Tillat gjentagende hendelser",
         "allow_anon_event": "Tillat anonyme hendelser (må bekreftes)?",
         "allow_registration_description": "Tillat selv-registrering?",
+        "allow_geolocation": "Tillat geolokalisering av hendelser",
         "event_confirm_description": "Du kan bekrefte hendelser som oppføres av anonyme brukere her",
         "place_description": "Hvis du har valgt feil sted eller adresse, kan du endre det. <br/>Alle nåværende og foregående hendelser tilknyttet dette stedet vil endre adresse."
     },
@@ -114,11 +118,13 @@
         "image_too_big": "Bildet kan ikke være større enn 4 MB",
         "recurrent_2m_ordinal": "|Den {n} {days} i måneden annenhver|Den {n} {days} i måneden annenhver",
         "recurrent_1m_ordinal": "På {n} {days} i hver måned",
-        "recurrent_2m_days": "|På {days} i hver måned annenhver|{days} i hver måned annenhver",
-        "recurrent_1m_days": "|På {days} i hver måned|{days} i hver måned",
+        "recurrent_2m_days": "På {days} i hver måned annenhver",
+        "recurrent_1m_days": "På {days} i hver måned",
         "recurrent_2w_days": "En {days} annenhver",
         "multidate_description": "Er det en festival? Velg når den starter og slutter",
         "where_description": "Hvor finner hendelsen sted? Hvis den ikke finnes kan du opprette den.",
+        "coordinates_search": "Søk etter koordinater",
+        "coordinates_search_description": "Du kan søke etter sted etter navn, eller lime inn koordinatparet.",
         "added_anon": "Hendelse lagt til, men ikke bekreftet enda.",
         "added": "Hendelse lagt til",
         "media_description": "Du kan legge til et flygeblad (valgfritt)",
@@ -133,7 +139,7 @@
         "first_user": "Administrator opprettet",
         "complete": "Registrering må bekreftes.",
         "error": "Feil: ",
-        "description": "Sosiale bevegelser bør organisere og finansiere seg selv.<br/>\n<br/>Før du kan publisere, <strong>må kontoen godkjennes</strong>, ha i minnet <strong> at bak denne siden er det mennesker, så skriv to linjer om hvilke hendelser du ønsker å publisere."
+        "description": "Sosiale bevegelser bør organisere og finansiere seg selv.<br/>\n<br/>Før du kan publisere, <strong>må kontoen godkjennes</strong>, ha i minnet <strong> at bak denne siden er det mennesker</strong>, så skriv to linjer om hvilke hendelser du ønsker å publisere."
     },
     "recover": {
         "not_valid_code": "Noe gikk galt."
@@ -232,7 +238,11 @@
         "federation": "Føderasjon",
         "n_resources": "ingen ressurs|én ressurs|{n} ressurser",
         "associate": "Tilknytt",
-        "import": "Importer"
+        "import": "Importer",
+        "show_map": "Vis kart",
+        "latitude": "breddegrad",
+        "longitude": "Lengdegrad",
+        "getting_there": "Slik kommer du deg dit"
     },
     "about": "\n  <p><a href='https://gancio.org'>Gancio</a> er en delt agenda for lokale gemenskaper.</p>\n  ",
     "validators": {

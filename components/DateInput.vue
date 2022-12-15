@@ -3,7 +3,7 @@ v-col(cols=12)
   .text-center
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-model='type' color='primary' @change='type => change("type", type)')
       v-btn(value='normal' label="normal") {{ $t('event.normal') }}
-      v-btn(value='multidate' label='multidate') {{ $t('event.multidate') }}
+      v-btn(v-if='settings.allow_multidate_event' value='multidate' label='multidate') {{ $t('event.multidate') }}
       v-btn(v-if='settings.allow_recurrent_event' value='recurrent' label="recurrent") {{ $t('event.recurrent') }}
 
     p {{ $t(`event.${type}_description`) }}
@@ -15,16 +15,17 @@ v-col(cols=12)
       .datePicker.mt-3
         v-input(:value='fromDate' :rules="[$validators.required('common.when')]")
           vc-date-picker(
-            v-model='fromDate'
+            :value='fromDate'
             :is-range='type === "multidate"'
-            @input="date => change('date', fromDate)"
-            :timezone='settings.instance_timezone'
+            @input="date => change('date', date)"
             :attributes='attributes'
             :locale='$i18n.locale'
             :is-dark="settings['theme.is_dark']"
             is-inline
             is-expanded
             :min-date='type !== "recurrent" && new Date()')
+      template(#placeholder)
+        span.calc Loading
 
   div.text-center.mb-2(v-if='type === "recurrent"')
     span(v-if='value.recurrent.frequency !== "1m" && value.recurrent.frequency !== "2m"') {{ whenPatterns }}
@@ -37,7 +38,7 @@ v-col(cols=12)
         v-model="menuFromHour"
         :close-on-content-click="false"
         offset-y
-        :value="fromHour"
+        :value="value.fromHour"
         transition="scale-transition")
         template(v-slot:activator="{ on, attrs }")
           v-text-field(
@@ -45,7 +46,7 @@ v-col(cols=12)
             :clear-icon='mdiClose'
             @click:clear='() => change("fromHour")'
             :label="$t('event.from')"
-            :value="fromHour"
+            :value="value.fromHour"
             :disabled='!value.from'
             readonly
             :prepend-icon="mdiClockTimeFourOutline"
@@ -54,11 +55,11 @@ v-col(cols=12)
             v-on="on")
         v-time-picker(
           v-if="menuFromHour"
-          v-model="fromHour"
+          :value="value.fromHour"
           :allowedMinutes='allowedMinutes'
           format='24hr'
           @click:minute='menuFromHour = false'
-          @change='hr => change("fromHour", hr)')
+          @input='hr => change("fromHour", hr)')
 
 
     v-col.col-12.col-sm-6
@@ -66,7 +67,7 @@ v-col(cols=12)
         v-model="menuDueHour"
         :close-on-content-click="false"
         offset-y
-        :value="dueHour"
+        :value="value.dueHour"
         transition="scale-transition")
         template(v-slot:activator="{ on, attrs }")
           v-text-field(
@@ -74,19 +75,19 @@ v-col(cols=12)
             :clear-icon='mdiClose'
             @click:clear='() => change("dueHour")'
             :label="$t('event.due')"
-            :value="dueHour"
-            :disabled='!fromHour'
+            :value="value.dueHour"
+            :disabled='!value.fromHour'
             readonly
             :prepend-icon="mdiClockTimeEightOutline"
             v-bind="attrs"
             v-on="on")
         v-time-picker(
           v-if="menuDueHour"
-          v-model="dueHour"
+          :value="value.dueHour"
           :allowedMinutes='allowedMinutes'
           format='24hr'
           @click:minute='menuDueHour = false'
-          @change='hr => change("dueHour", hr)')
+          @input='hr => change("dueHour", hr)')
 
   List(v-if='type === "normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
 
@@ -102,25 +103,14 @@ export default {
   name: 'DateInput',
   components: { List },
   props: {
-    value: { type: Object, default: () => ({ from: null, due: null, recurrent: null }) },
+    value: { type: Object, default: () => ({ from: null, due: null, recurrent: null, fromHour: null, dueHour: null }) },
     event: { type: Object, default: () => null }
   },
   data() {
-    let fromDate
-    if (this.value.from) {
-      if (this.value.multidate) {
-        fromDate = ({ start: dayjs(this.value.from).toDate(), end: dayjs(this.value.due).toDate() })
-      } else {
-        fromDate = new Date(this.value.from)
-      }
-    }
     return {
       mdiClockTimeFourOutline, mdiClockTimeEightOutline, mdiClose,
       allowedMinutes: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
       menuFromHour: false,
-      fromDate,
-      fromHour: this.value.from && dayjs.tz(this.value.from).format('HH:mm'),
-      dueHour: this.value.due && dayjs.tz(this.value.due).format('HH:mm'),
       menuDueHour: false,
       type: this.value.type || 'normal',
       events: [],
@@ -133,6 +123,15 @@ export default {
   },
   computed: {
     ...mapState(['settings']),
+    fromDate () {
+      if (this.value.from) {
+        if (this.value.multidate) {
+          return ({ start: dayjs(this.value.from).toDate(), end: dayjs(this.value.due).toDate() })
+        } else {
+          return new Date(this.value.from)
+        }
+      }
+    },
     todayEvents() {
       const start = dayjs.tz(this.value.from).startOf('day').unix()
       const end = dayjs.tz(this.value.from).endOf('day').unix()
@@ -227,60 +226,53 @@ export default {
       } else if (what === 'recurrentType') {
         this.$emit('input', { ...this.value, recurrent: { ...this.value.recurrent, type: value } })
       } else if (what === 'fromHour') {
-        // if (value) {
-        const [hour, minute] = value ? value.split(':') : [0, 0]
-        let from = dayjs.tz(this.value.from).hour(hour).minute(minute).second(0).toDate()
-        this.$emit('input', { ...this.value, from })
-        if (!value) {
-          this.fromHour = null
+        if (value) {
+          this.$emit('input', { ...this.value, fromHour: value })
+        } else {
+          this.$emit('input', { ...this.value, fromHour: null, dueHour: null })
         }
-        // } else {
-        // this.$emit('input', { ...this.value })
-        // }
       } else if (what === 'dueHour') {
         if (value) {
+          this.value.due = this.value.due ? this.value.due : this.value.from
           const [hour, minute] = value.split(':')
-          let due = dayjs.tz(this.value.due || this.value.from).hour(Number(hour)).minute(Number(minute)).second(0)
-
-          // add a day
-          if (dayjs(this.value.from).hour() > Number(hour) && !this.value.multidate) {
-            due = due.add(1, 'day')
+          const [fromHour, fromMinute] = this.value.fromHour.split(':')
+          if (!this.value.multidate) {
+            if (hour < fromHour) {
+              this.value.due = dayjs(this.value.from).add(1, 'day').toDate()
+            } else {
+              this.value.due = dayjs(this.value.from).toDate()
+            }
           }
-          due = due.hour(hour).minute(minute).second(0)
-          this.$emit('input', { ...this.value, due: due.toDate() })
         } else {
-          this.$emit('input', { ...this.value, due: null })
-          this.dueHour = null
+          this.value.due = null
         }
+        this.$emit('input', { ...this.value, dueHour: value })
+
+        // if (value) {
+        //   // const [hour, minute] = value.split(':')
+        //   // let due = dayjs.tz(this.value.due || this.value.from).hour(Number(hour)).minute(Number(minute)).second(0)
+
+        //   // add a day
+        //   // if (dayjs(this.value.from).hour() > Number(hour) && !this.value.multidate) {
+        //   //   due = due.add(1, 'day')
+        //   // }
+        //   // due = due.hour(hour).minute(minute).second(0)
+        // } else {
+        //   this.$emit('input', { ...this.value, dueHour: null })
+        // }
         // change date in calendar (could be a range or a recurrent event...)
       } else if (what === 'date') {
         if (value === null) {
-          this.$emit('input', { ...this.value, from: null, due: null })
+          this.$emit('input', { ...this.value, from: null, due: null, fromHour: null, dueHour: null })
           return
         }
         if (this.value.multidate) {
           let from = value.start
           let due = value.end
-          if (this.fromHour) {
-            const [hour, minute] = this.fromHour.split(':')
-            from = dayjs.tz(from).hour(hour).minute(minute).second(0).toDate()
-          }
-          if (this.dueHour) {
-            const [hour, minute] = this.dueHour.split(':')
-            due = dayjs.tz(due).hour(hour).minute(minute).second(0).toDate()
-          }
           this.$emit('input', { ...this.value, from, due })
         } else {
           let from = value
           let due = this.value.due
-          if (this.fromHour) {
-            const [hour, minute] = this.fromHour.split(':')
-            from = dayjs.tz(value).hour(hour).minute(minute).second(0).toDate()
-          }
-          if (this.dueHour) {
-            const [hour, minute] = this.dueHour.split(':')
-            due = dayjs.tz(value).hour(hour).minute(minute).second(0).toDate()
-          }
           this.$emit('input', { ...this.value, from, due })
         }
       }

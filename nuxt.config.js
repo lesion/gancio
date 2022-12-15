@@ -1,5 +1,8 @@
 const config = require('./server/config.js')
 const minifyTheme = require('minify-css-string').default
+const locales = require('./locales/index')
+
+import { ca, de, en, es, eu, fr, gl, it, nb, pl, pt, sk, zhHans  } from 'vuetify/lib/locale'
 
 const isDev = (process.env.NODE_ENV !== 'production')
 module.exports = {
@@ -30,16 +33,19 @@ module.exports = {
   /*
    ** Customize the progress-bar component
    */
-  loading: '~/components/Loading.vue',
+  loading: {
+    color: 'orangered',
+    height: '3px'
+  }, //'~/components/Loading.vue',
   /*
    ** Plugins to load before mounting the App
    */
   plugins: [
-    '@/plugins/i18n.js',
     '@/plugins/filters', // text filters, datetime filters, generic transformation helpers etc.
     '@/plugins/axios', // axios baseurl configuration
     '@/plugins/validators', // inject validators
     '@/plugins/api', // api helpers
+    '@/plugins/i18n',
     { src: '@/plugins/v-calendar', ssr: false } // v-calendar
   ],
 
@@ -48,6 +54,7 @@ module.exports = {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
+    '@nuxtjs/i18n',
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/sitemap'
@@ -76,6 +83,24 @@ module.exports = {
       }
     }
   },
+  i18n: {
+    locales: Object.keys(locales).map(key => ({
+      code: key,
+      name: locales[key],
+      file: `${key}.json`,
+      iso: key
+    })),
+    vueI18n: {
+      fallbackLocale: 'en',
+      silentTranslationWarn: true
+    },    
+    langDir: 'locales',
+    lazy: true,
+    strategy: 'no_prefix',
+    baseUrl: config.baseurl,
+    skipSettingLocaleOnNavigate: true,
+    skipNuxtState: true
+  },
 
   serverMiddleware: ['server/routes'],
 
@@ -87,6 +112,8 @@ module.exports = {
     prefix: '/api'
   },
   auth: {
+    rewriteRedirects: true,
+    fullPathRedirect: true,
     // localStorage: false, // https://github.com/nuxt-community/auth-module/issues/425
     cookie: {
       prefix: 'auth.',
@@ -105,7 +132,7 @@ module.exports = {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
           },
           logout: false,
-          user: { url: '/user', method: 'get', propertyName: false }
+          user: { url: '/user', method: 'get', propertyName: false, autoFetch: false }
         },
         tokenRequired: true,
         tokenType: 'Bearer'
@@ -114,6 +141,7 @@ module.exports = {
   },
   buildModules: ['@nuxtjs/vuetify'],
   vuetify: {
+    lang: { locales: { ca, de, en, es, eu, fr, gl, it, nb, pl, pt, sk, zhHans } },
     treeShake: true,
     theme: {
       options: {

@@ -5,6 +5,7 @@ v-container
   v-card-text
     v-data-table(
       :hide-default-footer='unconfirmedEvents.length<10'
+      :header-props='{ sortIcon: mdiChevronDown }'
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
       :items='unconfirmedEvents'
       :headers='headers')
@@ -17,7 +18,7 @@ v-container
           color='error') {{$t('common.delete')}}
 </template>
 <script>
-import { mdiChevronLeft, mdiChevronRight } from '@mdi/js'
+import { mdiChevronLeft, mdiChevronRight, mdiChevronDown } from '@mdi/js'
 
 export default {
   props: {
@@ -25,15 +26,15 @@ export default {
   },
   data () {
     return {
-      mdiChevronLeft, mdiChevronRight,
+      mdiChevronLeft, mdiChevronRight, mdiChevronDown,
       valid: false,
       dialog: false,
       editing: false,
       headers: [
-        { value: 'title', text: 'Title' },
-        { value: 'place.name', text: 'Place' },
-        { value: 'when', text: 'When' },
-        { value: 'actions', text: 'Actions', align: 'right' }
+        { value: 'title', text: this.$t('common.title') },
+        { value: 'place.name', text: this.$t('common.place') },
+        { value: 'when', text: this.$t('common.when') },
+        { value: 'actions', text: this.$t('common.actions'), align: 'right' }
       ]
     }
   },

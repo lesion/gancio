@@ -16,7 +16,7 @@ The configuration file shoud be a `.json` or a `.js` file and could be specified
 1. TOC
 {:toc}
 
-- ### Server
+### Server
 This probably support unix socket too
 
 ```json
@@ -26,7 +26,7 @@ This probably support unix socket too
 }
 ```
 
-- ### Database
+### Database
 DB configuration, look [here](https://sequelize.org/v6/class/src/sequelize.js~Sequelize.html#instance-constructor-constructor) for options.
 ```json
   "db": {
@@ -34,11 +34,15 @@ DB configuration, look [here](https://sequelize.org/v6/class/src/sequelize.js~Se
     "storage": "/tmp/db.sqlite"
   }
 ```
-- ### Upload path
-Where to save images
+### Upload path
+Where to save images  
 `"upload_path": "./uploads"`
 
-- ### User locale
+### Plugins path
+Where to search for [plugins](/usage/plugins)  
+`"plugins_path": "./plugins"`
+
+### User locale
 Probably you want to modify some text for your specific community, that's
 why we thought the `user_locale` configuration: you can specify your version of
 each string of **gancio** making a directory with your locales inside.

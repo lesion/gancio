@@ -1,0 +1,50 @@
+<template>
+  <nav>
+
+    <NavHeader/>
+
+    <!-- title -->
+    <div class='text-center'>
+      <nuxt-link id='title' v-text='settings.title' to='/' />
+      <div class='text-body-1 font-weight-light' v-text='settings.description' />
+    </div>
+
+    <NavSearch />
+
+    <NavBar />
+
+  </nav>
+
+
+
+</template>
+<script>
+import { mapState } from 'vuex'
+import NavHeader from './NavHeader.vue'
+import NavBar from './NavBar.vue'
+import NavSearch from './NavSearch.vue'
+
+export default {
+  name: 'Appbar',
+  components: { NavHeader, NavBar, NavSearch },
+  computed: mapState(['settings'])
+}
+</script>
+<style>
+nav {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(20, 20, 20, 0.7)), url(/headerimage.png);
+  background-position: center center;
+  background-size: cover;
+}
+
+.theme--light nav {
+  background-image: linear-gradient(to bottom, rgba(230,230,230,.95), rgba(250,250,250,.95)), url(/headerimage.png);
+}
+
+#title {
+  font-size: 2rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+</style>

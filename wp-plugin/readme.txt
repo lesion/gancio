@@ -3,8 +3,8 @@ Contributors: lesion
 Donate link: https://gancio.org
 Tags: events, gancio, fediverse, AP, activity pub
 Requires at least: 4.7
-Tested up to: 5.9
-Stable tag: 1.4
+Tested up to: 6.0
+Stable tag: 1.6
 Requires PHP: 7.0
 License: AGPLv3 or later
 License URI: https://www.gnu.org/licenses/agpl-3.0.html
@@ -18,6 +18,9 @@ for this to work an event manager plugin is required, only [Event Organiser](htt
  
 
 == Changelog ==
+= 1.6 =
+* Support MU installation
+
 = 1.4 =
 use `WP_GANCIO_DEFAULT_INSTANCEURL` as default instance url
 

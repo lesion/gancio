@@ -2,19 +2,56 @@
 v-container
   v-card-title {{$t('common.theme')}}
   v-card-text
-    //- LOGO
-    v-file-input.mt-5(ref='upload'
-      :label="$t('admin.favicon')"
-      @change='uploadLogo'
-      accept='image/*')
-      template(slot='append-outer')
-        v-btn(color='warning' text @click='resetLogo') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
-        v-img(:src='`/logo.png?${logoKey}`'
-          max-width="60px" max-height="60px" contain)
 
     v-switch.mt-5(v-model='is_dark'
       inset
       :label="$t('admin.is_dark')")
+      
+    v-switch.mt-5(v-model='hide_thumbs'
+      inset
+      :label="$t('admin.hide_thumbs')")
+
+    v-switch.mt-5(v-model='hide_calendar'
+      inset
+      :label="$t('admin.hide_calendar')")
+
+  v-card-title {{$t('admin.default_images')}}
+  v-card-subtitle(v-html="$t('admin.default_images_help')")
+  v-card-text
+    v-row
+      v-col(cols='4')
+        //- LOGO
+        v-file-input.mt-5(ref='upload'
+          :label="$t('admin.favicon')"
+          @change='uploadLogo'
+          accept='image/*')
+          template(slot='append-outer')
+            v-btn(color='warning' text @click='resetLogo') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
+        v-img.mt-2(:src='`/logo.png?${logoKey}`' max-height="60px" contain)
+
+      v-col(cols='4')
+        //- FALLBACK IMAGE
+        v-file-input.mt-5(ref='upload'
+          :label="$t('admin.fallback_image')"
+          persistent-hint
+          @change='uploadFallbackImage'
+          accept='image/*')
+          template(slot='append-outer')
+            v-btn(color='warning' text @click='resetFallbackImage') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
+        v-img.mt-2(:src='`/fallbackimage.png?${fallbackImageKey}`' max-height="150px" contain)
+
+      v-col(cols='4')
+        //- HEADER IMAGE
+        v-file-input.mt-5(ref='upload'
+          :label="$t('admin.header_image')"
+          persistent-hint
+          @change='uploadHeaderImage'
+          accept='image/*')
+          template(slot='append-outer')
+            v-btn(color='warning' text @click='resetHeaderImage') <v-icon v-text='mdiRestore'></v-icon> {{$t('common.reset')}}
+        v-img.mt-2(:src='`/headerimage.png?${headerImageKey}`' max-height="150px" contain)          
+
+
 
     //- TODO choose theme colors
     //- v-row
@@ -45,8 +82,8 @@ v-container
               :label="$t('common.url')")
         v-card-actions
           v-spacer
-          v-btn(link @click='linkModal=false' color='error') {{$t('common.cancel')}}
-          v-btn(link @click='addFooterLink' color='primary' :disabled='!valid') {{$t('common.add')}}
+          v-btn(outlined @click='linkModal=false' color='error') {{$t('common.cancel')}}
+          v-btn(outlined @click='addFooterLink' color='primary' :disabled='!valid') {{$t('common.add')}}
 
   v-card-title {{$t('admin.footer_links')}}
   v-card-text
@@ -73,10 +110,13 @@ import { mdiDeleteForever, mdiRestore, mdiPlus, mdiChevronUp } from '@mdi/js'
 export default {
   name: 'Theme',
   data () {
+    const t = new Date().getMilliseconds()
     return {
       mdiDeleteForever, mdiRestore, mdiPlus, mdiChevronUp,
       valid: false,
-      logoKey: 0,
+      logoKey: t,
+      fallbackImageKey: t,
+      headerImageKey: t,
       link: { href: '', label: '' },
       linkModal: false
       // menu: [false, false, false, false]
@@ -97,7 +137,15 @@ export default {
         this.$vuetify.theme.dark = value
         this.setSetting({ key: 'theme.is_dark', value })
       }
-    }
+    },
+    hide_thumbs: {
+      get () { return this.settings.hide_thumbs },
+      set (value) { this.setSetting({ key: 'hide_thumbs', value }) }
+    },
+    hide_calendar: {
+      get () { return this.settings.hide_calendar },
+      set (value) { this.setSetting({ key: 'hide_calendar', value }) }
+    },
   //   'colors[0]': {
   //     get () {
   //       return this.settings['theme.colors'] || [0, 0]
@@ -120,18 +168,35 @@ export default {
       this.setSetting({
         key: 'footerLinks',
         value: [
-          { href: '/about', label: 'about' },
-          { href: '/', label: 'home' }]
+          { href: '/', label: 'common.home' },
+          { href: '/about', label: 'common.about' }
+        ]
       })
     },
     forceLogoReload () {
       this.logoKey++
     },
+    forceFallbackImageReload () {
+      this.fallbackImageKey++
+    },
+    forceHeaderImageReload () {
+      this.headerImageKey++
+    },    
     resetLogo (e) {
       this.setSetting({ key: 'logo', value: null })
         .then(this.forceLogoReload)
       e.stopPropagation()
     },
+    resetFallbackImage (e) {
+      this.setSetting({ key: 'fallback_image', value: null })
+        .then(this.forceFallbackImageReload)
+      e.stopPropagation()
+    },
+    resetHeaderImage (e) {
+      this.setSetting({ key: 'header_image', value: null })
+        .then(this.forceHeaderImageReload)
+      e.stopPropagation()
+    },    
     updateColor (i, v) {
       this.colors[i] = v.hex
       this.$vuetify.theme.themes.dark[i] = v.hex
@@ -177,6 +242,32 @@ export default {
 
       }
     },
+    async uploadFallbackImage (file) {
+      const formData = new FormData()
+      formData.append('fallbackImage', file)
+      try {
+        await this.$axios.$post('/settings/fallbackImage', formData)
+        this.$root.$emit('message', {
+          message: 'Fallback image updated'
+        })
+        this.forceFallbackImageReload()
+      } catch (e) {
+
+      }
+    },
+    async uploadHeaderImage (file) {
+      const formData = new FormData()
+      formData.append('headerImage', file)
+      try {
+        await this.$axios.$post('/settings/headerImage', formData)
+        this.$root.$emit('message', {
+          message: 'Header image updated'
+        })
+        this.forceHeaderImageReload()
+      } catch (e) {
+
+      }
+    },    
     save (key, value) {
       if (this.settings[key] !== value) {
         this.setSetting({ key, value })

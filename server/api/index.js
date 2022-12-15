@@ -34,6 +34,7 @@ if (config.status !== 'READY') {
   const oauthController = require('./controller/oauth')
   const announceController = require('./controller/announce')
   const collectionController = require('./controller/collection')
+  const pluginController = require('./controller/plugins')
   const helpers = require('../helpers')
   const storage = require('./storage')
   const upload = multer({ storage })
@@ -59,7 +60,7 @@ if (config.status !== 'READY') {
   ```
   */
   api.get('/ping', (_req, res) => res.sendStatus(200))
-  api.get('/user', isAuth, (_req, res) => res.json(res.locals.user))
+  api.get('/user', isAuth, (req, res) => res.json(req.user))
 
 
   api.post('/user/recover', userController.forgotPassword)
@@ -89,16 +90,16 @@ if (config.status !== 'READY') {
    * @param {integer} [end] - end timestamp (optional)
    * @param {array} [tags] - List of tags
    * @param {array} [places] - List of places id
-   * @param {integer} [max] - Limit events 
+   * @param {integer} [max] - Limit events
    * @param {boolean} [show_recurrent] - Show also recurrent events (default: as choosen in admin settings)
    * @param {integer} [page] - Pagination
    * @param {boolean} [older] - select <= start instead of >=
-   * @example ***Example***  
-   * [https://demo.gancio.org/api/events](https://demo.gancio.org/api/events)  
+   * @example ***Example***
+   * [https://demo.gancio.org/api/events](https://demo.gancio.org/api/events)
    * [usage example](https://framagit.org/les/gancio/-/blob/master/webcomponents/src/GancioEvents.svelte#L18-42)
    */
 
-   api.get('/events', cors, eventController.select)  
+  api.get('/events', cors, eventController.select)
 
   /**
    * Add a new event
@@ -110,6 +111,8 @@ if (config.status !== 'READY') {
    * @param {string} description - event's description (html accepted and sanitized)
    * @param {string} place_name - the name of the place
    * @param {string} [place_address] - the address of the place
+   * @param {float} [place_latitude] - the latitude of the place
+   * @param {float} [place_longitude] - the longitude of the place
    * @param {integer} start_datetime - start timestamp
    * @param {integer} multidate - is a multidate event?
    * @param {array} tags - List of tags
@@ -140,6 +143,8 @@ if (config.status !== 'READY') {
   api.post('/settings', isAdmin, settingsController.setRequest)
   api.get('/settings', isAdmin, settingsController.getAll)
   api.post('/settings/logo', isAdmin, multer({ dest: config.upload_path }).single('logo'), settingsController.setLogo)
+  api.post('/settings/fallbackImage', isAdmin, multer({ dest: config.upload_path }).single('fallbackImage'), settingsController.setFallbackImage)
+  api.post('/settings/headerImage', isAdmin, multer({ dest: config.upload_path }).single('headerImage'), settingsController.setHeaderImage)
   api.post('/settings/smtp', isAdmin, settingsController.testSMTP)
   api.get('/settings/smtp', isAdmin, settingsController.getSMTPSettings)
 
@@ -157,13 +162,21 @@ if (config.status !== 'READY') {
   api.get('/export/:type', cors, exportController.export)
 
 
-  api.get('/place/all', isAdmin, placeController.getAll)
+  // - PLACES
+  api.get('/places', isAdmin, placeController.getAll)
   api.get('/place/:placeName', cors, placeController.getEvents)
   api.get('/place', cors, placeController.search)
+  api.get('/placeOSM/Nominatim/:place_details', cors, placeController._nominatim)
+  api.get('/placeOSM/Photon/:place_details', cors, placeController._photon)
   api.put('/place', isAdmin, placeController.updatePlace)
 
+  // - TAGS
+  api.get('/tags', isAdmin, tagController.getAll)
   api.get('/tag', cors, tagController.search)
   api.get('/tag/:tag', cors, tagController.getEvents)
+  api.delete('/tag/:tag', isAdmin, tagController.remove)
+  api.put('/tag', isAdmin, tagController.updateTag)
+
 
   // - FEDIVERSE INSTANCES, MODERATION, RESOURCES
   api.get('/instances', isAdmin, instanceController.getAll)
@@ -188,6 +201,10 @@ if (config.status !== 'READY') {
   api.get('/filter/:collection_id', isAdmin, collectionController.getFilters)
   api.post('/filter', isAdmin, collectionController.addFilter)
   api.delete('/filter/:id', isAdmin, collectionController.removeFilter)
+
+  // - PLUGINS
+  api.get('/plugins', isAdmin, pluginController.getAll)
+  api.put('/plugin/:plugin', isAdmin, pluginController.togglePlugin)
 
   // OAUTH
   api.get('/clients', isAuth, oauthController.getClients)

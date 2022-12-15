@@ -3,7 +3,7 @@
 Plugin Name: WPGancio
 Plugin URI:  https://gancio.org
 Description: Connects an user of a gancio instance to a Wordpress user so that published events are automatically pushed with Gancio API.
-Version:     1.0
+Version:     1.5
 Author:      Gancio
 License:  AGPL 3.0
 
@@ -19,10 +19,13 @@ You should have received a copy of the GNU Affero General Public License
 along with (WPGancio). If not, see (https://www.gnu.org/licenses/agpl-3.0.html).
 */
 
-defined( 'ABSPATH' ) or die( 'Nope, not accessing this' );
-require_once('settings.php');
-require_once('wc.php');
-require_once('oauth.php');
+defined('ABSPATH') or die('Nope, not accessing this');
+define('WPGANCIO_DIR', plugin_dir_path(__FILE__));
+require_once(WPGANCIO_DIR . 'settings.php');
+
+require_once(WPGANCIO_DIR . 'wc.php');
+require_once(WPGANCIO_DIR . 'oauth.php');
+
 
 
 /**
@@ -38,4 +41,3 @@ require_once('oauth.php');
  * - start an OAuth 2.0 authentication flow with the selected instance
  * - Send each new / updated events to the selected instance via Gancio API
  */
-

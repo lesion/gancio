@@ -4,7 +4,7 @@ v-container.container.pa-0.pa-md-3
     v-card-title
       h4 {{ edit ? $t('common.edit_event') : $t('common.add_event') }}
       v-spacer
-      v-btn(link text color='primary' @click='openImportDialog = true')
+      v-btn(outlined  color='primary' @click='openImportDialog = true')
         <v-icon v-text='mdiFileImport'></v-icon> {{ $t('common.import') }}
     v-dialog(v-model='openImportDialog' :fullscreen='$vuetify.breakpoint.xsOnly')
       ImportDialog(@close='openImportDialog = false' @imported='eventImported')
@@ -33,7 +33,7 @@ v-container.container.pa-0.pa-md-3
               WhereInput(ref='where' v-model='event.place')
 
             //- When
-            DateInput(v-model='date' :event='event')
+            DateInput(ref='when' v-model='date' :event='event')
             //- Description
             v-col.px-0(cols='12')
               Editor.px-3.ma-0(
@@ -91,17 +91,33 @@ export default {
     WhereInput,
     DateInput
   },
-  validate({ store }) {
-    return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
+  validate({ store, params, error }) {
+    // should we allow anon event?
+    if(!store.state.settings.allow_anon_event && !store.state.auth.loggedIn) {
+      return error({ statusCode: 401, message: 'Not allowed'})
+    }
+
+    // do not allow edit to anon users
+    if (params.edit && !store.state.auth.loggedIn) {
+      return error({ statusCode: 401, message: 'Not allowed'})
+    }
+
+    return true
+
   },
-  async asyncData({ params, $axios, error }) {
+  async asyncData({ params, $axios, error, $auth, store }) {
     if (params.edit) {
+
       const data = { event: { place: {}, media: [] } }
       data.id = params.edit
       data.edit = true
       let event
       try {
         event = await $axios.$get('/event/' + data.id)
+        if (!$auth.user.is_admin && $auth.user.id !== event.userId) {
+          error({ statusCode: 401, message: 'Not allowed' })
+          return {}
+        }
       } catch (e) {
         error({ statusCode: 404, message: 'Event not found!' })
         return {}
@@ -109,13 +125,15 @@ export default {
 
       data.event.place.name = event.place.name
       data.event.place.address = event.place.address || ''
+      const from = dayjs.unix(event.start_datetime)
+      const due = event.end_datetime && dayjs.unix(event.end_datetime)
       data.date = {
         recurrent: event.recurrent,
-        from: dayjs.unix(event.start_datetime).toDate(),
-        due: dayjs.unix(event.end_datetime).toDate(),
+        from: from.toDate(),
+        due: due && due.toDate(),
         multidate: event.multidate,
-        fromHour: true,
-        dueHour: true
+        fromHour: from.format('HH:mm'),
+        dueHour: due && due.format('HH:mm')
       }
 
       data.event.title = event.title
@@ -135,7 +153,7 @@ export default {
       valid: false,
       openImportDialog: false,
       event: {
-        place: { name: '', address: '' },
+        place: { name: '', address: '', latitude: null, longitude: null },
         title: '',
         description: '',
         tags: [],
@@ -161,6 +179,7 @@ export default {
     filteredTags() {
       if (!this.tagName) { return this.tags.slice(0, 10).map(t => t.tag) }
       const tagName = this.tagName.trim().toLowerCase()
+      console.log(tagName)
       return this.tags.filter(t => t.tag.toLowerCase().includes(tagName)).map(t => t.tag)
     }
   },
@@ -172,14 +191,17 @@ export default {
     }, 100),
     eventImported(event) {
       this.event = Object.assign(this.event, event)
-      this.$refs.where.selectPlace({ name: event.place.name || event.place, create: true })
+
+      this.$refs.where.selectPlace({ name: event.place.name || event.place, address: event.place.address })
+      const from = dayjs.unix(this.event.start_datetime)
+      const due = this.event.end_datetime && dayjs.unix(this.event.end_datetime)
       this.date = {
         recurrent: this.event.recurrent || null,
-        from: new Date(dayjs.unix(this.event.start_datetime)),
-        due: new Date(dayjs.unix(this.event.end_datetime)),
+        from: from.toDate(),
+        due: due && due.toDate(),
         multidate: event.multidate,
-        fromHour: true,
-        dueHour: true
+        fromHour: from.format('HH:mm'),
+        dueHour: due && due.format('HH:mm')
       }
       this.openImportDialog = false
     },
@@ -212,12 +234,18 @@ export default {
       if (this.event.place.id) {
         formData.append('place_id', this.event.place.id)
       }
-      formData.append('place_name', this.event.place.name)
+      formData.append('place_name', this.event.place.name.trim())
       formData.append('place_address', this.event.place.address)
+      formData.append('place_latitude', this.event.place.latitude)
+      formData.append('place_longitude', this.event.place.longitude)
       formData.append('description', this.event.description)
       formData.append('multidate', !!this.date.multidate)
-      formData.append('start_datetime', dayjs(this.date.from).unix())
-      formData.append('end_datetime', this.date.due ? dayjs(this.date.due).unix() : dayjs(this.date.from).add(2, 'hour').unix())
+      let [hour, minute] = this.date.fromHour.split(':')
+      formData.append('start_datetime', dayjs(this.date.from).hour(Number(hour)).minute(Number(minute)).second(0).unix())
+      if (this.date.dueHour) {
+        [hour, minute] = this.date.dueHour.split(':')
+        formData.append('end_datetime', dayjs(this.date.due).hour(Number(hour)).minute(Number(minute)).second(0).unix())
+      }
 
       if (this.edit) {
         formData.append('id', this.event.id)

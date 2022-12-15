@@ -2,7 +2,7 @@
 v-app(app)
   Snackbar
   Confirm
-  Nav
+  Appbar
 
   v-main(app)
     v-fade-transition(hide-on-leave)
@@ -12,13 +12,13 @@ v-app(app)
 
 </template>
 <script>
-import Nav from '~/components/Nav.vue'
+import Appbar from '~/components/Appbar.vue'
 import Snackbar from '../components/Snackbar'
 import Footer from '../components/Footer'
 import Confirm from '../components/Confirm'
 
 export default {
   name: 'Default',
-  components: { Nav, Snackbar, Footer, Confirm }
+  components: { Appbar, Snackbar, Footer, Confirm }
 }
 </script>

@@ -1,28 +1,10 @@
 const log = require('../log')
-const oauth = require('./oauth')
-const get = require('lodash/get')
 
 const Auth = {
 
-  fillUser (req, res, next) {
-    const token = get(req.cookies, 'auth._token.local', null)
-    const authorization = get(req.headers, 'authorization', null)
-    if (!authorization && token) {
-      req.headers.authorization = token
-    }
-
-    if (!authorization && !token) {
-      return next()
-    }
-
-    oauth.oauthServer.authenticate()(req, res, () => {
-      res.locals.user = get(res, 'locals.oauth.token.user', null)
-      next()
-    })
-  },
-
-  isAuth (_req, res, next) {
-    if (res.locals.user) {
+  isAuth (req, res, next) {
+    // TODO: check anon user
+    if (req.user) {
       next()
     } else {
       res.sendStatus(403)
@@ -30,7 +12,7 @@ const Auth = {
   },
 
   isAdmin (req, res, next) {
-    if (res.locals.user && res.locals.user.is_admin) {
+    if (req.user && req.user.is_admin) {
       next()
     } else {
       res.sendStatus(403)

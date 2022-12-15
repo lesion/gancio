@@ -40,6 +40,13 @@ v-container
         @blur='save("instance_place", instance_place)'
       )
 
+      v-text-field.mt-4(v-model='trusted_instances_label'
+        :label="$t('admin.trusted_instances_label')"
+        persistent-hint inset
+        :hint="$t('admin.trusted_instances_label_help')"
+        @blur='save("trusted_instances_label", trusted_instances_label)'
+      )
+
       v-dialog(v-model='dialogAddInstance' width='500px' :fullscreen='$vuetify.breakpoint.xsOnly')
         v-card
           v-card-title {{$t('admin.add_trusted_instance')}}
@@ -53,14 +60,15 @@ v-container
                 :label="$t('common.url')")
           v-card-actions
             v-spacer
-            v-btn(color='error' @click='dialogAddInstance=false') {{$t('common.cancel')}}
-            v-btn(color='primary' :disabled='!valid || loading' :loading='loading' @click='createTrustedInstance') {{$t('common.ok')}}
+            v-btn(outlined color='error' @click='dialogAddInstance=false') {{$t('common.cancel')}}
+            v-btn(outlined color='primary' :disabled='!valid || loading' :loading='loading' @click='createTrustedInstance') {{$t('common.ok')}}
 
       v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.add_instance')}}
       v-data-table(
         v-if='settings.trusted_instances.length'
         :hide-default-footer='settings.trusted_instances.length<10'
         :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
+        :header-props='{ sortIcon: mdiChevronDown }'
         :headers='headers'
         :items='settings.trusted_instances')
         template(v-slot:item.actions="{item}")
@@ -72,16 +80,17 @@ v-container
 import { mapActions, mapState } from 'vuex'
 import get from 'lodash/get'
 import axios from 'axios'
-import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
+import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown } from '@mdi/js'
 
 export default {
   name: 'Federation',
   data ({ $store, $options }) {
     return {
-      mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight,
+      mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown,
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
       instance_place: $store.state.settings.instance_place,
+      trusted_instances_label: $store.state.settings.trusted_instances_label,
       url2host: $options.filters.url2host,
       dialogAddInstance: false,
       loading: false,

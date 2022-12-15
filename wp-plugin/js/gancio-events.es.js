@@ -313,13 +313,13 @@ function Le(t) {
   let e, i, n;
   return {
     c() {
-      e = g("img"), a(e, "style", "aspect-ratio=1.7778;"), a(e, "alt", i = t[12].title), G(e.src, n = t[0] + "/noimg.svg") || a(e, "src", n), a(e, "loading", "lazy");
+      e = g("img"), a(e, "style", "aspect-ratio=1.7778;"), a(e, "alt", i = t[12].title), G(e.src, n = t[0] + "/fallbackimage.png") || a(e, "src", n), a(e, "loading", "lazy");
     },
     m(l, o) {
       v(l, e, o);
     },
     p(l, o) {
-      o & 32 && i !== (i = l[12].title) && a(e, "alt", i), o & 1 && !G(e.src, n = l[0] + "/noimg.svg") && a(e, "src", n);
+      o & 32 && i !== (i = l[12].title) && a(e, "alt", i), o & 1 && !G(e.src, n = l[0] + "/fallbackimage.png") && a(e, "src", n);
     },
     d(l) {
       l && x(e);
@@ -454,7 +454,7 @@ function Re(t, e, i) {
   }), t.$$set = (d) => {
     "baseurl" in d && i(0, n = d.baseurl), "title" in d && i(1, l = d.title), "maxlength" in d && i(6, o = d.maxlength), "tags" in d && i(7, r = d.tags), "places" in d && i(8, f = d.places), "theme" in d && i(2, c = d.theme), "show_recurrent" in d && i(9, s = d.show_recurrent), "sidebar" in d && i(3, k = d.sidebar), "external_style" in d && i(4, m = d.external_style);
   }, t.$$.update = () => {
-    t.$$.dirty & 974 && w();
+    t.$$.dirty & 975 && w();
   }, [
     n,
     l,

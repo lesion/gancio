@@ -13,26 +13,50 @@ li {
   background-color: #434343;
 }
 
+.v-application {
+  font-family: sans-serif;
+}
+
 .v-application .p-description.text-body-1 {
   letter-spacing: normal !important;
 }
 
+/* https://github.com/vuetifyjs/vuetify/issues/8875#issuecomment-559900683 */
+.v-slide-group__prev {
+  display: none !important;
+}
+
+.v-toolbar .v-list-item__subtitle,
+.v-toolbar h4 {
+  white-space: break-spaces;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
 #home {
   max-width: 1400px;
-  padding: 0px;
-  overflow: hidden;
+  /* padding: 0px; */
+  /* overflow: hidden; */
 }
 
 #events {
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
+  gap: 16px;
   justify-content: center;
 }
 
-#calh {
+@media only screen and (max-width: 600px) {
+  #events {
+    gap: 8px;
+  }
+}
+
+.calh {
   /* this is to avoid content shift layout as v-calendar does not support SSR */
   height: 268px;
+  max-width: 600px;
 }
 
 .container {
@@ -44,8 +68,8 @@ li {
   max-width: 800px;
 }
 
-.v-dialog .v-dialog--fullscreen {
-  max-width: 100%;
+.v-dialog--fullscreen {
+  max-width: 100% !important;
 }
 
 .v-application p {
@@ -81,8 +105,8 @@ li {
   width: 330px;
   max-width: 500px !important;
   flex-grow: 1;
-  margin-top: .4em;
-  margin-right: .4em;
+  /* margin-top: 16px;
+  margin-right: 16px; */
   transition: all .5s;
   overflow: hidden;
 }
@@ -96,7 +120,7 @@ li {
   -webkit-box-orient: vertical;
   font-size: 1.1em !important;
   line-height: 1.2em !important;
-  text-decoration: none;
+  /* text-decoration: none; */
 }
 
 .event .body {
@@ -113,6 +137,11 @@ li {
   text-decoration: none;
 }
 
+.event a:hover,
+.event a:focus {
+  text-decoration: underline;
+}
+
 .vc-past {
   opacity: 0.4;
 }
@@ -121,12 +150,12 @@ li {
   max-width: 1200px;
 }
 
-.tags .v-chip .v-chip__content {
+/* .tags .v-chip .v-chip__content {
   max-width: 120px;
   white-space: nowrap;
   overflow: hidden;
   display: block;
-}
+} */
 
 
 .cursorPointer {

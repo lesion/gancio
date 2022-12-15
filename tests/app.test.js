@@ -9,6 +9,7 @@ let app
 let places = []
 
 beforeAll(async () => {
+
   switch (process.env.DB) {
     case 'mariadb':
       process.env.config_path = path.resolve(__dirname, './seeds/config.mariadb.json')
@@ -54,7 +55,8 @@ describe('Authentication / Authorization', () => {
   test('should not authenticate with wrong user/password', () => {
     return request(app).post('/oauth/login')
       .set('Content-Type', 'application/x-www-form-urlencoded')
-      .expect(500)
+      .send({ email: 'admin', password: 'wrong'})
+      .expect(401)
   })
 
   test('should register an admin as first user', async () => {
@@ -155,7 +157,7 @@ describe('Events', () => {
     const required_fields = {
       'title': {},
       'start_datetime': { title: 'test title' },
-      'place_id or place_name and place_address': { title: 'test title', start_datetime: dayjs().unix() + 1000, place_name: 'test place name' },
+      'place_id or place_name and place_address are': { title: 'test title', start_datetime: dayjs().unix() + 1000, place_name: 'test place name' },
     }
 
     const promises = Object.keys(required_fields).map(async field => {
@@ -200,9 +202,9 @@ describe('Events', () => {
 
   })
 
-  test('should trim tags', async () => {
+  test('should trim tags and title', async () => {
     const event = {
-      title: 'test title 4',
+      title: ' test title 4 ',
       place_id: places[0],
       start_datetime: dayjs().unix() + 1000,
       tags: [' test tag ']
@@ -213,6 +215,7 @@ describe('Events', () => {
       .expect(200)
       .expect('Content-Type', /json/)
 
+    expect(response.body.title).toBe('test title 4')
     expect(response.body.tags[0]).toBe('test tag')
   })
 })
@@ -282,10 +285,10 @@ describe('Place', () => {
   })
 
   test('admin should get all places', async () => {
-    await request(app).get('/api/place/all')
+    await request(app).get('/api/places')
       .expect(403)
 
-    const response = await request(app).get('/api/place/all')
+    const response = await request(app).get('/api/places')
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
@@ -298,6 +301,17 @@ describe('Place', () => {
       .expect(200)
 
     expect(response.body.length).toBe(2)
+  })
+
+  test('should trim place\'s name and address', async () => {
+    const ret = await request(app).post('/api/event')
+      .send({ title: 'test trimming', place_name: ' test place with white Space ',
+        place_address: ' address with Space ', start_datetime: dayjs().unix() + 1000 })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
+    expect(ret.body.place.name).toBe('test place with white Space')
+    expect(ret.body.place.address).toBe('address with Space')
   })
 
 })
@@ -382,20 +396,14 @@ describe('Collection', () => {
   })
 
   test('shoud filter for tags', async () => {
-    let response = await request(app)
+    await request(app)
       .post('/api/filter')
       .send({ collectionId: collections[0], tags: ['test'] })
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
 
-    // response = await request(app)
-    // .get(`/api/filter/${response.body.id}`)
-    // .auth(token.access_token, { type: 'bearer' })
-    // .expect(200)
-    // expect(response.body.length).toBe(1)
-
-    response = await request(app)
+    const response = await request(app)
       .get(`/api/collections/test collection`)
       .expect(200)
 

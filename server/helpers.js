@@ -22,7 +22,6 @@ const { JSDOM } = require('jsdom')
 const { window } = new JSDOM('<!DOCTYPE html>')
 const domPurify = DOMPurify(window)
 const url = require('url')
-const locales = require('../locales')
 
 domPurify.addHook('beforeSanitizeElements', node => {
   if (node.hasAttribute && node.hasAttribute('href')) {
@@ -49,7 +48,7 @@ domPurify.addHook('beforeSanitizeElements', node => {
 module.exports = {
 
   randomString(length = 12) {
-    const wishlist = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    const wishlist = '0123456789abcdefghijklmnopqrstuvwxyz'
     return Array.from(crypto.randomFillSync(new Uint32Array(length)))
       .map(x => wishlist[x % wishlist.length])
       .join('')
@@ -63,26 +62,47 @@ module.exports = {
     })
   },
 
-  async setUserLocale(req, res, next) {
-    // select locale based on cookie? and accept-language header
-    acceptLanguage.languages(Object.keys(locales))
-    res.locals.acceptedLocale = acceptLanguage.get(req.headers['accept-language'])
-    dayjs.locale(res.locals.acceptedLocale)
-    next()
-  },
 
   async initSettings(_req, res, next) {
     // initialize settings
-    res.locals.settings = cloneDeep(settingsController.settings)
-    delete res.locals.settings.smtp
-    delete res.locals.settings.publicKey
-    res.locals.settings.baseurl = config.baseurl
-    res.locals.settings.hostname = config.hostname
-    res.locals.settings.title = res.locals.settings.title || config.title
-    res.locals.settings.description = res.locals.settings.description || config.description
-    res.locals.settings.version = pkg.version
+    // res.locals.settings = cloneDeep(settingsController.settings)
+    const settings = settingsController.settings
+    res.locals.settings = {
+      title: settings.title || config.title,
+      description: settings.description || config.description,
+      baseurl: config.baseurl,
+      hostname: config.hostname,
+      version: pkg.version,
+      instance_timezone: settings.instance_timezone,
+      instance_locale: settings.instance_locale,
+      instance_name: settings.instance_name,
+      instance_place: settings.instance_place,
+      allow_registration: settings.allow_registration,
+      allow_anon_event: settings.allow_anon_event,
+      allow_recurrent_event: settings.allow_recurrent_event,
+      allow_multidate_event: settings.allow_multidate_event,
+      recurrent_event_visible: settings.recurrent_event_visible,
+      enable_federation: settings.enable_federation,
+      enable_resources: settings.enable_resources,
+      hide_boosts: settings.hide_boosts,
+      enable_trusted_instances: settings.enable_trusted_instances,
+      trusted_instances: settings.trusted_instances,
+      trusted_instances_label: settings.trusted_instances_label,
+      'theme.is_dark': settings['theme.is_dark'],
+      'theme.primary': settings['theme.primary'],
+      hide_thumbs: settings.hide_thumbs,
+      hide_calendar: settings.hide_calendar,
+      allow_geolocation: settings.allow_geolocation,
+      geocoding_provider_type: settings.geocoding_provider_type,
+      geocoding_provider: settings.geocoding_provider,
+      geocoding_countrycodes: settings.geocoding_countrycodes,
+      tilelayer_provider: settings.tilelayer_provider,
+      tilelayer_provider_attribution: settings.tilelayer_provider_attribution,
+      footerLinks: settings.footerLinks,
+      about: settings.about
+    }
     // set user locale
-    res.locals.user_locale = settingsController.user_locale[res.locals.acceptedLocale]
+    // res.locals.user_locale = settingsController.user_locale[res.locals.acceptedLocale]
     dayjs.tz.setDefault(res.locals.settings.instance_timezone)
     next()
   },
@@ -92,16 +112,30 @@ module.exports = {
     // serve images/thumb
     router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' }), (_req, res) => res.sendStatus(404))
     router.use('/download/:filename', (req, res) => {
-      return res.download(req.params.filename, undefined, { root: config.upload_path }, err => {
+      res.download(req.params.filename, undefined, { root: config.upload_path }, err => {
         if (err) {
-          res.status(404).send('Not found (but nice try 😊)')
+          // Check if headers have been sent
+          if(res.headersSent) {
+            log.warn(err)
+          } else {
+            res.status(404).send('Not found (but nice try 😊)')
+          // }
         }
-      })
+      }})
     })
-    router.use('/noimg.svg', express.static('./static/noimg.svg'))
+
+    router.use('/fallbackimage.png', (req, res, next) => {
+      const fallbackImagePath =  settingsController.settings.fallback_image || './static/noimg.svg'
+      return express.static(fallbackImagePath)(req, res, next)
+    })
+
+    router.use('/headerimage.png', (req, res, next) => {
+      const headerImagePath =  settingsController.settings.header_image || './static/noimg.svg'
+      return express.static(headerImagePath)(req, res, next)
+    })
 
     router.use('/logo.png', (req, res, next) => {
-      const logoPath = res.locals.settings.logo || './static/gancio'
+      const logoPath = settingsController.settings.logo || './static/gancio'
       return express.static(logoPath + '.png')(req, res, next)
     })
 

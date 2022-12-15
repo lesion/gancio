@@ -57,7 +57,7 @@
     update()
   })
   $: update(
-    maxlength && title && places && tags && theme && show_recurrent && sidebar
+    maxlength && title && places && tags && theme && show_recurrent && sidebar && baseurl
   )
 </script>
 
@@ -98,7 +98,7 @@
               <img
                 style="aspect-ratio=1.7778;"
                 alt={event.title}
-                src={baseurl + '/noimg.svg'}
+                src={baseurl + '/fallbackimage.png'}
                 loading="lazy"
               />
             {/if}

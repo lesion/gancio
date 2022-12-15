@@ -1,70 +1,47 @@
 <template lang="pug">
-v-container.pa-0
+v-container.px-2.px-sm-6.pt-0
 
   //- Announcements
-  #announcements.ma-2(v-if='announcements.length')
+  #announcements.mt-2.mt-sm-4(v-if='announcements.length')
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
-  //- Calendar and search bar
-  v-row.ma-2
-    #calh.col-xl-5.col-lg-5.col-md-7.col-sm-12.col-xs-12.pa-0.ma-0
-      //- this is needed as v-calendar does not support SSR
-      //- https://github.com/nathanreyes/v-calendar/issues/336
-      client-only(placeholder='Loading...')
-        Calendar(@dayclick='dayChange' @monthchange='monthChange' :events='events')
-
-    .col.pt-0.pt-md-2.mt-4.ma-md-0.pb-0
-      //- v-btn(to='/search' color='primary' ) {{$t('common.search')}}
-      v-form(to='/search' action='/search' method='GET')
-        v-col(cols=12)
-          v-switch(
-            v-if='settings.allow_recurrent_event'
-            v-model='show_recurrent'
-            inset color='primary'
-            hide-details
-            :label="$t('event.show_recurrent')")      
-        v-col.mb-4(cols=12)
-          v-text-field(name='search' :label='$t("common.search")' outlined rounded hide-details :append-icon='mdiMagnify')
-      v-chip(v-if='selectedDay' close :close-icon='mdiCloseCircle' @click:close='dayChange()') {{selectedDay}}
-
-
   //- Events
-  #events.mb-2.mt-1.pl-1.pl-sm-2
-    Event(:event='event' @destroy='destroy' v-for='(event, idx) in visibleEvents' :lazy='idx>2' :key='event.id')
+  #events.mt-sm-4.mt-2
+    Event(:event='event' v-for='(event, idx) in visibleEvents' :lazy='idx>2' :key='event.id')
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import debounce from 'lodash/debounce'
 import dayjs from 'dayjs'
 import Event from '@/components/Event'
 import Announcement from '@/components/Announcement'
-import Calendar from '@/components/Calendar'
 import { mdiMagnify, mdiCloseCircle } from '@mdi/js'
 
 export default {
   name: 'Index',
-  components: { Event, Announcement, Calendar },
+  components: { Event, Announcement },
   middleware: 'setup',
-  async asyncData ({ $api }) {
-    const events = await $api.getEvents({
-      start: dayjs().startOf('month').unix(),
-      end: null,
-      show_recurrent: true
-    })
-    return { events }
+  async fetch () {
+    return this.getEvents()
   },
+  activated() {
+    if (this.$fetchState.timestamp <= Date.now() - 60000) {
+      this.$fetch();
+    }
+  },  
   data ({ $store }) {
     return {
       mdiMagnify, mdiCloseCircle,
-      first: true,
       isCurrentMonth: true,
       now: dayjs().unix(),
       date: dayjs.tz().format('YYYY-MM-DD'),
-      events: [],
       start: dayjs().startOf('month').unix(),
       end: null,
+      searching: false,
+      tmpEvents: [],
       selectedDay: null,
-      show_recurrent: $store.state.settings.recurrent_event_visible
+      show_recurrent: $store.state.settings.recurrent_event_visible,
     }
   },
   head () {
@@ -79,65 +56,81 @@ export default {
         { property: 'og:image', content: this.settings.baseurl + '/logo.png' }
       ],
       link: [
+        { rel: 'apple-touch-icon', href: this.settings.baseurl + '/logo.png' },
         { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' },
         { rel: 'alternate', type: 'text/calendar', title: this.settings.title, href: this.settings.baseurl + '/feed/ics' }
       ]
     }
   },
   computed: {
-    ...mapState(['settings', 'announcements']),
+    ...mapState(['settings', 'announcements', 'events']),
     visibleEvents () {
+      if (this.searching) {
+        return this.tmpEvents
+      }
       const now = dayjs().unix()
       if (this.selectedDay) {
         const min = dayjs.tz(this.selectedDay).startOf('day').unix()
         const max = dayjs.tz(this.selectedDay).endOf('day').unix()
         return this.events.filter(e => (e.start_datetime <= max && (e.end_datetime || e.start_datetime) >= min) && (this.show_recurrent || !e.parentId))
       } else if (this.isCurrentMonth) {
-          return this.events.filter(e => ((e.end_datetime ? e.end_datetime > now : e.start_datetime + 2 * 60 * 60 > now) && (this.show_recurrent || !e.parentId)))
+          return this.events.filter(e => ((e.end_datetime ? e.end_datetime > now : e.start_datetime + 3 * 60 * 60 > now) && (this.show_recurrent || !e.parentId)))
       } else {
         return this.events.filter(e => this.show_recurrent || !e.parentId)
       }
     }
   },
+  created () {
+    this.$root.$on('dayclick', this.dayChange)
+    this.$root.$on('monthchange', this.monthChange)
+    this.$root.$on('search', debounce(this.search, 100))
+  },
+  destroyed () {
+    this.$root.$off('dayclick')
+    this.$root.$off('monthchange')
+    this.$root.$off('search')
+  },
   methods: {
-    destroy (id) {
-      this.events = this.events.filter(e => e.id !== id)
+    ...mapActions(['getEvents']),
+    async search (query) {
+      if (query) {
+        this.tmpEvents = await this.$axios.$get(`/event/search?search=${query}`)
+        this.searching = true
+      } else {
+        this.tmpEvents = null
+        this.searching = false
+      }
     },
     updateEvents () {
-      this.events = []
-      return this.$api.getEvents({
+      return this.getEvents({
         start: this.start,
         end: this.end,
         show_recurrent: true
-      }).then(events => {
-        this.events = events
-        this.$nuxt.$loading.finish()
       })
     },
-    monthChange ({ year, month }) {
-      // avoid first time monthChange event (onload)
-      if (this.first) {
-        this.first = false
-        return
-      }
+    async monthChange ({ year, month }) {
 
       this.$nuxt.$loading.start()
+      this.$nextTick( async () => {
 
-      // unselect current selected day
-      this.selectedDay = null
+        // unselect current selected day
+        this.selectedDay = null
 
-      // check if current month is selected
-      if (month - 1 === dayjs.tz().month() && year === dayjs.tz().year()) {
-        this.isCurrentMonth = true
-        this.start = dayjs().startOf('month').unix()
-        this.date = dayjs.tz().format('YYYY-MM-DD')
-      } else {
-        this.isCurrentMonth = false
-        this.date = ''
-        this.start = dayjs().year(year).month(month - 1).startOf('month').unix() // .startOf('week').unix()
-      }
-      this.end = dayjs().year(year).month(month).endOf('month').unix() // .endOf('week').unix()
-      this.updateEvents()
+        // check if current month is selected
+        if (month - 1 === dayjs.tz().month() && year === dayjs.tz().year()) {
+          this.isCurrentMonth = true
+          this.start = dayjs().startOf('month').unix()
+          this.date = dayjs.tz().format('YYYY-MM-DD')
+        } else {
+          this.isCurrentMonth = false
+          this.date = ''
+          this.start = dayjs().year(year).month(month - 1).startOf('month').unix() // .startOf('week').unix()
+        }
+        this.end = dayjs().year(year).month(month).endOf('month').unix() // .endOf('week').unix()
+        await this.updateEvents()
+        this.$nuxt.$loading.finish()
+      })
+
     },
     dayChange (day) {
       this.selectedDay = day ? dayjs.tz(day).format('YYYY-MM-DD') : null
