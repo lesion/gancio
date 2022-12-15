@@ -13,7 +13,6 @@ v-container
         strong.ml-2 {{tag.tag}}
       v-card-subtitle {{$tc('admin.edit_tag_help', tag.count)}}
       v-card-text
-        p {{newTag}}
         v-form(v-model='valid' ref='form' lazy-validation)
           v-combobox(v-model='newTag'
             :prepend-icon="mdiTag"
@@ -94,6 +93,7 @@ export default {
       this.$nextTick( async () => {
         await this.$axios.$put('/tag', { tag: this.tag.tag, newTag: this.newTag })
         await this.$fetch()
+        this.newTag = ''
         this.loading = false
         this.dialog = false
       })
