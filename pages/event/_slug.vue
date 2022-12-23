@@ -3,7 +3,7 @@ v-container#event.pa-0.pa-sm-2
   //- EVENT PAGE
   //- gancio supports microformats (http://microformats.org/wiki/h-event)
   //- and microdata https://schema.org/Event
-  v-card.h-event(itemscope itemtype="https://schema.org/Event")
+  v-card.h-event(itemscope itemtype="https://schema.org/Event" v-touch="{ left: goNext, right: goPrev }")
 
     v-card-text
       v-row
@@ -318,10 +318,20 @@ export default {
     keyDown (ev) {
       if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) { return }
       if (ev.key === 'ArrowRight' && this.event.next) {
-        this.$router.replace(`/event/${this.event.next}`)
+        this.goNext()
       }
       if (ev.key === 'ArrowLeft' && this.event.prev) {
+        this.goPrev()
+      }
+    },
+    goPrev () {
+      if (this.event.prev) {
         this.$router.replace(`/event/${this.event.prev}`)
+      }
+    },
+    goNext () {
+      if (this.event.next) {
+        this.$router.replace(`/event/${this.event.next}`)
       }
     },
     showResource (resource) {
