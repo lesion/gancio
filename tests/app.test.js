@@ -21,16 +21,21 @@ beforeAll(async () => {
     default:
       process.env.config_path = path.resolve(__dirname, './seeds/config.sqlite.json')
   }
-  app = await require('../server/routes.js').main()
-  const { sequelize } = require('../server/api/models/index')
-  await sequelize.query('DELETE FROM settings')
-  await sequelize.query('DELETE FROM events')
-  await sequelize.query('DELETE FROM users')
-  await sequelize.query('DELETE FROM ap_users')
-  await sequelize.query('DELETE FROM tags')
-  await sequelize.query('DELETE FROM places')
-  await sequelize.query('DELETE FROM collections')
-  await sequelize.query('DELETE FROM filters')
+  try {
+    app = await require('../server/routes.js').main()
+    const { sequelize } = require('../server/api/models/index')
+    await sequelize.query('DELETE FROM settings')
+    await sequelize.query('DELETE FROM events')
+    await sequelize.query('DELETE FROM user_followers')
+    await sequelize.query('DELETE FROM users')
+    await sequelize.query('DELETE FROM ap_users')
+    await sequelize.query('DELETE FROM tags')
+    await sequelize.query('DELETE FROM places')
+    await sequelize.query('DELETE FROM filters')
+    await sequelize.query('DELETE FROM collections')
+  } catch (e) {
+    console.error(e)
+  }
 })
 
 afterAll(async () => {

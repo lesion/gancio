@@ -29,7 +29,6 @@ const models = {
 const db = {
   sequelize: null,
   loadModels () {
-
     for (const modelName in models) {
       const m = models[modelName](db.sequelize, Sequelize.DataTypes)
       DB[modelName] = m
