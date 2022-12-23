@@ -54,7 +54,7 @@
     "ical.js": "^1.5.0",
     "ics": "^2.40.0",
     "jsdom": "^20.0.2",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "leaflet": "^1.9.2",
     "linkify-html": "^4.0.2",
     "linkifyjs": "4.0.2",
