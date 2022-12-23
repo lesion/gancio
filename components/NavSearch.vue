@@ -13,6 +13,7 @@ import { mdiMagnify, mdiClose } from '@mdi/js'
 export default {
   data: () => ({
     mdiMagnify, mdiClose,
+    oldRoute: '',
     collections: []
   }),
   async fetch () {
@@ -24,7 +25,12 @@ export default {
       return this.$route.name === 'index'
     },
     showCollectionsBar () {
-      return ['index', 'collection-collection'].includes(this.$route.name)
+      const show = ['index', 'collection-collection'].includes(this.$route.name)
+      if (show && this.oldRoute !== this.$route.name) {
+        this.oldRoute = this.$route.name
+        this.$fetch()
+      }
+      return show
     },
     ...mapState(['settings'])
   },
