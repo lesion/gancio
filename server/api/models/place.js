@@ -1,9 +1,5 @@
-const { Model, DataTypes } = require('sequelize')
-const sequelize = require('./index').sequelize
-
-class Place extends Model {}
-
-Place.init({
+module.exports = (sequelize, DataTypes) => 
+  sequelize.define('place', {
   name: {
     type: DataTypes.STRING,
     unique: true,
@@ -13,6 +9,4 @@ Place.init({
   address: DataTypes.STRING,
   latitude: DataTypes.FLOAT,
   longitude: DataTypes.FLOAT,
-}, { sequelize, modelName: 'place' })
-
-module.exports = Place
+})

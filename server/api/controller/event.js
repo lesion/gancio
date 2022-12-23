@@ -9,12 +9,10 @@ const Sequelize = require('sequelize')
 const dayjs = require('dayjs')
 const helpers = require('../../helpers')
 const Col = helpers.col
-const Event = require('../models/event')
-const Resource = require('../models/resource')
-const Tag = require('../models/tag')
-const Place = require('../models/place')
-const Notification = require('../models/notification')
-const APUser = require('../models/ap_user')
+const notifier = require('../../notifier')
+
+const { Event, Resource, Tag, Place, Notification, APUser } = require('../models/models')
+
 
 const exportController = require('./export')
 const tagController = require('./tag')
@@ -155,34 +153,6 @@ const eventController = {
 
   },
 
-  async getNotifications(event, action) {
-    log.debug(`getNotifications ${event.title} ${action}`)
-    function match(event, filters) {
-      // matches if no filter specified
-      if (!filters) { return true }
-
-      // check for visibility
-      if (typeof filters.is_visible !== 'undefined' && filters.is_visible !== event.is_visible) { return false }
-
-      if (!filters.tags && !filters.places) { return true }
-      if (!filters.tags.length && !filters.places.length) { return true }
-      if (filters.tags.length) {
-        const m = intersection(event.tags.map(t => t.tag), filters.tags)
-        if (m.length > 0) { return true }
-      }
-      if (filters.places.length) {
-        if (filters.places.find(p => p === event.place.name)) {
-          return true
-        }
-      }
-    }
-
-    const notifications = await Notification.findAll({ where: { action }, include: [Event] })
-
-    // get notification that matches with selected event
-    return notifications.filter(notification => match(event, notification.filters))
-  },
-
   async _get(slug) {
     // retrocompatibility, old events URL does not use slug, use id as fallback
     const id = Number(slug) || -1
@@ -317,7 +287,6 @@ const eventController = {
       res.sendStatus(200)
 
       // send notification
-      const notifier = require('../../notifier')
       notifier.notifyEvent('Create', event.id)
     } catch (e) {
       log.error('[EVENT]', e)

@@ -4,14 +4,10 @@ const mail = require('./api/mail')
 const log = require('./log')
 const fediverseHelpers = require('./federation/helpers')
 
-const Event = require('./api/models/event')
-const Notification = require('./api/models/notification')
-const EventNotification = require('./api/models/eventnotification')
-const User = require('./api/models/user')
-const Place = require('./api/models/place')
-const Tag = require('./api/models/tag')
 
-const eventController = require('./api/controller/event')
+const { Event, Notification, EventNotification, User, Place, Tag } = require('./api/models/models')
+
+
 const settingsController = require('./api/controller/settings')
 
 const notifier = {
@@ -37,7 +33,36 @@ const notifier = {
     return Promise.all(promises)
   },
 
+  async getNotifications(event, action) {
+    log.debug(`getNotifications ${event.title} ${action}`)
+    function match(event, filters) {
+      // matches if no filter specified
+      if (!filters) { return true }
+
+      // check for visibility
+      if (typeof filters.is_visible !== 'undefined' && filters.is_visible !== event.is_visible) { return false }
+
+      if (!filters.tags && !filters.places) { return true }
+      if (!filters.tags.length && !filters.places.length) { return true }
+      if (filters.tags.length) {
+        const m = intersection(event.tags.map(t => t.tag), filters.tags)
+        if (m.length > 0) { return true }
+      }
+      if (filters.places.length) {
+        if (filters.places.find(p => p === event.place.name)) {
+          return true
+        }
+      }
+    }
+
+    const notifications = await Notification.findAll({ where: { action }, include: [Event] })
+
+    // get notification that matches with selected event
+    return notifications.filter(notification => match(event, notification.filters))
+  },  
+
   async notifyEvent (action, eventId) {
+
     const event = await Event.findByPk(eventId, {
       include: [Tag, Place, Notification, User]
     })
@@ -46,7 +71,7 @@ const notifier = {
     log.debug(action, event.title)
 
     // insert notifications
-    const notifications = await eventController.getNotifications(event, action)
+    const notifications = await notifier.getNotifications(event, action)
     await event.addNotifications(notifications)
     const event_notifications = await event.getNotifications({ through: { where: { status: 'new' } } })
 

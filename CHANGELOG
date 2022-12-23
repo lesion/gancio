@@ -1,5 +1,9 @@
 All notable changes to this project will be documented in this file.
 
+### 
+
+  - models initialization refactored, better dev xperience as backend hmr is working
+
 ### 1.6.1 - 15 dec '22
   - allow edit tags in admin panel, fix #170
   - fix header / fallback image upload, fix #222

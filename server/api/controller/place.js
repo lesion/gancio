@@ -1,5 +1,5 @@
-const Place = require('../models/place')
-const Event = require('../models/event')
+const { Place, Event } = require('../models/models')
+
 const eventController = require('./event')
 const exportController = require('./export')
 

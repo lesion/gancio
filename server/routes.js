@@ -4,23 +4,22 @@ const initialize = require('./initialize.server')
 
 const config = require('./config')
 const helpers = require('./helpers')
-
-app.use([
-  helpers.initSettings,
-  helpers.logRequest,
-  helpers.serveStatic()
-])
+const api = require('./api')
 
 async function main () {
-
+  
   await initialize.start()
-
+  
+  app.use([
+    helpers.initSettings,
+    helpers.logRequest,
+    helpers.serveStatic()
+  ])
   // const metricsController = require('./metrics')
   // const promBundle = require('express-prom-bundle')
   // const metricsMiddleware = promBundle({ includeMethod: true })
 
   const log = require('./log')
-  const api = require('./api')
 
   app.enable('trust proxy')
 
@@ -60,7 +59,7 @@ async function main () {
   }
 
   // api!
-  app.use('/api', api)
+  app.use('/api', api())
 
   // // Handle 500
   app.use((error, _req, res, _next) => {
@@ -86,8 +85,6 @@ async function main () {
 if (process.env.NODE_ENV !== 'test') {
   main()
 }
-
-// app.listen(13120)
 
 module.exports = {
   main,

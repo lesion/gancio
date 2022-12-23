@@ -1,15 +1,9 @@
-const { Model, DataTypes } = require('sequelize')
-const sequelize = require('./index').sequelize
-
-class Tag extends Model {}
-
-Tag.init({
+module.exports = (sequelize, DataTypes) => 
+  sequelize.define('tag', {
   tag: {
     type: DataTypes.STRING,
     allowNull: false,
     index: true,
     primaryKey: true
   }
-}, { sequelize, modelName: 'tag' })
-
-module.exports = Tag
+})

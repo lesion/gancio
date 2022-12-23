@@ -4,10 +4,78 @@ const Umzug = require('umzug')
 const path = require('path')
 const config = require('../../config')
 const log = require('../../log')
-const settingsController = require('../controller/settings')
+const SequelizeSlugify = require('sequelize-slugify')
+const DB = require('./models')
+
+const models = {
+  Announcement: require('./announcement'),
+  APUser: require('./ap_user'),
+  Collection: require('./collection'),
+  Event: require('./event'),
+  EventNotification: require('./eventnotification'),
+  Filter: require('./filter'),
+  Instance: require('./instance'),
+  Notification: require('./notification'),
+  OAuthClient: require('./oauth_client'),
+  OAuthCode: require('./oauth_code'),
+  OAuthToken: require('./oauth_token'),
+  Place: require('./place'),
+  Resource: require('./resource'),
+  Setting: require('./setting'),
+  Tag: require('./tag'),
+  User: require('./user'),
+}
 
 const db = {
   sequelize: null,
+  loadModels () {
+
+    for (const modelName in models) {
+      const m = models[modelName](db.sequelize, Sequelize.DataTypes)
+      DB[modelName] = m
+    }
+
+  },
+  associates () {
+    const { Filter, Collection, APUser, Instance, User, Event, EventNotification, Tag,
+      OAuthCode, OAuthClient, OAuthToken, Resource, Place, Notification } = DB
+
+    Filter.belongsTo(Collection)
+    Collection.hasMany(Filter)
+
+    Instance.hasMany(APUser)
+    APUser.belongsTo(Instance)
+    
+    OAuthCode.belongsTo(User)
+    OAuthCode.belongsTo(OAuthClient, { as: 'client' })
+    
+    OAuthToken.belongsTo(User)
+    OAuthToken.belongsTo(OAuthClient, { as: 'client' })
+
+    APUser.hasMany(Resource)
+    Resource.belongsTo(APUser)
+
+    Event.belongsTo(Place)
+    Place.hasMany(Event)
+    
+    Event.belongsTo(User)
+    User.hasMany(Event)
+    
+    Event.belongsToMany(Tag, { through: 'event_tags' })
+    Tag.belongsToMany(Event, { through: 'event_tags' })
+    
+    Event.belongsToMany(Notification, { through: EventNotification })
+    Notification.belongsToMany(Event, { through: EventNotification })
+    
+    Event.hasMany(Resource)
+    Resource.belongsTo(Event)
+    
+    Event.hasMany(Event, { as: 'child', foreignKey: 'parentId' })
+    Event.belongsTo(Event, { as: 'parent' })
+    
+    SequelizeSlugify.slugifyModel(Event, { source: ['title'], overwrite: false })
+
+  },
   close() {
     if (db.sequelize) {
       return db.sequelize.close()
@@ -28,7 +96,6 @@ const db = {
       }
     }
     db.sequelize = new Sequelize(dbConf)
-    return db.sequelize.authenticate()
   },
   async isEmpty() {
     try {
@@ -57,13 +124,12 @@ const db = {
     })
     return umzug.up()
   },
-  async initialize() {
+  initialize() {
     if (config.status === 'CONFIGURED') {
       try {
-        await db.connect()
-        log.debug('Running migrations')
-        await db.runMigrations()
-        return settingsController.load()
+        db.connect()
+        db.loadModels()
+        db.associates()
       } catch (e) {
         log.warn(` ⚠️ Cannot connect to db, check your configuration => ${e}`)
         process.exit(1)

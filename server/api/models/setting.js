@@ -1,9 +1,5 @@
-const { Model, DataTypes } = require('sequelize')
-const sequelize = require('./index').sequelize
-
-class Setting extends Model {}
-
-Setting.init({
+module.exports = (sequelize, DataTypes) => 
+  sequelize.define('setting', {
   key: {
     type: DataTypes.STRING,
     primaryKey: true,
@@ -12,6 +8,4 @@ Setting.init({
   },
   value: DataTypes.JSON,
   is_secret: DataTypes.BOOLEAN
-}, { sequelize, modelName: 'setting' })
-
-module.exports = Setting
+})

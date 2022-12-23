@@ -1,4 +1,4 @@
-const APUser = require('../models/ap_user')
+const { APUser } = require('../models/models')
 
 const apUserController = {
   async toggleBlock (req, res) {

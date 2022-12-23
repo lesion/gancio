@@ -9,7 +9,7 @@ function _initializeDB () {
 async function modify (args) {
   await _initializeDB()
   const helpers = require('../helpers')
-  const User = require('../api/models/user')
+  const { User } = require('../api/models/models')
   const user = await User.findOne({ where: { email: args.account } })
   console.log()
   if (!user) {

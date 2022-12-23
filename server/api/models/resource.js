@@ -1,11 +1,5 @@
-const { Model, DataTypes } = require('sequelize')
-const sequelize = require('./index').sequelize
-
-const APUser = require('./ap_user')
-
-class Resource extends Model {}
-
-Resource.init({
+module.exports = (sequelize, DataTypes) => 
+  sequelize.define('resource', {
   activitypub_id: {
     type: DataTypes.STRING,
     index: true,
@@ -13,9 +7,4 @@ Resource.init({
   },
   hidden: DataTypes.BOOLEAN,
   data: DataTypes.JSON
-}, { sequelize, modelName: 'resource' })
-
-APUser.hasMany(Resource)
-Resource.belongsTo(APUser)
-
-module.exports = Resource
+})

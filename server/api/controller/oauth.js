@@ -2,12 +2,9 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const session = require('cookie-session')
 
-const OAuthClient = require('../models/oauth_client')
-const OAuthToken = require('../models/oauth_token')
-const OAuthCode = require('../models/oauth_code')
+const { OAuthClient, OAuthToken, OAuthCode, User } = require('../models/models')
 
 const helpers = require('../../helpers.js')
-const User = require('../models/user')
 const passport = require('passport')
 
 const get = require('lodash/get')
