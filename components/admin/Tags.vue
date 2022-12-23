@@ -54,11 +54,10 @@ v-container
 <script>
 import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiEye, mdiMapSearch, mdiChevronDown, mdiDeleteForever, mdiTag } from '@mdi/js'
 import { mapState } from 'vuex'
-import debounce from 'lodash/debounce'
 import get from 'lodash/get'
 
 export default {
-  data( {$store} ) {
+  data() {
     return {
       mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiEye, mdiMapSearch, mdiChevronDown, mdiDeleteForever, mdiTag,
       loading: false,
