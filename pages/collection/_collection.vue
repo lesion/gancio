@@ -31,7 +31,7 @@ export default {
   async asyncData ({ $axios, params, error }) {
     try {
       const collection = params.collection
-      const events = await $axios.$get(`/collections/${collection}`)
+      const events = await $axios.$get(`/collections/${encodeURIComponent(collection)}`)
       return { events, collection }
     } catch (e) {
       console.error(e)
