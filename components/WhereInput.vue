@@ -256,7 +256,7 @@ export default {
             this.addressList = []
           }
         } else if (this.geocoding_provider_type == "Photon") {
-          let photon_properties = ['housenumber', 'street', 'district', 'city', 'county', 'state', 'postcode', 'country']
+          let photon_properties = ['housenumber', 'street', 'locality', 'district', 'city', 'county', 'state', 'postcode', 'country']
 
           if (ret) {
             this.addressList = ret.features.map(v => {
