@@ -264,6 +264,7 @@
     "new_collection": "New collection",
     "collections_description": "Collections are groupings of events by tags and places. They will be displayed on the home page",
     "edit_collection": "Edit Collection",
+    "delete_collection_confirm": "Are you sure you  want to remove the collection <u>{collection}</u>?",
     "config_plugin": "Plugin configuration",
     "plugins_description": "",
     "fallback_image": "Fallback image",
