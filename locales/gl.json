@@ -101,7 +101,8 @@
         "about": "Acerca de",
         "content": "Contido",
         "admin_actions": "Accións de Admin",
-        "recurring_event_actions": "Accións de eventos recurrentes"
+        "recurring_event_actions": "Accións de eventos recurrentes",
+        "tag": "Etiqueta"
     },
     "recover": {
         "not_valid_code": "Algo fallou."
@@ -142,7 +143,7 @@
         "interact_with_me": "Sígueme",
         "remove_recurrent_confirmation": "Tes a certeza de querer eliminar este evento recurrente?\nOs eventos pasados permanecerán, pero non se crearán novos eventos.",
         "import_URL": "Importar desde URL",
-        "anon": "Anon",
+        "anon": "Anónimo",
         "anon_description": "Podes engadir un evento sen rexistrarte nen acceder, pero deberás agardar a que alguén o lea e\nconfirme que é un evento axeitado. Non será posible modificalo.<br/><br/>\nPodes tamén <a href='/login'>acceder</a> ou <a href='/register'>crear unha conta</a>. Mais podes continuar e agardar a que se comprobe. ",
         "same_day": "no mesmo día",
         "tag_description": "Cancelo",
@@ -288,7 +289,11 @@
         "geolocation": "Xeolocalización",
         "allow_multidate_event": "Permitir eventos de varios días",
         "admin_email_help": "O enderezo que se usará como remitente para os emails. Tamén é o enderezo ao que se envían emails de administración",
-        "geolocation_description": "<b>1. Define un provedor para o servizo geocoding</b>.<br>Actualmente, entre os que aparecen na <a href=\"https://wiki.openstreetmap.org/wiki/Nominatim#Alternatives_.2F_Third-party_providers\">wiki de OpenStreetMap</a>, temos soporte para <a href=\"https://github.com/osm-search/Nominatim\">Nominatim</a> e <a href=\"https://github.com/komoot/photon\">Photon</a>.<br>Podes usar unha das demos oficiais indicadas copiando a ligazón no campo 'Provedor Geocoding':<ul><li>https://nominatim.openstreetmap.org/search (<a href=\"https://operations.osmfoundation.org/policies/nominatim/\">Termos do Servizo</a>)</li><li>https://photon.komoot.io/api/ (<a href=\"https://photon.komoot.io/\">Termos do Servizo</a>)</li></ul><br><b>2. Define un provedor para capas do mapa.</b><br>Aquí hai unha lista: <a href=\"https://leaflet-extras.github.io/leaflet-providers/preview/\">https://leaflet-extras.github.io/leaflet-providers/preview/</a>"
+        "geolocation_description": "<b>1. Define un provedor para o servizo geocoding</b>.<br>Actualmente, entre os que aparecen na <a href=\"https://wiki.openstreetmap.org/wiki/Nominatim#Alternatives_.2F_Third-party_providers\">wiki de OpenStreetMap</a>, temos soporte para <a href=\"https://github.com/osm-search/Nominatim\">Nominatim</a> e <a href=\"https://github.com/komoot/photon\">Photon</a>.<br>Podes usar unha das demos oficiais indicadas copiando a ligazón no campo 'Provedor Geocoding':<ul><li>https://nominatim.openstreetmap.org/search (<a href=\"https://operations.osmfoundation.org/policies/nominatim/\">Termos do Servizo</a>)</li><li>https://photon.komoot.io/api/ (<a href=\"https://photon.komoot.io/\">Termos do Servizo</a>)</li></ul><br><b>2. Define un provedor para capas do mapa.</b><br>Aquí hai unha lista: <a href=\"https://leaflet-extras.github.io/leaflet-providers/preview/\">https://leaflet-extras.github.io/leaflet-providers/preview/</a>",
+        "edit_tag": "Editar etiqueta",
+        "edit_tag_help": "Podes cambiar a etiqueta substituíndoa por unha nova ou fusionándoa cunha existente. Tamén se cambiarán os {n} eventos asociados.",
+        "delete_tag_confirm": "Estás seguro de que queres eliminar a etiqueta \"{tag}\"? A etiqueta eliminarase de {n} eventos.",
+        "delete_collection_confirm": "Estás seguro de que queres eliminar a colección <u>{collection}</u>?"
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",
