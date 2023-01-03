@@ -1,1 +1,21 @@
-{}
+{
+    "common": {
+        "send": "Отправить",
+        "where": "Где",
+        "address": "Адрес",
+        "when": "Когда",
+        "what": "Что",
+        "media": "Медиа",
+        "login": "Логин",
+        "email": "E-mail",
+        "password": "Пароль",
+        "register": "Зарегистрироваться",
+        "description": "Описание",
+        "remove": "Удалить",
+        "search": "Поиск",
+        "edit": "Ред.",
+        "info": "Инфо",
+        "add_event": "Доб. событие",
+        "hide": "Скрыть"
+    }
+}
