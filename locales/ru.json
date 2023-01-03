@@ -60,7 +60,7 @@
         "follow_me_title": "Следите за обновлениями от fediverse",
         "follow": "Подписаться",
         "moderation": "Модерация",
-        "authorize": "Авториз.",
+        "authorize": "Авторизация",
         "filter": "Фильтр",
         "start": "Начало",
         "fediverse": "Fediverse",
@@ -94,7 +94,9 @@
         "user": "Пользователь",
         "pause": "Пауза",
         "tag": "Тег",
-        "calendar": "Календарь"
+        "calendar": "Календарь",
+        "next": "След.",
+        "export": "Экспорт"
     },
     "login": {
         "description": "Войдя в систему, вы можете публиковать новые события.",
@@ -183,7 +185,7 @@
         "allow_multidate_event": "Разрешить многодневные мероприятия",
         "allow_recurrent_event": "Разрешить повторяющиеся события",
         "allow_geolocation": "Разрешить геолокацию событий",
-        "federation": "Federation / ActivityPub",
+        "federation": "",
         "enable_federation": "Включить федерацию",
         "enable_federation_help": "За этим экземпляром можно будет следить из федиверса",
         "add_instance": "Доб. экземпляр",
