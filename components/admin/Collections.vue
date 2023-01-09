@@ -69,7 +69,7 @@ v-container
                 //-       v-list-item-subtitle(v-text='item.address')
 
           v-col(cols=2)
-            v-btn(color='primary' text @click='addFilter' :disabled='!collection.id || !filterPlaces.length && !filterTags.length') add <v-icon v-text='mdiPlus'></v-icon>
+            v-btn(color='primary' :loading='loading' text @click='addFilter' :disabled='loading || !collection.id || !filterPlaces.length && !filterTags.length') add <v-icon v-text='mdiPlus'></v-icon>
 
         v-data-table(
           :headers='filterHeaders'
@@ -110,6 +110,9 @@ v-container
 <script>
 import get from 'lodash/get'
 import debounce from 'lodash/debounce'
+import isEqual from 'lodash/isEqual'
+import sortBy from 'lodash/sortBy'
+
 import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle, mdiChevronDown } from '@mdi/js'
 
 export default {
@@ -147,7 +150,7 @@ export default {
 
   methods: {
     searchTags: debounce(async function (ev) {
-      this.tags = await this.$axios.$get(`/tag?search=${ev.target.value}`)
+      this.tags = await this.$axios.$get(`/tag?search=${encodeURIComponent(ev.target.value)}`)
     }, 100),
     searchPlaces: debounce(async function (ev) {
       this.places = await this.$axios.$get(`/place?search=${ev.target.value}`)
@@ -163,9 +166,20 @@ export default {
       this.loading = true
       const tags = this.filterTags
       const places = this.filterPlaces.map(p => ({ id: p.id, name: p.name }))
-      const filter = await this.$axios.$post('/filter', { collectionId: this.collection.id, tags, places })
+
+      const filter = { collectionId: this.collection.id, tags, places }
+
+      // tags and places are JSON field and there's no way to use them inside a unique constrain
+      // 
+      const alreadyExists = this.filters.find(f => 
+        isEqual(sortBy(f.places, 'id'), sortBy(filter.places, 'id')) && isEqual(sortBy(f.tags), sortBy(filter.tags))
+      )
+
+      if (alreadyExists) return
+
+      const ret = await this.$axios.$post('/filter', filter )
       this.$fetch()
-      this.filters.push(filter)
+      this.filters.push(ret)
       this.filterTags = []
       this.filterPlaces = []
       this.loading = false

@@ -1,5 +1,4 @@
-const Tag = require('../models/tag')
-const Event = require('../models/event')
+const { Tag, Event } = require('../models/models')
 const uniq = require('lodash/uniq')
 const log = require('../../log')
 
@@ -82,29 +81,35 @@ module.exports = {
     return res.json(tags.map(t => t.tag))
   },
 
-  async updateTag (req, res) {
-    const tag = await Tag.findByPk(req.body.tag)
-    await tag.update(req.body)
-    res.json(place)
-  },
+  // async updateTag (req, res) {
+  //   const tag = await Tag.findByPk(req.body.tag)
+  //   await tag.update(req.body)
+  //   res.json(place)
+  // },
 
   async updateTag (req, res) {
-    const oldtag = await Tag.findByPk(req.body.tag)
-    const newtag = await Tag.findByPk(req.body.newTag)
+    try {
+      const oldtag = await Tag.findByPk(req.body.tag)
+      const newtag = await Tag.findByPk(req.body.newTag)
 
-    // if the new tag does not exists, just rename the old one
-    if (!newtag) {
-      oldtag.tag = req.body.newTag
-      await oldtag.update({ tag: req.body.newTag })
-    } else {
-      // in case it exists:
-      // - search for events with old tag
-      const events = await oldtag.getEvents()
-      // - substitute it with the new one
-      await oldtag.removeEvents(events)
-      await newtag.addEvents(events)
+      // if the new tag does not exists, just rename the old one
+      if (!newtag) {
+        log.info(`Rename tag ${oldtag.tag} to ${req.body.newTag}`)
+        await Tag.update({ tag: req.body.newTag }, { where: { tag: req.body.tag }, raw: true })
+
+      } else {
+        // in case it exists:
+        // - search for events with old tag
+        const events = await oldtag.getEvents()
+        // - substitute it with the new one
+        await oldtag.removeEvents(events)
+        await newtag.addEvents(events)
+      }
+      res.sendStatus(200)
+    } catch (e) {
+      console.error(e)
+      res.sendStatus(400)
     }
-    res.sendStatus(200)
   },
 
   async remove (req, res) {

@@ -147,6 +147,7 @@
     "recurrent": "Ricorrente",
     "edit_recurrent": "Modifica evento ricorrente:",
     "show_recurrent": "appuntamenti ricorrenti",
+    "show_multidate": "eventi di più giorni",
     "show_past": "eventi passati",
     "recurrent_description": "Scegli la frequenza e seleziona i giorni",
     "multidate_description": "Un festival o una tre giorni? Scegli quando comincia e quando finisce",

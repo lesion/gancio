@@ -1,10 +1,5 @@
-
-const sequelize = require('./index').sequelize
-const { Model, DataTypes } = require('sequelize')
-
-class OAuthClient extends Model {}
-
-OAuthClient.init({
+module.exports = (sequelize, DataTypes) => 
+sequelize.define('oauth_client', {
   id: {
     type: DataTypes.STRING,
     primaryKey: true,
@@ -15,6 +10,4 @@ OAuthClient.init({
   scopes: DataTypes.STRING,
   redirectUris: DataTypes.STRING,
   website: DataTypes.STRING
-}, { sequelize, modelName: 'oauth_client' })
-
-module.exports = OAuthClient
+})

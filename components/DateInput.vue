@@ -24,8 +24,9 @@ v-col(cols=12)
             is-inline
             is-expanded
             :min-date='type !== "recurrent" && new Date()')
-      template(#placeholder)
-        span.calc Loading
+      //- template(#placeholder)
+      .d-flex.calh.justify-center(slot='placeholder')
+        v-progress-circular(indeterminate)
 
   div.text-center.mb-2(v-if='type === "recurrent"')
     span(v-if='value.recurrent.frequency !== "1m" && value.recurrent.frequency !== "2m"') {{ whenPatterns }}
@@ -94,7 +95,7 @@ v-col(cols=12)
 </template>
 <script>
 import dayjs from 'dayjs'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import List from '@/components/List'
 import { attributesFromEvents } from '../assets/helper'
 import { mdiClockTimeFourOutline, mdiClockTimeEightOutline, mdiClose } from '@mdi/js'
@@ -113,7 +114,6 @@ export default {
       menuFromHour: false,
       menuDueHour: false,
       type: this.value.type || 'normal',
-      events: [],
       frequencies: [
         { value: '1w', text: this.$t('event.each_week') },
         { value: '2w', text: this.$t('event.each_2w') },
@@ -122,7 +122,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['settings']),
+    ...mapState(['settings', 'events']),
     fromDate () {
       if (this.value.from) {
         if (this.value.multidate) {
@@ -138,7 +138,7 @@ export default {
       return this.events.filter(e => e.start_datetime >= start && e.start_datetime <= end)
     },
     attributes() {
-      return attributesFromEvents(this.events)
+      return attributesFromEvents(this.events.filter(e => e.id !== this.event.id))
     },
     whenPatterns() {
       if (!this.value.from) { return }
@@ -192,13 +192,12 @@ export default {
     } else {
       this.type = 'normal'
     }
-    this.events = await this.$api.getEvents({
-      start: dayjs().unix(),
-      show_recurrent: true
-    })
-    this.events = this.events.filter(e => e.id !== this.event.id)
+    if (!this.events) {
+      this.getEvents()
+    }
   },
   methods: {
+    ...mapActions(['getEvents']),
     updateRecurrent(value) {
       this.$emit('input', { ...this.value, recurrent: value || null })
     },

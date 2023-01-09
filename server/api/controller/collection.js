@@ -1,8 +1,5 @@
-const Collection = require('../models/collection')
-const Filter = require('../models/filter')
-const Event = require('../models/event')
-const Tag = require('../models/tag')
-const Place = require('../models/place')
+const { Collection, Filter, Event, Tag, Place } = require('../models/models')
+
 const log = require('../../log')
 const dayjs = require('dayjs')
 const { col: Col } = require('../../helpers')
@@ -114,7 +111,7 @@ const collectionController = {
       res.json(collection)
     } catch (e) {
       log.error(`Create collection failed ${e}`)
-      res.sendStatus(400)
+      res.status(400).send(e)
     }
   },
 
@@ -138,15 +135,14 @@ const collectionController = {
   }, 
 
   async addFilter (req, res) {
-    const collectionId = req.body.collectionId
-    const tags = req.body.tags
-    const places = req.body.places
+    const { collectionId, tags, places } = req.body
+    
     try {
-      const filter = await Filter.create({ collectionId, tags, places })
+      filter = await Filter.create({ collectionId, tags, places })
       return res.json(filter)
     } catch (e) {
       log.error(String(e))
-      return res.status(500)
+      return res.sendStatus(400)
     }
   },
 
@@ -169,7 +165,5 @@ const collectionController = {
 
 
 }
-
-
 
 module.exports = collectionController

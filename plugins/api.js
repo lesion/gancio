@@ -18,12 +18,15 @@ export default ({ $axios }, inject) => {
       try {
         const events = await $axios.$get('/events', {
           params: {
-            start: params.start,
-            end: params.end,
+            ...params,
+            // start: params.start,
+            // end: params.end,
             places: params.places && params.places.join(','),
             tags: params.tags && params.tags.join(','),
-            show_recurrent: !!params.show_recurrent,
-            max: params.maxs
+            // ...(params.show_recurrent !==  && {show_recurrent: !!params.show_recurrent}),
+            // show_multidate: !!params.show_multidate,
+            // query: params.query,
+            // max: params.maxs
           }
         })
         return events.map(e => Object.freeze(e))

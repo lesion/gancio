@@ -1,6 +1,4 @@
-const Resource = require('../models/resource')
-const APUser = require('../models/ap_user')
-const Event = require('../models/event')
+const { Resource, APUser, Event } = require('../models/models')
 const get = require('lodash/get')
 
 const resourceController = {

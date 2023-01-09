@@ -125,9 +125,14 @@ export default {
       return matches
     }
   },
+  mounted () {
+    this.$nextTick( () => {
+      this.search()
+    })
+  },
   methods: {
     search: debounce(async function(ev) {
-      const search = ev.target.value.trim().toLowerCase()
+      const search = ev ? ev.target.value.trim().toLowerCase() : ''
       this.places = await this.$axios.$get(`place?search=${search}`)
       if (!search && this.places.length) { return this.places }
       const matches = this.places.find(p => search === p.name.toLocaleLowerCase())
@@ -256,7 +261,7 @@ export default {
             this.addressList = []
           }
         } else if (this.geocoding_provider_type == "Photon") {
-          let photon_properties = ['housenumber', 'street', 'district', 'city', 'county', 'state', 'postcode', 'country']
+          let photon_properties = ['housenumber', 'street', 'locality', 'district', 'city', 'county', 'state', 'postcode', 'country']
 
           if (ret) {
             this.addressList = ret.features.map(v => {

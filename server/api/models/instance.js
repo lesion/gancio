@@ -1,11 +1,5 @@
-
-const sequelize = require('./index').sequelize
-const { Model, DataTypes } = require('sequelize')
-const APUser = require('./ap_user')
-
-class Instance extends Model {}
-
-Instance.init({
+module.exports = (sequelize, DataTypes) => 
+  sequelize.define('instance', {
   domain: {
     primaryKey: true,
     allowNull: false,
@@ -14,9 +8,4 @@ Instance.init({
   name: DataTypes.STRING,
   blocked: DataTypes.BOOLEAN,
   data: DataTypes.JSON
-}, { sequelize, modelName: 'instance' })
-
-Instance.hasMany(APUser)
-APUser.belongsTo(Instance)
-
-module.exports = Instance
+})

@@ -101,7 +101,8 @@
         "calendar": "Calendario",
         "content": "Contenido",
         "admin_actions": "Acciones de administrador",
-        "recurring_event_actions": "Acciones de eventos recurrentes"
+        "recurring_event_actions": "Acciones de eventos recurrentes",
+        "tag": "Etiqueta"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
@@ -281,7 +282,25 @@
         "admin_email_help": "La dirección que usamos como remitente para enviar emails. Esta es también la dirección a la cual los emails de administración son enviados",
         "allow_multidate_event": "Permitir eventos de múltiples días",
         "geocoding_countrycodes": "Códigos de país",
-        "geocoding_provider_help": "El proveedor por defecto es Nominatim"
+        "geocoding_provider_help": "El proveedor por defecto es Nominatim",
+        "geocoding_provider_type": "Software de geocodificación",
+        "geocoding_provider_type_help": "El programa por defecto es Nominatim",
+        "geocoding_countrycodes_help": "Permite establecer un filtro para las búsquedas basadas en códigos de área",
+        "geocoding_test_button": "Prueba de geocodificación",
+        "delete_collection_confirm": "¿Estás seguro de que quieres eliminar la colección <u>{collection}</u>?",
+        "geocoding_test_success": "El servicio de geocodificación de {service_name} funciona",
+        "tilelayer_provider": "Proveedor de mosaicos de mapas",
+        "tilelayer_provider_help": "El proveedor por defecto es OpenStreetMap",
+        "tilelayer_provider_attribution": "Atribución",
+        "tilelayer_test_button": "Capa de mosaicos de prueba",
+        "tilelayer_test_success": "El servicio de mosaicos en {service_name} está funcionando",
+        "tilelayer_test_error": "No se puede acceder al servicio de mosaico en {service_name}",
+        "geolocation": "Geolocalización",
+        "delete_tag_confirm": "¿Está seguro de que desea eliminar la etiqueta \"{tag}\"? La etiqueta se eliminará de {n} eventos.",
+        "edit_tag": "Editar la etiqueta",
+        "edit_tag_help": "Puede cambiar la etiqueta sustituyéndola por una nueva o fusionándola con una existente. Los {n} eventos asociados también se modificarán.",
+        "geolocation_description": "<b>1. Defina un proveedor para el servicio de codificación geográfica</b>.<br>Actualmente, entre los enumerados en el <a href=\"https://wiki.openstreetmap.org/wiki/Nominatim#Alternatives_.2F_Third-party_providers\">wiki de OpenStreetMap </a>, hay soporte para el software <a href=\"https://github.com/osm-search/Nominatim\">Nominatim</a> y <a href=\"https://github.com/komoot /photon\">Photon</a>.<br>Puede usar una de las demostraciones oficiales relacionadas copiando el enlace en el campo 'Proveedor de codificación geográfica':<ul><li>https://nominatim.openstreetmap.org/search (<a href=\"https://operations.osmfoundation.org/policies/nominatim/\">Términos de servicio</a>)</li><li>https://photon.komoot.io/api/ (<a href=\"https://photon.komoot.io/\"> Condiciones de servicio</a>)</li></ul><br><b>2. Defina un proveedor para las capas del mapa.</b><br>Puede encontrar una lista de ellos aquí: <a href=\"https://leaflet-extras.github.io/leaflet-providers/preview/\">https://leaflet-extras.github.io/leaflet-providers/preview/</a>",
+        "geocoding_test_error": "No se puede acceder al servicio de geocodificación en {service_name}"
     },
     "auth": {
         "not_confirmed": "Todavía no hemos confirmado este email…",

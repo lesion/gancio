@@ -106,7 +106,7 @@ docker-compose pull
 See [Requirements](#requirements) about downloading the `.osm.pbf` files
 ```bash
 cd docs/docker/nominatim/
-wget https://download.geofabrik.de/europe/italy/nord-ovest-updates/nord-ovest-latest.osm.pbf \
+wget https://download.geofabrik.de/europe/italy/nord-ovest-latest.osm.pbf \
     ./nominatim/data/default.osm.pbf
 ```
 

@@ -179,7 +179,6 @@ export default {
     filteredTags() {
       if (!this.tagName) { return this.tags.slice(0, 10).map(t => t.tag) }
       const tagName = this.tagName.trim().toLowerCase()
-      console.log(tagName)
       return this.tags.filter(t => t.tag.toLowerCase().includes(tagName)).map(t => t.tag)
     }
   },
@@ -245,6 +244,8 @@ export default {
       if (this.date.dueHour) {
         [hour, minute] = this.date.dueHour.split(':')
         formData.append('end_datetime', dayjs(this.date.due).hour(Number(hour)).minute(Number(minute)).second(0).unix())
+      } else if (!!this.date.multidate) {
+        formData.append('end_datetime', dayjs(this.date.due).hour(24).minute(0).second(0).unix())
       }
 
       if (this.edit) {

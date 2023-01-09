@@ -1,6 +1,4 @@
-const Event = require('../models/event')
-const Place = require('../models/place')
-const Tag = require('../models/tag')
+const { Event, Place, Tag } = require('../models/models')
 
 const { htmlToText } = require('html-to-text')
 const { Op, literal } = require('sequelize')

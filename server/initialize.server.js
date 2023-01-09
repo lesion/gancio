@@ -1,4 +1,11 @@
 const config = require('../server/config')
+const db = require('./api/models/index')
+const log = require('../server/log')
+
+db.initialize()
+
+const settingsController = require('./api/controller/settings')
+
 
 const initialize = {
   // close connections/port/unix socket
@@ -19,14 +26,14 @@ const initialize = {
   },
 
   async start () {
-    const log = require('../server/log')
-    const settingsController = require('./api/controller/settings')
-    const db = require('./api/models/index')
     const dayjs = require('dayjs')
     const timezone = require('dayjs/plugin/timezone')
     dayjs.extend(timezone)
     if (config.status == 'CONFIGURED') {
-      await db.initialize()
+      await db.sequelize.authenticate()
+      log.debug('Running migrations')
+      await db.runMigrations()
+      await settingsController.load()
       config.status = 'READY'
     } else {
       if (process.env.GANCIO_DB_DIALECT) {

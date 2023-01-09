@@ -9,7 +9,7 @@ v-dialog(v-model='show'
   @keydown.esc='cancel')
   v-card
     v-card-title {{ title }}
-    v-card-text(v-show='!!message') {{ message }}
+    v-card-text(v-show='!!message' v-html='message')
     v-card-actions
       v-spacer
       v-btn(outlined color='error' @click='cancel') {{$t('common.cancel')}}

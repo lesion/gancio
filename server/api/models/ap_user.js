@@ -1,9 +1,6 @@
-const sequelize = require('./index').sequelize
-const { Model, DataTypes } = require('sequelize')
 
-class APUser extends Model {}
-
-APUser.init({
+module.exports = (sequelize, DataTypes) =>
+  sequelize.define('ap_user', {
   ap_id: {
     type: DataTypes.STRING,
     primaryKey: true
@@ -11,6 +8,4 @@ APUser.init({
   follower: DataTypes.BOOLEAN,
   blocked: DataTypes.BOOLEAN,
   object: DataTypes.JSON
-}, { sequelize, modelName: 'ap_user' })
-
-module.exports = APUser
+})

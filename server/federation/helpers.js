@@ -1,10 +1,10 @@
 const axios = require('axios')
-// const request = require('request')
 const crypto = require('crypto')
 const config = require('../config')
 const httpSignature = require('http-signature')
-const APUser = require('../api/models/ap_user')
-const Instance = require('../api/models/instance')
+
+const { APUser, Instance } = require('../api/models/models')
+
 const url = require('url')
 const settingsController = require('../api/controller/settings')
 const log = require('../log')

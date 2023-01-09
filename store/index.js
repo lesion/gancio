@@ -23,6 +23,11 @@ export const state = () => ({
     trusted_instances_label: '',
     footerLinks: []
   },
+  filter: {
+    query: '',
+    show_recurrent: null,
+    show_multidate: null
+  },
   announcements: [],
   events: []
 })
@@ -39,6 +44,9 @@ export const mutations = {
   },
   setEvents (state, events) {
     state.events = events
+  },
+  setFilter (state, { type, value }) {
+    state.filter[type] = value
   }
 }
 
@@ -47,6 +55,9 @@ export const actions = {
   // we use it to get configuration from db, set locale, etc...
   nuxtServerInit ({ commit }, { _req, res }) {
     commit('setSettings', res.locals.settings)
+    commit('setFilter', {  type: 'show_recurrent',
+        value: res.locals.settings.allow_recurrent_event && res.locals.settings.recurrent_event_visible })
+
     if (res.locals.status === 'READY') {
       commit('setAnnouncements', res.locals.announcements)
     }
@@ -62,11 +73,15 @@ export const actions = {
     await this.$axios.$post('/settings', setting)
     commit('setSetting', setting)
   },
+  setFilter ({ commit }, [type, value]) {
+    commit('setFilter', { type, value })
+  },
   async getEvents ({ commit, state }, params = {}) {
     const events = await this.$api.getEvents({
       start: params.start || dayjs().startOf('month').unix(),
       end: params.end || null,
-      show_recurrent: params.show_recurrent || state.settings.recurrent_event_visible
+      show_recurrent: state.filter.show_recurrent,
+      show_multidate: state.filter.show_multidate
     })
     commit('setEvents', events)
     return events

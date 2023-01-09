@@ -1,6 +1,6 @@
 {
   "name": "gancio",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
@@ -75,7 +75,7 @@
     "passport-oauth2-client-password": "^0.1.2",
     "passport-oauth2-client-public": "^0.0.1",
     "pg": "^8.8.0",
-    "sequelize": "^6.27.0",
+    "sequelize": "^6.28.0",
     "sequelize-slugify": "^1.6.2",
     "sharp": "^0.27.2",
     "sqlite3": "^5.1.4",

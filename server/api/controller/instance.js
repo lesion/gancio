@@ -1,6 +1,5 @@
-const APUser = require('../models/ap_user')
-const Instance = require('../models/instance')
-const Resource = require('../models/resource')
+const { APUser, Instance, Resource } = require('../models/models')
+
 const Sequelize = require('sequelize')
 
 const instancesController = {

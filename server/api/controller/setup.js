@@ -7,6 +7,8 @@ const settingsController = require('./settings')
 const path = require('path')
 const escape = require('lodash/escape')
 
+const DB = require('../models/models')
+
 const setupController = {
 
     async _setupDb (dbConf) {
@@ -23,7 +25,10 @@ const setupController = {
 
       // try to connect
       dbConf.logging = false
-      await db.connect(dbConf)
+      db.connect(dbConf)
+      db.loadModels()
+      db.associates()      
+      await db.sequelize.authenticate()
 
       // is empty ?
       const isEmpty = await db.isEmpty()
@@ -69,8 +74,7 @@ const setupController = {
         // create admin
         const password = helpers.randomString()
         const email = `admin`
-        const User = require('../models/user')
-        await User.create({
+        await DB.User.create({
           email,
           password,
           is_admin: true,

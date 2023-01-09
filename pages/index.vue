@@ -1,6 +1,5 @@
 <template lang="pug">
 v-container.px-2.px-sm-6.pt-0
-
   //- Announcements
   #announcements.mt-2.mt-sm-4(v-if='announcements.length')
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
@@ -41,7 +40,8 @@ export default {
       searching: false,
       tmpEvents: [],
       selectedDay: null,
-      show_recurrent: $store.state.settings.recurrent_event_visible,
+      storeUnsubscribe: null
+
     }
   },
   head () {
@@ -63,53 +63,60 @@ export default {
     }
   },
   computed: {
-    ...mapState(['settings', 'announcements', 'events']),
+    ...mapState(['settings', 'announcements', 'events', 'filter']),
     visibleEvents () {
-      if (this.searching) {
+      if (this.filter.query && this.filter.query.length > 2) {
         return this.tmpEvents
       }
       const now = dayjs().unix()
       if (this.selectedDay) {
         const min = dayjs.tz(this.selectedDay).startOf('day').unix()
         const max = dayjs.tz(this.selectedDay).endOf('day').unix()
-        return this.events.filter(e => (e.start_datetime <= max && (e.end_datetime || e.start_datetime) >= min) && (this.show_recurrent || !e.parentId))
+        return this.events.filter(e => (e.start_datetime <= max && (e.end_datetime || e.start_datetime) >= min) && (this.filter.show_recurrent || !e.parentId))
       } else if (this.isCurrentMonth) {
-          return this.events.filter(e => ((e.end_datetime ? e.end_datetime > now : e.start_datetime + 3 * 60 * 60 > now) && (this.show_recurrent || !e.parentId)))
+          return this.events.filter(e => ((e.end_datetime ? e.end_datetime > now : e.start_datetime + 3 * 60 * 60 > now) && (this.filter.show_recurrent || !e.parentId)))
       } else {
-        return this.events.filter(e => this.show_recurrent || !e.parentId)
+        return this.events.filter(e => this.filter.show_recurrent || !e.parentId)
       }
     }
   },
-  created () {
+  mounted () {
     this.$root.$on('dayclick', this.dayChange)
     this.$root.$on('monthchange', this.monthChange)
-    this.$root.$on('search', debounce(this.search, 100))
+    this.storeUnsubscribe = this.$store.subscribeAction( { after: (action, state) => {
+      if (action.type === 'setFilter') {
+        if (this.filter.query && this.filter.query.length > 2) {
+          this.search()
+        } else {
+          this.updateEvents()
+        }
+      }
+    }})
   },
   destroyed () {
     this.$root.$off('dayclick')
     this.$root.$off('monthchange')
-    this.$root.$off('search')
+    if (typeof this.storeUnsubscribe === 'function') {
+      this.storeUnsubscribe()
+    }
   },
   methods: {
     ...mapActions(['getEvents']),
-    async search (query) {
-      if (query) {
-        this.tmpEvents = await this.$axios.$get(`/event/search?search=${query}`)
-        this.searching = true
-      } else {
-        this.tmpEvents = null
-        this.searching = false
-      }
-    },
+    search: debounce(async function() {
+      this.tmpEvents =  await this.$api.getEvents({
+        start: 0,
+        show_recurrent: this.filter.show_recurrent,
+        show_multidate: this.filter.show_multidate,
+        query: this.filter.query
+      })
+    }, 100),
     updateEvents () {
       return this.getEvents({
         start: this.start,
-        end: this.end,
-        show_recurrent: true
+        end: this.end
       })
     },
     async monthChange ({ year, month }) {
-
       this.$nuxt.$loading.start()
       this.$nextTick( async () => {
 

@@ -2,11 +2,12 @@ const path = require('path')
 const fs = require('fs')
 const log = require('../../log')
 const config = require('../../config')
+const settingsController = require('./settings')
+const notifier = require('../../notifier')
 
 const pluginController = {
   plugins: [],
   getAll(_req, res) {
-    const settingsController = require('./settings')
     // return plugins and inner settings
     const plugins = pluginController.plugins.map( ({ configuration }) => {
       if (settingsController.settings['plugin_' + configuration.name]) {
@@ -18,7 +19,6 @@ const pluginController = {
   },
 
   togglePlugin(req, res) {
-    const settingsController = require('./settings')
     const pluginName = req.params.plugin
     const pluginSettings = settingsController.settings['plugin_' + pluginName]
     if (!pluginSettings) { return res.sendStatus(404) }
@@ -33,7 +33,6 @@ const pluginController = {
   },
 
   unloadPlugin(pluginName) {
-    const settingsController = require('./settings')
     const plugin = pluginController.plugins.find(p => p.configuration.name === pluginName)
     const settings = settingsController.settings['plugin_' + pluginName]
     if (!plugin) {
@@ -59,14 +58,12 @@ const pluginController = {
   },
 
   loadPlugin(pluginName) {
-    const settingsController = require('./settings')
     const plugin = pluginController.plugins.find(p => p.configuration.name === pluginName)
     const settings = settingsController.settings['plugin_' + pluginName]
     if (!plugin) {
       log.warn(`Plugin ${pluginName} not found`)
       return
     }
-    const notifier = require('../../notifier')
     log.info('Load plugin ' + pluginName)
     if (typeof plugin.onEventCreate === 'function') {
       notifier.emitter.on('Create', plugin.onEventCreate)
@@ -88,7 +85,6 @@ const pluginController = {
   },
 
   _load() {
-    const settingsController = require('./settings')
     // load custom plugins
     const plugins_path = config.plugins_path || path.resolve(process.env.cwd || '', 'plugins')
     log.info(`Loading plugin  ${plugins_path}`)
