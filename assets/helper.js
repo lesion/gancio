@@ -8,7 +8,7 @@ export function attributesFromEvents(_events) {
     const key = dayjs.unix(e.start_datetime).tz().format('MMDD') // Math.floor(e.start_datetime/(3600*24)) // dayjs.unix(e.start_datetime).tz().format('YYYYMMDD')
     const c = (e.end_datetime || e.start_datetime) < now ? 'vc-past' : ''
 
-    if (e.multidate) {
+    if (e.multidate === true) {
       attributes.push({
         dates: { start: new Date(e.start_datetime * 1000), end: new Date(e.end_datetime * 1000) },
         highlight: {
