@@ -65,7 +65,7 @@ export default {
   computed: {
     ...mapState(['settings', 'announcements', 'events', 'filter']),
     visibleEvents () {
-      if (this.filter.query) {
+      if (this.filter.query && this.filter.query.length > 2) {
         return this.tmpEvents
       }
       const now = dayjs().unix()
@@ -85,14 +85,13 @@ export default {
     this.$root.$on('monthchange', this.monthChange)
     this.storeUnsubscribe = this.$store.subscribeAction( { after: (action, state) => {
       if (action.type === 'setFilter') {
-        if (this.filter.query) {
+        if (this.filter.query && this.filter.query.length > 2) {
           this.search()
         } else {
           this.updateEvents()
         }
       }
     }})
-    console.error(this.storeUnsubscribe)
   },
   destroyed () {
     this.$root.$off('dayclick')
