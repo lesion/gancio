@@ -147,6 +147,7 @@
     "recurrent": "Recurring",
     "edit_recurrent": "Edit recurring event:",
     "show_recurrent": "recurring events",
+    "show_multidate": "multidate events",
     "show_past": "also prior events",
     "only_future": "only upcoming events",
     "recurrent_description": "Choose frequency and select days",

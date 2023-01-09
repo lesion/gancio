@@ -91,6 +91,7 @@ module.exports = () => {
      * @type GET
      * @param {integer} [start] - start timestamp (default: now)
      * @param {integer} [end] - end timestamp (optional)
+     * @param {string}  [query] - search for this string
      * @param {array} [tags] - List of tags
      * @param {array} [places] - List of places id
      * @param {integer} [max] - Limit events
@@ -128,7 +129,7 @@ module.exports = () => {
     // allow anyone to add an event (anon event has to be confirmed, TODO: flood protection)
     api.post('/event', eventController.isAnonEventAllowed, upload.single('image'), eventController.add)
   
-    api.get('/event/search', eventController.search)
+    // api.get('/event/search', eventController.search)
   
     api.put('/event', isAuth, upload.single('image'), eventController.update)
     api.get('/event/import', isAuth, helpers.importURL)

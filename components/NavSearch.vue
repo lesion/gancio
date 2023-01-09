@@ -1,20 +1,51 @@
 <template lang="pug">
-  #navsearch.mt-2.mt-sm-4(v-if='showCollectionsBar || showSearchBar')
-    v-text-field.mx-2(v-if='showSearchBar' outlined dense hide-details :placeholder='$t("common.search")' :append-icon='mdiMagnify' @input='search' clearable :clear-icon='mdiClose')
-      template(v-slot:prepend-inner)
-        Calendar(v-if='!settings.hide_calendar')
-    v-btn.ml-2.mt-2.gap-2(v-if='showCollectionsBar' small outlined v-for='collection in collections' color='primary' :key='collection.id' :to='`/collection/${encodeURIComponent(collection.name)}`') {{collection.name}}
+  #navsearch.mt-2.mt-sm-4(v-if='showCollectionsBar || showSearchBar || showCalendar')
+
+    div.mx-2
+      client-only(v-if='showSearchBar')
+        v-menu(offset-y :close-on-content-click='false' tile)
+          template(v-slot:activator="{on ,attrs}")
+            v-text-field(hide-details outlined
+              :placeholder='$t("common.search")'
+              @input="v => setFilter(['query', v])" clearable :clear-icon='mdiClose')
+              template(v-slot:append)
+                v-icon(v-text='mdiCog' v-bind='attrs' v-on='on')
+          v-card(outlined :rounded='"0"')
+            v-card-text
+              v-row(dense)
+                v-col(v-if='settings.allow_recurrent_event')
+                  v-switch.mt-0(v-model='show_recurrent' @change="v => setFilter(['show_recurrent', v])"
+                    hide-details :label="$t('event.show_recurrent')" inset)
+                v-col(v-if='settings.allow_multidate_event')
+                  v-switch.mt-0(v-model='show_multidate' @change="v => setFilter(['show_multidate', v])"
+                    hide-details :label="$t('event.show_multidate')" inset)
+              v-row(v-if='!showCalendar')
+                v-col
+                  Calendar.mt-2
+        v-text-field(slot='placeholder' outlined hide-details :placeholder="$t('common.search')" :append-icon='mdiCog')
+
+      span(v-if='showCollectionsBar')
+        v-btn.mr-2.mt-2(small outlined v-for='collection in collections'
+          color='primary' :key='collection.id'
+          :to='`/collection/${encodeURIComponent(collection.name)}`') {{collection.name}}
+
+      Calendar.mt-2(v-if='showCalendar')
+
+    
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import Calendar from '@/components/Calendar'
-import { mdiMagnify, mdiClose } from '@mdi/js'
+import { mdiClose, mdiCog } from '@mdi/js'
 
 export default {
-  data: () => ({
-    mdiMagnify, mdiClose,
+  data: ({ $store }) => ({
     oldRoute: '',
-    collections: []
+    mdiClose, mdiCog,
+    collections: [],
+    show_recurrent: $store.state.settings.recurrent_event_visible,
+    show_multidate: true,
+    query: ''
   }),
   async fetch () {
     this.collections = await this.$axios.$get('collections').catch(_e => [])
@@ -24,6 +55,9 @@ export default {
     showSearchBar () {
       return this.$route.name === 'index'
     },
+    showCalendar () {
+      return (!this.settings.hide_calendar && this.$route.name === 'index')
+    },
     showCollectionsBar () {
       const show = ['index', 'collection-collection'].includes(this.$route.name)
       if (show && this.oldRoute !== this.$route.name) {
@@ -32,18 +66,16 @@ export default {
       }
       return show
     },
-    ...mapState(['settings'])
+    ...mapState(['settings', 'filter'])
   },
   methods: {
-    search (ev) {
-      this.$root.$emit('search', ev)
-    }
+    ...mapActions(['setFilter']),
   }
 }
 </script>
 <style>
 #navsearch {
   margin: 0 auto;
-  max-width: 800px;
+  max-width: 700px;
 }
 </style>
