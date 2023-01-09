@@ -10,6 +10,7 @@ module.exports = {
   nb: 'Norwegian Bokmål',
   pl: 'Polski',
   pt: 'Português',
+  ru: 'Русский',
   sk: 'Slovak',
   zh: '中国'
 }
