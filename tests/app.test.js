@@ -415,5 +415,33 @@ describe('Collection', () => {
     expect(response.body.length).toBe(1)
 
   })
+})
 
+describe('Geocoding', () => {
+  test('should not be enabled by default', async () => {
+    await request(app)
+      .post('/api/settings')
+      .send({ key: 'allow_geolocation', value: false })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
+    const response = await request(app).get('/api/placeOSM/Nominatim/test')
+      .expect(403)
+
+    expect(response.body).toBeDefined()
+
+  })
+
+  test('should geocode when enabled', async () => {
+    await request(app)
+      .post('/api/settings')
+      .send({ key: 'allow_geolocation', value: true })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
+    const response = await request(app).get('/api/placeOSM/Nominatim/test')
+      .expect(200)
+
+    expect(response.body).toBeDefined()
+  })
 })

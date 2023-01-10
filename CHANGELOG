@@ -1,8 +1,12 @@
 All notable changes to this project will be documented in this file.
 
-### 
-
-  - models initialization refactored, better dev xperience as backend hmr is working
+### UNRELEASED
+  - models initialization refactored, better dev experience as backend hmr is working
+  - add swipe gesture to move to next/prev event
+  - fix refresh collections, fix #219
+  - add russian translation (thanks @drunkod)
+  - refactor search / filter / selection fix #225, 227, #224
+  - add nodejs v18 compatibility
 
 ### 1.6.1 - 15 dec '22
   - allow edit tags in admin panel, fix #170
