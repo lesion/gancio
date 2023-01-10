@@ -301,7 +301,8 @@
         "allow_multidate_event": "Permet activitats de diversos dies",
         "delete_tag_confirm": "Segur que vols eliminar l'etiqueta \"{tag}\"? S'esborrarà del sistema i de {n} activitats.",
         "edit_tag": "Canvia l'etiqueta",
-        "tilelayer_provider_attribution": "Atribució"
+        "tilelayer_provider_attribution": "Atribució",
+        "geolocation_description": "<b>1. Defineix una proveïdora de geocodificació</b>.<br>Actualment, de totes les llistades en <a href=\"https://wiki.openstreetmap.org/wiki/Nominatim#Alternatives_.2F_Third-party_providers\">la wiki d'OpenStreetMap</a>, són compatibles amb Gancio <a href=\"https://github.com/osm-search/Nominatim\">Nominatim</a> i <a href=\"https://github.com/komoot/photon\">Photon</a>.<br>Pots fer servir les instaŀlacions d'aquestes proveïdores copiant l'adreça de la instaŀlació al camp de 'Proveïdora de geolocodificació'<ul><li>https://nominatim.openstreetmap.org/search (<a href=\"https://operations.osmfoundation.org/policies/nominatim/\">Condicions del servei</a>)</li><li>https://photon.komoot.io/api/ (<a href=\"https://photon.komoot.io/\">Condicions del servei</a>)</li></ul><br><b>2. Defineix una proveïdora per mapes base.</b><br>Pots trobar-ne una llista aquí: <a href=\"https://leaflet-extras.github.io/leaflet-providers/preview/\">https://leaflet-extras.github.io/leaflet-providers/preview/</a>"
     },
     "auth": {
         "not_confirmed": "Encara no s'ha confirmat…",
