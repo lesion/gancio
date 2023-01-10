@@ -66,6 +66,16 @@ export default {
 </script>
 
 <style>
+.vc-container.vc-is-dark {
+  --gray-900: #111;
+  --gray-700: #333;
+}
+
+.vc-container {
+  --gray-400: #999 !important;
+  --rounded-lg: 4px !important;
+}
+
 .vc-opacity-0 {
   opacity: 0.3 !important;
 }
