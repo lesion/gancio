@@ -170,9 +170,11 @@ module.exports = () => {
     api.get('/places', isAdmin, placeController.getAll)
     api.get('/place/:placeName', cors, placeController.getEvents)
     api.get('/place', cors, placeController.search)
-    api.get('/placeOSM/Nominatim/:place_details', cors, placeController._nominatim)
-    api.get('/placeOSM/Photon/:place_details', cors, placeController._photon)
     api.put('/place', isAdmin, placeController.updatePlace)
+
+    // - GEOCODING
+    api.get('/placeOSM/Nominatim/:place_details', helpers.isGeocodingEnabled, placeController._nominatim)
+    api.get('/placeOSM/Photon/:place_details', helpers.isGeocodingEnabled, placeController._photon)
   
     // - TAGS
     api.get('/tags', isAdmin, tagController.getAll)
