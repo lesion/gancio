@@ -1,5 +1,5 @@
-const Tag = require('../api/models/tag')
-const Event = require('../api/models/event')
+const { Event, Tag } = require('../api/models/models')
+
 const Sequelize = require('sequelize')
 const log = require('../log')
 
@@ -13,7 +13,7 @@ module.exports = {
     })
 
     if (!tags.length) { return }
-    log.info(`Remove ${tags.length} unrelated tags`)
+    log.info(`Remove ${tags.length} orphan tags (${tags.join(', ')})`)
 
     await Tag.destroy({
       where: { tag: { [Sequelize.Op.in]: tags.map(p => p.tag) } }

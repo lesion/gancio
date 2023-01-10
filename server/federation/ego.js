@@ -1,4 +1,4 @@
-const Event = require('../api/models/event')
+const { Event } = require('../api/models/models')
 const config = require('../config')
 const log = require('../log')
 

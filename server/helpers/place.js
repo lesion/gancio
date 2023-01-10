@@ -1,5 +1,4 @@
-const Place = require('../api/models/place')
-const Event = require('../api/models/event')
+const { Event, Place } = require('../api/models/models')
 const Sequelize = require('sequelize')
 const log = require('../log')
 

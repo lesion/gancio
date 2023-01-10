@@ -1,6 +1,4 @@
-const Event = require('../api/models/event')
-const Resource = require('../api/models/resource')
-const APUser = require('../api/models/ap_user')
+const { Event, Resource, APUser } = require('../api/models/models')
 
 const log = require('../log')
 const helpers = require('../helpers')
