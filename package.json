@@ -4,9 +4,9 @@
   "description": "A shared agenda for local communities",
   "author": "lesion",
   "scripts": {
-    "build": "export NODE_OPTIONS=--openssl-legacy-provider; nuxt build --modern",
+    "build": "nuxt build --modern",
     "start:inspect": "NODE_ENV=production node --inspect node_modules/.bin/nuxt start --modern",
-    "dev": "export NODE_OPTIONS=--openssl-legacy-provider; nuxt dev",
+    "dev": "nuxt dev",
     "test-sqlite": "export NODE_ENV=test; export DB=sqlite; jest --testEnvironment=jest-environment-node --bail=1",
     "test-mariadb": "export NODE_ENV=test; export DB=mariadb; jest --testEnvironment=jest-environment-node --bail=1",
     "test-postgresql": "export NODE_ENV=test; export DB=postgresql; jest --testEnvironment=jest-environment-node --bail=1",
@@ -31,7 +31,7 @@
     "yarn.lock"
   ],
   "engines": {
-    "node": ">=14 <=18"
+    "node": ">=14 <=16"
   },
   "dependencies": {
     "@mdi/js": "^7.1.96",

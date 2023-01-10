@@ -6,7 +6,6 @@ All notable changes to this project will be documented in this file.
   - fix refresh collections, fix #219
   - add russian translation (thanks @drunkod)
   - refactor search / filter / selection fix #225, 227, #224
-  - add nodejs v18 compatibility
 
 ### 1.6.1 - 15 dec '22
   - allow edit tags in admin panel, fix #170
