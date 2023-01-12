@@ -58,7 +58,7 @@ export default ({ app, store }) => {
     return ''
   })
 
-  Vue.filter('from', timestamp => dayjs.unix(timestamp).tz().fromNow())
+  Vue.filter('from', timestamp => dayjs.unix(timestamp).tz().locale(app.i18n.locale || store.state.settings.instance_locale).fromNow())
 
   Vue.filter('recurrentDetail', event => {
     const parent = event.parent
