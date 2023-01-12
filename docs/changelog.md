@@ -8,6 +8,13 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.6.2 - 12 jan '23'
+  - add swipe gesture to move to next/prev event
+  - fix refresh collections, fix #219
+  - add russian translation (thanks @drunkod)
+  - refactor search / filter / selection fix #225, 227, #224
+  - models initialization refactored, better dev experience, fix backend HMR
+
 ### 1.6.1 - 15 dec '22
   - allow edit tags in admin panel, fix #170
   - fix header / fallback image upload, fix #222
