@@ -26,7 +26,7 @@ export const state = () => ({
   filter: {
     query: '',
     show_recurrent: null,
-    show_multidate: null
+    show_multidate: null,
   },
   announcements: [],
   events: []
@@ -43,7 +43,7 @@ export const mutations = {
     state.announcements = announcements
   },
   setEvents (state, events) {
-    state.events = events
+    state.events = Object.freeze(events)
   },
   setFilter (state, { type, value }) {
     state.filter[type] = value
@@ -84,6 +84,5 @@ export const actions = {
       show_multidate: state.filter.show_multidate
     })
     commit('setEvents', events)
-    return events
   }
 }

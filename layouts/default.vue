@@ -4,7 +4,7 @@
     <v-main>
       <Snackbar/>
       <Confirm/>
-        <nuxt :keep-alive='$route.name === "index"'/>
+      <nuxt keep-alive :keep-alive-props="{include: ['Index']}"/>
     </v-main>
     <Footer/>
 
