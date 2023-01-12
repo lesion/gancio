@@ -8,7 +8,7 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
-### 1.6.2 - 12 jan '23'
+### 1.6.2 - 12 jan '23
   - add swipe gesture to move to next/prev event
   - fix refresh collections, fix #219
   - add russian translation (thanks @drunkod)
