@@ -27,24 +27,11 @@ export default {
       end: this.end
     })
   },
-  activated() {
-    if (!this.isCurrentMonth) {
-      this.start = dayjs().startOf('month').unix()
-      this.end = null
-      this.$fetch()
-      this.isCurrentMonth = true
-      return
-    }
-    if (this.$fetchState.timestamp <= (Date.now() - 60000)) {
-      this.$fetch()
-    }
-  },
   data () {
     return {
       mdiMagnify, mdiCloseCircle,
       isCurrentMonth: true,
       now: dayjs().unix(),
-      // date: dayjs.tz().format('YYYY-MM-DD'),
       start: dayjs().startOf('month').unix(),
       end: null,
       tmpEvents: [],
@@ -130,10 +117,8 @@ export default {
       if (month - 1 === dayjs.tz().month() && year === dayjs.tz().year()) {
         isCurrentMonth = true
         this.start = dayjs().startOf('month').unix()
-        // this.date = dayjs.tz().format('YYYY-MM-DD')
       } else {
         isCurrentMonth = false
-        // this.date = ''
         this.start = dayjs().year(year).month(month - 1).startOf('month').unix() // .startOf('week').unix()
       }
       this.end = dayjs().year(year).month(month).endOf('month').unix() // .endOf('week').unix()
