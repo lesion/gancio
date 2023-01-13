@@ -17,7 +17,7 @@ export default {
   layout: 'iframe',
   async asyncData ({ $axios, params, error }) {
     try {
-      const event = await $axios.$get(`/event/${params.event_id}`)
+      const event = await $axios.$get(`/event/detail/${params.event_id}`)
       return { event }
     } catch (e) {
       error({ statusCode: 404, message: 'Event not found' })

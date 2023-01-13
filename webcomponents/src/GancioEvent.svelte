@@ -11,7 +11,7 @@
 
   function update(id, baseurl) {
     if (mounted) {
-      fetch(`${baseurl}/api/event/${id}`)
+      fetch(`${baseurl}/api/event/detail/${id}`)
         .then((res) => res.json())
         .then((e) => (event = e))
     }

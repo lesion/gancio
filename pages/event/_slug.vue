@@ -185,7 +185,7 @@ export default {
   },
   async asyncData ({ $axios, params, error }) {
     try {
-      const event = await $axios.$get(`/event/${params.slug}`)
+      const event = await $axios.$get(`/event/detail/${params.slug}`)
       return { event }
     } catch (e) {
       error({ statusCode: 404, message: 'Event not found' })
