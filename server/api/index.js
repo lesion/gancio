@@ -19,6 +19,7 @@ const resourceController = require('./controller/resource')
 const oauthController = require('./controller/oauth')
 const announceController = require('./controller/announce')
 const pluginController = require('./controller/plugins')
+const geolocationController = require('./controller/geolocation')
 const helpers = require('../helpers')
 const storage = require('./storage')
 
@@ -64,7 +65,6 @@ module.exports = () => {
     */
     api.get('/ping', (_req, res) => res.sendStatus(200))
     api.get('/user', isAuth, (req, res) => res.json(req.user))
-  
   
     api.post('/user/recover', userController.forgotPassword)
     api.post('/user/check_recover_code', userController.checkRecoverCode)
@@ -173,8 +173,8 @@ module.exports = () => {
     api.put('/place', isAdmin, placeController.updatePlace)
 
     // - GEOCODING
-    api.get('/placeOSM/Nominatim/:place_details', helpers.isGeocodingEnabled, placeController._nominatim)
-    api.get('/placeOSM/Photon/:place_details', helpers.isGeocodingEnabled, placeController._photon)
+    api.get('/placeOSM/Nominatim/:place_details', helpers.isGeocodingEnabled, geolocationController.apiLimit, placeController._nominatim)
+    api.get('/placeOSM/Photon/:place_details', helpers.isGeocodingEnabled, geolocationController.apiLimit, placeController._photon)
   
     // - TAGS
     api.get('/tags', isAdmin, tagController.getAll)
