@@ -1,6 +1,6 @@
 const rateLimit = require('express-rate-limit');
 const log = require('../../log')
-let curReq
+let d // departure time
 
 const geolocationController = {
   rateLimiter: rateLimit({
@@ -17,18 +17,26 @@ const geolocationController = {
    * [Websites and Apps] Note that the usage limits above apply per website/application: the sum of traffic by all your users should not exceed the limits.
    */
   apiLimit (req, res, next) {
-    prevReq = curReq
-    curReq = Date.now()
-    deltaTime = (curReq - prevReq)
+    let dprev = d // departure time of previous
+    let a = Date.now() // arrival time
 
-    if (typeof prevReq === 'undefined' || deltaTime > 1000) {
-      geolocationController.rateLimiter(req, res, next)
-    } else {
-      log.warn('More than 1 request per second to geolocation api come from ' + req.ip)
+    if (typeof dprev !== 'undefined') {
+      d = dprev + 1000
 
-      setTimeout(() => {
+      if (a > d) {
+        d = a + 10
         geolocationController.rateLimiter(req, res, next)
-      }, 1000 - deltaTime)
+      } else {
+        let wait = d - a
+        log.warn('More than 1 request per second to geolocation api. This from ' + req.ip)
+
+        setTimeout(() => {
+          geolocationController.rateLimiter(req, res, next)
+        }, wait)
+      }
+    } else {
+      d = a + 10 // add 10ms
+      geolocationController.rateLimiter(req, res, next)
     }
     
   }
