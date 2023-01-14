@@ -64,7 +64,7 @@
         "embed": "Incorporar",
         "embed_title": "Publica este evento en tu página web",
         "embed_help": "Copiando el siguiente código en tu página web, el evento será incluido como puedes ver aquí al lado",
-        "feed": "RSS Feed",
+        "feed": "Canal RSS",
         "feed_url_copied": "Copiada feed url, pegala en tu lector de feeds",
         "follow_me_title": "Sigue las actualizaciones en el fediverso",
         "follow": "Sigue",
@@ -183,7 +183,8 @@
         "address_description": "¿Cuál es la dirección?",
         "alt_text_description": "Descripción para personas con baja visión",
         "download_flyer": "Descargar folleto",
-        "remove_media_confirmation": "¿Confirmas la eliminación de la imagen?"
+        "remove_media_confirmation": "¿Confirmas la eliminación de la imagen?",
+        "show_multidate": "eventos de varios días"
     },
     "admin": {
         "place_description": "En el caso de que un lugar sea incorrecto o cambie de dirección, puedes cambiarlo. <br/> Todos los eventos presentes y pasados asociados con este lugar cambiarán de dirección.",

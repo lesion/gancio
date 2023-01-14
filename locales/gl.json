@@ -174,7 +174,8 @@
         "remove_media_confirmation": "Confirmas a eliminación da imaxe?",
         "download_flyer": "Descargar folleto",
         "address_description": "Cal é o enderezo?",
-        "address_description_osm": "Cal é o enderezo? (Contribuíntes a <a href='http://osm.org/copyright'>OpenStreetMap</a>)"
+        "address_description_osm": "Cal é o enderezo? (Contribuíntes a <a href='http://osm.org/copyright'>OpenStreetMap</a>)",
+        "show_multidate": "eventos con varias datas"
     },
     "admin": {
         "place_description": "Se escribiches mal o lugar ou enderezo, podes cambialo.<br/>Cambiará o enderezo de tódolos eventos actuais e pasados asociados a este lugar.",
