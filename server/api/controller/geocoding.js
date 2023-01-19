@@ -32,16 +32,15 @@ const geocodingController = {
     let dprev = d
     d = dprev + 1000 + h
 
-    console.log('a: ' + a)
-    console.log('dprev: ' + dprev)
-    console.log('d: ' + d)
+    // console.log('a: ' + a)
+    // console.log('dprev: ' + dprev)
+    // console.log('d: ' + d)
 
     // if the same request was already cached skip the delay mechanism
     if (cache.get(providerCommonName + '_' + req.params.place_details)) {
       if (a < d) {
-        log.warn('More than 1 request per second to geocoding api. This from ' + req.ip + ' . The response data is served from memory-cache')
+        log.warn('More than 1 request per second to geocoding api. This from ' + req.ip + ' . The response data is served from memory-cache.')
       }
-      console.log('yet cached')
       // reset departure time because there is no need to ask provider
       d = dprev
       return next()
@@ -49,15 +48,15 @@ const geocodingController = {
 
     if (d === 0 || a > d) {
       // no-queue or old-queue
-      console.log('No queue or Old queue')
+      // console.log('No queue or Old queue')
       // arrival time + 10ms estimated computing time
       d = a + 10 
       next()
     } else {
       // fresh queue
-      console.log('Fresh queue')
+      // console.log('Fresh queue')
       let wait = d - a
-      console.log('Waiting '+ wait)
+      // console.log('Waiting '+ wait)
       log.warn('More than 1 request per second to geocoding api. This from ' + req.ip + ' . Applying ToS padding before asking to provider. The response data is now cached.')
       
       setTimeout(() => {
@@ -80,14 +79,14 @@ const geocodingController = {
       const ret = await cache.get(providerCommonName + '_' + details) 
       return ret
     } else {
-      console.log('Not in cache')
+      // console.log('Not in cache')
       return
     }
   },
 
   async queryProvider(req, res, details, provider) {
     let RTTstart = Date.now()
-    console.log('Asking Provider: ' + RTTstart)
+    // console.log('Asking Provider: ' + RTTstart)
 
     const ret = await axios.get(`${provider.endpoint(req, res)}`, { 
       params: provider.getParams(req, res),
@@ -96,16 +95,16 @@ const geocodingController = {
 
     if (ret) {
       let RTTend = Date.now()
-      console.log('Asking Provider: ' + RTTend)
+      // console.log('Asking Provider: ' + RTTend)
       // Save the hit time (aka Latency)
-      console.log('Saving latency h: ' + h)
+      // console.log('Saving latency h: ' + h)
       h = (RTTend - RTTstart) / 2
     }
 
     // Cache the response data
     cache.put(provider.commonName + '_' + details, ret.data, 1000 * 60 * 60 * 24);
-    console.log(cache.keys())
-    console.log(cache.exportJson())
+    // console.log(cache.keys())
+    // console.log(cache.exportJson())
     return ret.data
   },
 
