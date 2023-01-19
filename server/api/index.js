@@ -19,7 +19,7 @@ const resourceController = require('./controller/resource')
 const oauthController = require('./controller/oauth')
 const announceController = require('./controller/announce')
 const pluginController = require('./controller/plugins')
-const geolocationController = require('./controller/geolocation')
+const geocodingController = require('./controller/geocoding')
 const helpers = require('../helpers')
 const storage = require('./storage')
 
@@ -173,8 +173,8 @@ module.exports = () => {
     api.put('/place', isAdmin, placeController.updatePlace)
 
     // - GEOCODING
-    api.get('/placeOSM/Nominatim/:place_details', helpers.isGeocodingEnabled, geolocationController.instanceApiRateLimiter, geolocationController.providerRateLimit, geolocationController._nominatim)
-    api.get('/placeOSM/Photon/:place_details', helpers.isGeocodingEnabled, geolocationController.instanceApiRateLimiter, geolocationController.providerRateLimit, geolocationController._photon)
+    api.get('/placeOSM/Nominatim/:place_details', helpers.isGeocodingEnabled, geocodingController.instanceApiRateLimiter, geocodingController.nominatimRateLimit, geocodingController._nominatim)
+    api.get('/placeOSM/Photon/:place_details', helpers.isGeocodingEnabled, geocodingController.instanceApiRateLimiter, geocodingController.photonRateLimit, geocodingController._photon)
   
     // - TAGS
     api.get('/tags', isAdmin, tagController.getAll)
