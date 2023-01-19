@@ -173,8 +173,8 @@ module.exports = () => {
     api.put('/place', isAdmin, placeController.updatePlace)
 
     // - GEOCODING
-    api.get('/placeOSM/Nominatim/:place_details', helpers.isGeocodingEnabled, geolocationController.apiLimit, placeController._nominatim)
-    api.get('/placeOSM/Photon/:place_details', helpers.isGeocodingEnabled, geolocationController.apiLimit, placeController._photon)
+    api.get('/placeOSM/Nominatim/:place_details', helpers.isGeocodingEnabled, geolocationController.instanceApiRateLimiter, geolocationController.providerRateLimit, geolocationController._nominatim)
+    api.get('/placeOSM/Photon/:place_details', helpers.isGeocodingEnabled, geolocationController.instanceApiRateLimiter, geolocationController.providerRateLimit, geolocationController._photon)
   
     // - TAGS
     api.get('/tags', isAdmin, tagController.getAll)

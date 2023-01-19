@@ -62,6 +62,7 @@
     "linkifyjs": "4.0.2",
     "lodash": "^4.17.21",
     "mariadb": "^3.0.1",
+    "memory-cache": "^0.2.0",
     "microformat-node": "^2.0.1",
     "minify-css-string": "^1.0.0",
     "mkdirp": "^1.0.4",
