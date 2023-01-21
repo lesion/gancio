@@ -1,10 +1,13 @@
+const cache = require('memory-cache')
+const providerCache = new cache.Cache()
 
-module.exports = {
+const photon = {
   commonName: 'Photon',
   DEFAULT_ENDPOINT: 'https://photon.komoot.io/api/',
   endpoint: (req, res) => {
-    return res.locals.settings.geocoding_provider || this.DEFAULT_ENDPOINT
+    return res.locals.settings.geocoding_provider || photon.DEFAULT_ENDPOINT
   },
+  cache: providerCache,
 
   getParams (req, res) {
     const details = req.params.place_details
@@ -16,3 +19,5 @@ module.exports = {
   }
 
 }
+
+module.exports = photon

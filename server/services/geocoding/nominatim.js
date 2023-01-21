@@ -1,10 +1,13 @@
+const cache = require('memory-cache')
+const providerCache = new cache.Cache()
 
-module.exports = {
+const nominatim = {
   commonName: 'Nominatim',
   DEFAULT_ENDPOINT: 'https://nominatim.openstreetmap.org/search',
   endpoint: (req, res) => { 
-    return res.locals.settings.geocoding_provider || this.DEFAULT_ENDPOINT
+    return res.locals.settings.geocoding_provider || nominatim.DEFAULT_ENDPOINT
   },
+  cache: providerCache,
 
   getParams (req, res) {
     const countrycodes = res.locals.settings.geocoding_countrycodes || []
@@ -21,3 +24,5 @@ module.exports = {
   },
 
 }
+
+module.exports = nominatim

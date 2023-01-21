@@ -4,7 +4,6 @@ const nominatim = require('../../services/geocoding/nominatim')
 const photon = require('../../services/geocoding/photon')
 const axios = require('axios')
 const { version } = require('../../../package.json')
-const cache = require('memory-cache');
 let d = 0 // departure time
 let h = 0 // hit geocoding provider time (aka Latency)
 
@@ -27,7 +26,7 @@ const geocodingController = {
    * - Note that the usage limits above apply per website/application: the sum of traffic by all your users should not exceed the limits.
    * - If at all possible, set up a proxy and also enable caching of requests. 
    */
-  providerRateLimit (req, res, next, providerCommonName) {
+  providerRateLimit (req, res, next, providerCache) {
     let a = Date.now(); // arrival time
     let dprev = d
     d = dprev + 1000 + h
@@ -37,7 +36,7 @@ const geocodingController = {
     // console.log('d: ' + d)
 
     // if the same request was already cached skip the delay mechanism
-    if (cache.get(providerCommonName + '_' + req.params.place_details)) {
+    if (providerCache.get(req.params.place_details)) {
       if (a < d) {
         log.warn('More than 1 request per second to geocoding api. This from ' + req.ip + ' . The response data is served from memory-cache.')
       }
@@ -67,19 +66,18 @@ const geocodingController = {
   },
 
   async nominatimRateLimit(req, res, next) {
-    geocodingController.providerRateLimit(req, res, next, nominatim.commonName)
+    geocodingController.providerRateLimit(req, res, next, nominatim.cache)
   },
 
   async photonRateLimit(req, res, next) {
-    geocodingController.providerRateLimit(req, res, next, photon.commonName)
+    geocodingController.providerRateLimit(req, res, next, photon.cache)
   },
 
-  async checkInCache (req, res, details, providerCommonName) {
-    if (cache.get(providerCommonName + '_' + details)) { 
-      const ret = await cache.get(providerCommonName + '_' + details) 
+  async checkInCache (req, res, details, providerCache) {
+    const ret = await providerCache.get(details)
+    if (ret) {
       return ret
     } else {
-      // console.log('Not in cache')
       return
     }
   },
@@ -102,7 +100,7 @@ const geocodingController = {
     }
 
     // Cache the response data
-    cache.put(provider.commonName + '_' + details, ret.data, 1000 * 60 * 60 * 24);
+    provider.cache.put(details, ret.data, 1000 * 60 * 60 * 24);
     // console.log(cache.keys())
     // console.log(cache.exportJson())
     return ret.data
@@ -112,7 +110,7 @@ const geocodingController = {
   async _nominatim (req, res) {
     const details = req.params.place_details
 
-    const ret = await geocodingController.checkInCache(req, res, details, nominatim.commonName) ||
+    const ret = await geocodingController.checkInCache(req, res, details, nominatim.cache) ||
       await geocodingController.queryProvider(req, res, details, nominatim)
 
     return res.json(ret)
@@ -122,7 +120,7 @@ const geocodingController = {
   async _photon (req, res) {
     const details = req.params.place_details
 
-    const ret = await geocodingController.checkInCache(req, res, details, photon.commonName) ||
+    const ret = await geocodingController.checkInCache(req, res, details, photon.cache) ||
       await geocodingController.queryProvider(req, res, details, photon)
 
     return res.json(ret)
