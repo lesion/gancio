@@ -139,7 +139,7 @@ export default {
       if (!matches && search) {
         this.places.unshift({ create: true, name: ev.target.value.trim() })
       }
-    }, 100),
+    }, 200),
     loadCoordinatesResultIcon(item) {
       if (this.geocoding_provider_type == "Nominatim") {
         if ( this.nominatim_class.includes(item.class)) {
