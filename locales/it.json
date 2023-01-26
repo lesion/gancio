@@ -136,7 +136,7 @@
     "saved": "Evento salvato",
     "added_anon": "Evento aggiunto, verrà confermato quanto prima.",
     "updated": "Evento aggiornato",
-    "where_description": "Dov'è il gancio? Se il posto non è presente potrai crearlo.",
+    "where_description": "Dov'è l'evento? Se il posto non è presente potrai crearlo.",
     "address_description": "A che indirizzo?",
     "address_description_osm": "A che indirizzo? (<a href='http://osm.org/copyright'>OpenStreetMap</a>)",
     "coordinates_search_description": "Puoi ricercare il posto per nome, o incollare la coppia di coordinate.",
