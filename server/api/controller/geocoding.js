@@ -1,4 +1,3 @@
-const rateLimit = require('express-rate-limit');
 const log = require('../../log')
 const nominatim = require('../../services/geocoding/nominatim')
 const photon = require('../../services/geocoding/photon')
@@ -8,15 +7,6 @@ let d = 0 // departure time
 let h = 0 // hit geocoding provider time (aka Latency)
 
 const geocodingController = {
-  /**
-   * TODO: replace/merge with a general 'instance rate-limiter' or 'instance api-related rate-limiter' when this will be defined
-   */  
-  instanceApiRateLimiter: rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  }),
 
   /** 
    * Limit provider api usage.

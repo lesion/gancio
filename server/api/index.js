@@ -20,6 +20,7 @@ const oauthController = require('./controller/oauth')
 const announceController = require('./controller/announce')
 const pluginController = require('./controller/plugins')
 const geocodingController = require('./controller/geocoding')
+const { DDOSProtectionApiRateLimiter, SPAMProtectionApiRateLimiter } = require('./limiter')
 const helpers = require('../helpers')
 const storage = require('./storage')
 
@@ -29,6 +30,10 @@ module.exports = () => {
   const api = express.Router()
   api.use(express.urlencoded({ extended: false }))
   api.use(express.json())
+  
+  if (process.env.NODE_ENV !== 'test') {
+    api.use(DDOSProtectionApiRateLimiter)
+  }
   
   
   if (config.status !== 'READY') {
@@ -66,12 +71,12 @@ module.exports = () => {
     api.get('/ping', (_req, res) => res.sendStatus(200))
     api.get('/user', isAuth, (req, res) => res.json(req.user))
   
-    api.post('/user/recover', userController.forgotPassword)
+    api.post('/user/recover', SPAMProtectionApiRateLimiter, userController.forgotPassword)
     api.post('/user/check_recover_code', userController.checkRecoverCode)
-    api.post('/user/recover_password', userController.updatePasswordWithRecoverCode)
+    api.post('/user/recover_password', SPAMProtectionApiRateLimiter, userController.updatePasswordWithRecoverCode)
   
     // register and add users
-    api.post('/user/register', userController.register)
+    api.post('/user/register', SPAMProtectionApiRateLimiter, userController.register)
     api.post('/user', isAdmin, userController.create)
   
     // update user
@@ -127,7 +132,7 @@ module.exports = () => {
      */
   
     // allow anyone to add an event (anon event has to be confirmed, TODO: flood protection)
-    api.post('/event', eventController.isAnonEventAllowed, upload.single('image'), eventController.add)
+    api.post('/event', eventController.isAnonEventAllowed, SPAMProtectionApiRateLimiter, upload.single('image'), eventController.add)
   
     // api.get('/event/search', eventController.search)
   
@@ -141,8 +146,8 @@ module.exports = () => {
     api.get('/event/meta', eventController.searchMeta)
   
     // add event notification TODO
-    api.post('/event/notification', eventController.addNotification)
-    api.delete('/event/notification/:code', eventController.delNotification)
+    // api.post('/event/notification', eventController.addNotification)
+    // api.delete('/event/notification/:code', eventController.delNotification)
   
     api.post('/settings', isAdmin, settingsController.setRequest)
     api.get('/settings', isAdmin, settingsController.getAll)
@@ -173,8 +178,8 @@ module.exports = () => {
     api.put('/place', isAdmin, placeController.updatePlace)
 
     // - GEOCODING
-    api.get('/placeOSM/Nominatim/:place_details', helpers.isGeocodingEnabled, geocodingController.instanceApiRateLimiter, geocodingController.nominatimRateLimit, geocodingController._nominatim)
-    api.get('/placeOSM/Photon/:place_details', helpers.isGeocodingEnabled, geocodingController.instanceApiRateLimiter, geocodingController.photonRateLimit, geocodingController._photon)
+    api.get('/placeOSM/Nominatim/:place_details', helpers.isGeocodingEnabled, geocodingController.nominatimRateLimit, geocodingController._nominatim)
+    api.get('/placeOSM/Photon/:place_details', helpers.isGeocodingEnabled, geocodingController.photonRateLimit, geocodingController._photon)
   
     // - TAGS
     api.get('/tags', isAdmin, tagController.getAll)
@@ -215,7 +220,7 @@ module.exports = () => {
     // OAUTH
     api.get('/clients', isAuth, oauthController.getClients)
     api.get('/client/:client_id', isAuth, oauthController.getClient)
-    api.post('/client', oauthController.createClient)
+    api.post('/client', SPAMProtectionApiRateLimiter, oauthController.createClient)
   }
   
   api.use((_req, res) => res.sendStatus(404))

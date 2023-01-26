@@ -3,8 +3,6 @@ const { Place, Event } = require('../models/models')
 const eventController = require('./event')
 const exportController = require('./export')
 
-const { version } = require('../../../package.json')
-
 const log = require('../../log')
 const { Op, where, col, fn, cast } = require('sequelize')
 

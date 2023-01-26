@@ -689,7 +689,7 @@ const eventController = {
       ...pagination,
       replacements
     }).catch(e => {
-      log.error('[EVENT]', e)
+      log.error('[EVENT]' + String(e))
       return []
     })
 
