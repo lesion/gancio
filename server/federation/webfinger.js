@@ -63,7 +63,9 @@ router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
     metadata: {
       nodeDescription: settings.description,
       nodeName: settings.title,
-      nodeLabel: settings.instance_place
+      nodeLabel: settings.instance_place,
+      nodeTimezone: settings.instance_timezone,
+      nodeActor: settings.instance_name
     },
     openRegistrations: settings.allow_registration,
     protocols: ['activitypub'],
