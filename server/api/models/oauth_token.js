@@ -1,13 +1,5 @@
-
-const sequelize = require('./index').sequelize
-const { Model, DataTypes } = require('sequelize')
-
-const User = require('./user')
-const OAuthClient = require('./oauth_client')
-
-class OAuthToken extends Model {}
-
-OAuthToken.init({
+module.exports = (sequelize, DataTypes) => 
+  sequelize.define('oauth_token', {
   accessToken: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -27,9 +19,4 @@ OAuthToken.init({
     }
   },
   scope: DataTypes.STRING
-}, { sequelize, modelName: 'oauth_token' })
-
-OAuthToken.belongsTo(User)
-OAuthToken.belongsTo(OAuthClient, { as: 'client' })
-
-module.exports = OAuthToken
+})

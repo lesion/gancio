@@ -1,6 +1,5 @@
 const ical = require('ical.js')
 const settingsController = require('./api/controller/settings')
-const acceptLanguage = require('accept-language')
 const express = require('express')
 const dayjs = require('dayjs')
 const timezone = require('dayjs/plugin/timezone')
@@ -15,7 +14,6 @@ const axios = require('axios')
 const crypto = require('crypto')
 const Microformats = require('microformat-node')
 const get = require('lodash/get')
-const cloneDeep = require('lodash/cloneDeep')
 
 const DOMPurify = require('dompurify')
 const { JSDOM } = require('jsdom')
@@ -80,6 +78,7 @@ module.exports = {
       allow_registration: settings.allow_registration,
       allow_anon_event: settings.allow_anon_event,
       allow_recurrent_event: settings.allow_recurrent_event,
+      allow_multidate_event: settings.allow_multidate_event,
       recurrent_event_visible: settings.recurrent_event_visible,
       enable_federation: settings.enable_federation,
       enable_resources: settings.enable_resources,
@@ -92,6 +91,11 @@ module.exports = {
       hide_thumbs: settings.hide_thumbs,
       hide_calendar: settings.hide_calendar,
       allow_geolocation: settings.allow_geolocation,
+      geocoding_provider_type: settings.geocoding_provider_type,
+      geocoding_provider: settings.geocoding_provider,
+      geocoding_countrycodes: settings.geocoding_countrycodes,
+      tilelayer_provider: settings.tilelayer_provider,
+      tilelayer_provider_attribution: settings.tilelayer_provider_attribution,
       footerLinks: settings.footerLinks,
       about: settings.about
     }
@@ -113,14 +117,14 @@ module.exports = {
             log.warn(err)
           } else {
             res.status(404).send('Not found (but nice try 😊)')
-          // }
+          }
         }
-      }})
+      })
     })
 
     router.use('/fallbackimage.png', (req, res, next) => {
       const fallbackImagePath =  settingsController.settings.fallback_image || './static/noimg.svg'
-      return express.static(fallbackImagePath, { maxAge: '1d' })(req, res, next)
+      return express.static(fallbackImagePath)(req, res, next)
     })
 
     router.use('/headerimage.png', (req, res, next) => {
@@ -130,12 +134,12 @@ module.exports = {
 
     router.use('/logo.png', (req, res, next) => {
       const logoPath = settingsController.settings.logo || './static/gancio'
-      return express.static(logoPath + '.png', {maxAge: '1d'})(req, res, next)
+      return express.static(logoPath + '.png')(req, res, next)
     })
 
     router.use('/favicon.ico', (req, res, next) => {
       const faviconPath = res.locals.settings.logo ? res.locals.settings.logo + '.png' : './assets/favicon.ico'
-      return express.static(faviconPath, {maxAge: '1d'})(req, res, next)
+      return express.static(faviconPath)(req, res, next)
     })
 
     return router
@@ -264,9 +268,9 @@ module.exports = {
   },
 
   async APRedirect(req, res, next) {
+    const eventController = require('../server/api/controller/event')
     const acceptJson = req.accepts('html', 'application/activity+json') === 'application/activity+json'
     if (acceptJson) {
-      const eventController = require('../server/api/controller/event')
       const event = await eventController._get(req.params.slug)
       if (event) {
         return res.redirect(`/federation/m/${event.id}`)
@@ -281,5 +285,13 @@ module.exports = {
       return res.redirect((accepted === 'application/rss+xml' ? '/feed/rss' : '/feed/ics') + req.path)
     }
     next()
+  },
+
+  async isGeocodingEnabled(req, res, next) {
+    if (res.locals.settings.allow_geolocation) {
+      next()
+    } else {
+      res.sendStatus(403)
+    }
   }
 }

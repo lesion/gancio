@@ -3,18 +3,15 @@ const path = require('path')
 const config = require('../../config')
 const fs = require('fs')
 const { Op } = require('sequelize')
-const intersection = require('lodash/intersection')
 const linkifyHtml = require('linkify-html')
 const Sequelize = require('sequelize')
 const dayjs = require('dayjs')
 const helpers = require('../../helpers')
 const Col = helpers.col
-const Event = require('../models/event')
-const Resource = require('../models/resource')
-const Tag = require('../models/tag')
-const Place = require('../models/place')
-const Notification = require('../models/notification')
-const APUser = require('../models/ap_user')
+const notifier = require('../../notifier')
+
+const { Event, Resource, Tag, Place, Notification, APUser } = require('../models/models')
+
 
 const exportController = require('./export')
 const tagController = require('./tag')
@@ -89,99 +86,71 @@ const eventController = {
   },
 
 
-  async search(req, res) {
-    const search = req.query.search.trim().toLocaleLowerCase()
-    const show_recurrent = req.query.show_recurrent || false
-    const end = req.query.end
-    const replacements = []
+  // async search(req, res) {
+  //   const search = req.query.search.trim().toLocaleLowerCase()
+  //   const show_recurrent = req.query.show_recurrent || false
+  //   const end = req.query.end
+  //   const replacements = []
 
-    const where = {
-      // do not include parent recurrent event
-      recurrent: null,
+  //   const where = {
+  //     // do not include parent recurrent event
+  //     recurrent: null,
 
-      // confirmed event only
-      is_visible: true,
+  //     // confirmed event only
+  //     is_visible: true,
 
-    }
+  //   }
 
-    if (!show_recurrent) {
-      where.parentId = null
-    }
+  //   if (!show_recurrent) {
+  //     where.parentId = null
+  //   }
 
-    if (end) {
-      where.start_datetime = { [Op.lte]: end }
-    }
+  //   if (end) {
+  //     where.start_datetime = { [Op.lte]: end }
+  //   }
 
-    if (search) {
-      replacements.push(search)
-      where[Op.or] =
-        [
-          { title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', '%' + search + '%') },
-          Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%'),
-          Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND LOWER(${Col('tagTag')}) = ?`))
-        ]
-    }
+  //   if (search) {
+  //     replacements.push(search)
+  //     where[Op.or] =
+  //       [
+  //         { title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', '%' + search + '%') },
+  //         Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%'),
+  //         Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND LOWER(${Col('tagTag')}) = ?`))
+  //       ]
+  //   }
 
 
-    const events = await Event.findAll({
-      where,
-      attributes: {
-        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'description', 'resources']
-      },
-      order: [['start_datetime', 'DESC']],
-      include: [
-        {
-          model: Tag,
-          // order: [Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
-          attributes: ['tag'],
-          through: { attributes: [] }
-        },
-        { model: Place, required: true, attributes: ['id', 'name', 'address', 'latitude', 'longitude'] }
-      ],
-      replacements,
-      limit: 30,
-    }).catch(e => {
-      log.error('[EVENT]', e)
-      return res.json([])
-    })
+  //   const events = await Event.findAll({
+  //     where,
+  //     attributes: {
+  //       exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'description', 'resources']
+  //     },
+  //     order: [['start_datetime', 'DESC']],
+  //     include: [
+  //       {
+  //         model: Tag,
+  //         // order: [Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
+  //         attributes: ['tag'],
+  //         through: { attributes: [] }
+  //       },
+  //       { model: Place, required: true, attributes: ['id', 'name', 'address', 'latitude', 'longitude'] }
+  //     ],
+  //     replacements,
+  //     limit: 30,
+  //   }).catch(e => {
+  //     log.error('[EVENT]', e)
+  //     return res.json([])
+  //   })
 
-    const ret = events.map(e => {
-      e = e.get()
-      e.tags = e.tags ? e.tags.map(t => t && t.tag) : []
-      return e
-    })
+  //   const ret = events.map(e => {
+  //     e = e.get()
+  //     e.tags = e.tags ? e.tags.map(t => t && t.tag) : []
+  //     return e
+  //   })
 
-    return res.json(ret)
+  //   return res.json(ret)
 
-  },
-
-  async getNotifications(event, action) {
-    log.debug(`getNotifications ${event.title} ${action}`)
-    function match(event, filters) {
-      // matches if no filter specified
-      if (!filters) { return true }
-
-      // check for visibility
-      if (typeof filters.is_visible !== 'undefined' && filters.is_visible !== event.is_visible) { return false }
-
-      if (!filters.tags && !filters.places) { return true }
-      if (!filters.tags.length && !filters.places.length) { return true }
-      if (filters.tags.length) {
-        const m = intersection(event.tags.map(t => t.tag), filters.tags)
-        if (m.length > 0) { return true }
-      }
-      if (filters.places.length) {
-        if (filters.places.find(p => p === event.place.name)) {
-          return true
-        }
-      }
-    }
-
-    const notifications = await Notification.findAll({ where: { action }, include: [Event] })
-
-    // get notification that matches with selected event
-    return notifications.filter(notification => match(event, notification.filters))
-  },
+  // },
 
   async _get(slug) {
     // retrocompatibility, old events URL does not use slug, use id as fallback
@@ -317,7 +286,6 @@ const eventController = {
       res.sendStatus(200)
 
       // send notification
-      const notifier = require('../../notifier')
       notifier.notifyEvent('Create', event.id)
     } catch (e) {
       log.error('[EVENT]', e)
@@ -631,9 +599,11 @@ const eventController = {
   async _select({
     start = dayjs().unix(),
     end,
+    query,
     tags,
     places,
     show_recurrent,
+    show_multidate,
     limit,
     page,
     older }) {
@@ -654,6 +624,10 @@ const eventController = {
     // include recurrent events?
     if (!show_recurrent) {
       where.parentId = null
+    }
+
+    if (!show_multidate) {
+      where.multidate = { [Op.not]: true }
     }
 
     if (end) {
@@ -679,6 +653,16 @@ const eventController = {
       where.placeId = places.split(',')
     }
 
+    if (query) {
+      replacements.push(query)
+      where[Op.or] =
+        [
+          { title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', '%' + query + '%') },
+          Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + query + '%'),
+          Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND LOWER(${Col('tagTag')}) = ?`))
+        ]
+    }
+    
     let pagination = {}
     if (limit) {
       pagination = {
@@ -705,7 +689,7 @@ const eventController = {
       ...pagination,
       replacements
     }).catch(e => {
-      log.error('[EVENT]', e)
+      log.error('[EVENT]' + String(e))
       return []
     })
 
@@ -723,17 +707,21 @@ const eventController = {
     const settings = res.locals.settings
     const start = req.query.start || dayjs().unix()
     const end = req.query.end
+    const query = req.query.query
     const tags = req.query.tags
     const places = req.query.places
     const limit = Number(req.query.max) || 0
     const page = Number(req.query.page) || 0
     const older = req.query.older || false
 
+    const show_multidate = settings.allow_multidate_event &&
+    typeof req.query.show_multidate !== 'undefined' ? req.query.show_multidate !== 'false' : true
+
     const show_recurrent = settings.allow_recurrent_event &&
       typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settings.recurrent_event_visible
 
     res.json(await eventController._select({
-      start, end, places, tags, show_recurrent, limit, page, older
+      start, end, query, places, tags, show_recurrent, show_multidate, limit, page, older
     }))
   },
 

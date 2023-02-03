@@ -4,7 +4,7 @@ rm -fr node_modules
 yarn
 yarn build
 yarn pack
-# yarn publish
+yarn publish
 gpg --pinentry-mode loopback --passphrase `pass underscore/pgp`  --detach-sign --local-user 5DAC477D5441B7A15ACBF680BBEB4DD39AC6CCA9 gancio-$RELEASE.tgz
 cp gancio-$RELEASE.tgz releases/
 mv gancio-$RELEASE.tgz releases/latest.tgz

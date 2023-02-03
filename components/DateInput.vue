@@ -3,11 +3,10 @@ v-col(cols=12)
   .text-center
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-model='type' color='primary' @change='type => change("type", type)')
       v-btn(value='normal' label="normal") {{ $t('event.normal') }}
-      v-btn(value='multidate' label='multidate') {{ $t('event.multidate') }}
+      v-btn(v-if='settings.allow_multidate_event' value='multidate' label='multidate') {{ $t('event.multidate') }}
       v-btn(v-if='settings.allow_recurrent_event' value='recurrent' label="recurrent") {{ $t('event.recurrent') }}
 
     p {{ $t(`event.${type}_description`) }}
-
 
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-if='type === "recurrent"' color='primary' :value='value.recurrent.frequency' @change='fq => change("frequency", fq)')
       v-btn(v-for='f in frequencies' :key='f.value' :value='f.value') {{ f.text }}
@@ -25,8 +24,9 @@ v-col(cols=12)
             is-inline
             is-expanded
             :min-date='type !== "recurrent" && new Date()')
-      template(#placeholder)
-        span.calc Loading
+      //- template(#placeholder)
+      .d-flex.calh.justify-center(slot='placeholder')
+        v-progress-circular(indeterminate)
 
   div.text-center.mb-2(v-if='type === "recurrent"')
     span(v-if='value.recurrent.frequency !== "1m" && value.recurrent.frequency !== "2m"') {{ whenPatterns }}
@@ -60,7 +60,7 @@ v-col(cols=12)
           :allowedMinutes='allowedMinutes'
           format='24hr'
           @click:minute='menuFromHour = false'
-          @change='hr => change("fromHour", hr)')
+          @input='hr => change("fromHour", hr)')
 
 
     v-col.col-12.col-sm-6
@@ -88,14 +88,14 @@ v-col(cols=12)
           :allowedMinutes='allowedMinutes'
           format='24hr'
           @click:minute='menuDueHour = false'
-          @change='hr => change("dueHour", hr)')
+          @input='hr => change("dueHour", hr)')
 
   List(v-if='type === "normal" && todayEvents.length' :events='todayEvents' :title='$t("event.same_day")')
 
 </template>
 <script>
 import dayjs from 'dayjs'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import List from '@/components/List'
 import { attributesFromEvents } from '../assets/helper'
 import { mdiClockTimeFourOutline, mdiClockTimeEightOutline, mdiClose } from '@mdi/js'
@@ -114,7 +114,6 @@ export default {
       menuFromHour: false,
       menuDueHour: false,
       type: this.value.type || 'normal',
-      events: [],
       frequencies: [
         { value: '1w', text: this.$t('event.each_week') },
         { value: '2w', text: this.$t('event.each_2w') },
@@ -123,7 +122,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['settings']),
+    ...mapState(['settings', 'events']),
     fromDate () {
       if (this.value.from) {
         if (this.value.multidate) {
@@ -139,7 +138,7 @@ export default {
       return this.events.filter(e => e.start_datetime >= start && e.start_datetime <= end)
     },
     attributes() {
-      return attributesFromEvents(this.events)
+      return attributesFromEvents(this.events.filter(e => e.id !== this.event.id))
     },
     whenPatterns() {
       if (!this.value.from) { return }
@@ -193,13 +192,12 @@ export default {
     } else {
       this.type = 'normal'
     }
-    this.events = await this.$api.getEvents({
-      start: dayjs().unix(),
-      show_recurrent: true
-    })
-    this.events = this.events.filter(e => e.id !== this.event.id)
+    if (!this.events) {
+      this.getEvents()
+    }
   },
   methods: {
+    ...mapActions(['getEvents']),
     updateRecurrent(value) {
       this.$emit('input', { ...this.value, recurrent: value || null })
     },
@@ -235,6 +233,15 @@ export default {
       } else if (what === 'dueHour') {
         if (value) {
           this.value.due = this.value.due ? this.value.due : this.value.from
+          const [hour, minute] = value.split(':')
+          const [fromHour, fromMinute] = this.value.fromHour.split(':')
+          if (!this.value.multidate) {
+            if (hour < fromHour) {
+              this.value.due = dayjs(this.value.from).add(1, 'day').toDate()
+            } else {
+              this.value.due = dayjs(this.value.from).toDate()
+            }
+          }
         } else {
           this.value.due = null
         }

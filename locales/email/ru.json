@@ -1,0 +1,29 @@
+{
+    "recover": {
+        "subject": "Восстановление пароля",
+        "content": "Здравствуйте, вы запросили восстановление пароля на {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Нажмите здесь</a> для подтверждения."
+    },
+    "confirm": {
+        "subject": "Теперь вы можете начать публиковать события",
+        "content": "Здравствуйте, ваша учетная запись <a href='{{config.baseurl}}'>{{config.title}}</a> была подтверждена. Пишите нам по адресу {{config.admin_email}} для получения любой информации."
+    },
+    "admin_register": {
+        "subject": "Новая регистрация",
+        "content": "{{user.email}} запросил регистрацию на {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Подтвердите это <a href='{{config.baseurl}}/admin'>здесь</a>."
+    },
+    "user_confirm": {
+        "subject": "Теперь вы можете начать публиковать события",
+        "content": "Здравствуйте, ваша учетная запись <a href='{{config.baseurl}}'>{{config.title}}</a> была создана. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Подтвердите это и измените пароль.</a>."
+    },
+    "register": {
+        "content": "Мы получили запрос на регистрацию. Мы подтвердим его как можно скорее.",
+        "subject": "Запрос на регистрацию получен"
+    },
+    "event_confirm": {
+        "content": "Вы можете подтвердить это событие по адресу <a href='{{url}}'>на этой странице</a>"
+    },
+    "test": {
+        "subject": "Ваша конфигурация SMTP работает",
+        "content": "Это тестовое письмо, если вы читаете его, ваша конфигурация работает."
+    }
+}

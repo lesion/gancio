@@ -21,16 +21,21 @@ beforeAll(async () => {
     default:
       process.env.config_path = path.resolve(__dirname, './seeds/config.sqlite.json')
   }
-  app = await require('../server/routes.js').main()
-  const { sequelize } = require('../server/api/models/index')
-  await sequelize.query('DELETE FROM settings')
-  await sequelize.query('DELETE FROM events')
-  await sequelize.query('DELETE FROM users')
-  await sequelize.query('DELETE FROM ap_users')
-  await sequelize.query('DELETE FROM tags')
-  await sequelize.query('DELETE FROM places')
-  await sequelize.query('DELETE FROM collections')
-  await sequelize.query('DELETE FROM filters')
+  try {
+    app = await require('../server/routes.js').main()
+    const { sequelize } = require('../server/api/models/index')
+    await sequelize.query('DELETE FROM settings')
+    await sequelize.query('DELETE FROM events')
+    await sequelize.query('DELETE FROM user_followers')
+    await sequelize.query('DELETE FROM users')
+    await sequelize.query('DELETE FROM ap_users')
+    await sequelize.query('DELETE FROM tags')
+    await sequelize.query('DELETE FROM places')
+    await sequelize.query('DELETE FROM filters')
+    await sequelize.query('DELETE FROM collections')
+  } catch (e) {
+    console.error(e)
+  }
 })
 
 afterAll(async () => {
@@ -285,10 +290,10 @@ describe('Place', () => {
   })
 
   test('admin should get all places', async () => {
-    await request(app).get('/api/place/all')
+    await request(app).get('/api/places')
       .expect(403)
 
-    const response = await request(app).get('/api/place/all')
+    const response = await request(app).get('/api/places')
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
@@ -410,5 +415,33 @@ describe('Collection', () => {
     expect(response.body.length).toBe(1)
 
   })
+})
 
+describe('Geocoding', () => {
+  test('should not be enabled by default', async () => {
+    await request(app)
+      .post('/api/settings')
+      .send({ key: 'allow_geolocation', value: false })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
+    const response = await request(app).get('/api/placeOSM/Nominatim/test')
+      .expect(403)
+
+    expect(response.body).toBeDefined()
+
+  })
+
+  test('should geocode when enabled', async () => {
+    await request(app)
+      .post('/api/settings')
+      .send({ key: 'allow_geolocation', value: true })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
+    const response = await request(app).get('/api/placeOSM/Nominatim/test')
+      .expect(200)
+
+    expect(response.body).toBeDefined()
+  })
 })

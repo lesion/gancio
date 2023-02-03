@@ -2,10 +2,8 @@ const express = require('express')
 const router = express.Router()
 const cors = require('cors')
 const Users = require('./users')
-const Event = require('../api/models/event')
-const User = require('../api/models/user')
-const Tag = require('../api/models/tag')
-const Place = require('../api/models/place')
+const { Event, User, Tag, Place } = require('../api/models/models')
+
 const settingsController =  require('../api/controller/settings')
 
 const Helpers = require('./helpers')

@@ -2,11 +2,12 @@ const path = require('path')
 const fs = require('fs')
 const log = require('../../log')
 const config = require('../../config')
+const settingsController = require('./settings')
+const notifier = require('../../notifier')
 
 const pluginController = {
   plugins: [],
   getAll(_req, res) {
-    const settingsController = require('./settings')
     // return plugins and inner settings
     const plugins = pluginController.plugins.map( ({ configuration }) => {
       if (settingsController.settings['plugin_' + configuration.name]) {
@@ -18,7 +19,6 @@ const pluginController = {
   },
 
   togglePlugin(req, res) {
-    const settingsController = require('./settings')
     const pluginName = req.params.plugin
     const pluginSettings = settingsController.settings['plugin_' + pluginName]
     if (!pluginSettings) { return res.sendStatus(404) }
@@ -33,7 +33,6 @@ const pluginController = {
   },
 
   unloadPlugin(pluginName) {
-    const settingsController = require('./settings')
     const plugin = pluginController.plugins.find(p => p.configuration.name === pluginName)
     const settings = settingsController.settings['plugin_' + pluginName]
     if (!plugin) {
@@ -59,14 +58,12 @@ const pluginController = {
   },
 
   loadPlugin(pluginName) {
-    const settingsController = require('./settings')
     const plugin = pluginController.plugins.find(p => p.configuration.name === pluginName)
     const settings = settingsController.settings['plugin_' + pluginName]
     if (!plugin) {
       log.warn(`Plugin ${pluginName} not found`)
       return
     }
-    const notifier = require('../../notifier')
     log.info('Load plugin ' + pluginName)
     if (typeof plugin.onEventCreate === 'function') {
       notifier.emitter.on('Create', plugin.onEventCreate)
@@ -79,37 +76,47 @@ const pluginController = {
     }
 
     if (plugin.load && typeof plugin.load === 'function') {
-      plugin.load({ helpers: require('../../helpers'), settings: settingsController.settings }, settings)
+      plugin.load({
+        helpers: require('../../helpers'),
+        settings: settingsController.settings
+      },
+      settings)
     }
   },
 
-  _load() {
-    const settingsController = require('./settings')
-    // load custom plugins
-    const plugins_path = config.plugins_path || path.resolve(process.env.cwd || '', 'gancio_plugins')
-    log.info(`Loading plugin  ${plugins_path}`)
-    if (fs.existsSync(plugins_path)) {
-      const plugins = fs.readdirSync(plugins_path)
-        .map(e => path.resolve(plugins_path, e, 'index.js'))
-        .filter(index => fs.existsSync(index))
-      plugins.forEach(pluginFile => {
-        try {
-          const plugin = require(pluginFile)
-          const name = plugin.configuration.name
-          console.log(`Found plugin '${name}'`)
-          pluginController.plugins.push(plugin)
-          if (settingsController.settings['plugin_' + name]) {
-            const pluginSetting = settingsController.settings['plugin_' + name]
-            if (pluginSetting.enable) {
-              pluginController.loadPlugin(name)
-            }
-          } else {
-            settingsController.set('plugin_' + name, { enable: false })
-          }
-        } catch (e) {
-          log.warn(`Unable to load plugin ${pluginFile}: ${String(e)}`)
+  _loadPlugin (pluginFile) {
+    try {
+      const plugin = require(pluginFile)
+      const name = plugin.configuration.name
+      console.log(`Found plugin '${name}'`)
+      pluginController.plugins.push(plugin)
+      if (settingsController.settings['plugin_' + name]) {
+        const pluginSetting = settingsController.settings['plugin_' + name]
+        if (pluginSetting.enable) {
+          pluginController.loadPlugin(name)
         }
-      })
+      } else {
+        settingsController.set('plugin_' + name, { enable: false })
+      }
+    } catch (e) {
+      log.warn(`Unable to load plugin ${pluginFile}: ${String(e)}`)
+    }    
+  },
+
+  _load() {
+    // load custom plugins
+    const system_plugins_path = path.resolve(__dirname || '', '../../../gancio_plugins')
+    const custom_plugins_path = config.plugins_path || path.resolve(process.env.cwd || '', 'plugins')
+    const plugins_paths = custom_plugins_path === system_plugins_path ? [custom_plugins_path] : [custom_plugins_path, system_plugins_path]
+
+    log.info(`Loading plugins from ${plugins_paths.join(' and ')}`)
+    for (const plugins_path of plugins_paths) {
+      if (fs.existsSync(plugins_path)) {
+        fs.readdirSync(plugins_path)
+          .map(e => path.resolve(plugins_path, e, 'index.js'))
+          .filter(index => fs.existsSync(index))
+          .forEach(pluginController._loadPlugin)
+      }
     }
   }
 }

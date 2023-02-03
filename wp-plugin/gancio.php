@@ -22,9 +22,10 @@ along with (WPGancio). If not, see (https://www.gnu.org/licenses/agpl-3.0.html).
 defined('ABSPATH') or die('Nope, not accessing this');
 define('WPGANCIO_DIR', plugin_dir_path(__FILE__));
 require_once(WPGANCIO_DIR . 'settings.php');
-require_once(WPGANCIO_DIR . 'network_settings.php');
+
 require_once(WPGANCIO_DIR . 'wc.php');
 require_once(WPGANCIO_DIR . 'oauth.php');
+
 
 
 /**

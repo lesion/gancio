@@ -1,8 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Event = require('../api/models/event')
-const Resource = require('../api/models/resource')
-const User = require('../api/models/user')
+const { Event, Resource, User } = require('../api/models/models')
 
 const cors = require('cors')
 const settingsController = require('../api/controller/settings')
@@ -65,7 +63,9 @@ router.get('/nodeinfo/:nodeinfo_version', async (req, res) => {
     metadata: {
       nodeDescription: settings.description,
       nodeName: settings.title,
-      nodeLabel: settings.instance_place
+      nodeLabel: settings.instance_place,
+      nodeTimezone: settings.instance_timezone,
+      nodeActor: settings.instance_name
     },
     openRegistrations: settings.allow_registration,
     protocols: ['activitypub'],

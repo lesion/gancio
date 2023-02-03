@@ -64,7 +64,7 @@
         "embed": "Incorporar",
         "embed_title": "Publica este evento en tu página web",
         "embed_help": "Copiando el siguiente código en tu página web, el evento será incluido como puedes ver aquí al lado",
-        "feed": "RSS Feed",
+        "feed": "Canal RSS",
         "feed_url_copied": "Copiada feed url, pegala en tu lector de feeds",
         "follow_me_title": "Sigue las actualizaciones en el fediverso",
         "follow": "Sigue",
@@ -98,7 +98,11 @@
         "about": "Sobre el sitio",
         "close": "Cerrar",
         "help_translate": "Ayuda a traducir",
-        "calendar": "Calendario"
+        "calendar": "Calendario",
+        "content": "Contenido",
+        "admin_actions": "Acciones de administrador",
+        "recurring_event_actions": "Acciones de eventos recurrentes",
+        "tag": "Etiqueta"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
@@ -179,7 +183,8 @@
         "address_description": "¿Cuál es la dirección?",
         "alt_text_description": "Descripción para personas con baja visión",
         "download_flyer": "Descargar folleto",
-        "remove_media_confirmation": "¿Confirmas la eliminación de la imagen?"
+        "remove_media_confirmation": "¿Confirmas la eliminación de la imagen?",
+        "show_multidate": "eventos de varios días"
     },
     "admin": {
         "place_description": "En el caso de que un lugar sea incorrecto o cambie de dirección, puedes cambiarlo. <br/> Todos los eventos presentes y pasados asociados con este lugar cambiarán de dirección.",
@@ -268,7 +273,35 @@
         "smtp_use_sendmail": "Usar sendmail",
         "wrong_domain_warning": "El parámetro baseurl configurado en config.json <b>({baseurl})</b> difiere del que estás visitando <b>({url})</b>",
         "new_collection": "Nueva colección",
-        "collections_description": "Las colecciones son agrupaciones de eventos por etiquetas y ubicaciones. Serán desplegadas en la página de inicio"
+        "collections_description": "Las colecciones son agrupaciones de eventos por etiquetas y ubicaciones. Serán desplegadas en la página de inicio",
+        "domain": "Dominio",
+        "created_at": "Creado a las",
+        "blocked": "Bloqueado",
+        "known_users": "Usuarios conocidos",
+        "default_images_help": "Tienes que <a href='/admin?tab=theme'>actualizas</a> la página para ver los cambios.",
+        "geocoding_provider": "Proveedor de geocodificación",
+        "admin_email_help": "La dirección que usamos como remitente para enviar emails. Esta es también la dirección a la cual los emails de administración son enviados",
+        "allow_multidate_event": "Permitir eventos de múltiples días",
+        "geocoding_countrycodes": "Códigos de país",
+        "geocoding_provider_help": "El proveedor por defecto es Nominatim",
+        "geocoding_provider_type": "Software de geocodificación",
+        "geocoding_provider_type_help": "El programa por defecto es Nominatim",
+        "geocoding_countrycodes_help": "Permite establecer un filtro para las búsquedas basadas en códigos de área",
+        "geocoding_test_button": "Prueba de geocodificación",
+        "delete_collection_confirm": "¿Estás seguro de que quieres eliminar la colección <u>{collection}</u>?",
+        "geocoding_test_success": "El servicio de geocodificación de {service_name} funciona",
+        "tilelayer_provider": "Proveedor de mosaicos de mapas",
+        "tilelayer_provider_help": "El proveedor por defecto es OpenStreetMap",
+        "tilelayer_provider_attribution": "Atribución",
+        "tilelayer_test_button": "Capa de mosaicos de prueba",
+        "tilelayer_test_success": "El servicio de mosaicos en {service_name} está funcionando",
+        "tilelayer_test_error": "No se puede acceder al servicio de mosaico en {service_name}",
+        "geolocation": "Geolocalización",
+        "delete_tag_confirm": "¿Está seguro de que desea eliminar la etiqueta \"{tag}\"? La etiqueta se eliminará de {n} eventos.",
+        "edit_tag": "Editar la etiqueta",
+        "edit_tag_help": "Puede cambiar la etiqueta sustituyéndola por una nueva o fusionándola con una existente. Los {n} eventos asociados también se modificarán.",
+        "geolocation_description": "<b>1. Defina un proveedor para el servicio de codificación geográfica</b>.<br>Actualmente, entre los enumerados en el <a href=\"https://wiki.openstreetmap.org/wiki/Nominatim#Alternatives_.2F_Third-party_providers\">wiki de OpenStreetMap </a>, hay soporte para el software <a href=\"https://github.com/osm-search/Nominatim\">Nominatim</a> y <a href=\"https://github.com/komoot /photon\">Photon</a>.<br>Puede usar una de las demostraciones oficiales relacionadas copiando el enlace en el campo 'Proveedor de codificación geográfica':<ul><li>https://nominatim.openstreetmap.org/search (<a href=\"https://operations.osmfoundation.org/policies/nominatim/\">Términos de servicio</a>)</li><li>https://photon.komoot.io/api/ (<a href=\"https://photon.komoot.io/\"> Condiciones de servicio</a>)</li></ul><br><b>2. Defina un proveedor para las capas del mapa.</b><br>Puede encontrar una lista de ellos aquí: <a href=\"https://leaflet-extras.github.io/leaflet-providers/preview/\">https://leaflet-extras.github.io/leaflet-providers/preview/</a>",
+        "geocoding_test_error": "No se puede acceder al servicio de geocodificación en {service_name}"
     },
     "auth": {
         "not_confirmed": "Todavía no hemos confirmado este email…",

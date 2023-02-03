@@ -3,7 +3,7 @@ v-container#event.pa-0.pa-sm-2
   //- EVENT PAGE
   //- gancio supports microformats (http://microformats.org/wiki/h-event)
   //- and microdata https://schema.org/Event
-  v-card.h-event(itemscope itemtype="https://schema.org/Event")
+  v-card.h-event(itemscope itemtype="https://schema.org/Event" v-touch="{ left: goNext, right: goPrev }")
 
     v-card-text
       v-row
@@ -28,13 +28,13 @@ v-container#event.pa-0.pa-sm-2
 
               .text-h6.p-location.h-adr(itemprop="location" itemscope itemtype="https://schema.org/Place")
                 v-icon(v-text='mdiMapMarker' small)
-                nuxt-link.vcard.ml-2.p-name.text-decoration-none.text-button(itemprop="name" :to='`/place/${event.place.name}`') {{event.place && event.place.name}}
+                nuxt-link.vcard.ml-2.p-name.text-decoration-none.text-button(itemprop="name" :to='`/place/${encodeURIComponent(event.place.name)}`') {{event.place && event.place.name}}
                 .text-caption.p-street-address(itemprop='address') {{event.place && event.place.address}}
 
             //- tags, hashtags
             v-card-text.pt-0(v-if='event.tags && event.tags.length')
               v-chip.p-category.ml-1.mt-1(v-for='tag in event.tags' small label color='primary'
-                outlined :key='tag' :to='`/tag/${tag}`') {{tag}}
+                outlined :key='tag' :to='`/tag/${encodeURIComponent(tag)}`') {{tag}}
 
             v-divider
             //- info & actions
@@ -185,7 +185,7 @@ export default {
   },
   async asyncData ({ $axios, params, error }) {
     try {
-      const event = await $axios.$get(`/event/${params.slug}`)
+      const event = await $axios.$get(`/event/detail/${params.slug}`)
       return { event }
     } catch (e) {
       error({ statusCode: 404, message: 'Event not found' })
@@ -318,10 +318,20 @@ export default {
     keyDown (ev) {
       if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) { return }
       if (ev.key === 'ArrowRight' && this.event.next) {
-        this.$router.replace(`/event/${this.event.next}`)
+        this.goNext()
       }
       if (ev.key === 'ArrowLeft' && this.event.prev) {
+        this.goPrev()
+      }
+    },
+    goPrev () {
+      if (this.event.prev) {
         this.$router.replace(`/event/${this.event.prev}`)
+      }
+    },
+    goNext () {
+      if (this.event.next) {
+        this.$router.replace(`/event/${this.event.next}`)
       }
     },
     showResource (resource) {

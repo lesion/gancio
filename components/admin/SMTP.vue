@@ -7,7 +7,9 @@ v-card
 
       v-text-field(v-model='admin_email'
         @blur="save('admin_email', admin_email )"
-        :label="$t('admin.sender_email')"
+        :label="$t('admin.admin_email')"
+        :hint="$t('admin.admin_email_help')"
+        persistent-hint
         :rules="$validators.email")
 
       v-switch(v-model='smtp.sendmail'

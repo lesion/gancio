@@ -1,6 +1,5 @@
 const path = require('path')
 const URL = require('url')
-const fs = require('fs')
 const crypto = require('crypto')
 const { promisify } = require('util')
 const sharp = require('sharp')
@@ -9,7 +8,7 @@ const generateKeyPair = promisify(crypto.generateKeyPair)
 const log = require('../../log')
 // const locales = require('../../../locales/index')
 const escape = require('lodash/escape')
-const pluginController = require('./plugins')
+const DB = require('../models/models')
 
 let defaultHostname
 try {
@@ -27,9 +26,15 @@ const defaultSettings = {
   instance_place: '',
   allow_registration: true,
   allow_anon_event: true,
+  allow_multidate_event: true,
   allow_recurrent_event: false,
   recurrent_event_visible: false,
-  allow_geolocation: true,
+  allow_geolocation: false,
+  geocoding_provider_type: 'Nominatim',
+  geocoding_provider: 'https://nominatim.openstreetmap.org/search',
+  geocoding_countrycodes: [],
+  tilelayer_provider: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  tilelayer_provider_attribution: "<a target=\"_blank\" href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
   enable_federation: true,
   enable_resources: false,
   hide_boosts: true,
@@ -68,8 +73,7 @@ const settingsController = {
     // initialize instance settings from db
     // note that this is done only once when the server starts
     // and not for each request
-    const Setting = require('../models/setting')
-    const settings = await Setting.findAll()
+    const settings = await DB.Setting.findAll()
     settingsController.settings = defaultSettings
     settings.forEach(s => {
       if (s.is_secret) {
@@ -111,15 +115,14 @@ const settingsController = {
     //     }
     //   })
     // }
-
+    const pluginController = require('./plugins')
     pluginController._load()
   },
 
   async set (key, value, is_secret = false) {
-    const Setting = require('../models/setting')
     log.info(`SET ${key} ${is_secret ? '*****' : value}`)
     try {
-      const [setting, created] = await Setting.findOrCreate({
+      const [setting, created] = await DB.Setting.findOrCreate({
         where: { key },
         defaults: { value, is_secret }
       })
@@ -211,7 +214,7 @@ const settingsController = {
     }
 
     const uploadedPath = path.join(req.file.destination, req.file.filename)
-    const baseImgPath = path.resolve(config.upload_path, 'fallbackImage.png')
+    const baseImgPath = path.resolve(config.upload_path, 'headerImage.png')
 
     // convert and resize to png
     return sharp(uploadedPath)

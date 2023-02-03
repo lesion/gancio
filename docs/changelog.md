@@ -8,6 +8,47 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.6.2 - 12 jan '23
+  - add swipe gesture to move to next/prev event
+  - fix refresh collections, fix #219
+  - add russian translation (thanks @drunkod)
+  - refactor search / filter / selection fix #225, 227, #224
+  - models initialization refactored, better dev experience, fix backend HMR
+
+### 1.6.1 - 15 dec '22
+  - allow edit tags in admin panel, fix #170
+  - fix header / fallback image upload, fix #222
+  - fix WPGancio MU
+  - fix recurrent events label
+  - update translations (de, es, eu, gl)
+
+### 1.6.0 - 11 dec '22
+  - new plugin system - fix #177
+    - new "publish on telegram" plugin: (thanks @fadelkon)
+  - people can now choose the language displayed - fix #171
+  - admin could choose a custom fallback image - fix #195
+  - it is now possible NOT to enter the end time of an event - fix #188
+  - live search
+  - improve event import
+  - add Apple touch icon - fix #200
+  - add nominatim / openstreetmap search feature (thanks @sedum)
+  - new hide calendar option
+  - new hide thumbs from homepage option
+  - linkable admin tab
+  - friendly instances label is now customizable (thanks @sedum)
+  - i18n refactoring
+  - Wordpress plugin now supports MU installation
+  - new chinese translation
+  - new portuguese translation
+  - improved navbar layout
+  - improved event layout
+  - complete oauth2 refactoring
+  - fix ics unique uuid
+  - fix place "[Object]" issue - #194
+  - fix random restart while downloading random media
+  - fix mobile dialog layout
+  - urlencode place and tag urls
+
 ### 1.5.6 - 22 set '22
   - update linkifyjs, sequelizem, nuxt deps
   - improve homepage loading time

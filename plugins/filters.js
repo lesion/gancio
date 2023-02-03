@@ -16,6 +16,7 @@ import 'dayjs/locale/fr'
 import 'dayjs/locale/de'
 import 'dayjs/locale/gl'
 import 'dayjs/locale/sk'
+import 'dayjs/locale/ru'
 import 'dayjs/locale/pt'
 import 'dayjs/locale/zh'
 
@@ -57,11 +58,11 @@ export default ({ app, store }) => {
     return ''
   })
 
-  Vue.filter('from', timestamp => dayjs.unix(timestamp).tz().fromNow())
+  Vue.filter('from', timestamp => dayjs.unix(timestamp).tz().locale(app.i18n.locale || store.state.settings.instance_locale).fromNow())
 
   Vue.filter('recurrentDetail', event => {
     const parent = event.parent
-    if (!parent.recurrent || parent.recurrent.frequency) return 'error!'
+    if (!parent.recurrent || !parent.recurrent.frequency) return 'error!'
     const { frequency, type } = parent.recurrent
     let recurrent
     if (frequency === '1w' || frequency === '2w') {

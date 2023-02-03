@@ -4,7 +4,9 @@
     <v-main>
       <Snackbar/>
       <Confirm/>
-        <nuxt :keep-alive='$route.name === "index"'/>
+      <v-fade-transition hide-on-leave>
+        <nuxt />
+      </v-fade-transition>
     </v-main>
     <Footer/>
 

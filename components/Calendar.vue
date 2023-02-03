@@ -15,13 +15,14 @@
       aria-label='Calendar'
       is-expanded
       is-inline)
-      template(v-slot="{ inputValue, inputEvents }")
+      //- template(v-slot="{ inputValue, inputEvents }")
         v-btn#calendarButton(v-on='inputEvents' text tile :color='selectedDate ? "primary" : "" ') {{inputValue || $t('common.calendar')}} 
           v-icon(v-if='selectedDate' v-text='mdiClose' right small icon @click.prevent.stop='selectedDate = null')
           v-icon(v-else v-text='mdiChevronDown' right small icon)
-    template(v-slot:placeholder)
-      v-btn#calendarButton(text tile) {{$t('common.calendar')}} 
-        v-icon(v-text='mdiChevronDown' right small icon)
+    .calh.d-flex.justify-center.align-center(slot='placeholder')
+      v-progress-circular(indeterminate)
+    //-   v-btn#calendarButton(text tile) {{$t('common.calendar')}} 
+    //-     v-icon(v-text='mdiChevronDown' right small icon)
 
   </template>
 
@@ -65,6 +66,16 @@ export default {
 </script>
 
 <style>
+.vc-container.vc-is-dark {
+  --gray-900: #111;
+  --gray-700: #333;
+}
+
+.vc-container {
+  --gray-400: #999 !important;
+  --rounded-lg: 4px !important;
+}
+
 .vc-opacity-0 {
   opacity: 0.3 !important;
 }

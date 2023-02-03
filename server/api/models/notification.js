@@ -1,10 +1,5 @@
-
-const sequelize = require('./index').sequelize
-const { Model, DataTypes } = require('sequelize')
-
-class Notification extends Model {}
-
-Notification.init({
+module.exports = (sequelize, DataTypes) => 
+  sequelize.define('notification', {
   filters: DataTypes.JSON,
   email: DataTypes.STRING,
   remove_code: DataTypes.STRING,
@@ -25,5 +20,3 @@ Notification.init({
     fields: ['action', 'type']
   }]
 })
-
-module.exports = Notification

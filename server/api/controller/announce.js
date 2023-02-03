@@ -1,4 +1,5 @@
-const Announcement = require('../models/announcement')
+const { Announcement } = require('../models/models')
+
 const log = require('../../log')
 
 const announceController = {

@@ -91,17 +91,33 @@ export default {
     WhereInput,
     DateInput
   },
-  validate({ store }) {
-    return (store.state.auth.loggedIn || store.state.settings.allow_anon_event)
+  validate({ store, params, error }) {
+    // should we allow anon event?
+    if(!store.state.settings.allow_anon_event && !store.state.auth.loggedIn) {
+      return error({ statusCode: 401, message: 'Not allowed'})
+    }
+
+    // do not allow edit to anon users
+    if (params.edit && !store.state.auth.loggedIn) {
+      return error({ statusCode: 401, message: 'Not allowed'})
+    }
+
+    return true
+
   },
-  async asyncData({ params, $axios, error }) {
+  async asyncData({ params, $axios, error, $auth, store }) {
     if (params.edit) {
+
       const data = { event: { place: {}, media: [] } }
       data.id = params.edit
       data.edit = true
       let event
       try {
-        event = await $axios.$get('/event/' + data.id)
+        event = await $axios.$get('/event/detail/' + data.id)
+        if (!$auth.user.is_admin && $auth.user.id !== event.userId) {
+          error({ statusCode: 401, message: 'Not allowed' })
+          return {}
+        }
       } catch (e) {
         error({ statusCode: 404, message: 'Event not found!' })
         return {}
@@ -228,6 +244,8 @@ export default {
       if (this.date.dueHour) {
         [hour, minute] = this.date.dueHour.split(':')
         formData.append('end_datetime', dayjs(this.date.due).hour(Number(hour)).minute(Number(minute)).second(0).unix())
+      } else if (!!this.date.multidate) {
+        formData.append('end_datetime', dayjs(this.date.due).hour(24).minute(0).second(0).unix())
       }
 
       if (this.edit) {

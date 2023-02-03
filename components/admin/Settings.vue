@@ -39,6 +39,10 @@ v-container
       inset
       :label="$t('admin.allow_anon_event')")
 
+    v-switch.mt-1(v-model='allow_multidate_event'
+      inset
+      :label="$t('admin.allow_multidate_event')")
+
     v-switch.mt-1(v-model='allow_recurrent_event'
       inset
       :label="$t('admin.allow_recurrent_event')")
@@ -57,32 +61,35 @@ v-container
 
   v-card-actions
     v-btn(text @click='showSMTP=true')
-      <v-icon v-if='!settings.admin_email' color='error' v-text='mdiAlert'></v-icon> {{$t('admin.show_smtp_setup')}}
-    v-btn(text @click='$emit("complete")' color='primary' v-if='setup') {{$t('common.next')}}
-      v-icon(v-text='mdiArrowRight')
+      <v-icon v-if='!settings.admin_email' color='error' class="mr-2" v-text='mdiAlert'></v-icon> {{$t('admin.show_smtp_setup')}}
+
+  v-btn(text @click='$emit("complete")' color='primary' v-if='setup') {{$t('common.next')}}
+    v-icon(v-text='mdiArrowRight')
 
 </template>
 <script>
 import SMTP from './SMTP.vue'
+import Geolocation from './Geolocation.vue'
 import { mapActions, mapState } from 'vuex'
 import moment from 'dayjs'
 import tzNames from './tz.json'
-import { mdiAlert, mdiArrowRight } from '@mdi/js'
+import { mdiAlert, mdiArrowRight, mdiMap } from '@mdi/js'
 const locales = require('../../locales/index')
 
 export default {
   props: {
     setup: { type: Boolean, default: false }
   },
-  components: { SMTP },
+  components: { SMTP, Geolocation },
   name: 'Settings',
   data ({ $store }) {
     return {
-      mdiAlert, mdiArrowRight,
+      mdiAlert, mdiArrowRight, mdiMap,
       title: $store.state.settings.title,
       description: $store.state.settings.description,
       locales: Object.keys(locales).map(locale => ({ value: locale, text: locales[locale] })),
       showSMTP: false,
+      showGeolocationConfigs: false,
     }
   },
   computed: {
@@ -106,6 +113,10 @@ export default {
     allow_recurrent_event: {
       get () { return this.settings.allow_recurrent_event },
       set (value) { this.setSetting({ key: 'allow_recurrent_event', value }) }
+    },
+    allow_multidate_event: {
+      get () { return this.settings.allow_multidate_event },
+      set (value) { this.setSetting({ key: 'allow_multidate_event', value }) }
     },
     recurrent_event_visible: {
       get () { return this.settings.recurrent_event_visible },
