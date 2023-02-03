@@ -17,15 +17,13 @@ v-card.h-event.event.d-flex(itemscope itemtype="https://schema.org/Event")
 
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import MyPicture from '~/components/MyPicture'
 import { mdiRepeat, mdiCalendar, mdiMapMarker } from '@mdi/js'
 
 export default {
   data({ $store }) {
-    return { mdiRepeat, mdiMapMarker, mdiCalendar,
-      hide_thumbs: this.$cookies.get('theme.hide_thumbs') || $store.state.settings.hide_thumbs
-    }
+    return { mdiRepeat, mdiMapMarker, mdiCalendar }
   },
   components: {
     MyPicture
@@ -34,6 +32,6 @@ export default {
     event: { type: Object, default: () => ({}) },
     lazy: Boolean
   },
-  computed: mapState(['settings'])
+  computed: mapGetters(['hide_thumbs'])
 }
 </script>

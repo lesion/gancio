@@ -19,7 +19,7 @@ import Appbar from '../components/Appbar.vue'
 import Snackbar from '../components/Snackbar'
 import Footer from '../components/Footer'
 import Confirm from '../components/Confirm'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   head () {
@@ -32,14 +32,12 @@ export default {
   },
   name: 'Default',
   components: { Appbar, Snackbar, Footer, Confirm },
-  computed: mapState(['settings']),
+  computed: {
+    ...mapState(['settings']),
+    ...mapGetters(['is_dark'])
+  },
   created () {
-    const theme_is_dark = this.$cookies.get('theme.is_dark')
-    if ( theme_is_dark != null ) {
-      this.$vuetify.theme.dark = theme_is_dark
-    } else {
-      this.$vuetify.theme.dark = this.settings['theme.is_dark']
-    }
+    this.$vuetify.theme.dark = this.is_dark
   }
 }
 </script>

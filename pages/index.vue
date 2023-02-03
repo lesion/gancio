@@ -10,7 +10,7 @@ v-container.px-2.px-sm-6.pt-0
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
   //- Events
-  #events.mt-sm-4.mt-2(:key="reload_events")
+  #events.mt-sm-4.mt-2
     Event(:event='event' v-for='(event, idx) in visibleEvents' :lazy='idx>2' :key='event.id')
 </template>
 
@@ -48,7 +48,6 @@ export default {
       tmpEvents: [],
       selectedDay: null,
       storeUnsubscribe: null,
-      reload_events: 0
     }
   },
   head () {
@@ -100,10 +99,6 @@ export default {
         }
       }
     }})
-    // this.$root.$on('search', debounce(this.search, 100))
-    // this.$root.$on('layout_loaded', () => {
-    //     this.reload_events++
-    // })
   },
   destroyed () {
     this.$root.$off('dayclick')
