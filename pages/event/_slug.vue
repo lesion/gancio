@@ -65,7 +65,7 @@ v-container#event.pa-0.pa-sm-2
                     v-list-item-title(v-text="$t('common.embed')")
                 
                 //- calendar
-                v-list-item(:href='`/api/event/${event.slug || event.id}.ics`')
+                v-list-item(:href='`/api/event/detail/${event.slug || event.id}.ics`')
                   v-list-item-icon
                     v-icon(v-text='mdiCalendarExport')
                   v-list-item-content
