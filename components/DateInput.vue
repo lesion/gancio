@@ -20,7 +20,7 @@ v-col(cols=12)
             @input="date => change('date', date)"
             :attributes='attributes'
             :locale='$i18n.locale'
-            :is-dark="settings['theme.is_dark']"
+            :is-dark="is_dark"
             is-inline
             is-expanded
             :min-date='type !== "recurrent" && new Date()')
@@ -95,7 +95,7 @@ v-col(cols=12)
 </template>
 <script>
 import dayjs from 'dayjs'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import List from '@/components/List'
 import { attributesFromEvents } from '../assets/helper'
 import { mdiClockTimeFourOutline, mdiClockTimeEightOutline, mdiClose } from '@mdi/js'
@@ -123,6 +123,7 @@ export default {
   },
   computed: {
     ...mapState(['settings', 'events']),
+    ...mapGetters(['is_dark']),
     fromDate () {
       if (this.value.from) {
         if (this.value.multidate) {
