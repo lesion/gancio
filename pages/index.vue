@@ -35,7 +35,7 @@ export default {
   },
   activated() {
     if (this.$fetchState.timestamp <= Date.now() - 60000) {
-      this.$fetch();
+      this.$fetch()
     }
   },
   data ({ $store }) {

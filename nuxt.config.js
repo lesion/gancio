@@ -89,6 +89,7 @@ module.exports = {
       code: key,
       name: locales[key],
       file: `${key}.json`,
+      file: 'loader.js',
       iso: key
     })),
     vueI18n: {
@@ -98,9 +99,7 @@ module.exports = {
     langDir: 'locales',
     lazy: true,
     strategy: 'no_prefix',
-    baseUrl: config.baseurl,
     skipSettingLocaleOnNavigate: true,
-    skipNuxtState: true
   },
 
   serverMiddleware: ['server/routes'],

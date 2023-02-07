@@ -20,6 +20,7 @@ const oauthController = require('./controller/oauth')
 const announceController = require('./controller/announce')
 const pluginController = require('./controller/plugins')
 const geocodingController = require('./controller/geocoding')
+const localeController = require('./controller/locale')
 const { DDOSProtectionApiRateLimiter, SPAMProtectionApiRateLimiter } = require('./limiter')
 const helpers = require('../helpers')
 const storage = require('./storage')
@@ -221,6 +222,9 @@ module.exports = () => {
     api.get('/clients', isAuth, oauthController.getClients)
     api.get('/client/:client_id', isAuth, oauthController.getClient)
     api.post('/client', SPAMProtectionApiRateLimiter, oauthController.createClient)
+
+    // CUSTOM LOCALE
+    api.get('/locale/:locale', localeController.get)
   }
   
   api.use((_req, res) => res.sendStatus(404))
