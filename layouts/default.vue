@@ -4,7 +4,9 @@
     <v-main>
       <Snackbar/>
       <Confirm/>
-        <nuxt :keep-alive='$route.name === "index"'/>
+      <v-fade-transition hide-on-leave>
+        <nuxt />
+      </v-fade-transition>
     </v-main>
     <Footer/>
 
@@ -17,7 +19,7 @@ import Appbar from '../components/Appbar.vue'
 import Snackbar from '../components/Snackbar'
 import Footer from '../components/Footer'
 import Confirm from '../components/Confirm'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   head () {
@@ -30,9 +32,12 @@ export default {
   },
   name: 'Default',
   components: { Appbar, Snackbar, Footer, Confirm },
-  computed: mapState(['settings']),
+  computed: {
+    ...mapState(['settings']),
+    ...mapGetters(['is_dark'])
+  },
   created () {
-    this.$vuetify.theme.dark = this.settings['theme.is_dark']
+    this.$vuetify.theme.dark = this.is_dark
   }
 }
 </script>

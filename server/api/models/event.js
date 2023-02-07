@@ -69,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
       url: `${config.baseurl}/event/${this.slug || this.id}`,
       type: 'Event',
       startTime: dayjs.unix(this.start_datetime).tz().locale(locale).format(),
-      endTime: this.end_datetime ? dayjs.unix(this.end_datetime).tz().locale(locale).format() : null,
+      ...( this.end_datetime ? { endTime : dayjs.unix(this.end_datetime).tz().locale(locale).format() } : {} ),
       location: {
         name: this.place.name,
         address: this.place.address,

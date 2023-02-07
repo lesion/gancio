@@ -1,6 +1,10 @@
 import dayjs from 'dayjs'
 
 export const state = () => ({
+  localSettings : {
+    hide_thumbs: null,
+    'theme.is_dark': null
+  },
   settings: {
     instance_timezone: 'Europe/Rome',
     instance_name: '',
@@ -21,16 +25,28 @@ export const state = () => ({
     enable_trusted_instances: true,
     trusted_instances: [],
     trusted_instances_label: '',
-    footerLinks: []
+    footerLinks: [],
+    hide_thumbs: false,
+    'theme.is_dark': true,
+    hide_calendar: false
   },
   filter: {
     query: '',
     show_recurrent: null,
-    show_multidate: null
+    show_multidate: null,
   },
   announcements: [],
   events: []
 })
+
+export const getters = {
+  hide_thumbs (state) {
+    return (state.localSettings['hide_thumbs'] === null) ? state.settings.hide_thumbs : state.localSettings.hide_thumbs
+  },
+  is_dark (state) {
+    return (state.localSettings['theme.is_dark'] === null) ? state.settings['theme.is_dark'] : state.localSettings['theme.is_dark']
+  }
+}
 
 export const mutations = {
   setSettings (state, settings) {
@@ -39,11 +55,14 @@ export const mutations = {
   setSetting (state, setting) {
     state.settings[setting.key] = setting.value
   },
+  setLocalSetting(state, setting) {
+    state.localSettings[setting.key] = setting.value
+  },
   setAnnouncements (state, announcements) {
     state.announcements = announcements
   },
   setEvents (state, events) {
-    state.events = events
+    state.events = Object.freeze(events)
   },
   setFilter (state, { type, value }) {
     state.filter[type] = value
@@ -53,10 +72,16 @@ export const mutations = {
 export const actions = {
   // this method is called server side only for each request for nuxt
   // we use it to get configuration from db, set locale, etc...
-  nuxtServerInit ({ commit }, { _req, res }) {
-    commit('setSettings', res.locals.settings)
+  nuxtServerInit ({ commit }, { res, app }) {
+
+    if (res.locals && res.locals.settings) {
+      commit('setSettings', res.locals.settings)
+    }
     commit('setFilter', {  type: 'show_recurrent',
         value: res.locals.settings.allow_recurrent_event && res.locals.settings.recurrent_event_visible })
+
+    commit('setLocalSetting', { key: 'hide_thumbs', value: app.$cookies.get('hide_thumbs') })
+    commit('setLocalSetting', { key: 'theme.is_dark', value: app.$cookies.get('theme.is_dark') })
 
     if (res.locals.status === 'READY') {
       commit('setAnnouncements', res.locals.announcements)
@@ -73,6 +98,13 @@ export const actions = {
     await this.$axios.$post('/settings', setting)
     commit('setSetting', setting)
   },
+  async setLocalSetting ({ commit }, setting) {
+    this.$cookies.set(setting.key, setting.value, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7
+    })
+    commit('setLocalSetting', setting)
+  },
   setFilter ({ commit }, [type, value]) {
     commit('setFilter', { type, value })
   },
@@ -84,6 +116,5 @@ export const actions = {
       show_multidate: state.filter.show_multidate
     })
     commit('setEvents', events)
-    return events
   }
 }

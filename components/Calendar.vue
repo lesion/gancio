@@ -4,7 +4,7 @@
       ref='cal'
       v-model='selectedDate'
       title-position='left'
-      :is-dark="settings['theme.is_dark']"
+      :is-dark="is_dark"
       :columns="!$vuetify.breakpoint.smAndDown ? 2 : 1"
       @input='click'
       @update:from-page='updatePage'
@@ -15,20 +15,14 @@
       aria-label='Calendar'
       is-expanded
       is-inline)
-      //- template(v-slot="{ inputValue, inputEvents }")
-        v-btn#calendarButton(v-on='inputEvents' text tile :color='selectedDate ? "primary" : "" ') {{inputValue || $t('common.calendar')}} 
-          v-icon(v-if='selectedDate' v-text='mdiClose' right small icon @click.prevent.stop='selectedDate = null')
-          v-icon(v-else v-text='mdiChevronDown' right small icon)
     .calh.d-flex.justify-center.align-center(slot='placeholder')
       v-progress-circular(indeterminate)
-    //-   v-btn#calendarButton(text tile) {{$t('common.calendar')}} 
-    //-     v-icon(v-text='mdiChevronDown' right small icon)
 
   </template>
 
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import dayjs from 'dayjs'
 import { mdiChevronDown, mdiClose } from '@mdi/js'
 import { attributesFromEvents } from '../assets/helper'
@@ -46,6 +40,7 @@ export default {
   },
   computed: {
     ...mapState(['settings', 'events']),
+    ...mapGetters(['is_dark']),
     attributes () {
       return attributesFromEvents(this.events)
     }
@@ -66,6 +61,16 @@ export default {
 </script>
 
 <style>
+.vc-container.vc-is-dark {
+  --gray-900: #111;
+  --gray-700: #333;
+}
+
+.vc-container {
+  --gray-400: #999 !important;
+  --rounded-lg: 4px !important;
+}
+
 .vc-opacity-0 {
   opacity: 0.3 !important;
 }

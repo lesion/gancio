@@ -1,6 +1,5 @@
 const ical = require('ical.js')
 const settingsController = require('./api/controller/settings')
-const acceptLanguage = require('accept-language')
 const express = require('express')
 const dayjs = require('dayjs')
 const timezone = require('dayjs/plugin/timezone')
@@ -15,7 +14,6 @@ const axios = require('axios')
 const crypto = require('crypto')
 const Microformats = require('microformat-node')
 const get = require('lodash/get')
-const cloneDeep = require('lodash/cloneDeep')
 
 const DOMPurify = require('dompurify')
 const { JSDOM } = require('jsdom')
@@ -119,9 +117,9 @@ module.exports = {
             log.warn(err)
           } else {
             res.status(404).send('Not found (but nice try 😊)')
-          // }
+          }
         }
-      }})
+      })
     })
 
     router.use('/fallbackimage.png', (req, res, next) => {
@@ -287,5 +285,13 @@ module.exports = {
       return res.redirect((accepted === 'application/rss+xml' ? '/feed/rss' : '/feed/ics') + req.path)
     }
     next()
+  },
+
+  async isGeocodingEnabled(req, res, next) {
+    if (res.locals.settings.allow_geolocation) {
+      next()
+    } else {
+      res.sendStatus(403)
+    }
   }
 }

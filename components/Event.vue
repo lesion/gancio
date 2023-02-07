@@ -1,7 +1,7 @@
 <template lang="pug">
 v-card.h-event.event.d-flex(itemscope itemtype="https://schema.org/Event")
   nuxt-link(:to='`/event/${event.slug || event.id}`' itemprop="url")
-    MyPicture(v-if='!settings.hide_thumbs' :event='event' thumb :lazy='lazy')
+    MyPicture(v-if='!hide_thumbs' :event='event' thumb :lazy='lazy')
     v-icon.float-right.mr-1(v-if='event.parentId' color='success' v-text='mdiRepeat')
     .title.p-name(itemprop="name") {{ event.title }}
 
@@ -17,12 +17,12 @@ v-card.h-event.event.d-flex(itemscope itemtype="https://schema.org/Event")
 
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import MyPicture from '~/components/MyPicture'
 import { mdiRepeat, mdiCalendar, mdiMapMarker } from '@mdi/js'
 
 export default {
-  data() {
+  data({ $store }) {
     return { mdiRepeat, mdiMapMarker, mdiCalendar }
   },
   components: {
@@ -32,6 +32,6 @@ export default {
     event: { type: Object, default: () => ({}) },
     lazy: Boolean
   },
-  computed: mapState(['settings'])
+  computed: mapGetters(['hide_thumbs'])
 }
 </script>

@@ -8,7 +8,7 @@
             v-text-field(hide-details outlined
               :placeholder='$t("common.search")'
               @input="v => setFilter(['query', v])" clearable :clear-icon='mdiClose')
-              template(v-slot:append)
+              template(v-slot:append v-if='settings.allow_recurrent_event || settings.allow_multidate_event')
                 v-icon(v-text='mdiCog' v-bind='attrs' v-on='on')
           v-card(outlined :rounded='"0"')
             v-card-text

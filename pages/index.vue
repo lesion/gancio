@@ -1,5 +1,10 @@
 <template lang="pug">
 v-container.px-2.px-sm-6.pt-0
+
+  //- View
+  #themeview.mt-sm-4.mt-2
+    ThemeView
+
   //- Announcements
   #announcements.mt-2.mt-sm-4(v-if='announcements.length')
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
@@ -15,33 +20,34 @@ import debounce from 'lodash/debounce'
 import dayjs from 'dayjs'
 import Event from '@/components/Event'
 import Announcement from '@/components/Announcement'
+import ThemeView from '@/components/ThemeView'
 import { mdiMagnify, mdiCloseCircle } from '@mdi/js'
 
 export default {
   name: 'Index',
-  components: { Event, Announcement },
+  components: { Event, Announcement, ThemeView },
   middleware: 'setup',
-  async fetch () {
-    return this.getEvents()
+  fetch () {
+    return this.getEvents({
+      start: this.start,
+      end: this.end
+    })
   },
   activated() {
     if (this.$fetchState.timestamp <= Date.now() - 60000) {
-      this.$fetch();
+      this.$fetch()
     }
-  },  
+  },
   data ({ $store }) {
     return {
       mdiMagnify, mdiCloseCircle,
       isCurrentMonth: true,
       now: dayjs().unix(),
-      date: dayjs.tz().format('YYYY-MM-DD'),
       start: dayjs().startOf('month').unix(),
       end: null,
-      searching: false,
       tmpEvents: [],
       selectedDay: null,
-      storeUnsubscribe: null
-
+      storeUnsubscribe: null,
     }
   },
   head () {
@@ -80,7 +86,7 @@ export default {
       }
     }
   },
-  mounted () {
+  created () {
     this.$root.$on('dayclick', this.dayChange)
     this.$root.$on('monthchange', this.monthChange)
     this.storeUnsubscribe = this.$store.subscribeAction( { after: (action, state) => {
@@ -88,7 +94,8 @@ export default {
         if (this.filter.query && this.filter.query.length > 2) {
           this.search()
         } else {
-          this.updateEvents()
+          this.tmpEvents = []
+          this.$fetch()
         }
       }
     }})
@@ -109,34 +116,26 @@ export default {
         show_multidate: this.filter.show_multidate,
         query: this.filter.query
       })
-    }, 100),
-    updateEvents () {
-      return this.getEvents({
-        start: this.start,
-        end: this.end
-      })
-    },
+    }, 200),
     async monthChange ({ year, month }) {
       this.$nuxt.$loading.start()
-      this.$nextTick( async () => {
+      let isCurrentMonth
 
-        // unselect current selected day
-        this.selectedDay = null
+      // unselect current selected day
+      this.selectedDay = null
 
-        // check if current month is selected
-        if (month - 1 === dayjs.tz().month() && year === dayjs.tz().year()) {
-          this.isCurrentMonth = true
-          this.start = dayjs().startOf('month').unix()
-          this.date = dayjs.tz().format('YYYY-MM-DD')
-        } else {
-          this.isCurrentMonth = false
-          this.date = ''
-          this.start = dayjs().year(year).month(month - 1).startOf('month').unix() // .startOf('week').unix()
-        }
-        this.end = dayjs().year(year).month(month).endOf('month').unix() // .endOf('week').unix()
-        await this.updateEvents()
-        this.$nuxt.$loading.finish()
-      })
+      // check if current month is selected
+      if (month - 1 === dayjs.tz().month() && year === dayjs.tz().year()) {
+        isCurrentMonth = true
+        this.start = dayjs().startOf('month').unix()
+      } else {
+        isCurrentMonth = false
+        this.start = dayjs().year(year).month(month - 1).startOf('month').unix() // .startOf('week').unix()
+      }
+      this.end = dayjs().year(year).month(month).endOf('month').unix() // .endOf('week').unix()
+      await this.$fetch()
+      this.$nuxt.$loading.finish()
+      this.$nextTick( () => this.isCurrentMonth = isCurrentMonth)
 
     },
     dayChange (day) {

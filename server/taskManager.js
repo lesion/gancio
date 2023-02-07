@@ -1,5 +1,4 @@
 const log = require('./log')
-const eventController = require('./api/controller/event')
 const placeHelpers = require('./helpers/place')
 const tagHelpers = require('./helpers/tag')
 // const notifier = require('./notifier')
@@ -54,6 +53,7 @@ class TaskManager {
   }
 
   start (interval = loopInterval) {
+    const eventController = require('./api/controller/event')
 
     // create and clean recurrent events
     this.add(new Task({

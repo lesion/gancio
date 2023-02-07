@@ -84,32 +84,39 @@ const pluginController = {
     }
   },
 
+  _loadPlugin (pluginFile) {
+    try {
+      const plugin = require(pluginFile)
+      const name = plugin.configuration.name
+      console.log(`Found plugin '${name}'`)
+      pluginController.plugins.push(plugin)
+      if (settingsController.settings['plugin_' + name]) {
+        const pluginSetting = settingsController.settings['plugin_' + name]
+        if (pluginSetting.enable) {
+          pluginController.loadPlugin(name)
+        }
+      } else {
+        settingsController.set('plugin_' + name, { enable: false })
+      }
+    } catch (e) {
+      log.warn(`Unable to load plugin ${pluginFile}: ${String(e)}`)
+    }    
+  },
+
   _load() {
     // load custom plugins
-    const plugins_path = config.plugins_path || path.resolve(process.env.cwd || '', 'plugins')
-    log.info(`Loading plugin  ${plugins_path}`)
-    if (fs.existsSync(plugins_path)) {
-      const plugins = fs.readdirSync(plugins_path)
-        .map(e => path.resolve(plugins_path, e, 'index.js'))
-        .filter(index => fs.existsSync(index))
-      plugins.forEach(pluginFile => {
-        try {
-          const plugin = require(pluginFile)
-          const name = plugin.configuration.name
-          console.log(`Found plugin '${name}'`)
-          pluginController.plugins.push(plugin)
-          if (settingsController.settings['plugin_' + name]) {
-            const pluginSetting = settingsController.settings['plugin_' + name]
-            if (pluginSetting.enable) {
-              pluginController.loadPlugin(name)
-            }
-          } else {
-            settingsController.set('plugin_' + name, { enable: false })
-          }
-        } catch (e) {
-          log.warn(`Unable to load plugin ${pluginFile}: ${String(e)}`)
-        }
-      })
+    const system_plugins_path = path.resolve(__dirname || '', '../../../gancio_plugins')
+    const custom_plugins_path = config.plugins_path || path.resolve(process.env.cwd || '', 'plugins')
+    const plugins_paths = custom_plugins_path === system_plugins_path ? [custom_plugins_path] : [custom_plugins_path, system_plugins_path]
+
+    log.info(`Loading plugins from ${plugins_paths.join(' and ')}`)
+    for (const plugins_path of plugins_paths) {
+      if (fs.existsSync(plugins_path)) {
+        fs.readdirSync(plugins_path)
+          .map(e => path.resolve(plugins_path, e, 'index.js'))
+          .filter(index => fs.existsSync(index))
+          .forEach(pluginController._loadPlugin)
+      }
     }
   }
 }

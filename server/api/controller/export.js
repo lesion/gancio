@@ -81,14 +81,13 @@ const exportController = {
   ics (_req, res, events, alarms = []) {
     const settings = res.locals.settings
     const eventsMap = events.map(e => {
+
       const tmpStart = moment.unix(e.start_datetime)
-      const tmpEnd = moment.unix(e.end_datetime)
       const start = tmpStart.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
-      const end = tmpEnd.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
-      return {
+
+      const ret = {
         uid: `${e.id}@${settings.hostname}`,
         start,
-        end,
         title: `[${settings.title}] ${e.title}`,
         description: htmlToText(e.description),
         htmlContent: e.description,
@@ -98,6 +97,14 @@ const exportController = {
         categories: e.tags.map(t => t.tag),
         alarms
       }
+
+      if (e.end_datetime) {
+        const tmpEnd = moment.unix(e.end_datetime)
+        const end = tmpEnd.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
+        ret.end = end
+      }
+
+      return ret
     })
     res.type('text/calendar; charset=UTF-8')
     ics.createEvents(eventsMap, (err, value) => {
