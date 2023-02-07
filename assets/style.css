@@ -73,7 +73,7 @@ li {
 }
 
 .v-application p {
-  margin-bottom: 6px;
+  min-height: 1.3em;
 }
 
 .v-application blockquote {
