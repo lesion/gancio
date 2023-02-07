@@ -53,7 +53,7 @@ v-container.container.pa-0.pa-md-3
                 chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
                 cache-items
                 @input.native='searchTags'
-                :delimiters="[',', ';', '#']"
+                :delimiters="[',', ';']"
                 :items="tags"
                 :menu-props="{ maxWidth: 400, eager: true }"
                 :label="$t('common.tags')")
