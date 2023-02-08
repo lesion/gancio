@@ -19,7 +19,7 @@ const DOMPurify = require('dompurify')
 const { JSDOM } = require('jsdom')
 const { window } = new JSDOM('<!DOCTYPE html>')
 const domPurify = DOMPurify(window)
-const url = require('url')
+const URL = require('url')
 
 domPurify.addHook('beforeSanitizeElements', node => {
   if (node.hasAttribute && node.hasAttribute('href')) {
@@ -29,7 +29,7 @@ domPurify.addHook('beforeSanitizeElements', node => {
     // remove FB tracking param
     if (href.includes('fbclid=')) {
       try {
-        const url = new url.URL(href)
+        const url = new URL.URL(href)
         url.searchParams.delete('fbclid')
         node.setAttribute('href', url.href)
         if (text.includes('fbclid=')) {
