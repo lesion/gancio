@@ -97,7 +97,9 @@ module.exports = {
       tilelayer_provider: settings.tilelayer_provider,
       tilelayer_provider_attribution: settings.tilelayer_provider_attribution,
       footerLinks: settings.footerLinks,
-      about: settings.about
+      about: settings.about,
+      allow_event_only_online: settings.allow_event_only_online,
+      allow_event_also_online: settings.allow_event_also_online
     }
     // set user locale
     // res.locals.user_locale = settingsController.user_locale[res.locals.acceptedLocale]

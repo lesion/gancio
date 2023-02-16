@@ -36,6 +36,22 @@ v-container#event.pa-0.pa-sm-2
               v-chip.p-category.ml-1.mt-1(v-for='tag in event.tags' small label color='primary'
                 outlined :key='tag' :to='`/tag/${encodeURIComponent(tag)}`') {{tag}}
 
+            //- online events
+            v-divider(v-if='event.locations && event.locations.length')
+            v-card(v-if='event.locations && event.locations.length')
+              v-card-text.text-caption.pb-0(v-text="event.place.name === 'online' && $t('event.online_event_only') || $t('event.online_event_too') ")
+              v-list-item(target='_blank' :href='`${event.locations[0]}`')
+                v-list-item-icon
+                  v-icon.my-auto(v-text='mdiMonitorAccount')
+                v-list-item-content.py-0
+                  v-text(small label v-text='`${event.locations[0]}`' outlined color='primary')
+            v-card.pb-2(v-if='event.locations.length > 1')
+              v-card-text.text-caption.pt-0.pb-0(v-text="$t('event.online_event_fallback_urls')")
+              v-list-item
+                v-list-item-content
+                  v-chip(v-for='(item, index) in event.locations' v-if="index > 0" target='_blank' :href="`${item}`" 
+                    v-bind:key="index" small label v-text="`${item}`" outlined )
+
             v-divider
             //- info & actions
             v-list(dense nav)
@@ -172,7 +188,7 @@ const { htmlToText } = require('html-to-text')
 
 import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose, mdiMap,
   mdiEye, mdiEyeOff, mdiDelete, mdiRepeat, mdiLock, mdiFileDownloadOutline,
-  mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker, mdiChevronUp } from '@mdi/js'
+  mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker, mdiChevronUp, mdiMonitorAccount } from '@mdi/js'
 
 export default {
   name: 'Event',
@@ -194,7 +210,7 @@ export default {
   data () {
     return {
       mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar, mdiFileDownloadOutline,
-      mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat, mdiLock, mdiMap, mdiChevronUp,
+      mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat, mdiLock, mdiMap, mdiChevronUp, mdiMonitorAccount,
       currentAttachment: 0,
       event: {},
       diocane: '',

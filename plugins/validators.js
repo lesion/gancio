@@ -12,6 +12,12 @@ export default ({ app }, inject) => {
     ],
     password: [
       v => !!v || $t('validators.required', { fieldName: $t('common.password') })
+    ],
+    latitude: [
+      v => (v < 90 && v > -90) || $t('validators.latitude')
+    ],
+    longitude: [
+      v => (v < 180 && v > -180) || $t('validators.longitude')
     ]
   }
 

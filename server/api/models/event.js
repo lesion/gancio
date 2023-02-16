@@ -37,7 +37,8 @@ module.exports = (sequelize, DataTypes) => {
     is_visible: DataTypes.BOOLEAN,
     recurrent: DataTypes.JSON,
     likes: { type: DataTypes.JSON, defaultValue: [] },
-    boost: { type: DataTypes.JSON, defaultValue: [] }
+    boost: { type: DataTypes.JSON, defaultValue: [] },
+    locations: { type: DataTypes.JSON, defaultValue: [] }
   })
   
   Event.prototype.toAP = function (username, locale, to = []) {

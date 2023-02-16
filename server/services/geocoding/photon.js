@@ -16,6 +16,51 @@ const photon = {
       q: details,
       limit: 3,
     }
+  },
+
+  /*
+   * Icons to nominatim `osm_type` and `class` conversion
+   */
+  searchIcons_nominatim_osm_type: {
+    'W': 'mdiRoadVariant',
+    'N': 'mdiMapMarker',
+    'R': 'mdiCityVariant',
+  },
+  searchIcons_nominatim_class: {
+    mdiHome: ['amenity', 'shop', 'tourism', 'leisure', 'building'],
+  },
+
+
+  fullAddressMapping: ['housenumber', 'street', 'locality', 'district', 'city', 'county', 'state', 'postcode', 'country'],
+
+  mapQueryResults(ret, addressList = []) {
+    if (ret) {
+      addressList = ret.features.map(v => {
+        let pre_name = v.properties.name || v.properties.street || ''
+        let pre_address = ''
+
+        this.fullAddressMapping.forEach((item, i) => {
+          let last = i == (this.fullAddressMapping.length - 1)
+          if (v.properties[item] && !last) {
+            pre_address += v.properties[item]+', '
+          } else if (v.properties[item]) {
+            pre_address += v.properties[item]
+          }
+        });
+
+        let name = pre_name
+        let address = pre_address
+        return {
+          class: v.properties.osm_key,
+          type: v.properties.osm_type,
+          lat: v.geometry.coordinates[1],
+          lon: v.geometry.coordinates[0],
+          name,
+          address
+        }
+      })
+    }
+    return addressList 
   }
 
 }

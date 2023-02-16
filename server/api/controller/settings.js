@@ -29,6 +29,8 @@ const defaultSettings = {
   allow_multidate_event: true,
   allow_recurrent_event: false,
   recurrent_event_visible: false,
+  allow_event_only_online: false,
+  allow_event_also_online: false,
   allow_geolocation: false,
   geocoding_provider_type: 'Nominatim',
   geocoding_provider: 'https://nominatim.openstreetmap.org/search',

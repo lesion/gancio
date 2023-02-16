@@ -100,6 +100,7 @@ module.exports = () => {
      * @param {string}  [query] - search for this string
      * @param {array} [tags] - List of tags
      * @param {array} [places] - List of places id
+     * @param {array} [locations] - List of locations
      * @param {integer} [max] - Limit events
      * @param {boolean} [show_recurrent] - Show also recurrent events (default: as choosen in admin settings)
      * @param {integer} [page] - Pagination

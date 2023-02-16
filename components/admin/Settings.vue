@@ -56,6 +56,14 @@ v-container
       inset
       :label="$t('admin.allow_geolocation')")
 
+    v-switch.mt-1(v-model='allow_event_only_online'
+      inset
+      :label="$t('admin.allow_event_only_online')")
+
+    v-switch.mt-1(v-model='allow_event_also_online'
+      inset
+      :label="$t('admin.allow_event_also_online')")
+
   v-dialog(v-model='showSMTP' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
     SMTP(@close='showSMTP = false')
 
@@ -125,6 +133,18 @@ export default {
     allow_geolocation: {
       get () { return this.settings.allow_geolocation },
       set (value) { this.setSetting({ key: 'allow_geolocation', value }) }
+    },
+    allow_event_only_online: {
+      get () { return this.settings.allow_event_only_online },
+      set (value) { this.setSetting({ key: 'allow_event_only_online', value })
+        if (value == true) { this.allow_event_also_online = value } 
+      }
+    },
+    allow_event_also_online: {
+      get () { return this.settings.allow_event_also_online },
+      set (value) { this.setSetting({ key: 'allow_event_also_online', value }) 
+        if (value == false) { this.setSetting({ key: 'allow_event_only_online', value }) } 
+      }
     },
     filteredTimezones () {
       const current_timezone = moment.tz.guess()
