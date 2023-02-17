@@ -12,7 +12,7 @@ rss(version='2.0' xmlns:atom="http://www.w3.org/2005/Atom")
                 title [#{moment.unix(event.start_datetime).format("YY-MM-DD")}] #{event.title} @ #{event.place.name}
                 link #{settings.baseurl}/event/#{event.slug || event.id}
                 each tag in event.tags
-                  category #{tag}
+                  category #{tag.tag}
                 description
                     | <![CDATA[
                     | <h4>#{event.title}</h4>
