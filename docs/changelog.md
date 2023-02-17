@@ -7,6 +7,21 @@ nav_order: 10
 
 
 All notable changes to this project will be documented in this file.
+### 1.6.3 - 17 feb '23
+  - visitors could now choose to view images or not / dark theme or not
+  - i18n refactoring, locale loaders, custom strings, fix #231
+  - introduce a new instance api limiter
+  - hide search filters when none is allowed
+  - add instance timezone and AP actor to nodeinfo
+  - event api path is now /api/event/detail/
+  - fix tag in rss export
+  - fix fbclid param removal in url sanitizer
+  - fix ics validation
+  - rows now breaks correctly in description, fix #237
+  - do not use hash as tags separator, fix #210
+  - do not use end time when not used, fix #233
+  - use timezone on selection, fix #232
+  - fix ics link
 
 ### 1.6.2 - 12 jan '23
   - add swipe gesture to move to next/prev event
