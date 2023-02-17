@@ -13,6 +13,7 @@ let config = {
   log_level: 'debug',
   log_path: path.resolve(process.env.cwd || '', 'logs'),
   db: {},
+  user_locale: path.resolve(process.env.cwd || '', 'user_locale'),
   upload_path: path.resolve(process.env.cwd || '', 'uploads'),
   write (config_path= process.env.config_path || './config.json') {
     delete config.status
