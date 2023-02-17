@@ -61,7 +61,7 @@ const mail = {
         ...locals,
         locale,
         config: { title: settings.title, baseurl: settings.baseurl, description: settings.description, admin_email: settings.admin_email },
-        datetime: datetime => moment.unix(datetime).locale(locale).format('ddd, D MMMM HH:mm')
+        datetime: datetime => moment.unix(datetime).tz().locale(locale).format('ddd, D MMMM HH:mm')
       }
     }
     return email.send(msg)
