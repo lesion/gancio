@@ -128,8 +128,8 @@ export default {
       data.event.place.latitude = event.place.latitude || ''
       data.event.place.longitude = event.place.longitude || ''
       data.event.locations = event.locations || []
-      const from = dayjs.unix(event.start_datetime)
-      const due = event.end_datetime && dayjs.unix(event.end_datetime)
+      const from = dayjs.unix(event.start_datetime).tz()
+      const due = event.end_datetime && dayjs.unix(event.end_datetime).tz()
       data.date = {
         recurrent: event.recurrent,
         from: from.toDate(),
@@ -253,12 +253,12 @@ export default {
       formData.append('description', this.event.description)
       formData.append('multidate', !!this.date.multidate)
       let [hour, minute] = this.date.fromHour.split(':')
-      formData.append('start_datetime', dayjs(this.date.from).hour(Number(hour)).minute(Number(minute)).second(0).unix())
+      formData.append('start_datetime', dayjs(this.date.from).hour(Number(hour)).minute(Number(minute)).second(0).tz().unix())
       if (this.date.dueHour) {
         [hour, minute] = this.date.dueHour.split(':')
-        formData.append('end_datetime', dayjs(this.date.due).hour(Number(hour)).minute(Number(minute)).second(0).unix())
+        formData.append('end_datetime', dayjs(this.date.due).hour(Number(hour)).minute(Number(minute)).second(0).tz().unix())
       } else if (!!this.date.multidate) {
-        formData.append('end_datetime', dayjs(this.date.due).hour(24).minute(0).second(0).unix())
+        formData.append('end_datetime', dayjs(this.date.due).hour(24).minute(0).second(0).tz().unix())
       }
 
       if (this.edit) {

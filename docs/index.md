@@ -10,9 +10,11 @@ permalink: /
 
 A shared agenda for local communities.
 {: .fs-6 }
+Last release  **[1.6.3 - 17 Feb 2023](/changelog#163---17-feb-23)**
 
-[Install]({% link install/install.md %}){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [Demo](https://demo.gancio.org){: .btn .btn-green .fs-5 .mb-4 .mb-md-0 }
-[Source](https://framagit.org/les/gancio){: .btn .fs-5 }
+[Install]({% link install/install.md %}){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[Demo](https://demo.gancio.org){: .btn .btn-green .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[Source](https://framagit.org/les/gancio){: .btn .mb-4 .mb-md-0 .fs-5 }
 
 
 ## Some relevant key features:

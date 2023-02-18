@@ -15,7 +15,7 @@ nav_order: 7
 - [balotta.org](https://balotta.org) (Bologna, Italy)
 - [gancio.daghe.xyz](https://gancio.daghe.xyz/) (Trento, Italy)
 - [bcn.convoca.la](https://bcn.convoca.la/) (Barcelona)
-- [mad.convoca.la](https://bcn.convoca.la/) (Madrid)
+- [mad.convoca.la](https://mad.convoca.la/) (Madrid)
 - [bonn.jetzt](https://bonn.jetzt/) (Digital-Events aus Bonn, Rhein-Sieg und der Region)
 - [quest.livellosegreto.it](https://quest.livellosegreto.it/)
 - [ezkerraldea.euskaragendak.eus](https://ezkerraldea.euskaragendak.eus/)
