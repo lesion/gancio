@@ -37,15 +37,15 @@ v-container#event.pa-0.pa-sm-2
                 outlined :key='tag' :to='`/tag/${encodeURIComponent(tag)}`') {{tag}}
 
             //- online events
-            v-divider(v-if='event.locations && event.locations.length')
-            v-card(v-if='event.locations && event.locations.length')
+            v-divider(v-if='onlineSectionEnabled && event.locations && event.locations.length')
+            v-card(v-if='onlineSectionEnabled && event.locations && event.locations.length')
               v-card-text.text-caption.pb-0(v-text="event.place.name === 'online' && $t('event.online_event_only') || $t('event.online_event_too') ")
               v-list-item(target='_blank' :href='`${event.locations[0]}`')
                 v-list-item-icon
                   v-icon.my-auto(v-text='mdiMonitorAccount')
                 v-list-item-content.py-0
                   v-text(small label v-text='`${event.locations[0]}`' outlined color='primary')
-            v-card.pb-2(v-if='event.locations.length > 1')
+            v-card.pb-2(v-if='onlineSectionEnabled && event.locations && event.locations.length > 1')
               v-card-text.text-caption.pt-0.pb-0(v-text="$t('event.online_event_fallback_urls')")
               v-list-item
                 v-list-item-content
@@ -207,7 +207,7 @@ export default {
       error({ statusCode: 404, message: 'Event not found' })
     }
   },
-  data () {
+  data ({$store}) {
     return {
       mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar, mdiFileDownloadOutline,
       mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat, mdiLock, mdiMap, mdiChevronUp, mdiMonitorAccount,
@@ -217,7 +217,8 @@ export default {
       showEmbed: false,
       showResources: false,
       selectedResource: { data: { attachment: [] } },
-      mapModal: false
+      mapModal: false,
+      onlineSectionEnabled: $store.state.settings.allow_event_only_online || $store.state.settings.allow_event_also_online
     }
   },
   head () {

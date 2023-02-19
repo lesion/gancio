@@ -27,7 +27,7 @@ v-row.mb-4
     v-row.mx-0.my-0.align-center.justify-center
       v-combobox.mr-4(v-model="virtualLocations" v-if="settings.allow_event_only_online && value.name === 'online'"
         :prepend-icon='mdiLink'
-        :hint="`Online locations, for instance a url to a videconference room`"
+        :hint="$t('event.online_locations_help')"
         :label="$t('event.online_event_urls')"
         clearable chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
         :delimiters="[',', ';', '; ']"

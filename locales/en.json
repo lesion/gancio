@@ -194,7 +194,8 @@
     "additional_online_locations_help": "Online locations, for instance a url to a videconference room",
     "address_geocoded_disclaimer": "Didn't you found the address or housenumber you are looking for? The <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> project is open to contributions. If you have Android, we recommend <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> ",
     "address_overwrite": "Overwrite Address",
-    "address_overwrite_help": "Overwrite the geocoded address, for instance to add missing housenumber or a floor information"
+    "address_overwrite_help": "Overwrite the geocoded address, for instance to add missing housenumber or a floor information",
+    "online_locations_help": "Online locations, for instance a url to a videconference room"
   },
   "admin": {
     "place_description": "If you have gotten the place or address wrong, you can change it.<br/>All current and past events associated with this place will change address.",
