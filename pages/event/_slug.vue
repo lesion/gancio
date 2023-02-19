@@ -44,7 +44,7 @@ v-container#event.pa-0.pa-sm-2
                 v-list-item-icon
                   v-icon.my-auto(v-text='mdiMonitorAccount')
                 v-list-item-content.py-0
-                  v-text(small label v-text='`${event.locations[0]}`' outlined color='primary')
+                  v-list-item-title.text-caption(v-text='`${event.locations[0]}`')
             v-card.pb-2(v-if='onlineSectionEnabled && event.locations && event.locations.length > 1')
               v-card-text.text-caption.pt-0.pb-0(v-text="$t('event.online_event_fallback_urls')")
               v-list-item

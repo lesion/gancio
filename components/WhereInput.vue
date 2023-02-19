@@ -39,43 +39,18 @@ v-row.mb-4
         template(v-slot:append)
           v-icon(v-text='mdiCog' :disabled='!value.name' @click="whereInputAdvancedDialog = true")
       
-      v-text-field.mr-4(v-if="!settings.allow_geolocation && value.name !== 'online'"
+      v-text-field.mr-4(v-if="value.name !== 'online'"
         ref='address'
+        v-model='value.address'
         :prepend-icon='mdiMap'
         :disabled='disableAddress'
         :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
         :label="$t('common.address')"
         :hint="$t('event.address_description')"
-        persistent-hint
-        @change="changeAddress"
-        :value="value.address")
-        template(v-slot:append v-if="settings.allow_event_also_online && place.name !== 'online'")
-          v-icon(v-text='mdiCog' :disabled='!value.name' @click="whereInputAdvancedDialog = true")
-      
-      v-combobox(ref='address' v-if="settings.allow_geolocation && value.name !== 'online' || (!settings.allow_event_only_online && value.name === 'online')"
-        :prepend-icon='mdiMapSearch'
-        :disabled='disableAddress'
-        @input.native='searchAddress'
-        :label="$t('common.address')"
-        :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
-        :value='value.address'
-        item-text='address'
-        persistent-hint hide-no-data clearable no-filter
-        :loading='loading'
-        @change='selectAddress'
-        @focus='searchAddress'
-        :items="addressList"
-        :hint="$t('event.address_description_osm')")
-        template(v-slot:message="{message, key}")
-          span(v-html='message' :key="key")
-        template(v-slot:item="{ item, attrs, on  }")
-          v-list-item(v-bind='attrs' v-on='on')
-            v-icon.pr-4(v-text='loadCoordinatesResultIcon(item)')
-            v-list-item-content(two-line v-if='item')
-              v-list-item-title(v-text='item.name')
-              v-list-item-subtitle(v-text='`${item.address}`')
-        template(v-slot:append v-if="settings.allow_event_also_online || settings.allow_geolocation")
-          v-icon(v-text='mdiCog' :disabled='!value.name || (!value.isNew && !settings.allow_event_also_online) ' @click="whereInputAdvancedDialog = true")
+        persistent-hint)
+        template(v-slot:append v-if="!hideWhereInputAdvancedDialogButton")
+          v-icon(v-text='mdiCog' :disabled='!(value.name && settings.allow_event_also_online) && !(value.isNew && settings.allow_geolocation)'
+            @click="whereInputAdvancedDialog = true")
 
     v-dialog(v-model='whereInputAdvancedDialog' :key="whereAdvancedId" destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly' dense)
       WhereInputAdvanced(ref='whereAdvanced' :place.sync='value' :event='event' @close='whereInputAdvancedDialog = false && this.$refs.address.blur()'
@@ -88,13 +63,11 @@ v-row.mb-4
     
 </template>
 <script>
-import { mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiRoadVariant, mdiHome, mdiCityVariant, mdiCog, mdiLink, mdiCloseCircle } from '@mdi/js'
+import { mdiMap, mdiMapMarker, mdiPlus, mdiCog, mdiLink, mdiCloseCircle } from '@mdi/js'
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 import get from 'lodash/get'
 import WhereInputAdvanced from './WhereInputAdvanced.vue'
-import nominatim from '../server/services/geocoding/nominatim'
-import photon from '../server/services/geocoding/photon'
 
 export default {
   name: 'WhereInput',
@@ -105,30 +78,13 @@ export default {
   components: { WhereInputAdvanced },
   data ( {$store} ) {
     return {
-      mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiRoadVariant, mdiHome, mdiCityVariant, mdiCog, mdiLink, mdiCloseCircle,
+      mdiMap, mdiMapMarker, mdiPlus, mdiCog, mdiLink, mdiCloseCircle,
       places: [],
       place: { },
       placeName: '',
       disableAddress: true,
-      addressList: [],
-      loading: false,
-      nominatim_osm_type: {
-        way: mdiRoadVariant,
-        house: mdiHome,
-        node: mdiMapMarker,
-        relation: mdiCityVariant,
-      },
-      nominatim_class: ['amenity', 'shop', 'tourism', 'leisure', 'building'],
-      photon_osm_key: ['amenity', 'shop', 'tourism', 'leisure', 'building'],
-      photon_osm_type: {
-        'W': mdiRoadVariant,
-        'N': mdiMapMarker,
-        'R': mdiCityVariant,
-      },
-      geocoding_provider_type: $store.state.settings.geocoding_provider_type || 'Nominatim',
-      nominatimProvider: nominatim,
-      photonProvider: photon,
       whereInputAdvancedDialog: false,
+      hideWhereInputAdvancedDialogButton: !$store.state.settings.allow_event_also_online && !$store.state.settings.allow_geolocation,
       virtualLocations: this.event.locations || [],
       online_event_only: (this.value.name === 'online') ? true : false,
       whereAdvancedId: 1
@@ -177,19 +133,6 @@ export default {
         this.places.unshift({ create: true, name: ev.target.value.trim() })
       }
     }, 200),
-    loadCoordinatesResultIcon(item) {
-      if (this.geocoding_provider_type == "Nominatim") {
-        if ( this.nominatim_class.includes(item.class)) {
-          return this.mdiHome
-        }
-        return this.nominatim_osm_type[item.type]
-      } else if (this.geocoding_provider_type == "Photon") {
-        if ( this.photon_osm_key.includes(item.class)) {
-          return this.mdiHome
-        }
-        return this.photon_osm_type[item.type]
-      }
-    },
     selectPlace (p) {
       // force online events under place: online address: online
       this.online_event_only = false
@@ -212,8 +155,6 @@ export default {
         this.disableAddress = true
       } else { // this is a new place
         this.place.isNew = true
-        this.whereAdvancedId++
-
         this.place.name = (p.name || p).trim()
         const tmpPlace = this.place.name.toLocaleLowerCase()
         // search for a place with the same name
@@ -227,7 +168,6 @@ export default {
           delete this.place.id
           this.place.address = ''
           if (this.settings.allow_geolocation) {
-            this.place.details = p.details
             this.place.latitude = p.latitude
             this.place.longitude = p.longitude
           }
@@ -242,41 +182,6 @@ export default {
       }
       this.$emit('input', { ...this.place })
     },
-    changeAddress (v) {
-      this.place.address = v
-      this.$emit('input', { ...this.place })
-      this.disableDetails = false
-    },
-    selectAddress (v) {
-      if (!v) { return }
-      if (typeof v === 'object') {
-          this.place.latitude = v.lat
-          this.place.longitude = v.lon
-          this.place.address = v.address
-        // }
-      } else {
-        this.place.address = v
-        this.place.latitude = this.place.longitude = null
-      }
-      this.$emit('input', { ...this.place })
-    },
-    searchAddress: debounce(async function(ev) {
-      const pre_searchCoordinates = ev.target.value.trim().toLowerCase()
-      const searchCoordinates = pre_searchCoordinates.replace('/', ',')
-      if (searchCoordinates.length) {
-        this.loading = true
-        const ret = await this.$axios.$get(`placeOSM/${this.geocoding_provider_type}/${searchCoordinates}`)
-
-        // this.geocoding_provider.mapQueryResults(ret)
-
-        if (this.geocoding_provider_type == "Nominatim") {
-          this.addressList = nominatim.mapQueryResults(ret)
-        } else if (this.geocoding_provider_type == "Photon") {
-          this.addressList = photon.mapQueryResults(ret)
-        }
-        this.loading = false
-      }
-    }, 1000),
     selectLocations () {
       this.event.locations = []
       this.virtualLocations && this.virtualLocations.forEach((item, i) => {

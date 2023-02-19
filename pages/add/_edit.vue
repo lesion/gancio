@@ -239,8 +239,11 @@ export default {
       }
       formData.append('place_name', this.event.place.name.trim())
       formData.append('place_address', this.event.place.address)
-      formData.append('place_latitude', this.event.place.latitude)
-      formData.append('place_longitude', this.event.place.longitude)
+
+      if (this.settings.allow_geolocation) {
+        formData.append('place_latitude', this.event.place.latitude || '')
+        formData.append('place_longitude', this.event.place.longitude || '')
+      }
 
       if (this.event.locations.length) {
         this.event.locations.forEach(location => formData.append('locations[]', location.url))
