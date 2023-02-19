@@ -28,7 +28,7 @@ v-card
     v-combobox(ref='geocodedAddress' v-if="settings.allow_geolocation && place.name !== 'online' || (!settings.allow_event_only_online && place.name === 'online')"
       :prepend-icon='mdiMapSearch'
       @input.native='searchAddress'
-      :label="$t('common.address')"
+      :label="$t('common.search_address')"
       :value='place.geocodedAddress'
       item-text='address'
       persistent-hint hide-no-data clearable no-filter

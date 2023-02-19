@@ -100,7 +100,8 @@
     "admin_actions": "Admin actions",
     "recurring_event_actions": "Recurring event actions",
     "latitude": "Latitude",
-    "longitude": "Longitude"
+    "longitude": "Longitude",
+    "search_address": "Search address"
   },
   "login": {
     "description": "By logging in you can publish new events.",
@@ -313,8 +314,7 @@
     "tilelayer_test_error": "The tilelayer service is not reachable at {service_name}",
     "geolocation": "Geolocation",
     "allow_event_only_online": "Allow event only online",
-    "allow_event_also_online": "Allow event also online",
-    "search_address": "Search address"
+    "allow_event_also_online": "Allow event also online"
   },
   "auth": {
     "not_confirmed": "Not confirmed yet…",

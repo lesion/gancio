@@ -30,7 +30,7 @@ v-container
             :disabled="!(settings.allow_geolocation && place.name !== 'online')"
             :prepend-icon='mdiMapSearch'
             @input.native='searchAddress'
-            :label="$t('admin.search_address')"
+            :label="$t('common.search_address')"
             :value='place.latitude && place.longitude && place.geocodedAddress'
             persistent-hint hide-no-data clearable no-filter
             :loading='loading'
