@@ -47,7 +47,7 @@ v-container#event.pa-0.pa-sm-2
                 v-list-item-title.text-caption(v-text='`${event.locations[0]}`')
             v-card-text.text-caption.pt-0.pb-0(v-if='onlineSectionEnabled && event.locations && event.locations.length > 1'
               v-text="$t('event.online_locations_fallback_urls')")
-            v-list-item
+            v-list-item(v-if='onlineSectionEnabled && event.locations && event.locations.length > 1')
               v-list-item-content
                 v-chip(v-for='(item, index) in event.locations' v-if="index > 0" target='_blank' :href="`${item}`" 
                   v-bind:key="index" small label v-text="`${item}`" outlined )
