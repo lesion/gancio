@@ -237,12 +237,12 @@ export default {
       formData.append('description', this.event.description)
       formData.append('multidate', !!this.date.multidate)
       let [hour, minute] = this.date.fromHour.split(':')
-      formData.append('start_datetime', dayjs(this.date.from).hour(Number(hour)).minute(Number(minute)).second(0).tz().unix())
+      formData.append('start_datetime', dayjs(this.date.from).hour(Number(hour)).minute(Number(minute)).second(0).unix())
       if (this.date.dueHour) {
         [hour, minute] = this.date.dueHour.split(':')
-        formData.append('end_datetime', dayjs(this.date.due).hour(Number(hour)).minute(Number(minute)).second(0).tz().unix())
+        formData.append('end_datetime', dayjs(this.date.due).hour(Number(hour)).minute(Number(minute)).second(0).unix())
       } else if (!!this.date.multidate) {
-        formData.append('end_datetime', dayjs(this.date.due).hour(24).minute(0).second(0).tz().unix())
+        formData.append('end_datetime', dayjs(this.date.due).hour(24).minute(0).second(0).unix())
       }
 
       if (this.edit) {
