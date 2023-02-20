@@ -19,13 +19,13 @@ v-container
             v-model='place.name'
             :placeholder='$t("common.name")')
         
-          v-text-field(
+          v-text-field(ref='address'
             :rules="[ v => $validators.required('common.address')(v)]"
             :label="$t('common.address')"
             v-model='place.address'
             persistent-hint)
           
-          v-combobox.mt-0.mb-4(ref='geocodedAddress'
+          v-combobox.mt-0.mb-4(ref='geocodedAddress' v-model='place.geocodedAddress'
             v-if="(settings.allow_geolocation && place.name !== 'online')"
             :disabled="!(settings.allow_geolocation && place.name !== 'online')"
             :prepend-icon='mdiMapSearch'
@@ -42,6 +42,7 @@ v-container
               span(v-html='message' :key="key")
             template(v-slot:item="{ item, attrs, on  }")
               v-list-item(v-bind='attrs' v-on='on')
+                v-icon.pr-4(v-text='loadCoordinatesResultIcon(item)')
                 v-list-item-content(two-line v-if='item')
                   v-list-item-title(v-text='item.name')
                   v-list-item-subtitle(v-text='`${item.address}`')
@@ -87,13 +88,11 @@ v-container
 
 </template>
 <script>
-import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiEye, mdiMapSearch, mdiChevronDown,
-  mdiLatitude, mdiLongitude } from '@mdi/js'
+import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiChevronDown, mdiMagnify, mdiEye, mdiMapMarker,
+    mdiLatitude, mdiLongitude, mdiMapSearch, mdiRoadVariant, mdiHome, mdiCityVariant } from '@mdi/js'
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
-import nominatim from '../../server/services/geocoding/nominatim'
-import photon from '../../server/services/geocoding/photon'
-// import geolocation from '../../server/helpers/geolocation/index'
+import geolocation from '../../server/helpers/geolocation/index'
 
 export default {
   components: {
@@ -101,8 +100,8 @@ export default {
   },
   data( {$store} ) {
     return {
-      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiEye, mdiMapSearch, mdiChevronDown,
-      mdiLatitude, mdiLongitude,
+      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiChevronDown, mdiMagnify, mdiEye, mdiMapMarker,
+      mdiLatitude, mdiLongitude, mdiMapSearch, mdiRoadVariant, mdiHome, mdiCityVariant,
       loading: false,
       dialog: false,
       valid: false,
@@ -118,15 +117,18 @@ export default {
         { value: 'actions', text: this.$t('common.actions'), align: 'right' }
       ],
       geocoding_provider_type: $store.state.settings.geocoding_provider_type || 'Nominatim',
-      nominatimProvider: nominatim,
-      photonProvider: photon
+      currentGeocodingProvider: geolocation.getGeocodingProvider($store.state.settings.geocoding_provider_type),
+      prevAddress: '',
+      iconsMapper: {
+        'mdiHome': mdiHome,
+        'mdiRoadVariant': mdiRoadVariant,
+        'mdiMapMarker': mdiMapMarker,
+        'mdiCityVariant': mdiCityVariant
+      },
     }
   },
   async fetch() {
     this.places = await this.$axios.$get('/places')
-  },
-  mounted() {
-    // this.currentGeocodingProvider = geolocation.getGeocodingProvider(this.settings.geocoding_provider_type)
   },
   computed: {
     ...mapState(['settings']),
@@ -136,6 +138,7 @@ export default {
       this.place.name = item.name
       this.place.address = item.address
       if (this.settings.allow_geolocation) {
+        this.prevAddress = ''
         this.place.geocodedAddress = ''
         this.mapEdit++
         this.place.latitude = item.latitude
@@ -153,19 +156,23 @@ export default {
       this.dialog = false
     },
     selectAddress (v) {
+      let currentAddress = this.place.address
       if (!v) { return }
       if (typeof v === 'object') {
         this.place.latitude = v.lat
         this.place.longitude = v.lon
+        this.place.geocodedAddress = v.address
         this.place.address = v.address
-        if (this.settings.allow_geolocation) { 
-          this.place.geocodedAddress = v.address
+        if (currentAddress === this.prevAddress) {
+          console.log('here')
+          this.place.address = currentAddress
         }
       } else {
         this.place.address = v
         this.place.latitude = this.place.longitude = null
       }
       this.$emit('input', { ...this.place })
+      this.prevAddress = this.geocodedAddress
     },
     searchAddress: debounce(async function(ev) {
       const pre_searchCoordinates = ev.target.value.trim().toLowerCase()
@@ -174,14 +181,14 @@ export default {
       if (searchCoordinates.length) {
         this.loading = true
         const ret = await this.$axios.$get(`placeOSM/${this.geocoding_provider_type}/${searchCoordinates}`)
-        if (this.geocoding_provider_type == "Nominatim") {
-          this.addressList = nominatim.mapQueryResults(ret)
-        } else if (this.geocoding_provider_type == "Photon") {
-          this.addressList = photon.mapQueryResults(ret)
-        }
+        this.addressList = this.currentGeocodingProvider.mapQueryResults(ret)
         this.loading = false
       }
-    }, 1000)
+    }, 1000),
+    loadCoordinatesResultIcon(item) {
+      let icon = this.currentGeocodingProvider.loadResultIcon(item)
+      return this.iconsMapper[icon]
+    },
   }
 }
 </script>

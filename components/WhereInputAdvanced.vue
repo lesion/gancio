@@ -4,11 +4,11 @@ v-card
   v-card-subtitle {{ $t('event.where_advanced_options_description') }}
 
   v-card-text(v-if='settings.allow_event_also_online')
-    v-switch.mt-0.mb-4(v-model='online_event_only_update' 
+    v-switch.mt-0.mb-4(v-model='event_only_online_update' 
       v-if='settings.allow_event_only_online'
       persistent-hint
       :label="$t('event.event_only_online_label')"
-      :hint="$t('event.online_event_only_help')")
+      :hint="$t('event.event_only_online_help')")
 
     v-combobox.mt-0.mb-0.mr-4.my-5(v-model="virtualLocations_update" 
       v-if="place.name !== 'online' && settings.allow_event_also_online"
@@ -69,19 +69,19 @@ v-card
 
 </template>
 <script>
-import { mdiMap, mdiLatitude, mdiLongitude, mdiCog, mdiLink, mdiCloseCircle, mdiMapMarker, mdiMapSearch, mdiRoadVariant, mdiHome, mdiCityVariant } from '@mdi/js'
+import { mdiMap, mdiLatitude, mdiLongitude, mdiCog, mdiLink, mdiCloseCircle, mdiMapMarker, 
+  mdiMapSearch, mdiRoadVariant, mdiHome, mdiCityVariant } from '@mdi/js'
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 import get from 'lodash/get'
-import nominatim from '../server/services/geocoding/nominatim'
-import photon from '../server/services/geocoding/photon'
+import geolocation from '../server/helpers/geolocation/index'
 
 export default {
   name: 'WhereInputAdvanced',
   props: {
     place: { type: Object, default: () => ({}) },
     event: { type: Object, default: () => null },
-    online_event_only_value: { type: Boolean, default: false },
+    event_only_online_value: { type: Boolean, default: false },
     virtualLocations: { type: Array, default: [] }
   },
   components: {
@@ -93,33 +93,25 @@ export default {
       mdiMapMarker, mdiMapSearch, mdiRoadVariant, mdiHome, mdiCityVariant,
       showOnline: $store.state.settings.allow_event_also_online,
       showGeocoded: $store.state.settings.allow_geolocation && this.place.isNew,
-      online_event_only: this.place.name === 'online',
+      event_only_online: this.place.name === 'online',
       mapEdit: 1,
       addressList: [],
       loading: false,
-      nominatim_osm_type: {
-        way: mdiRoadVariant,
-        house: mdiHome,
-        node: mdiMapMarker,
-        relation: mdiCityVariant,
-      },
-      nominatim_class: ['amenity', 'shop', 'tourism', 'leisure', 'building'],
-      photon_osm_key: ['amenity', 'shop', 'tourism', 'leisure', 'building'],
-      photon_osm_type: {
-        'W': mdiRoadVariant,
-        'N': mdiMapMarker,
-        'R': mdiCityVariant,
+      iconsMapper: {
+        'mdiHome': mdiHome,
+        'mdiRoadVariant': mdiRoadVariant,
+        'mdiMapMarker': mdiMapMarker,
+        'mdiCityVariant': mdiCityVariant
       },
       geocoding_provider_type: $store.state.settings.geocoding_provider_type || 'Nominatim',
-      nominatimProvider: nominatim,
-      photonProvider: photon,
+      currentGeocodingProvider: geolocation.getGeocodingProvider($store.state.settings.geocoding_provider_type),
       prevAddress: ''
     }
   },
   computed: {
     ...mapState(['settings']),
-    online_event_only_update: {
-      get () { return this.online_event_only_value },
+    event_only_online_update: {
+      get () { return this.event_only_online_value },
       set (value) {
         this.$emit('update:onlineEvent', value)
         this.close()
@@ -137,17 +129,8 @@ export default {
       this.$emit('close')
     },
     loadCoordinatesResultIcon(item) {
-      if (this.geocoding_provider_type == "Nominatim") {
-        if ( this.nominatim_class.includes(item.class)) {
-          return this.mdiHome
-        }
-        return this.nominatim_osm_type[item.type]
-      } else if (this.geocoding_provider_type == "Photon") {
-        if ( this.photon_osm_key.includes(item.class)) {
-          return this.mdiHome
-        }
-        return this.photon_osm_type[item.type]
-      }
+      let icon = this.currentGeocodingProvider.loadResultIcon(item)
+      return this.iconsMapper[icon]
     },
     searchAddress: debounce(async function(ev) {
       const pre_searchCoordinates = ev.target.value.trim().toLowerCase()
@@ -155,14 +138,7 @@ export default {
       if (searchCoordinates.length) {
         this.loading = true
         const ret = await this.$axios.$get(`placeOSM/${this.geocoding_provider_type}/${searchCoordinates}`)
-
-        // this.geocoding_provider.mapQueryResults(ret)
-
-        if (this.geocoding_provider_type == "Nominatim") {
-          this.addressList = nominatim.mapQueryResults(ret)
-        } else if (this.geocoding_provider_type == "Photon") {
-          this.addressList = photon.mapQueryResults(ret)
-        }
+        this.addressList = this.currentGeocodingProvider.mapQueryResults(ret)
         this.loading = false
       }
     }, 1000),

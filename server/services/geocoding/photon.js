@@ -18,7 +18,7 @@ const photon = {
     }
   },
 
-  /*
+  /**
    * Icons to nominatim `osm_type` and `class` conversion
    */
   searchIcons_nominatim_osm_type: {
@@ -26,11 +26,18 @@ const photon = {
     'N': 'mdiMapMarker',
     'R': 'mdiCityVariant',
   },
-  searchIcons_nominatim_class: {
-    mdiHome: ['amenity', 'shop', 'tourism', 'leisure', 'building'],
+  searchIcons_nominatim_class: ['amenity', 'shop', 'tourism', 'leisure', 'building'],
+
+  loadResultIcon (item) {
+    if (this.searchIcons_nominatim_class.includes(item.class)) {
+      return 'mdiHome'
+    }
+    return this.searchIcons_nominatim_osm_type[item.type]
   },
 
-
+  /**
+   * Map results from provider
+   */
   fullAddressMapping: ['housenumber', 'street', 'locality', 'district', 'city', 'county', 'state', 'postcode', 'country'],
 
   mapQueryResults(ret, addressList = []) {

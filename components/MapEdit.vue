@@ -54,7 +54,9 @@ export default {
     });
 
     setTimeout(() => {
-      this.$refs.map.mapObject.invalidateSize();
+      if (this.$refs.map && this.$refs.map.mapObject ) {
+        this.$refs.map.mapObject.invalidateSize();
+      }
     }, 200);
   }
 }

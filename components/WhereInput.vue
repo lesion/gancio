@@ -28,7 +28,7 @@ v-row.mb-4
       v-combobox.mr-4(v-model="virtualLocations" v-if="settings.allow_event_only_online && value.name === 'online'"
         :prepend-icon='mdiLink'
         :hint="$t('event.online_locations_help')"
-        :label="$t('event.online_event_urls')"
+        :label="$t('event.online_locations_url')"
         clearable chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
         :delimiters="[',', ';', '; ']"
         :items="virtualLocations"
@@ -55,7 +55,7 @@ v-row.mb-4
     v-dialog(v-model='whereInputAdvancedDialog' :key="whereAdvancedId" destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly' dense)
       WhereInputAdvanced(ref='whereAdvanced' :place.sync='value' :event='event' @close='whereInputAdvancedDialog = false && this.$refs.address.blur()'
         :virtualLocations.sync="virtualLocations"
-        :online_event_only_value.sync='online_event_only'
+        :event_only_online_value.sync='event_only_online'
         @update:onlineEvent="changeOnlineEvent"
         @update:virtualLocations="selectLocations"
         )
@@ -86,7 +86,7 @@ export default {
       whereInputAdvancedDialog: false,
       hideWhereInputAdvancedDialogButton: !$store.state.settings.allow_event_also_online && !$store.state.settings.allow_geolocation,
       virtualLocations: this.event.locations || [],
-      online_event_only: (this.value.name === 'online') ? true : false,
+      event_only_online: (this.value.name === 'online') ? true : false,
       whereAdvancedId: 1
     }
   },
@@ -135,7 +135,7 @@ export default {
     }, 200),
     selectPlace (p) {
       // force online events under place: online address: online
-      this.online_event_only = false
+      this.event_only_online = false
       this.place.isNew = false
       this.whereAdvancedId++
 
@@ -150,7 +150,7 @@ export default {
         }
         this.place.id = p.id
         if (this.settings.allow_event_only_online && this.place.name === 'online') {
-          this.online_event_only = true
+          this.event_only_online = true
         }
         this.disableAddress = true
       } else { // this is a new place
@@ -184,6 +184,10 @@ export default {
     },
     selectLocations () {
       this.event.locations = []
+      // Insert up to 3 online location: the main one and 2 fallback
+      if (this.virtualLocations && this.virtualLocations.length > 3) {
+        this.$nextTick(() => this.virtualLocations.pop())
+      }
       this.virtualLocations && this.virtualLocations.forEach((item, i) => {
         if (!item.startsWith('http')) {
           this.virtualLocations[i] = `https://${item}`
@@ -192,10 +196,10 @@ export default {
       })
     },
     changeOnlineEvent(v) {
-      this.online_event_only = v
-      // console.log(this.online_event_only)
-      if (this.online_event_only) { this.place.name = this.place.address = 'online' }
-      if (!this.online_event_only) { this.place.name = this.place.address = '' }
+      this.event_only_online = v
+      // console.log(this.event_only_online)
+      if (this.event_only_online) { this.place.name = this.place.address = 'online' }
+      if (!this.event_only_online) { this.place.name = this.place.address = '' }
       this.place.latitude = null
       this.place.longitude = null
 
