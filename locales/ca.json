@@ -183,7 +183,8 @@
         "alt_text_description": "Descripció per a persones amb discapacitat visual",
         "choose_focal_point": "Tria el punt focal",
         "address_description": "Quina és l'adreça completa del lloc?",
-        "address_description_osm": "Quina és l'adreça completa del lloc? (gràcies a la comunitat d'<a href='http://osm.org/copyright'>OpenStreetMap</a>)"
+        "address_description_osm": "Quina és l'adreça completa del lloc? (gràcies a la comunitat d'<a href='http://osm.org/copyright'>OpenStreetMap</a>)",
+        "show_multidate": "activitats de més d'un dia"
     },
     "admin": {
         "place_description": "En el cas que un lloc és incorrecte o l'adreça ha de canviar, pots arreglar-ho.<br/>Tingues en compte que totes les activitats passades i futures associades amb aquest lloc també canviaran d'adreça.",
