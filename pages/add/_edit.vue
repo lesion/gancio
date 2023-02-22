@@ -232,8 +232,8 @@ export default {
       }
       formData.append('place_name', this.event.place.name.trim())
       formData.append('place_address', this.event.place.address)
-      formData.append('place_latitude', this.event.place.latitude)
-      formData.append('place_longitude', this.event.place.longitude)
+      if (this.event.place.latitude) { formData.append('place_latitude', this.event.place.latitude) }
+      if (this.event.place.longitude) { formData.append('place_longitude', this.event.place.longitude) }
       formData.append('description', this.event.description)
       formData.append('multidate', !!this.date.multidate)
       let [hour, minute] = this.date.fromHour.split(':')

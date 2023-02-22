@@ -29,6 +29,8 @@ const eventController = {
       return place
     }
 
+    console.error('dentro findOrCreatePlace', body)
+
     const place_name = body.place_name && body.place_name.trim()
     const place_address = body.place_address && body.place_address.trim()
     if (!place_address || !place_name) {
@@ -39,8 +41,8 @@ const eventController = {
       place = await Place.create({
         name: place_name,
         address: place_address,
-        latitude: body.place_latitude,
-        longitude: body.place_longitude        
+        latitude: Number(body.place_latitude) || null,
+        longitude: Number(body.place_longitude) || null
       })
     }
     return place
@@ -390,6 +392,7 @@ const eventController = {
           return res.status(400).send(`Place not found`)
         }
       } catch (e) {
+        log.error(e.message)
         return res.status(400).send(e.message)
       }
 
