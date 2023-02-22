@@ -151,7 +151,7 @@ export default {
         }
         this.place.id = p.id
         if (this.settings.allow_event_only_online && this.place.name === 'online') {
-          this.event_only_online = true
+          this.event_only_online = true 
         }
         this.disableAddress = true
       } else { // this is a new place
@@ -172,13 +172,19 @@ export default {
             this.place.latitude = p.latitude
             this.place.longitude = p.longitude
           }
-          // Prevent to provide link for 'event only online' if not allowed: reset locations
-          if (!this.settings.allow_event_only_online && this.place.name === 'online') {
-            this.event.online_locations = []
-          }
+          // If 'event only online' is not allowed: reset place and online_locations
+          if (this.place.name === 'online') {
+            if (!this.settings.allow_event_only_online) {
+              this.$nextTick(() => { this.$refs.place && this.$refs.place.setValue('') && this.$refs.place.focus() })
+              this.event.online_locations = []
+              return
+            } else {
+              this.event_online_only = true
+            }
+          } 
           this.disableAddress = false
           this.$refs.place.blur()
-          this.$nextTick(() => { this.$refs.address.focus() })
+          this.$nextTick(() => { this.$refs.address && this.$refs.address.focus() })
         }
       }
       this.$emit('input', { ...this.place })
