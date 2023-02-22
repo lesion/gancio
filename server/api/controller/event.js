@@ -390,6 +390,7 @@ const eventController = {
           return res.status(400).send(`Place not found`)
         }
       } catch (e) {
+        log.error(e.message)
         return res.status(400).send(e.message)
       }
 

@@ -74,7 +74,6 @@ import dayjs from 'dayjs'
 
 import { mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle } from '@mdi/js'
 
-import List from '@/components/List'
 import Editor from '@/components/Editor'
 import ImportDialog from '@/components/ImportDialog'
 import MediaInput from '@/components/MediaInput'
@@ -84,7 +83,6 @@ import DateInput from '@/components/DateInput'
 export default {
   name: 'NewEvent',
   components: {
-    List,
     Editor,
     ImportDialog,
     MediaInput,
@@ -125,9 +123,6 @@ export default {
 
       data.event.place.name = event.place.name
       data.event.place.address = event.place.address || ''
-      data.event.place.latitude = event.place.latitude || ''
-      data.event.place.longitude = event.place.longitude || ''
-      data.event.online_locations = event.online_locations || []
       const from = dayjs.unix(event.start_datetime).tz()
       const due = event.end_datetime && dayjs.unix(event.end_datetime).tz()
       data.date = {
@@ -157,7 +152,6 @@ export default {
       openImportDialog: false,
       event: {
         place: { name: '', address: '', latitude: null, longitude: null },
-        online_locations: [],
         title: '',
         description: '',
         tags: [],
@@ -165,7 +159,6 @@ export default {
       },
       tags: [],
       page: { month, year },
-      fileList: [],
       id: null,
       date: { from: null, due: null, recurrent: null },
       edit: false,
@@ -252,12 +245,12 @@ export default {
       formData.append('description', this.event.description)
       formData.append('multidate', !!this.date.multidate)
       let [hour, minute] = this.date.fromHour.split(':')
-      formData.append('start_datetime', dayjs(this.date.from).hour(Number(hour)).minute(Number(minute)).second(0).tz().unix())
+      formData.append('start_datetime', dayjs(this.date.from).tz().hour(Number(hour)).minute(Number(minute)).second(0).unix())
       if (this.date.dueHour) {
         [hour, minute] = this.date.dueHour.split(':')
-        formData.append('end_datetime', dayjs(this.date.due).hour(Number(hour)).minute(Number(minute)).second(0).tz().unix())
+        formData.append('end_datetime', dayjs(this.date.due).tz().hour(Number(hour)).minute(Number(minute)).second(0).unix())
       } else if (!!this.date.multidate) {
-        formData.append('end_datetime', dayjs(this.date.due).hour(24).minute(0).second(0).tz().unix())
+        formData.append('end_datetime', dayjs(this.date.due).tz().hour(24).minute(0).second(0).unix())
       }
 
       if (this.edit) {

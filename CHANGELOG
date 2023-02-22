@@ -1,5 +1,11 @@
 All notable changes to this project will be documented in this file.
 
+### 1.6.4 - 22 feb '23
+  - add missing i18n during setup
+  - really fix #232
+  - downgrade mariadb as sequelize is not ready yet
+  - location saving not working when geocoding is disabled, fix #238
+
 ### 1.6.3 - 17 feb '23
   - visitors could now choose to view images or not / dark theme or not
   - i18n refactoring, locale loaders, custom strings, fix #231

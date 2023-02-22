@@ -1,6 +1,8 @@
 <template lang="pug">
 v-container.pa-6
   h2.mb-2.text-center Gancio Setup
+  v-select(label='Select your language'  single-line :items='$i18n.locales' item-text='name' item-value='code' @change='e => $i18n.setLocale(e)')
+
   v-stepper.grey.lighten-5(v-model='step')
     v-stepper-header
       v-stepper-step(v-show='!dbdone' :complete='step > 1' step='1') Database
