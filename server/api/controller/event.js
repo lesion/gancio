@@ -29,8 +29,6 @@ const eventController = {
       return place
     }
 
-    console.error('dentro findOrCreatePlace', body)
-
     const place_name = body.place_name && body.place_name.trim()
     const place_address = body.place_address && body.place_address.trim()
     if (!place_address || !place_name) {
