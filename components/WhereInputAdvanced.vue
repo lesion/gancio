@@ -37,6 +37,7 @@ v-card
       @change='selectAddress'
       @focus='searchAddress'
       :items="addressList"
+      :disabled='disableGeocoded'
       :hint="$t('event.address_description_osm')")
       template(v-slot:message="{message, key}")
         span(v-html='message' :key="key")
@@ -51,16 +52,16 @@ v-card
       v-col.py-0(cols=12 sm=6)
         v-text-field(v-model="place.latitude"
           :prepend-icon='mdiLatitude'
-          :disabled="!settings.allow_geolocation || place.name === 'online'"
+          :disabled='disableGeocoded'
           :label="$t('common.latitude')"
           :rules="$validators.latitude")
       v-col.py-0(cols=12 sm=6)
         v-text-field(v-model="place.longitude"
           :prepend-icon='mdiLongitude'
-          :disabled="!settings.allow_geolocation || place.name === 'online'"
+          :disabled='disableGeocoded'
           :label="$t('common.longitude')"
           :rules="$validators.longitude")
-    p.mt-4(v-html="$t('event.address_geocoded_disclaimer')")
+    p.mt-4(v-if='place.isNew' v-html="$t('event.address_geocoded_disclaimer')")
 
     MapEdit.mt-4(:place='place' :key='mapEdit' v-if="(settings.allow_geolocation && place.name !== 'online' && place.latitude && place.longitude)"  )
 
@@ -93,7 +94,8 @@ export default {
       mdiMap, mdiLatitude, mdiLongitude, mdiCog, mdiLink, mdiCloseCircle,
       mdiMapMarker, mdiMapSearch, mdiRoadVariant, mdiHome, mdiCityVariant,
       showOnline: $store.state.settings.allow_event_also_online,
-      showGeocoded: $store.state.settings.allow_geolocation && this.place.isNew && this.place.name !== 'online',
+      showGeocoded: $store.state.settings.allow_geolocation && this.place.name !== 'online',
+      disableGeocoded: this.place.name === 'online' || !this.place.isNew,
       event_only_online: this.place.name === 'online',
       mapEdit: 1,
       addressList: [],
@@ -104,7 +106,6 @@ export default {
         'mdiMapMarker': mdiMapMarker,
         'mdiCityVariant': mdiCityVariant
       },
-      geocoding_provider_type: $store.state.settings.geocoding_provider_type || 'Nominatim',
       currentGeocodingProvider: geolocation.getGeocodingProvider($store.state.settings.geocoding_provider_type),
       prevAddress: ''
     }
@@ -138,7 +139,7 @@ export default {
       const searchCoordinates = pre_searchCoordinates.replace('/', ',')
       if (searchCoordinates.length) {
         this.loading = true
-        const ret = await this.$axios.$get(`placeOSM/${this.geocoding_provider_type}/${searchCoordinates}`)
+        const ret = await this.$axios.$get(`placeOSM/${this.currentGeocodingProvider.commonName}/${searchCoordinates}`)
         this.addressList = this.currentGeocodingProvider.mapQueryResults(ret)
         this.loading = false
       }

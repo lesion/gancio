@@ -39,8 +39,8 @@ const eventController = {
       place = await Place.create({
         name: place_name,
         address: place_address,
-        latitude: body.place_latitude,
-        longitude: body.place_longitude        
+        latitude: Number(body.place_latitude) || null,
+        longitude: Number(body.place_longitude) || null
       })
     }
     return place

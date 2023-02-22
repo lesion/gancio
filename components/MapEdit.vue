@@ -64,7 +64,7 @@ export default {
 
 <style>
   #leaflet-map {
-    height: 8rem;
+    height: 10rem;
     border-radius: .3rem;
     border: 1px solid #fff;
     z-index: 1;

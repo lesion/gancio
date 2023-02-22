@@ -43,9 +43,9 @@ v-container
             template(v-slot:item="{ item, attrs, on, selected  }")
               v-list-item(v-bind='attrs' v-on='on')
                 v-icon.pr-4(v-text='loadCoordinatesResultIcon(item)')
-                v-list-item-content(two-line v-if='item' :input-value="selected" )
+                v-list-item-content(two-line v-if='item')
                   v-list-item-title(v-text='item.name')
-                  v-list-item-subtitle(v-text='`${item.address}`')
+                  v-list-item-subtitle(v-text='`${item.address}`') {{ selected }}
 
           v-row.mt-4(v-if="(settings.allow_geolocation && place.name !== 'online')")
             v-col.py-0(cols=12 md=6)
@@ -174,7 +174,7 @@ export default {
       } else {
         this.place.address = currentAddress
       }
-
+      this.place.selected = true
       this.prevAddress = this.place.geocodedAddress
       this.$emit('input', { ...this.place })
     },
