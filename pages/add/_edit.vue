@@ -127,7 +127,7 @@ export default {
       data.event.place.address = event.place.address || ''
       data.event.place.latitude = event.place.latitude || ''
       data.event.place.longitude = event.place.longitude || ''
-      data.event.locations = event.locations || []
+      data.event.online_locations = event.online_locations || []
       const from = dayjs.unix(event.start_datetime).tz()
       const due = event.end_datetime && dayjs.unix(event.end_datetime).tz()
       data.date = {
@@ -157,7 +157,7 @@ export default {
       openImportDialog: false,
       event: {
         place: { name: '', address: '', latitude: null, longitude: null },
-        locations: [],
+        online_locations: [],
         title: '',
         description: '',
         tags: [],
@@ -245,12 +245,8 @@ export default {
         formData.append('place_longitude', this.event.place.longitude || '')
       }
 
-      if (this.event.locations.length) {
-        this.event.locations.forEach(location => formData.append('locations[]', location.url))
-      } else {
-        // delete
-        this.event.locations = []
-        formData.append('locations', this.event.locations )
+      if (this.event.online_locations) { 
+        this.event.online_locations.forEach(l => formData.append('online_locations[]', l)) 
       }
 
       formData.append('description', this.event.description)

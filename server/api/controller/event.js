@@ -401,7 +401,7 @@ const eventController = {
         multidate: body.multidate,
         start_datetime: body.start_datetime,
         end_datetime: body.end_datetime,
-        locations: body.locations,
+        online_locations: body.online_locations,
         recurrent,
         // publish this event only if authenticated
         is_visible: !!req.user
@@ -486,7 +486,7 @@ const eventController = {
         multidate: body.multidate,
         start_datetime: body.start_datetime || event.start_datetime,
         end_datetime: body.end_datetime || null,
-        locations: body.locations,
+        online_locations: body.online_locations,
         recurrent
       }
 

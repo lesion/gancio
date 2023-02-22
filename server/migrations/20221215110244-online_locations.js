@@ -10,7 +10,7 @@ module.exports = {
      */
      return Promise.all(
       [
-        await queryInterface.addColumn('events', 'locations', { type: Sequelize.JSON }),
+        await queryInterface.addColumn('events', 'online_locations', { type: Sequelize.JSON }),
       ])
   },
 
@@ -23,7 +23,7 @@ module.exports = {
      */
      return Promise.all(
       [
-        await queryInterface.removeColumn('events', 'locations'),
+        await queryInterface.removeColumn('events', 'online_locations'),
       ])
   }
 };

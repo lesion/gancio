@@ -4,31 +4,32 @@ v-card
   v-card-subtitle {{ $t('event.where_advanced_options_description') }}
 
   v-card-text(v-if='settings.allow_event_also_online')
-    v-switch.mt-0.mb-4(v-model='event_only_online_update' 
+    v-switch.mt-0.mb-0(v-model='event_only_online_update' 
       v-if='settings.allow_event_only_online'
       persistent-hint
-      :label="$t('event.event_only_online_label')"
-      :hint="$t('event.event_only_online_help')")
+      :label="$t('event.event_only_online_label')")
 
-    v-combobox.mt-0.mb-0.mr-4.my-5(v-model="virtualLocations_update" 
+    v-combobox.mt-0.mb-0.mr-4.my-5(v-model="onlineLocations_update" 
       v-if="place.name !== 'online' && settings.allow_event_also_online"
       :prepend-icon='mdiLink'
-      :hint="$t('event.additional_online_locations_help')"
-      :label="$t('event.additional_online_locations')"
+      :hint="$t('event.online_locations_help')"
+      :label="$t('event.online_locations')"
       clearable chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
       :delimiters="[',', ';', '; ']"
-      :items="virtualLocations_update")
-      template(v-slot:selection="{ item, on, attrs, selected, parent }")
-        v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+      :items="onlineLocations_update")
+      template(v-slot:selection="{ item, index, on, attrs, selected, parent }")
+        v-chip(v-bind="attrs" :outlined='index !== 0'
+          close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
           :input-value="selected" label small) {{ item }}
 
   v-divider(v-if='showGeocoded && showOnline')
 
   v-card-text.mt-5(v-if='showGeocoded')
     v-combobox(ref='geocodedAddress' v-if="settings.allow_geolocation && place.name !== 'online' || (!settings.allow_event_only_online && place.name === 'online')"
+      v-focus
       :prepend-icon='mdiMapSearch'
       @input.native='searchAddress'
-      :label="$t('common.search_address')"
+      :label="$t('common.search_coordinates')"
       :value='place.geocodedAddress'
       item-text='address'
       persistent-hint hide-no-data clearable no-filter
@@ -47,13 +48,13 @@ v-card
             v-list-item-subtitle(v-text='`${item.address}`')
 
     v-row.mt-4
-      v-col.py-0(cols=12 md=6)
+      v-col.py-0(cols=12 sm=6)
         v-text-field(v-model="place.latitude"
           :prepend-icon='mdiLatitude'
           :disabled="!settings.allow_geolocation || place.name === 'online'"
           :label="$t('common.latitude')"
           :rules="$validators.latitude")
-      v-col.py-0(cols=12 md=6)
+      v-col.py-0(cols=12 sm=6)
         v-text-field(v-model="place.longitude"
           :prepend-icon='mdiLongitude'
           :disabled="!settings.allow_geolocation || place.name === 'online'"
@@ -82,7 +83,7 @@ export default {
     place: { type: Object, default: () => ({}) },
     event: { type: Object, default: () => null },
     event_only_online_value: { type: Boolean, default: false },
-    virtualLocations: { type: Array, default: [] }
+    onlineLocations: { type: Array, default: [] }
   },
   components: {
     [process.client && 'MapEdit']: () => import('@/components/MapEdit.vue')
@@ -92,7 +93,7 @@ export default {
       mdiMap, mdiLatitude, mdiLongitude, mdiCog, mdiLink, mdiCloseCircle,
       mdiMapMarker, mdiMapSearch, mdiRoadVariant, mdiHome, mdiCityVariant,
       showOnline: $store.state.settings.allow_event_also_online,
-      showGeocoded: $store.state.settings.allow_geolocation && this.place.isNew,
+      showGeocoded: $store.state.settings.allow_geolocation && this.place.isNew && this.place.name !== 'online',
       event_only_online: this.place.name === 'online',
       mapEdit: 1,
       addressList: [],
@@ -117,10 +118,10 @@ export default {
         this.close()
       }
     },
-    virtualLocations_update: {
-      get () { return this.virtualLocations },
+    onlineLocations_update: {
+      get () { return this.onlineLocations },
       set (value) {
-        this.$emit('update:virtualLocations', value)
+        this.$emit('update:onlineLocations', value)
       }
     },
   },

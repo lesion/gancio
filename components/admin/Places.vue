@@ -30,7 +30,7 @@ v-container
             :disabled="!(settings.allow_geolocation && place.name !== 'online')"
             :prepend-icon='mdiMapSearch'
             @input.native='searchAddress'
-            :label="$t('common.search_address')"
+            :label="$t('common.search_coordinates')"
             :value='place.latitude && place.longitude && place.geocodedAddress'
             persistent-hint hide-no-data clearable no-filter
             :loading='loading'
@@ -40,10 +40,10 @@ v-container
             :hint="$t('event.address_description_osm')")
             template(v-slot:message="{message, key}")
               span(v-html='message' :key="key")
-            template(v-slot:item="{ item, attrs, on  }")
+            template(v-slot:item="{ item, attrs, on, selected  }")
               v-list-item(v-bind='attrs' v-on='on')
                 v-icon.pr-4(v-text='loadCoordinatesResultIcon(item)')
-                v-list-item-content(two-line v-if='item')
+                v-list-item-content(two-line v-if='item' :input-value="selected" )
                   v-list-item-title(v-text='item.name')
                   v-list-item-subtitle(v-text='`${item.address}`')
 
@@ -62,7 +62,7 @@ v-container
                 :label="$t('common.longitude')"
                 :rules="$validators.longitude")
           
-          MapEdit.mt-4(:place='place' :key="mapEdit" v-if="settings.allow_geolocation && place.name !== 'online' && place.latitude && place.longitude")     
+          MapEdit.mt-4(:place.sync='place' :key="dialog" v-if="settings.allow_geolocation && place.name !== 'online' && place.latitude && place.longitude")     
 
       v-card-actions
         v-spacer
@@ -79,7 +79,7 @@ v-container
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
       :search='search')
       template(v-slot:item.map='{ item }')
-        span {{item.latitude && item.longitude && 'YEP' }}
+        v-icon(v-if='item.latitude && item.longitude' v-text='mdiMapMarker')
       template(v-slot:item.actions='{ item }')
         v-btn(@click='editPlace(item)' color='primary' icon)
           v-icon(v-text='mdiPencil')
@@ -116,7 +116,6 @@ export default {
         { value: 'map', text: 'Map' },
         { value: 'actions', text: this.$t('common.actions'), align: 'right' }
       ],
-      geocoding_provider_type: $store.state.settings.geocoding_provider_type || 'Nominatim',
       currentGeocodingProvider: geolocation.getGeocodingProvider($store.state.settings.geocoding_provider_type),
       prevAddress: '',
       iconsMapper: {
@@ -124,11 +123,12 @@ export default {
         'mdiRoadVariant': mdiRoadVariant,
         'mdiMapMarker': mdiMapMarker,
         'mdiCityVariant': mdiCityVariant
-      },
+      }
     }
   },
   async fetch() {
     this.places = await this.$axios.$get('/places')
+    this.places.splice(this.places.findIndex((p) => p.name === 'online' ), 1)
   },
   computed: {
     ...mapState(['settings']),
@@ -140,7 +140,6 @@ export default {
       if (this.settings.allow_geolocation) {
         this.prevAddress = ''
         this.place.geocodedAddress = ''
-        this.mapEdit++
         this.place.latitude = item.latitude
         this.place.longitude = item.longitude
       }
@@ -157,22 +156,27 @@ export default {
     },
     selectAddress (v) {
       let currentAddress = this.place.address
+      this.place.geocodedAddress = ''
+      this.dialog++
+
       if (!v) { return }
       if (typeof v === 'object') {
         this.place.latitude = v.lat
         this.place.longitude = v.lon
         this.place.geocodedAddress = v.address
         this.place.address = v.address
-        if (currentAddress === this.prevAddress) {
-          console.log('here')
-          this.place.address = currentAddress
-        }
       } else {
         this.place.address = v
         this.place.latitude = this.place.longitude = null
       }
+      if (currentAddress == '' || currentAddress == this.prevAddress) {
+        this.place.address = this.place.geocodedAddress
+      } else {
+        this.place.address = currentAddress
+      }
+
+      this.prevAddress = this.place.geocodedAddress
       this.$emit('input', { ...this.place })
-      this.prevAddress = this.geocodedAddress
     },
     searchAddress: debounce(async function(ev) {
       const pre_searchCoordinates = ev.target.value.trim().toLowerCase()
@@ -180,7 +184,7 @@ export default {
 
       if (searchCoordinates.length) {
         this.loading = true
-        const ret = await this.$axios.$get(`placeOSM/${this.geocoding_provider_type}/${searchCoordinates}`)
+        const ret = await this.$axios.$get(`placeOSM/${this.currentGeocodingProvider.commonName}/${searchCoordinates}`)
         this.addressList = this.currentGeocodingProvider.mapQueryResults(ret)
         this.loading = false
       }

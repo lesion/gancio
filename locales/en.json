@@ -101,7 +101,7 @@
     "recurring_event_actions": "Recurring event actions",
     "latitude": "Latitude",
     "longitude": "Longitude",
-    "search_address": "Search address"
+    "search_coordinates": "Search coordinates"
   },
   "login": {
     "description": "By logging in you can publish new events.",
@@ -143,7 +143,7 @@
     "updated": "Event updated",
     "where_description": "Where's the event? If not present you can create it.",
     "address_description": "What is the address?",
-    "address_description_osm": "What is the address? (<a href='http://osm.org/copyright'>OpenStreetMap</a> contributors)",
+    "address_description_osm": "Search tiping the address. (<a href='http://osm.org/copyright'>OpenStreetMap</a> contributors)",
     "confirmed": "Event confirmed",
     "not_found": "Could not find event",
     "remove_confirmation": "Are you sure you want to remove this event?",
@@ -183,19 +183,15 @@
     "remove_media_confirmation": "Do you confirm the image removal?",
     "download_flyer": "Download flyer",
     "where_advanced_options": "Place - Advanced options",
-    "where_advanced_options_description": "Define here additional place properties to the event",
+    "where_advanced_options_description": "Define here additional place properties",
     "event_only_online": "Online event",
-    "event_only_online_label": "Event only online",
-    "event_only_online_help": "For online-only event, the default place name 'online' is applied",
+    "event_only_online_label": "The event is only online",
     "event_also_online": "Partecipate remotely",
+    "online_locations": "Online locations",
+    "online_locations_help": "For instance a url to a videconference room, and a fallback url (max. 3)",
     "online_locations_url": "Online locations",
     "online_locations_fallback_urls": "Fallback links",
-    "additional_online_locations": "Additional online locations",
-    "additional_online_locations_help": "Online locations, for instance a url to a videconference room",
-    "address_geocoded_disclaimer": "Didn't you found the address or housenumber you are looking for? The <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> project is open to contributions. If you have Android, we recommend <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> ",
-    "address_overwrite": "Overwrite Address",
-    "address_overwrite_help": "Overwrite the geocoded address, for instance to add missing housenumber or a floor information",
-    "online_locations_help": "Online locations, for instance a url to a videconference room"
+    "address_geocoded_disclaimer": "If you cannot find the <strong>street address</strong> or the <strong>housenumber</strong> you are looking for in the geocoding results, you can manually insert them in the 'Address' field without loose the coordinates. Consider also that the <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> project is open to contributions. If you have Android, we recommend <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> "
   },
   "admin": {
     "place_description": "If you have gotten the place or address wrong, you can change it.<br/>All current and past events associated with this place will change address.",

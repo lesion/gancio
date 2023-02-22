@@ -1,6 +1,6 @@
 <template lang="pug">
 client-only(placeholder='Loading...' )
-  LMap(ref="map"
+  LMap(ref="mapEdit"
       id="leaflet-map"
       :zoom="zoom"
       :options="{attributionControl: false}"
@@ -34,7 +34,7 @@ export default {
       mdiWalk, mdiBike, mdiCar, mdiMapMarker,
       url: $store.state.settings.tilelayer_provider || 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution: $store.state.settings.tilelayer_provider_attribution || "<a target=\"_blank\" href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
-      zoom: 14,
+      zoom: 16,
       center: [this.place.latitude, this.place.longitude],
       marker: {
         address: this.place.address,
@@ -54,8 +54,8 @@ export default {
     });
 
     setTimeout(() => {
-      if (this.$refs.map && this.$refs.map.mapObject ) {
-        this.$refs.map.mapObject.invalidateSize();
+      if (this.$refs.mapEdit && this.$refs.mapEdit.mapObject ) {
+        this.$refs.mapEdit.mapObject.invalidateSize();
       }
     }, 200);
   }

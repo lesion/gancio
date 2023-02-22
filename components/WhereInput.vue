@@ -25,22 +25,8 @@ v-row.mb-4
 
   v-col(cols=12 md=6)
     v-row.mx-0.my-0.align-center.justify-center
-      v-combobox.mr-4(v-model="virtualLocations" v-if="settings.allow_event_only_online && value.name === 'online'"
-        :prepend-icon='mdiLink'
-        :hint="$t('event.online_locations_help')"
-        :label="$t('event.online_locations_url')"
-        clearable chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-        :delimiters="[',', ';', '; ']"
-        :items="virtualLocations"
-        @change='selectLocations')
-        template(v-slot:selection="{ item, on, attrs, selected, parent }")
-          v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
-            :input-value="selected" label small) {{ item }}
-        template(v-slot:append)
-          v-icon(v-text='mdiCog' :disabled='!value.name' @click="whereInputAdvancedDialog = true")
-      
-      v-text-field.mr-4(v-if="value.name !== 'online'"
-        ref='address'
+
+      v-text-field.mr-4(ref='address' v-if="value.name !== 'online'"
         v-model='value.address'
         :prepend-icon='mdiMap'
         :disabled='disableAddress'
@@ -52,12 +38,27 @@ v-row.mb-4
           v-icon(v-text='mdiCog' :disabled='!(value.name && settings.allow_event_also_online) && !(value.isNew && settings.allow_geolocation)'
             @click="whereInputAdvancedDialog = true")
 
+      v-combobox.mr-4(v-model="onlineLocations" v-if="settings.allow_event_only_online && value.name === 'online'"
+        :prepend-icon='mdiLink'
+        :hint="$t('event.online_locations_help')"
+        :label="$t('event.online_locations_url')"
+        clearable chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
+        :delimiters="[',', ';', '; ']"
+        :items="onlineLocations"
+        @change='selectLocations')
+        template(v-slot:selection="{ item, index, on, attrs, selected, parent }")
+          v-chip(v-bind="attrs" :outlined='index !== 0'
+            close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+            :input-value="selected" label small) {{ item }}
+        template(v-slot:append)
+          v-icon(v-text='mdiCog' :disabled='!value.name' @click="whereInputAdvancedDialog = true") 
+
     v-dialog(v-model='whereInputAdvancedDialog' :key="whereAdvancedId" destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly' dense)
       WhereInputAdvanced(ref='whereAdvanced' :place.sync='value' :event='event' @close='whereInputAdvancedDialog = false && this.$refs.address.blur()'
-        :virtualLocations.sync="virtualLocations"
+        :onlineLocations.sync="onlineLocations"
         :event_only_online_value.sync='event_only_online'
-        @update:onlineEvent="changeOnlineEvent"
-        @update:virtualLocations="selectLocations"
+        @update:onlineEvent="changeEventOnlyOnline"
+        @update:onlineLocations="selectLocations"
         )
 
     
@@ -85,7 +86,7 @@ export default {
       disableAddress: true,
       whereInputAdvancedDialog: false,
       hideWhereInputAdvancedDialogButton: !$store.state.settings.allow_event_also_online && !$store.state.settings.allow_geolocation,
-      virtualLocations: this.event.locations || [],
+      onlineLocations: this.event.online_locations || [],
       event_only_online: (this.value.name === 'online') ? true : false,
       whereAdvancedId: 1
     }
@@ -173,38 +174,42 @@ export default {
           }
           // Prevent to provide link for 'event only online' if not allowed: reset locations
           if (!this.settings.allow_event_only_online && this.place.name === 'online') {
-            this.event.locations = []
+            this.event.online_locations = []
           }
           this.disableAddress = false
           this.$refs.place.blur()
-          this.$refs.address.focus()
+          this.$nextTick(() => { this.$refs.address.focus() })
         }
       }
       this.$emit('input', { ...this.place })
     },
     selectLocations () {
-      this.event.locations = []
-      // Insert up to 3 online location: the main one and 2 fallback
-      if (this.virtualLocations && this.virtualLocations.length > 3) {
-        this.$nextTick(() => this.virtualLocations.pop())
-      }
-      this.virtualLocations && this.virtualLocations.forEach((item, i) => {
-        if (!item.startsWith('http')) {
-          this.virtualLocations[i] = `https://${item}`
+      this.event.online_locations = []
+
+      if (this.onlineLocations) {
+        // Insert up to 3 online location: the main one and 2 fallback
+        if (this.onlineLocations.length > 3) {
+          this.$nextTick(() => this.onlineLocations = this.onlineLocations.slice(0, 3))
         }
-        this.event.locations[i] = {'type': 'virtualLocation', 'url': this.virtualLocations[i] }
-      })
+        // Remove duplicates
+        this.$nextTick(() => this.onlineLocations = [...new Set(this.onlineLocations)])
+        
+        this.onlineLocations.forEach((item, i) => {
+          if (!item.startsWith('http')) { this.onlineLocations[i] = `https://${item}` }
+          this.event.online_locations[i] = this.onlineLocations[i]
+        })
+      }
     },
-    changeOnlineEvent(v) {
+    changeEventOnlyOnline(v) {
       this.event_only_online = v
       // console.log(this.event_only_online)
       if (this.event_only_online) { this.place.name = this.place.address = 'online' }
-      if (!this.event_only_online) { this.place.name = this.place.address = '' }
+      if (!this.event_only_online) { this.place.name = this.place.address = ''; this.onlineLocations = [] }
       this.place.latitude = null
       this.place.longitude = null
 
-      // update virtualLocations
-      this.event.locations && this.selectLocations()
+      // Update onlineLocations
+      this.event.online_locations && this.selectLocations()
       this.$emit('input', { ...this.place })
     },
   }
