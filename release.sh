@@ -12,4 +12,6 @@ cp gancio-$RELEASE.tgz.sig releases/
 mv gancio-$RELEASE.tgz.sig releases/latest.tgz.sig
 yarn doc
 rsync -a docs/_site/ --chown=www-data:www-data cisti.web:/var/www/gancio/
+git tag $RELEASE
+git push --tags
 cd docs
