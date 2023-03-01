@@ -79,7 +79,7 @@
     "passport-oauth2-client-password": "^0.1.2",
     "passport-oauth2-client-public": "^0.0.1",
     "pg": "^8.8.0",
-    "sequelize": "^6.28.0",
+    "sequelize": "^6.29.0",
     "sequelize-slugify": "^1.6.2",
     "sharp": "^0.27.2",
     "sqlite3": "^5.1.4",
