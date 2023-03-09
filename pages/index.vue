@@ -38,7 +38,7 @@ export default {
       this.$fetch()
     }
   },
-  data ({ $store }) {
+  data () {
     return {
       mdiMagnify, mdiCloseCircle,
       isCurrentMonth: true,
@@ -89,16 +89,18 @@ export default {
   created () {
     this.$root.$on('dayclick', this.dayChange)
     this.$root.$on('monthchange', this.monthChange)
-    this.storeUnsubscribe = this.$store.subscribeAction( { after: (action, state) => {
-      if (action.type === 'setFilter') {
-        if (this.filter.query && this.filter.query.length > 2) {
-          this.search()
-        } else {
-          this.tmpEvents = []
-          this.$fetch()
+    if (process.client) {
+      this.storeUnsubscribe = this.$store.subscribeAction( { after: (action, state) => {
+        if (action.type === 'setFilter') {
+          if (this.filter.query && this.filter.query.length > 2) {
+            this.search()
+          } else {
+            this.tmpEvents = []
+            this.$fetch()
+          }
         }
-      }
-    }})
+      }})
+    }
   },
   destroyed () {
     this.$root.$off('dayclick')
