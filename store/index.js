@@ -73,10 +73,8 @@ export const actions = {
   // this method is called server side only for each request for nuxt
   // we use it to get configuration from db, set locale, etc...
   nuxtServerInit ({ commit }, { res, app }) {
-    console.error('dentro nuxtServerInit ', res.locals)
     if (res.locals && res.locals.settings) {
       commit('setSettings', res.locals.settings)
-      console.error(`SETTINGS: ${res.locals.settings}`)
     }
     commit('setFilter', {  type: 'show_recurrent',
         value: res.locals.settings.allow_recurrent_event && res.locals.settings.recurrent_event_visible })
