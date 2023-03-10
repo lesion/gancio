@@ -52,22 +52,22 @@ v-container
         v-img.mt-2(:src='`/headerimage.png?${headerImageKey}`' max-height="150px" contain)          
 
 
-
-    //- TODO choose theme colors
-    //- v-row
-    //-   v-col(v-for='(color, i) in colors' :key='i')
-    //-     v-menu(v-model='menu[i]'
-    //-         :close-on-content-click="false"
-    //-         transition="slide-x-transition"
-    //-         offset-y
-    //-         absolute
-    //-         bottom
-    //-         max-width="290px"
-    //-         min-width="290px")
-    //-       template(v-slot:activator='{ on }')
-    //-         v-btn(:color='i' small
-    //-           v-on='on') {{i}}
-    //-       v-color-picker(light @update:color='c => updateColor(i, c)')
+  v-card-title {{$t('admin.colors')}}
+  v-card-text
+    //- choose theme colors
+    v-row
+      v-col(v-for='(color, i) in colors' :key='i')
+        v-menu(v-model='menu[i]'
+            :close-on-content-click="false"
+            transition="slide-x-transition"
+            offset-y
+            absolute
+            bottom
+            max-width="290px"
+            min-width="290px")
+          template(v-slot:activator='{ on }')
+            v-btn(:color='i' small v-on='on') {{i}}
+          v-color-picker(light :value='color' @update:color='c => updateColor(i, c)')
 
     v-dialog(v-model='linkModal' width='500' :fullscreen='$vuetify.breakpoint.xsOnly')
       v-card
@@ -106,10 +106,11 @@ v-container
 <script>
 import { mapActions, mapState } from 'vuex'
 import { mdiDeleteForever, mdiRestore, mdiPlus, mdiChevronUp } from '@mdi/js'
+import debounce from 'lodash/debounce'
 
 export default {
   name: 'Theme',
-  data () {
+  data ({ $store }) {
     const t = new Date().getMilliseconds()
     return {
       mdiDeleteForever, mdiRestore, mdiPlus, mdiChevronUp,
@@ -118,19 +119,19 @@ export default {
       fallbackImageKey: t,
       headerImageKey: t,
       link: { href: '', label: '' },
-      linkModal: false
-      // menu: [false, false, false, false]
-      // colors: { primary: '', secondary: '', accent: '', error: '', info: '', success: '', warning: '' }
-      //   primary: {},
-      //   secondary: {}
-      // }
+      linkModal: false,
+      menu: [false, false, false, false],
+      colors: { 
+        primary: $store.state.settings['theme.primary'],
+        secondary: $store.state.settings['theme.secondary'],
+        error: $store.state.settings['theme.error'],
+        warning: $store.state.settings['theme.warning'],
+        success: $store.state.settings['theme.success'],
+      }
     }
   },
   computed: {
     ...mapState(['settings']),
-    // 'colors.primary': this.color('primary'),
-    // 'colors.secondary': this.color('primary'),
-    // 'colors.tertiary': this.color('primary'),
     is_dark: {
       get () { return this.settings['theme.is_dark'] },
       set (value) {
@@ -145,22 +146,7 @@ export default {
     hide_calendar: {
       get () { return this.settings.hide_calendar },
       set (value) { this.setSetting({ key: 'hide_calendar', value }) }
-    },
-  //   'colors[0]': {
-  //     get () {
-  //       return this.settings['theme.colors'] || [0, 0]
-  //     },
-  //     set (value) {
-  //       console.error(value)
-  //       if (!value) { return }
-  //       this.setSetting({ key: 'theme.primary', value })
-  //       if (this.settings['theme.is_dark']) {
-  //         this.$vuetify.theme.themes.dark.primary = value
-  //       } else {
-  //         this.$vuetify.theme.themes.light.primary = value
-  //       }
-  //     }
-  //   }
+    }
   },
   methods: {
     ...mapActions(['setSetting']),
@@ -196,10 +182,11 @@ export default {
       this.setSetting({ key: 'header_image', value: null })
         .then(this.forceHeaderImageReload)
       e.stopPropagation()
-    },    
-    updateColor (i, v) {
-      this.colors[i] = v.hex
-      this.$vuetify.theme.themes.dark[i] = v.hex
+    },
+    updateSettingColor: debounce( async function (i, value) { this.setSetting({ key: `theme.${i}`, value: value.hex }) }, 200),
+    updateColor (i, value) {
+      this.$vuetify.theme.themes.dark[i] = this.$vuetify.theme.themes.light[i] = value.hex
+      this.updateSettingColor(i, value)
     },
     openLinkModal () {
       // this.link = { href: '', label: '' }
