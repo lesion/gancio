@@ -1,5 +1,7 @@
 All notable changes to this project will be documented in this file.
 
+### UNRELEASED
+
 ### 1.6.4 - 22 feb '23
   - add missing i18n during setup
   - really fix #232

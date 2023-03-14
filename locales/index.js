@@ -8,6 +8,7 @@ module.exports = {
   gl: 'Galego',
   it: 'Italiano',
   nb: 'Norwegian Bokmål',
+  nl: 'Dutch',
   pl: 'Polski',
   pt: 'Português',
   ru: 'Русский',
