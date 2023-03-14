@@ -197,9 +197,9 @@ module.exports = {
    * It does supports ICS and H-EVENT
    */
   async importURL(req, res) {
-    const URL = req.query.URL
+    const url = req.query.URL
     try {
-      const response = await axios.get(URL)
+      const response = await axios.get(url)
       const contentType = response.headers['content-type']
 
       if (contentType.includes('text/html')) {
@@ -211,7 +211,7 @@ module.exports = {
             const props = e.properties
             let media = get(props, 'featured[0]')
             if (media) {
-              media = url.resolve(URL, media)
+              media = URL.resolve(url, media)
             }
             return {
               title: get(props, 'name[0]', ''),
