@@ -55,6 +55,7 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/i18n',
+    '~/modules/axios-proxy.js', // Note: import this before @nuxtjs/axios to override defaults of both instances: `$axios` available in context, and `axios` used in controllers
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/sitemap',
