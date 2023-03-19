@@ -15,6 +15,17 @@ let config = {
   db: {},
   user_locale: path.resolve(process.env.cwd || '', 'user_locale'),
   upload_path: path.resolve(process.env.cwd || '', 'uploads'),
+  proxy: {
+    protocol: process.env.GANCIO_PROXY_PROTOCOL || '',
+    hostname: process.env.GANCIO_PROXY_HOSTNAME || '',
+    host: process.env.GANCIO_PROXY_HOST || '',
+    port: process.env.GANCIO_PROXY_PORT || '',
+    auth: {
+      username: process.env.GANCIO_PROXY_USERNAME || '',
+      password: process.env.GANCIO_PROXY_PASSWORD || ''
+    },
+    headers: process.env.GANCIO_PROXY_HEADERS && JSON.parse(process.env.GANCIO_PROXY_HEADERS) || {}
+  },
   write (config_path= process.env.config_path || './config.json') {
     delete config.status
     return fs.writeFileSync(config_path, JSON.stringify(config, null, 2))

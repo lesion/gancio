@@ -67,3 +67,24 @@ list of strings you can override.
 
 > warning "Restart needed"
 > Note that a restart is needed when you change user_locale's content.
+
+### Proxy
+Proxy outward request from gancio.
+Look [here](https://www.npmjs.com/package/https-proxy-agent) for options.
+Note: `hostname` option takes precedence over `host`.
+
+```json
+"proxy": {
+    "protocol": "http:",
+    "hostname": "",
+    "host": "127.0.0.1",
+    "port": "8118",
+    "auth": {
+      "username": "user",
+      "password": "password"
+    },
+    "headers": {
+      "X-Proxy-Header": "example"
+    }
+}
+```
