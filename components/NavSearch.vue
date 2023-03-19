@@ -5,11 +5,12 @@
       client-only(v-if='showSearchBar')
         v-menu(offset-y :close-on-content-click='false' tile)
           template(v-slot:activator="{on ,attrs}")
-            v-text-field(hide-details outlined
-              :placeholder='$t("common.search")'
-              @input="v => setFilter(['query', v])" clearable :clear-icon='mdiClose')
-              template(v-slot:append v-if='settings.allow_recurrent_event || settings.allow_multidate_event')
-                v-icon(v-text='mdiCog' v-bind='attrs' v-on='on')
+            v-text-field(hide-details outlined v-model='query'
+              :placeholder='$t("common.search")' @click:clear="setFilter(['query', null])"
+              @keypress.enter="setFilter(['query', query])" clearable :clear-icon='mdiClose')
+              template(v-slot:append)
+                v-icon.mr-2(v-if='query' v-text='mdiMagnify' @click="setFilter(['query', query])")
+                v-icon(v-if='settings.allow_recurrent_event || settings.allow_multidate_event' v-text='mdiCog' v-bind='attrs' v-on='on')
           v-card(outlined :rounded='"0"')
             v-card-text
               v-row(dense)
@@ -36,12 +37,12 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import Calendar from '@/components/Calendar'
-import { mdiClose, mdiCog } from '@mdi/js'
+import { mdiClose, mdiCog, mdiMagnify } from '@mdi/js'
 
 export default {
   data: ({ $store }) => ({
     oldRoute: '',
-    mdiClose, mdiCog,
+    mdiClose, mdiCog, mdiMagnify,
     collections: [],
     show_recurrent: $store.state.settings.recurrent_event_visible,
     show_multidate: true,

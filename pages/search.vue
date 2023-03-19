@@ -11,7 +11,6 @@ v-container#home(fluid)
 
 <script>
 import { mapState } from 'vuex'
-import dayjs from 'dayjs'
 import Event from '@/components/Event'
 import Announcement from '@/components/Announcement'
 import Calendar from '@/components/Calendar'
@@ -20,11 +19,11 @@ import { mdiMagnify } from '@mdi/js'
 export default {
   name: 'Index',
   components: { Event, Announcement, Calendar },
-  data () {
+  data ({ $time }) {
     return {
       mdiMagnify,
       events: [],
-      start: dayjs().startOf('month').unix(),
+      start: $time.startMonth(),
       end: null,
     }
   },

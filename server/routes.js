@@ -7,8 +7,13 @@ const helpers = require('./helpers')
 const api = require('./api')
 
 async function main () {
+  const log = require('./log')
   
-  await initialize.start()
+  try {
+    await initialize.start()
+  } catch (e) {
+    log.error('[ERROR]' + e)
+  }
   
   app.use([
     helpers.initSettings,
@@ -19,7 +24,6 @@ async function main () {
   // const promBundle = require('express-prom-bundle')
   // const metricsMiddleware = promBundle({ includeMethod: true })
 
-  const log = require('./log')
 
   app.enable('trust proxy')
 

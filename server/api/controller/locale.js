@@ -18,7 +18,8 @@ const localeController = {
 
     // check if we have a user custom messages
     let customLocaleMessages = {}
-    const customLocalePath = path.resolve(config.user_locale, `${locale}.json`)
+
+    const customLocalePath = config.user_locale && path.resolve(config.user_locale, `${locale}.json`)
     if (config.user_locale && fs.existsSync(customLocalePath)) {
       try {
         customLocaleMessages = require(customLocalePath)

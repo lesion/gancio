@@ -41,7 +41,7 @@ v-container
         template(v-slot:item.content='{ item }')
           span(v-html='item.data.content')
         template(v-slot:item.created='{ item }')
-          span {{item.created | dateFormat('lll')}}
+          span {{$time.format(item.created, 'ff')}}
         template(v-slot:item.user='{ item }')
           a(:href='item.ap_user.url || item.ap_user.ap_id' target='_blank') {{item.ap_user.preferredUsername}}
         template(v-slot:item.event='{ item }')

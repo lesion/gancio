@@ -71,7 +71,7 @@ v-container
 import SMTP from './SMTP.vue'
 import Geolocation from './Geolocation.vue'
 import { mapActions, mapState } from 'vuex'
-import moment from 'dayjs'
+import { DateTime } from 'luxon'
 import tzNames from './tz.json'
 import { mdiAlert, mdiArrowRight, mdiMap } from '@mdi/js'
 const locales = require('../../locales/index')
@@ -127,7 +127,7 @@ export default {
       set (value) { this.setSetting({ key: 'allow_geolocation', value }) }
     },
     filteredTimezones () {
-      const current_timezone = moment.tz.guess()
+      const current_timezone = DateTime.local().zoneName
       tzNames.unshift(current_timezone)
       return tzNames
     }

@@ -1,6 +1,14 @@
 All notable changes to this project will be documented in this file.
 
 ### UNRELEASED
+  - optimize home page using lazy loading (v-lazy)
+  - show a progress 
+  - improve search flow (order by, press enter or icon...)
+  - add Duch (nl) locale (thanks @jeoenepraat)
+  - fix #244, dark theme user / admin preference merge issue
+  - fix some issues with recurrent events, #247
+  - filters / helpers refactoring
+  - use luxon instead of dayjs, new $time plugin
 
 ### 1.6.4 - 22 feb '23
   - add missing i18n during setup

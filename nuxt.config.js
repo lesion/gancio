@@ -41,7 +41,8 @@ module.exports = {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    '@/plugins/filters', // text filters, datetime filters, generic transformation helpers etc.
+    '@/plugins/helpers',
+    '@/plugins/time', // datetime filters
     '@/plugins/axios', // axios baseurl configuration
     '@/plugins/validators', // inject validators
     '@/plugins/api', // api helpers

@@ -81,7 +81,6 @@ v-container.pa-0.pa-md-3
 
 </template>
 <script>
-import dayjs from 'dayjs'
 import { mapState } from 'vuex'
 import FollowMe from '../components/FollowMe'
 import Search from '@/components/Search'
@@ -95,9 +94,9 @@ export default {
     Search
   },
   mixins: [clipboard],
-  async asyncData ({ $axios, params, store, $api }) {
+  async asyncData ({ $axios, params, store, $api, $time }) {
     const events = await $api.getEvents({
-      start: dayjs().unix(),
+      start: $time.currentTimestamp(),
       show_recurrent: false
     })
     return { events }

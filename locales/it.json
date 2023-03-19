@@ -96,7 +96,9 @@
     "getting_there": "Come arrivare",
     "calendar": "Calendario",
     "home": "Home",
-    "about": "Cos'è"
+    "about": "Cos'è",
+    "admin_actions": "Gestisci",
+    "recurring_event_actions": "Gestisci ricorrenza"    
   },
   "login": {
     "description": "Entrando puoi pubblicare nuovi eventi.",
@@ -158,8 +160,8 @@
     "recurrent_2w_days": "Un {days} ogni due",
     "recurrent_1m_days": "Il giorno {days} di ogni mese",
     "recurrent_2m_days": "Il giorno {days} ogni due mesi",
-    "recurrent_1m_ordinal": "Il {n} {days} di ogni mese",
-    "recurrent_2m_ordinal": "Il {n} {days} un mese sì e uno no",
+    "recurrent_1m_ordinal": "Ogni {n} {days} del mese",
+    "recurrent_2m_ordinal": "Ogni {n} {days} un mese sì e uno no",
     "each_week": "Ogni settimana",
     "each_2w": "Ogni due settimane",
     "each_month": "Ogni mese",
@@ -191,6 +193,7 @@
     "allow_registration_description": "Vuoi abilitare la registrazione?",
     "allow_anon_event": "Si possono inserire eventi anonimi (previa conferma)?",
     "allow_recurrent_event": "Abilita eventi ricorrenti",
+    "allow_multidate_event": "Abilita eventi di più giorni",
     "allow_geolocation": "Abilita la geolocalizzazione degli eventi",
     "recurrent_event_visible": "Appuntamenti ricorrenti visibili di default",
     "federation": "Federazione / ActivityPub",

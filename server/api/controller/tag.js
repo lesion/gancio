@@ -33,7 +33,7 @@ module.exports = {
     const eventController = require('./event')
     const format = req.params.format || 'json'
     const tags = req.params.tag
-    const events = await eventController._select({ tags: tags.toLocaleLowerCase(), show_recurrent: true })
+    const events = await eventController._select({ tags: tags.toLocaleLowerCase(), show_recurrent: true, older: true })
     switch (format) {
       case 'rss':
         return exportController.feed(req, res, events,

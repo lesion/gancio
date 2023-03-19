@@ -1,5 +1,3 @@
-import dayjs from 'dayjs'
-
 export const state = () => ({
   localSettings : {
     hide_thumbs: null,
@@ -109,10 +107,12 @@ export const actions = {
   },
   async getEvents ({ commit, state }, params = {}) {
     const events = await this.$api.getEvents({
-      start: params.start || dayjs().startOf('month').unix(),
+      start: params.start || this.$time.startMonth(),
       end: params.end || null,
       show_recurrent: state.filter.show_recurrent,
-      show_multidate: state.filter.show_multidate
+      show_multidate: state.filter.show_multidate,
+      ...( params.query && { query: params.query }),
+      ...( params.older && { older: params.older })
     })
     commit('setEvents', events)
   }

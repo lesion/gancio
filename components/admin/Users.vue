@@ -12,7 +12,7 @@ v-container
   //- ADD NEW USER
   v-dialog(v-model='newUserDialog' :fullscreen='$vuetify.breakpoint.xsOnly')
 
-    v-card(color='secondary')
+    v-card
       v-card-title {{$t('common.new_user')}}
       v-card-text
         v-form(v-model='valid' ref='user_form' lazy-validation @submit.prevent='createUser')

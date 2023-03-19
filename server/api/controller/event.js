@@ -1,7 +1,7 @@
 const crypto = require('crypto')
 const path = require('path')
 const config = require('../../config')
-const fs = require('fs')
+const fs = require('fs/promises')
 const { Op } = require('sequelize')
 const linkifyHtml = require('linkify-html')
 const Sequelize = require('sequelize')
@@ -84,73 +84,6 @@ const eventController = {
 
     return res.json(ret)
   },
-
-
-  // async search(req, res) {
-  //   const search = req.query.search.trim().toLocaleLowerCase()
-  //   const show_recurrent = req.query.show_recurrent || false
-  //   const end = req.query.end
-  //   const replacements = []
-
-  //   const where = {
-  //     // do not include parent recurrent event
-  //     recurrent: null,
-
-  //     // confirmed event only
-  //     is_visible: true,
-
-  //   }
-
-  //   if (!show_recurrent) {
-  //     where.parentId = null
-  //   }
-
-  //   if (end) {
-  //     where.start_datetime = { [Op.lte]: end }
-  //   }
-
-  //   if (search) {
-  //     replacements.push(search)
-  //     where[Op.or] =
-  //       [
-  //         { title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', '%' + search + '%') },
-  //         Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%'),
-  //         Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND LOWER(${Col('tagTag')}) = ?`))
-  //       ]
-  //   }
-
-
-  //   const events = await Event.findAll({
-  //     where,
-  //     attributes: {
-  //       exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'updatedAt', 'description', 'resources']
-  //     },
-  //     order: [['start_datetime', 'DESC']],
-  //     include: [
-  //       {
-  //         model: Tag,
-  //         // order: [Sequelize.literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
-  //         attributes: ['tag'],
-  //         through: { attributes: [] }
-  //       },
-  //       { model: Place, required: true, attributes: ['id', 'name', 'address', 'latitude', 'longitude'] }
-  //     ],
-  //     replacements,
-  //     limit: 30,
-  //   }).catch(e => {
-  //     log.error('[EVENT]', e)
-  //     return res.json([])
-  //   })
-
-  //   const ret = events.map(e => {
-  //     e = e.get()
-  //     e.tags = e.tags ? e.tags.map(t => t && t.tag) : []
-  //     return e
-  //   })
-
-  //   return res.json(ret)
-
-  // },
 
   async _get(slug) {
     // retrocompatibility, old events URL does not use slug, use id as fallback
@@ -494,8 +427,8 @@ const eventController = {
         try {
           const old_path = path.resolve(config.upload_path, event.media[0].url)
           const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.media[0].url)
-          fs.unlinkSync(old_path)
-          fs.unlinkSync(old_thumb_path)
+          await fs.unlink(old_path)
+          await fs.unlink(old_thumb_path)
         } catch (e) {
           log.info(e.toString())
         }
@@ -573,8 +506,8 @@ const eventController = {
         try {
           const old_path = path.join(config.upload_path, event.media[0].url)
           const old_thumb_path = path.join(config.upload_path, 'thumb', event.media[0].url)
-          fs.unlinkSync(old_thumb_path)
-          fs.unlinkSync(old_path)
+          await fs.unlink(old_thumb_path)
+          await fs.unlink(old_path)
         } catch (e) {
           log.info(e.toString())
         }
@@ -746,7 +679,7 @@ const eventController = {
     const start_date = dayjs.unix(e.start_datetime)
     let cursor = start_date > startAt ? start_date : startAt
     startAt = cursor
-    const duration = dayjs.unix(e.end_datetime).diff(start_date, 's')
+    const duration = e.end_datetime ? e.end_datetime-e.start_datetime : 0
     const frequency = recurrent.frequency
     const type = recurrent.type
 
@@ -782,9 +715,14 @@ const eventController = {
     }
     log.debug(cursor)
     event.start_datetime = cursor.unix()
-    event.end_datetime = event.start_datetime + duration
-    const newEvent = await Event.create(event)
-    return newEvent.addTags(e.tags)
+    event.end_datetime = e.end_datetime ? event.start_datetime + duration : null
+    try {
+      const newEvent = await Event.create(event)
+      return newEvent.addTags(e.tags)
+    } catch (e) {
+      console.error(event)
+      log.error('[RECURRENT EVENT]', e)
+    }
   },
 
   /**
