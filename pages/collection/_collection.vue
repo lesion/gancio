@@ -5,7 +5,9 @@
 
     <!-- Events -->
     <div class='mb-2 mt-1 pl-1 pl-sm-2' id="events">
-      <Event :event='event' v-for='(event, idx) in events' :lazy='idx>2' :key='event.id'></Event>
+      <v-lazy class='event' :value='idx<9' v-for='(event, idx) in events' :key='event.id' :min-height='hide_thumbs ? 105 : undefined' :options="{ threshold: .5, rootMargin: '500px' }">
+        <Event :event='event' :lazy='idx>9' />
+      </v-lazy>
     </div>
   </v-container>
 </template>
