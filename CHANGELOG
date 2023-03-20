@@ -1,6 +1,6 @@
 All notable changes to this project will be documented in this file.
 
-### UNRELEASED
+### 1.6.5 - 20 mar '23
   - optimize home page using lazy loading (v-lazy)
   - add support for server side http proxy (thanks @sedum)
   - add Duch (nl) locale (thanks @jeoenepraat)

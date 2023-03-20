@@ -8,6 +8,22 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+
+### 1.6.5 - 20 mar '23
+  - optimize home page using lazy loading (v-lazy)
+  - add support for server side http proxy (thanks @sedum)
+  - add Duch (nl) locale (thanks @jeoenepraat)
+  - fix #244, dark theme user / admin preference merge issue
+  - fix some issues with recurrent events, #247
+  - improve search flow (order by, press enter or icon...)
+  - filters / helpers refactoring
+  - use luxon instead of dayjs, new $time plugin
+  - tag and place pages list all events (past too)
+  - show boosts/bookmarks, fix #241
+  - go to event on save/update
+  - fix event import from URL
+  - remove an annoying warning from logs
+
 ### 1.6.4 - 22 feb '23
   - add missing i18n during setup
   - really fix #232
