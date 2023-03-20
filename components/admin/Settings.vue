@@ -72,7 +72,6 @@ import SMTP from './SMTP.vue'
 import Geolocation from './Geolocation.vue'
 import { mapActions, mapState } from 'vuex'
 import { DateTime } from 'luxon'
-import tzNames from './tz.json'
 import { mdiAlert, mdiArrowRight, mdiMap } from '@mdi/js'
 const locales = require('../../locales/index')
 
@@ -128,6 +127,7 @@ export default {
     },
     filteredTimezones () {
       const current_timezone = DateTime.local().zoneName
+      const tzNames = Intl.supportedValuesOf('timeZone')
       tzNames.unshift(current_timezone)
       return tzNames
     }

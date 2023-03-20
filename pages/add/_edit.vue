@@ -250,13 +250,11 @@ export default {
       }
       if (this.event.tags) { this.event.tags.forEach(tag => formData.append('tags[]', tag.tag || tag)) }
       try {
-        if (this.edit) {
-          const ret = await this.$axios.$put('/event', formData)
+        const ret = this.edit ? await this.$axios.$put('/event', formData) : await this.$axios.$post('/event', formData)
+        if (!this.date.recurrent) {
           this.$router.push(`/event/${ret.slug}`)
-
         } else {
-          const ret = await this.$axios.$post('/event', formData)
-          this.$router.push(`/event/${ret.slug}`)
+          this.$router.push('/')
         }
         this.$nextTick(() => {
           this.$root.$message(this.$auth.loggedIn ? (this.edit ? 'event.saved' : 'event.added') : 'event.added_anon', { color: 'success' })

@@ -663,7 +663,7 @@ const eventController = {
   /**
    * Ensure we have the next instance of a recurrent event
    */
-  async _createRecurrentOccurrence(e, startAt) {
+  async _createRecurrentOccurrence(e, startAt, firstOccurrence) {
     log.debug(`Create recurrent event [${e.id}] ${e.title}"`)
     const event = {
       parentId: e.id,
@@ -684,7 +684,6 @@ const eventController = {
     const type = recurrent.type
 
     cursor = cursor.hour(start_date.hour()).minute(start_date.minute()).second(0)
-
     if (!frequency) { return }
 
     // each week or 2
@@ -693,7 +692,7 @@ const eventController = {
       if (cursor.isBefore(startAt)) {
         cursor = cursor.add(7, 'day')
       }
-      if (frequency[0] === '2') {
+      if (frequency[0] === '2' && !firstOccurrence) {
         cursor = cursor.add(7, 'day')
       }
     } else if (frequency === '1m') {
@@ -741,9 +740,9 @@ const eventController = {
     const creations = events.map(e => {
       if (e.child.length) {
         if (e.child.find(c => c.is_visible)) return
-        return eventController._createRecurrentOccurrence(e, dayjs.unix(e.child[0].start_datetime + 1))
+        return eventController._createRecurrentOccurrence(e, dayjs.unix(e.child[0].start_datetime + 1), false)
       }
-      return eventController._createRecurrentOccurrence(e, dayjs())
+      return eventController._createRecurrentOccurrence(e, dayjs(), true)
     })
 
     return Promise.all(creations)
