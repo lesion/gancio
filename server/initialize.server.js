@@ -60,7 +60,7 @@ const initialize = {
     dayjs.tz.setDefault(settingsController.settings.instance_timezone)
   
     let TaskManager
-    if (config.status === 'READY' && process.env.NODE_ENV == 'production') {
+    if (config.status === 'READY') {// && process.env.NODE_ENV == 'production') {
       TaskManager = require('../server/taskManager').TaskManager
       TaskManager.start()
     }
