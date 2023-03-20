@@ -20,6 +20,7 @@
   "files": [
     "server/",
     "assets/",
+    "modules/",
     "nuxt.config.js",
     "static/",
     "views/",
