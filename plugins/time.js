@@ -80,7 +80,7 @@ export default ({ app, store }, inject) => {
       if (frequency === '1w' || frequency === '2w') {
         recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: DateTime.fromSeconds(parent.start_datetime).toFormat('EEEE') })
       } else if (frequency === '1m' || frequency === '2m') {
-        const d = type === 'ordinal' ? DateTime.fromSeconds(parent.start_datetime).toDate() : DateTime.fromSeconds(parent.start_datetime).toFormat('EEEE')
+        const d = type === 'ordinal' ? DateTime.fromSeconds(parent.start_datetime).day : DateTime.fromSeconds(parent.start_datetime).toFormat('EEEE')
         if (type === 'ordinal') {
           recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: d })
         } else {
