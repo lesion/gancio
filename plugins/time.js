@@ -121,7 +121,7 @@ export default ({ app, store }, inject) => {
         const key = `${start.month}${start.day}`
         const c = (e.end_datetime || e.start_datetime) < now ? 'vc-past' : ''
         
-        if (e.multidate === true) {
+        if (e.multidate === true && e.end_datetime) {
           attributes.push({
             dates: { start: start.toJSDate(), end: DateTime.fromSeconds(e.end_datetime).toJSDate() },
             highlight: {
