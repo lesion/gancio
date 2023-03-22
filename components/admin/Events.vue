@@ -9,7 +9,7 @@ v-container
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
       :items='unconfirmedEvents'
       :headers='headers')
-      template(v-slot:item.when='{ item }') {{item|when}}
+      template(v-slot:item.when='{ item }') {{$time.when(item)}}
       template(v-slot:item.actions='{ item }')
         v-btn(text small @click='confirm(item)' color='success') {{$t('common.confirm')}}
         v-btn(text small :to='`/event/${item.slug || item.id}`' color='success') {{$t('common.preview')}}
