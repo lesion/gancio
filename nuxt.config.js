@@ -1,8 +1,6 @@
 const config = require('./server/config.js')
-const minifyTheme = require('minify-css-string').default
 const locales = require('./locales/index')
 
-import { ca, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, ru, zhHans  } from 'vuetify/lib/locale'
 
 const isDev = (process.env.NODE_ENV !== 'production')
 module.exports = {
@@ -142,27 +140,7 @@ module.exports = {
     }
   },
   buildModules: ['@nuxtjs/vuetify'],
-  vuetify: {
-    lang: { locales: { ca, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, ru, zhHans } },
-    treeShake: true,
-    theme: {
-      options: {
-        customProperties: false,
-        variations: false,
-        minifyTheme,
-      },
-      dark: true,
-      themes: {
-        dark: {
-          primary: '#FF6E40'
-        },
-        light: {
-          primary: '#FF4500'
-        }
-      }
-    },
-    defaultAssets: false
-  },
+  vuetify: { optionsPath: './vuetify.options.js' },
   build: {
     extend(config, { isDev, isClient }) {
       // ..
