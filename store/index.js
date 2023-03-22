@@ -73,9 +73,9 @@ export const actions = {
   nuxtServerInit ({ commit }, { res, app }) {
     if (res.locals && res.locals.settings) {
       commit('setSettings', res.locals.settings)
+      commit('setFilter', {  type: 'show_recurrent',
+          value: res.locals.settings.allow_recurrent_event && res.locals.settings.recurrent_event_visible })
     }
-    commit('setFilter', {  type: 'show_recurrent',
-        value: res.locals.settings.allow_recurrent_event && res.locals.settings.recurrent_event_visible })
 
     commit('setLocalSetting', { key: 'hide_thumbs', value: app.$cookies.get('hide_thumbs') })
     commit('setLocalSetting', { key: 'theme.is_dark', value: app.$cookies.get('theme.is_dark') })
