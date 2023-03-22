@@ -8,6 +8,10 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.6.6 - 22 mar '23
+  - node is not Intl ready, fix #250
+  - fix old smultidate events without an end_datetime!
+
 
 ### 1.6.5 - 21 mar '23
   - optimize home page using lazy loading
