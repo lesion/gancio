@@ -3,7 +3,7 @@
 Plugin Name: WPGancio
 Plugin URI:  https://gancio.org
 Description: Connects an user of a gancio instance to a Wordpress user so that published events are automatically pushed with Gancio API.
-Version:     1.5
+Version:     1.7
 Author:      Gancio
 License:  AGPL 3.0
 
@@ -34,10 +34,4 @@ require_once(WPGANCIO_DIR . 'oauth.php');
  * on Wordpress are automatically inserted.
  * It requires an event manager plugin, only Event Organiser (https://wp-event-organiser.com/) is
  * supported until now but to add another plugin it's easy.
- */
-
-/**
- * - Add Gancio Settings page to select an instance URL and...
- * - start an OAuth 2.0 authentication flow with the selected instance
- * - Send each new / updated events to the selected instance via Gancio API
  */
