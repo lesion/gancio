@@ -35,9 +35,10 @@ function wpgancio_save_event ($post_id) {
     return sanitize_title($tag->name);
   }
 
-  // TODO: merge event tags with post tags
   $tmp_tags = get_the_terms( $event, 'event-tag' );
-  $tags = array_map('tagName', $tmp_tags);
+  if ($tmp_tags) {
+    $tags = array_map('tagName', $tmp_tags);
+  }
 
 
   $gancio_id = get_post_meta($post_id, 'wpgancio_gancio_id', TRUE);
@@ -55,9 +56,8 @@ function wpgancio_save_event ($post_id) {
     'tags' => $tags,
     'description' => $event->post_content,
     'start_datetime' => intval($start_datetime),
-    'end_datetime' => intval($end_datetime),
     'place_name' => $place_name,
-    'place_address' => "${place_address['address']}, ${place_address['city']}"
+    'place_address' => $place_address['address'] . ", " . $place_address['city']
   );
 
   // add image if specified
