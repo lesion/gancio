@@ -294,7 +294,8 @@
     "tilelayer_test_button": "Test tilelayer",
     "tilelayer_test_success": "The tilelayer service at {service_name} is working",
     "tilelayer_test_error": "The tilelayer service is not reachable at {service_name}",
-    "geolocation": "Geolocation"
+    "geolocation": "Geolocation",
+    "colors": "Colors"
   },
   "auth": {
     "not_confirmed": "Not confirmed yet…",
