@@ -1,1 +1,5 @@
-{}
+{
+    "register": {
+        "subject": "Registratieverzoek ontvangen"
+    }
+}
