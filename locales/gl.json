@@ -294,7 +294,8 @@
         "edit_tag": "Editar etiqueta",
         "edit_tag_help": "Podes cambiar a etiqueta substituíndoa por unha nova ou fusionándoa cunha existente. Tamén se cambiarán os {n} eventos asociados.",
         "delete_tag_confirm": "Estás seguro de que queres eliminar a etiqueta \"{tag}\"? A etiqueta eliminarase de {n} eventos.",
-        "delete_collection_confirm": "Estás seguro de que queres eliminar a colección <u>{collection}</u>?"
+        "delete_collection_confirm": "Estás seguro de que queres eliminar a colección <u>{collection}</u>?",
+        "colors": "Cores"
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",
