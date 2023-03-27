@@ -56,7 +56,7 @@ v-container
   //- choose theme colors
   v-card-text
     v-theme-provider(dark)
-      v-card(max-width='450')
+      v-card(max-width='465')
         v-card-text
           span.mr-2(v-for='(color, i) in settings.dark_colors' :key='i')
             v-menu(v-model='dark_menu[i]'
@@ -71,7 +71,7 @@ v-container
               v-color-picker(mode='hexa' :value='color' @update:color='c => updateColor("dark", i, c)')
 
     v-theme-provider(light)
-      v-card.mt-4(max-width='450')
+      v-card.mt-4(max-width='465')
         v-card-text
           span.mr-2(v-for='(color, i) in settings.light_colors' :key='i')
             v-menu(v-model='light_menu[i]'
