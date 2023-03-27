@@ -1,5 +1,5 @@
 <template lang="pug">
-v-container.px-2.px-sm-6.pt-0
+v-container.px-2.px-sm-6.pt-0#home
 
   //- View
   #themeview.mt-sm-4.mt-2
@@ -11,8 +11,8 @@ v-container.px-2.px-sm-6.pt-0
 
   //- Events
   #events.mt-sm-4.mt-2(v-if='!$fetchState.pending')
-    v-lazy.event(:value='idx<9' v-for='(event, idx) in visibleEvents' :key='event.id' :min-height='hide_thumbs ? 105 : undefined' :options="{ threshold: .5, rootMargin: '500px' }")
-      Event(:event='event' :lazy='idx<9')
+    v-lazy.event.v-card(:value='idx<9' v-for='(event, idx) in visibleEvents' :key='event.id' :min-height='hide_thumbs ? 105 : undefined' :options="{ threshold: .5, rootMargin: '500px' }" :class="{ 'theme--dark': is_dark }")
+      Event(:event='event' :lazy='idx>9')
   .text-center(v-else)
     v-progress-circular.justify-center.align-center(color='primary' indeterminate model-value='20')
 
@@ -75,7 +75,7 @@ export default {
   },
   computed: {
     ...mapState(['settings', 'announcements', 'events', 'filter']),
-    ...mapGetters(['hide_thumbs']),
+    ...mapGetters(['hide_thumbs', 'is_dark']),
     visibleEvents () {
       const now = this.$time.nowUnix()
       if (this.selectedDay) {

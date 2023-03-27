@@ -1,5 +1,5 @@
 <template lang="pug">
-div.d-flex.flex-column.flex-grow-1(itemscope itemtype="https://schema.org/Event")
+div.h-event(itemscope itemtype="https://schema.org/Event")
   nuxt-link(:to='`/event/${event.slug || event.id}`' itemprop="url")
     MyPicture(v-if='!hide_thumbs' :event='event' thumb :lazy='lazy')
     v-icon.float-right.mr-1(v-if='event.parentId' color='success' v-text='mdiRepeat')
