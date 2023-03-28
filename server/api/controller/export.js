@@ -97,8 +97,8 @@ const exportController = {
     const settings = res.locals.settings
     const eventsMap = events.map(e => {
 
-      const tmpStart = moment.unix(e.start_datetime)
-      const start = tmpStart.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
+      const tmpStart = DateTime.fromSeconds(e.start_datetime)
+      const start = [ tmpStart.year, tmpStart.month, tmpStart.day, tmpStart.hour, tmpStart.minute ]
 
       const ret = {
         uid: `${e.id}@${settings.hostname}`,
@@ -114,8 +114,8 @@ const exportController = {
       }
 
       if (e.end_datetime) {
-        const tmpEnd = moment.unix(e.end_datetime)
-        const end = tmpEnd.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
+        const tmpEnd = DateTime.fromSeconds(e.end_datetime)
+        const end = [ tmpEnd.year, tmpEnd.month, tmpEnd.day, tmpEnd.hour, tmpEnd.minute ]
         ret.end = end
       }
 
