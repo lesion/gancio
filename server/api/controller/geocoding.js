@@ -56,11 +56,11 @@ const geocodingController = {
   },
 
   async nominatimRateLimit(req, res, next) {
-    geocodingController.providerRateLimit(req, res, next, nominatim.cache)
+    process.env.NODE_ENV === 'test' ? next() : geocodingController.providerRateLimit(req, res, next, nominatim.cache)
   },
 
   async photonRateLimit(req, res, next) {
-    geocodingController.providerRateLimit(req, res, next, photon.cache)
+    process.env.NODE_ENV === 'test' ? next() : geocodingController.providerRateLimit(req, res, next, photon.cache)
   },
 
   async checkInCache (req, res, details, providerCache) {
