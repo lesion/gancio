@@ -1,10 +1,9 @@
 <template lang="pug">
 v-container#event.pa-0.pa-sm-2(itemscope itemtype="https://schema.org/Event" v-touch="{ left: goNext, right: goPrev }")
-  //- EVENT PAGE
-  //- gancio supports microformats (http://microformats.org/wiki/h-event)
-  //- and microdata https://schema.org/Event
+    //- EVENT PAGE
+    //- gancio supports microformats (http://microformats.org/wiki/h-event)
+    //- and microdata https://schema.org/Event
 
-  v-card-text
     v-row
       v-col.col-12.col-md-8
         MyPicture(v-if='hasMedia' :event='event')
@@ -17,7 +16,7 @@ v-container#event.pa-0.pa-sm-2(itemscope itemtype="https://schema.org/Event" v-t
             .title.text-h5
               strong.p-name.text--primary(itemprop="name") {{event.title}}
           v-divider
-          v-card-text.eventDetails
+          v-container.eventDetails
             time.dt-start(:datetime='$time.unixFormat(event.start_datetime, "yyyy-MM-dd HH:mm")' itemprop="startDate" :content="$time.unixFormat(event.start_datetime, \"yyyy-MM-dd'T'HH:mm\")")
               v-icon(v-text='mdiCalendar' small)
               strong.ml-2.text-uppercase {{$time.when(event)}}
@@ -28,16 +27,16 @@ v-container#event.pa-0.pa-sm-2(itemscope itemtype="https://schema.org/Event" v-t
             .p-location.h-adr(itemprop="location" itemscope itemtype="https://schema.org/Place")
               v-icon(v-text='mdiMapMarker' small)
               nuxt-link.vcard.ml-2.p-name.text-decoration-none.text-uppercase(itemprop="name" :to='`/place/${encodeURIComponent(event.place.name)}`') {{event.place && event.place.name}}
-              .text-weight-light.p-street-address(itemprop='address') {{event.place && event.place.address}}
+              .font-weight-light.p-street-address(itemprop='address') {{event.place && event.place.address}}
 
           //- tags, hashtags
-          v-card-text.pt-0(v-if='event.tags && event.tags.length')
+          v-container.pt-0(v-if='event.tags && event.tags.length')
             v-chip.p-category.ml-1.mt-1(v-for='tag in event.tags' small label color='primary'
               outlined :key='tag' :to='`/tag/${encodeURIComponent(tag)}`') {{tag}}
 
           v-divider
           //- info & actions
-          v-list(dense nav)
+          v-list(dense nav color='transparent')
               //- v-list-group(:append-icon='mdiChevronUp' :value='true')
               //-   template(v-slot:activator)
               //-     v-list-item.text-overline {{$t('common.actions')}}

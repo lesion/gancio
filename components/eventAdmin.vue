@@ -1,6 +1,6 @@
 <template lang='pug'>
 span
-  v-list(dense nav)
+  v-list(dense nav color='transparent')
     v-list-group(:append-icon='mdiChevronUp' :value='true')
       template(v-slot:activator)
         v-list-item.text-overline {{$t('common.admin_actions')}}
