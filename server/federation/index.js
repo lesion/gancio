@@ -34,7 +34,7 @@ router.get('/m/:event_id', async (req, res) => {
 
   const event = await Event.findByPk(req.params.event_id, { include: [User, Tag, Place] })
   if (!event) { return res.status(404).send('Not found') }
-  const eventAp = event.toAP(settingsController.settings.instance_name, settingsController.settings.instance_locale)
+  const eventAp = event.toAP(settingsController.settings)
   eventAp['@context'] = [
     "https://www.w3.org/ns/activitystreams"
   ]

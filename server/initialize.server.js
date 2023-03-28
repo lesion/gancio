@@ -1,11 +1,11 @@
 const config = require('../server/config')
 const db = require('./api/models/index')
 const log = require('../server/log')
+const { Settings } = require('luxon')
 
 db.initialize()
 
 const settingsController = require('./api/controller/settings')
-
 
 const initialize = {
   // close connections/port/unix socket
@@ -26,9 +26,6 @@ const initialize = {
   },
 
   async start () {
-    const dayjs = require('dayjs')
-    const timezone = require('dayjs/plugin/timezone')
-    dayjs.extend(timezone)
     if (config.status == 'CONFIGURED') {
       await db.sequelize.authenticate()
       log.debug('Running migrations')
@@ -57,10 +54,11 @@ const initialize = {
       await settingsController.load()
     }
   
-    dayjs.tz.setDefault(settingsController.settings.instance_timezone)
+    Settings.defaultLocale = settingsController.settings.instance_locale
+    Settings.defaultZone = settingsController.settings.instance_timezone
   
     let TaskManager
-    if (config.status === 'READY') {// && process.env.NODE_ENV == 'production') {
+    if (config.status === 'READY' && process.env.NODE_ENV != 'test') {
       TaskManager = require('../server/taskManager').TaskManager
       TaskManager.start()
     }

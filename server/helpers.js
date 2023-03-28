@@ -100,9 +100,6 @@ module.exports = {
       footerLinks: settings.footerLinks,
       about: settings.about
     }
-    // set user locale
-    // res.locals.user_locale = settingsController.user_locale[res.locals.acceptedLocale]
-    dayjs.tz.setDefault(res.locals.settings.instance_timezone)
     next()
   },
 
@@ -254,16 +251,17 @@ module.exports = {
     let cursor
     if (n === -1) {
       cursor = date.endOf('month')
-      cursor = cursor.day(weekday)
-      if (cursor.month() !== date.month()) {
-        cursor = cursor.subtract(1, 'week')
+      cursor = cursor.set({ weekday })
+      if (cursor.month !== date.month) {
+        cursor = cursor.minus({ days: 7 })
       }
     } else {
       cursor = date.startOf('month')
       cursor = cursor.add(cursor.day() <= date.day() ? n - 1 : n, 'week')
-      cursor = cursor.day(weekday)
+      cursor = cursor.plus({ days: cursor.weekday <= date.weekday ? (n-1) * 7 : n * 7})
+      cursor = cursor.set({ weekday })
     }
-    cursor = cursor.hour(date.hour()).minute(date.minute()).second(0)
+    cursor = cursor.set({ hour: date.hour, minute: date.minute, second: 0 })
     log.debug(cursor)
     return cursor
   },

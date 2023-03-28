@@ -2,7 +2,7 @@ const { Event, Place, Tag } = require('../models/models')
 
 const { htmlToText } = require('html-to-text')
 const { Op, literal } = require('sequelize')
-const moment = require('dayjs')
+const { DateTime } = require('luxon')
 const ics = require('ics')
 
 const exportController = {
@@ -13,8 +13,13 @@ const exportController = {
     const places = req.query.places
     const show_recurrent = !!req.query.show_recurrent
 
+    const opt = {
+      zone: res.locals.settings.instance_timezone,
+      locale: res.locals.settings.instance_locale
+    }
+
     const where = {}
-    const yesterday = moment().subtract('1', 'day').unix()
+    const yesterday = DateTime.local(opt).minus({day: 1}).toUnixInteger()
 
 
     if (tags && places) {
@@ -69,8 +74,18 @@ const exportController = {
 
   feed (_req, res, events, title = res.locals.settings.title, link = `${res.locals.settings.baseurl}/feed/rss`) {
     const settings = res.locals.settings
+
+    const opt = {
+      zone: settings.instance_timezone,
+      locale: settings.instance_locale
+    }
+
+    function unixFormat (timestamp, format='EEEE d MMMM HH:mm') {
+      return DateTime.fromSeconds(timestamp, opt).toFormat(format)
+    }    
+
     res.type('application/rss+xml; charset=UTF-8')
-    res.render('feed/rss.pug', { events, settings, moment, title, link })
+    res.render('feed/rss.pug', { events, settings, unixFormat, title, link })
   },
 
   /**

@@ -88,7 +88,7 @@ const pluginController = {
     try {
       const plugin = require(pluginFile)
       const name = plugin.configuration.name
-      console.log(`Found plugin '${name}'`)
+      log.info(`Found plugin '${name}'`)
       pluginController.plugins.push(plugin)
       if (settingsController.settings['plugin_' + name]) {
         const pluginSetting = settingsController.settings['plugin_' + name]

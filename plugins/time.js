@@ -99,7 +99,7 @@ export default ({ app, store }, inject) => {
       const opt = {
         zone: store.state.settings.instance_timezone,
         locale: app.i18n.locale || store.state.settings.instance_locale
-      }      
+      }
       return DateTime.fromSeconds(timestamp, opt).toRelative()
     },
     

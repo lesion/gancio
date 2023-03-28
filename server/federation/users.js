@@ -3,10 +3,8 @@ const { Event, Place, APUser, Tag } = require('../api/models/models')
 const escape = require('lodash/escape')
 const config = require('../config')
 const log = require('../log')
-const utc = require('dayjs/plugin/utc')
-const dayjs = require('dayjs')
 const settingsController = require('../api/controller/settings')
-dayjs.extend(utc)
+const { DateTime } = require('luxon')
 
 module.exports = {
   get (req, res) {
@@ -132,9 +130,9 @@ module.exports = {
               type: 'Create',
               to: ['https://www.w3.org/ns/activitystreams#Public'],
               cc: [`${settings.baseurl}/federation/u/${name}/followers`],
-              published: dayjs(e.createdAt).utc().format(),
+              published: e.createdAt,
               actor: `${settings.baseurl}/federation/u/${name}`,
-              object: e.toAP(name, settings.instance_locale)
+              object: e.toAP(settings)
             }))
         }
       })
