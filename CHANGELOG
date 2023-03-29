@@ -1,5 +1,13 @@
 All notable changes to this project will be documented in this file.
 
+### 1.6.8
+  - use new $time in admins table, fix #252
+  - fix some WPGancio issues
+  - new custom color feature!
+  - update locales (durch, spanish, galician)
+  - improve index, tag, place page layout
+  - use luxon instead of dayjs server side, fix #254
+
 ### 1.6.7 - 22 mar '23
   - node is not Intl ready, fix #250
   - fix old smultidate events without an end_datetime!
