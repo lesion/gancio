@@ -140,7 +140,7 @@ module.exports = {
     }
   },
   buildModules: ['@nuxtjs/vuetify'],
-  vuetify: { optionsPath: './vuetify.options.js' },
+  vuetify: { defaultAssets: false, optionsPath: './vuetify.options.js' },
   build: {
     extend(config, { isDev, isClient }) {
       // ..
