@@ -34,21 +34,21 @@ v-container#event.pa-2.pa-sm-2(itemscope itemtype="https://schema.org/Event" v-t
             v-chip.p-category.ml-1.mt-1(v-for='tag in event.tags' small label color='primary'
               outlined :key='tag' :to='`/tag/${encodeURIComponent(tag)}`') {{tag}}
 
-            //- online events
-            v-divider(v-if='onlineSectionEnabled && event.online_locations && event.online_locations.length')
-            div(v-if='onlineSectionEnabled && event.online_locations && event.online_locations.length')
-              v-card-text.text-caption.pb-0(v-text="event.place.name === 'online' && $t('event.event_only_online') || $t('event.event_also_online') ")
-              v-list-item(target='_blank' :href='`${event.online_locations[0]}`')
-                v-list-item-icon
-                  v-icon.my-auto(v-text='mdiMonitorAccount')
-                v-list-item-content.py-0
-                  v-list-item-title.text-caption(v-text='`${event.online_locations[0]}`')
-            div(v-if='onlineSectionEnabled && event.online_locations && event.online_locations.length > 1')
-              v-card-text.text-caption.pt-0.pb-0(v-text="$t('event.online_locations_fallback_urls')")
-              v-list-item
-                v-list-item-content
-                  v-chip(v-for='(item, index) in event.online_locations' v-if="index > 0" target='_blank' :href="`${item}`" 
-                    v-bind:key="index" small label v-text="`${item}`" outlined )
+          //- online events
+          v-divider(v-if='onlineSectionEnabled && event.online_locations && event.online_locations.length')
+          div(v-if='onlineSectionEnabled && event.online_locations && event.online_locations.length')
+            v-card-text.text-caption.pb-0(v-text="event.place.name === 'online' && $t('event.event_only_online') || $t('event.event_also_online') ")
+            v-list-item(target='_blank' :href='`${event.online_locations[0]}`')
+              v-list-item-icon
+                v-icon.my-auto(v-text='mdiMonitorAccount')
+              v-list-item-content.py-0
+                v-list-item-title.text-caption(v-text='`${event.online_locations[0]}`')
+          div(v-if='onlineSectionEnabled && event.online_locations && event.online_locations.length > 1')
+            v-card-text.text-caption.pt-0.pb-0(v-text="$t('event.online_locations_fallback_urls')")
+            v-list-item
+              v-list-item-content
+                v-chip(v-for='(item, index) in event.online_locations' v-if="index > 0" target='_blank' :href="`${item}`" 
+                  v-bind:key="index" small label v-text="`${item}`" outlined )
 
           v-divider
           //- info & actions
