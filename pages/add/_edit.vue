@@ -34,6 +34,7 @@ v-container.container.pa-0.pa-md-3
 
             //- When
             DateInput(ref='when' v-model='date' :event='event')
+
             //- Description
             v-col.px-0(cols='12')
               Editor.px-3.ma-0(
@@ -70,7 +71,6 @@ v-container.container.pa-0.pa-md-3
 <script>
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
-import dayjs from 'dayjs'
 
 import { mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle } from '@mdi/js'
 
@@ -103,7 +103,7 @@ export default {
     return true
 
   },
-  async asyncData({ params, $axios, error, $auth, store }) {
+  async asyncData({ params, $axios, error, $auth, $time }) {
     if (params.edit) {
 
       const data = { event: { place: {}, media: [] } }
@@ -123,15 +123,15 @@ export default {
 
       data.event.place.name = event.place.name
       data.event.place.address = event.place.address || ''
-      const from = dayjs.unix(event.start_datetime).tz()
-      const due = event.end_datetime && dayjs.unix(event.end_datetime).tz()
+      const from = $time.fromUnix(event.start_datetime)
+      const due = event.end_datetime && $time.fromUnix(event.end_datetime)
       data.date = {
         recurrent: event.recurrent,
-        from: from.toDate(),
-        due: due && due.toDate(),
+        from: from.toJSDate(),
+        due: due && due.toJSDate(),
         multidate: event.multidate,
-        fromHour: from.format('HH:mm'),
-        dueHour: due && due.format('HH:mm')
+        fromHour: from.toFormat('HH:mm'),
+        dueHour: due && (due.toFormat('HH:mm') === '23:59' ? null : due.toFormat('HH:mm'))
       }
 
       data.event.title = event.title
@@ -139,13 +139,15 @@ export default {
       data.event.id = event.id
       data.event.tags = event.tags
       data.event.media = event.media || []
+      data.event.parentId = event.parentId
+      data.event.recurrent = event.recurrent
       return data
     }
     return {}
   },
-  data() {
-    const month = dayjs.tz().month() + 1
-    const year = dayjs.tz().year()
+  data({ $time }) {
+    const month = $time.currentMonth()
+    const year = $time.currentYear()
     return {
       mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle,
       valid: false,
@@ -189,15 +191,15 @@ export default {
       this.event = Object.assign(this.event, event)
 
       this.$refs.where.selectPlace({ name: event.place.name || event.place, address: event.place.address })
-      const from = dayjs.unix(this.event.start_datetime)
-      const due = this.event.end_datetime && dayjs.unix(this.event.end_datetime)
+      const from = this.$time.fromUnix(this.event.start_datetime)
+      const due = this.event.end_datetime && this.$time.fromUnix(this.event.end_datetime)
       this.date = {
         recurrent: this.event.recurrent || null,
-        from: from.toDate(),
-        due: due && due.toDate(),
+        from: from.toJSDate(),
+        due: due && due.toJSDate(),
         multidate: event.multidate,
-        fromHour: from.format('HH:mm'),
-        dueHour: due && due.format('HH:mm')
+        fromHour: from.toFormat('HH:mm'),
+        dueHour: due && due.toFormat('HH:mm')
       }
       this.openImportDialog = false
     },
@@ -244,13 +246,11 @@ export default {
 
       formData.append('description', this.event.description)
       formData.append('multidate', !!this.date.multidate)
-      let [hour, minute] = this.date.fromHour.split(':')
-      formData.append('start_datetime', dayjs(this.date.from).tz().hour(Number(hour)).minute(Number(minute)).second(0).unix())
-      if (this.date.dueHour) {
-        [hour, minute] = this.date.dueHour.split(':')
-        formData.append('end_datetime', dayjs(this.date.due).tz().hour(Number(hour)).minute(Number(minute)).second(0).unix())
-      } else if (!!this.date.multidate) {
-        formData.append('end_datetime', dayjs(this.date.due).tz().hour(24).minute(0).second(0).unix())
+      formData.append('start_datetime', this.$time.fromDateInput(this.date.from, this.date.fromHour))
+      if (!!this.date.multidate) {
+        formData.append('end_datetime', this.$time.fromDateInput(this.date.due, this.date.dueHour || '23:59'))
+      } else if (this.date.dueHour) {
+        formData.append('end_datetime', this.$time.fromDateInput(this.date.from, this.date.dueHour))
       }
 
       if (this.edit) {
@@ -258,12 +258,12 @@ export default {
       }
       if (this.event.tags) { this.event.tags.forEach(tag => formData.append('tags[]', tag.tag || tag)) }
       try {
-        if (this.edit) {
-          await this.$axios.$put('/event', formData)
+        const ret = this.edit ? await this.$axios.$put('/event', formData) : await this.$axios.$post('/event', formData)
+        if (!this.date.recurrent) {
+          this.$router.push(`/event/${ret.slug}`)
         } else {
-          await this.$axios.$post('/event', formData)
+          this.$router.push('/')
         }
-        this.$router.push('/')
         this.$nextTick(() => {
           this.$root.$message(this.$auth.loggedIn ? (this.edit ? 'event.saved' : 'event.added') : 'event.added_anon', { color: 'success' })
         })

@@ -1,6 +1,6 @@
 const Email = require('email-templates')
 const path = require('path')
-const moment = require('dayjs')
+const { DateTime } = require('luxon')
 const settingsController = require('./controller/settings')
 const log = require('../log')
 const { Task, TaskManager } = require('../taskManager')
@@ -52,6 +52,11 @@ const mail = {
       transport: settings.smtp || {}
     })
 
+    const opt = {
+      zone: settings.instance_timezone,
+      locale
+    }
+
     const msg = {
       template,
       message: {
@@ -61,7 +66,7 @@ const mail = {
         ...locals,
         locale,
         config: { title: settings.title, baseurl: settings.baseurl, description: settings.description, admin_email: settings.admin_email },
-        datetime: datetime => moment.unix(datetime).tz().locale(locale).format('ddd, D MMMM HH:mm')
+        datetime: timestamp => DateTime.fromSeconds(timestamp, opt).toFormat('EEEE, d MMMM HH:mm')
       }
     }
     return email.send(msg)

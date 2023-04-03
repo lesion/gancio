@@ -1,8 +1,6 @@
 const config = require('./server/config.js')
-const minifyTheme = require('minify-css-string').default
 const locales = require('./locales/index')
 
-import { ca, de, en, es, eu, fr, gl, it, nb, pl, pt, sk, ru, zhHans  } from 'vuetify/lib/locale'
 
 const isDev = (process.env.NODE_ENV !== 'production')
 module.exports = {
@@ -41,7 +39,8 @@ module.exports = {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    '@/plugins/filters', // text filters, datetime filters, generic transformation helpers etc.
+    '@/plugins/helpers',
+    '@/plugins/time', // datetime filters
     '@/plugins/axios', // axios baseurl configuration
     '@/plugins/validators', // inject validators
     '@/plugins/api', // api helpers
@@ -55,6 +54,7 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/i18n',
+    '~/modules/axios-proxy.js', // Note: import this before @nuxtjs/axios to override defaults of both instances: `$axios` available in context, and `axios` used in controllers
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/sitemap',
@@ -140,27 +140,7 @@ module.exports = {
     }
   },
   buildModules: ['@nuxtjs/vuetify'],
-  vuetify: {
-    lang: { locales: { ca, de, en, es, eu, fr, gl, it, nb, pl, pt, sk, ru, zhHans } },
-    treeShake: true,
-    theme: {
-      options: {
-        customProperties: false,
-        variations: false,
-        minifyTheme,
-      },
-      dark: true,
-      themes: {
-        dark: {
-          primary: '#FF6E40'
-        },
-        light: {
-          primary: '#FF4500'
-        }
-      }
-    },
-    defaultAssets: false
-  },
+  vuetify: { defaultAssets: false, optionsPath: './vuetify.options.js' },
   build: {
     extend(config, { isDev, isClient }) {
       // ..

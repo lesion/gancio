@@ -224,7 +224,7 @@ export default {
     transition: opacity .5s;
     opacity: 0;
     visibility: hidden;
-    overflow: scroll;
+    overflow: auto;
     // position: absolute;
   }
 

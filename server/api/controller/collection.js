@@ -1,7 +1,7 @@
 const { Collection, Filter, Event, Tag, Place } = require('../models/models')
 
 const log = require('../../log')
-const dayjs = require('dayjs')
+const { DateTime } = require('luxon')
 const { col: Col } = require('../../helpers')
 const { Op, Sequelize } = require('sequelize')
 
@@ -21,7 +21,6 @@ const collectionController = {
 
   // return events from collection
   async getEvents (req, res) {
-    const format = req.params.format || 'json'
     const name = req.params.name
 
     const collection = await Collection.findOne({ where: { name } })
@@ -33,7 +32,7 @@ const collectionController = {
     if (!filters.length) {
       return res.json([])
     }
-    const start = dayjs().unix()
+    const start = DateTime.local().toUnixInteger()
     const where = {
       // do not include parent recurrent event
       recurrent: null,

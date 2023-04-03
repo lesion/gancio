@@ -108,7 +108,11 @@ li {
   /* margin-top: 16px;
   margin-right: 16px; */
   transition: all .5s;
+  min-height: 288px;
   overflow: hidden;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+
 }
 
 .event  .title {
@@ -127,11 +131,10 @@ li {
   flex: 1 1 auto;
 }
 
-.event .place span {
-  white-space: nowrap;
+/* .event .place span {
   overflow: hidden;
   text-overflow: ellipsis;
-}
+} */
 
 .event a {
   text-decoration: none;
@@ -148,6 +151,7 @@ li {
 
 #event {
   max-width: 1200px;
+  overflow-wrap: break-word;
 }
 
 /* .tags .v-chip .v-chip__content {

@@ -1,6 +1,6 @@
 <template lang='pug'>
 span
-  v-list(dense nav)
+  v-list(dense nav color='transparent')
     v-list-group(:append-icon='mdiChevronUp' :value='true')
       template(v-slot:activator)
         v-list-item.text-overline {{$t('common.admin_actions')}}
@@ -11,7 +11,7 @@ span
           v-icon(v-if='event.is_visible' v-text='mdiEyeOff')
           v-icon(v-else='event.is_visible' v-text='mdiEye')
         v-list-item-content
-          v-list-item-title(v-text="$t(`common.${event.is_visible?'hide':'confirm'}`)")
+          v-list-item-title(v-text="$t(`common.${event.is_visible?(event.parentId?'skip':'hide'):'confirm'}`)")
 
       //- Edit event
       v-list-item(:to='`/add/${event.id}`')
@@ -21,7 +21,7 @@ span
           v-list-item-title(v-text="$t('common.edit')")
 
       //- Remove
-      v-list-item(@click='remove(false)')
+      v-list-item(v-if='!event.parentId' @click='remove(false)')
         v-list-item-icon
           v-icon(v-text='mdiDelete')
         v-list-item-content

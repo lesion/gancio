@@ -419,11 +419,6 @@ describe('Collection', () => {
 
 describe('Geocoding', () => {
   test('should not be enabled by default', async () => {
-    await request(app)
-      .post('/api/settings')
-      .send({ key: 'allow_geolocation', value: false })
-      .auth(token.access_token, { type: 'bearer' })
-      .expect(200)
 
     const response = await request(app).get('/api/placeOSM/Nominatim/test')
       .expect(403)

@@ -28,7 +28,7 @@ v-container
           :disable='!valid || loading') {{ $t('common.save') }}
 
   v-card-text
-    v-card(v-for='plugin in plugins' :key='plugin.name' max-width="400" elevation='10' color='secondary' dark)
+    v-card(v-for='plugin in plugins' :key='plugin.name' max-width="400" elevation='10')
       v-card-title {{ plugin.name }}
       v-card-text
         p {{ plugin.description }}

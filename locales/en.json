@@ -162,8 +162,8 @@
     "recurrent_2w_days": "A {days} every other",
     "recurrent_1m_days": "The {days} of each month",
     "recurrent_2m_days": "The {days} a month every other",
-    "recurrent_1m_ordinal": "The {n} {days} of each month",
-    "recurrent_2m_ordinal": "The {n} {days} a month every other",
+    "recurrent_1m_ordinal": "Each {n} {days} of the month",
+    "recurrent_2m_ordinal": "Each {n} {days} a month every other",
     "each_week": "Each week",
     "each_2w": "Every other weeks",
     "each_month": "Each month",
@@ -309,7 +309,8 @@
     "tilelayer_test_error": "The tilelayer service is not reachable at {service_name}",
     "geolocation": "Geolocation",
     "allow_event_only_online": "Allow event only online",
-    "allow_event_also_online": "Allow event also online"
+    "allow_event_also_online": "Allow event also online",
+    "colors": "Colors"
   },
   "auth": {
     "not_confirmed": "Not confirmed yet…",

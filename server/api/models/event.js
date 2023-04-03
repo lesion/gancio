@@ -1,13 +1,7 @@
 const config = require('../../config')
 const { htmlToText } = require('html-to-text')
-const dayjs = require('dayjs')
-const timezone = require('dayjs/plugin/timezone')
-const utc = require('dayjs/plugin/utc')
+const { DateTime } = require('luxon')
 
-dayjs.extend(utc)
-dayjs.extend(timezone)
-
-// class Event extends Model {}
 module.exports = (sequelize, DataTypes) => {
   const Event = sequelize.define('event', {
     id: {
@@ -41,12 +35,18 @@ module.exports = (sequelize, DataTypes) => {
     online_locations: { type: DataTypes.JSON, defaultValue: [] }
   })
   
-  Event.prototype.toAP = function (username, locale, to = []) {
+  Event.prototype.toAP = function (settings, to = []) {
+
+    const username = settings.instance_name
+    const opt = {
+      zone: settings.instance_timezone,
+      locale: settings.instance_locale
+    }
     const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
     const plainDescription = htmlToText(this.description && this.description.replace('\n', '').slice(0, 1000))
     const content = `
     📍 ${this.place && this.place.name}
-    📅 ${dayjs.unix(this.start_datetime).tz().locale(locale).format('dddd, D MMMM (HH:mm)')}
+    📅 ${DateTime.fromSeconds(this.start_datetime).toFormat('EEEE, d MMMM (HH:mm)')}
     
     ${plainDescription}
     `
@@ -69,8 +69,8 @@ module.exports = (sequelize, DataTypes) => {
       name: this.title,
       url: `${config.baseurl}/event/${this.slug || this.id}`,
       type: 'Event',
-      startTime: dayjs.unix(this.start_datetime).tz().locale(locale).format(),
-      ...( this.end_datetime ? { endTime : dayjs.unix(this.end_datetime).tz().locale(locale).format() } : {} ),
+      startTime: DateTime.fromSeconds(this.start_datetime, opt).toISO(),
+      ...( this.end_datetime ? { endTime : DateTime.fromSeconds(this.end_datetime, opt).toISO() } : {} ),
       location: {
         name: this.place.name,
         address: this.place.address,
@@ -83,7 +83,7 @@ module.exports = (sequelize, DataTypes) => {
         name: '#' + tag,
         href: `${config.baseurl}/tag/${tag}`
       })),
-      published: dayjs(this.createdAt).utc().format(),
+      published: this.createdAt,
       attributedTo: `${config.baseurl}/federation/u/${username}`,
       to: ['https://www.w3.org/ns/activitystreams#Public'],
       cc: [`${config.baseurl}/federation/u/${username}/followers`],

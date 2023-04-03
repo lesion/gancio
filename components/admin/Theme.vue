@@ -52,38 +52,55 @@ v-container
         v-img.mt-2(:src='`/headerimage.png?${headerImageKey}`' max-height="150px" contain)          
 
 
-
-    //- TODO choose theme colors
-    //- v-row
-    //-   v-col(v-for='(color, i) in colors' :key='i')
-    //-     v-menu(v-model='menu[i]'
-    //-         :close-on-content-click="false"
-    //-         transition="slide-x-transition"
-    //-         offset-y
-    //-         absolute
-    //-         bottom
-    //-         max-width="290px"
-    //-         min-width="290px")
-    //-       template(v-slot:activator='{ on }')
-    //-         v-btn(:color='i' small
-    //-           v-on='on') {{i}}
-    //-       v-color-picker(light @update:color='c => updateColor(i, c)')
-
-    v-dialog(v-model='linkModal' width='500' :fullscreen='$vuetify.breakpoint.xsOnly')
-      v-card
-        v-card-title {{$t('admin.footer_links')}}
+  v-card-title {{$t('admin.colors')}}
+  //- choose theme colors
+  v-card-text
+    v-theme-provider(dark)
+      v-card(max-width='465')
         v-card-text
-          v-form(v-model='valid' ref='linkModalForm')
-            v-text-field(v-model='link.label'
-              :rules="[$validators.required('common.label')]"
-              label='Label')
-            v-text-field(v-model='link.href'
-              :rules="[$validators.required('common.url')]"
-              :label="$t('common.url')")
-        v-card-actions
-          v-spacer
-          v-btn(outlined @click='linkModal=false' color='error') {{$t('common.cancel')}}
-          v-btn(outlined @click='addFooterLink' color='primary' :disabled='!valid') {{$t('common.add')}}
+          span.mr-2(v-for='(color, i) in settings.dark_colors' :key='i')
+            v-menu(v-model='dark_menu[i]'
+                :close-on-content-click="false"
+                transition="slide-y-transition"
+                offset-y
+                top right
+                max-width="290px"
+                min-width="290px")
+              template(v-slot:activator='{ on }')
+                v-btn(:color='color' dark small v-on='on') {{i}}
+              v-color-picker(mode='hexa' :value='color' @update:color='c => updateColor("dark", i, c)')
+
+    v-theme-provider(light)
+      v-card.mt-4(max-width='465')
+        v-card-text
+          span.mr-2(v-for='(color, i) in settings.light_colors' :key='i')
+            v-menu(v-model='light_menu[i]'
+                :close-on-content-click="false"
+                transition="slide-y-transition"
+                offset-y
+                top right
+                max-width="290px"
+                min-width="290px")
+              template(v-slot:activator='{ on }')
+                v-btn(:color='color' small v-on='on') {{i}}
+              v-color-picker(mode='hexa' :value='color' @update:color='c => updateColor("light", i, c)')
+
+
+  v-dialog(v-model='linkModal' width='500' :fullscreen='$vuetify.breakpoint.xsOnly')
+    v-card
+      v-card-title {{$t('admin.footer_links')}}
+      v-card-text
+        v-form(v-model='valid' ref='linkModalForm')
+          v-text-field(v-model='link.label'
+            :rules="[$validators.required('common.label')]"
+            label='Label')
+          v-text-field(v-model='link.href'
+            :rules="[$validators.required('common.url')]"
+            :label="$t('common.url')")
+      v-card-actions
+        v-spacer
+        v-btn(outlined @click='linkModal=false' color='error') {{$t('common.cancel')}}
+        v-btn(outlined @click='addFooterLink' color='primary' :disabled='!valid') {{$t('common.add')}}
 
   v-card-title {{$t('admin.footer_links')}}
   v-card-text
@@ -106,10 +123,11 @@ v-container
 <script>
 import { mapActions, mapState } from 'vuex'
 import { mdiDeleteForever, mdiRestore, mdiPlus, mdiChevronUp } from '@mdi/js'
+import debounce from 'lodash/debounce'
 
 export default {
   name: 'Theme',
-  data () {
+  data ({ $store }) {
     const t = new Date().getMilliseconds()
     return {
       mdiDeleteForever, mdiRestore, mdiPlus, mdiChevronUp,
@@ -118,24 +136,19 @@ export default {
       fallbackImageKey: t,
       headerImageKey: t,
       link: { href: '', label: '' },
-      linkModal: false
-      // menu: [false, false, false, false]
-      // colors: { primary: '', secondary: '', accent: '', error: '', info: '', success: '', warning: '' }
-      //   primary: {},
-      //   secondary: {}
-      // }
+      linkModal: false,
+      dark_menu: [false, false, false, false],
+      light_menu: [false, false, false, false],
     }
   },
   computed: {
     ...mapState(['settings']),
-    // 'colors.primary': this.color('primary'),
-    // 'colors.secondary': this.color('primary'),
-    // 'colors.tertiary': this.color('primary'),
     is_dark: {
       get () { return this.settings['theme.is_dark'] },
       set (value) {
         this.$vuetify.theme.dark = value
         this.setSetting({ key: 'theme.is_dark', value })
+        this.setLocalSetting({ key: 'theme.is_dark', value })
       }
     },
     hide_thumbs: {
@@ -145,25 +158,10 @@ export default {
     hide_calendar: {
       get () { return this.settings.hide_calendar },
       set (value) { this.setSetting({ key: 'hide_calendar', value }) }
-    },
-  //   'colors[0]': {
-  //     get () {
-  //       return this.settings['theme.colors'] || [0, 0]
-  //     },
-  //     set (value) {
-  //       console.error(value)
-  //       if (!value) { return }
-  //       this.setSetting({ key: 'theme.primary', value })
-  //       if (this.settings['theme.is_dark']) {
-  //         this.$vuetify.theme.themes.dark.primary = value
-  //       } else {
-  //         this.$vuetify.theme.themes.light.primary = value
-  //       }
-  //     }
-  //   }
+    }
   },
   methods: {
-    ...mapActions(['setSetting']),
+    ...mapActions(['setSetting', 'setLocalSetting']),
     reset () {
       this.setSetting({
         key: 'footerLinks',
@@ -196,13 +194,16 @@ export default {
       this.setSetting({ key: 'header_image', value: null })
         .then(this.forceHeaderImageReload)
       e.stopPropagation()
-    },    
-    updateColor (i, v) {
-      this.colors[i] = v.hex
-      this.$vuetify.theme.themes.dark[i] = v.hex
+    },
+    updateSettingColor: debounce( async function (theme, color, value) {
+      const key = `${theme}_colors`
+      this.setSetting({ key, value: { ...this.settings[key], [color]: value.hex } })
+    }, 200),
+    updateColor (theme, color, value) {
+      this.$vuetify.theme.themes[theme][color] = value.hex
+      this.updateSettingColor(theme, color, value)
     },
     openLinkModal () {
-      // this.link = { href: '', label: '' }
       this.linkModal = true
       this.$nextTick(() => this.$refs.linkModalForm.reset())
     },

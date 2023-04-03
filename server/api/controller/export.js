@@ -2,7 +2,7 @@ const { Event, Place, Tag } = require('../models/models')
 
 const { htmlToText } = require('html-to-text')
 const { Op, literal } = require('sequelize')
-const moment = require('dayjs')
+const { DateTime } = require('luxon')
 const ics = require('ics')
 
 const exportController = {
@@ -13,8 +13,13 @@ const exportController = {
     const places = req.query.places
     const show_recurrent = !!req.query.show_recurrent
 
+    const opt = {
+      zone: res.locals.settings.instance_timezone,
+      locale: res.locals.settings.instance_locale
+    }
+
     const where = {}
-    const yesterday = moment().subtract('1', 'day').unix()
+    const yesterday = DateTime.local(opt).minus({day: 1}).toUnixInteger()
 
 
     if (tags && places) {
@@ -69,8 +74,18 @@ const exportController = {
 
   feed (_req, res, events, title = res.locals.settings.title, link = `${res.locals.settings.baseurl}/feed/rss`) {
     const settings = res.locals.settings
+
+    const opt = {
+      zone: settings.instance_timezone,
+      locale: settings.instance_locale
+    }
+
+    function unixFormat (timestamp, format='EEEE d MMMM HH:mm') {
+      return DateTime.fromSeconds(timestamp, opt).toFormat(format)
+    }    
+
     res.type('application/rss+xml; charset=UTF-8')
-    res.render('feed/rss.pug', { events, settings, moment, title, link })
+    res.render('feed/rss.pug', { events, settings, unixFormat, title, link })
   },
 
   /**
@@ -82,8 +97,8 @@ const exportController = {
     const settings = res.locals.settings
     const eventsMap = events.map(e => {
 
-      const tmpStart = moment.unix(e.start_datetime)
-      const start = tmpStart.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
+      const tmpStart = DateTime.fromSeconds(e.start_datetime)
+      const start = [ tmpStart.year, tmpStart.month, tmpStart.day, tmpStart.hour, tmpStart.minute ]
 
       const ret = {
         uid: `${e.id}@${settings.hostname}`,
@@ -99,8 +114,8 @@ const exportController = {
       }
 
       if (e.end_datetime) {
-        const tmpEnd = moment.unix(e.end_datetime)
-        const end = tmpEnd.utc(true).format('YYYY-M-D-H-m').split('-').map(Number)
+        const tmpEnd = DateTime.fromSeconds(e.end_datetime)
+        const end = [ tmpEnd.year, tmpEnd.month, tmpEnd.day, tmpEnd.hour, tmpEnd.minute ]
         ret.end = end
       }
 

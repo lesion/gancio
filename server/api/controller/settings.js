@@ -6,7 +6,6 @@ const sharp = require('sharp')
 const config = require('../../config')
 const generateKeyPair = promisify(crypto.generateKeyPair)
 const log = require('../../log')
-// const locales = require('../../../locales/index')
 const escape = require('lodash/escape')
 const DB = require('../models/models')
 
@@ -43,7 +42,8 @@ const defaultSettings = {
   enable_trusted_instances: true,
   trusted_instances: [],
   'theme.is_dark': true,
-  'theme.primary': '#FF4500',
+  dark_colors: { primary: '#FF6E40', error: '#FF5252', info: '#2196F3', success: '#4CAF50', warning: '#FB8C00' },
+  light_colors: { primary: '#FF4500', error: '#FF5252', info: '#2196F3', success: '#4CAF50', warning: '#FB8C00' },
   trusted_instances_label: '',
   hide_thumbs: false,
   hide_calendar: false,
@@ -104,19 +104,6 @@ const settingsController = {
       await settingsController.set('privateKey', privateKey, true)
     }
 
-    // initialize user_locale
-    // if (config.user_locale && fs.existsSync(path.resolve(config.user_locale))) {
-    //   const user_locales_files = fs.readdirSync(path.resolve(config.user_locale))
-    //     user_locales_files.forEach( f => {
-    //     const locale = path.basename(f ,'.json')
-    //     if (locales[locale]) {
-    //       log.info(`Adding custom locale ${locale}`)
-    //       settingsController.user_locale[locale] = require(path.resolve(config.user_locale, f)).default
-    //     } else {
-    //       log.warning(`Unknown custom user locale: ${locale} [valid locales are ${locales}]`)
-    //     }
-    //   })
-    // }
     const pluginController = require('./plugins')
     pluginController._load()
   },

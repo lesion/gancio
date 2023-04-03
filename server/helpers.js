@@ -87,7 +87,8 @@ module.exports = {
       trusted_instances: settings.trusted_instances,
       trusted_instances_label: settings.trusted_instances_label,
       'theme.is_dark': settings['theme.is_dark'],
-      'theme.primary': settings['theme.primary'],
+      dark_colors: settings.dark_colors,
+      light_colors: settings.light_colors,
       hide_thumbs: settings.hide_thumbs,
       hide_calendar: settings.hide_calendar,
       allow_geolocation: settings.allow_geolocation,
@@ -101,9 +102,6 @@ module.exports = {
       allow_event_only_online: settings.allow_event_only_online,
       allow_event_also_online: settings.allow_event_also_online
     }
-    // set user locale
-    // res.locals.user_locale = settingsController.user_locale[res.locals.acceptedLocale]
-    dayjs.tz.setDefault(res.locals.settings.instance_timezone)
     next()
   },
 
@@ -199,9 +197,9 @@ module.exports = {
    * It does supports ICS and H-EVENT
    */
   async importURL(req, res) {
-    const URL = req.query.URL
+    const url = req.query.URL
     try {
-      const response = await axios.get(URL)
+      const response = await axios.get(url)
       const contentType = response.headers['content-type']
 
       if (contentType.includes('text/html')) {
@@ -213,7 +211,7 @@ module.exports = {
             const props = e.properties
             let media = get(props, 'featured[0]')
             if (media) {
-              media = url.resolve(URL, media)
+              media = URL.resolve(url, media)
             }
             return {
               title: get(props, 'name[0]', ''),
@@ -255,16 +253,17 @@ module.exports = {
     let cursor
     if (n === -1) {
       cursor = date.endOf('month')
-      cursor = cursor.day(weekday)
-      if (cursor.month() !== date.month()) {
-        cursor = cursor.subtract(1, 'week')
+      cursor = cursor.set({ weekday })
+      if (cursor.month !== date.month) {
+        cursor = cursor.minus({ days: 7 })
       }
     } else {
       cursor = date.startOf('month')
       cursor = cursor.add(cursor.day() <= date.day() ? n - 1 : n, 'week')
-      cursor = cursor.day(weekday)
+      cursor = cursor.plus({ days: cursor.weekday <= date.weekday ? (n-1) * 7 : n * 7})
+      cursor = cursor.set({ weekday })
     }
-    cursor = cursor.hour(date.hour()).minute(date.minute()).second(0)
+    cursor = cursor.set({ hour: date.hour, minute: date.minute, second: 0 })
     log.debug(cursor)
     return cursor
   },

@@ -9,29 +9,26 @@
       @input='click'
       @update:from-page='updatePage'
       :locale='$i18n.locale'
-      :popover="{ visibility: 'click' }"
       :attributes='attributes'
       transition='fade'
       aria-label='Calendar'
       is-expanded
       is-inline)
-    .calh.d-flex.justify-center.align-center(slot='placeholder')
-      v-progress-circular(indeterminate)
+    .calh.text-center(slot='placeholder')
+      v-progress-circular.mt-5(indeterminate color='primary')
 
   </template>
 
 </template>
 <script>
 import { mapState, mapGetters } from 'vuex'
-import dayjs from 'dayjs'
 import { mdiChevronDown, mdiClose } from '@mdi/js'
-import { attributesFromEvents } from '../assets/helper'
 
 export default {
   name: 'Calendar',
-  data () {
-    const month = dayjs.tz().month() + 1
-    const year = dayjs.tz().year()
+  data ({$time}) {
+    const month = $time.currentMonth()
+    const year = $time.currentYear()
     return {
       mdiChevronDown, mdiClose,
       selectedDate: null,
@@ -42,15 +39,15 @@ export default {
     ...mapState(['settings', 'events']),
     ...mapGetters(['is_dark']),
     attributes () {
-      return attributesFromEvents(this.events)
+      return this.$time.attributesFromEvents(this.events)
     }
   },
   methods: {
     updatePage (page) {
       if (page.month !== this.page.month || page.year !== this.page.year) {
-        this.$root.$emit('monthchange', page)
         this.page.month = page.month
         this.page.year = page.year
+        this.$root.$emit('monthchange', page)
       }
     },
     click (day) {

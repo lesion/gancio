@@ -2,10 +2,10 @@
 nuxt-link.embed_event(:to='`/event/${event.slug || event.id}`' target='_blank' :class='{ withImg: event.media }')
 
   //- image
-  img.float-left(:src='event | mediaURL("thumb")')
+  img.float-left(:src='$helper.mediaURL(event, "thumb")')
   .event-info
     //-  title
-    .date {{event|when}}<br/>
+    .date {{$time.when(event)}}<br/>
     h4 {{event.title}}
 
     //- date / place
