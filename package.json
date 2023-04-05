@@ -70,7 +70,7 @@
     "mkdirp": "^2.1.6",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^2.3.3",
-    "nuxt-edge": "2.17.0-27999381.ff351a6",
+    "nuxt-edge": "2.17.0-28010897.1ab8718",
     "oauth2orize": "^1.11.1",
     "passport": "^0.6.0",
     "passport-anonymous": "^1.0.1",
