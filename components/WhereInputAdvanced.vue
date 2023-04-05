@@ -3,30 +3,8 @@ v-card
   v-card-title {{ $t('event.where_advanced_options') }}
   v-card-subtitle {{ $t('event.where_advanced_options_description') }}
 
-  v-card-text(v-if='settings.allow_event_also_online')
-    v-switch.mt-0.mb-0(v-model='event_only_online_update' 
-      v-if='settings.allow_event_only_online'
-      persistent-hint
-      :label="$t('event.event_only_online_label')")
-
-    v-combobox.mt-0.mb-0.mr-4.my-5(v-model="onlineLocations_update" 
-      v-if="place.name !== 'online' && settings.allow_event_also_online"
-      :prepend-icon='mdiLink'
-      :hint="$t('event.online_locations_help')"
-      :label="$t('event.online_locations')"
-      clearable chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-      :delimiters="[',', ';', '; ']"
-      :items="onlineLocations_update")
-      template(v-slot:selection="{ item, index, on, attrs, selected, parent }")
-        v-chip(v-bind="attrs" :outlined='index !== 0'
-          close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
-          :input-value="selected" label small) {{ item }}
-
-  v-divider(v-if='showGeocoded && showOnline')
-
-  v-card-text.mt-5(v-if='showGeocoded')
-    v-combobox(ref='geocodedAddress' v-if="settings.allow_geolocation && place.name !== 'online' || (!settings.allow_event_only_online && place.name === 'online')"
-      v-focus
+  v-card-text(v-if='showGeocoded')
+    v-combobox(ref='geocodedAddress'
       :prepend-icon='mdiMapSearch'
       @input.native='searchAddress'
       :label="$t('common.search_coordinates')"
@@ -63,7 +41,23 @@ v-card
           :rules="$validators.longitude")
     p.mt-4(v-if='place.isNew' v-html="$t('event.address_geocoded_disclaimer')")
 
-    MapEdit.mt-4(:place='place' :key='mapEdit' v-if="(settings.allow_geolocation && place.name !== 'online' && place.latitude && place.longitude)"  )
+    MapEdit.mt-4(:place='place' v-if="(settings.allow_geolocation && place.name !== 'online' && place.latitude && place.longitude)"  )
+
+  v-divider(v-if='settings.allow_online_event && showGeocoded')
+
+  v-card-text.mt-6(v-if='settings.allow_online_event')
+    v-combobox(v-model="onlineLocations_update" 
+      :prepend-icon='mdiLink'
+      :hint="$t('event.online_locations_help')"
+      :label="$t('event.online_locations')"
+      clearable chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
+      :delimiters="[',', ';']"
+      :items="onlineLocations_update")
+      template(v-slot:selection="{ item, index, on, attrs, selected, parent }")
+        v-chip(v-bind="attrs" :outlined='index !== 0'
+          close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+          :input-value="selected" label small) {{ item }}
+
 
   v-card-actions
     v-spacer
@@ -75,7 +69,6 @@ import { mdiMap, mdiLatitude, mdiLongitude, mdiCog, mdiLink, mdiCloseCircle, mdi
   mdiMapSearch, mdiRoadVariant, mdiHome, mdiCityVariant } from '@mdi/js'
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
-import get from 'lodash/get'
 import geolocation from '../server/helpers/geolocation/index'
 
 export default {
@@ -83,7 +76,6 @@ export default {
   props: {
     place: { type: Object, default: () => ({}) },
     event: { type: Object, default: () => null },
-    event_only_online_value: { type: Boolean, default: false },
     onlineLocations: { type: Array, default: [] }
   },
   components: {
@@ -93,18 +85,13 @@ export default {
     return {
       mdiMap, mdiLatitude, mdiLongitude, mdiCog, mdiLink, mdiCloseCircle,
       mdiMapMarker, mdiMapSearch, mdiRoadVariant, mdiHome, mdiCityVariant,
-      showOnline: $store.state.settings.allow_event_also_online,
-      showGeocoded: $store.state.settings.allow_geolocation && this.place.name !== 'online',
-      disableGeocoded: this.place.name === 'online' || !this.place.isNew,
-      event_only_online: this.place.name === 'online',
-      mapEdit: 1,
       addressList: [],
       loading: false,
       iconsMapper: {
-        'mdiHome': mdiHome,
-        'mdiRoadVariant': mdiRoadVariant,
-        'mdiMapMarker': mdiMapMarker,
-        'mdiCityVariant': mdiCityVariant
+        mdiHome,
+        mdiRoadVariant,
+        mdiMapMarker,
+        mdiCityVariant
       },
       currentGeocodingProvider: geolocation.getGeocodingProvider($store.state.settings.geocoding_provider_type),
       prevAddress: ''
@@ -112,12 +99,8 @@ export default {
   },
   computed: {
     ...mapState(['settings']),
-    event_only_online_update: {
-      get () { return this.event_only_online_value },
-      set (value) {
-        this.$emit('update:onlineEvent', value)
-        this.close()
-      }
+    showGeocoded () {
+      return this.settings.allow_geolocation && this.place.name !== 'online' && this.place.isNew
     },
     onlineLocations_update: {
       get () { return this.onlineLocations },
@@ -155,7 +138,6 @@ export default {
       } else {
         this.place.latitude = this.place.longitude = null
       }
-      this.mapEdit++
       this.prevAddress = v.address
     },
   }

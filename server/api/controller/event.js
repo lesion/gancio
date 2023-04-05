@@ -31,14 +31,14 @@ const eventController = {
 
     const place_name = body.place_name && body.place_name.trim()
     const place_address = body.place_address && body.place_address.trim()
-    if (!place_address || !place_name) {
+    if (!place_name || !place_address && place_name !== 'online') {
       throw new Error(`place_id or place_name and place_address are required`)
     }    
     let place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Sequelize.Op.eq, place_name.toLocaleLowerCase()) })
     if (!place) {
       place = await Place.create({
         name: place_name,
-        address: place_address,
+        address: place_address || '',
         latitude: Number(body.place_latitude) || null,
         longitude: Number(body.place_longitude) || null
       })

@@ -17,17 +17,17 @@ v-container#event.pa-2.pa-sm-2(itemscope itemtype="https://schema.org/Event" v-t
               strong.p-name.text--primary(itemprop="name") {{event.title}}
           v-divider
           v-container.eventDetails
-            time.dt-start(:datetime='$time.unixFormat(event.start_datetime, "yyyy-MM-dd HH:mm")' itemprop="startDate" :content="$time.unixFormat(event.start_datetime, \"yyyy-MM-dd'T'HH:mm\")")
+            time.dt-start(:datetime='$time.unixFormat(event.start_datetime, "yyyy-MM-dd HH:mm")' itemprop="startDate" :content='$time.unixFormat(event.start_datetime, "yyyy-MM-dd\'T\'HH:mm")')
               v-icon(v-text='mdiCalendar' small)
               strong.ml-2.text-uppercase {{$time.when(event)}}
-              .d-none.dt-end(v-if='event.end_datetime' itemprop="endDate" :content="$time.unixFormat(event.end_datetime,\"yyyy-MM-dd'T'HH:mm\")") {{$time.unixFormat(event.end_datetime,"yyyy-MM-dd'T'HH:mm")}}
+              .d-none.dt-end(v-if='event.end_datetime' itemprop="endDate" :content='$time.unixFormat(event.end_datetime,"yyyy-MM-dd\'T\'HH:mm")') {{$time.unixFormat(event.end_datetime,"yyyy-MM-dd'T'HH:mm")}}
             div.font-weight-light.mb-3 {{$time.from(event.start_datetime)}}
               small(v-if='event.parentId')  ({{$time.recurrentDetail(event)}})
 
             .p-location.h-adr(itemprop="location" itemscope itemtype="https://schema.org/Place")
               v-icon(v-text='mdiMapMarker' small)
               nuxt-link.vcard.ml-2.p-name.text-decoration-none.text-uppercase(itemprop="name" :to='`/place/${encodeURIComponent(event.place.name)}`') {{event.place && event.place.name}}
-              .font-weight-light.p-street-address(itemprop='address') {{event.place && event.place.address}}
+              .font-weight-light.p-street-address(v-if='event.place.name !=="online"' itemprop='address') {{event.place && event.place.address}}
 
           //- tags, hashtags
           v-container.pt-0(v-if='event.tags && event.tags.length')
@@ -35,20 +35,13 @@ v-container#event.pa-2.pa-sm-2(itemscope itemtype="https://schema.org/Event" v-t
               outlined :key='tag' :to='`/tag/${encodeURIComponent(tag)}`') {{tag}}
 
           //- online events
-          v-divider(v-if='onlineSectionEnabled && event.online_locations && event.online_locations.length')
-          div(v-if='onlineSectionEnabled && event.online_locations && event.online_locations.length')
-            v-card-text.text-caption.pb-0(v-text="event.place.name === 'online' && $t('event.event_only_online') || $t('event.event_also_online') ")
-            v-list-item(target='_blank' :href='`${event.online_locations[0]}`')
+          //- v-divider(v-if='hasOnlineLocations')
+          v-list(nav dense v-if='hasOnlineLocations')
+            v-list-item(v-for='(item, index) in event.online_locations' target='_blank' :href="`${item}`" :key="index")
               v-list-item-icon
-                v-icon.my-auto(v-text='mdiMonitorAccount')
+                v-icon(v-text='mdiMonitorAccount')
               v-list-item-content.py-0
-                v-list-item-title.text-caption(v-text='`${event.online_locations[0]}`')
-          div(v-if='onlineSectionEnabled && event.online_locations && event.online_locations.length > 1')
-            v-card-text.text-caption.pt-0.pb-0(v-text="$t('event.online_locations_fallback_urls')")
-            v-list-item
-              v-list-item-content
-                v-chip(v-for='(item, index) in event.online_locations' v-if="index > 0" target='_blank' :href="`${item}`" 
-                  v-bind:key="index" small label v-text="`${item}`" outlined )
+                v-list-item-title.text-caption(v-text='item')
 
           v-divider
           //- info & actions
@@ -92,7 +85,7 @@ v-container#event.pa-2.pa-sm-2(itemscope itemtype="https://schema.org/Event" v-t
                 v-list-item-content
                   v-list-item-title(v-text="$t('event.download_flyer')")
 
-          v-divider
+          v-divider(v-if='is_mine')
 
           //- admin actions
           eventAdmin(v-if='is_mine' :event='event')
@@ -229,8 +222,7 @@ export default {
       showEmbed: false,
       showResources: false,
       selectedResource: { data: { attachment: [] } },
-      mapModal: false,
-      onlineSectionEnabled: $store.state.settings.allow_event_only_online || $store.state.settings.allow_event_also_online
+      mapModal: false
     }
   },
   head () {
@@ -311,6 +303,12 @@ export default {
   },
   computed: {
     ...mapState(['settings']),
+    hasOnlineLocations () {
+      return this.event.online_locations && this.event.online_locations.length
+    },
+    showMap () {
+      return this.settings.allow_geolocation && this.event.place.latitude && this.event.place.longitude
+    },
     hasMedia () {
       return this.event.media && this.event.media.length
     },

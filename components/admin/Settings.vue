@@ -52,17 +52,13 @@ v-container
       inset
       :label="$t('admin.recurrent_event_visible')")
 
+    v-switch.mt-1(v-model='allow_online_event'
+      inset
+      :label="$t('admin.allow_online_event')")
+
     v-switch.mt-1(v-model='allow_geolocation'
       inset
       :label="$t('admin.allow_geolocation')")
-
-    v-switch.mt-1(v-model='allow_event_only_online'
-      inset
-      :label="$t('admin.allow_event_only_online')")
-
-    v-switch.mt-1(v-model='allow_event_also_online'
-      inset
-      :label="$t('admin.allow_event_also_online')")
 
   v-dialog(v-model='showSMTP' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
     SMTP(@close='showSMTP = false')
@@ -134,17 +130,9 @@ export default {
       get () { return this.settings.allow_geolocation },
       set (value) { this.setSetting({ key: 'allow_geolocation', value }) }
     },
-    allow_event_only_online: {
-      get () { return this.settings.allow_event_only_online },
-      set (value) { this.setSetting({ key: 'allow_event_only_online', value })
-        if (value == true) { this.allow_event_also_online = value } 
-      }
-    },
-    allow_event_also_online: {
-      get () { return this.settings.allow_event_also_online },
-      set (value) { this.setSetting({ key: 'allow_event_also_online', value }) 
-        if (value == false) { this.setSetting({ key: 'allow_event_only_online', value }) } 
-      }
+    allow_online_event: {
+      get () { return this.settings.allow_online_event },
+      set (value) { this.setSetting({ key: 'allow_online_event', value }) }
     },
     filteredTimezones () {
       const current_timezone = DateTime.local().zoneName

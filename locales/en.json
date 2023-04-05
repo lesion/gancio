@@ -101,7 +101,8 @@
     "recurring_event_actions": "Recurring event actions",
     "latitude": "Latitude",
     "longitude": "Longitude",
-    "search_coordinates": "Search coordinates"
+    "search_coordinates": "Search coordinates",
+    "online": "On-line"
   },
   "login": {
     "description": "By logging in you can publish new events.",
@@ -143,7 +144,7 @@
     "updated": "Event updated",
     "where_description": "Where's the event? If not present you can create it.",
     "address_description": "What is the address?",
-    "address_description_osm": "Search tiping the address. (<a href='http://osm.org/copyright'>OpenStreetMap</a> contributors)",
+    "address_description_osm": "Search coordinates by typing the address. (<a href='http://osm.org/copyright'>OpenStreetMap</a> contributors)",
     "confirmed": "Event confirmed",
     "not_found": "Could not find event",
     "remove_confirmation": "Are you sure you want to remove this event?",
@@ -184,12 +185,8 @@
     "download_flyer": "Download flyer",
     "where_advanced_options": "Place - Advanced options",
     "where_advanced_options_description": "Define here additional place properties",
-    "event_only_online": "Online event",
-    "event_only_online_label": "The event is only online",
-    "event_also_online": "Partecipate remotely",
     "online_locations": "Online locations",
-    "online_locations_help": "For instance a url to a videconference room, and a fallback url (max. 3)",
-    "online_locations_url": "Online locations",
+    "online_locations_help": "For instance an url to a videconference room and a fallback url (max. 3)",
     "online_locations_fallback_urls": "Fallback links",
     "address_geocoded_disclaimer": "If you cannot find the <strong>street address</strong> or the <strong>housenumber</strong> you are looking for in the geocoding results, you can manually insert them in the 'Address' field without loose the coordinates. Consider also that the <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> project is open to contributions. If you have Android, we recommend <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> "
   },
@@ -209,6 +206,8 @@
     "allow_anon_event": "Allow anonymous events (has to be confirmed)?",
     "allow_multidate_event": "Allow multi-day events",
     "allow_recurrent_event": "Allow recurring events",
+    "allow_online_event": "Allow online events",
+    "allow_online_event_hint": "Ask for urls ",
     "allow_geolocation": "Allow events geolocation",
     "recurrent_event_visible": "Show recurring events by default",
     "federation": "Federation / ActivityPub",
@@ -308,8 +307,6 @@
     "tilelayer_test_success": "The tilelayer service at {service_name} is working",
     "tilelayer_test_error": "The tilelayer service is not reachable at {service_name}",
     "geolocation": "Geolocation",
-    "allow_event_only_online": "Allow event only online",
-    "allow_event_also_online": "Allow event also online",
     "colors": "Colors"
   },
   "auth": {

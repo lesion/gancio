@@ -141,6 +141,7 @@ export default {
       data.event.media = event.media || []
       data.event.parentId = event.parentId
       data.event.recurrent = event.recurrent
+      data.event.online_locations = event.online_locations
       return data
     }
     return {}
@@ -233,7 +234,7 @@ export default {
         formData.append('place_id', this.event.place.id)
       }
       formData.append('place_name', this.event.place.name.trim())
-      formData.append('place_address', this.event.place.address)
+      formData.append('place_address', this.event.place.address || null)
 
       if (this.settings.allow_geolocation) {
         formData.append('place_latitude', this.event.place.latitude || '')

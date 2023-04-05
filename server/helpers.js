@@ -79,6 +79,7 @@ module.exports = {
       allow_anon_event: settings.allow_anon_event,
       allow_recurrent_event: settings.allow_recurrent_event,
       allow_multidate_event: settings.allow_multidate_event,
+      allow_online_event: settings.allow_online_event,
       recurrent_event_visible: settings.recurrent_event_visible,
       enable_federation: settings.enable_federation,
       enable_resources: settings.enable_resources,
@@ -99,8 +100,6 @@ module.exports = {
       tilelayer_provider_attribution: settings.tilelayer_provider_attribution,
       footerLinks: settings.footerLinks,
       about: settings.about,
-      allow_event_only_online: settings.allow_event_only_online,
-      allow_event_also_online: settings.allow_event_also_online
     }
     next()
   },
