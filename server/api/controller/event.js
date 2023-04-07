@@ -677,7 +677,8 @@ const eventController = {
       media: e.media,
       is_visible: true,
       userId: e.userId,
-      placeId: e.placeId
+      placeId: e.placeId,
+      ...(e.online_locations && { online_locations: e.online_locations } )
     }
 
     const recurrentDetails = e.recurrent
