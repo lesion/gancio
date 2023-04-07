@@ -23,7 +23,7 @@ v-col(cols=12)
             is-inline
             is-expanded
             :min-date='new Date()')
-      .calh.text-center(slot='placeholder')
+      v-col.calh.text-center(slot='placeholder')
         v-progress-circular(indeterminate color='primary')
 
   div.text-center.mb-2(v-if='type === "recurrent"')

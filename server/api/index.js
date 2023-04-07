@@ -141,7 +141,7 @@ module.exports = () => {
     // api.get('/event/search', eventController.search)
   
     api.put('/event', isAuth, upload.single('image'), eventController.update)
-    api.get('/event/import', isAuth, helpers.importURL)
+    api.get('/event/import', eventController.isAnonEventAllowed, helpers.importURL)
   
     // remove event
     api.delete('/event/:id', isAuth, eventController.remove)
