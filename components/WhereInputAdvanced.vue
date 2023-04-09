@@ -15,7 +15,6 @@ v-card
       @change='selectAddress'
       @focus='searchAddress'
       :items="addressList"
-      :disabled='disableGeocoded'
       :hint="$t('event.address_description_osm')")
       template(v-slot:message="{message, key}")
         span(v-html='message' :key="key")
@@ -30,13 +29,11 @@ v-card
       v-col.py-0(cols=12 sm=6)
         v-text-field(v-model="place.latitude"
           :prepend-icon='mdiLatitude'
-          :disabled='disableGeocoded'
           :label="$t('common.latitude')"
           :rules="$validators.latitude")
       v-col.py-0(cols=12 sm=6)
         v-text-field(v-model="place.longitude"
           :prepend-icon='mdiLongitude'
-          :disabled='disableGeocoded'
           :label="$t('common.longitude')"
           :rules="$validators.longitude")
     p.mt-4(v-if='place.isNew' v-html="$t('event.address_geocoded_disclaimer')")

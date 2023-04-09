@@ -3,7 +3,7 @@ client-only(placeholder='Loading...' )
   v-card
     v-container
       LMap(ref="map"
-          id="leaflet-map"
+          id="leaflet-map-dialog"
           :zoom="zoom"
           :options="{attributionControl: false}"
           :center="center")
@@ -105,7 +105,7 @@ export default {
 </script>
 
 <style>
-  #leaflet-map {
+  #leaflet-map-dialog {
     height: 55vh;
     width: 100%;
     border-radius: .3rem;

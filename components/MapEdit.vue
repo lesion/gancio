@@ -17,7 +17,6 @@ client-only(placeholder='Loading...' )
 
 import "leaflet/dist/leaflet.css"
 import { LMap, LTileLayer, LMarker, LPopup, LControlAttribution } from 'vue2-leaflet'
-import { mapActions, mapState } from 'vuex'
 import { Icon } from 'leaflet'
 import { mdiWalk, mdiBike, mdiCar, mdiMapMarker } from '@mdi/js'
 
@@ -35,15 +34,21 @@ export default {
       url: $store.state.settings.tilelayer_provider || 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution: $store.state.settings.tilelayer_provider_attribution || "<a target=\"_blank\" href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
       zoom: 16,
-      center: [this.place.latitude, this.place.longitude],
-      marker: {
+    }
+  },
+  computed: {
+    center () {
+      return [this.place.latitude, this.place.longitude]
+    },
+    marker () {
+      return {
         address: this.place.address,
         coordinates: {lat: this.place.latitude, lon: this.place.longitude }
-      }
+      }      
     }
   },
   props: {
-    place: { type: Object, default: () => ({}) }
+    place: { type: Object, default: () => ({ latitude: 0, longitude: 0 }) }
   },
   mounted() {
     delete Icon.Default.prototype._getIconUrl;
