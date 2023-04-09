@@ -38,6 +38,8 @@ v-col(cols=12)
         :close-on-content-click="false"
         offset-y
         :value="value.fromHour"
+        max-width="290px"
+        min-width="290px"
         transition="scale-transition")
         template(v-slot:activator="{ on, attrs }")
           v-text-field(
@@ -56,6 +58,7 @@ v-col(cols=12)
           v-if="menuFromHour"
           :value="value.fromHour"
           :allowedMinutes='allowedMinutes'
+          full-width
           format='24hr'
           @click:minute='menuFromHour = false'
           @input='hr => change("fromHour", hr)')
@@ -66,6 +69,8 @@ v-col(cols=12)
         v-model="menuDueHour"
         :close-on-content-click="false"
         offset-y
+        max-width="290px"
+        min-width="290px"
         :value="value.dueHour"
         transition="scale-transition")
         template(v-slot:activator="{ on, attrs }")
@@ -83,6 +88,7 @@ v-col(cols=12)
         v-time-picker(
           v-if="menuDueHour"
           :value="value.dueHour"
+          full-width
           :allowedMinutes='allowedMinutes'
           format='24hr'
           @click:minute='menuDueHour = false'
