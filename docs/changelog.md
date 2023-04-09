@@ -9,6 +9,11 @@ nav_order: 10
 All notable changes to this project will be documented in this file.
 
 
+### UNRELEASED
+  - show past events in tag and place pages
+  - fix import from URL for guest, #256
+  - add support to online events (tha
+
 ### 1.6.8
   - use new $time in admins table, fix #252
   - fix some WPGancio issues
