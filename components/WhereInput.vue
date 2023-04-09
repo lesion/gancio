@@ -29,7 +29,7 @@ v-row.mb-4
   v-col(cols=12 md=6)
     v-row.mx-0.my-0.align-center.justify-center
 
-      v-text-field.mr-4(ref='address' v-if="value.name !== 'online'"
+      v-text-field.mr-4(ref='address' v-if="value.name !== 'online' || !settings.allow_online_event"
         v-model='value.address'
         :prepend-icon='mdiMap'
         :disabled='disableAddress'
@@ -81,7 +81,7 @@ export default {
     return {
       mdiMap, mdiMapMarker, mdiPlus, mdiCog, mdiLink, mdiCloseCircle, mdiLaptopAccount,
       places: [],
-      place: { },
+      place: { isNew: false },
       placeName: '',
       disableAddress: true,
       whereInputAdvancedDialog: false,
@@ -92,32 +92,16 @@ export default {
     ...mapState(['settings']),
     showAdvancedDialogButton () {
 
+      // do not show advanced dialog button in case geolocation and online events are not allowed
       if (!(this.settings.allow_geolocation || this.settings.allow_online_event)) {
         return false
       }
 
-
+      // known places already have coords
       if (!this.place.isNew && !this.settings.allow_online_event) return false
+
       return true
     }
-    // filteredPlaces () {
-    //   if (!this.placeName) { return this.places }
-    //   const placeName = this.placeName.trim().toLowerCase()
-    //   let nameMatch = false
-    //   const matches = this.places.filter(p => {
-    //     const tmpName = p.name.toLowerCase()
-    //     const tmpAddress = p.address.toLowerCase()
-    //     if (tmpName.includes(placeName)) {
-    //       if (tmpName === placeName) { nameMatch = true }
-    //       return true
-    //     }
-    //     return tmpAddress.includes(placeName)
-    //   })
-    //   if (!nameMatch) {
-    //     matches.unshift({ create: true, name: this.placeName })
-    //   }
-    //   return matches
-    // }
   },
   mounted () {
     this.$nextTick( () => {
