@@ -45,6 +45,7 @@ v-row.mb-4
         :prepend-icon='mdiLink'
         :hint="$t('event.online_locations_help')"
         :label="$t('event.online_locations')"
+        :rules="[$validators.required('event.online_locations')]"
         clearable chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
         :delimiters="[',', ';', '; ']"
         :items="onlineLocations"
