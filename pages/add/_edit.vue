@@ -30,7 +30,7 @@ v-container.container.pa-0.pa-md-3
 
             //- Where
             v-col(cols=12)
-              WhereInput(ref='where' v-model='event.place')
+              WhereInput(ref='where' v-model='event.place' :event='event')
 
             //- When
             DateInput(ref='when' v-model='date' :event='event')
@@ -141,6 +141,7 @@ export default {
       data.event.media = event.media || []
       data.event.parentId = event.parentId
       data.event.recurrent = event.recurrent
+      data.event.online_locations = event.online_locations
       return data
     }
     return {}
@@ -233,9 +234,17 @@ export default {
         formData.append('place_id', this.event.place.id)
       }
       formData.append('place_name', this.event.place.name.trim())
-      formData.append('place_address', this.event.place.address)
-      if (this.event.place.latitude) { formData.append('place_latitude', this.event.place.latitude) }
-      if (this.event.place.longitude) { formData.append('place_longitude', this.event.place.longitude) }
+      formData.append('place_address', this.event.place.address || null)
+
+      if (this.settings.allow_geolocation) {
+        formData.append('place_latitude', this.event.place.latitude || '')
+        formData.append('place_longitude', this.event.place.longitude || '')
+      }
+
+      if (this.event.online_locations) { 
+        this.event.online_locations.forEach(l => formData.append('online_locations[]', l)) 
+      }
+
       formData.append('description', this.event.description)
       formData.append('multidate', !!this.date.multidate)
       formData.append('start_datetime', this.$time.fromDateInput(this.date.from, this.date.fromHour))

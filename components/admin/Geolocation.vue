@@ -60,7 +60,7 @@ v-card
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import { isoCountries } from '../../server/helpers/geolocation'
+import { isoCountries } from '../../server/helpers/geolocation/isoCountries'
 import { mdiChevronDown } from '@mdi/js'
 // import Map from '~/components/Map'
 import "leaflet/dist/leaflet.css"

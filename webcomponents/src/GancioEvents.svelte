@@ -113,7 +113,7 @@
           </div>
           <span class="place"
             >@{event.place.name}
-            <span class="subtitle"> {event.place.address}</span></span
+            {#if event.place.name!=="online"}<span class="subtitle"> {event.place.address}</span>{/if}</span
           >
           {#if event.tags.length}
             <div class="tags">

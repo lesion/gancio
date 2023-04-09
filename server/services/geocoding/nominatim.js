@@ -1,5 +1,6 @@
 const cache = require('memory-cache')
 const providerCache = new cache.Cache()
+const get = require('lodash/get')
 
 const nominatim = {
   commonName: 'Nominatim',
@@ -22,6 +23,47 @@ const nominatim = {
       namedetails: 1,
     }
   },
+
+  /**
+   * Icons to nominatim `osm_type` and `class` conversion
+   */
+  searchIcons_nominatim_osm_type: {
+    way: 'mdiRoadVariant',
+    house: 'mdiHome',
+    node: 'mdiMapMarker',
+    relation: 'mdiCityVariant',
+  },
+  searchIcons_nominatim_class: ['place', 'amenity', 'shop', 'tourism', 'leisure', 'building'],
+
+  loadResultIcon (item) {
+    if (this.searchIcons_nominatim_class.includes(item.class)) {
+      return 'mdiHome'
+    }
+    return this.searchIcons_nominatim_osm_type[item.type]
+  },
+
+  /**
+   * Map results from provider
+   */
+  filterNameFromAddress: ['place', 'amenity', 'shop', 'tourism', 'leisure', 'building'],
+
+  mapQueryResults (ret, addressList = []) {
+    if (ret && ret.length) {
+      addressList = ret.map(v => {
+        const name = get(v.namedetails, 'alt_name', get(v.namedetails, 'name'))
+        const address = this.filterNameFromAddress.includes(v.class) ? v.display_name.replace(name, '').replace(/^, ?/, '') : v.display_name.replace(/^, ?/, '')
+        return {
+          class: v.class,
+          type: v.osm_type,
+          lat: v.lat,
+          lon: v.lon,
+          name,
+          address
+        }
+      }) 
+    }
+    return addressList
+  }
 
 }
 

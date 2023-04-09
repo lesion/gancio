@@ -52,6 +52,10 @@ v-container
       inset
       :label="$t('admin.recurrent_event_visible')")
 
+    v-switch.mt-1(v-model='allow_online_event'
+      inset
+      :label="$t('admin.allow_online_event')")
+
     v-switch.mt-1(v-model='allow_geolocation'
       inset
       :label="$t('admin.allow_geolocation')")
@@ -125,6 +129,10 @@ export default {
     allow_geolocation: {
       get () { return this.settings.allow_geolocation },
       set (value) { this.setSetting({ key: 'allow_geolocation', value }) }
+    },
+    allow_online_event: {
+      get () { return this.settings.allow_online_event },
+      set (value) { this.setSetting({ key: 'allow_online_event', value }) }
     },
     filteredTimezones () {
       const current_timezone = DateTime.local().zoneName

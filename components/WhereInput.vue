@@ -1,6 +1,7 @@
 <template lang="pug">
 v-row.mb-4
   v-col(cols=12 md=6)
+    //- this is the name used by people
     v-combobox(ref='place'
       :rules="[$validators.required('common.where')]"
       :label="$t('common.where')"
@@ -18,112 +19,105 @@ v-row.mb-4
         v-list-item(v-bind='attrs' v-on='on')
           v-list-item-content(two-line v-if='item.create')
             v-list-item-title <v-icon color='primary' v-text='mdiPlus' :aria-label='$t("common.add")'></v-icon> {{$t('common.add')}} <strong>{{item.name}}</strong>
+          v-list-item-content(two-line v-else-if='item.online')
+            v-list-item-title <v-icon color='primary' v-text='mdiLaptopAccount' :aria-label='$t("common.online")'></v-icon> {{$t('common.online')}}
           v-list-item-content(two-line v-else)
             v-list-item-title(v-text='item.name')
             v-list-item-subtitle(v-text='item.address')
 
 
   v-col(cols=12 md=6)
-    v-text-field(v-if="!settings.allow_geolocation"
-        ref='address'
+    v-row.mx-0.my-0.align-center.justify-center
+
+      v-text-field.mr-4(ref='address' v-if="value.name !== 'online'"
+        v-model='value.address'
         :prepend-icon='mdiMap'
         :disabled='disableAddress'
         :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
         :label="$t('common.address')"
         :hint="$t('event.address_description')"
-        persistent-hint
-        @change="changeAddress"
-        :value="value.address")
-    v-combobox(ref='address' v-else
-      :prepend-icon='mdiMapSearch'
-      :disabled='disableAddress'
-      @input.native='searchAddress'
-      :label="$t('common.address')"
-      :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
-      :value='value.address'
-      item-text='address'
-      persistent-hint hide-no-data clearable no-filter
-      :loading='loading'
-      @change='selectAddress'
-      @focus='searchAddress'
-      :items="addressList"
-      :hint="$t('event.address_description_osm')")
-      template(v-slot:message="{message, key}")
-        span(v-html='message' :key="key")
-      template(v-slot:item="{ item, attrs, on  }")
-        v-list-item(v-bind='attrs' v-on='on')
-          v-icon.pr-4(v-text='loadCoordinatesResultIcon(item)')
-          v-list-item-content(two-line v-if='item')
-            v-list-item-title(v-text='item.name')
-            v-list-item-subtitle(v-text='`${item.address}`')
-  //- v-col(cols=12 md=3 v-if='settings.allow_geolocation')
-  //-   v-text-field(ref='latitude' :value='value.latitude'
-  //-         :prepend-icon='mdiLatitude'
-  //-         :disabled='disableDetails'
-  //-         :label="$t('common.latitude')" )
-  //- v-col(cols=12 md=3 v-if='settings.allow_geolocation')
-  //-   v-text-field(ref='longitude' :value='value.longitude'
-  //-         :prepend-icon='mdiLongitude'
-  //-         :disabled='disableDetails'
-  //-         :label="$t('common.longitude')")
+        persistent-hint)
+        template(v-slot:append v-if="showAdvancedDialogButton")
+          v-icon(v-text='mdiCog'
+            @click="whereInputAdvancedDialog = true")
 
+      v-combobox.mr-4(v-model="onlineLocations" v-else
+        :prepend-icon='mdiLink'
+        :hint="$t('event.online_locations_help')"
+        :label="$t('event.online_locations')"
+        clearable chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
+        :delimiters="[',', ';', '; ']"
+        :items="onlineLocations"
+        @change='selectLocations')
+        template(v-slot:selection="{ item, index, on, attrs, selected, parent }")
+          v-chip(v-bind="attrs" :outlined='index !== 0'
+            close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+            :input-value="selected" label small) {{ item }}
+        //- template(v-slot:append)
+        //-   v-icon(v-text='mdiCog' :disabled='!value.name' @click="whereInputAdvancedDialog = true") 
+
+    v-dialog(v-model='whereInputAdvancedDialog' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly' dense)
+      WhereInputAdvanced(ref='whereAdvanced' :place.sync='value' :event='event'
+        @close='whereInputAdvancedDialog = false && this.$refs.address.blur()'
+        :onlineLocations.sync="onlineLocations"
+        @update:onlineLocations="selectLocations")
+
+    
 </template>
 <script>
-import { mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiLatitude, mdiLongitude, mdiRoadVariant, mdiHome, mdiCityVariant } from '@mdi/js'
+import { mdiMap, mdiMapMarker, mdiPlus, mdiCog, mdiLink, mdiCloseCircle, mdiLaptopAccount } from '@mdi/js'
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
-import get from 'lodash/get'
+import WhereInputAdvanced from './WhereInputAdvanced.vue'
 
 export default {
   name: 'WhereInput',
   props: {
-    value: { type: Object, default: () => ({}) }
+    value: { type: Object, default: () => ({}) },
+    event: { type: Object, default: () => null },
   },
+  components: { WhereInputAdvanced },
   data ( {$store} ) {
     return {
-      mdiMap, mdiMapMarker, mdiPlus, mdiMapSearch, mdiLatitude, mdiLongitude, mdiRoadVariant, mdiHome, mdiCityVariant,
+      mdiMap, mdiMapMarker, mdiPlus, mdiCog, mdiLink, mdiCloseCircle, mdiLaptopAccount,
+      places: [],
       place: { },
       placeName: '',
-      places: [],
       disableAddress: true,
-      addressList: [],
-      loading: false,
-      nominatim_osm_type: {
-        way: mdiRoadVariant,
-        house: mdiHome,
-        node: mdiMapMarker,
-        relation: mdiCityVariant,
-      },
-      nominatim_class: ['amenity', 'shop', 'tourism', 'leisure', 'building'],
-      photon_osm_key: ['amenity', 'shop', 'tourism', 'leisure', 'building'],
-      photon_osm_type: {
-        'W': mdiRoadVariant,
-        'N': mdiMapMarker,
-        'R': mdiCityVariant,
-      },
-      geocoding_provider_type: $store.state.settings.geocoding_provider_type || 'Nominatim'
+      whereInputAdvancedDialog: false,
+      onlineLocations: this.event.online_locations || [],
     }
   },
   computed: {
     ...mapState(['settings']),
-    filteredPlaces () {
-      if (!this.placeName) { return this.places }
-      const placeName = this.placeName.trim().toLowerCase()
-      let nameMatch = false
-      const matches = this.places.filter(p => {
-        const tmpName = p.name.toLowerCase()
-        const tmpAddress = p.address.toLowerCase()
-        if (tmpName.includes(placeName)) {
-          if (tmpName === placeName) { nameMatch = true }
-          return true
-        }
-        return tmpAddress.includes(placeName)
-      })
-      if (!nameMatch) {
-        matches.unshift({ create: true, name: this.placeName })
+    showAdvancedDialogButton () {
+
+      if (!(this.settings.allow_geolocation || this.settings.allow_online_event)) {
+        return false
       }
-      return matches
+
+
+      if (!this.place.isNew && !this.settings.allow_online_event) return false
+      return true
     }
+    // filteredPlaces () {
+    //   if (!this.placeName) { return this.places }
+    //   const placeName = this.placeName.trim().toLowerCase()
+    //   let nameMatch = false
+    //   const matches = this.places.filter(p => {
+    //     const tmpName = p.name.toLowerCase()
+    //     const tmpAddress = p.address.toLowerCase()
+    //     if (tmpName.includes(placeName)) {
+    //       if (tmpName === placeName) { nameMatch = true }
+    //       return true
+    //     }
+    //     return tmpAddress.includes(placeName)
+    //   })
+    //   if (!nameMatch) {
+    //     matches.unshift({ create: true, name: this.placeName })
+    //   }
+    //   return matches
+    // }
   },
   mounted () {
     this.$nextTick( () => {
@@ -133,29 +127,32 @@ export default {
   methods: {
     search: debounce(async function(ev) {
       const search = ev ? ev.target.value.trim().toLowerCase() : ''
-      this.places = await this.$axios.$get(`place?search=${search}`)
-      if (!search && this.places.length) { return this.places }
+      this.places = await this.$axios.$get('place', { params: { search } })
+
+      // Filter out the place with name 'online' if not allowed
+      if (this.places.length) {
+        this.places = this.places.filter(p => p.name !== 'online')
+      }
+      if (this.settings.allow_online_event) {
+        this.places.push({ online: true, name: 'online' })
+      }
+
+      if (!search && this.places.length) { 
+        return this.places 
+      }
       const matches = this.places.find(p => search === p.name.toLocaleLowerCase())
       if (!matches && search) {
         this.places.unshift({ create: true, name: ev.target.value.trim() })
       }
     }, 200),
-    loadCoordinatesResultIcon(item) {
-      if (this.geocoding_provider_type == "Nominatim") {
-        if ( this.nominatim_class.includes(item.class)) {
-          return this.mdiHome
-        }
-        return this.nominatim_osm_type[item.type]
-      } else if (this.geocoding_provider_type == "Photon") {
-        if ( this.photon_osm_key.includes(item.class)) {
-          return this.mdiHome
-        }
-        return this.photon_osm_type[item.type]
-      }
-    },
     selectPlace (p) {
+      // force online events under place: online address: online
+      // this.event_only_online = false
+      this.place.isNew = false
+      // this.whereAdvancedId++
+
       if (!p) { return }
-      if (typeof p === 'object' && !p.create) {
+      if (typeof p === 'object' && !p.create && !p.online) {
         if (p.id === this.value.id) return
         this.place.name = p.name
         this.place.address = p.address
@@ -164,8 +161,12 @@ export default {
           this.place.longitude = p.longitude
         }
         this.place.id = p.id
+        // if (this.settings.allow_event_only_online && this.place.name === 'online') {
+        //   this.event_only_online = true 
+        // }
         this.disableAddress = true
       } else { // this is a new place
+        this.place.isNew = true
         this.place.name = (p.name || p).trim()
         const tmpPlace = this.place.name.toLocaleLowerCase()
         // search for a place with the same name
@@ -179,122 +180,55 @@ export default {
           delete this.place.id
           this.place.address = ''
           if (this.settings.allow_geolocation) {
-            this.place.details = p.details
             this.place.latitude = p.latitude
             this.place.longitude = p.longitude
           }
+          // If 'event only online' is not allowed: reset place and online_locations
+          // if (this.place.name === 'online') {
+          //   if (!this.settings.allow_event_only_online) {
+          //     this.$nextTick(() => { this.$refs.place && this.$refs.place.setValue('') && this.$refs.place.focus() })
+          //     this.event.online_locations = []
+          //     return
+          //   } else {
+          //     this.event_online_only = true
+          //   }
+          // } 
           this.disableAddress = false
           this.$refs.place.blur()
-          this.$refs.address.focus()
+          this.$nextTick(() => { this.$refs.address && this.$refs.address.focus() })
         }
       }
       this.$emit('input', { ...this.place })
     },
-    changeAddress (v) {
-      this.place.address = v
-      this.$emit('input', { ...this.place })
-      this.disableDetails = false
-    },
-    selectAddress (v) {
-      if (!v) { return }
-      if (typeof v === 'object') {
-          this.place.latitude = v.lat
-          this.place.longitude = v.lon
-          this.place.address = v.address
-        // }
-      } else {
-        this.place.address = v
-        this.place.latitude = this.place.longitude = null
-      }
-      this.$emit('input', { ...this.place })
-    },
-    searchAddress: debounce(async function(ev) {
-      const pre_searchCoordinates = ev.target.value.trim().toLowerCase()
-      // allow pasting coordinates lat/lon and lat,lon
-      const searchCoordinates = pre_searchCoordinates.replace('/', ',')
-      // const regex_coords_comma = "-?[1-9][0-9]*(\\.[0-9]+)?,\\s*-?[1-9][0-9]*(\\.[0-9]+)?";
-      // const regex_coords_slash = "-?[1-9][0-9]*(\\.[0-9]+)?/\\s*-?[1-9][0-9]*(\\.[0-9]+)?";
+    selectLocations () {
+      this.event.online_locations = []
 
-      // const setCoords = (v) => {
-      //   const lat = v[0].trim()
-      //   const lon = v[1].trim()
-      //   // check coordinates are valid
-      //   if ((lat < 90 && lat > -90)
-      //   && (lon < 180 && lon > -180)) {
-      //     this.place.latitude = lat
-      //     this.place.longitude = lon
-      //   } else {
-      //     this.$root.$message("Non existent coordinates", { color: 'error' })
-      //     return
-      //   }
-      // }
-
-      // if (pre_searchCoordinates.match(regex_coords_comma)) {
-      //   let v = pre_searchCoordinates.split(",")
-      //   setCoords(v)
-      //   return
-      // }
-      // if (pre_searchCoordinates.match(regex_coords_slash)) {
-      //   let v = pre_searchCoordinates.split("/")
-      //   setCoords(v)
-      //   return
-      // }
-
-      if (searchCoordinates.length) {
-        this.loading = true
-        const ret = await this.$axios.$get(`placeOSM/${this.geocoding_provider_type}/${searchCoordinates}`)
-        if (this.geocoding_provider_type == "Nominatim") {
-          if (ret && ret.length) {
-            this.addressList = ret.map(v => {
-              const name = get(v.namedetails, 'alt_name', get(v.namedetails, 'name'))
-              const address = v.display_name ? v.display_name.replace(name, '').replace(/^, ?/, '') : ''
-              return {
-                class: v.class,
-                type: v.osm_type,
-                lat: v.lat,
-                lon: v.lon,
-                name,
-                address
-              }
-            })
-          } else {
-            this.addressList = []
-          }
-        } else if (this.geocoding_provider_type == "Photon") {
-          let photon_properties = ['housenumber', 'street', 'locality', 'district', 'city', 'county', 'state', 'postcode', 'country']
-
-          if (ret) {
-            this.addressList = ret.features.map(v => {
-              let pre_name = v.properties.name || v.properties.street || ''
-              let pre_address = ''
-
-              photon_properties.forEach((item, i) => {
-                let last = i == (photon_properties.length - 1)
-                if (v.properties[item] && !last) {
-                  pre_address += v.properties[item]+', '
-                } else if (v.properties[item]) {
-                  pre_address += v.properties[item]
-                }
-              });
-
-              let name = pre_name
-              let address = pre_address
-              return {
-                class: v.properties.osm_key,
-                type: v.properties.osm_type,
-                lat: v.geometry.coordinates[1],
-                lon: v.geometry.coordinates[0],
-                name,
-                address
-              }
-            })
-          } else {
-            this.addressList = []
-          }
+      if (this.onlineLocations) {
+        // Insert up to 3 online location: the main one and 2 fallback
+        if (this.onlineLocations.length > 3) {
+          this.$nextTick(() => this.onlineLocations = this.onlineLocations.slice(0, 3))
         }
-        this.loading = false
+        // Remove duplicates
+        this.$nextTick(() => this.onlineLocations = [...new Set(this.onlineLocations)])
+        
+        this.onlineLocations.forEach((item, i) => {
+          if (!item.startsWith('http')) { this.onlineLocations[i] = `https://${item}` }
+          this.event.online_locations[i] = this.onlineLocations[i]
+        })
       }
-    }, 1000)
+    },
+  //   changeEventOnlyOnline(v) {
+  //     this.event_only_online = v
+  //     // console.log(this.event_only_online)
+  //     if (this.event_only_online) { this.place.name = this.place.address = 'online' }
+  //     if (!this.event_only_online) { this.place.name = this.place.address = ''; this.onlineLocations = [] }
+  //     this.place.latitude = null
+  //     this.place.longitude = null
+
+  //     // Update onlineLocations
+  //     this.event.online_locations && this.selectLocations()
+  //     this.$emit('input', { ...this.place })
+  //   },
   }
 }
 </script>

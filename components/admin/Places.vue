@@ -11,32 +11,58 @@ v-container
   v-dialog(v-model='dialog' width='600' :fullscreen='$vuetify.breakpoint.xsOnly')
     v-card
       v-card-title {{ $t('admin.edit_place') }}
-      v-card-text
+      v-card-text.mb-4
         v-form(v-model='valid' ref='form' lazy-validation)
           v-text-field(
             :rules="[$validators.required('common.name')]"
             :label="$t('common.name')"
             v-model='place.name'
             :placeholder='$t("common.name")')
-
-          v-combobox(ref='address'
+        
+          v-text-field(ref='address'
+            :rules="[ v => $validators.required('common.address')(v)]"
+            :label="$t('common.address')"
+            v-model='place.address'
+            persistent-hint)
+          
+          v-combobox.mt-0.mb-4(ref='geocodedAddress' v-model='place.geocodedAddress'
+            v-if="(settings.allow_geolocation && place.name !== 'online')"
+            :disabled="!(settings.allow_geolocation && place.name !== 'online')"
             :prepend-icon='mdiMapSearch'
             @input.native='searchAddress'
-            :label="$t('common.address')"
-            :rules="[ v => $validators.required('common.address')(v)]"
-            :value='place.address'
+            :label="$t('common.search_coordinates')"
+            :value='place.latitude && place.longitude && place.geocodedAddress'
             persistent-hint hide-no-data clearable no-filter
             :loading='loading'
             @change='selectAddress'
             @focus='searchAddress'
             :items="addressList"
-            :hint="$t('event.address_description')")
-            template(v-slot:item="{ item, attrs, on  }")
+            :hint="$t('event.address_description_osm')")
+            template(v-slot:message="{message, key}")
+              span(v-html='message' :key="key")
+            template(v-slot:item="{ item, attrs, on, selected  }")
               v-list-item(v-bind='attrs' v-on='on')
+                v-icon.pr-4(v-text='loadCoordinatesResultIcon(item)')
                 v-list-item-content(two-line v-if='item')
                   v-list-item-title(v-text='item.name')
-                  v-list-item-subtitle(v-text='`${item.address}`')
+                  v-list-item-subtitle(v-text='`${item.address}`') {{ selected }}
 
+          v-row.mt-4(v-if="(settings.allow_geolocation && place.name !== 'online')")
+            v-col.py-0(cols=12 md=6)
+              v-text-field(v-model="place.latitude"
+                :value="place.latitude"
+                :prepend-icon='mdiLatitude'
+                :disabled="(!settings.allow_geolocation || place.name === 'online')"
+                :label="$t('common.latitude')"
+                :rules="$validators.latitude")
+            v-col.py-0(cols=12 md=6)
+              v-text-field(v-model="place.longitude"
+                :prepend-icon='mdiLongitude'
+                :disabled="!settings.allow_geolocation || place.name === 'online'"
+                :label="$t('common.longitude')"
+                :rules="$validators.longitude")
+          
+          MapEdit.mt-4(:place.sync='place' :key="dialog" v-if="settings.allow_geolocation && place.name !== 'online' && place.latitude && place.longitude")     
 
       v-card-actions
         v-spacer
@@ -53,7 +79,7 @@ v-container
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
       :search='search')
       template(v-slot:item.map='{ item }')
-        span {{item.latitude && item.longitude && 'YEP' }}
+        v-icon(v-if='item.latitude && item.longitude' v-text='mdiMapMarker')
       template(v-slot:item.actions='{ item }')
         v-btn(@click='editPlace(item)' color='primary' icon)
           v-icon(v-text='mdiPencil')
@@ -62,15 +88,20 @@ v-container
 
 </template>
 <script>
-import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiEye, mdiMapSearch, mdiChevronDown } from '@mdi/js'
+import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiChevronDown, mdiMagnify, mdiEye, mdiMapMarker,
+    mdiLatitude, mdiLongitude, mdiMapSearch, mdiRoadVariant, mdiHome, mdiCityVariant } from '@mdi/js'
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
-import get from 'lodash/get'
+import geolocation from '../../server/helpers/geolocation/index'
 
 export default {
+  components: {
+    [process.client && 'MapEdit']: () => import('@/components/MapEdit.vue')
+  },
   data( {$store} ) {
     return {
-      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiEye, mdiMapSearch, mdiChevronDown,
+      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiChevronDown, mdiMagnify, mdiEye, mdiMapMarker,
+      mdiLatitude, mdiLongitude, mdiMapSearch, mdiRoadVariant, mdiHome, mdiCityVariant,
       loading: false,
       dialog: false,
       valid: false,
@@ -85,11 +116,19 @@ export default {
         { value: 'map', text: 'Map' },
         { value: 'actions', text: this.$t('common.actions'), align: 'right' }
       ],
-      geocoding_provider_type: $store.state.settings.geocoding_provider_type || 'Nominatim'
+      currentGeocodingProvider: geolocation.getGeocodingProvider($store.state.settings.geocoding_provider_type),
+      prevAddress: '',
+      iconsMapper: {
+        'mdiHome': mdiHome,
+        'mdiRoadVariant': mdiRoadVariant,
+        'mdiMapMarker': mdiMapMarker,
+        'mdiCityVariant': mdiCityVariant
+      }
     }
   },
   async fetch() {
     this.places = await this.$axios.$get('/places')
+    this.places.splice(this.places.findIndex((p) => p.name === 'online' ), 1)
   },
   computed: {
     ...mapState(['settings']),
@@ -99,6 +138,8 @@ export default {
       this.place.name = item.name
       this.place.address = item.address
       if (this.settings.allow_geolocation) {
+        this.prevAddress = ''
+        this.place.geocodedAddress = ''
         this.place.latitude = item.latitude
         this.place.longitude = item.longitude
       }
@@ -114,105 +155,44 @@ export default {
       this.dialog = false
     },
     selectAddress (v) {
+      let currentAddress = this.place.address
+      this.place.geocodedAddress = ''
+      this.dialog++
+
       if (!v) { return }
       if (typeof v === 'object') {
-          this.place.latitude = v.lat
-          this.place.longitude = v.lon
-          this.place.address = v.address
-        // }
+        this.place.latitude = v.lat
+        this.place.longitude = v.lon
+        this.place.geocodedAddress = v.address
+        this.place.address = v.address
       } else {
         this.place.address = v
         this.place.latitude = this.place.longitude = null
       }
+      if (currentAddress == '' || currentAddress == this.prevAddress) {
+        this.place.address = this.place.geocodedAddress
+      } else {
+        this.place.address = currentAddress
+      }
+      this.place.selected = true
+      this.prevAddress = this.place.geocodedAddress
       this.$emit('input', { ...this.place })
     },
     searchAddress: debounce(async function(ev) {
       const pre_searchCoordinates = ev.target.value.trim().toLowerCase()
-      // allow pasting coordinates lat/lon and lat,lon
       const searchCoordinates = pre_searchCoordinates.replace('/', ',')
-      // const regex_coords_comma = "-?[1-9][0-9]*(\\.[0-9]+)?,\\s*-?[1-9][0-9]*(\\.[0-9]+)?";
-      // const regex_coords_slash = "-?[1-9][0-9]*(\\.[0-9]+)?/\\s*-?[1-9][0-9]*(\\.[0-9]+)?";
-
-      // const setCoords = (v) => {
-      //   const lat = v[0].trim()
-      //   const lon = v[1].trim()
-      //   // check coordinates are valid
-      //   if ((lat < 90 && lat > -90)
-      //   && (lon < 180 && lon > -180)) {
-      //     this.place.latitude = lat
-      //     this.place.longitude = lon
-      //   } else {
-      //     this.$root.$message("Non existent coordinates", { color: 'error' })
-      //     return
-      //   }
-      // }
-
-      // if (pre_searchCoordinates.match(regex_coords_comma)) {
-      //   let v = pre_searchCoordinates.split(",")
-      //   setCoords(v)
-      //   return
-      // }
-      // if (pre_searchCoordinates.match(regex_coords_slash)) {
-      //   let v = pre_searchCoordinates.split("/")
-      //   setCoords(v)
-      //   return
-      // }
 
       if (searchCoordinates.length) {
         this.loading = true
-        const ret = await this.$axios.$get(`placeOSM/${this.geocoding_provider_type}/${searchCoordinates}`)
-        if (this.geocoding_provider_type == "Nominatim") {
-          if (ret && ret.length) {
-            this.addressList = ret.map(v => {
-              const name = get(v.namedetails, 'alt_name', get(v.namedetails, 'name'))
-              const address = v.display_name ? v.display_name.replace(name, '').replace(/^, ?/, '') : ''
-              return {
-                class: v.class,
-                type: v.osm_type,
-                lat: v.lat,
-                lon: v.lon,
-                name,
-                address
-              }
-            })
-          } else {
-            this.addressList = []
-          }
-        } else if (this.geocoding_provider_type == "Photon") {
-          let photon_properties = ['housenumber', 'street', 'district', 'city', 'county', 'state', 'postcode', 'country']
-
-          if (ret) {
-            this.addressList = ret.features.map(v => {
-              let pre_name = v.properties.name || v.properties.street || ''
-              let pre_address = ''
-
-              photon_properties.forEach((item, i) => {
-                let last = i == (photon_properties.length - 1)
-                if (v.properties[item] && !last) {
-                  pre_address += v.properties[item]+', '
-                } else if (v.properties[item]) {
-                  pre_address += v.properties[item]
-                }
-              });
-
-              let name = pre_name
-              let address = pre_address
-              return {
-                class: v.properties.osm_key,
-                type: v.properties.osm_type,
-                lat: v.geometry.coordinates[1],
-                lon: v.geometry.coordinates[0],
-                name,
-                address
-              }
-            })
-          } else {
-            this.addressList = []
-          }
-        }
+        const ret = await this.$axios.$get(`placeOSM/${this.currentGeocodingProvider.commonName}/${searchCoordinates}`)
+        this.addressList = this.currentGeocodingProvider.mapQueryResults(ret)
         this.loading = false
       }
-    }, 300)
+    }, 1000),
+    loadCoordinatesResultIcon(item) {
+      let icon = this.currentGeocodingProvider.loadResultIcon(item)
+      return this.iconsMapper[icon]
+    },
   }
 }
 </script>

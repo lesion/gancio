@@ -31,14 +31,14 @@ const eventController = {
 
     const place_name = body.place_name && body.place_name.trim()
     const place_address = body.place_address && body.place_address.trim()
-    if (!place_address || !place_name) {
+    if (!place_name || !place_address && place_name !== 'online') {
       throw new Error(`place_id or place_name and place_address are required`)
     }    
     let place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Sequelize.Op.eq, place_name.toLocaleLowerCase()) })
     if (!place) {
       place = await Place.create({
         name: place_name,
-        address: place_address,
+        address: place_address || '',
         latitude: Number(body.place_latitude) || null,
         longitude: Number(body.place_longitude) || null
       })
@@ -335,6 +335,7 @@ const eventController = {
         multidate: body.multidate,
         start_datetime: body.start_datetime,
         end_datetime: body.end_datetime,
+        online_locations: body.online_locations,
         recurrent,
         // publish this event only if authenticated
         is_visible: !!req.user
@@ -419,6 +420,7 @@ const eventController = {
         multidate: body.multidate,
         start_datetime: body.start_datetime || event.start_datetime,
         end_datetime: body.end_datetime || null,
+        online_locations: body.online_locations,
         recurrent
       }
 
@@ -675,7 +677,8 @@ const eventController = {
       media: e.media,
       is_visible: true,
       userId: e.userId,
-      placeId: e.placeId
+      placeId: e.placeId,
+      ...(e.online_locations && { online_locations: e.online_locations } )
     }
 
     const recurrentDetails = e.recurrent
