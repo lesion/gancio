@@ -82,7 +82,7 @@ export default {
     return {
       mdiMap, mdiMapMarker, mdiPlus, mdiCog, mdiLink, mdiCloseCircle, mdiLaptopAccount,
       places: [],
-      place: { isNew: false },
+      place: { isNew: false, name: '' },
       placeName: '',
       disableAddress: true,
       whereInputAdvancedDialog: false,
@@ -93,6 +93,8 @@ export default {
     ...mapState(['settings']),
     showAdvancedDialogButton () {
 
+      if (!this.place.name) return false
+    
       // do not show advanced dialog button in case geolocation and online events are not allowed
       if (!(this.settings.allow_geolocation || this.settings.allow_online_event)) {
         return false
