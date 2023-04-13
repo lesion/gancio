@@ -8,13 +8,13 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
-
-### UNRELEASED
-  - show past events in tag and place pages
+### 1.6.9 - 13 apr '23
+  - add support to online events (thanks @sedum) #26
+  - show past events in tag and place pages #259
   - fix import from URL for guest, #256
-  - add support to online events (tha
+  - fix ics export timezone, #258
 
-### 1.6.8
+### 1.6.8 - 30 mar '23
   - use new $time in admins table, fix #252
   - fix some WPGancio issues
   - new custom color feature!
