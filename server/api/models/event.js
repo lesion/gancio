@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     const plainDescription = htmlToText(this.description && this.description.replace('\n', '').slice(0, 1000))
     const content = `
     📍 ${this.place && this.place.name}
-    📅 ${DateTime.fromSeconds(this.start_datetime).toFormat('EEEE, d MMMM (HH:mm)')}
+    📅 ${DateTime.fromSeconds(this.start_datetime, opt).toFormat('EEEE, d MMMM (HH:mm)')}
     
     ${plainDescription}
     `

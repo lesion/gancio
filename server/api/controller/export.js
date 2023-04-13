@@ -97,7 +97,7 @@ const exportController = {
     const settings = res.locals.settings
     const eventsMap = events.map(e => {
 
-      const tmpStart = DateTime.fromSeconds(e.start_datetime)
+      const tmpStart = DateTime.fromSeconds(e.start_datetime, { zone: settings.instance_timezone })
       const start = [ tmpStart.year, tmpStart.month, tmpStart.day, tmpStart.hour, tmpStart.minute ]
 
       const ret = {
@@ -114,7 +114,7 @@ const exportController = {
       }
 
       if (e.end_datetime) {
-        const tmpEnd = DateTime.fromSeconds(e.end_datetime)
+        const tmpEnd = DateTime.fromSeconds(e.end_datetime, { zone: settings.instance_timezone })
         const end = [ tmpEnd.year, tmpEnd.month, tmpEnd.day, tmpEnd.hour, tmpEnd.minute ]
         ret.end = end
       }
