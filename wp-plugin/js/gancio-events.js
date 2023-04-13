@@ -38,14 +38,14 @@ function be(t, e) {
 function m(t) {
   return document.createElement(t);
 }
-function $(t) {
+function S(t) {
   return document.createTextNode(t);
 }
-function M() {
-  return $(" ");
+function A() {
+  return S(" ");
 }
 function pe() {
-  return $("");
+  return S("");
 }
 function a(t, e, i) {
   i == null ? t.removeAttribute(e) : t.getAttribute(e) !== i && t.setAttribute(e, i);
@@ -154,8 +154,8 @@ function we(t, e, i, l, n, r, o, f = [-1]) {
   };
   o && o(s.root);
   let w = !1;
-  if (s.ctx = i ? i(t, e.props || {}, (g, _, ...A) => {
-    const y = A.length ? A[0] : _;
+  if (s.ctx = i ? i(t, e.props || {}, (g, _, ...M) => {
+    const y = M.length ? M[0] : _;
     return s.ctx && n(s.ctx[g], s.ctx[g] = y) && (!s.skip_bound && s.bound[g] && s.bound[g](y), w && Ne(t, g)), _;
   }) : [], s.update(), w = !0, U(s.before_update), s.fragment = l ? l(s.ctx) : !1, e.target) {
     if (e.hydrate) {
@@ -242,7 +242,7 @@ function ne(t) {
     r[o] = fe(te(t, n, o));
   return {
     c() {
-      e = m("div"), l && l.c(), i = M();
+      e = m("div"), l && l.c(), i = A();
       for (let o = 0; o < r.length; o += 1)
         r[o].c();
       a(e, "id", "gancioEvents"), L(e, "dark", t[2] === "dark"), L(e, "light", t[2] === "light"), L(e, "sidebar", t[3] === "true"), L(e, "nosidebar", t[3] !== "true");
@@ -275,7 +275,7 @@ function re(t) {
   let e, i, l, n, r, o, f;
   return {
     c() {
-      e = m("a"), i = m("div"), l = m("div"), n = $(t[1]), r = M(), o = m("img"), a(l, "class", "title"), a(o, "id", "logo"), a(o, "alt", "logo"), H(o.src, f = t[0] + "/logo.png") || a(o, "src", f), a(i, "class", "content"), a(e, "href", t[0]), a(e, "target", "_blank"), a(e, "id", "header");
+      e = m("a"), i = m("div"), l = m("div"), n = S(t[1]), r = A(), o = m("img"), a(l, "class", "title"), a(o, "id", "logo"), a(o, "alt", "logo"), H(o.src, f = t[0] + "/logo.png") || a(o, "src", f), a(i, "class", "content"), a(e, "href", t[0]), a(e, "target", "_blank"), a(e, "id", "header");
     },
     m(c, s) {
       p(c, e, s), u(e, i), u(i, l), u(l, n), u(i, r), u(i, o);
@@ -347,7 +347,7 @@ function ae(t) {
   let e, i = t[12].place.address + "", l;
   return {
     c() {
-      e = m("span"), l = $(i), a(e, "class", "subtitle");
+      e = m("span"), l = S(i), a(e, "class", "subtitle");
     },
     m(n, r) {
       p(n, e, r), u(e, l);
@@ -398,7 +398,7 @@ function ce(t) {
   let e, i, l = t[15] + "", n;
   return {
     c() {
-      e = m("span"), i = $("#"), n = $(l), a(e, "class", "tag");
+      e = m("span"), i = S("#"), n = S(l), a(e, "class", "tag");
     },
     m(r, o) {
       p(r, e, o), u(e, i), u(e, n);
@@ -412,20 +412,19 @@ function ce(t) {
   };
 }
 function fe(t) {
-  let e, i, l, n, r = V(t[12]) + "", o, f, c, s = t[12].title + "", w, g, _, A, y = t[12].place.name + "", d, z, h, v, C, q, E = t[3] !== "true" && oe(t), j = t[12].place.name !== "online" && ae(t), S = t[12].tags.length && se(t);
+  let e, i, l, n, r = V(t[12]) + "", o, f, c, s = t[12].title + "", w, g, _, M, y = t[12].place.name + "", d, z, h, v, C, q, $ = t[3] !== "true" && oe(t), E = t[12].place.name !== "online" && ae(t), j = t[12].tags.length && se(t);
   return {
     c() {
-      e = m("a"), E && E.c(), i = M(), l = m("div"), n = m("div"), o = $(r), f = M(), c = m("div"), w = $(s), g = M(), _ = m("span"), A = $('@"'), d = $(y), z = $(`"
-            `), j && j.c(), h = M(), S && S.c(), v = M(), a(n, "class", "subtitle"), a(c, "class", "title"), a(_, "class", "place"), a(l, "class", "content"), a(e, "href", C = t[0] + "/event/" + (t[12].slug || t[12].id)), a(e, "class", "event"), a(e, "title", q = t[12].title), a(e, "target", "_blank");
+      e = m("a"), $ && $.c(), i = A(), l = m("div"), n = m("div"), o = S(r), f = A(), c = m("div"), w = S(s), g = A(), _ = m("span"), M = S("@"), d = S(y), z = A(), E && E.c(), h = A(), j && j.c(), v = A(), a(n, "class", "subtitle"), a(c, "class", "title"), a(_, "class", "place"), a(l, "class", "content"), a(e, "href", C = t[0] + "/event/" + (t[12].slug || t[12].id)), a(e, "class", "event"), a(e, "title", q = t[12].title), a(e, "target", "_blank");
     },
     m(b, N) {
-      p(b, e, N), E && E.m(e, null), u(e, i), u(e, l), u(l, n), u(n, o), u(l, f), u(l, c), u(c, w), u(l, g), u(l, _), u(_, A), u(_, d), u(_, z), j && j.m(_, null), u(l, h), S && S.m(l, null), u(e, v);
+      p(b, e, N), $ && $.m(e, null), u(e, i), u(e, l), u(l, n), u(n, o), u(l, f), u(l, c), u(c, w), u(l, g), u(l, _), u(_, M), u(_, d), u(_, z), E && E.m(_, null), u(l, h), j && j.m(l, null), u(e, v);
     },
     p(b, N) {
-      b[3] !== "true" ? E ? E.p(b, N) : (E = oe(b), E.c(), E.m(e, i)) : E && (E.d(1), E = null), N & 32 && r !== (r = V(b[12]) + "") && T(o, r), N & 32 && s !== (s = b[12].title + "") && T(w, s), N & 32 && y !== (y = b[12].place.name + "") && T(d, y), b[12].place.name !== "online" ? j ? j.p(b, N) : (j = ae(b), j.c(), j.m(_, null)) : j && (j.d(1), j = null), b[12].tags.length ? S ? S.p(b, N) : (S = se(b), S.c(), S.m(l, null)) : S && (S.d(1), S = null), N & 33 && C !== (C = b[0] + "/event/" + (b[12].slug || b[12].id)) && a(e, "href", C), N & 32 && q !== (q = b[12].title) && a(e, "title", q);
+      b[3] !== "true" ? $ ? $.p(b, N) : ($ = oe(b), $.c(), $.m(e, i)) : $ && ($.d(1), $ = null), N & 32 && r !== (r = V(b[12]) + "") && T(o, r), N & 32 && s !== (s = b[12].title + "") && T(w, s), N & 32 && y !== (y = b[12].place.name + "") && T(d, y), b[12].place.name !== "online" ? E ? E.p(b, N) : (E = ae(b), E.c(), E.m(_, null)) : E && (E.d(1), E = null), b[12].tags.length ? j ? j.p(b, N) : (j = se(b), j.c(), j.m(l, null)) : j && (j.d(1), j = null), N & 33 && C !== (C = b[0] + "/event/" + (b[12].slug || b[12].id)) && a(e, "href", C), N & 32 && q !== (q = b[12].title) && a(e, "title", q);
     },
     d(b) {
-      b && k(e), E && E.d(), j && j.d(), S && S.d();
+      b && k(e), $ && $.d(), E && E.d(), j && j.d();
     }
   };
 }
@@ -433,7 +432,7 @@ function Ge(t) {
   let e, i, l = t[4] && le(t), n = t[5].length && ne(t);
   return {
     c() {
-      l && l.c(), e = M(), n && n.c(), i = pe(), this.c = G;
+      l && l.c(), e = A(), n && n.c(), i = pe(), this.c = G;
     },
     m(r, o) {
       l && l.m(r, o), p(r, e, o), n && n.m(r, o), p(r, i, o);
@@ -456,13 +455,13 @@ function ue(t) {
   return "center center";
 }
 function He(t, e, i) {
-  let { baseurl: l = "" } = e, { title: n = "" } = e, { maxlength: r = !1 } = e, { tags: o = "" } = e, { places: f = "" } = e, { theme: c = "light" } = e, { show_recurrent: s = !1 } = e, { sidebar: w = "true" } = e, { external_style: g = "" } = e, _ = !1, A = [];
+  let { baseurl: l = "" } = e, { title: n = "" } = e, { maxlength: r = !1 } = e, { tags: o = "" } = e, { places: f = "" } = e, { theme: c = "light" } = e, { show_recurrent: s = !1 } = e, { sidebar: w = "true" } = e, { external_style: g = "" } = e, _ = !1, M = [];
   function y(d) {
     if (!_)
       return;
     const z = [];
     r && z.push(`max=${r}`), o && z.push(`tags=${o}`), f && z.push(`places=${f}`), z.push(`show_recurrent=${s ? "true" : "false"}`), fetch(`${l}/api/events?${z.join("&")}`).then((h) => h.json()).then((h) => {
-      i(5, A = h);
+      i(5, M = h);
     }).catch((h) => {
       console.error("Error loading Gancio API -> ", h);
     });
@@ -479,7 +478,7 @@ function He(t, e, i) {
     c,
     w,
     g,
-    A,
+    M,
     r,
     o,
     f,
@@ -588,13 +587,13 @@ class Re extends X {
 }
 customElements.define("gancio-events", Re);
 function de(t) {
-  let e, i, l, n, r = t[1].title + "", o, f, c, s = V(t[1]) + "", w, g, _, A, y = t[1].place.name + "", d, z, h = t[1].media.length && he(t);
+  let e, i, l, n, r = t[1].title + "", o, f, c, s = V(t[1]) + "", w, g, _, M, y = t[1].place.name + "", d, z, h = t[1].media.length && he(t);
   return {
     c() {
-      e = m("a"), h && h.c(), i = M(), l = m("div"), n = m("strong"), o = $(r), f = M(), c = m("div"), w = $(s), g = M(), _ = m("div"), A = $("@"), d = $(y), a(_, "class", "place"), a(l, "class", "container"), a(e, "href", z = t[0] + "/event/" + (t[1].slug || t[1].id)), a(e, "class", "card"), a(e, "target", "_blank");
+      e = m("a"), h && h.c(), i = A(), l = m("div"), n = m("strong"), o = S(r), f = A(), c = m("div"), w = S(s), g = A(), _ = m("div"), M = S("@"), d = S(y), a(_, "class", "place"), a(l, "class", "container"), a(e, "href", z = t[0] + "/event/" + (t[1].slug || t[1].id)), a(e, "class", "card"), a(e, "target", "_blank");
     },
     m(v, C) {
-      p(v, e, C), h && h.m(e, null), u(e, i), u(e, l), u(l, n), u(n, o), u(l, f), u(l, c), u(c, w), u(l, g), u(l, _), u(_, A), u(_, d);
+      p(v, e, C), h && h.m(e, null), u(e, i), u(e, l), u(l, n), u(n, o), u(l, f), u(l, c), u(c, w), u(l, g), u(l, _), u(_, M), u(_, d);
     },
     p(v, C) {
       v[1].media.length ? h ? h.p(v, C) : (h = he(v), h.c(), h.m(e, i)) : h && (h.d(1), h = null), C & 2 && r !== (r = v[1].title + "") && T(o, r), C & 2 && s !== (s = V(v[1]) + "") && T(w, s), C & 2 && y !== (y = v[1].place.name + "") && T(d, y), C & 3 && z !== (z = v[0] + "/event/" + (v[1].slug || v[1].id)) && a(e, "href", z);

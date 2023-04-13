@@ -1,171 +1,171 @@
-function L() {
+function G() {
 }
 function W(t) {
   return t();
 }
-function ee() {
+function Y() {
   return /* @__PURE__ */ Object.create(null);
 }
-function O(t) {
+function U(t) {
   t.forEach(W);
 }
-function _e(t) {
+function ge(t) {
   return typeof t == "function";
 }
-function be(t, e) {
+function _e(t, e) {
   return t != t ? e == e : t !== e || t && typeof t == "object" || typeof t == "function";
 }
 let B;
-function G(t, e) {
+function H(t, e) {
   return B || (B = document.createElement("a")), B.href = e, t === B.href;
 }
-function xe(t) {
+function ye(t) {
   return Object.keys(t).length === 0;
 }
 function u(t, e) {
   t.appendChild(e);
 }
-function v(t, e, i) {
+function p(t, e, i) {
   t.insertBefore(e, i || null);
 }
-function x(t) {
+function k(t) {
   t.parentNode.removeChild(t);
 }
-function pe(t, e) {
+function be(t, e) {
   for (let i = 0; i < t.length; i += 1)
     t[i] && t[i].d(e);
 }
-function g(t) {
+function m(t) {
   return document.createElement(t);
 }
-function j(t) {
+function $(t) {
   return document.createTextNode(t);
 }
-function z() {
-  return j(" ");
+function M() {
+  return $(" ");
 }
-function ve() {
-  return j("");
+function pe() {
+  return $("");
 }
 function a(t, e, i) {
   i == null ? t.removeAttribute(e) : t.getAttribute(e) !== i && t.setAttribute(e, i);
 }
-function $e(t) {
+function xe(t) {
   return Array.from(t.childNodes);
 }
-function N(t, e) {
+function T(t, e) {
   e = "" + e, t.wholeText !== e && (t.data = e);
 }
-function T(t, e, i) {
+function L(t, e, i) {
   t.classList[i ? "add" : "remove"](e);
 }
-function ke(t) {
+function ve(t) {
   const e = {};
   for (const i of t)
     e[i.name] = i.value;
   return e;
 }
-let I;
-function R(t) {
-  I = t;
+let O;
+function I(t) {
+  O = t;
 }
-function Ee() {
-  if (!I)
+function $e() {
+  if (!O)
     throw new Error("Function called outside component initialization");
-  return I;
+  return O;
 }
-function we(t) {
-  Ee().$$.on_mount.push(t);
+function ke(t) {
+  $e().$$.on_mount.push(t);
 }
-const H = [], te = [], P = [], ie = [], je = Promise.resolve();
+const R = [], Z = [], P = [], ee = [], Ee = Promise.resolve();
 let K = !1;
-function Se() {
-  K || (K = !0, je.then(y));
+function je() {
+  K || (K = !0, Ee.then(x));
 }
 function Q(t) {
   P.push(t);
 }
 const J = /* @__PURE__ */ new Set();
 let D = 0;
-function y() {
-  const t = I;
+function x() {
+  const t = O;
   do {
-    for (; D < H.length; ) {
-      const e = H[D];
-      D++, R(e), ze(e.$$);
+    for (; D < R.length; ) {
+      const e = R[D];
+      D++, I(e), Se(e.$$);
     }
-    for (R(null), H.length = 0, D = 0; te.length; )
-      te.pop()();
+    for (I(null), R.length = 0, D = 0; Z.length; )
+      Z.pop()();
     for (let e = 0; e < P.length; e += 1) {
       const i = P[e];
       J.has(i) || (J.add(i), i());
     }
     P.length = 0;
-  } while (H.length);
-  for (; ie.length; )
-    ie.pop()();
-  K = !1, J.clear(), R(t);
+  } while (R.length);
+  for (; ee.length; )
+    ee.pop()();
+  K = !1, J.clear(), I(t);
 }
-function ze(t) {
+function Se(t) {
   if (t.fragment !== null) {
-    t.update(), O(t.before_update);
+    t.update(), U(t.before_update);
     const e = t.dirty;
     t.dirty = [-1], t.fragment && t.fragment.p(t.ctx, e), t.after_update.forEach(Q);
   }
 }
-const Ce = /* @__PURE__ */ new Set();
-function Ae(t, e) {
-  t && t.i && (Ce.delete(t), t.i(e));
+const ze = /* @__PURE__ */ new Set();
+function Ce(t, e) {
+  t && t.i && (ze.delete(t), t.i(e));
 }
-function Me(t, e, i, l) {
-  const { fragment: n, on_mount: o, on_destroy: r, after_update: f } = t.$$;
+function Ae(t, e, i, l) {
+  const { fragment: n, on_mount: r, on_destroy: o, after_update: f } = t.$$;
   n && n.m(e, i), l || Q(() => {
-    const c = o.map(W).filter(_e);
-    r ? r.push(...c) : O(c), t.$$.on_mount = [];
+    const c = r.map(W).filter(ge);
+    o ? o.push(...c) : U(c), t.$$.on_mount = [];
   }), f.forEach(Q);
 }
-function Ne(t, e) {
+function Me(t, e) {
   const i = t.$$;
-  i.fragment !== null && (O(i.on_destroy), i.fragment && i.fragment.d(e), i.on_destroy = i.fragment = null, i.ctx = []);
+  i.fragment !== null && (U(i.on_destroy), i.fragment && i.fragment.d(e), i.on_destroy = i.fragment = null, i.ctx = []);
 }
-function Te(t, e) {
-  t.$$.dirty[0] === -1 && (H.push(t), Se(), t.$$.dirty.fill(0)), t.$$.dirty[e / 31 | 0] |= 1 << e % 31;
+function Ne(t, e) {
+  t.$$.dirty[0] === -1 && (R.push(t), je(), t.$$.dirty.fill(0)), t.$$.dirty[e / 31 | 0] |= 1 << e % 31;
 }
-function ye(t, e, i, l, n, o, r, f = [-1]) {
-  const c = I;
-  R(t);
+function we(t, e, i, l, n, r, o, f = [-1]) {
+  const c = O;
+  I(t);
   const s = t.$$ = {
     fragment: null,
     ctx: null,
-    props: o,
-    update: L,
+    props: r,
+    update: G,
     not_equal: n,
-    bound: ee(),
+    bound: Y(),
     on_mount: [],
     on_destroy: [],
     on_disconnect: [],
     before_update: [],
     after_update: [],
     context: new Map(e.context || (c ? c.$$.context : [])),
-    callbacks: ee(),
+    callbacks: Y(),
     dirty: f,
     skip_bound: !1,
     root: e.target || c.$$.root
   };
-  r && r(s.root);
-  let k = !1;
-  if (s.ctx = i ? i(t, e.props || {}, (m, _, ...C) => {
-    const w = C.length ? C[0] : _;
-    return s.ctx && n(s.ctx[m], s.ctx[m] = w) && (!s.skip_bound && s.bound[m] && s.bound[m](w), k && Te(t, m)), _;
-  }) : [], s.update(), k = !0, O(s.before_update), s.fragment = l ? l(s.ctx) : !1, e.target) {
+  o && o(s.root);
+  let w = !1;
+  if (s.ctx = i ? i(t, e.props || {}, (g, _, ...A) => {
+    const y = A.length ? A[0] : _;
+    return s.ctx && n(s.ctx[g], s.ctx[g] = y) && (!s.skip_bound && s.bound[g] && s.bound[g](y), w && Ne(t, g)), _;
+  }) : [], s.update(), w = !0, U(s.before_update), s.fragment = l ? l(s.ctx) : !1, e.target) {
     if (e.hydrate) {
-      const m = $e(e.target);
-      s.fragment && s.fragment.l(m), m.forEach(x);
+      const g = xe(e.target);
+      s.fragment && s.fragment.l(g), g.forEach(k);
     } else
       s.fragment && s.fragment.c();
-    e.intro && Ae(t.$$.fragment), Me(t, e.target, e.anchor, e.customElement), y();
+    e.intro && Ce(t.$$.fragment), Ae(t, e.target, e.anchor, e.customElement), x();
   }
-  R(c);
+  I(c);
 }
 let X;
 typeof HTMLElement == "function" && (X = class extends HTMLElement {
@@ -174,7 +174,7 @@ typeof HTMLElement == "function" && (X = class extends HTMLElement {
   }
   connectedCallback() {
     const { on_mount: t } = this.$$;
-    this.$$.on_disconnect = t.map(W).filter(_e);
+    this.$$.on_disconnect = t.map(W).filter(ge);
     for (const e in this.$$.slotted)
       this.appendChild(this.$$.slotted[e]);
   }
@@ -182,10 +182,10 @@ typeof HTMLElement == "function" && (X = class extends HTMLElement {
     this[t] = i;
   }
   disconnectedCallback() {
-    O(this.$$.on_disconnect);
+    U(this.$$.on_disconnect);
   }
   $destroy() {
-    Ne(this, 1), this.$destroy = L;
+    Me(this, 1), this.$destroy = G;
   }
   $on(t, e) {
     const i = this.$$.callbacks[t] || (this.$$.callbacks[t] = []);
@@ -195,7 +195,7 @@ typeof HTMLElement == "function" && (X = class extends HTMLElement {
     };
   }
   $set(t) {
-    this.$$set && !xe(t) && (this.$$.skip_bound = !0, this.$$set(t), this.$$.skip_bound = !1);
+    this.$$set && !ye(t) && (this.$$.skip_bound = !0, this.$$set(t), this.$$.skip_bound = !1);
   }
 });
 function F(t, e = "long") {
@@ -211,264 +211,282 @@ function F(t, e = "long") {
 function V(t) {
   return t.multidate ? F(t.start_datetime) + " - " + F(t.end_datetime) : F(t.start_datetime) + (t.end_datetime ? "-" + F(t.end_datetime, "short") : "");
 }
-function le(t, e, i) {
+function te(t, e, i) {
   const l = t.slice();
   return l[12] = e[i], l;
 }
-function ne(t, e, i) {
+function ie(t, e, i) {
   const l = t.slice();
   return l[15] = e[i], l;
 }
-function re(t) {
+function le(t) {
   let e;
   return {
     c() {
-      e = g("link"), a(e, "rel", "stylesheet"), a(e, "href", t[4]);
+      e = m("link"), a(e, "rel", "stylesheet"), a(e, "href", t[4]);
     },
     m(i, l) {
-      v(i, e, l);
+      p(i, e, l);
     },
     p(i, l) {
       l & 16 && a(e, "href", i[4]);
     },
     d(i) {
-      i && x(e);
+      i && k(e);
+    }
+  };
+}
+function ne(t) {
+  let e, i, l = t[1] && t[3] === "true" && re(t), n = t[5], r = [];
+  for (let o = 0; o < n.length; o += 1)
+    r[o] = fe(te(t, n, o));
+  return {
+    c() {
+      e = m("div"), l && l.c(), i = M();
+      for (let o = 0; o < r.length; o += 1)
+        r[o].c();
+      a(e, "id", "gancioEvents"), L(e, "dark", t[2] === "dark"), L(e, "light", t[2] === "light"), L(e, "sidebar", t[3] === "true"), L(e, "nosidebar", t[3] !== "true");
+    },
+    m(o, f) {
+      p(o, e, f), l && l.m(e, null), u(e, i);
+      for (let c = 0; c < r.length; c += 1)
+        r[c].m(e, null);
+    },
+    p(o, f) {
+      if (o[1] && o[3] === "true" ? l ? l.p(o, f) : (l = re(o), l.c(), l.m(e, i)) : l && (l.d(1), l = null), f & 41) {
+        n = o[5];
+        let c;
+        for (c = 0; c < n.length; c += 1) {
+          const s = te(o, n, c);
+          r[c] ? r[c].p(s, f) : (r[c] = fe(s), r[c].c(), r[c].m(e, null));
+        }
+        for (; c < r.length; c += 1)
+          r[c].d(1);
+        r.length = n.length;
+      }
+      f & 4 && L(e, "dark", o[2] === "dark"), f & 4 && L(e, "light", o[2] === "light"), f & 8 && L(e, "sidebar", o[3] === "true"), f & 8 && L(e, "nosidebar", o[3] !== "true");
+    },
+    d(o) {
+      o && k(e), l && l.d(), be(r, o);
+    }
+  };
+}
+function re(t) {
+  let e, i, l, n, r, o, f;
+  return {
+    c() {
+      e = m("a"), i = m("div"), l = m("div"), n = $(t[1]), r = M(), o = m("img"), a(l, "class", "title"), a(o, "id", "logo"), a(o, "alt", "logo"), H(o.src, f = t[0] + "/logo.png") || a(o, "src", f), a(i, "class", "content"), a(e, "href", t[0]), a(e, "target", "_blank"), a(e, "id", "header");
+    },
+    m(c, s) {
+      p(c, e, s), u(e, i), u(i, l), u(l, n), u(i, r), u(i, o);
+    },
+    p(c, s) {
+      s & 2 && T(n, c[1]), s & 1 && !H(o.src, f = c[0] + "/logo.png") && a(o, "src", f), s & 1 && a(e, "href", c[0]);
+    },
+    d(c) {
+      c && k(e);
     }
   };
 }
 function oe(t) {
-  let e, i, l = t[1] && t[3] === "true" && ae(t), n = t[5], o = [];
-  for (let r = 0; r < n.length; r += 1)
-    o[r] = ue(le(t, n, r));
-  return {
-    c() {
-      e = g("div"), l && l.c(), i = z();
-      for (let r = 0; r < o.length; r += 1)
-        o[r].c();
-      a(e, "id", "gancioEvents"), T(e, "dark", t[2] === "dark"), T(e, "light", t[2] === "light"), T(e, "sidebar", t[3] === "true"), T(e, "nosidebar", t[3] !== "true");
-    },
-    m(r, f) {
-      v(r, e, f), l && l.m(e, null), u(e, i);
-      for (let c = 0; c < o.length; c += 1)
-        o[c].m(e, null);
-    },
-    p(r, f) {
-      if (r[1] && r[3] === "true" ? l ? l.p(r, f) : (l = ae(r), l.c(), l.m(e, i)) : l && (l.d(1), l = null), f & 41) {
-        n = r[5];
-        let c;
-        for (c = 0; c < n.length; c += 1) {
-          const s = le(r, n, c);
-          o[c] ? o[c].p(s, f) : (o[c] = ue(s), o[c].c(), o[c].m(e, null));
-        }
-        for (; c < o.length; c += 1)
-          o[c].d(1);
-        o.length = n.length;
-      }
-      f & 4 && T(e, "dark", r[2] === "dark"), f & 4 && T(e, "light", r[2] === "light"), f & 8 && T(e, "sidebar", r[3] === "true"), f & 8 && T(e, "nosidebar", r[3] !== "true");
-    },
-    d(r) {
-      r && x(e), l && l.d(), pe(o, r);
-    }
-  };
-}
-function ae(t) {
-  let e, i, l, n, o, r, f;
-  return {
-    c() {
-      e = g("a"), i = g("div"), l = g("div"), n = j(t[1]), o = z(), r = g("img"), a(l, "class", "title"), a(r, "id", "logo"), a(r, "alt", "logo"), G(r.src, f = t[0] + "/logo.png") || a(r, "src", f), a(i, "class", "content"), a(e, "href", t[0]), a(e, "target", "_blank"), a(e, "id", "header");
-    },
-    m(c, s) {
-      v(c, e, s), u(e, i), u(i, l), u(l, n), u(i, o), u(i, r);
-    },
-    p(c, s) {
-      s & 2 && N(n, c[1]), s & 1 && !G(r.src, f = c[0] + "/logo.png") && a(r, "src", f), s & 1 && a(e, "href", c[0]);
-    },
-    d(c) {
-      c && x(e);
-    }
-  };
-}
-function se(t) {
   let e;
-  function i(o, r) {
-    return o[12].media.length ? Ge : Le;
+  function i(r, o) {
+    return r[12].media.length ? Le : Te;
   }
   let l = i(t), n = l(t);
   return {
     c() {
-      e = g("div"), n.c(), a(e, "class", "img");
+      e = m("div"), n.c(), a(e, "class", "img");
     },
-    m(o, r) {
-      v(o, e, r), n.m(e, null);
+    m(r, o) {
+      p(r, e, o), n.m(e, null);
     },
-    p(o, r) {
-      l === (l = i(o)) && n ? n.p(o, r) : (n.d(1), n = l(o), n && (n.c(), n.m(e, null)));
+    p(r, o) {
+      l === (l = i(r)) && n ? n.p(r, o) : (n.d(1), n = l(r), n && (n.c(), n.m(e, null)));
     },
-    d(o) {
-      o && x(e), n.d();
+    d(r) {
+      r && k(e), n.d();
+    }
+  };
+}
+function Te(t) {
+  let e, i, l;
+  return {
+    c() {
+      e = m("img"), a(e, "style", "aspect-ratio=1.7778;"), a(e, "alt", i = t[12].title), H(e.src, l = t[0] + "/fallbackimage.png") || a(e, "src", l), a(e, "loading", "lazy");
+    },
+    m(n, r) {
+      p(n, e, r);
+    },
+    p(n, r) {
+      r & 32 && i !== (i = n[12].title) && a(e, "alt", i), r & 1 && !H(e.src, l = n[0] + "/fallbackimage.png") && a(e, "src", l);
+    },
+    d(n) {
+      n && k(e);
     }
   };
 }
 function Le(t) {
-  let e, i, l;
-  return {
-    c() {
-      e = g("img"), a(e, "style", "aspect-ratio=1.7778;"), a(e, "alt", i = t[12].title), G(e.src, l = t[0] + "/fallbackimage.png") || a(e, "src", l), a(e, "loading", "lazy");
-    },
-    m(n, o) {
-      v(n, e, o);
-    },
-    p(n, o) {
-      o & 32 && i !== (i = n[12].title) && a(e, "alt", i), o & 1 && !G(e.src, l = n[0] + "/fallbackimage.png") && a(e, "src", l);
-    },
-    d(n) {
-      n && x(e);
-    }
-  };
-}
-function Ge(t) {
   let e, i, l, n;
   return {
     c() {
-      e = g("img"), a(e, "style", i = "object-position: " + de(t[12]) + "; aspect-ratio=1.7778;"), a(e, "alt", l = t[12].media[0].name), G(e.src, n = t[0] + "/media/thumb/" + t[12].media[0].url) || a(e, "src", n), a(e, "loading", "lazy");
+      e = m("img"), a(e, "style", i = "object-position: " + ue(t[12]) + "; aspect-ratio=1.7778;"), a(e, "alt", l = t[12].media[0].name), H(e.src, n = t[0] + "/media/thumb/" + t[12].media[0].url) || a(e, "src", n), a(e, "loading", "lazy");
     },
-    m(o, r) {
-      v(o, e, r);
+    m(r, o) {
+      p(r, e, o);
     },
-    p(o, r) {
-      r & 32 && i !== (i = "object-position: " + de(o[12]) + "; aspect-ratio=1.7778;") && a(e, "style", i), r & 32 && l !== (l = o[12].media[0].name) && a(e, "alt", l), r & 33 && !G(e.src, n = o[0] + "/media/thumb/" + o[12].media[0].url) && a(e, "src", n);
+    p(r, o) {
+      o & 32 && i !== (i = "object-position: " + ue(r[12]) + "; aspect-ratio=1.7778;") && a(e, "style", i), o & 32 && l !== (l = r[12].media[0].name) && a(e, "alt", l), o & 33 && !H(e.src, n = r[0] + "/media/thumb/" + r[12].media[0].url) && a(e, "src", n);
     },
-    d(o) {
-      o && x(e);
+    d(r) {
+      r && k(e);
     }
   };
 }
-function ce(t) {
-  let e, i = t[12].tags, l = [];
-  for (let n = 0; n < i.length; n += 1)
-    l[n] = fe(ne(t, i, n));
+function ae(t) {
+  let e, i = t[12].place.address + "", l;
   return {
     c() {
-      e = g("div");
+      e = m("span"), l = $(i), a(e, "class", "subtitle");
+    },
+    m(n, r) {
+      p(n, e, r), u(e, l);
+    },
+    p(n, r) {
+      r & 32 && i !== (i = n[12].place.address + "") && T(l, i);
+    },
+    d(n) {
+      n && k(e);
+    }
+  };
+}
+function se(t) {
+  let e, i = t[12].tags, l = [];
+  for (let n = 0; n < i.length; n += 1)
+    l[n] = ce(ie(t, i, n));
+  return {
+    c() {
+      e = m("div");
       for (let n = 0; n < l.length; n += 1)
         l[n].c();
       a(e, "class", "tags");
     },
-    m(n, o) {
-      v(n, e, o);
-      for (let r = 0; r < l.length; r += 1)
-        l[r].m(e, null);
+    m(n, r) {
+      p(n, e, r);
+      for (let o = 0; o < l.length; o += 1)
+        l[o].m(e, null);
     },
-    p(n, o) {
-      if (o & 32) {
+    p(n, r) {
+      if (r & 32) {
         i = n[12].tags;
-        let r;
-        for (r = 0; r < i.length; r += 1) {
-          const f = ne(n, i, r);
-          l[r] ? l[r].p(f, o) : (l[r] = fe(f), l[r].c(), l[r].m(e, null));
+        let o;
+        for (o = 0; o < i.length; o += 1) {
+          const f = ie(n, i, o);
+          l[o] ? l[o].p(f, r) : (l[o] = ce(f), l[o].c(), l[o].m(e, null));
         }
-        for (; r < l.length; r += 1)
-          l[r].d(1);
+        for (; o < l.length; o += 1)
+          l[o].d(1);
         l.length = i.length;
       }
     },
     d(n) {
-      n && x(e), pe(l, n);
+      n && k(e), be(l, n);
+    }
+  };
+}
+function ce(t) {
+  let e, i, l = t[15] + "", n;
+  return {
+    c() {
+      e = m("span"), i = $("#"), n = $(l), a(e, "class", "tag");
+    },
+    m(r, o) {
+      p(r, e, o), u(e, i), u(e, n);
+    },
+    p(r, o) {
+      o & 32 && l !== (l = r[15] + "") && T(n, l);
+    },
+    d(r) {
+      r && k(e);
     }
   };
 }
 function fe(t) {
-  let e, i, l = t[15] + "", n;
+  let e, i, l, n, r = V(t[12]) + "", o, f, c, s = t[12].title + "", w, g, _, A, y = t[12].place.name + "", d, z, h, v, C, q, E = t[3] !== "true" && oe(t), j = t[12].place.name !== "online" && ae(t), S = t[12].tags.length && se(t);
   return {
     c() {
-      e = g("span"), i = j("#"), n = j(l), a(e, "class", "tag");
+      e = m("a"), E && E.c(), i = M(), l = m("div"), n = m("div"), o = $(r), f = M(), c = m("div"), w = $(s), g = M(), _ = m("span"), A = $('@"'), d = $(y), z = $(`"
+            `), j && j.c(), h = M(), S && S.c(), v = M(), a(n, "class", "subtitle"), a(c, "class", "title"), a(_, "class", "place"), a(l, "class", "content"), a(e, "href", C = t[0] + "/event/" + (t[12].slug || t[12].id)), a(e, "class", "event"), a(e, "title", q = t[12].title), a(e, "target", "_blank");
     },
-    m(o, r) {
-      v(o, e, r), u(e, i), u(e, n);
+    m(b, N) {
+      p(b, e, N), E && E.m(e, null), u(e, i), u(e, l), u(l, n), u(n, o), u(l, f), u(l, c), u(c, w), u(l, g), u(l, _), u(_, A), u(_, d), u(_, z), j && j.m(_, null), u(l, h), S && S.m(l, null), u(e, v);
     },
-    p(o, r) {
-      r & 32 && l !== (l = o[15] + "") && N(n, l);
+    p(b, N) {
+      b[3] !== "true" ? E ? E.p(b, N) : (E = oe(b), E.c(), E.m(e, i)) : E && (E.d(1), E = null), N & 32 && r !== (r = V(b[12]) + "") && T(o, r), N & 32 && s !== (s = b[12].title + "") && T(w, s), N & 32 && y !== (y = b[12].place.name + "") && T(d, y), b[12].place.name !== "online" ? j ? j.p(b, N) : (j = ae(b), j.c(), j.m(_, null)) : j && (j.d(1), j = null), b[12].tags.length ? S ? S.p(b, N) : (S = se(b), S.c(), S.m(l, null)) : S && (S.d(1), S = null), N & 33 && C !== (C = b[0] + "/event/" + (b[12].slug || b[12].id)) && a(e, "href", C), N & 32 && q !== (q = b[12].title) && a(e, "title", q);
     },
-    d(o) {
-      o && x(e);
+    d(b) {
+      b && k(e), E && E.d(), j && j.d(), S && S.d();
+    }
+  };
+}
+function Ge(t) {
+  let e, i, l = t[4] && le(t), n = t[5].length && ne(t);
+  return {
+    c() {
+      l && l.c(), e = M(), n && n.c(), i = pe(), this.c = G;
+    },
+    m(r, o) {
+      l && l.m(r, o), p(r, e, o), n && n.m(r, o), p(r, i, o);
+    },
+    p(r, [o]) {
+      r[4] ? l ? l.p(r, o) : (l = le(r), l.c(), l.m(e.parentNode, e)) : l && (l.d(1), l = null), r[5].length ? n ? n.p(r, o) : (n = ne(r), n.c(), n.m(i.parentNode, i)) : n && (n.d(1), n = null);
+    },
+    i: G,
+    o: G,
+    d(r) {
+      l && l.d(r), r && k(e), n && n.d(r), r && k(i);
     }
   };
 }
 function ue(t) {
-  let e, i, l, n, o = V(t[12]) + "", r, f, c, s = t[12].title + "", k, m, _, C, w = t[12].place.name + "", d, S, h, b = t[12].place.address + "", A, Y, Z, U, q, $ = t[3] !== "true" && se(t), E = t[12].tags.length && ce(t);
-  return {
-    c() {
-      e = g("a"), $ && $.c(), i = z(), l = g("div"), n = g("div"), r = j(o), f = z(), c = g("div"), k = j(s), m = z(), _ = g("span"), C = j("@"), d = j(w), S = z(), h = g("span"), A = j(b), Y = z(), E && E.c(), Z = z(), a(n, "class", "subtitle"), a(c, "class", "title"), a(h, "class", "subtitle"), a(_, "class", "place"), a(l, "class", "content"), a(e, "href", U = t[0] + "/event/" + (t[12].slug || t[12].id)), a(e, "class", "event"), a(e, "title", q = t[12].title), a(e, "target", "_blank");
-    },
-    m(p, M) {
-      v(p, e, M), $ && $.m(e, null), u(e, i), u(e, l), u(l, n), u(n, r), u(l, f), u(l, c), u(c, k), u(l, m), u(l, _), u(_, C), u(_, d), u(_, S), u(_, h), u(h, A), u(l, Y), E && E.m(l, null), u(e, Z);
-    },
-    p(p, M) {
-      p[3] !== "true" ? $ ? $.p(p, M) : ($ = se(p), $.c(), $.m(e, i)) : $ && ($.d(1), $ = null), M & 32 && o !== (o = V(p[12]) + "") && N(r, o), M & 32 && s !== (s = p[12].title + "") && N(k, s), M & 32 && w !== (w = p[12].place.name + "") && N(d, w), M & 32 && b !== (b = p[12].place.address + "") && N(A, b), p[12].tags.length ? E ? E.p(p, M) : (E = ce(p), E.c(), E.m(l, null)) : E && (E.d(1), E = null), M & 33 && U !== (U = p[0] + "/event/" + (p[12].slug || p[12].id)) && a(e, "href", U), M & 32 && q !== (q = p[12].title) && a(e, "title", q);
-    },
-    d(p) {
-      p && x(e), $ && $.d(), E && E.d();
-    }
-  };
-}
-function He(t) {
-  let e, i, l = t[4] && re(t), n = t[5].length && oe(t);
-  return {
-    c() {
-      l && l.c(), e = z(), n && n.c(), i = ve(), this.c = L;
-    },
-    m(o, r) {
-      l && l.m(o, r), v(o, e, r), n && n.m(o, r), v(o, i, r);
-    },
-    p(o, [r]) {
-      o[4] ? l ? l.p(o, r) : (l = re(o), l.c(), l.m(e.parentNode, e)) : l && (l.d(1), l = null), o[5].length ? n ? n.p(o, r) : (n = oe(o), n.c(), n.m(i.parentNode, i)) : n && (n.d(1), n = null);
-    },
-    i: L,
-    o: L,
-    d(o) {
-      l && l.d(o), o && x(e), n && n.d(o), o && x(i);
-    }
-  };
-}
-function de(t) {
   if (t.media && t.media[0].focalpoint) {
     const e = t.media[0].focalpoint;
     return `${(e[0] + 1) * 50}% ${(e[1] + 1) * 50}%`;
   }
   return "center center";
 }
-function Re(t, e, i) {
-  let { baseurl: l = "" } = e, { title: n = "" } = e, { maxlength: o = !1 } = e, { tags: r = "" } = e, { places: f = "" } = e, { theme: c = "light" } = e, { show_recurrent: s = !1 } = e, { sidebar: k = "true" } = e, { external_style: m = "" } = e, _ = !1, C = [];
-  function w(d) {
+function He(t, e, i) {
+  let { baseurl: l = "" } = e, { title: n = "" } = e, { maxlength: r = !1 } = e, { tags: o = "" } = e, { places: f = "" } = e, { theme: c = "light" } = e, { show_recurrent: s = !1 } = e, { sidebar: w = "true" } = e, { external_style: g = "" } = e, _ = !1, A = [];
+  function y(d) {
     if (!_)
       return;
-    const S = [];
-    o && S.push(`max=${o}`), r && S.push(`tags=${r}`), f && S.push(`places=${f}`), S.push(`show_recurrent=${s ? "true" : "false"}`), fetch(`${l}/api/events?${S.join("&")}`).then((h) => h.json()).then((h) => {
-      i(5, C = h);
+    const z = [];
+    r && z.push(`max=${r}`), o && z.push(`tags=${o}`), f && z.push(`places=${f}`), z.push(`show_recurrent=${s ? "true" : "false"}`), fetch(`${l}/api/events?${z.join("&")}`).then((h) => h.json()).then((h) => {
+      i(5, A = h);
     }).catch((h) => {
       console.error("Error loading Gancio API -> ", h);
     });
   }
-  return we(() => {
-    _ = !0, w();
+  return ke(() => {
+    _ = !0, y();
   }), t.$$set = (d) => {
-    "baseurl" in d && i(0, l = d.baseurl), "title" in d && i(1, n = d.title), "maxlength" in d && i(6, o = d.maxlength), "tags" in d && i(7, r = d.tags), "places" in d && i(8, f = d.places), "theme" in d && i(2, c = d.theme), "show_recurrent" in d && i(9, s = d.show_recurrent), "sidebar" in d && i(3, k = d.sidebar), "external_style" in d && i(4, m = d.external_style);
+    "baseurl" in d && i(0, l = d.baseurl), "title" in d && i(1, n = d.title), "maxlength" in d && i(6, r = d.maxlength), "tags" in d && i(7, o = d.tags), "places" in d && i(8, f = d.places), "theme" in d && i(2, c = d.theme), "show_recurrent" in d && i(9, s = d.show_recurrent), "sidebar" in d && i(3, w = d.sidebar), "external_style" in d && i(4, g = d.external_style);
   }, t.$$.update = () => {
-    t.$$.dirty & 975 && w();
+    t.$$.dirty & 975 && y();
   }, [
     l,
     n,
     c,
-    k,
-    m,
-    C,
-    o,
+    w,
+    g,
+    A,
     r,
+    o,
     f,
     s
   ];
 }
-class Ie extends X {
+class Re extends X {
   constructor(e) {
     super(), this.shadowRoot.innerHTML = `<style>#gancioEvents{font-family:ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
       'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
@@ -476,16 +494,16 @@ class Ie extends X {
       'Noto Color Emoji';overflow-x:hidden;width:100%;box-sizing:content-box;margin:0 auto;font-size:1rem;text-align:left}.nosidebar{max-width:1200px}#header{padding:1.2rem 1rem;background-color:var(--bg-odd-color)}.sidebar{max-width:500px;box-shadow:rgba(60, 64, 67, 0.4) 0px 1px 2px 0px,
       rgba(60, 64, 67, 0.25) 0px 1px 3px 1px;border-radius:5px;font-size:1rem}.event .img{width:100%;max-width:450px;max-height:250px;aspect-ratio:1.7778;flex:1 0 auto}@media screen and (max-width: 800px){.event{flex-wrap:wrap}.event .img{max-width:100%}}.event img{object-fit:cover;border-radius:15px;width:100%;height:100%;box-shadow:rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
       rgba(0, 0, 0, 0.3) 0px 3px 7px -3px}.nosidebar .event{margin-bottom:2rem}.nosidebar .content{margin-left:1rem;margin-top:5px;text-align:left}.tags{margin-top:2px}#logo{position:absolute;top:10px;right:10px;height:40px}a{text-decoration:none;color:var(--text-color);display:flex;padding:8px 20px;margin:0;line-height:1.275rem;font-weight:400;font-size:0.875rem;position:relative;transition:background-color 0.3s cubic-bezier(0.25, 0.8, 0.5, 1),
-      padding 0.3s;box-sizing:content-box}a:hover .title,a:focus .title,a:active .title{text-decoration:underline}.dark{--bg-odd-color:#161616;--bg-even-color:#222;--bg-hover-color:#333;--text-color:white;--title-color:white;--line-color:rgba(120, 120, 120, 0.2)}.light{--bg-odd-color:#f5f5f5;--bg-even-color:#fafafa;--bg-hover-color:#eee;--text-color:#222;--title-color:black;--line-color:rgba(220, 220, 220, 0.9)}.sidebar a{background-color:var(--bg-even-color);border-bottom:1px solid var(--line-color)}.sidebar a:hover,.sidebar a:focus,.sidebar a:active{background-color:var(--bg-hover-color);padding-left:15px;padding-right:25px}.place{font-weight:400;font-size:1.2rem;line-height:1.4rem;color:orangered}.title{color:var(--title-color);font-weight:bold;font-size:1.3rem;line-height:1.1em}.nosidebar .title{font-size:1.9em;line-height:1.1em}.subtitle{font-size:1rem;line-height:1.1em;color:var(--title-color);opacity:0.9}.tag{margin-right:10px;display:inline-block}</style>`, ye(
+      padding 0.3s;box-sizing:content-box}a:hover .title,a:focus .title,a:active .title{text-decoration:underline}.dark{--bg-odd-color:#161616;--bg-even-color:#222;--bg-hover-color:#333;--text-color:white;--title-color:white;--line-color:rgba(120, 120, 120, 0.2)}.light{--bg-odd-color:#f5f5f5;--bg-even-color:#fafafa;--bg-hover-color:#eee;--text-color:#222;--title-color:black;--line-color:rgba(220, 220, 220, 0.9)}.sidebar a{background-color:var(--bg-even-color);border-bottom:1px solid var(--line-color)}.sidebar a:hover,.sidebar a:focus,.sidebar a:active{background-color:var(--bg-hover-color);padding-left:15px;padding-right:25px}.place{font-weight:400;font-size:1.2rem;line-height:1.4rem;color:orangered}.title{color:var(--title-color);font-weight:bold;font-size:1.3rem;line-height:1.1em}.nosidebar .title{font-size:1.9em;line-height:1.1em}.subtitle{font-size:1rem;line-height:1.1em;color:var(--title-color);opacity:0.9}.tag{margin-right:10px;display:inline-block}</style>`, we(
       this,
       {
         target: this.shadowRoot,
-        props: ke(this.attributes),
+        props: ve(this.attributes),
         customElement: !0
       },
-      Re,
       He,
-      be,
+      Ge,
+      _e,
       {
         baseurl: 0,
         title: 1,
@@ -498,7 +516,7 @@ class Ie extends X {
         external_style: 4
       },
       null
-    ), e && (e.target && v(e.target, this, e.anchor), e.props && (this.$set(e.props), y()));
+    ), e && (e.target && p(e.target, this, e.anchor), e.props && (this.$set(e.props), x()));
   }
   static get observedAttributes() {
     return [
@@ -517,108 +535,108 @@ class Ie extends X {
     return this.$$.ctx[0];
   }
   set baseurl(e) {
-    this.$$set({ baseurl: e }), y();
+    this.$$set({ baseurl: e }), x();
   }
   get title() {
     return this.$$.ctx[1];
   }
   set title(e) {
-    this.$$set({ title: e }), y();
+    this.$$set({ title: e }), x();
   }
   get maxlength() {
     return this.$$.ctx[6];
   }
   set maxlength(e) {
-    this.$$set({ maxlength: e }), y();
+    this.$$set({ maxlength: e }), x();
   }
   get tags() {
     return this.$$.ctx[7];
   }
   set tags(e) {
-    this.$$set({ tags: e }), y();
+    this.$$set({ tags: e }), x();
   }
   get places() {
     return this.$$.ctx[8];
   }
   set places(e) {
-    this.$$set({ places: e }), y();
+    this.$$set({ places: e }), x();
   }
   get theme() {
     return this.$$.ctx[2];
   }
   set theme(e) {
-    this.$$set({ theme: e }), y();
+    this.$$set({ theme: e }), x();
   }
   get show_recurrent() {
     return this.$$.ctx[9];
   }
   set show_recurrent(e) {
-    this.$$set({ show_recurrent: e }), y();
+    this.$$set({ show_recurrent: e }), x();
   }
   get sidebar() {
     return this.$$.ctx[3];
   }
   set sidebar(e) {
-    this.$$set({ sidebar: e }), y();
+    this.$$set({ sidebar: e }), x();
   }
   get external_style() {
     return this.$$.ctx[4];
   }
   set external_style(e) {
-    this.$$set({ external_style: e }), y();
+    this.$$set({ external_style: e }), x();
   }
 }
-customElements.define("gancio-events", Ie);
-function he(t) {
-  let e, i, l, n, o = t[1].title + "", r, f, c, s = V(t[1]) + "", k, m, _, C, w = t[1].place.name + "", d, S, h = t[1].media.length && ge(t);
+customElements.define("gancio-events", Re);
+function de(t) {
+  let e, i, l, n, r = t[1].title + "", o, f, c, s = V(t[1]) + "", w, g, _, A, y = t[1].place.name + "", d, z, h = t[1].media.length && he(t);
   return {
     c() {
-      e = g("a"), h && h.c(), i = z(), l = g("div"), n = g("strong"), r = j(o), f = z(), c = g("div"), k = j(s), m = z(), _ = g("div"), C = j("@"), d = j(w), a(_, "class", "place"), a(l, "class", "container"), a(e, "href", S = t[0] + "/event/" + (t[1].slug || t[1].id)), a(e, "class", "card"), a(e, "target", "_blank");
+      e = m("a"), h && h.c(), i = M(), l = m("div"), n = m("strong"), o = $(r), f = M(), c = m("div"), w = $(s), g = M(), _ = m("div"), A = $("@"), d = $(y), a(_, "class", "place"), a(l, "class", "container"), a(e, "href", z = t[0] + "/event/" + (t[1].slug || t[1].id)), a(e, "class", "card"), a(e, "target", "_blank");
     },
-    m(b, A) {
-      v(b, e, A), h && h.m(e, null), u(e, i), u(e, l), u(l, n), u(n, r), u(l, f), u(l, c), u(c, k), u(l, m), u(l, _), u(_, C), u(_, d);
+    m(v, C) {
+      p(v, e, C), h && h.m(e, null), u(e, i), u(e, l), u(l, n), u(n, o), u(l, f), u(l, c), u(c, w), u(l, g), u(l, _), u(_, A), u(_, d);
     },
-    p(b, A) {
-      b[1].media.length ? h ? h.p(b, A) : (h = ge(b), h.c(), h.m(e, i)) : h && (h.d(1), h = null), A & 2 && o !== (o = b[1].title + "") && N(r, o), A & 2 && s !== (s = V(b[1]) + "") && N(k, s), A & 2 && w !== (w = b[1].place.name + "") && N(d, w), A & 3 && S !== (S = b[0] + "/event/" + (b[1].slug || b[1].id)) && a(e, "href", S);
+    p(v, C) {
+      v[1].media.length ? h ? h.p(v, C) : (h = he(v), h.c(), h.m(e, i)) : h && (h.d(1), h = null), C & 2 && r !== (r = v[1].title + "") && T(o, r), C & 2 && s !== (s = V(v[1]) + "") && T(w, s), C & 2 && y !== (y = v[1].place.name + "") && T(d, y), C & 3 && z !== (z = v[0] + "/event/" + (v[1].slug || v[1].id)) && a(e, "href", z);
     },
-    d(b) {
-      b && x(e), h && h.d();
+    d(v) {
+      v && k(e), h && h.d();
     }
   };
 }
-function ge(t) {
+function he(t) {
   let e, i, l, n;
   return {
     c() {
-      e = g("img"), G(e.src, i = t[2](t[1])) || a(e, "src", i), a(e, "alt", l = t[1].media[0].name), a(e, "style", n = "object-position: " + me(t[1]) + "; aspect-ratio=1.7778;");
+      e = m("img"), H(e.src, i = t[2](t[1])) || a(e, "src", i), a(e, "alt", l = t[1].media[0].name), a(e, "style", n = "object-position: " + me(t[1]) + "; aspect-ratio=1.7778;");
     },
-    m(o, r) {
-      v(o, e, r);
+    m(r, o) {
+      p(r, e, o);
     },
-    p(o, r) {
-      r & 2 && !G(e.src, i = o[2](o[1])) && a(e, "src", i), r & 2 && l !== (l = o[1].media[0].name) && a(e, "alt", l), r & 2 && n !== (n = "object-position: " + me(o[1]) + "; aspect-ratio=1.7778;") && a(e, "style", n);
+    p(r, o) {
+      o & 2 && !H(e.src, i = r[2](r[1])) && a(e, "src", i), o & 2 && l !== (l = r[1].media[0].name) && a(e, "alt", l), o & 2 && n !== (n = "object-position: " + me(r[1]) + "; aspect-ratio=1.7778;") && a(e, "style", n);
     },
-    d(o) {
-      o && x(e);
+    d(r) {
+      r && k(e);
     }
   };
 }
-function Oe(t) {
-  let e, i = t[1] && he(t);
+function Ie(t) {
+  let e, i = t[1] && de(t);
   return {
     c() {
-      i && i.c(), e = ve(), this.c = L;
+      i && i.c(), e = pe(), this.c = G;
     },
     m(l, n) {
-      i && i.m(l, n), v(l, e, n);
+      i && i.m(l, n), p(l, e, n);
     },
     p(l, [n]) {
-      l[1] ? i ? i.p(l, n) : (i = he(l), i.c(), i.m(e.parentNode, e)) : i && (i.d(1), i = null);
+      l[1] ? i ? i.p(l, n) : (i = de(l), i.c(), i.m(e.parentNode, e)) : i && (i.d(1), i = null);
     },
-    i: L,
-    o: L,
+    i: G,
+    o: G,
     d(l) {
-      i && i.d(l), l && x(e);
+      i && i.d(l), l && k(e);
     }
   };
 }
@@ -629,13 +647,13 @@ function me(t) {
   }
   return "center center";
 }
-function Ue(t, e, i) {
-  let { baseurl: l = "https://demo.gancio.org" } = e, { id: n } = e, o = !1, r;
-  function f(s, k) {
-    o && fetch(`${k}/api/event/detail/${s}`).then((m) => m.json()).then((m) => i(1, r = m));
+function Oe(t, e, i) {
+  let { baseurl: l = "https://demo.gancio.org" } = e, { id: n } = e, r = !1, o;
+  function f(s, w) {
+    r && fetch(`${w}/api/event/detail/${s}`).then((g) => g.json()).then((g) => i(1, o = g));
   }
-  we(() => {
-    o = !0, f(n, l);
+  ke(() => {
+    r = !0, f(n, l);
   });
   function c(s) {
     return `${l}/media/thumb/${s.media[0].url}`;
@@ -644,24 +662,24 @@ function Ue(t, e, i) {
     "baseurl" in s && i(0, l = s.baseurl), "id" in s && i(3, n = s.id);
   }, t.$$.update = () => {
     t.$$.dirty & 9 && f(n, l);
-  }, [l, r, c, n];
+  }, [l, o, c, n];
 }
-class qe extends X {
+class Ue extends X {
   constructor(e) {
     super(), this.shadowRoot.innerHTML = `<style>.card{display:block;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
-      sans-serif;box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2);transition:0.3s;border-radius:5px;max-width:500px;text-decoration:none;color:white;background-color:#1e1e1e;overflow:hidden}img{border-radius:5px 5px 0 0;max-height:250px;min-height:160px;width:100%;object-fit:cover;object-position:top}.card:hover .container{padding-left:20px}.card:hover{box-shadow:0 8px 16px 0 rgba(0, 0, 0, 0.2)}.container{transition:padding-left 0.2s;padding:16px}.place{font-weight:600;color:#ff6e40}</style>`, ye(
+      sans-serif;box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2);transition:0.3s;border-radius:5px;max-width:500px;text-decoration:none;color:white;background-color:#1e1e1e;overflow:hidden}img{border-radius:5px 5px 0 0;max-height:250px;min-height:160px;width:100%;object-fit:cover;object-position:top}.card:hover .container{padding-left:20px}.card:hover{box-shadow:0 8px 16px 0 rgba(0, 0, 0, 0.2)}.container{transition:padding-left 0.2s;padding:16px}.place{font-weight:600;color:#ff6e40}</style>`, we(
       this,
       {
         target: this.shadowRoot,
-        props: ke(this.attributes),
+        props: ve(this.attributes),
         customElement: !0
       },
-      Ue,
       Oe,
-      be,
+      Ie,
+      _e,
       { baseurl: 0, id: 3 },
       null
-    ), e && (e.target && v(e.target, this, e.anchor), e.props && (this.$set(e.props), y()));
+    ), e && (e.target && p(e.target, this, e.anchor), e.props && (this.$set(e.props), x()));
   }
   static get observedAttributes() {
     return ["baseurl", "id"];
@@ -670,13 +688,13 @@ class qe extends X {
     return this.$$.ctx[0];
   }
   set baseurl(e) {
-    this.$$set({ baseurl: e }), y();
+    this.$$set({ baseurl: e }), x();
   }
   get id() {
     return this.$$.ctx[3];
   }
   set id(e) {
-    this.$$set({ id: e }), y();
+    this.$$set({ id: e }), x();
   }
 }
-customElements.define("gancio-event", qe);
+customElements.define("gancio-event", Ue);
