@@ -1,6 +1,6 @@
 const config = require('./server/config.js')
 const locales = require('./locales/index')
-
+import { ca, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, ru, zhHans  } from 'vuetify/es5/locale'
 
 const isDev = (process.env.NODE_ENV !== 'production')
 module.exports = {
@@ -140,7 +140,11 @@ module.exports = {
     }
   },
   buildModules: ['@nuxtjs/vuetify'],
-  vuetify: { defaultAssets: false, optionsPath: './vuetify.options.js' },
+  vuetify: {
+    lang: { locales: { ca, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, ru, zhHans } },
+    treeShake: true,    
+    defaultAssets: false,
+    optionsPath: './vuetify.options.js' },
   build: {
     extend(config, { isDev, isClient }) {
       // ..

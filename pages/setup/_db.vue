@@ -20,17 +20,19 @@ v-container.pa-6
         Completed(ref='completed' :isHttp='isHttp')
 </template>
 <script>
-import DbStep from '@/components/DbStep'
-import Settings from '@/components/admin/Settings'
-import Completed from '@/components/Completed'
 
 export default {
-  components: { DbStep, Settings, Completed },
+  components: {
+    Settings: () => import(/* webpackChunkName: "setup" */'@/components/admin/Settings.vue'),
+    DbStep: () => import(/* webpackChunkName: "setup" */'@/components/DbStep.vue'),
+    Completed: () => import(/* webpackChunkName: "setup" */'@/components/Completed.vue'),
+  },
   middleware: 'setup',
   layout: 'clean',
   head: {
     title: 'Setup',
   },
+  name: 'Setup',
   auth: false,
   asyncData ({ params, req }) {
     const protocol = process.client ? window.location.protocol : req.protocol + ':'

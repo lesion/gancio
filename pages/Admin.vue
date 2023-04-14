@@ -73,12 +73,11 @@ v-container.container.pa-0.pa-md-3
 <script>
 import { mapState } from 'vuex'
 import { mdiAlert, mdiChevronRight, mdiChevronLeft } from '@mdi/js'
-import Settings from '@/components/admin/Settings'
 
 export default {
   name: 'Admin',
   components: { 
-    Settings,
+    Settings: () => import(/* webpackChunkName: "admin" */'../components/admin/Settings.vue'),
     Users:  () => import(/* webpackChunkName: "admin" */'../components/admin/Users'),
     Events: () => import(/* webpackChunkName: "admin" */'../components/admin/Events'),
     Places: () => import(/* webpackChunkName: "admin" */'../components/admin/Places'),
