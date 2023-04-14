@@ -8,11 +8,12 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
-### 1.6.9 - 13 apr '23
+### 1.6.10 - 14 apr '23
   - add support to online events (thanks @sedum) #26
   - show past events in tag and place pages #259
   - fix import from URL for guest, #256
   - fix ics export timezone, #258
+  - fix autocomplete address when geocoding, #216
 
 ### 1.6.8 - 30 mar '23
   - use new $time in admins table, fix #252
