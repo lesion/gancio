@@ -102,7 +102,9 @@
         "content": "Contenido",
         "admin_actions": "Acciones de administrador",
         "recurring_event_actions": "Acciones de eventos recurrentes",
-        "tag": "Etiqueta"
+        "tag": "Etiqueta",
+        "search_coordinates": "Buscar las coordenadas",
+        "online": "En línea"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
@@ -179,12 +181,18 @@
         "updated": "Evento actualizado",
         "saved": "Evento guardado",
         "choose_focal_point": "Elige el punto central",
-        "address_description_osm": "¿Cuál es la dirección? (colaboradores de <a href='http://osm.org/copyright'>OpenStreetMap</a>)",
+        "address_description_osm": "Buscar las coordenadas escribiendo la dirección. (a los colaboradores de<a href='http://osm.org/copyright'>OpenStreetMap</a>)",
         "address_description": "¿Cuál es la dirección?",
         "alt_text_description": "Descripción para personas con baja visión",
         "download_flyer": "Descargar folleto",
         "remove_media_confirmation": "¿Confirmas la eliminación de la imagen?",
-        "show_multidate": "eventos de varios días"
+        "show_multidate": "eventos de varios días",
+        "where_advanced_options": "Lugar - Opciones avanzadas",
+        "where_advanced_options_description": "Define aquí otras propiedades para el lugar",
+        "online_locations": "Ubicaciones en línea",
+        "online_locations_help": "Por ejemplo, una url a una sala de videoconferencia y una url alternativa (máx. 3)",
+        "online_locations_fallback_urls": "Enlaces alternativos",
+        "address_geocoded_disclaimer": "Si no puede encontrar la <strong>dirección de la calle</strong> o el <strong>número de la casa</strong> que está buscando en los resultados de la codificación geográfica, puedes insertarlos manualmente en el campo 'Dirección' sin perder las coordenadas. Considera también que el proyecto <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> está abierto a contribuciones. Si tienes Android, te recomendamos <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> "
     },
     "admin": {
         "place_description": "En el caso de que un lugar sea incorrecto o cambie de dirección, puedes cambiarlo. <br/> Todos los eventos presentes y pasados asociados con este lugar cambiarán de dirección.",
@@ -302,7 +310,9 @@
         "edit_tag_help": "Puede cambiar la etiqueta sustituyéndola por una nueva o fusionándola con una existente. Los {n} eventos asociados también se modificarán.",
         "geolocation_description": "<b>1. Defina un proveedor para el servicio de codificación geográfica</b>.<br>Actualmente, entre los enumerados en el <a href=\"https://wiki.openstreetmap.org/wiki/Nominatim#Alternatives_.2F_Third-party_providers\">wiki de OpenStreetMap </a>, hay soporte para el software <a href=\"https://github.com/osm-search/Nominatim\">Nominatim</a> y <a href=\"https://github.com/komoot /photon\">Photon</a>.<br>Puede usar una de las demostraciones oficiales relacionadas copiando el enlace en el campo 'Proveedor de codificación geográfica':<ul><li>https://nominatim.openstreetmap.org/search (<a href=\"https://operations.osmfoundation.org/policies/nominatim/\">Términos de servicio</a>)</li><li>https://photon.komoot.io/api/ (<a href=\"https://photon.komoot.io/\"> Condiciones de servicio</a>)</li></ul><br><b>2. Defina un proveedor para las capas del mapa.</b><br>Puede encontrar una lista de ellos aquí: <a href=\"https://leaflet-extras.github.io/leaflet-providers/preview/\">https://leaflet-extras.github.io/leaflet-providers/preview/</a>",
         "geocoding_test_error": "No se puede acceder al servicio de geocodificación en {service_name}",
-        "colors": "Colores"
+        "colors": "Colores",
+        "allow_online_event": "Permitir acontecimientos en línea",
+        "allow_online_event_hint": "Pedir las urls "
     },
     "auth": {
         "not_confirmed": "Todavía no hemos confirmado este email…",
@@ -343,7 +353,9 @@
     },
     "validators": {
         "email": "Introduce un correo electrónico valido",
-        "required": "{fieldName} es requerido"
+        "required": "{fieldName} es requerido",
+        "longitude": "Introduce una latitud válida (-180 < latitud < 180)",
+        "latitude": "Introduce una latitud válida (-90 < latitud < 90)"
     },
     "setup": {
         "completed": "Configuración completada",
