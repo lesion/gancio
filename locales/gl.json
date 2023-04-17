@@ -102,7 +102,9 @@
         "content": "Contido",
         "admin_actions": "Accións de Admin",
         "recurring_event_actions": "Accións de eventos recurrentes",
-        "tag": "Etiqueta"
+        "tag": "Etiqueta",
+        "search_coordinates": "Buscar coordenadas",
+        "online": "En liña"
     },
     "recover": {
         "not_valid_code": "Algo fallou."
@@ -174,8 +176,14 @@
         "remove_media_confirmation": "Confirmas a eliminación da imaxe?",
         "download_flyer": "Descargar folleto",
         "address_description": "Cal é o enderezo?",
-        "address_description_osm": "Cal é o enderezo? (Contribuíntes a <a href='http://osm.org/copyright'>OpenStreetMap</a>)",
-        "show_multidate": "eventos con varias datas"
+        "address_description_osm": "Buscar coordenadas escribindo o enderezo. (Contribuíntes a <a href='http://osm.org/copyright'>OpenStreetMap</a>)",
+        "show_multidate": "eventos con varias datas",
+        "where_advanced_options": "Lugar - Opcións avanzadas",
+        "where_advanced_options_description": "Indica aquí detalles adicionais sobre o lugar",
+        "online_locations": "Localizacións en liña",
+        "online_locations_fallback_urls": "Ligazóns de reforzo",
+        "online_locations_help": "Por exemplo un URL a unha sala de videoconferencia e un URL de reforzo (máx. 3)",
+        "address_geocoded_disclaimer": "Se non atopas nos resultados o <strong>enderezo da rúa</strong> ou o <strong>número do edificio</strong> que estás a buscar, podes buscalos manualmente en 'Enderezo' e sen perder as coordenadas. Considera tamén que <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> é un proxecto aberto a colaboracións. Se usas Android, recomendamos <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> "
     },
     "admin": {
         "place_description": "Se escribiches mal o lugar ou enderezo, podes cambialo.<br/>Cambiará o enderezo de tódolos eventos actuais e pasados asociados a este lugar.",
@@ -295,7 +303,9 @@
         "edit_tag_help": "Podes cambiar a etiqueta substituíndoa por unha nova ou fusionándoa cunha existente. Tamén se cambiarán os {n} eventos asociados.",
         "delete_tag_confirm": "Estás seguro de que queres eliminar a etiqueta \"{tag}\"? A etiqueta eliminarase de {n} eventos.",
         "delete_collection_confirm": "Estás seguro de que queres eliminar a colección <u>{collection}</u>?",
-        "colors": "Cores"
+        "colors": "Cores",
+        "allow_online_event": "Permitir eventos en liña",
+        "allow_online_event_hint": "Solicitar URLs "
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",
@@ -328,7 +338,9 @@
     },
     "validators": {
         "required": "{fieldName} é requerido",
-        "email": "Escribe un email válido"
+        "email": "Escribe un email válido",
+        "latitude": "Escribe unha latitude válida (-90 < latitude < 90)",
+        "longitude": "Escribe unha lonxitude válida (-180 < lonxitude < 180)"
     },
     "about": "\n  <p><a href='https://gancio.org'>Gancio</a> é unha axenda compartida para comunidades locais.</p>\n  ",
     "oauth": {
