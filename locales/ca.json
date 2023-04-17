@@ -102,7 +102,9 @@
         "content": "Contingut",
         "admin_actions": "Accions d'administració",
         "recurring_event_actions": "Accions d'activitats recorrents",
-        "tag": "Etiqueta"
+        "tag": "Etiqueta",
+        "search_coordinates": "Cerca les coordenades",
+        "online": "En línia"
     },
     "login": {
         "description": "Amb la sessió iniciada pots afegir activitats noves.",
@@ -159,8 +161,8 @@
         "recurrent_2w_days": "Un de cada dos {days}",
         "recurrent_1m_days": "El dia {days} de cada mes",
         "recurrent_2m_days": "El dia {days} d'un de cada dos mesos",
-        "recurrent_1m_ordinal": "El {n} {days} de cada mes",
-        "recurrent_2m_ordinal": "El {n} {days} de cada dos mesos",
+        "recurrent_1m_ordinal": "Cada {n} {days} del mes",
+        "recurrent_2m_ordinal": "Cada {n} {days} de cada dos mesos",
         "each_week": "Cada setmana",
         "each_2w": "Cada dues setmanes",
         "each_month": "Cada mes",
@@ -183,8 +185,14 @@
         "alt_text_description": "Descripció per a persones amb discapacitat visual",
         "choose_focal_point": "Tria el punt focal",
         "address_description": "Quina és l'adreça completa del lloc?",
-        "address_description_osm": "Quina és l'adreça completa del lloc? (gràcies a la comunitat d'<a href='http://osm.org/copyright'>OpenStreetMap</a>)",
-        "show_multidate": "activitats de més d'un dia"
+        "address_description_osm": "Troba les coordenades a partir de l'adreça (gràcies a la comunitat d'<a href='http://osm.org/copyright'>OpenStreetMap</a>)",
+        "show_multidate": "activitats de més d'un dia",
+        "where_advanced_options": "Lloc - Opcions avançades",
+        "where_advanced_options_description": "Defineix aquí més propietats del lloc",
+        "online_locations": "Llocs virtuals",
+        "online_locations_help": "Per exemple, l'adreça d'una videoconferència i una altra de recanvi (màx. 3)",
+        "online_locations_fallback_urls": "Enllaços alternatius",
+        "address_geocoded_disclaimer": "Si l' <strong>adreça del carrer</strong> o el <strong>número d'edifici</strong> que estàs cercant no surten als resultats, pots inserir-los manualment en el camp \"Adreça\" sense perdre'n les coordenades. Considera també contribuir al projecte lliure <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> per millorar-ne la informació. Si fas servir Android, recomanem l'aplicació <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> "
     },
     "admin": {
         "place_description": "En el cas que un lloc és incorrecte o l'adreça ha de canviar, pots arreglar-ho.<br/>Tingues en compte que totes les activitats passades i futures associades amb aquest lloc també canviaran d'adreça.",
@@ -303,7 +311,10 @@
         "delete_tag_confirm": "Segur que vols eliminar l'etiqueta \"{tag}\"? S'esborrarà del sistema i de {n} activitats.",
         "edit_tag": "Canvia l'etiqueta",
         "tilelayer_provider_attribution": "Atribució",
-        "geolocation_description": "<b>1. Defineix una proveïdora de geocodificació</b>.<br>Actualment, de totes les llistades en <a href=\"https://wiki.openstreetmap.org/wiki/Nominatim#Alternatives_.2F_Third-party_providers\">la wiki d'OpenStreetMap</a>, són compatibles amb Gancio <a href=\"https://github.com/osm-search/Nominatim\">Nominatim</a> i <a href=\"https://github.com/komoot/photon\">Photon</a>.<br>Pots fer servir les instaŀlacions d'aquestes proveïdores copiant l'adreça de la instaŀlació al camp de 'Proveïdora de geolocodificació'<ul><li>https://nominatim.openstreetmap.org/search (<a href=\"https://operations.osmfoundation.org/policies/nominatim/\">Condicions del servei</a>)</li><li>https://photon.komoot.io/api/ (<a href=\"https://photon.komoot.io/\">Condicions del servei</a>)</li></ul><br><b>2. Defineix una proveïdora per mapes base.</b><br>Pots trobar-ne una llista aquí: <a href=\"https://leaflet-extras.github.io/leaflet-providers/preview/\">https://leaflet-extras.github.io/leaflet-providers/preview/</a>"
+        "geolocation_description": "<b>1. Defineix una proveïdora de geocodificació</b>.<br>Actualment, de totes les llistades en <a href=\"https://wiki.openstreetmap.org/wiki/Nominatim#Alternatives_.2F_Third-party_providers\">la wiki d'OpenStreetMap</a>, són compatibles amb Gancio <a href=\"https://github.com/osm-search/Nominatim\">Nominatim</a> i <a href=\"https://github.com/komoot/photon\">Photon</a>.<br>Pots fer servir les instaŀlacions d'aquestes proveïdores copiant l'adreça de la instaŀlació al camp de 'Proveïdora de geolocodificació'<ul><li>https://nominatim.openstreetmap.org/search (<a href=\"https://operations.osmfoundation.org/policies/nominatim/\">Condicions del servei</a>)</li><li>https://photon.komoot.io/api/ (<a href=\"https://photon.komoot.io/\">Condicions del servei</a>)</li></ul><br><b>2. Defineix una proveïdora per mapes base.</b><br>Pots trobar-ne una llista aquí: <a href=\"https://leaflet-extras.github.io/leaflet-providers/preview/\">https://leaflet-extras.github.io/leaflet-providers/preview/</a>",
+        "allow_online_event": "Permet activitats on-line",
+        "allow_online_event_hint": "Demana urls ",
+        "colors": "Colors"
     },
     "auth": {
         "not_confirmed": "Encara no s'ha confirmat…",
@@ -344,7 +355,9 @@
     },
     "validators": {
         "email": "Escriu una adreça de correu vàlida",
-        "required": "Cal omplir el camp {fieldName} és"
+        "required": "Cal omplir el camp {fieldName} és",
+        "latitude": "Insereix una latitud vàlida (entre -90 i 90)",
+        "longitude": "Insereix una longitud vàlida (entre -180 i 180)"
     },
     "setup": {
         "completed": "S'ha completat la configuració inicial",
