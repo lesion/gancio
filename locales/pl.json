@@ -97,9 +97,16 @@
     "about": "\n  <p><a href='https://gancio.org'>Gancio</a> jest rozwiązaniem dla lokalnych społeczności.</p>\n  ",
     "oauth": {
         "authorization_request": "Aplikacja <code>{app}</code> chce dokonać autoryzacji na instancji <code>{instance_name}</code>:",
-        "redirected_to": "Po potwierdzeniu przeniesiemy Cię pod adres <code>{url}</code>"
+        "redirected_to": "Po potwierdzeniu przeniesiemy Cię pod adres <code>{url}</code>",
+        "scopes": {
+            "event:write": "Dodaj lub edytuj swoje wydarzenie"
+        }
     },
     "setup": {
-        "start": "Start"
+        "start": "Start",
+        "completed": "Zakończono konfigurację",
+        "completed_description": "<p>Możesz się już zalogować wykorzystująć poniższe dane.<br/><br/>Użytkownik: <b>{email}</b><br/>Hasło: <b>{password}<b/></p>",
+        "copy_password_dialog": "Tak, musisz skopiować hasło!",
+        "https_warning": "Odwiedzasz stronę przez HTTP. Pamiętaj aby zmienić baseurl w pliku config.json, jeżeli ustawiłeś HTTPS!"
     }
 }
