@@ -23,6 +23,7 @@
         "content": "Żeby potwierdzić to wydarzenie wejdź w <a href='{{url}}'>ten link</a>"
     },
     "test": {
-        "subject": "Serwer SMTP skonfigurowany prawidłowo"
+        "subject": "Serwer SMTP skonfigurowany prawidłowo",
+        "content": "Jest to e-mail testowy. Jeśli go czytasz, konfiguracja przebiegła pomyślnie."
     }
 }
