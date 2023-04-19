@@ -67,6 +67,7 @@
         "feed_url_copied": "Otwórz skopiowany link w swoim czytniku RSS"
     },
     "settings": {
-        "change_password": "Zmień hasło"
+        "change_password": "Zmień swoje hasło",
+        "danger_section": "Niebezpieczna sekcja"
     }
 }
