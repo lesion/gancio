@@ -96,6 +96,7 @@
     },
     "about": "\n  <p><a href='https://gancio.org'>Gancio</a> jest rozwiązaniem dla lokalnych społeczności.</p>\n  ",
     "oauth": {
-        "authorization_request": "Aplikacja <code>{app}</code> chce dokonać autoryzacji na instancji <code>{instance_name}</code>:"
+        "authorization_request": "Aplikacja <code>{app}</code> chce dokonać autoryzacji na instancji <code>{instance_name}</code>:",
+        "redirected_to": "Po potwierdzeniu zostaniesz przeniesiony pod adres <code>{url}</code>"
     }
 }
