@@ -69,7 +69,7 @@
     "settings": {
         "change_password": "Zmień swoje hasło",
         "danger_section": "Niebezpieczna sekcja",
-        "remove_account": "Aby trwale usunąć swoje konto kliknij poniższy przycisk. Nie usunie to wydarzeń, które już dodałeś.",
+        "remove_account": "Aby trwale usunąć swoje konto kliknij poniższy przycisk. Nie usunie to wydarzeń, które już dodano.",
         "password_updated": "Hasło zmienione.",
         "remove_account_confirm": "Czy na pewno chcesz trwale usunąć swoje konto?"
     },
