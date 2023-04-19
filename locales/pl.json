@@ -62,6 +62,11 @@
         "instances": "Instancje",
         "copied": "Skopiowano",
         "embed": "Osadź",
-        "embed_help": "Skopiuj poniższy kod na swoją stronę internetową, a wydarzenie będzie wyglądało tak jak to tutaj"
+        "embed_help": "Skopiuj poniższy kod na swoją stronę internetową, a wydarzenie będzie wyglądało tak jak to tutaj",
+        "feed": "Kanał RSS",
+        "feed_url_copied": "Otwórz skopiowany link w swoim czytniku RSS"
+    },
+    "settings": {
+        "change_password": "Zmień hasło"
     }
 }
