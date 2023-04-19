@@ -36,6 +36,20 @@
         "events": "Wydarzenia",
         "settings": "Opcje",
         "places": "Miejsca",
-        "actions": "Działania"
+        "actions": "Działania",
+        "enable": "Włącz",
+        "password_updated": "Zmieniono hasło.",
+        "recover_password": "Odzyskaj hasło",
+        "new_password": "Nowe hasło",
+        "new_user": "Nowy użytkownik",
+        "ok": "Ok",
+        "cancel": "Anuluj",
+        "me": "Ja",
+        "resources": "Zasoby",
+        "activate_user": "Potwierdzony",
+        "add": "Dodaj",
+        "logout_ok": "Wylogowano",
+        "disable": "Wyłącz",
+        "copy": "Kopiuj"
     }
 }
