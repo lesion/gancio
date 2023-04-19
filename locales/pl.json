@@ -20,7 +20,22 @@
         "edit": "Edytuj",
         "info": "Informacje",
         "confirm": "Potwierdź",
-        "admin": "Admin",
-        "users": "Użytkownik"
+        "admin": "Admininstrator",
+        "users": "Użytkownik",
+        "logout": "Wyloguj się",
+        "deactivate": "Wyłącz",
+        "remove_admin": "Usuń administratora",
+        "activate": "Aktywuj",
+        "save": "Zapisz",
+        "preview": "Podgląd",
+        "share": "Udostępnij",
+        "name": "Nazwa",
+        "associate": "Skojarz",
+        "edit_event": "Edytuj wydarzenie",
+        "related": "Pokrewne",
+        "events": "Wydarzenia",
+        "settings": "Opcje",
+        "places": "Miejsca",
+        "actions": "Działania"
     }
 }
