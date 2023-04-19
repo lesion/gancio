@@ -70,6 +70,32 @@
         "change_password": "Zmień swoje hasło",
         "danger_section": "Niebezpieczna sekcja",
         "remove_account": "Aby trwale usunąć swoje konto kliknij poniższy przycisk. Nie usunie to wydarzeń, które już dodałeś.",
-        "password_updated": "Hasło zmienione."
+        "password_updated": "Hasło zmienione.",
+        "remove_account_confirm": "Czy na pewno chcesz trwale usunąć swoje konto?"
+    },
+    "ordinal": {
+        "1": "pierwszy",
+        "5": "piąty",
+        "-1": "ostatni",
+        "2": "drugi",
+        "3": "trzeci",
+        "4": "czwarty"
+    },
+    "confirm": {
+        "not_valid": "Coś poszło nie tak.",
+        "valid": "Twoje konto zostało zatwierdzone. Możesz się teraz <a href=\"/login\">zalogować</a>",
+        "title": "Potwiedzenie użytkownika"
+    },
+    "validators": {
+        "required": "Pole {fieldName} jest wymagane",
+        "email": "Podaj właściwy adres e-mail"
+    },
+    "error": {
+        "nick_taken": "Ta nazwa użytkownika jest już zarejestrowana.",
+        "email_taken": "Ten e-mail jest już zarejestrowany."
+    },
+    "about": "\n  <p><a href='https://gancio.org'>Gancio</a> jest rozwiązaniem dla lokalnych społeczności.</p>\n  ",
+    "oauth": {
+        "authorization_request": "Aplikacja <code>{app}</code> chce dokonać autoryzacji na <code>{instance_name}</code>:"
     }
 }
