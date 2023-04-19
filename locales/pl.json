@@ -51,6 +51,17 @@
         "logout_ok": "Wylogowano",
         "disable": "Wyłącz",
         "copy": "Kopiuj",
-        "n_resources": "brak zasobu|zasób|{n} zasoby"
+        "n_resources": "brak zasobu|zasób|{n} zasoby",
+        "send_via_mail": "Wyślij e-mail",
+        "embed_title": "Zamieść to wydarzenie na swojej stronie internetowej",
+        "set_password": "Ustaw hasło",
+        "displayname": "Wyświetlana nazwa użytkownika",
+        "federation": "Federalizacja",
+        "copy_link": "Skopiuj link",
+        "add_to_calendar": "Dodaj do kalendarza",
+        "instances": "Instancje",
+        "copied": "Skopiowano",
+        "embed": "Osadź",
+        "embed_help": "Skopiuj poniższy kod na swoją stronę internetową, a wydarzenie będzie wyglądało tak jak to tutaj"
     }
 }
