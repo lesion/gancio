@@ -97,12 +97,14 @@ const exportController = {
     const settings = res.locals.settings
     const eventsMap = events.map(e => {
 
-      const tmpStart = DateTime.fromSeconds(e.start_datetime, { zone: settings.instance_timezone })
+      const tmpStart = DateTime.fromSeconds(e.start_datetime, { zone: 'UTC' })
       const start = [ tmpStart.year, tmpStart.month, tmpStart.day, tmpStart.hour, tmpStart.minute ]
 
       const ret = {
         uid: `${e.id}@${settings.hostname}`,
         start,
+        startInputType: 'utc',
+        endInputType: 'utc',
         title: `[${settings.title}] ${e.title}`,
         description: htmlToText(e.description),
         htmlContent: e.description,
@@ -114,7 +116,7 @@ const exportController = {
       }
 
       if (e.end_datetime) {
-        const tmpEnd = DateTime.fromSeconds(e.end_datetime, { zone: settings.instance_timezone })
+        const tmpEnd = DateTime.fromSeconds(e.end_datetime, { zone: 'UTC' })
         const end = [ tmpEnd.year, tmpEnd.month, tmpEnd.day, tmpEnd.hour, tmpEnd.minute ]
         ret.end = end
       }
