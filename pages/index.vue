@@ -81,9 +81,9 @@ export default {
       if (this.selectedDay) {
         const min = this.selectedDay.startOf('day').toUnixInteger()
         const max = this.selectedDay.endOf('day').toUnixInteger()
-        return this.events.filter(e => (e.start_datetime < max && (e.end_datetime || e.start_datetime) > min) && (this.filter.show_recurrent || !e.parentId))
+        return this.events.filter(e => (e.start_datetime <= max && (e.end_datetime || e.start_datetime) >= min) && (this.filter.show_recurrent || !e.parentId))
       } else if (this.isCurrentMonth && !this.filter.query) {
-          return this.events.filter(e => ((e.end_datetime ? e.end_datetime > now : e.start_datetime + 3 * 60 * 60 > now) && (this.filter.show_recurrent || !e.parentId)))
+          return this.events.filter(e => ((e.end_datetime ? e.end_datetime >= now : e.start_datetime + 3 * 60 * 60 >= now) && (this.filter.show_recurrent || !e.parentId)))
       } else {
         return this.events.filter(e => this.filter.show_recurrent || !e.parentId)
       }
