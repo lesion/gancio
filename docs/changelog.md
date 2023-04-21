@@ -8,6 +8,13 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.6.11 - 21 apr '23
+  - update deps
+  - update locales (polish, spanish, catalan, galician)
+  - really fix #259
+  - fix #258 without setting TZ env
+  - minor fix with events starting or ending at 00:00
+
 ### 1.6.10 - 14 apr '23
   - add support to online events (thanks @sedum) #26
   - show past events in tag and place pages #259
