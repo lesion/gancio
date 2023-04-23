@@ -98,7 +98,8 @@
         "about": "Honi buruz",
         "recurring_event_actions": "Ekitaldi errepikarien eragiketak",
         "content": "Edukia",
-        "admin_actions": "Administratzaile eragiketak"
+        "admin_actions": "Administratzaile eragiketak",
+        "tag": "Etiketa"
     },
     "login": {
         "description": "Saioa hasten baduzu ekitaldi berriak sortu ahal izango dituzu.",
@@ -154,7 +155,7 @@
         "recurrent_1m_days": "Hilabetero {days}etan",
         "recurrent_2m_days": "{days}etan bi hilabetez behin",
         "recurrent_1m_ordinal": "Hilabeteko {n}. {days}(e)ro",
-        "recurrent_2m_ordinal": "Bi hilabetez behin {n}. {days}(e)an",
+        "recurrent_2m_ordinal": "Bi hilabetan behin {n}. {days}(e)an",
         "each_week": "Astero",
         "each_2w": "Bi astez behin",
         "each_month": "Hilero",
@@ -177,7 +178,10 @@
         "choose_focal_point": "Aukeratu arretagunea",
         "download_flyer": "Deskargatu eskuorria",
         "address_description": "Zein da helbidea?",
-        "address_description_osm": "Zein da helbidea? (<a href='http://osm.org/copyright'>OpenStreetMap</a> kolaboratzaileak)"
+        "address_description_osm": "Bilatu koordenatuak helbidea idatziz. (<a href='http://osm.org/copyright'>OpenStreetMap</a> kolaboratzaileak)",
+        "show_multidate": "data anitzeko ekitaldiak",
+        "where_advanced_options": "Lekua - Aukera aurreratuak",
+        "where_advanced_options_description": "Zehaztu hemen lekuaren ezaugarri gehigarriak"
     },
     "admin": {
         "place_description": "Lekua edo helbidea oker badago, alda dezakezu.<br/>Leku honekin lotutako iraganeko eta etorkizuneko ekitaldien helbidea aldatuko da.",
@@ -291,7 +295,9 @@
         "geocoding_provider_help": "Lehenetsitako hornitzailea Nominatim da",
         "geolocation": "Geokokapena",
         "geocoding_test_success": "Geokodeketa zerbitzua {service_name}-(e)n martxan dago",
-        "tilelayer_test_success": "Lauza-geruzen zerbitzua {service_name}(e)n martxan dago"
+        "tilelayer_test_success": "Lauza-geruzen zerbitzua {service_name}(e)n martxan dago",
+        "colors": "Koloreak",
+        "edit_tag": "Editatu etiketa"
     },
     "auth": {
         "not_confirmed": "Oraindik baieztatu gabe dago…",
