@@ -107,7 +107,7 @@ const exportController = {
         endInputType: 'utc',
         title: `[${settings.title}] ${e.title}`,
         description: htmlToText(e.description),
-        htmlContent: e.description,
+        htmlContent: e.description.replaceAll("\n","\n\t"),
         location: `${e.place.name} - ${e.place.address}`,
         url: `${settings.baseurl}/event/${e.slug || e.id}`,
         status: 'CONFIRMED',
