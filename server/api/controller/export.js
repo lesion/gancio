@@ -100,6 +100,7 @@ const exportController = {
       const tmpStart = DateTime.fromSeconds(e.start_datetime, { zone: 'UTC' })
       const start = [ tmpStart.year, tmpStart.month, tmpStart.day, tmpStart.hour, tmpStart.minute ]
 
+      const location = e.place.name !== 'online' ? `${e.place.name} - ${e.place.address}` : `${e.place.name} - ${e?.online_locations[0]}`
       const ret = {
         uid: `${e.id}@${settings.hostname}`,
         start,
@@ -107,12 +108,16 @@ const exportController = {
         endInputType: 'utc',
         title: `[${settings.title}] ${e.title}`,
         description: htmlToText(e.description),
-        htmlContent: e.description.replaceAll("\n","\n\t"),
-        location: `${e.place.name} - ${e.place.address}`,
+        htmlContent: e.description.replaceAll("\n","<br>"),
+        location,
         url: `${settings.baseurl}/event/${e.slug || e.id}`,
         status: 'CONFIRMED',
         categories: e.tags.map(t => t.tag),
         alarms
+      }
+
+      if (e.place.latitude && e.place.longitude) {
+        ret.geo = { lat: e.place.latitude, lon: e.place.longitude }
       }
 
       if (e.end_datetime) {
