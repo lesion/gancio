@@ -49,8 +49,13 @@ v-card
             :label="$t('admin.tilelayer_provider_attribution')"
             :placeholder="tilelayer_provider_attribution_default")
 
-      div(id="leaflet-map-preview" max-height='10px')
-      //- Map
+      Map(:key='mapKey' v-if='mapPreview'
+        @tileerror='tilelayerTestError'
+        @tileload='tilelayerTestSuccess'
+        height="20rem" 
+        showMarker=false 
+        :mapCenter='mapCenter' 
+        :zoom='12')
 
   v-card-actions
     v-spacer
@@ -61,19 +66,19 @@ v-card
 <script>
 import { mapActions, mapState } from 'vuex'
 import { isoCountries } from '../../server/helpers/geolocation/isoCountries'
+import geolocation from '../../server/helpers/geolocation/index'
 import { mdiChevronDown } from '@mdi/js'
-// import Map from '~/components/Map'
-import "leaflet/dist/leaflet.css"
 
 export default {
-  props: {
-    setup: { type: Boolean, default: false }
+  components: { 
+    [process.client && 'Map']: () => import('@/components/Map.vue')
   },
-  // components: { Map },
   data ({ $store }) {
     return {
       mdiChevronDown,
-      loading: false,
+      mapKey: 0,
+      mapPreview: false,
+      mapCenter: [42, 42],
       testGeocodingLoading: false,
       testTileLayerLoading: false,
       geocoding_provider_type_items: ['Nominatim', 'Photon'],
@@ -87,57 +92,38 @@ export default {
       tilelayer_provider_attribution: $store.state.settings.tilelayer_provider_attribution || '',
       tilelayer_provider_attribution_default: '<a target=\'_blank\' href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors',
       countries: isoCountries,
-      mapPreviewTest: null,
     }
   },
-  created() {
-    if (process.client) {
-      const L = require('leaflet')
+  computed: {
+    ...mapState(['settings', 'events']),
+    tilelayerTest() {
+      const v = this.tilelayer_provider !== '' ? this.tilelayer_provider : this.tilelayer_provider_default
+      return v
+    },
+    geocodingTest() {
+      const v = this.geocoding_provider !== '' ? this.geocoding_provider : this.geocoding_provider_default
+      return v
     }
   },
-  computed: mapState(['settings', 'events']),
   methods: {
     ...mapActions(['setSetting']),
     async testGeocodingProvider () {
       this.testGeocodingLoading = true
-      const geocodingProviderTest = this.geocoding_provider || this.geocoding_provider_default
-      const geocodingSoftwareTest = this.geocoding_provider_type || this.geocoding_provider_type_default
+      const currentGeocodingProvider = geolocation.getGeocodingProvider(this.settings.geocoding_provider_type)
       const geocodingQuery = 'building'
-
       try {
-        if (geocodingSoftwareTest === 'Nominatim') {
-          const geolocation = await this.$axios.$get(`${geocodingProviderTest}`, {timeout: 3000, params: {q: `${geocodingQuery}`, format: 'json', limit: 1 }} )
-        } else if (geocodingSoftwareTest === 'Photon') {
-          const geolocation = await this.$axios.$get(`${geocodingProviderTest}`, {timeout: 3000, params: {q: `${geocodingQuery}`, limit: 1}} )
-        }
-
-        this.$root.$message(this.$t('admin.geocoding_test_success', { service_name: geocodingProviderTest }), { color: 'success' })
+        const ret = await this.$axios.$get(`placeOSM/${currentGeocodingProvider.commonName}/${geocodingQuery}`, { timeout: 3000 })
+        const res = currentGeocodingProvider.mapQueryResults(ret)
+        this.geocodingTestSuccess()
       } catch (e) {
-        this.$root.$message(this.$t('admin.tilelayer_test_error', { service_name: geocodingProviderTest }), { color: 'error' })
+        this.geocodingTestError()
       }
       this.testGeocodingLoading = false
     },
     async testTileLayerProvider () {
       this.testTileLayerLoading = true
-      const tileThis = this
-      const tileLayerTest = this.tilelayer_provider || this.tilelayer_provider_default
-      const tileLayerAttributionTest = this.tilelayer_provider_attribution || this.tilelayer_provider_attribution_default
-
-      // init tilelayer
-      if (this.mapPreviewTest == null) {
-        this.mapPreviewTest = L.map("leaflet-map-preview").setView([40,40],10);
-      }
-      this.tileLayer = L.tileLayer(`${tileLayerTest}`, {attribution: `${tileLayerAttributionTest}`})
-      this.tileLayer.addTo(this.mapPreviewTest)
-
-      // tilelayer events inherited from gridlayer https://leafletjs.com/reference.html#gridlayer
-      this.tileLayer.on('tileload', function (event) {
-          tileThis.tileLayerTestSucess(event, tileLayerTest)
-      });
-      this.tileLayer.on('tileerror', function(error, tile) {
-          tileThis.tileLayerTestError(event, tileLayerTest)
-          tileThis.tileLayer = null
-      });
+      this.mapPreview = true
+      this.mapKey++
       this.testTileLayerLoading = false
     },
     save (key, value) {
@@ -148,22 +134,20 @@ export default {
     done () {
       this.$emit('close')
     },
-    geocodingTestError(event, tileLayerTest) {
-      this.$root.$message(this.$t('admin.geocoding_test_error', { service_name: geocodingTest }), { color: 'error' })
+    geocodingTestError() {
+      this.$root.$message(this.$t('admin.geocoding_test_error', { service_name: this.geocodingTest }), { color: 'error' })
     },
-    tileLayerTestSucess(event, tileLayerTest) {
-      this.$root.$message(this.$t('admin.tilelayer_test_success', { service_name: tileLayerTest }), { color: 'success' })
+    geocodingTestSuccess() {
+      this.$root.$message(this.$t('admin.geocoding_test_success', { service_name: this.geocodingTest }), { color: 'success' })
     },
-    tileLayerTestError(event, tileLayerTest) {
-      this.$root.$message(this.$t('admin.tilelayer_test_error', { service_name: tileLayerTest }), { color: 'error' })
+    tilelayerTestError() {
+      this.$root.$message(this.$t('admin.tilelayer_test_error', { service_name: this.tilelayerTest }), { color: 'error' })
+    },
+    tilelayerTestSuccess() {
+      this.$root.$message(this.$t('admin.tilelayer_test_success', { service_name: this.tilelayerTest }), { color: 'success' })
     }
 
   }
 }
 </script>
 
-<style>
-#leaflet-map-preview {
-  height: 20rem;
-}
-</style>

@@ -62,7 +62,7 @@ v-container
                 :label="$t('common.longitude')"
                 :rules="$validators.longitude")
           
-          MapEdit.mt-4(:place.sync='place' :key="dialog" v-if="settings.allow_geolocation && place.name !== 'online' && place.latitude && place.longitude")     
+          Map.mt-4(:place.sync='place' :key="dialog" v-if="settings.allow_geolocation && place.name !== 'online' && place.latitude && place.longitude")     
 
       v-card-actions
         v-spacer
@@ -96,7 +96,7 @@ import geolocation from '../../server/helpers/geolocation/index'
 
 export default {
   components: {
-    [process.client && 'MapEdit']: () => import('@/components/MapEdit.vue')
+    [process.client && 'Map']: () => import('@/components/Map.vue')
   },
   data( {$store} ) {
     return {
