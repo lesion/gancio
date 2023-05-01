@@ -126,6 +126,19 @@ const settingsController = {
   async setRequest (req, res) {
     const { key, value, is_secret } = req.body
     const ret = await settingsController.set(key, value, is_secret)
+
+    // reload plugin when its settings change
+    if (key.startsWith('plugin_')) {
+      const pluginName = key.slice(7)
+      try {
+        const pluginController = require('./plugins')
+        pluginController.unloadPlugin(pluginName)
+        pluginController.loadPlugin(pluginName)
+      } catch (e) {
+        log.error(e)
+      }
+    }
+
     if (ret) { res.sendStatus(200) } else { res.sendStatus(400) }
   },
 
