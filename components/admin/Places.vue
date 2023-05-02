@@ -62,7 +62,8 @@ v-container
                 :label="$t('common.longitude')"
                 :rules="$validators.longitude")
           
-          Map.mt-4(:place.sync='place' :key="dialog" v-if="settings.allow_geolocation && place.name !== 'online' && place.latitude && place.longitude")     
+          Map.mt-4(:place.sync='place' :key="dialog" draggable=true
+            v-if="settings.allow_geolocation && place.name !== 'online' && place.latitude && place.longitude")     
 
       v-card-actions
         v-spacer
@@ -109,7 +110,7 @@ export default {
       addressList: [],
       address: '',
       search: '',
-      place: { name: '', address: '', id: null },
+      place: { name: '', address: '', latitude: 0, longitude: 0, id: null },
       headers: [
         { value: 'name', text: this.$t('common.name') },
         { value: 'address', text: this.$t('common.address') },

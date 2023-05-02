@@ -13,7 +13,9 @@ client-only(placeholder='Loading...' )
         :url="url"
         :attribution="attribution")
     LMarker(v-if="showMarker"
-      :lat-lng="marker.coordinates")
+      :lat-lng="marker.coordinates"
+      @update:lat-lng="updateCoords"
+      :draggable="draggable")
 
 </template>
 <script>
@@ -41,6 +43,8 @@ export default {
       if (this.mapCenter.length)
         return this.mapCenter
       else {
+        this.place.latitude = isNaN(this.place.latitude) ? 0 : this.place.latitude
+        this.place.longitude = isNaN(this.place.longitude) ? 0 : this.place.longitude
         return [this.place.latitude, this.place.longitude]
       }
     },
@@ -57,6 +61,7 @@ export default {
     showMarker: { type: Boolean, default: true },
     mapCenter: { type: Array, default: () => ([]) },
     zoom: { type: Number, default: () => (16) },
+    draggable: { type: Boolean, default: false },
   },
   mounted() {
     delete Icon.Default.prototype._getIconUrl;
@@ -71,6 +76,12 @@ export default {
         this.$refs.leafletMap.mapObject.invalidateSize();
       }
     }, 200);
+  },
+  methods: {
+    updateCoords(v) {
+      this.place.latitude = Number.parseFloat(v.lat).toFixed(7)
+      this.place.longitude = Number.parseFloat(v.lng).toFixed(7) 
+    }
   }
 }
 </script>
