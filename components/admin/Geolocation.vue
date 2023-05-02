@@ -6,7 +6,7 @@ v-card
 
     v-form
       v-row
-        v-col(md=3)
+        v-col(cols=12 md=3)
           v-autocomplete.mb-4(v-model='geocoding_provider_type'
             @blur="save('geocoding_provider_type', geocoding_provider_type )"
             :label="$t('admin.geocoding_provider_type')"
@@ -15,7 +15,7 @@ v-card
             :items="geocoding_provider_type_items"
             :placeholder="geocoding_provider_type_default")
 
-        v-col(md=5)
+        v-col(cols=12 md=5)
           v-text-field.mb-4(v-model='geocoding_provider'
             @blur="save('geocoding_provider', geocoding_provider )"
             :label="$t('admin.geocoding_provider')"
@@ -23,7 +23,7 @@ v-card
             persistent-hint
             :placeholder="geocoding_provider_default")
 
-        v-col(md=4)
+        v-col(cols=12 md=4)
           v-autocomplete.mb-6(v-model="geocoding_countrycodes" :disabled="!(geocoding_provider_type === null || geocoding_provider_type === 'Nominatim')"
             :append-icon='mdiChevronDown'
             @blur="save('geocoding_countrycodes', geocoding_countrycodes )"
@@ -35,7 +35,7 @@ v-card
             :hint="$t('admin.geocoding_countrycodes_help')")
       
       v-row
-        v-col(md=6)
+        v-col(cols=12 md=6)
           v-text-field.mb-4(v-model='tilelayer_provider'
             @blur="save('tilelayer_provider', tilelayer_provider )"
             :label="$t('admin.tilelayer_provider')"
@@ -43,7 +43,7 @@ v-card
             persistent-hint
             :placeholder="tilelayer_provider_default")
 
-        v-col(md=6)
+        v-col(cols=12 md=6)
           v-text-field(v-model='tilelayer_provider_attribution'
             @blur="save('tilelayer_provider_attribution', tilelayer_provider_attribution )"
             :label="$t('admin.tilelayer_provider_attribution')"
@@ -55,12 +55,12 @@ v-card
         height="20rem" 
         showMarker=false 
         :mapCenter='mapCenter' 
-        :zoom='12')
+        :zoom='10')
 
   v-card-actions
     v-spacer
-    v-btn(color='primary' @click='testGeocodingProvider' :loading='testGeocodingLoading' outlined ) {{$t('admin.geocoding_test_button')}}
-    v-btn(color='primary' @click='testTileLayerProvider' :loading='testTileLayerLoading' outlined ) {{$t('admin.tilelayer_test_button')}}
+    v-btn(color='primary' @click='testGeocodingProvider' :loading='isNewGeocodingTest' outlined ) {{$t('admin.geocoding_test_button')}}
+    v-btn(color='primary' @click='testTileLayerProvider' :loading='isNewTilelayerTest' outlined ) {{$t('admin.tilelayer_test_button')}}
 
 </template>
 <script>
@@ -79,8 +79,8 @@ export default {
       mapKey: 0,
       mapPreview: false,
       mapCenter: [42, 42],
-      testGeocodingLoading: false,
-      testTileLayerLoading: false,
+      isNewTilelayerTest: false,
+      isNewGeocodingTest: false,
       geocoding_provider_type_items: ['Nominatim', 'Photon'],
       geocoding_provider_type: $store.state.settings.geocoding_provider_type || '',
       geocoding_provider_type_default: 'Nominatim',
@@ -108,9 +108,10 @@ export default {
   methods: {
     ...mapActions(['setSetting']),
     async testGeocodingProvider () {
-      this.testGeocodingLoading = true
+      this.isNewGeocodingTest = true
       const currentGeocodingProvider = geolocation.getGeocodingProvider(this.settings.geocoding_provider_type)
-      const geocodingQuery = 'building'
+      // random query
+      const geocodingQuery = Math.random().toString(36).slice(2, 7);
       try {
         const ret = await this.$axios.$get(`placeOSM/${currentGeocodingProvider.commonName}/${geocodingQuery}`, { timeout: 3000 })
         const res = currentGeocodingProvider.mapQueryResults(ret)
@@ -118,13 +119,12 @@ export default {
       } catch (e) {
         this.geocodingTestError()
       }
-      this.testGeocodingLoading = false
+      this.isNewGeocodingTest = false
     },
-    async testTileLayerProvider () {
-      this.testTileLayerLoading = true
+    testTileLayerProvider () {
+      this.isNewTilelayerTest = true
       this.mapPreview = true
       this.mapKey++
-      this.testTileLayerLoading = false
     },
     save (key, value) {
       if (this.settings[key] !== value) {
@@ -134,17 +134,22 @@ export default {
     done () {
       this.$emit('close')
     },
+    handleMsg(t, s, c) {
+      this.$root.$message(this.$t(t, { service_name: s }), { color: c })
+    },
     geocodingTestError() {
-      this.$root.$message(this.$t('admin.geocoding_test_error', { service_name: this.geocodingTest }), { color: 'error' })
+      this.handleMsg('admin.geocoding_test_error', this.geocodingTest, 'error')
     },
     geocodingTestSuccess() {
-      this.$root.$message(this.$t('admin.geocoding_test_success', { service_name: this.geocodingTest }), { color: 'success' })
+      this.handleMsg('admin.geocoding_test_success', this.geocodingTest, 'success')
     },
     tilelayerTestError() {
-      this.$root.$message(this.$t('admin.tilelayer_test_error', { service_name: this.tilelayerTest }), { color: 'error' })
+      this.isNewTilelayerTest && this.handleMsg('admin.tilelayer_test_error', this.tilelayerTest, 'error')
+      this.isNewTilelayerTest = false
     },
     tilelayerTestSuccess() {
-      this.$root.$message(this.$t('admin.tilelayer_test_success', { service_name: this.tilelayerTest }), { color: 'success' })
+      this.isNewTilelayerTest && this.handleMsg('admin.tilelayer_test_success', this.tilelayerTest, 'success')
+      this.isNewTilelayerTest = false
     }
 
   }
