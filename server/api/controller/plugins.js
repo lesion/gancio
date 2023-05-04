@@ -78,6 +78,7 @@ const pluginController = {
     if (plugin.load && typeof plugin.load === 'function') {
       plugin.load({
         helpers: require('../../helpers'),
+        log,
         settings: settingsController.settings
       },
       settings)
