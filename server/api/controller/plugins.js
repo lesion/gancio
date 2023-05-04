@@ -32,6 +32,23 @@ const pluginController = {
     res.json()
   },
 
+  async testPlugin (req, res) {
+    const pluginName = req.params.plugin
+    const plugin = pluginController.plugins.find(p => p.configuration.name === pluginName)
+    if (!plugin) {
+      log.warn(`Plugin ${pluginName} not found`)
+      return res.sendStatus(404)
+    }
+  
+    if (typeof plugin.onTest !== 'function') {
+      log.warn(`Plugin ${pluginName} does not expose an 'onTest' function`)
+      return res.sendStatus(404)
+    }
+
+    await plugin.onTest()
+    res.sendStatus(200)
+  },
+
   unloadPlugin(pluginName) {
     const plugin = pluginController.plugins.find(p => p.configuration.name === pluginName)
     const settings = settingsController.settings['plugin_' + pluginName]

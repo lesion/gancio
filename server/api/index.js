@@ -219,6 +219,7 @@ module.exports = () => {
   
     // - PLUGINS
     api.get('/plugins', isAdmin, pluginController.getAll)
+    api.post('/plugin/test/:plugin', isAdmin, pluginController.testPlugin)
     api.put('/plugin/:plugin', isAdmin, pluginController.togglePlugin)
   
     // OAUTH

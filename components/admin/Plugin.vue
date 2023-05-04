@@ -22,13 +22,14 @@ v-container
               v-select(v-if='setting.type === "LIST"' v-model='selectedPlugin.settingsValue[name]' :items='setting.items' :label='setting.description')
           v-switch(:label="$t('common.enable')" inset color='primary' v-model='selectedPlugin.settingsValue["enable"]')
       v-card-actions
+        v-btn(@click='testPlugin' outlined color='primary') {{ $t('common.test') }}
         v-spacer
-        v-btn(@click='dialog = false' outlined color='warning') {{ $t('common.cancel') }}
+        v-btn(@click='dialog = false' outlined color='warning') {{ $t('common.close') }}
         v-btn(@click='saveSettings' outlined color='primary' :loading='loading'
           :disable='!valid || loading') {{ $t('common.save') }}
 
   v-card-text
-    v-card(v-for='plugin in plugins' :key='plugin.name' max-width="400" elevation='10')
+    v-card(v-for='plugin in plugins' :key='plugin.name' max-width="400" outlined)
       v-card-title {{ plugin.name }}
       v-card-text
         p {{ plugin.description }}
@@ -67,15 +68,19 @@ export default {
     ...mapActions(['setSetting']),
     async saveSettings() {
       this.loading = true
-      this.setSetting({
+      await this.setSetting({
         key: 'plugin_' + this.selectedPlugin.name,
         value: this.selectedPlugin.settingsValue
       })
       this.loading = false
       this.dialog = false
     },
-    async toggleEnable(plugin) {
-      await this.$axios.$put(`/plugin/${plugin.name}`)
+    async testPlugin() {
+      await this.saveSettings()
+      this.$axios.$post(`/plugin/test/${this.selectedPlugin.name}`)
+    },
+    toggleEnable(plugin) {
+      this.$axios.$put(`/plugin/${plugin.name}`)
     },
     setOptions(plugin) {
       this.selectedPlugin = plugin
