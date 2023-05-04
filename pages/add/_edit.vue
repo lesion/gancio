@@ -49,10 +49,11 @@ v-container.container.pa-0.pa-md-3
 
             //- tags
             v-col(cols=12 md=6)
-              v-combobox(v-model='event.tags'
+              v-combobox(:value='event.tags'
                 :prepend-icon="mdiTagMultiple"
                 chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
                 cache-items
+                @change='updateTags'
                 @input.native='searchTags'
                 :delimiters="[',', ';']"
                 :items="tags"
@@ -71,6 +72,7 @@ v-container.container.pa-0.pa-md-3
 <script>
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
+import uniq from 'lodash/uniq'
 
 import { mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle } from '@mdi/js'
 
@@ -174,20 +176,16 @@ export default {
       title: `${this.settings.title} - ${this.$t('common.add_event')}`
     }
   },
-  computed: {
-    ...mapState(['settings']),
-    filteredTags() {
-      if (!this.tagName) { return this.tags.slice(0, 10).map(t => t.tag) }
-      const tagName = this.tagName.trim().toLowerCase()
-      return this.tags.filter(t => t.tag.toLowerCase().includes(tagName)).map(t => t.tag)
-    }
-  },
+  computed: mapState(['settings']),
   methods: {
+    updateTags (tags) {
+      this.event.tags = uniq(tags.map(t => t.trim()).filter(t => t))
+    },
     searchTags: debounce(async function (ev) {
       const search = ev.target.value
       if (!search) return
       this.tags = await this.$axios.$get(`/tag?search=${search}`)
-    }, 100),
+    }, 200),
     eventImported(event) {
       this.event = Object.assign(this.event, event)
 
