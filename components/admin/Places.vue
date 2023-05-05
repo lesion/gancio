@@ -129,7 +129,8 @@ export default {
   },
   async fetch() {
     this.places = await this.$axios.$get('/places')
-    this.places.splice(this.places.findIndex((p) => p.name === 'online' ), 1)
+    // do not allow edit the online place
+    this.places = this.places.filter(p => p.name !== 'online')
   },
   computed: {
     ...mapState(['settings']),
