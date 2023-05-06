@@ -153,7 +153,7 @@ export default {
       if (freq === '1w' || freq === '2w') {
         return this.$t(`event.recurrent_${freq}_days`, { days: weekDay }).toUpperCase()
       } else if (freq === '1m' || freq === '2m') {
-        const n = Math.floor((date.day) / 7) + 1
+        const n = Math.floor((date.day-1) / 7) + 1
 
         const patterns = [
           { label: this.$t(`event.recurrent_${freq}_days`, { days: date.day }), key: 'ordinal' }
