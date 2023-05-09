@@ -38,7 +38,8 @@ v-card
           :rules="$validators.longitude")
     p.mt-4(v-if='place.isNew' v-html="$t('event.address_geocoded_disclaimer')")
 
-    MapEdit.mt-4(:place='place' v-if="(settings.allow_geolocation && place.name !== 'online' && place.latitude && place.longitude)"  )
+    Map.mt-4(:place='place' draggable=true
+      v-if="(settings.allow_geolocation && place.name !== 'online' && place.latitude && place.longitude)"  )
 
   v-divider(v-if='settings.allow_online_event && showGeocoded')
 
@@ -76,7 +77,7 @@ export default {
     onlineLocations: { type: Array, default: [] }
   },
   components: {
-    [process.client && 'MapEdit']: () => import('@/components/MapEdit.vue')
+    [process.client && 'Map']: () => import('@/components/Map.vue')
   },
   data ({$store}) {
     return {

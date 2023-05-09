@@ -177,7 +177,7 @@ v-container#event.pa-2.pa-sm-2(itemscope itemtype="https://schema.org/Event" v-t
       EmbedEvent(:event='event' @close='showEmbed=false')
     
     v-dialog(v-show='settings.allow_geolocation && event.place.latitude && event.place.longitude' v-model='mapModal' :fullscreen='$vuetify.breakpoint.xsOnly' destroy-on-close)
-      Map(:event='event' @close='mapModal=false')        
+      EventMapDialog(:event='event' @close='mapModal=false')        
 
 </template>
 <script>
@@ -188,6 +188,7 @@ import clipboard from '../../assets/clipboard'
 import MyPicture from '~/components/MyPicture'
 import EventAdmin from '@/components/eventAdmin'
 import EmbedEvent from '@/components/embedEvent'
+import EventMapDialog from '@/components/EventMapDialog'
 
 const { htmlToText } = require('html-to-text')
 
@@ -202,7 +203,7 @@ export default {
     EventAdmin,
     EmbedEvent,
     MyPicture,
-    [process.client && 'Map']: () => import('@/components/Map.vue')
+    EventMapDialog
   },
   async asyncData ({ $axios, params, error }) {
     try {

@@ -1,43 +1,28 @@
 <template lang="pug">
 client-only(placeholder='Loading...' )
-  v-card
-    v-container
-      LMap(ref="map"
-          id="leaflet-map-dialog"
-          :zoom="zoom"
-          :options="{attributionControl: false}"
-          :center="center")
-        LControlAttribution(position='bottomright' prefix="")
-        LTileLayer(
-            :url="url"
-            :attribution="attribution")
-        LMarker(
-          :lat-lng="marker.coordinates")
+  LMap(ref="leafletMap"
+      id="leaflet-map"
+      :style="{ 'height': height }"
+      :zoom="zoom"
+      :options="{attributionControl: false}"
+      :center="center")
+    LControlAttribution(position='bottomright' prefix="")
+    LTileLayer(
+        @tileload="$emit('tileload')"
+        @tileerror="$emit('tileerror')"
+        :url="url"
+        :attribution="attribution")
+    LMarker(v-if="showMarker"
+      :lat-lng="marker.coordinates"
+      @update:lat-lng="updateCoords"
+      :draggable="draggable")
 
-      v-row.my-4.d-flex.flex-column.align-center.text-center
-        .text-h6
-          v-icon(v-text='mdiMapMarker' )
-          nuxt-link.ml-2.text-decoration-none(v-text="event.place.name" :to='`/place/${event.place.name}`')
-          .mx-2(v-text="`${event.place.address}`")
-    v-card-actions
-      v-row
-        //- p.my-4(v-text="$t('common.getting_there')")
-        v-btn.ml-2(icon large :href="routeBy('foot')")
-          v-icon(v-text='mdiWalk')
-        v-btn.ml-2(icon large :href="routeBy('bike')")
-          v-icon(v-text='mdiBike')
-        v-btn.ml-2(icon large :href="routeBy('car')")
-          v-icon(v-text='mdiCar')
-      v-spacer
-      v-btn(@click='$emit("close")' outlined) Close
 </template>
 <script>
 
 import "leaflet/dist/leaflet.css"
 import { LMap, LTileLayer, LMarker, LPopup, LControlAttribution } from 'vue2-leaflet'
-import { mapActions, mapState } from 'vuex'
 import { Icon } from 'leaflet'
-import { mdiWalk, mdiBike, mdiCar, mdiMapMarker } from '@mdi/js'
 
 export default {
   components: {
@@ -49,20 +34,34 @@ export default {
   },
   data ({ $store }) {
     return {
-      mdiWalk, mdiBike, mdiCar, mdiMapMarker,
       url: $store.state.settings.tilelayer_provider || 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution: $store.state.settings.tilelayer_provider_attribution || "<a target=\"_blank\" href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
-      zoom: 14,
-      center: [this.event.place.latitude, this.event.place.longitude],
-      marker: {
-        address: this.event.place.address,
-        coordinates: {lat: this.event.place.latitude, lon: this.event.place.longitude}
-      },
-      routingProvider: 'openstreetmap',
+    }
+  },
+  computed: {
+    center () {
+      if (this.mapCenter.length)
+        return this.mapCenter
+      else {
+        this.place.latitude = isNaN(this.place.latitude) ? 0 : this.place.latitude
+        this.place.longitude = isNaN(this.place.longitude) ? 0 : this.place.longitude
+        return [this.place.latitude, this.place.longitude]
+      }
+    },
+    marker () {
+      return {
+        address: this.place.address,
+        coordinates: {lat: this.place.latitude, lon: this.place.longitude }
+      }      
     }
   },
   props: {
-    event: { type: Object, default: () => ({}) }
+    place: { type: Object, default: () => ({ latitude: 0, longitude: 0 }) },
+    height: { type: String, default: '' },
+    showMarker: { type: Boolean, default: true },
+    mapCenter: { type: Array, default: () => ([]) },
+    zoom: { type: Number, default: () => (16) },
+    draggable: { type: Boolean, default: false },
   },
   mounted() {
     delete Icon.Default.prototype._getIconUrl;
@@ -73,41 +72,23 @@ export default {
     });
 
     setTimeout(() => {
-      this.$refs.map.mapObject.invalidateSize();
+      if (this.$refs.leafletMap && this.$refs.leafletMap.mapObject ) {
+        this.$refs.leafletMap.mapObject.invalidateSize();
+      }
     }, 200);
   },
-  computed: {
-    ...mapState(['settings']),
-  },
   methods: {
-    ...mapActions(['setSetting']),
-    // mountLocateControl() {
-    //   this.$refs.map.mapObject.locate({
-    //     locateOptions: {
-    //       maxZoom: 10
-    //     }
-    //   });
-    //   this.$refs.map.mapObject.MyLocate();
-    // },
-    routeBy (type) {
-      const lat = this.event.place.latitude
-      const lon = this.event.place.longitude
-      const routingType = {
-        foot: "engine=fossgis_osrm_foot",
-        bike: "engine=fossgis_osrm_bike",
-        transit: null,
-        car: "engine=fossgis_osrm_car"
-      }
-      return `https://www.openstreetmap.org/directions?from=&to=${lat},${lon}&${routingType[type]}#map=14/${lat}/${lon}`
-     },
+    updateCoords(v) {
+      this.place.latitude = Number.parseFloat(v.lat).toFixed(7)
+      this.place.longitude = Number.parseFloat(v.lng).toFixed(7) 
+    }
   }
 }
 </script>
 
 <style>
-  #leaflet-map-dialog {
-    height: 55vh;
-    width: 100%;
+  #leaflet-map {
+    height: 10rem;
     border-radius: .3rem;
     border: 1px solid #fff;
     z-index: 1;

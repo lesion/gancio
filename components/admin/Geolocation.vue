@@ -6,7 +6,7 @@ v-card
 
     v-form
       v-row
-        v-col(md=3)
+        v-col(cols=12 md=3)
           v-autocomplete.mb-4(v-model='geocoding_provider_type'
             @blur="save('geocoding_provider_type', geocoding_provider_type )"
             :label="$t('admin.geocoding_provider_type')"
@@ -15,7 +15,7 @@ v-card
             :items="geocoding_provider_type_items"
             :placeholder="geocoding_provider_type_default")
 
-        v-col(md=5)
+        v-col(cols=12 md=5)
           v-text-field.mb-4(v-model='geocoding_provider'
             @blur="save('geocoding_provider', geocoding_provider )"
             :label="$t('admin.geocoding_provider')"
@@ -23,7 +23,7 @@ v-card
             persistent-hint
             :placeholder="geocoding_provider_default")
 
-        v-col(md=4)
+        v-col(cols=12 md=4)
           v-autocomplete.mb-6(v-model="geocoding_countrycodes" :disabled="!(geocoding_provider_type === null || geocoding_provider_type === 'Nominatim')"
             :append-icon='mdiChevronDown'
             @blur="save('geocoding_countrycodes', geocoding_countrycodes )"
@@ -35,7 +35,7 @@ v-card
             :hint="$t('admin.geocoding_countrycodes_help')")
       
       v-row
-        v-col(md=6)
+        v-col(cols=12 md=6)
           v-text-field.mb-4(v-model='tilelayer_provider'
             @blur="save('tilelayer_provider', tilelayer_provider )"
             :label="$t('admin.tilelayer_provider')"
@@ -43,39 +43,44 @@ v-card
             persistent-hint
             :placeholder="tilelayer_provider_default")
 
-        v-col(md=6)
+        v-col(cols=12 md=6)
           v-text-field(v-model='tilelayer_provider_attribution'
             @blur="save('tilelayer_provider_attribution', tilelayer_provider_attribution )"
             :label="$t('admin.tilelayer_provider_attribution')"
             :placeholder="tilelayer_provider_attribution_default")
 
-      div(id="leaflet-map-preview" max-height='10px')
-      //- Map
+      Map(:key='mapKey' v-if='mapPreview'
+        @tileerror='tilelayerTestError'
+        @tileload='tilelayerTestSuccess'
+        height="20rem" 
+        showMarker=false 
+        :mapCenter='mapCenter' 
+        :zoom='10')
 
   v-card-actions
     v-spacer
-    v-btn(color='primary' @click='testGeocodingProvider' :loading='testGeocodingLoading' outlined ) {{$t('admin.geocoding_test_button')}}
-    v-btn(color='primary' @click='testTileLayerProvider' :loading='testTileLayerLoading' outlined ) {{$t('admin.tilelayer_test_button')}}
+    v-btn(color='primary' @click='testGeocodingProvider' :loading='isNewGeocodingTest' outlined ) {{$t('admin.geocoding_test_button')}}
+    v-btn(color='primary' @click='testTileLayerProvider' :loading='isNewTilelayerTest' outlined ) {{$t('admin.tilelayer_test_button')}}
 
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
 import { isoCountries } from '../../server/helpers/geolocation/isoCountries'
+import geolocation from '../../server/helpers/geolocation/index'
 import { mdiChevronDown } from '@mdi/js'
-// import Map from '~/components/Map'
-import "leaflet/dist/leaflet.css"
 
 export default {
-  props: {
-    setup: { type: Boolean, default: false }
+  components: { 
+    [process.client && 'Map']: () => import('@/components/Map.vue')
   },
-  // components: { Map },
   data ({ $store }) {
     return {
       mdiChevronDown,
-      loading: false,
-      testGeocodingLoading: false,
-      testTileLayerLoading: false,
+      mapKey: 0,
+      mapPreview: false,
+      mapCenter: [42, 42],
+      isNewTilelayerTest: false,
+      isNewGeocodingTest: false,
       geocoding_provider_type_items: ['Nominatim', 'Photon'],
       geocoding_provider_type: $store.state.settings.geocoding_provider_type || '',
       geocoding_provider_type_default: 'Nominatim',
@@ -87,58 +92,39 @@ export default {
       tilelayer_provider_attribution: $store.state.settings.tilelayer_provider_attribution || '',
       tilelayer_provider_attribution_default: '<a target=\'_blank\' href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors',
       countries: isoCountries,
-      mapPreviewTest: null,
     }
   },
-  created() {
-    if (process.client) {
-      const L = require('leaflet')
+  computed: {
+    ...mapState(['settings', 'events']),
+    tilelayerTest() {
+      const v = this.tilelayer_provider !== '' ? this.tilelayer_provider : this.tilelayer_provider_default
+      return v
+    },
+    geocodingTest() {
+      const v = this.geocoding_provider !== '' ? this.geocoding_provider : this.geocoding_provider_default
+      return v
     }
   },
-  computed: mapState(['settings', 'events']),
   methods: {
     ...mapActions(['setSetting']),
     async testGeocodingProvider () {
-      this.testGeocodingLoading = true
-      const geocodingProviderTest = this.geocoding_provider || this.geocoding_provider_default
-      const geocodingSoftwareTest = this.geocoding_provider_type || this.geocoding_provider_type_default
-      const geocodingQuery = 'building'
-
+      this.isNewGeocodingTest = true
+      const currentGeocodingProvider = geolocation.getGeocodingProvider(this.settings.geocoding_provider_type)
+      // random query
+      const geocodingQuery = Math.random().toString(36).slice(2, 7);
       try {
-        if (geocodingSoftwareTest === 'Nominatim') {
-          const geolocation = await this.$axios.$get(`${geocodingProviderTest}`, {timeout: 3000, params: {q: `${geocodingQuery}`, format: 'json', limit: 1 }} )
-        } else if (geocodingSoftwareTest === 'Photon') {
-          const geolocation = await this.$axios.$get(`${geocodingProviderTest}`, {timeout: 3000, params: {q: `${geocodingQuery}`, limit: 1}} )
-        }
-
-        this.$root.$message(this.$t('admin.geocoding_test_success', { service_name: geocodingProviderTest }), { color: 'success' })
+        const ret = await this.$axios.$get(`placeOSM/${currentGeocodingProvider.commonName}/${geocodingQuery}`, { timeout: 3000 })
+        const res = currentGeocodingProvider.mapQueryResults(ret)
+        this.geocodingTestSuccess()
       } catch (e) {
-        this.$root.$message(this.$t('admin.tilelayer_test_error', { service_name: geocodingProviderTest }), { color: 'error' })
+        this.geocodingTestError()
       }
-      this.testGeocodingLoading = false
+      this.isNewGeocodingTest = false
     },
-    async testTileLayerProvider () {
-      this.testTileLayerLoading = true
-      const tileThis = this
-      const tileLayerTest = this.tilelayer_provider || this.tilelayer_provider_default
-      const tileLayerAttributionTest = this.tilelayer_provider_attribution || this.tilelayer_provider_attribution_default
-
-      // init tilelayer
-      if (this.mapPreviewTest == null) {
-        this.mapPreviewTest = L.map("leaflet-map-preview").setView([40,40],10);
-      }
-      this.tileLayer = L.tileLayer(`${tileLayerTest}`, {attribution: `${tileLayerAttributionTest}`})
-      this.tileLayer.addTo(this.mapPreviewTest)
-
-      // tilelayer events inherited from gridlayer https://leafletjs.com/reference.html#gridlayer
-      this.tileLayer.on('tileload', function (event) {
-          tileThis.tileLayerTestSucess(event, tileLayerTest)
-      });
-      this.tileLayer.on('tileerror', function(error, tile) {
-          tileThis.tileLayerTestError(event, tileLayerTest)
-          tileThis.tileLayer = null
-      });
-      this.testTileLayerLoading = false
+    testTileLayerProvider () {
+      this.isNewTilelayerTest = true
+      this.mapPreview = true
+      this.mapKey++
     },
     save (key, value) {
       if (this.settings[key] !== value) {
@@ -148,22 +134,25 @@ export default {
     done () {
       this.$emit('close')
     },
-    geocodingTestError(event, tileLayerTest) {
-      this.$root.$message(this.$t('admin.geocoding_test_error', { service_name: geocodingTest }), { color: 'error' })
+    handleMsg(t, s, c) {
+      this.$root.$message(this.$t(t, { service_name: s }), { color: c })
     },
-    tileLayerTestSucess(event, tileLayerTest) {
-      this.$root.$message(this.$t('admin.tilelayer_test_success', { service_name: tileLayerTest }), { color: 'success' })
+    geocodingTestError() {
+      this.handleMsg('admin.geocoding_test_error', this.geocodingTest, 'error')
     },
-    tileLayerTestError(event, tileLayerTest) {
-      this.$root.$message(this.$t('admin.tilelayer_test_error', { service_name: tileLayerTest }), { color: 'error' })
+    geocodingTestSuccess() {
+      this.handleMsg('admin.geocoding_test_success', this.geocodingTest, 'success')
+    },
+    tilelayerTestError() {
+      this.isNewTilelayerTest && this.handleMsg('admin.tilelayer_test_error', this.tilelayerTest, 'error')
+      this.isNewTilelayerTest = false
+    },
+    tilelayerTestSuccess() {
+      this.isNewTilelayerTest && this.handleMsg('admin.tilelayer_test_success', this.tilelayerTest, 'success')
+      this.isNewTilelayerTest = false
     }
 
   }
 }
 </script>
 
-<style>
-#leaflet-map-preview {
-  height: 20rem;
-}
-</style>
