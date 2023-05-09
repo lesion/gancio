@@ -103,7 +103,8 @@
         "longitude": "Longitude",
         "search_coordinates": "Search coordinates",
         "online": "On-line",
-        "test": "Test"
+        "test": "Test",
+        "show_preview": "Show preview"
     },
     "login": {
         "description": "By logging in you can publish new events.",

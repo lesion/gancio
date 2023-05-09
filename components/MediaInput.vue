@@ -31,14 +31,14 @@ span
 
   h3.mb-3.font-weight-regular(v-if='mediaPreview') {{$t('common.media')}}
   v-card-actions(v-if='mediaPreview')
+    v-switch.ml-3.mt-0.pt-0(v-model='showPreview' inset :label="$t('common.show_preview')" hide-details)
     v-spacer
-    v-switch(v-model='showPreview' inset :label="$t('common.show_preview')")
     v-btn(text color='primary' @click='openMediaDetails = true') {{$t('common.edit')}}
     v-btn(text color='error' @click='remove') {{$t('common.remove')}}
-  div(v-if='mediaPreview')
-    img.col-12.ml-3(:src='mediaPreview' v-if='showPreview')
-    img.mediaPreview.col-12.ml-3(:src='mediaPreview' v-else :style="{ 'object-position': savedPosition }")
-    span.float-right {{event.media[0].name}}
+  div.col-12.pt-0(v-if='mediaPreview')
+    img.col-12.pa-0(:src='mediaPreview' v-if='!showPreview')
+    img.col-12.mediaPreview.pa-0(:src='mediaPreview' v-else :style="{ 'object-position': savedPosition }")
+    span.text-center {{event.media[0].name}}
   v-file-input(
     v-else
     :label="$t('common.media')"
@@ -60,7 +60,7 @@ export default {
   data () {
     return {
       mdiCamera,
-      showPreview: true,
+      showPreview: false,
       openMediaDetails: false,
       name: this.value.name || '',
       focalpoint: this.value.focalpoint || [0, 0],
