@@ -454,11 +454,18 @@ const eventController = {
         }]
       } else if (!body.image) {
         eventDetails.media = []
-      } else if (body.image_focalpoint && event.media.length) {
+      }
+      
+      if (body.image_focalpoint && event.media.length) {
         let focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
         focalpoint = [parseFloat(parseFloat(focalpoint[0]).toFixed(2)), parseFloat(parseFloat(focalpoint[1]).toFixed(2))]
         eventDetails.media = [{ ...event.media[0], focalpoint }] // [0].focalpoint = focalpoint
       }
+
+      if (body.image_name && event.media.length && event.media[0].name !== body.image_name) {
+        eventDetails.media[0].name = body.image_name || body.title || ''
+      }
+
       await event.update(eventDetails)
 
       // find or create the place
