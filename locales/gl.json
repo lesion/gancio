@@ -104,7 +104,9 @@
         "recurring_event_actions": "Accións de eventos recurrentes",
         "tag": "Etiqueta",
         "search_coordinates": "Buscar coordenadas",
-        "online": "En liña"
+        "online": "En liña",
+        "show_preview": "Mostrar vista previa",
+        "test": "Proba"
     },
     "recover": {
         "not_valid_code": "Algo fallou."
