@@ -104,7 +104,9 @@
         "recurring_event_actions": "Acciones de eventos recurrentes",
         "tag": "Etiqueta",
         "search_coordinates": "Buscar las coordenadas",
-        "online": "En línea"
+        "online": "En línea",
+        "test": "Prueba",
+        "show_preview": "Mostrar una vista previa"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
