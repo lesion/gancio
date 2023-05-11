@@ -1,5 +1,20 @@
 All notable changes to this project will be documented in this file.
 
+### 1.6.12 - unreleased
+  - update locales (Basque, Galician, Italian, Spanish, Catalan )
+  - fix multiline event description breaks ICS export, #234
+  - adds online locations and geo coords to ICS export
+  - reload plugins when its settings change, fix #262
+  - map marker is now draggable
+  - allow plugins to use native log system
+  - do not allow duplicate or empty tags
+  - adds a way to test plugins settings from admin
+  - fix #266
+  - show full media on upload / add a switch to show preview, fix #257
+  - update image alt text when modified
+  - fix end_datetime
+  - check if place or tag exists, fix #268
+
 ### 1.6.11 - 21 apr '23
   - update deps
   - update locales (polish, spanish, catalan, galician)
