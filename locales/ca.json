@@ -104,7 +104,9 @@
         "recurring_event_actions": "Accions d'activitats recorrents",
         "tag": "Etiqueta",
         "search_coordinates": "Cerca les coordenades",
-        "online": "En línia"
+        "online": "En línia",
+        "test": "Prova",
+        "show_preview": "Previsualitza"
     },
     "login": {
         "description": "Amb la sessió iniciada pots afegir activitats noves.",
