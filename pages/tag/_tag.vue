@@ -40,7 +40,7 @@ export default {
       const events = await $axios.$get(`/tag/${encodeURIComponent(tag)}`)
       return { events, tag }
     } catch (e) {
-      error({ statusCode: 400, message: 'Error!' })
+      error({ statusCode: 404, message: 'Tag not found' })
     }
   }
 

@@ -1,7 +1,7 @@
 const { Tag, Event } = require('../models/models')
 const uniq = require('lodash/uniq')
 const log = require('../../log')
-
+const Sequelize = require('sequelize')
 
 const { where, fn, col, Op } = require('sequelize')
 const exportController = require('./export')
@@ -25,14 +25,21 @@ module.exports = {
     )
   },
 
-  // /feed/rss/tag/:tagname
-  // /feed/ics/tag/:tagname
-  // /feed/json/tag/:tagname
+  // /feed/rss/tag/:tag
+  // /feed/ics/tag/:tag
+  // /feed/json/tag/:tag
   // tag/:tag
   async getEvents (req, res) {
     const eventController = require('./event')
     const format = req.params.format || 'json'
     const tags = req.params.tag
+
+    // check if this tag exists
+    if(!await Tag.findOne({ where:
+      Sequelize.where( Sequelize.fn( 'LOWER', Sequelize.col('tag')),
+        Sequelize.Op.eq, tags.toLocaleLowerCase())})) {
+      return res.sendStatus(404)
+    }
     const events = await eventController._select({ tags: tags.toLocaleLowerCase(), show_recurrent: true, show_multidate: true, start: 0, reverse: true })
     switch (format) {
       case 'rss':

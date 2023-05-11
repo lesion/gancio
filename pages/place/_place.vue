@@ -35,12 +35,12 @@ export default {
     ...mapState(['settings']),
     ...mapGetters(['hide_thumbs', 'is_dark']),
   },
-  asyncData({ $axios, params, error }) {
+  async asyncData({ $axios, params, error }) {
     try {
-      const place = params.place
-      return $axios.$get(`/place/${encodeURIComponent(place)}`)
+      const events = await $axios.$get(`/place/${encodeURIComponent(params.place)}`)
+      return events
     } catch (e) {
-      error({ statusCode: 400, message: 'Error!' })
+      error({ statusCode: 404, message: 'Place not found!' })
     }
   }
 
