@@ -28,8 +28,8 @@ v-container
         v-btn(@click='saveSettings' outlined color='primary' :loading='loading'
           :disable='!valid || loading') {{ $t('common.save') }}
 
-  v-card-text
-    v-card(v-for='plugin in plugins' :key='plugin.name' max-width="400" outlined)
+  v-card-text(class='d-flex')
+    v-card(v-for='plugin in plugins' :key='plugin.name' max-width="400" outlined class='mr-2')
       v-card-title {{ plugin.name }}
       v-card-text
         p {{ plugin.description }}
