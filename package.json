@@ -113,6 +113,10 @@
   "jest": {
     "testEnvironment": "jsdom"
   },
+  "resolutions": {
+    "vue": "2.7.14",
+    "vue-template-compiler": "2.7.14"
+  },
   "bin": {
     "gancio": "server/cli.js"
   },

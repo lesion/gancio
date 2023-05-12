@@ -8,7 +8,7 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
-### 1.6.12 - 12 mag '23
+### 1.6.12 - 12 may '23
   - Fixed a bad bug in end time calculation that would sometimes hide the event from the homepage the day it occurred
   - update locales (Basque, Galician, Italian, Spanish, Catalan)
   - [fix multiline event description breaks ICS export](https://framagit.org/les/gancio/-/issues/234)
