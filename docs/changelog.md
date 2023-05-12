@@ -8,6 +8,25 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.6.12 - 12 mag '23
+  - Fixed a bad bug in end time calculation that would sometimes hide the event from the homepage the day it occurred
+  - update locales (Basque, Galician, Italian, Spanish, Catalan)
+  - [fix multiline event description breaks ICS export](https://framagit.org/les/gancio/-/issues/234)
+  - adds online locations and geo coords to ICS export
+  - map marker is now draggable
+  - do not allow duplicate or empty tags in UI
+  - [fix wrong week calculation in recurrent events](https://framagit.org/les/gancio/-/issues/266)
+  - [show full media on upload / add a switch to show preview](https://framagit.org/les/gancio/-/issues/257)
+  - [update image alt text when modified](https://framagit.org/les/gancio/-/issues/267)
+  - [check if place or tag exists](https://framagit.org/les/gancio/-/issues/268)
+  - fix export microformat / microdata events
+  - plugins improvements:
+    - [reload plugins when its settings change](https://framagit.org/les/gancio/-/issues/262)
+    - [allow plugins to use native log system](https://framagit.org/bcn.convocala/gancio-plugin-telegram-bridge/-/issues/6)
+    - [adds a way to test plugins settings from admin](https://framagit.org/bcn.convocala/gancio-plugin-telegram-bridge/-/issues/3)
+    - avoid loading the same plugin twice
+    - update [gancio-plugin-telegram-bridge](https://framagit.org/bcn.convocala/gancio-plugin-telegram-bridge)
+
 ### 1.6.11 - 21 apr '23
   - update deps
   - update locales (polish, spanish, catalan, galician)
