@@ -106,7 +106,11 @@ const pluginController = {
     try {
       const plugin = require(pluginFile)
       const name = plugin.configuration.name
-      log.info(`Found plugin '${name}'`)
+      log.info(`Found plugin '${name}' in '${pluginFile}'`)
+      if (pluginController.plugins.find(p => p.configuration.name === name)) {
+        log.warn(`Cannot load plugins with the same name: plugin '${name}' already exists`)
+        return
+      }
       pluginController.plugins.push(plugin)
       if (settingsController.settings['plugin_' + name]) {
         const pluginSetting = settingsController.settings['plugin_' + name]
