@@ -438,6 +438,26 @@ describe('Collection', () => {
   })
 })
 
+describe('Export', () => {
+  test('should export an rss feed', async () => {
+    await request(app).get('/feed/rss')
+      .expect('Content-Type', /application\/rss\+xml/)
+      .expect(200)
+  })
+
+  test('should export a json feed', async () => {
+    await request(app).get('/feed/json')
+      .expect('Content-Type', /application\/json/)
+      .expect(200)
+  })
+
+  test('should export an ics feed', async () => {
+    await request(app).get('/feed/ics')
+      .expect('Content-Type', /text\/calendar/)
+      .expect(200)
+  })
+})
+
 describe('Geocoding', () => {
   test('should not be enabled by default', async () => {
 
