@@ -172,7 +172,7 @@ module.exports = () => {
     api.get('/event/detail/:event_slug.:format?', cors, eventController.get)
   
     // export events (rss/ics)
-    api.get('/export/:type', cors, exportController.export)
+    api.get('/export/:format', cors, exportController.export)
   
   
     // - PLACES
