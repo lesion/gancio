@@ -62,7 +62,8 @@ module.exports = {
       include: [{ model: APUser, required: true, attributes: ['ap_id'] }]
     })
     if (!resource) {
-      log.info(`Comment ${req.body.object.id} not found`)
+      log.info(`Comment not found`)
+      log.debug(req.body)
       return res.status(404).send('Not found')
     }
     // check if fedi_user that requested resource removal

@@ -70,6 +70,7 @@ const exportController = {
       case 'json':
         return res.json(events)
     }
+    return res.send('Please specify a valid format: rss, feed, ics or json').status(404)
   },
 
   feed (_req, res, events, title = res.locals.settings.title, link = `${res.locals.settings.baseurl}/feed/rss`) {

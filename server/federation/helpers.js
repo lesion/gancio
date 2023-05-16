@@ -63,7 +63,8 @@ const Helpers = {
       })
       log.debug(`signed ${ret.status} => ${ret.data}`)
     } catch (e) {
-      log.error(`Response: ${e.response.status} ${e.response.data}`)
+      log.debug(e)
+      log.error(`Response: ${ret.status} ${ret.data}`)
     }
   },
 
