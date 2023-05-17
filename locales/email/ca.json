@@ -4,7 +4,7 @@
         "content": "Hem rebut una soŀlicitud de registre. Hi respondrem tan aviat com ens sigui possible.<br/>Salut."
     },
     "confirm": {
-        "subject": "Ja pots publicar activitats",
+        "subject": "Ja pots començar a publicar activitats",
         "content": "Ei, el teu compte a <a href='{{config.baseurl}}'>{{config.title}}</a> ha estat confirmat. Escriu-nos a {{config.admin_email}} per qualsevol dubte."
     },
     "user_confirm": {
