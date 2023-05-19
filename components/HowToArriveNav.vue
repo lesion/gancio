@@ -1,11 +1,11 @@
 <template lang="pug">
 v-row(color='primary')
   //- p.my-4(v-text="$t('common.getting_there')")
-  v-btn.mx-2(icon large :href="routeBy('foot')")
+  v-btn.mx-1(icon large :href="routeBy('foot')")
     v-icon(v-text='mdiWalk')
-  v-btn.mx-2(icon large :href="routeBy('bike')")
+  v-btn.mx-1(icon large :href="routeBy('bike')")
     v-icon(v-text='mdiBike')
-  v-btn.mx-2(icon large :href="routeBy('car')")
+  v-btn.mx-1(icon large :href="routeBy('car')")
     v-icon(v-text='mdiCar')
 </template>
 <script>
