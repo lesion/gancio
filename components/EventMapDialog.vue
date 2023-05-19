@@ -10,7 +10,7 @@ v-card
         nuxt-link.ml-2.text-decoration-none(v-text="place.name" :to='`/place/${place.name}`')
         .mx-2(v-text="`${place.address}`")
   v-card-actions.py-4
-    HowToArriveNav(:place='place')
+    HowToArriveNav.pl-1(:place='place')
     v-spacer
     v-btn(@click='$emit("close")' outlined) Close
 </template>
