@@ -52,6 +52,9 @@ POST
 | description | `string` | event's description (html accepted and sanitized) |
 | place_name | `string` | the name of the place |
 | place_address | `string` | the address of the place |
+| place_latitude | `float` | the latitude of the place |
+| place_longitude | `float` | the longitude of the place |
+| online_locations | `array` | List of online locations |
 | start_datetime | `integer` | start timestamp |
 | multidate | `integer` | is a multidate event? |
 | tags | `array` | List of tags |

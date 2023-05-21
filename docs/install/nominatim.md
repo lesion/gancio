@@ -15,7 +15,7 @@ nav_order: 7
 ---
 
 ## Testing
-For testing purposes you could skip the nominatim installation and use one of this geocoding providers that run a server for free:
+For testing purposes you could skip the nominatim installation and use one of these geocoding providers that run a server for free:
 
 - [https://photon.komoot.io/](https://photon.komoot.io/) [Terms of service](https://photon.komoot.io/)
 - [https://nominatim.openstreetmap.org/](https://nominatim.openstreetmap.org/) [Terms of service](https://operations.osmfoundation.org/policies/nominatim/)
@@ -28,25 +28,25 @@ From [https://nominatim.org/release-docs/latest/admin/Installation/](https://nom
 "A minimum of 2GB of RAM is required or installation will fail. For a full planet import 128GB of RAM or more are strongly recommended. Do not report out of memory problems if you have less than 64GB RAM."
 
 ### Planet mirrors
-There is a list of planet mirror at [https://wiki.openstreetmap.org/wiki/Planet.osm#Planet.osm_mirrors](https://wiki.openstreetmap.org/wiki/Planet.osm#Planet.osm_mirrors)      
+There is a list of planet mirrors at [https://wiki.openstreetmap.org/wiki/Planet.osm#Planet.osm_mirrors](https://wiki.openstreetmap.org/wiki/Planet.osm#Planet.osm_mirrors)      
 There you can also find `Country and area extracts`, divided by `Worldwide extract sources` and `Regional extract sources`
 
 ### Download an extract
-For Nominatim to work, you will needs to import files in [PBF Format](https://wiki.openstreetmap.org/wiki/PBF_Format) in the PostGis database. Those files have extension `*.osm.pbf`.
+For Nominatim to work, you need to import files in [PBF Format](https://wiki.openstreetmap.org/wiki/PBF_Format) in the PostGis database. Those files have extension `*.osm.pbf`.
 
 Some of these mirrors provide also incremental updates via [OsmChange](https://wiki.openstreetmap.org/wiki/OsmChange), for example:
-- Provides updates but with a lower detail    
+- These provide updates but with a lower detail    
 [https://download.geofabrik.de/europe/italy/nord-ovest-updates/nord-ovest-latest.osm.pbf](http://download.geofabrik.de/europe/italy/nord-ovest-latest.osm.pbf)    
 [https://download.geofabrik.de/europe/italy/nord-ovest-updates/](https://download.geofabrik.de/europe/italy/nord-ovest-updates/)
-- Does not provide updates but as higher level of detail     
+- This doesn't provide updates but has an higher level of detail     
 [https://osmit-estratti-test.wmcloud.org/dati/poly/province/pbf/015_Milano_poly.osm.pbf](https://osmit-estratti-test.wmcloud.org/dati/poly/province/pbf/015_Milano_poly.osm.pbf)
 
-Needs to host multiple areas? Checkout [Osmium](https://osmcode.org/osmium-tool/manual.html), to merge multiple PBF files into one.
+Do you need to host multiple areas? Checkout [Osmium](https://osmcode.org/osmium-tool/manual.html), to merge multiple PBF files into one.
 
 ---
 
 ## Install on Debian
-There is a [detailed documentaion](https://nominatim.org/release-docs/latest/appendix/Install-on-Ubuntu-22/) for installing nominatim on `Ubuntu 22` that should be valid also to install on `Debian`.
+There is a [detailed documentation](https://nominatim.org/release-docs/latest/appendix/Install-on-Ubuntu-22/) for installing nominatim on `Ubuntu 22` that should be valid also to install on `Debian`.
 
 ### Setup
 [https://nominatim.org/release-docs/latest/appendix/Install-on-Ubuntu-22/#installing-the-required-software](https://nominatim.org/release-docs/latest/appendix/Install-on-Ubuntu-22/#installing-the-required-software)
@@ -54,14 +54,14 @@ There is a [detailed documentaion](https://nominatim.org/release-docs/latest/app
 ### Building and Configuration
 
 Get the source code from Github and change into the source directory
-```
+```bash
 cd $USERHOME
 wget https://nominatim.org/release/Nominatim-4.2.0.tar.bz2
 tar xf Nominatim-4.2.0.tar.bz2
 ```
 
 The code must be built in a separate directory. Create this directory, then configure and build Nominatim in there:
-```
+```bash
 mkdir $USERHOME/build
 cd $USERHOME/build
 cmake $USERHOME/Nominatim-4.2.0
@@ -91,13 +91,12 @@ From [https://github.com/mediagis/nominatim-docker](https://github.com/mediagis/
 - Clone the project from sources
 ```bash
 git clone git@github.com:mediagis/nominatim-docker.git
-# cd nominatim-docker/<version>
 cd nominatim-docker/4.2/contrib # released Nov 29, 2022
 docker-compose pull
 ```
 
 - Or, use the template at `docs/docker/nominatim`
-```
+```bash
 cd /opt/gancio/docs/docker/nominatim
 docker-compose pull
 ```
@@ -111,15 +110,13 @@ wget https://download.geofabrik.de/europe/italy/nord-ovest-latest.osm.pbf \
 ```
 
 ### Configure the environment file
-```
+```bash
 cd docs/docker/nominatim/
 cp .env.example .env
 ```
-Create a random password for nominatim a add it to .env file
+Create a random password for nominatim and add it to .env file
 ```bash
-NOMINATIM_PASSWORD=random_password;
-NOMINATIM_PASSWORD=$(echo $NOMINATIM_PASSWORD | openssl passwd --stdin);
-echo $NOMINATIM_PASSWORD;
+NOMINATIM_PASSWORD=$(echo random_password | openssl passwd --stdin);
 sed -i -e 's/\(NOMINATIM_PASSWORD=\)\(.*\)/\1'$NOMINATIM_PASSWORD'/g' .env
 ```
 
