@@ -6,9 +6,11 @@
     <span v-if='place.name!=="online"' class="d-block text-subtitle text-center w-100">{{ place.address }}</span>
 
     <!-- Map -->
-    <div v-if='settings.allow_geolocation && place.latitude && place.longitude' class='my-4'>
-      <Map :place='place' height="35vh" />
-      <div class='my-4'>
+    <div v-if='settings.allow_geolocation && place.latitude && place.longitude' >
+      <div class="mt-4 mx-auto px-4" >
+        <Map :place='place' :height='mapHeight' />
+      </div>
+      <div class="mt-4">
         <HowToArriveNav :place='place' class="justify-center" />
       </div>
     </div>
@@ -34,6 +36,9 @@ export default {
     HowToArriveNav,
     [process.client && 'Map']: () => import('@/components/Map.vue')
    },
+  data() {
+    return { mapHeight: "14rem" }
+  },
   head() {
     const title = `${this.settings.title} - ${this.place.name}`
     return {
@@ -41,7 +46,7 @@ export default {
       link: [
         { rel: 'alternate', type: 'application/rss+xml', title, href: this.settings.baseurl + `/feed/rss/place/${this.place.name}` },
         { rel: 'alternate', type: 'text/calendar', title, href: this.settings.baseurl + `/feed/ics/place/${this.place.name}` }
-      ]
+      ],
     }
   },
   computed: {
