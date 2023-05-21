@@ -33,7 +33,7 @@
     "yarn.lock"
   ],
   "engines": {
-    "node": ">=14 <=16"
+    "node": ">=15 <=16"
   },
   "dependencies": {
     "@mdi/js": "^7.1.96",
