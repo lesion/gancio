@@ -33,7 +33,7 @@ const eventController = {
     const place_address = body.place_address && body.place_address.trim()
     if (!place_name || !place_address && place_name !== 'online') {
       throw new Error(`place_id or place_name and place_address are required`)
-    }    
+    }
     let place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Sequelize.Op.eq, place_name.toLocaleLowerCase()) })
     if (!place) {
       place = await Place.create({
@@ -454,9 +454,7 @@ const eventController = {
         }]
       } else if (!body.image) {
         eventDetails.media = []
-      }
-      
-      if (body.image_focalpoint && event.media.length) {
+      } else if (body.image_focalpoint && event.media.length) {
         let focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
         focalpoint = [parseFloat(parseFloat(focalpoint[0]).toFixed(2)), parseFloat(parseFloat(focalpoint[1]).toFixed(2))]
         eventDetails.media = [{ ...event.media[0], focalpoint }] // [0].focalpoint = focalpoint
@@ -607,7 +605,7 @@ const eventController = {
           Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND LOWER(${Col('tagTag')}) = ?`))
         ]
     }
-    
+
     let pagination = {}
     if (limit) {
       pagination = {
@@ -692,7 +690,7 @@ const eventController = {
     const parentStartDatetime = DateTime.fromSeconds(e.start_datetime)
 
     // cursor is when start to count
-    // sets it to 
+    // sets it to
     let cursor = parentStartDatetime > startAt ? parentStartDatetime : startAt
     startAt = cursor
 
