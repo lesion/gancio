@@ -83,7 +83,7 @@ const exportController = {
 
     function unixFormat (timestamp, format='EEEE d MMMM HH:mm') {
       return DateTime.fromSeconds(timestamp, opt).toFormat(format)
-    }    
+    }
 
     res.type('application/rss+xml; charset=UTF-8')
     res.render('feed/rss.pug', { events, settings, unixFormat, title, link })
@@ -109,7 +109,7 @@ const exportController = {
         endInputType: 'utc',
         title: `[${settings.title}] ${e.title}`,
         description: htmlToText(e.description),
-        htmlContent: e.description.replaceAll("\n","<br>"),
+        htmlContent: e.description.replace(/\n/g,"<br>"),
         location,
         url: `${settings.baseurl}/event/${e.slug || e.id}`,
         status: 'CONFIRMED',
