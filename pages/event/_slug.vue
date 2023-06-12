@@ -177,7 +177,7 @@ v-container#event.h-event.pa-2.pa-sm-2(itemscope itemtype="https://schema.org/Ev
       EmbedEvent(:event='event' @close='showEmbed=false')
     
     v-dialog(v-show='settings.allow_geolocation && event.place.latitude && event.place.longitude' v-model='mapModal' :fullscreen='$vuetify.breakpoint.xsOnly' destroy-on-close)
-      EventMapDialog(:event='event' @close='mapModal=false')        
+      EventMapDialog(:place='event.place' @close='mapModal=false')        
 
 </template>
 <script>

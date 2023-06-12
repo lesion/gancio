@@ -5,6 +5,16 @@
     </h1>
     <span v-if='place.name!=="online"' class="d-block text-subtitle text-center w-100">{{ place.address }}</span>
 
+    <!-- Map -->
+    <div v-if='settings.allow_geolocation && place.latitude && place.longitude' >
+      <div class="mt-4 mx-auto px-4" >
+        <Map :place='place' :height='mapHeight' />
+      </div>
+      <div class="mt-4">
+        <HowToArriveNav :place='place' class="justify-center" />
+      </div>
+    </div>
+
     <!-- Events -->
     <div id="events" class='mt-14'>
       <v-lazy class='event v-card' :value='idx<9' v-for='(event, idx) in events' :key='event.id' :min-height='hide_thumbs ? 105 : undefined' :options="{ threshold: .5, rootMargin: '500px' }" :class="{ 'theme--dark': is_dark }">
@@ -17,10 +27,18 @@
 
 import { mapState, mapGetters } from 'vuex'
 import Event from '@/components/Event'
+import HowToArriveNav from '@/components/HowToArriveNav.vue'
 
 export default {
   name: 'Place',
-  components: { Event },
+  components: { 
+    Event, 
+    HowToArriveNav,
+    [process.client && 'Map']: () => import('@/components/Map.vue')
+   },
+  data() {
+    return { mapHeight: "14rem" }
+  },
   head() {
     const title = `${this.settings.title} - ${this.place.name}`
     return {
@@ -28,7 +46,7 @@ export default {
       link: [
         { rel: 'alternate', type: 'application/rss+xml', title, href: this.settings.baseurl + `/feed/rss/place/${this.place.name}` },
         { rel: 'alternate', type: 'text/calendar', title, href: this.settings.baseurl + `/feed/ics/place/${this.place.name}` }
-      ]
+      ],
     }
   },
   computed: {
