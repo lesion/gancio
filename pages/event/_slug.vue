@@ -1,10 +1,10 @@
 <template lang="pug">
-v-container#event.h-event.pa-2.pa-sm-2(itemscope itemtype="https://schema.org/Event" v-touch="{ left: goNext, right: goPrev }")
+v-container#event.h-event.pa-2.pa-sm-2(v-touch="{ left: goNext, right: goPrev }")
     //- EVENT PAGE
     //- gancio supports microformats (http://microformats.org/wiki/h-event)
     //- and microdata https://schema.org/Event
 
-    v-row
+    v-row(itemscope itemtype="https://schema.org/Event")
       v-col.col-12.col-md-8
         MyPicture(v-if='hasMedia' :event='event')
         .p-description.text-body-1.pa-3.rounded(v-if='!hasMedia && event.description' itemprop='description' v-html='event.description')
