@@ -102,7 +102,11 @@
         "tag": "Tag",
         "admin_actions": "Admin actions",
         "recurring_event_actions": "Evènement Récurrent action",
-        "content": "Contenu"
+        "content": "Contenu",
+        "online": "En ligne",
+        "search_coordinates": "Rechercher les coordonnées",
+        "test": "Tester",
+        "show_preview": "Afficher l'aperçu"
     },
     "event": {
         "follow_me_description": "Une des manières de rester informé sur les évènements publiés ici sur {title}\nest de suivre le compte <u>{account}</u> sur le fediverse, par exemple via Mastodon, et pourquoi pas d'ajouter des ressources à un évènement à partir de là.<br/><br/>\nSi vous n'avez jamais entendu parler de Mastodon and du fediverse, nous vous recommandons de lire <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>cet article (en anglais)</a>.<br/><br/>Saisissez votre nom d'instance ci-dessous (par ex. mastodon.social)",
