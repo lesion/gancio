@@ -70,7 +70,7 @@ v-container#event.h-event.pa-2.pa-sm-2(v-touch="{ left: goNext, right: goPrev }"
                   v-icon(v-text='mdiCodeTags')
                 v-list-item-content
                   v-list-item-title(v-text="$t('common.embed')")
-              
+
               //- calendar
               v-list-item(:href='`/api/event/detail/${event.slug || event.id}.ics`')
                 v-list-item-icon
@@ -175,9 +175,9 @@ v-container#event.h-event.pa-2.pa-sm-2(v-touch="{ left: goNext, right: goPrev }"
 
     v-dialog(v-model='showEmbed' width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
       EmbedEvent(:event='event' @close='showEmbed=false')
-    
+
     v-dialog(v-show='settings.allow_geolocation && event.place.latitude && event.place.longitude' v-model='mapModal' :fullscreen='$vuetify.breakpoint.xsOnly' destroy-on-close)
-      EventMapDialog(:place='event.place' @close='mapModal=false')        
+      EventMapDialog(:place='event.place' @close='mapModal=false')
 
 </template>
 <script>

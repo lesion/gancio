@@ -131,11 +131,11 @@ const collectionController = {
     const collectionId = req.params.collection_id
     const filters = await Filter.findAll({ where: { collectionId } })
     return res.json(filters)
-  }, 
+  },
 
   async addFilter (req, res) {
     const { collectionId, tags, places } = req.body
-    
+
     try {
       filter = await Filter.create({ collectionId, tags, places })
       return res.json(filter)
