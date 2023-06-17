@@ -258,7 +258,7 @@ module.exports = {
       }
     } else {
       cursor = date.startOf('month')
-      cursor = cursor.add(cursor.day() <= date.day() ? n - 1 : n, 'week')
+      // cursor = cursor.add(cursor.day <= date.day ? n - 1 : n, 'week')
       cursor = cursor.plus({ days: cursor.weekday <= date.weekday ? (n-1) * 7 : n * 7})
       cursor = cursor.set({ weekday })
     }
