@@ -2,6 +2,9 @@ const config = require('./server/config.js')
 const locales = require('./locales/index')
 import { ca, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, ru, zhHans  } from 'vuetify/es5/locale'
 
+const dns = require('node:dns')
+dns.setDefaultResultOrder('ipv4first')
+
 const isDev = (process.env.NODE_ENV !== 'production')
 module.exports = {
   telemetry: false,
@@ -95,7 +98,7 @@ module.exports = {
     vueI18n: {
       fallbackLocale: 'en',
       silentTranslationWarn: true
-    },    
+    },
     langDir: 'locales',
     lazy: true,
     strategy: 'no_prefix',
@@ -142,7 +145,7 @@ module.exports = {
   buildModules: ['@nuxtjs/vuetify'],
   vuetify: {
     lang: { locales: { ca, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, ru, zhHans } },
-    treeShake: true,    
+    treeShake: true,
     defaultAssets: false,
     optionsPath: './vuetify.options.js' },
   build: {
