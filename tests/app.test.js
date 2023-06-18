@@ -239,9 +239,9 @@ describe('Events', () => {
       .send(event)
       .expect(200)
       .expect('Content-Type', /json/)
-      
+
     expect(response.body.description).toBe(`<p>inside paragraph</p><a href="https://test.com/?query=true">link with fb reference</a>`)
-    
+
   })
 
 })
@@ -384,7 +384,7 @@ describe('Collection', () => {
   })
 
   test('shoud get collection\'s filters using withFilters parameter', async () => {
-    const response = await request(app)
+    let response = await request(app)
       .get('/api/collections?withFilters=true')
       .expect(200)
 
@@ -393,6 +393,18 @@ describe('Collection', () => {
     expect(response.body[0].filters.length).toBe(1)
     expect(response.body[0].filters[0].tags.length).toBe(1)
     expect(response.body[0].filters[0].tags[0]).toBe('test')
+
+    response = await request(app)
+      .get('/api/collections')
+      .expect(200)
+    expect(response.body[0].filters).toBeUndefined()
+
+
+    response = await request(app)
+      .get('/api/collections?withFilters=false')
+      .expect(200)
+    expect(response.body[0].filters).toBeUndefined()
+
   })
 
   test('should get collection events', async () => {
