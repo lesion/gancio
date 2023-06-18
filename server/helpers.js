@@ -295,8 +295,9 @@ module.exports = {
     }
   },
 
-  queryParamToBool (value) {
-    return ((value+'').toLowerCase() === 'true')
+  queryParamToBool (value, defaultValue) {
+    if (typeof value === 'undefined') return defaultValue
+    return (String(value).toLowerCase() === 'true')
   }
 
 }

@@ -2,13 +2,13 @@ const { Collection, Filter, Event, Tag, Place } = require('../models/models')
 
 const log = require('../../log')
 const { DateTime } = require('luxon')
-const { col: Col } = require('../../helpers')
+const { col: Col, queryParamToBool } = require('../../helpers')
 const { Op, Sequelize } = require('sequelize')
 
 const collectionController = {
 
   async getAll (req, res) {
-    const withFilters = req.query.withFilters
+    const withFilters = queryParamToBool(req.query.withFilters)
     let collections
     if (withFilters) {
       collections = await Collection.findAll({ include: [ Filter ] })
