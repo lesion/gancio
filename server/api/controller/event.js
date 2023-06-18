@@ -690,7 +690,7 @@ const eventController = {
     const parentStartDatetime = DateTime.fromSeconds(e.start_datetime)
 
     // cursor is when start to count
-    // sets it to
+    // in case parent is in past, start to calculate from now
     let cursor = parentStartDatetime > startAt ? parentStartDatetime : startAt
     startAt = cursor
 
@@ -711,6 +711,8 @@ const eventController = {
         cursor = cursor.plus({ days: 7 * Number(frequency[0]) })
       }
     } else if (frequency === '1m') {
+
+      // day n.X each month
       if (type === 'ordinal') {
         cursor = cursor.set({ day: parentStartDatetime.day })
 
@@ -718,10 +720,10 @@ const eventController = {
           cursor = cursor.plus({ months: 1 })
         }
       } else { // weekday
-        // get weekday
+
         // get recurrent freq details
         cursor = helpers.getWeekdayN(cursor, type, parentStartDatetime.weekday)
-        if (cursor< startAt) {
+        if (cursor < startAt) {
           cursor = cursor.plus({ months: 1 })
           cursor = helpers.getWeekdayN(cursor, type, parentStartDatetime.weekday)
         }

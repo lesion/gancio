@@ -143,9 +143,9 @@ describe('Recurrent events', () => {
     const eventController = require('../server/api/controller/event')
     const { Event } = require('../server/api/models/models')
 
-    // each week starting from past
+    // each week
     let ret = await Event.create({
-      title: 'each last monday starting from past',
+      title: 'each last monday starting',
       is_visible: true,
       recurrent: { frequency: '1m', type: -1 },
       start_datetime: DateTime.local(2033, 3, 27, 8).toUnixInteger(),
@@ -159,10 +159,43 @@ describe('Recurrent events', () => {
     ev = await eventController._createRecurrentOccurrence(ret, DateTime.fromSeconds(ev.start_datetime+1), false)
     expect(ev.start_datetime).toBe(DateTime.local(2033, 4, 24, 8).toUnixInteger())
 
-
     // 24 April 2033 08:00 -> 1m -> 29 May 2033 08:00
     ev = await eventController._createRecurrentOccurrence(ret, DateTime.fromSeconds(ev.start_datetime+1), false)
     expect(ev.start_datetime).toBe(DateTime.local(2033, 5, 29, 8).toUnixInteger())
+
+  })
+
+
+  test('shoud create an occurrence each second tuesday', async () => {
+    const eventController = require('../server/api/controller/event')
+    const { Event } = require('../server/api/models/models')
+
+    // each week starting from past
+    let ret = await Event.create({
+      title: 'each second tuesday',
+      is_visible: true,
+      recurrent: { frequency: '1m', type: 2 },
+      start_datetime: DateTime.local(2033, 2, 8, 8).toUnixInteger(),
+    })
+
+    ev = await eventController._createRecurrentOccurrence(ret)
+    expect(ev.start_datetime).toBe(DateTime.local(2033, 2, 8, 8).toUnixInteger())
+
+    ev = await eventController._createRecurrentOccurrence(ret, DateTime.fromSeconds(ev.start_datetime+1), false)
+    expect(ev.start_datetime).toBe(DateTime.local(2033, 3, 8, 8).toUnixInteger())
+
+    // 8 March 2033 08:00 -> 1m -> 12 April 2033 08:00
+    ev = await eventController._createRecurrentOccurrence(ret, DateTime.fromSeconds(ev.start_datetime+1), false)
+    expect(ev.start_datetime).toBe(DateTime.local(2033, 4, 12, 8).toUnixInteger())
+
+    // 12 Apr 2033 08:00 -> 1m -> 10 May 2033 08:00
+    ev = await eventController._createRecurrentOccurrence(ret, DateTime.fromSeconds(ev.start_datetime+1), false)
+    expect(ev.start_datetime).toBe(DateTime.local(2033, 5, 10, 8).toUnixInteger())
+
+
+    // 10 May 2033 08:00 -> 1m -> 9 June 2033 08:00
+    ev = await eventController._createRecurrentOccurrence(ret, DateTime.fromSeconds(ev.start_datetime+1), false)
+    expect(ev.start_datetime).toBe(DateTime.local(2033, 6, 14, 8).toUnixInteger())
 
   })
 

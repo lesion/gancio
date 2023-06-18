@@ -259,7 +259,7 @@ module.exports = {
     } else {
       cursor = date.startOf('month')
       // cursor = cursor.add(cursor.day <= date.day ? n - 1 : n, 'week')
-      cursor = cursor.plus({ days: cursor.weekday <= date.weekday ? (n-1) * 7 : n * 7})
+      cursor = cursor.plus({ weeks: cursor.weekday <= weekday ? n-1 : n })
       cursor = cursor.set({ weekday })
     }
     cursor = cursor.set({ hour: date.hour, minute: date.minute, second: 0 })
@@ -293,5 +293,10 @@ module.exports = {
     } else {
       res.sendStatus(403)
     }
+  },
+
+  queryParamToBool (value) {
+    return ((value+'').toLowerCase() === 'true')
   }
+
 }
