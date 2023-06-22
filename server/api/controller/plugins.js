@@ -32,6 +32,22 @@ const pluginController = {
     res.json()
   },
 
+  async routeAPI (req, res, next) {
+    const pluginName = req.params.plugin
+    const plugin = pluginController.plugins.find(p => p.configuration.name === pluginName)
+    if (!plugin) {
+      log.warn(`Plugin ${pluginName} not found`)
+      return res.sendStatus(404)
+    }
+
+    if (typeof plugin.routeAPI !== 'function') {
+      log.warn(`Plugin ${pluginName} does not expose a 'routeAPI' function`)
+      return res.sendStatus(404)
+    }
+
+    return plugin.routeAPI(req, res, next)
+  },
+
   async testPlugin (req, res) {
     const pluginName = req.params.plugin
     const plugin = pluginController.plugins.find(p => p.configuration.name === pluginName)
@@ -39,7 +55,7 @@ const pluginController = {
       log.warn(`Plugin ${pluginName} not found`)
       return res.sendStatus(404)
     }
-  
+
     if (typeof plugin.onTest !== 'function') {
       log.warn(`Plugin ${pluginName} does not expose an 'onTest' function`)
       return res.sendStatus(404)
@@ -122,7 +138,7 @@ const pluginController = {
       }
     } catch (e) {
       log.warn(`Unable to load plugin ${pluginFile}: ${String(e)}`)
-    }    
+    }
   },
 
   _load() {
