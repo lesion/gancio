@@ -4,6 +4,7 @@ const log = require('../../log')
 const config = require('../../config')
 const settingsController = require('./settings')
 const notifier = require('../../notifier')
+const db = require('../models/index.js')
 
 const pluginController = {
   plugins: [],
@@ -112,7 +113,8 @@ const pluginController = {
       plugin.load({
         helpers: require('../../helpers'),
         log,
-        settings: settingsController.settings
+        settings: settingsController.settings,
+        db: db.sequelize
       },
       settings)
     }
@@ -132,6 +134,8 @@ const pluginController = {
         const pluginSetting = settingsController.settings['plugin_' + name]
         if (pluginSetting.enable) {
           pluginController.loadPlugin(name)
+        } else {
+          log.info(`Do not load plugin ${name} (${pluginFile}) as it is not enabled!`)
         }
       } else {
         settingsController.set('plugin_' + name, { enable: false })
