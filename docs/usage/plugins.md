@@ -10,12 +10,11 @@ has_toc: true
 # Plugins
 {: .no_toc }
 
-This page is a guide to install plugins, if you want to develop one instead look [here](/dev/plugins)
+This page is a guide to install plugins, if you want to develop one instead look [here](/dev/plugins).  
+__Please note that some plugins are officially supported and distributed along with the release__
 
 1. TOC
 {:toc}
-
-
 
 ## Install
 
@@ -49,7 +48,7 @@ __with docker__
 docker-compose restart
 ```
 
-# List of plugins
+# List of embedded plugins
 
 ## __Telegram__
 
@@ -57,6 +56,5 @@ This plugin republishes events to Telegram channels or groups.
 The goal is to spread the info of our networks to the capitalist cyberspace, and pull otherwise isolated people to our radical and free part of the internet.
 
 - **Website**: [https://framagit.org/bcn.convocala/gancio-plugin-telegram-bridge](https://framagit.org/bcn.convocala/gancio-plugin-telegram-bridge)
-- **Download**: [gancio-plugin-telegram-bridge-v0.2.0.zip](https://framagit.org/les/gancio-plugin-telegram-bridge/-/archive/v0.2.0/gancio-plugin-telegram-bridge-v0.2.0.zip)
-- **Release**: v0.2.0 / 10 Dec '22
+- **Release**: https://framagit.org/bcn.convocala/gancio-plugin-telegram-bridge/-/commit/af0eed7b42242ba484d9828157f1be0355bba69b
 
