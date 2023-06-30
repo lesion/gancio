@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const pkg = require('../package.json')
 const path = require('path')
-const accountsCLI = require('./cli/accounts')
+const usersCLI = require('./cli/users')
 
 process.env.cwd = process.env.GANCIO_DATA || path.resolve('./')
 
@@ -29,7 +29,7 @@ require('yargs')
       return absolute_config_path
     }})
   .command(['start', 'run', '$0'], 'Start gancio', {}, start)
-  .command(['accounts'], 'Manage accounts', accountsCLI)
+  .command(['users'], 'Manage users', usersCLI)
   .help('h')
   .alias('h', 'help')
   .epilog('Made with ❤ by underscore hacklab - https://gancio.org')
