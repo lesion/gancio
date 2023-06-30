@@ -86,7 +86,7 @@ const pluginController = {
     }
 
     if (plugin.unload && typeof plugin.unload === 'function') {
-      plugin.unload({ settings: settingsController.settings }, settings)
+      plugin.unload()
     }
 
   },
