@@ -1,5 +1,17 @@
 All notable changes to this project will be documented in this file.
 
+### 1.6.14 - 30 June '23
+  - improve CLI accounts operations ([documentation](https://gancio.org/usage/cli))
+  - allow plugins to expose API ([documentation](http://gancio.org/dev/plugins))
+  - allow plugins to access DB ([documentation](http://gancio.org/dev/plugins))
+  - show map on the places page, #276 #30
+  - add node v18 support, #278
+  - fix media update, #285
+  - fix nodejs v14 compatibility in export
+  - fix invalid event microdata, #277
+  - fix recurrent event, #280
+  - update deps and locales
+
 ### 1.6.13 - 16 may '23
   - fix feed, ics, json exports
 
@@ -134,7 +146,7 @@ All notable changes to this project will be documented in this file.
   - restore removed icons
 
 ### 1.5.5 - 21 set '22
-  - fix #185 - wrong res.download api usage 
+  - fix #185 - wrong res.download api usage
   - fix some dialog background on light theme
   - update sequelize and remove live patch
   - improve events filtering on selected day
@@ -202,7 +214,7 @@ All notable changes to this project will be documented in this file.
   - fix plain description meta
   - fix recurrent events always shown #150
   - remove `less` and `less-loader` dependency
-  
+
 ### 1.4.3 - 10 mar '22
   - fix [#140](https://framagit.org/les/gancio/-/issues/140) - Invalid date
   - fix [#141](https://framagit.org/les/gancio/-/issues/141) - Cannot change logo
@@ -285,7 +297,7 @@ All notable changes to this project will be documented in this file.
   - fix `Note` remove from fediverse
   - AP Actor is now `Application`, was `Person`
   - better handling event AP representations
-  
+
   this release is a step forward to improve AP compatibility with other platforms, thanks @tcit
 
 ### 1.2.0 - 9 nov '21
@@ -417,7 +429,7 @@ This release is a complete rewrite of frontend UI and many internals, main chang
 - use html2text for event description in og: meta
 - update deps
 - fix a moment.js typo from/to issue
-- fix #73 
+- fix #73
 
 ### 0.21.0
 - a new recurring events logic (a la taskwarrior):
@@ -537,7 +549,7 @@ This release is a complete rewrite of frontend UI and many internals, main chang
 ### 0.14.18
 - [improve] better quality for images
 - [fix] password recovery email
-- [feat] new action field for notification 
+- [feat] new action field for notification
 - [feat] add DEBUG env variable in docker-compose.yml
 - [style] fixed width in confirmation events table
 - [fix] #38 timezone issue in rss export and using tor...

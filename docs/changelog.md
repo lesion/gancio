@@ -8,6 +8,18 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.6.14 - 30 June '23
+  - improve CLI accounts operations ([documentation](https://gancio.org/usage/cli))
+  - allow plugins to expose API ([documentation](http://gancio.org/dev/plugins))
+  - allow plugins to access DB ([documentation](http://gancio.org/dev/plugins))
+  - show map on the places page, [#276]((https://framagit.org/les/gancio/-/issues/276)) #30
+  - add node v18 support, [#278]((https://framagit.org/les/gancio/-/issues/278))
+  - fix media update, [#285]((https://framagit.org/les/gancio/-/issues/285))
+  - fix nodejs v14 compatibility in export
+  - fix invalid event microdata, [#277]((https://framagit.org/les/gancio/-/issues/277))
+  - fix recurrent event, [#280]((https://framagit.org/les/gancio/-/issues/280))
+  - update deps and locales
+
 ### 1.6.13 - 16 may '23
   - fix feed, ics, json exports
 
