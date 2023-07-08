@@ -44,7 +44,7 @@ let config = {
       }
     } else {
       config.status = 'SETUP'
-      console.info('> Configuration file does not exists, running setup..')
+      console.info('> Configuration file does not exists...')
     }
   }
 }

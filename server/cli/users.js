@@ -1,6 +1,10 @@
 let db
 function _initializeDB () {
   const config = require('../config')
+  if (config.status !== 'CONFIGURED') {
+    console.error(`> Cannot run CLI before setup (are you in the correct path?)`)
+    process.exit(1)
+  }
   config.log_level = 'error'
   db = require('../api/models/index')
   return db.initialize()
