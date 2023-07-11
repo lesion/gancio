@@ -1,7 +1,7 @@
 {
     "common": {
         "add_event": "Sortu ekitaldia",
-        "next": "Jarraitu",
+        "next": "Hurrengoa",
         "export": "Esportatu",
         "send": "Bidali",
         "where": "Non",
@@ -81,7 +81,7 @@
         "announcements": "Iragarpenak",
         "url": "URLa",
         "place": "Lekua",
-        "label": "Izena",
+        "label": "Etiketa",
         "max_events": "Gehienezko ekitaldi kopurua",
         "import": "Inportatu",
         "reset": "Berrezarri",
@@ -99,7 +99,9 @@
         "recurring_event_actions": "Ekitaldi errepikarien eragiketak",
         "content": "Edukia",
         "admin_actions": "Administratzaile eragiketak",
-        "tag": "Etiketa"
+        "tag": "Etiketa",
+        "latitude": "Latitudea",
+        "longitude": "Longitudea"
     },
     "login": {
         "description": "Saioa hasten baduzu ekitaldi berriak sortu ahal izango dituzu.",
