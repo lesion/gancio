@@ -1,7 +1,7 @@
 {
     "common": {
         "add_event": "Sortu ekitaldia",
-        "next": "Jarraitu",
+        "next": "Hurrengoa",
         "export": "Esportatu",
         "send": "Bidali",
         "where": "Non",
@@ -81,7 +81,7 @@
         "announcements": "Iragarpenak",
         "url": "URLa",
         "place": "Lekua",
-        "label": "Izena",
+        "label": "Etiketa",
         "max_events": "Gehienezko ekitaldi kopurua",
         "import": "Inportatu",
         "reset": "Berrezarri",
@@ -99,7 +99,13 @@
         "recurring_event_actions": "Ekitaldi errepikarien eragiketak",
         "content": "Edukia",
         "admin_actions": "Administratzaile eragiketak",
-        "tag": "Etiketa"
+        "tag": "Etiketa",
+        "latitude": "Latitudea",
+        "longitude": "Longitudea",
+        "search_coordinates": "Bilbatu koordenatuak",
+        "online": "Online",
+        "test": "Proba",
+        "show_preview": "Erakutsi aurrebista"
     },
     "login": {
         "description": "Saioa hasten baduzu ekitaldi berriak sortu ahal izango dituzu.",
@@ -181,7 +187,10 @@
         "address_description_osm": "Bilatu koordenatuak helbidea idatziz. (<a href='http://osm.org/copyright'>OpenStreetMap</a> kolaboratzaileak)",
         "show_multidate": "data anitzeko ekitaldiak",
         "where_advanced_options": "Lekua - Aukera aurreratuak",
-        "where_advanced_options_description": "Zehaztu hemen lekuaren ezaugarri gehigarriak"
+        "where_advanced_options_description": "Zehaztu hemen lekuaren ezaugarri gehigarriak",
+        "online_locations_help": "Esaterako bideokonferentzia baten URLa eta URL alternatiboa (gehienez 3)",
+        "online_locations": "Online kokapenak",
+        "online_locations_fallback_urls": "Esteka alternatiboak"
     },
     "admin": {
         "place_description": "Lekua edo helbidea oker badago, alda dezakezu.<br/>Leku honekin lotutako iraganeko eta etorkizuneko ekitaldien helbidea aldatuko da.",
@@ -297,7 +306,9 @@
         "geocoding_test_success": "Geokodeketa zerbitzua {service_name}-(e)n martxan dago",
         "tilelayer_test_success": "Lauza-geruzen zerbitzua {service_name}(e)n martxan dago",
         "colors": "Koloreak",
-        "edit_tag": "Editatu etiketa"
+        "edit_tag": "Editatu etiketa",
+        "allow_online_event_hint": "URLak eskatu ",
+        "allow_online_event": "Online ekitaldiak ahalbidetu"
     },
     "auth": {
         "not_confirmed": "Oraindik baieztatu gabe dago…",
@@ -338,7 +349,9 @@
     },
     "validators": {
         "email": "Sartu baliozko eposta bat",
-        "required": "{fieldName} beharrezkoa da"
+        "required": "{fieldName} beharrezkoa da",
+        "latitude": "Sartu baliozko latitude bat (-90 < latitudea < 90)",
+        "longitude": "Sartu baliozko latitude bat (-180 < latitudea < 180)"
     },
     "setup": {
         "start": "Hasi",
