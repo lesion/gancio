@@ -344,7 +344,7 @@
         "required": "{fieldName} is required",
         "email": "Insert a valid email",
         "latitude": "Insert a valid latitude (-90 < latitude < 90)",
-        "longitude": "Insert a valid latitude (-180 < latitude < 180)"
+        "longitude": "Insert a valid longitude (-180 < longitude < 180)"
     },
     "about": "\n  <p><a href='https://gancio.org'>Gancio</a> is a shared agenda for local communities.</p>\n  ",
     "oauth": {
