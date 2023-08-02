@@ -356,7 +356,7 @@
     "validators": {
         "email": "Introduce un correo electrónico valido",
         "required": "{fieldName} es requerido",
-        "longitude": "Introduce una latitud válida (-180 < latitud < 180)",
+        "longitude": "Introduce una longitud válida (-180 < longitud < 180)",
         "latitude": "Introduce una latitud válida (-90 < latitud < 90)"
     },
     "setup": {
