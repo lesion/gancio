@@ -343,7 +343,7 @@
         "required": "Campo {fieldName} necessario",
         "email": "Inserisci un'e-mail valida",
         "latitude": "Inserisci una latitudine valida (-90 < latitudine < 90)",
-        "longitude": "Inserisci una latitudine valida (-180 < latitude < 180)"
+        "longitude": "Inserisci una longitudine valida (-180 < longitudine < 180)"
     },
     "about": "\n  <p> <a href='https://gancio.org'> Gancio </a> è un'agenda condivisa per le comunità locali. </p>\n  ",
     "oauth": {
