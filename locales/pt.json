@@ -206,7 +206,15 @@
         "admin_email_help": "O e-mail que utilizaremos como remetente para enviar mensagens. Este é também o endereço para o qual são enviadas as mensagens da administração",
         "allow_multidate_event": "Permitir eventos com múltiplas datas",
         "delete_tag_confirm": "Tem certeza que quer remover a etiqueta \"{tag}\"? A etiqueta será removida de {n} eventos.",
-        "delete_collection_confirm": "Têm a certeza que quer remover a coleção <u>{collection}</u>?"
+        "delete_collection_confirm": "Têm a certeza que quer remover a coleção <u>{collection}</u>?",
+        "colors": "Cores",
+        "geocoding_provider_help": "O provedor padrão é o Nominatim",
+        "geocoding_provider_type_help": "O software padrão é o Nominatim",
+        "geocoding_countrycodes": "Código de países",
+        "geocoding_provider_type": "Software de geocodificação",
+        "geocoding_provider": "Provedor de geocodificação",
+        "tilelayer_provider_help": "O provedor padrão é o  OpenStreetMap",
+        "edit_tag_help": "Você pode alterar o marcador ao substituí-lo por um novo ou mesclando-o com um já existente. Os {n} eventos associados também serão alterados."
     },
     "event": {
         "follow_me_description": "Uma das maneiras de se manter atualizado com os eventos publicados aqui em {title},\né seguir a conta <u>{account}</u> no Fediverso, por exemplo, via Mastodon, e possivelmente adicionar recursos para um evento a partir de lá.<br/><br/>\nSe nunca ouviu falar sobre Mastodon ou no Fediverso nós recomendamos ler <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>este artigo</a>.<br/><br/>Entre com o seu domínio abaixo (e.g. mastodon.social)",
@@ -317,7 +325,9 @@
     },
     "validators": {
         "email": "Insira um e-mail válido",
-        "required": "{fieldName} é obrigatório"
+        "required": "{fieldName} é obrigatório",
+        "longitude": "Insira uma longitude válida (-180 < longitude < 180)",
+        "latitude": "Insira uma latitude válida (90 < latitude < 90)"
     },
     "about": "\n  <p><a href='https://gancio.org'>Gancio</a> é uma agenda compartilhada para comunidades locais.</p>\n  ",
     "login": {
