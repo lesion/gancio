@@ -106,7 +106,8 @@
         "search_coordinates": "Buscar coordenadas",
         "online": "En liña",
         "show_preview": "Mostrar vista previa",
-        "test": "Proba"
+        "test": "Proba",
+        "clone": "Clonar"
     },
     "recover": {
         "not_valid_code": "Algo fallou."
@@ -332,11 +333,11 @@
     },
     "ordinal": {
         "1": "primeiro",
+        "2": "segundo",
         "3": "terceiro",
         "4": "cuarto",
         "5": "quinto",
-        "-1": "último",
-        "2": "segundo"
+        "-1": "último"
     },
     "validators": {
         "required": "{fieldName} é requerido",

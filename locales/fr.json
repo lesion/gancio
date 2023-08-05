@@ -106,7 +106,8 @@
         "online": "En ligne",
         "search_coordinates": "Rechercher les coordonnées",
         "test": "Tester",
-        "show_preview": "Afficher l'aperçu"
+        "show_preview": "Afficher l'aperçu",
+        "clone": "Cloner"
     },
     "event": {
         "follow_me_description": "Une des manières de rester informé sur les évènements publiés ici sur {title}\nest de suivre le compte <u>{account}</u> sur le fediverse, par exemple via Mastodon, et pourquoi pas d'ajouter des ressources à un évènement à partir de là.<br/><br/>\nSi vous n'avez jamais entendu parler de Mastodon and du fediverse, nous vous recommandons de lire <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>cet article (en anglais)</a>.<br/><br/>Saisissez votre nom d'instance ci-dessous (par ex. mastodon.social)",
@@ -309,12 +310,12 @@
         "required": "{fieldName} est requis"
     },
     "ordinal": {
-        "-1": "dernier",
-        "5": "cinquième",
-        "4": "quatrième",
-        "3": "troisième",
+        "1": "premier",
         "2": "deuxième",
-        "1": "premier"
+        "3": "troisième",
+        "4": "quatrième",
+        "5": "cinquième",
+        "-1": "dernier"
     },
     "confirm": {
         "valid": "Votre compte a bien été confirmé, vous pouvez désormais <a href=\"/login\">vous connecter</a>",

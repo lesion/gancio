@@ -1,6 +1,7 @@
 html, body {
   scrollbar-width: thin;
-  overflow: auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden;
   scrollbar-color: #FF4511 #111;
   font-family: sans-serif;
 }

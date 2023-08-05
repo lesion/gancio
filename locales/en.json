@@ -104,7 +104,8 @@
         "search_coordinates": "Search coordinates",
         "online": "On-line",
         "test": "Test",
-        "show_preview": "Show preview"
+        "show_preview": "Show preview",
+        "clone": "Clone"
     },
     "login": {
         "description": "By logging in you can publish new events.",

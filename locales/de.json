@@ -100,7 +100,8 @@
         "help_translate": "Hilf beim Übersetzen mit",
         "content": "Inhalt",
         "admin_actions": "Aktionen der Administrierenden",
-        "recurring_event_actions": "Einstellungen für regelmäßige Veranstaltungen"
+        "recurring_event_actions": "Einstellungen für regelmäßige Veranstaltungen",
+        "clone": "Klon"
     },
     "admin": {
         "delete_footer_link_confirm": "Möchtest du diesen Link löschen?",

@@ -242,7 +242,8 @@
         "show_map": "Vis kart",
         "latitude": "breddegrad",
         "longitude": "Lengdegrad",
-        "getting_there": "Slik kommer du deg dit"
+        "getting_there": "Slik kommer du deg dit",
+        "clone": "Klone"
     },
     "about": "\n  <p><a href='https://gancio.org'>Gancio</a> er en delt agenda for lokale gemenskaper.</p>\n  ",
     "validators": {
@@ -250,12 +251,12 @@
         "required": "{fieldName} kreves"
     },
     "ordinal": {
-        "-1": "siste",
-        "5": "femte",
-        "4": "fjerde",
-        "3": "tredje",
+        "1": "første",
         "2": "andre",
-        "1": "første"
+        "3": "tredje",
+        "4": "fjerde",
+        "5": "femte",
+        "-1": "siste"
     },
     "export": {
         "list_description": "Hvis du har en nettside og ønsker å vise en liste over hendelser, bruk følgende kode",

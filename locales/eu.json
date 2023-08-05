@@ -105,7 +105,8 @@
         "search_coordinates": "Bilbatu koordenatuak",
         "online": "Online",
         "test": "Proba",
-        "show_preview": "Erakutsi aurrebista"
+        "show_preview": "Erakutsi aurrebista",
+        "clone": "Klonatu"
     },
     "login": {
         "description": "Saioa hasten baduzu ekitaldi berriak sortu ahal izango dituzu.",

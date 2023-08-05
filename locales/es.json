@@ -106,7 +106,8 @@
         "search_coordinates": "Buscar las coordenadas",
         "online": "En línea",
         "test": "Prueba",
-        "show_preview": "Mostrar una vista previa"
+        "show_preview": "Mostrar una vista previa",
+        "clone": "Clon"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",

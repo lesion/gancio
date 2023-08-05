@@ -46,9 +46,6 @@ v-container#event.h-event.pa-2.pa-sm-2(v-touch="{ left: goNext, right: goPrev }"
           v-divider
           //- info & actions
           v-list(dense nav color='transparent')
-              //- v-list-group(:append-icon='mdiChevronUp' :value='true')
-              //-   template(v-slot:activator)
-              //-     v-list-item.text-overline {{$t('common.actions')}}
 
               //- copy link
               v-list-item(@click='clipboard(`${settings.baseurl}/event/${event.slug || event.id}`)')

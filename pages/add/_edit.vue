@@ -105,12 +105,12 @@ export default {
     return true
 
   },
-  async asyncData({ params, $axios, error, $auth, $time }) {
+  async asyncData({ query, params, $axios, error, $auth, $time, store }) {
     if (params.edit) {
 
       const data = { event: { place: {}, media: [] } }
       data.id = params.edit
-      data.edit = true
+      data.edit = query.clone ? false : true 
       let event
       try {
         event = await $axios.$get('/event/detail/' + data.id)
@@ -138,8 +138,13 @@ export default {
 
       data.event.title = event.title
       data.event.description = event.description
-      data.event.id = event.id
+      if (data.edit) {
+        data.event.id = event.id
+      }
       data.event.tags = event.tags
+      if (event.media && event.media.length > 0 && !data.edit) {
+        event.media[0].url = `${store.state.settings.baseurl}/media/${event.media[0].url}`
+      }
       data.event.media = event.media || []
       data.event.parentId = event.parentId
       data.event.recurrent = event.recurrent

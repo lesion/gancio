@@ -104,12 +104,12 @@
         "tilelayer_test_button": "Tilelayer testen"
     },
     "ordinal": {
-        "4": "vierde",
         "1": "eerste",
-        "3": "derde",
-        "-1": "laatste",
         "2": "tweede",
-        "5": "vijfde"
+        "3": "derde",
+        "4": "vierde",
+        "5": "vijfde",
+        "-1": "laatste"
     },
     "common": {
         "plugins": "Plugins",
@@ -210,7 +210,8 @@
         "reset": "Resetten",
         "import": "Importeren",
         "label": "Label",
-        "collections": "Collecties"
+        "collections": "Collecties",
+        "clone": "Kloon"
     },
     "login": {
         "not_registered": "Niet geregistreerd?",

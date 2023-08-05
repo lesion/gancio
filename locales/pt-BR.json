@@ -104,7 +104,8 @@
         "search_coordinates": "Procurar coordenadas",
         "online": "On-line",
         "test": "Teste",
-        "show_preview": "Mostrar pré-visualização"
+        "show_preview": "Mostrar pré-visualização",
+        "clone": "Clone"
     },
     "admin": {
         "user_block_confirm": "Têm a certeza que quer bloquear o utilizador {user}?",
@@ -297,12 +298,12 @@
         "redirected_to": "Depois da confirmação, será redirecionado para <code>{url}</code>"
     },
     "ordinal": {
-        "2": "segundo",
         "1": "primeiro",
-        "5": "quinto",
-        "-1": "último",
+        "2": "segundo",
         "3": "terceiro",
-        "4": "quarto"
+        "4": "quarto",
+        "5": "quinto",
+        "-1": "último"
     },
     "settings": {
         "remove_account": "Ao pressionar este botão a sua conta de utilizador será apagada. Eventos que publicou serão mantidos.",

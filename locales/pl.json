@@ -64,7 +64,8 @@
         "embed": "Osadź",
         "embed_help": "Skopiuj poniższy kod na swoją stronę internetową, a wydarzenie będzie wyglądało tak jak tutaj",
         "feed": "Kanał RSS",
-        "feed_url_copied": "Otwórz skopiowany link w swoim czytniku RSS"
+        "feed_url_copied": "Otwórz skopiowany link w swoim czytniku RSS",
+        "clone": "Klon"
     },
     "settings": {
         "change_password": "Zmień swoje hasło",
@@ -75,11 +76,11 @@
     },
     "ordinal": {
         "1": "pierwszy",
-        "5": "piąty",
-        "-1": "ostatni",
         "2": "drugi",
         "3": "trzeci",
-        "4": "czwarty"
+        "4": "czwarty",
+        "5": "piąty",
+        "-1": "ostatni"
     },
     "confirm": {
         "not_valid": "Coś poszło nie tak.",
