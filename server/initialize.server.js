@@ -30,6 +30,7 @@ const initialize = {
       await db.sequelize.authenticate()
       log.debug('Running migrations')
       await db.runMigrations()
+      await db.fixMariaDBJSON()
       await settingsController.load()
       config.status = 'READY'
     } else {

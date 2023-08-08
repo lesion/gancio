@@ -6,7 +6,7 @@ const config = require('../../config')
 const log = require('../../log')
 const SequelizeSlugify = require('sequelize-slugify')
 const DB = require('./models')
-
+const semver = require('semver')
 const models = {
   Announcement: require('./announcement'),
   APUser: require('./ap_user'),
@@ -104,8 +104,39 @@ const db = {
       return true
     }
   },
+  async fixMariaDBJSON () {
+
+    // manually fix mariadb JSON wrong parse
+    if (db.sequelize.options.dialect === 'mariadb' && semver.lt('10.5.2', db.sequelize.options.databaseVersion)) {
+      try {
+        const ret = await db.sequelize.query('SHOW CREATE TABLE `settings`')
+        if (!ret[0][0]['Create Table'].toLowerCase().includes('json_valid')){
+          await db.sequelize.query('alter table settings modify `value` JSON')
+          await db.sequelize.query('alter table ap_users modify `object` JSON')
+          await db.sequelize.query('alter table events modify `recurrent` JSON')
+          await db.sequelize.query('alter table events modify `likes` JSON')
+          await db.sequelize.query('alter table events modify `boost` JSON')
+          await db.sequelize.query('alter table events modify `media` JSON')
+          await db.sequelize.query('alter table events modify `online_locations` JSON')
+          await db.sequelize.query('alter table filters modify `tags` JSON')
+          await db.sequelize.query('alter table filters modify `places` JSON')
+          await db.sequelize.query('alter table instances modify `data` JSON')
+          await db.sequelize.query('alter table notifications modify `filters` JSON')
+          await db.sequelize.query('alter table resources modify `data` JSON')
+          await db.sequelize.query('alter table users modify `settings` JSON')
+          await db.sequelize.query('alter table users modify `rsa` JSON')
+          log.info(`MariaDB JSON migrations done`)
+        } else {
+          log.debug('MariaDB JSON issue already fixed')
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  },
   async runMigrations() {
     const logging = config.status !== 'READY' ? false : log.debug.bind(log)
+
     const umzug = new Umzug({
       storage: 'sequelize',
       storageOptions: { sequelize: db.sequelize },
