@@ -187,8 +187,6 @@ import EventAdmin from '@/components/eventAdmin'
 import EmbedEvent from '@/components/embedEvent'
 import EventMapDialog from '@/components/EventMapDialog'
 
-const { htmlToText } = require('html-to-text')
-
 import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose, mdiMap,
   mdiEye, mdiEyeOff, mdiDelete, mdiRepeat, mdiLock, mdiFileDownloadOutline, mdiShareAll,
   mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker, mdiChevronUp, mdiMonitorAccount, mdiBookmark } from '@mdi/js'
@@ -311,7 +309,7 @@ export default {
       return this.event.media && this.event.media.length
     },
     plainDescription () {
-      return htmlToText(this.event.description && this.event.description.replace('\n', '').slice(0, 1000))
+      return this.event.plain_description || ''
     },
     currentAttachmentLabel () {
       return get(this.selectedResource, `data.attachment[${this.currentAttachment}].name`, '')

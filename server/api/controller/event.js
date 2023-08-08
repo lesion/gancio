@@ -9,6 +9,7 @@ const { DateTime } = require('luxon')
 const helpers = require('../../helpers')
 const Col = helpers.col
 const notifier = require('../../notifier')
+const { htmlToText } = require('html-to-text')
 
 const { Event, Resource, Tag, Place, Notification, APUser } = require('../models/models')
 
@@ -181,6 +182,8 @@ const eventController = {
       event.next = next && (next.slug || next.id)
       event.prev = prev && (prev.slug || prev.id)
       event.tags = event.tags.map(t => t.tag)
+      event.plain_description = htmlToText(event.description, event.description.replace('\n', '').slice(0, 1000) )
+
       if (format === 'json') {
         res.json(event)
       } else if (format === 'ics') {
