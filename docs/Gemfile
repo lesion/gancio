@@ -22,7 +22,7 @@ gem "mini_magick"
 # If you have any plugins, put them here!
 group :jekyll_plugins do
   gem "jekyll-feed"
-  gem "jemoji"
+  gem "jemoji", ">= 0.13.0"
   gem "premonition"
   gem "jekyll-default-layout"
 end
