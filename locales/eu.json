@@ -309,7 +309,8 @@
         "colors": "Koloreak",
         "edit_tag": "Editatu etiketa",
         "allow_online_event_hint": "URLak eskatu ",
-        "allow_online_event": "Online ekitaldiak ahalbidetu"
+        "allow_online_event": "Online ekitaldiak ahalbidetu",
+        "delete_tag_confirm": "Ziur al zaude \"{tag}\" etiketa ezabatu nahi duzula? Etiketa {n} ekitalditik ezabatuko da."
     },
     "auth": {
         "not_confirmed": "Oraindik baieztatu gabe dago…",
