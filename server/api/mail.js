@@ -37,7 +37,7 @@ const mail = {
         }
       },
       message: {
-        from: `📅 ${settings.title} <${settings.admin_email}>`
+        from: `"📅 ${settings.title}" <${settings.admin_email}>`
       },
       send: true,
       i18n: {
