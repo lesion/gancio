@@ -111,7 +111,7 @@
     "event": {
         "follow_me_description": "Une des manières de rester informé sur les évènements publiés ici sur {title}\nest de suivre le compte <u>{account}</u> sur le fediverse, par exemple via Mastodon, et pourquoi pas d'ajouter des ressources à un évènement à partir de là.<br/><br/>\nSi vous n'avez jamais entendu parler de Mastodon and du fediverse, nous vous recommandons de lire <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>cet article (en anglais)</a>.<br/><br/>Saisissez votre nom d'instance ci-dessous (par ex. mastodon.social)",
         "interact_with_me_at": "Interagissez avec moi sur le fediverse à",
-        "recurrent_1m_ordinal": "Le {n} {days} de chaque mois",
+        "recurrent_1m_ordinal": "Chaque {n} {days} du mois",
         "import_ICS": "Importer à partir d'un fichier ICS",
         "import_URL": "Importer à partir d'une URL",
         "remove_recurrent_confirmation": "Êtes-vous sûr·e de vouloir supprimer cet évènement récurrent ?\nLes évènements passés seront conservés, mais aucun évènement futur de sera créé.",
@@ -149,7 +149,7 @@
         "anon": "Anonyme",
         "ics": "ICS",
         "each_2w": "Une semaine sur deux",
-        "recurrent_2m_ordinal": "Les {n} {days} du mois un mois sur deux",
+        "recurrent_2m_ordinal": "Chaque {n} {days} par mois un mois sur deux",
         "recurrent_2m_days": "Le {days} un mois sur deux",
         "recurrent_2w_days": "Un {days} sur deux",
         "edit_recurrent": "Modifier l’évènement récurrent :",
@@ -161,8 +161,14 @@
         "download_flyer": "Télécharger le flyer",
         "show_multidate": "évènements sur plusieurs jours",
         "choose_focal_point": "Choisir le centre d'intérêt",
-        "address_description_osm": "Quelle est l'adresse?  (<a href='http://osm.org/copyright'>OpenStreetMap</a> contributeurs)",
-        "address_description": "Quelle adresse ?"
+        "address_description_osm": "Chercher des coordonnées en tapant l'adresse. (<a href='http://osm.org/copyright'>OpenStreetMap</a> contributeurs)",
+        "address_description": "Quelle adresse ?",
+        "where_advanced_options": "Lieu - Option avancées",
+        "online_locations_fallback_urls": "Liens alternatifs",
+        "where_advanced_options_description": "Définir ici les propriétés additionnelles du lieu",
+        "online_locations": "Localisations en ligne",
+        "online_locations_help": "Par exemple l'URL d'un salon de visioconférence et une URL alternative (max. 3)",
+        "address_geocoded_disclaimer": "Si vous ne pouvez pas trouver l'<strong>adresse</strong> our le <strong>numéro</strong> que vous cherchez dans les résultats de géocodage, vous pouvez les insérer manuellement dans le champ 'Adresse' sans coordonnées précises. Par ailleurs considérez que le projet <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> est ouvert aux contributions pour corriger cela. Si vous avez un téléphone Android, nous recommendons <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> "
     },
     "register": {
         "description": "Les mouvements sociaux doivent s'organiser et s'autofinancer.<br/>\n<br/>Avant de pouvoir publier, <strong> le compte doit être approuvé</strong>, considérez que <strong> derrière ce site vous trouverez de vraies personnes</strong>, à qui vous pouvez écrire en deux lignes pour exprimer les évènements que vous souhaiteriez publier.",
@@ -269,7 +275,7 @@
         "config_plugin": "Configuration du plugin",
         "colors": "Couleurs",
         "allow_multidate_event": "Autoriser les évènements sur plusieurs jours",
-        "delete_tag_confirm": "Etes vous certain.e de vouloir supprimer le tag \"{tag}\"? Le tag sera supprimé de {n} évènements.",
+        "delete_tag_confirm": "Êtes vous certain.e de vouloir supprimer le tag \"{tag}\"? Le tag sera supprimé de {n} évènements.",
         "hide_thumbs": "Cacher les vignettes",
         "hide_calendar": "Cacher le calendrier",
         "default_images": "Images par défaut",
@@ -292,9 +298,13 @@
         "geolocation": "Géolocalisation",
         "edit_tag_help": "Vous pouvez changer le tag en le remplaçant par un nouveau ou bien fusionner celui-ci avec l'existant. Les {n}  évènements associés seront modifiés.",
         "edit_tag": "Modifier le tag",
-        "delete_collection_confirm": "Etes vous certain.e de vouloir supprimer la collection <u>{collection}</u>?",
+        "delete_collection_confirm": "Êtes vous certain⋅e de vouloir supprimer la collection <u>{collection}</u>?",
         "admin_email_help": "L'adresse que nous utilisons comme expéditeur pour envoyer des courriels. Il s'agit également de l'adresse à laquelle les mails admin sont envoyés.",
-        "geolocation_description": "<b>1. Définir un fournisseur de service de géolocalisation</b>.<br>Actuellement, parmi ceux listés dans le <a href=\"https://wiki.openstreetmap.org/wiki/Nominatim#Alternatives_.2F_Third-party_providers\">wiki d'OpenStreetMap</a>, il y a un service de support pour logiciel <a href=\"https://github.com/osm-search/Nominatim\">Nominatim</a> et <a href=\"https://github.com/komoot/photon\">Photon</a>.<br>Vous pouvez utiliser l'une des démos officielles en copiant le lien dans le champs ' Geocoding provider' :<ul><li>https://nominatim.openstreetmap.org/search (<a href=\"https://operations.osmfoundation.org/policies/nominatim/\">Terms of Service</a>)</li><li>https://photon.komoot.io/api/ (<a href=\"https://photon.komoot.io/\">Terms of Service</a>)</li></ul><br><b>2. Definir un fournisseur de fonds de carte.</b><br>Vous pouvez en trouvez une liste ici: <a href=\"https://leaflet-extras.github.io/leaflet-providers/preview/\">https://leaflet-extras.github.io/leaflet-providers/preview/</a>"
+        "geolocation_description": "<b>1. Définir un fournisseur de service de géolocalisation</b>.<br>Actuellement, parmi ceux listés dans le <a href=\"https://wiki.openstreetmap.org/wiki/Nominatim#Alternatives_.2F_Third-party_providers\">wiki d'OpenStreetMap</a>, il y a un service de support pour logiciel <a href=\"https://github.com/osm-search/Nominatim\">Nominatim</a> et <a href=\"https://github.com/komoot/photon\">Photon</a>.<br>Vous pouvez utiliser l'une des démos officielles en copiant le lien dans le champs ' Fournisseurs de géocodage' :<ul><li>https://nominatim.openstreetmap.org/search (<a href=\"https://operations.osmfoundation.org/policies/nominatim/\">Conditions d'utilisations</a>)</li><li>https://photon.komoot.io/api/ (<a href=\"https://photon.komoot.io/\">Conditions d'utilisations</a>)</li></ul><br><b>2. Définir un fournisseur de fonds de carte.</b><br>Vous pouvez en trouvez une liste ici: <a href=\"https://leaflet-extras.github.io/leaflet-providers/preview/\">https://leaflet-extras.github.io/leaflet-providers/preview/</a>",
+        "header_image": "Image d'en-tête",
+        "allow_online_event_hint": "Demander des liens ",
+        "fallback_image": "Image de rechange",
+        "allow_online_event": "Permettre les évènements en ligne"
     },
     "oauth": {
         "scopes": {
@@ -306,7 +316,9 @@
     "about": "\n  <p><a href='https://gancio.org'>Gancio</a> est un agenda partagé pour les communautés locales.</p>\n  ",
     "validators": {
         "email": "Saisissez une adresse courriel valide",
-        "required": "{fieldName} est requis"
+        "required": "{fieldName} est requis",
+        "latitude": "Insérer une latitude valide (entre -90 et 90)",
+        "longitude": "Insérer une longitude valide (entre -180 et 180)"
     },
     "ordinal": {
         "-1": "dernier",
