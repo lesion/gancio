@@ -1,5 +1,5 @@
 All notable changes to this project will be documented in this file.
-### 1.6.15
+### ....
   - [feat] clone event
   - [feat] include Brazilian Portuguese (pt-br) and Portugual Portuguese (pt-pt) [#292](https://framagit.org/les/gancio/-/issues/292)
   - [feat] update telegram plugin bridge to v1.0.3, #fix 299
