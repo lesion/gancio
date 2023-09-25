@@ -18,7 +18,7 @@ v-container
                 :rules="[setting.required ? $validators.required(setting.description) : false]")
 
               v-text-field(v-if='setting.type === "NUMBER"' v-model='selectedPlugin.settingsValue[name]' type='number' :label='setting.description')
-              v-switch(v-if='setting.type === "CHECK"' v-model='selectedPlugin.settingsValue[name]' :label='setting.description')
+              v-switch(v-if='setting.type === "CHECK"' v-model='selectedPlugin.settingsValue[name]' :label='setting.description' inset)
               v-select(v-if='setting.type === "LIST"' v-model='selectedPlugin.settingsValue[name]' :items='setting.items' :label='setting.description')
           v-switch(:label="$t('common.enable')" inset color='primary' v-model='selectedPlugin.settingsValue["enable"]')
       v-card-actions
