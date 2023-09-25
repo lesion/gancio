@@ -79,7 +79,6 @@ v-container
 <script>
 import { mapActions, mapState } from 'vuex'
 import get from 'lodash/get'
-import axios from 'axios'
 import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown } from '@mdi/js'
 
 export default {
@@ -136,13 +135,13 @@ export default {
           this.instance_url = `https://${this.instance_url}`
         }
         this.instance_url = this.instance_url.replace(/\/$/, '')
-        const instance = await axios.get(`${this.instance_url}/.well-known/nodeinfo/2.1`)
+        const instance = await this.$axios.$get(`${this.instance_url}/.well-known/nodeinfo/2.1`)
         this.setSetting({
           key: 'trusted_instances',
           value: this.settings.trusted_instances.concat({
             url: this.instance_url,
-            name: get(instance, 'data.metadata.nodeName', ''),
-            label: get(instance, 'data.metadata.nodeLabel', '')
+            name: get(instance, 'metadata.nodeName', ''),
+            label: get(instance, 'metadata.nodeLabel', '')
           })
         })
         this.$refs.form.reset()
