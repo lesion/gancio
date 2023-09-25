@@ -3,7 +3,7 @@ import { ca, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, ru, zhHans  } from 
 
 export default ({ res, nuxtState }) => {
 
-  const settings = process.server ? res.locals.settings : nuxtState.state.settings
+  const settings = process.server ? (res.locals.settings || {}) : nuxtState.state.settings || {}
   
   return {
     lang: { locales: { ca, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, ru, zhHans } },
