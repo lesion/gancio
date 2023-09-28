@@ -81,7 +81,7 @@
     "pg": "^8.8.0",
     "sequelize": "^6.28.0",
     "sequelize-slugify": "^1.6.2",
-    "sharp": "^0.27.2",
+    "sharp": "^0.32.6",
     "sqlite3": "^5.1.4",
     "telegraf": "^4.9.1",
     "tiptap": "^1.32.0",
