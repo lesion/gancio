@@ -53,7 +53,7 @@ put something like this in `/opt/gancio/user_locale/en.json` to override the reg
 english:  
 ```json
 {
-  "registrer": {
+  "register": {
     "description": "My new registration page description"
   }
 }
