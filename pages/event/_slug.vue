@@ -19,7 +19,7 @@ v-container#event.h-event.pa-2.pa-sm-2(v-touch="{ left: goNext, right: goPrev }"
           v-container.eventDetails
             time.dt-start(:datetime='$time.unixFormat(event.start_datetime, "yyyy-MM-dd HH:mm")' itemprop="startDate" :content='$time.unixFormat(event.start_datetime, "yyyy-MM-dd\'T\'HH:mm")')
               v-icon(v-text='mdiCalendar' small)
-              strong.ml-2.text-uppercase {{$time.when(event)}}
+              span.ml-2.text-uppercase {{$time.when(event)}}
               .d-none.dt-end(v-if='event.end_datetime' itemprop="endDate" :content='$time.unixFormat(event.end_datetime,"yyyy-MM-dd\'T\'HH:mm")') {{$time.unixFormat(event.end_datetime,"yyyy-MM-dd'T'HH:mm")}}
             div.font-weight-light.mb-3 {{$time.from(event.start_datetime)}}
               small(v-if='event.parentId')  ({{$time.recurrentDetail(event)}})

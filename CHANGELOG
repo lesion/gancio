@@ -1,11 +1,13 @@
 All notable changes to this project will be documented in this file.
-### ....
+
+### 1.6.15 - 3 Oct '23
   - [feat] clone event
-  - [feat] include Brazilian Portuguese (pt-br) and Portugual Portuguese (pt-pt) [#292](https://framagit.org/les/gancio/-/issues/292)
+  - [feat] am/pm / 24hr support, fix [#294](https://framagit.org/les/gancio/-/issues/294) [#264](https://framagit.org/les/gancio/-/issues/264)
   - [feat] update telegram plugin bridge to v1.0.3, [#299](https://framagit.org/les/gancio/-/issues/299)
-  - [fix] CLI has to fail when configuration not present [#284](https://framagit.org/les/gancio/-/issues/284)
+  - [feat] include Brazilian Portuguese (pt-br) and Portugual Portuguese (pt-pt) [#292](https://framagit.org/les/gancio/-/issues/292)
   - [fix] MariaDB JSON fields manual fix
   - [fix] improve some corner case with SMTP From field [#297](https://framagit.org/les/gancio/-/issues/297)
+  - [fix] CLI has to fail when configuration not present [#284](https://framagit.org/les/gancio/-/issues/284)
   - [minor] remove html2text dep from client
   - [minor] RSS item's title format is now YYYY-MM-DD, [#300](https://framagit.org/les/gancio/-/issues/300)
 

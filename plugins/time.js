@@ -4,6 +4,21 @@ export default ({ app, store }, inject) => {
   Settings.defaultLocale = app.i18n.locale || store.state.settings.instance_locale
   const time = {
 
+    timeFormat () {
+      const time = DateTime.fromObject({ hour: 14 }, {
+        zone: store.state.settings.instance_timezone,
+        locale: app.i18n.locale || store.state.settings.instance_locale
+      }).toLocaleString({ hour: 'numeric'})
+      return time === '2 PM' ? 'ampm' : '24hr'
+    },
+
+    formatHour (value, format) {
+      return DateTime.fromFormat(value, 'HH:mm', {
+        zone: store.state.settings.instance_timezone,
+        locale: app.i18n.locale || store.state.settings.instance_locale
+      }).toLocaleString({ hour: '2-digit', minute: '2-digit'})
+    },
+
     format (date, format) {
       return DateTime.fromISO(date, {
         zone: store.state.settings.instance_timezone,
@@ -46,11 +61,11 @@ export default ({ app, store }, inject) => {
       }
       
       const start = DateTime.fromSeconds(event.start_datetime, opt)
-      let time = start.toFormat('EEEE d MMMM HH:mm')
+      let time = start.toLocaleString({ weekday: 'long', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })
       const end = event.end_datetime && DateTime.fromSeconds(event.end_datetime, opt)
       
       if (end) {
-        time += event.multidate ? ` → ${end.toFormat('EEEE d MMMM')}` : `-${end.toFormat('HH:mm')}`
+        time += event.multidate ? ` → ${end.toLocaleString({ weekday: 'long', month: 'short', day: '2-digit'})}` : `-${end.toLocaleString({hour: '2-digit', minute: '2-digit'})}`
       }
 
       if (currentYear !== start.year) {
@@ -78,9 +93,9 @@ export default ({ app, store }, inject) => {
       const { frequency, type } = parent.recurrent
       let recurrent
       if (frequency === '1w' || frequency === '2w') {
-        recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: DateTime.fromSeconds(parent.start_datetime).toFormat('EEEE') })
+        recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: DateTime.fromSeconds(parent.start_datetime).toLocaleString('EEEE') })
       } else if (frequency === '1m' || frequency === '2m') {
-        const d = type === 'ordinal' ? DateTime.fromSeconds(parent.start_datetime).day : DateTime.fromSeconds(parent.start_datetime).toFormat('EEEE')
+        const d = type === 'ordinal' ? DateTime.fromSeconds(parent.start_datetime).day : DateTime.fromSeconds(parent.start_datetime).toLocaleString('EEEE')
         if (type === 'ordinal') {
           recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: d })
         } else {
