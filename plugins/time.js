@@ -13,6 +13,7 @@ export default ({ app, store }, inject) => {
     },
 
     formatHour (value, format) {
+      if (!value) return ''
       return DateTime.fromFormat(value, 'HH:mm', {
         zone: store.state.settings.instance_timezone,
         locale: app.i18n.locale || store.state.settings.instance_locale
