@@ -1,1 +1,29 @@
-{}
+{
+    "register": {
+        "content": "Přijali jsme žádost o registraci, potvrdíme ji co nejdříve.",
+        "subject": "Žádost o registraci byla přijata"
+    },
+    "user_confirm": {
+        "content": "Ahoj, tvůj účet na <a href='{{config.baseurl}}'>{{config.title}}</a> byl vytvořený. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Potvrď ho a nastav si heslo.</a>.",
+        "subject": "Nyní můžeš začít zveřejňovat události"
+    },
+    "event_confirm": {
+        "content": "Tuto událost můžeš potvrdit na <a href='{{url}}'>této stránce </a>"
+    },
+    "admin_register": {
+        "subject": "Nová registrace",
+        "content": "{{user.email}} požádal o registraci na {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Potvrď ji <a href='{{config.baseurl}}/admin'>zde</a>."
+    },
+    "confirm": {
+        "subject": "Teď můžete začít zveřejňovat události",
+        "content": "Ahoj, tvůj účet na <a href='{{config.baseurl}}'>{{config.title}}</a> byl schválený. Napiš nám na {{config.admin_email}} pokud potřebuješ další informace."
+    },
+    "recover": {
+        "subject": "Obnova hesla",
+        "content": "Ahoj, požádali jste o změnu hesla na {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Klikni zde</a> pro potvrzení."
+    },
+    "test": {
+        "content": "Toto je testovací email, nastavení je funkční.",
+        "subject": "Nastavení SMTP je funkční"
+    }
+}
