@@ -207,6 +207,49 @@ describe('Events', () => {
 
   })
 
+
+
+  test('should not allow start_datetime greater than end_datetime', async () => {
+    const event = {
+      title: ' test title 5',
+      place_id: places[0],
+      start_datetime: dayjs().unix() + 1000,
+      end_datetime: dayjs().unix(),
+    }
+
+    const response = await request(app).post('/api/event')
+      .send(event)
+      .expect(400)
+    
+    expect(response.text).toBe('start datetime is greater than end datetime')
+  })
+
+  test('should not allow start_datetime greater than 3000', async () => {
+    const event = {
+      title: ' test title 5',
+      start_datetime: dayjs().set('year', 4000).unix(),
+      place_id: places[0],
+    }
+
+    const response = await request(app).post('/api/event')
+      .send(event)
+      .expect(400)
+
+    expect(response.text).toBe('are you sure?')
+  })
+
+  test('should validate start_datime', async () => {
+    const event = {
+      title: ' test title 5',
+      start_datetime: "antani",
+      place_id: places[0],
+    }
+
+    const response = await request(app).post('/api/event')
+      .send(event)
+      .expect(400)
+  })
+
   test('should trim tags and title', async () => {
     const event = {
       title: ' test title 4 ',

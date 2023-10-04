@@ -318,6 +318,26 @@ const eventController = {
         return res.status(400).send(`${missing_field} required`)
       }
 
+      // validate start_datetime and end_datetime
+      if (body.end_datetime) {
+        if (body.start_datetime > body.end_datetime) {
+          return res.status(400).send(`start datetime is greater than end datetime`)
+        }
+
+        if (Number(body.end_datetime) > 1000*24*60*60*365) {
+          return res.status(400).send('are you sure?')
+        }
+  
+      }
+
+      if (!Number(body.start_datetime)) {
+        return res.status(400).send(`Wrong format for start datetime`)
+      }
+
+      if (Number(body.start_datetime) > 1000*24*60*60*365) {
+        return res.status(400).send('are you sure?')
+      }
+
       // find or create the place
       let place
       try {

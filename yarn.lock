@@ -2939,10 +2939,10 @@
   optionalDependencies:
     prettier "^1.18.2 || ^2.0.0"
 
-"@vue/language-plugin-pug@^1.8.13":
-  version "1.8.13"
-  resolved "https://registry.yarnpkg.com/@vue/language-plugin-pug/-/language-plugin-pug-1.8.13.tgz#fd4c0b76aabce1b835e5eefe676294bdb1e80ca5"
-  integrity sha512-rA4VSock+Ncpmfc1/1QYuMMd0teTkicGLZnYtF7Ax+iVPIDjBrKTu66Q0SzwhJu2lYdRg8JI/IF6R+pFtJeRzg==
+"@vue/language-plugin-pug@^1.8.15":
+  version "1.8.15"
+  resolved "https://registry.yarnpkg.com/@vue/language-plugin-pug/-/language-plugin-pug-1.8.15.tgz#48dfdede23bff5d693eee13810dc032269d6534e"
+  integrity sha512-6HYqx9qQ38oSMnebAIB9NuGG1bVX161WSpMT6MMBnMmKXBwLBqx/2j6DvmAchdwHJ5he+nJwJgIzWIfLYRvezA==
   dependencies:
     "@volar/source-map" "~1.10.0"
     volar-service-pug "0.0.13"
@@ -5473,10 +5473,10 @@ domhandler@^5.0.1, domhandler@^5.0.2, domhandler@^5.0.3:
   dependencies:
     domelementtype "^2.3.0"
 
-dompurify@^3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.0.5.tgz#eb3d9cfa10037b6e73f32c586682c4b2ab01fbed"
-  integrity sha512-F9e6wPGtY+8KNMRAVfxeCOHU0/NPWMSENNq4pQctuXRqqdEPW7q3CrLbR5Nse044WwacyjHGOMlvNsBe1y6z9A==
+dompurify@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.0.6.tgz#925ebd576d54a9531b5d76f0a5bef32548351dae"
+  integrity sha512-ilkD8YEnnGh1zJ240uJsW7AzE+2qpbOUYjacomn3AvJ6J4JhKGSZ2nh4wUIXPZrEPppaCLx5jFe8T89Rk8tQ7w==
 
 domutils@1.5.1:
   version "1.5.1"
@@ -6001,10 +6001,10 @@ expect@^29.7.0:
     jest-message-util "^29.7.0"
     jest-util "^29.7.0"
 
-express-rate-limit@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-7.0.1.tgz#933af24166990ea4fc8004335e6cd6c86fd31562"
-  integrity sha512-oTIPm094gh8c7nbShl4TNLqnayzOcbDGY7dCRnFqUAvptyb0pp5231LaH34JtvVEbZlOJMiixikU5AVK8VN3FA==
+express-rate-limit@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-7.0.2.tgz#0257a823d1547bca35c268d4111e2c7da2473407"
+  integrity sha512-EZoojG9civtJ6GRR7vE0JErow5q/ltbIl0RGbYhrNJKwBC9/kp2HckpdAvQkkE0sRAAtFDBvILvwZSR2kQroDw==
 
 express@^4.18.1:
   version "4.18.2"
