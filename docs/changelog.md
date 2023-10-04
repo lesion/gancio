@@ -7,6 +7,8 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.6.17 - 4 Oct '23
+  - [fix] typo
 
 ### 1.6.16 - 4 Oct '23
   - [feat] add Czech locale
