@@ -132,7 +132,7 @@ export default ({ app, store }, inject) => {
       const now = DateTime.local(opt).toUnixInteger()
       for (const e of events) {
         const tmp = DateTime.fromSeconds(e.start_datetime, opt)
-        if (!tpm || !tmp.year) continue
+        if (!tmp || !tmp.year) continue
         const start = DateTime.local().set({ year: tmp.year, month: tmp.month, day: tmp.day })
         // merge events with same date
         const key = `${start.month}${start.day}`
