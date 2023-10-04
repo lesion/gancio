@@ -6,6 +6,12 @@ nav_order: 10
 ---
 
 All notable changes to this project will be documented in this file.
+
+
+### 1.6.16 - 4 Oct '23
+  - [feat] add Czech locale
+  - [fix] improve datetime validation
+
 ### 1.6.15 - 3 Oct '23
   - [feat] clone event
   - [feat] am/pm / 24hr support, fix [#294](https://framagit.org/les/gancio/-/issues/294) [#264](https://framagit.org/les/gancio/-/issues/264)
