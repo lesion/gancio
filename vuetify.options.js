@@ -1,12 +1,12 @@
 const minifyTheme = require('minify-css-string').default
-import { ca, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, ru, zhHans  } from 'vuetify/es5/locale'
+import { ca, cs, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, ru, zhHans  } from 'vuetify/es5/locale'
 
 export default ({ res, nuxtState }) => {
 
   const settings = process.server ? (res.locals.settings || {}) : nuxtState.state.settings || {}
   
   return {
-    lang: { locales: { ca, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, ru, zhHans } },
+    lang: { locales: { ca, cs, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, ru, zhHans } },
     treeShake: true,
     theme: {
       options: {

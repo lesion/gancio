@@ -16,7 +16,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn icon large v-bind='attrs' v-on='on' aria-label='Language' v-text="$i18n.locale" />
           </template>
-          <v-list>
+          <v-list dense>
             <v-list-item v-for='locale in $i18n.locales' @click.prevent.stop="$i18n.setLocale(locale.code)" :key='locale.code'>
               <v-list-item-content>
                 <v-list-item-title v-text='locale.name' />
