@@ -36,7 +36,14 @@ router.get('/m/:event_id', async (req, res) => {
   if (!event) { return res.status(404).send('Not found') }
   const eventAp = event.toAP(settingsController.settings)
   eventAp['@context'] = [
-    "https://www.w3.org/ns/activitystreams"
+    "https://www.w3.org/ns/activitystreams",
+    {
+      "sc": "http://schema.org/",
+      "address": {
+        "@id": "sc:address",
+        "@type": "sc:Text"
+      }
+    }
   ]
 
   res.type('application/activity+json; charset=utf-8')
