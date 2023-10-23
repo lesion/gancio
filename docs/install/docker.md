@@ -55,5 +55,5 @@ You'll need to [setup nginx as a proxy]({% link install/nginx.md %}) then you ca
 
 ```bash
 cd /opt/gancio # or where your installation is
-docker-compose pull && docker-compose restart
+docker-compose pull && docker-compose up -d
 ```
