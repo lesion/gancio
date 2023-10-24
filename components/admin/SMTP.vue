@@ -73,7 +73,7 @@ export default {
   computed: mapState(['settings']),
   watch: {
     'smtp.secure' (value) {
-      this.smtp.port = value ? 465 : 25
+      this.smtp.port = value ? 465 : 587
     }
   },
   methods: {
