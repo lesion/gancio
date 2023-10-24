@@ -65,12 +65,17 @@ async function resetPassword (args) {
 async function create (args) {
   await _initializeDB()
   const { User } = require('../api/models/models')
-  const user = await User.create({
-    email: args.email,
-    is_active: true,
-    is_admin: args.admin || false
-  }).catch(e => console.error(String(e)))
-  console.error(JSON.stringify(user, null, 2))
+  try {
+    const user = await User.create({
+      email: args.email,
+      password: args.password,
+      is_active: true,
+      is_admin: args.admin || false
+    })
+    console.error(`User ${args.email} created`)
+  } catch(e) {
+    console.error(String(e))
+  }
   await db.close()
 }
 
@@ -106,11 +111,12 @@ const usersCLI = yargs => yargs
   }, resetPassword)
   .command('set-admin <email|username>', 'Set administrator privileges to the given user', {}, setAdmin)
   .command('unset-admin <email|username>', 'Remove administrator privileges to the given user', {}, unsetAdmin)
-  .command('create <email|username> [admin]', 'Create an user', { 
-    admin: { describe: 'Define this user as administrator', type: 'boolean' }
+  .command('create <email|username> [password] [admin]', 'Create an user', { 
+    admin: { describe: 'Define this user as administrator', type: 'boolean' },
     }, create)
     .command('remove <email|username>', 'Remove an user', {}, remove)
     .positional('email', { describe: 'user email or username', type: 'string', demandOption: true })
+    .positional('password', { describe: 'Password', type: 'string', demandOption: false })
   .recommendCommands()
   .demandCommand(1, '')
   .argv
