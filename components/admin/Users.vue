@@ -19,6 +19,7 @@ v-container
           v-text-field(v-model='new_user.email'
             :label="$t('common.email')"
             :rules="$validators.email")
+          v-text-field(v-model='new_user.description' :label="$t('common.description')")
           v-switch(v-model='new_user.is_admin' :label="$t('common.admin')" inset)
         v-alert(type='info' :closable='false' :icon='mdiInformation') {{$t('admin.user_add_help')}}
         v-card-actions
