@@ -83,7 +83,7 @@ module.exports = () => {
     api.post('/user', isAdmin, userController.create)
 
     // update user
-    api.put('/user', isAuth, userController.update)
+    api.put('/user', isAdmin, userController.update)
 
     // delete user
     api.delete('/user/:id', isAdmin, userController.remove)
