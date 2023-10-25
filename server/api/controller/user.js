@@ -11,7 +11,7 @@ const userController = {
 
   async forgotPassword (req, res) {
     const email = req.body.email
-    const user = await User.findOne({ where: { email: { [Op.eq]: email } } })
+    const user = await User.findOne({ where: { email, is_active: true } })
     if (!user) { return res.sendStatus(200) }
 
     user.recover_code = crypto.randomBytes(16).toString('hex')
