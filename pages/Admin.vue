@@ -3,6 +3,8 @@ v-container.container.pa-0.pa-md-3
   v-card
     v-alert(v-if='url!==settings.baseurl' outlined type='warning' show-icon :icon='mdiAlert')
       span(v-html="$t('admin.wrong_domain_warning', { url, baseurl: settings.baseurl })")
+    v-alert(v-if='!selfReachable' outlined type='warning' show-icon :icon='mdiAlert')
+      span(v-html="$t('admin.not_reachable')")      
     v-tabs(v-model='selectedTab' show-arrows :next-icon='mdiChevronRight' :prev-icon='mdiChevronLeft')
 
       //- SETTINGS
@@ -101,9 +103,10 @@ export default {
     try {
       const users = await $axios.$get('/users')
       const unconfirmedEvents = await $axios.$get('/event/unconfirmed')
-      return { users, unconfirmedEvents, url }
+      const selfReachable = await $axios.$get('/reachable')
+      return { users, unconfirmedEvents, url, selfReachable }
     } catch (e) {
-      return { users: [], unconfirmedEvents: [], url }
+      return { users: [], unconfirmedEvents: [], url, selfReachable: false }
     }
   },
   data () {
@@ -112,6 +115,7 @@ export default {
       users: [],
       description: '',
       unconfirmedEvents: [],
+      selfReachable: false
     }
   },
   head () {

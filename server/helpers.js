@@ -287,6 +287,15 @@ module.exports = {
     next()
   },
 
+  async reachable(req, res) {
+    try {
+      const response = await axios({ url: config.baseurl })
+      return res.sendStatus(200)
+    } catch(e) {
+      return res.status(400).json(e)
+    }
+  },
+
   async isGeocodingEnabled(req, res, next) {
     if (res.locals.settings.allow_geolocation) {
       next()

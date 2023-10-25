@@ -71,6 +71,7 @@ module.exports = () => {
     ```
     */
     api.get('/ping', (_req, res) => res.sendStatus(200))
+    api.get('/reachable', helpers.reachable)
     api.get('/user', isAuth, (req, res) => res.json(req.user))
 
     api.post('/user/recover', SPAMProtectionApiRateLimiter, userController.forgotPassword)
