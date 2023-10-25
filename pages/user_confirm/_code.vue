@@ -15,10 +15,11 @@ v-container
               v-btn(color="primary" type='submit' :disabled='!new_password' @click='change_password' outlined) {{$t('common.send')}}
 
           v-card-text(v-else)
-            v-alert.ma-5(type='error') {{$t('recover.not_valid_code')}}
+            v-alert.ma-5(type='error' :icon='mdiAlert') {{$t('recover.not_valid_code')}} <br/> {{ error }}
 
 </template>
 <script>
+import { mdiAlert } from '@mdi/js'
 
 export default {
   name: 'Recover',
@@ -28,11 +29,11 @@ export default {
       const user = await $axios.$post('/user/check_recover_code', { recover_code: code })
       return { user, code }
     } catch (e) {
-      return { user: false }
+      return { user: false, error: String(e) }
     }
   },
   data () {
-    return { new_password: '' }
+    return { new_password: '', mdiAlert }
   },
   methods: {
     async change_password () {

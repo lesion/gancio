@@ -1,24 +1,28 @@
 <template lang='pug'>
 v-container
-  v-row.mt-5(align='center' justify='center')
-    v-col(cols='12' md="6" lg="5" xl="4")
-      v-card
-        v-card-title {{$t('common.recover_password')}}
-        template(v-if='user')
-          v-card-subtitle {{user.email}}
-          v-card-text
-            v-text-field(type='password'
-              :rules="$validators.password"
-              autofocus :placeholder='$t("common.new_password")'
-              v-model='new_password')
-        div(v-else) {{$t('recover.not_valid_code')}}
+  v-form(@submit.prevent="change_password" v-model='valid')
+    v-row.mt-5(align='center' justify='center')
+      v-col(cols='12' md="6" lg="5" xl="4")
+        v-card
+          v-card-title {{$t('common.recover_password')}}
+          template(v-if='user')
+            v-card-subtitle {{user.email}}
+            v-card-text
+              v-text-field(type='password'
+                :rules="$validators.password"
+                autofocus :placeholder='$t("common.new_password")'
+                v-model='new_password')
+          template(v-else)
+            v-card-text
+              v-alert(type='error' :icon='mdiAlert') {{$t('recover.not_valid_code')}} <br/> {{ error }}
 
-        v-card-actions
-          v-spacer
-          v-btn(v-if='user' text color='primary' @click='change_password') {{$t('common.send')}}
+          v-card-actions
+            v-spacer
+            v-btn(v-if='user' outlined color='primary' type='submit' :disabled='!valid') {{$t('common.send')}}
 </template>
 <script>
 import { mapState } from 'vuex'
+import { mdiAlert } from '@mdi/js'
 
 export default {
   name: 'Recover',
@@ -28,11 +32,11 @@ export default {
       const user = await $axios.$post('/user/check_recover_code', { recover_code: code })
       return { user, code }
     } catch (e) {
-      return { user: false }
+      return { user: false, error: String(e) }
     }
   },
   data () {
-    return { new_password: '' }
+    return { new_password: '', valid: false, mdiAlert }
   },
   computed: mapState(['settings']),
   methods: {
