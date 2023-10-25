@@ -620,6 +620,8 @@ const eventController = {
     }
 
     if (query) {
+      query = query.toLocaleLowerCase()
+      replacements.push(query)
       replacements.push(query)
       where[Op.or] =
         [
