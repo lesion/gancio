@@ -1,5 +1,18 @@
 All notable changes to this project will be documented in this file.
 
+### 1.6.18 - unreleased
+  - [fix] fix postgres image version in docker-compose [#303](https://framagit.org/les/gancio/-/issues/303)
+  - [fix] Improve json-ld representation of events
+  - [fix] Add description field to admin's new user form, closes [#307](https://framagit.org/les/gancio/-/issues/307)
+  - [fix] use tls SSLv3 to send email, fix #192
+  - [fix] notify user when accepted, fix #308
+  - [fix] forgot password on active user only
+  - [fix] make search case insensitive, fix #301
+  - [feat] allow to specify password while create new user via CLI
+  - [feat] check if I'm reachable to myself to help in #298
+  - [feat] improve recover and user_confirm error messages
+
+
 ### 1.6.17 - 4 Oct '23
   - [fix] typo
 
