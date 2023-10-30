@@ -11,7 +11,7 @@ const Col = helpers.col
 const notifier = require('../../notifier')
 const { htmlToText } = require('html-to-text')
 
-const { Event, Resource, Tag, Place, Notification, APUser } = require('../models/models')
+const { Event, Resource, Tag, Place, Notification, APUser, Collection } = require('../models/models')
 
 
 const exportController = require('./export')
@@ -48,7 +48,7 @@ const eventController = {
   },
 
   async searchMeta(req, res) {
-    const search = req.query.search
+    const search = req.query.search.toLocaleLowerCase()
 
     const places = await Place.findAll({
       order: [[Sequelize.col('w'), 'DESC']],
@@ -75,13 +75,24 @@ const eventController = {
       raw: true
     })
 
+    const collections = await Collection.findAll({
+      where: {
+        name: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%'),
+      },
+      attributes: [['name', 'label'], 'id'],
+      raw: true
+    })
+
     const ret = places.map(p => {
       p.type = 'place'
       return p
     }).concat(tags.map(t => {
       t.type = 'tag'
       return t
-    })).sort((a, b) => b.w - a.w).slice(0, 10)
+    }).concat(collections.map(c => {
+      c.type = 'collection'
+      return c
+    }))).sort((a, b) => b.w - a.w).slice(0, 10)
 
     return res.json(ret)
   },

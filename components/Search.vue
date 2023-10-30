@@ -1,6 +1,7 @@
 <template lang="pug">
 v-row
   v-col(cols=12)
+    span {{ filters }} - {{ meta }}
     v-switch(
       v-if='settings.allow_recurrent_event'
       v-model='show_recurrent'
@@ -10,7 +11,8 @@ v-row
       :label="$t('event.show_recurrent')")
   v-col.mb-4(cols=12)
     v-autocomplete.p-0(
-      v-model='meta'
+      outlined
+      rounded
       :label='$t("common.search")'
       :filter='filter'
       cache-items
@@ -35,19 +37,19 @@ v-row
           @click:close='remove(item)'
           :close-icon='mdiCloseCircle')
           v-avatar(left)
-            v-icon(small v-text="item.type === 'place' ? mdiMapMarker : mdiTag")
+            v-icon(small v-text="item.type === 'place' ? mdiMapMarker : item.type === 'tag' ? mdiTag : mdiCollage")
           span {{ item.label }}
       template(v-slot:item='{ item }')
           v-list-item-avatar
-            v-icon(v-text="item.type === 'place' ? mdiMapMarker : mdiTag")
+            v-icon(v-text="item.type === 'place' ? mdiMapMarker : item.type === 'tag' ? mdiTag : mdiCollage")
           v-list-item-content
             v-list-item-title(v-text='item.label')
-            v-list-item-subtitle(v-if='item.type ==="place"' v-text='item.address')
+            v-list-item-subtitle(v-if='item.type ==="place"' v-text='item.label !== "online" && item.address')
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { mdiMapMarker, mdiTag, mdiCloseCircle } from '@mdi/js'
+import { mdiMapMarker, mdiTag, mdiCloseCircle, mdiCollage } from '@mdi/js'
 import debounce from 'lodash/debounce'
 
 export default {
@@ -57,13 +59,20 @@ export default {
   },
   data () {
     return {
-      mdiTag, mdiMapMarker, mdiCloseCircle,
-      meta: [],
+      mdiTag, mdiMapMarker, mdiCloseCircle, mdiCollage,
+      // meta: [],
       items: [],
       show_recurrent: this.filters.show_recurrent || false
     }
   },
-  computed: mapState(['settings']),
+  computed: {
+    ...mapState(['settings']),
+    meta: {
+      get () {
+        return this.filters
+      }
+    }
+  },
   methods: {
     filter (item, queryText, itemText) {
       return itemText.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1 || 
@@ -73,13 +82,22 @@ export default {
       this.items = await this.$axios.$get(`/event/meta?search=${search.target.value}`)
     }, 100),
     remove (item) {
-      this.meta = this.meta.filter(m => m.type !== item.type || m.type === 'place' ? m.id !== item.id : m.label !== item.label)
-      this.change()
+      console.error(item)
+      this.filters = this.filters.filter(m => m.type !== item.type || m.type === 'place' ? m.id !== item.id : m.label !== item.label)
+      this.$emit('update', filters)
+      // this.change()
     },
-    change () {
+    change (v, i) {
+      console.error(v, i)
+      if (!v) return
+      const collection = v.find(c => c.type === 'collection')
+      if (collection) {
+        this.$emit('update', { collection: collection.label, places: [], tags: [] })
+        return
+      }
       const filters = {
-        tags: this.meta.filter(t => t.type === 'tag').map(t => t.label),
-        places: this.meta.filter(p => p.type === 'place').map(p => p.id),
+        tags: v.filter(t => t.type === 'tag').map(t => t.label),
+        places: v.filter(p => p.type === 'place').map(p => p.id),
         show_recurrent: this.show_recurrent
       }
       this.$emit('update', filters)

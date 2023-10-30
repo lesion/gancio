@@ -59,6 +59,7 @@ v-container.pa-0.pa-md-3
                   :maxlength='list.maxEvents &&  Number(list.maxEvents)'
                   :title='list.title'
                   :theme='list.theme'
+                  :collection='filters.collection'
                   :places='filters.places.join(",")'
                   :tags='filters.tags.join(",")'
                   :show_recurrent='filters.show_recurrent'
@@ -112,7 +113,7 @@ export default {
         theme: $store.state.settings['theme.is_dark'] ? 'dark' : 'light',
         sidebar: 'true'
       },
-      filters: { tags: [], places: [], show_recurrent: $store.state.settings.recurrent_event_visible },
+      filters: { tags: [], places: [], collection: undefined, show_recurrent: $store.state.settings.recurrent_event_visible },
       events: []
     }
   },
@@ -130,12 +131,16 @@ export default {
         params.push(`title="${this.list.title}"`)
       }
 
-      if (this.filters.places.length) {
-        params.push(`places="${this.filters.places.join(',')}"`)
-      }
+      if (this.filters.collection) {
+        params.push(`collection="${this.filters.collection}"`)
+      } else {
+        if (this.filters.places.length) {
+          params.push(`places="${this.filters.places.join(',')}"`)
+        }
 
-      if (this.filters.tags.length) {
-        params.push(`tags="${this.filters.tags.join(',')}"`)
+        if (this.filters.tags.length) {
+          params.push(`tags="${this.filters.tags.join(',')}"`)
+        }
       }
 
       if (this.filters.show_recurrent) {
@@ -158,12 +163,17 @@ export default {
       const typeMap = ['rss', 'ics']
       const params = []
 
-      if (this.filters.tags.length) {
-        params.push(`tags=${this.filters.tags.map(encodeURIComponent).join(',')}`)
-      }
 
-      if (this.filters.places.length) {
-        params.push(`places=${this.filters.places.join(',')}`)
+      if (this.filters.collection) {
+        return `${this.settings.baseurl}/feed/${typeMap[this.type]}/collection/${encodeURIComponent(this.filters.collection)}`
+      } else {
+        if (this.filters.tags.length) {
+          params.push(`tags=${this.filters.tags.map(encodeURIComponent).join(',')}`)
+        }
+
+        if (this.filters.places.length) {
+          params.push(`places=${this.filters.places.join(',')}`)
+        }
       }
 
       if (this.filters.show_recurrent) {

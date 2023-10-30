@@ -25,10 +25,10 @@ function ye(t) {
 function u(t, e) {
   t.appendChild(e);
 }
-function p(t, e, i) {
+function k(t, e, i) {
   t.insertBefore(e, i || null);
 }
-function k(t) {
+function x(t) {
   t.parentNode.removeChild(t);
 }
 function be(t, e) {
@@ -38,14 +38,14 @@ function be(t, e) {
 function m(t) {
   return document.createElement(t);
 }
-function $(t) {
+function z(t) {
   return document.createTextNode(t);
 }
-function M() {
-  return $(" ");
+function C() {
+  return z(" ");
 }
 function pe() {
-  return $("");
+  return z("");
 }
 function a(t, e, i) {
   i == null ? t.removeAttribute(e) : t.getAttribute(e) !== i && t.setAttribute(e, i);
@@ -69,25 +69,25 @@ let O;
 function I(t) {
   O = t;
 }
-function $e() {
+function Ee() {
   if (!O)
     throw new Error("Function called outside component initialization");
   return O;
 }
 function ke(t) {
-  $e().$$.on_mount.push(t);
+  Ee().$$.on_mount.push(t);
 }
-const R = [], Z = [], P = [], ee = [], Ee = Promise.resolve();
+const R = [], Z = [], P = [], ee = [], $e = Promise.resolve();
 let K = !1;
 function je() {
-  K || (K = !0, Ee.then(x));
+  K || (K = !0, $e.then(y));
 }
 function Q(t) {
   P.push(t);
 }
 const J = /* @__PURE__ */ new Set();
 let D = 0;
-function x() {
+function y() {
   const t = O;
   do {
     for (; D < R.length; ) {
@@ -120,8 +120,8 @@ function Ce(t, e) {
 function Ae(t, e, i, l) {
   const { fragment: n, on_mount: r, on_destroy: o, after_update: f } = t.$$;
   n && n.m(e, i), l || Q(() => {
-    const c = r.map(W).filter(ge);
-    o ? o.push(...c) : U(c), t.$$.on_mount = [];
+    const s = r.map(W).filter(ge);
+    o ? o.push(...s) : U(s), t.$$.on_mount = [];
   }), f.forEach(Q);
 }
 function Me(t, e) {
@@ -132,9 +132,9 @@ function Ne(t, e) {
   t.$$.dirty[0] === -1 && (R.push(t), je(), t.$$.dirty.fill(0)), t.$$.dirty[e / 31 | 0] |= 1 << e % 31;
 }
 function we(t, e, i, l, n, r, o, f = [-1]) {
-  const c = O;
+  const s = O;
   I(t);
-  const s = t.$$ = {
+  const c = t.$$ = {
     fragment: null,
     ctx: null,
     props: r,
@@ -146,26 +146,26 @@ function we(t, e, i, l, n, r, o, f = [-1]) {
     on_disconnect: [],
     before_update: [],
     after_update: [],
-    context: new Map(e.context || (c ? c.$$.context : [])),
+    context: new Map(e.context || (s ? s.$$.context : [])),
     callbacks: Y(),
     dirty: f,
     skip_bound: !1,
-    root: e.target || c.$$.root
+    root: e.target || s.$$.root
   };
-  o && o(s.root);
+  o && o(c.root);
   let w = !1;
-  if (s.ctx = i ? i(t, e.props || {}, (g, _, ...A) => {
-    const y = A.length ? A[0] : _;
-    return s.ctx && n(s.ctx[g], s.ctx[g] = y) && (!s.skip_bound && s.bound[g] && s.bound[g](y), w && Ne(t, g)), _;
-  }) : [], s.update(), w = !0, U(s.before_update), s.fragment = l ? l(s.ctx) : !1, e.target) {
+  if (c.ctx = i ? i(t, e.props || {}, (g, _, ...A) => {
+    const E = A.length ? A[0] : _;
+    return c.ctx && n(c.ctx[g], c.ctx[g] = E) && (!c.skip_bound && c.bound[g] && c.bound[g](E), w && Ne(t, g)), _;
+  }) : [], c.update(), w = !0, U(c.before_update), c.fragment = l ? l(c.ctx) : !1, e.target) {
     if (e.hydrate) {
       const g = xe(e.target);
-      s.fragment && s.fragment.l(g), g.forEach(k);
+      c.fragment && c.fragment.l(g), g.forEach(x);
     } else
-      s.fragment && s.fragment.c();
-    e.intro && Ce(t.$$.fragment), Ae(t, e.target, e.anchor, e.customElement), x();
+      c.fragment && c.fragment.c();
+    e.intro && Ce(t.$$.fragment), Ae(t, e.target, e.anchor, e.customElement), y();
   }
-  I(c);
+  I(s);
 }
 let X;
 typeof HTMLElement == "function" && (X = class extends HTMLElement {
@@ -213,11 +213,11 @@ function V(t) {
 }
 function te(t, e, i) {
   const l = t.slice();
-  return l[12] = e[i], l;
+  return l[13] = e[i], l;
 }
 function ie(t, e, i) {
   const l = t.slice();
-  return l[15] = e[i], l;
+  return l[16] = e[i], l;
 }
 function le(t) {
   let e;
@@ -226,13 +226,13 @@ function le(t) {
       e = m("link"), a(e, "rel", "stylesheet"), a(e, "href", t[4]);
     },
     m(i, l) {
-      p(i, e, l);
+      k(i, e, l);
     },
     p(i, l) {
       l & 16 && a(e, "href", i[4]);
     },
     d(i) {
-      i && k(e);
+      i && x(e);
     }
   };
 }
@@ -242,32 +242,32 @@ function ne(t) {
     r[o] = fe(te(t, n, o));
   return {
     c() {
-      e = m("div"), l && l.c(), i = M();
+      e = m("div"), l && l.c(), i = C();
       for (let o = 0; o < r.length; o += 1)
         r[o].c();
       a(e, "id", "gancioEvents"), L(e, "dark", t[2] === "dark"), L(e, "light", t[2] === "light"), L(e, "sidebar", t[3] === "true"), L(e, "nosidebar", t[3] !== "true");
     },
     m(o, f) {
-      p(o, e, f), l && l.m(e, null), u(e, i);
-      for (let c = 0; c < r.length; c += 1)
-        r[c].m(e, null);
+      k(o, e, f), l && l.m(e, null), u(e, i);
+      for (let s = 0; s < r.length; s += 1)
+        r[s].m(e, null);
     },
     p(o, f) {
       if (o[1] && o[3] === "true" ? l ? l.p(o, f) : (l = re(o), l.c(), l.m(e, i)) : l && (l.d(1), l = null), f & 41) {
         n = o[5];
-        let c;
-        for (c = 0; c < n.length; c += 1) {
-          const s = te(o, n, c);
-          r[c] ? r[c].p(s, f) : (r[c] = fe(s), r[c].c(), r[c].m(e, null));
+        let s;
+        for (s = 0; s < n.length; s += 1) {
+          const c = te(o, n, s);
+          r[s] ? r[s].p(c, f) : (r[s] = fe(c), r[s].c(), r[s].m(e, null));
         }
-        for (; c < r.length; c += 1)
-          r[c].d(1);
+        for (; s < r.length; s += 1)
+          r[s].d(1);
         r.length = n.length;
       }
       f & 4 && L(e, "dark", o[2] === "dark"), f & 4 && L(e, "light", o[2] === "light"), f & 8 && L(e, "sidebar", o[3] === "true"), f & 8 && L(e, "nosidebar", o[3] !== "true");
     },
     d(o) {
-      o && k(e), l && l.d(), be(r, o);
+      o && x(e), l && l.d(), be(r, o);
     }
   };
 }
@@ -275,23 +275,23 @@ function re(t) {
   let e, i, l, n, r, o, f;
   return {
     c() {
-      e = m("a"), i = m("div"), l = m("div"), n = $(t[1]), r = M(), o = m("img"), a(l, "class", "title"), a(o, "id", "logo"), a(o, "alt", "logo"), H(o.src, f = t[0] + "/logo.png") || a(o, "src", f), a(i, "class", "content"), a(e, "href", t[0]), a(e, "target", "_blank"), a(e, "id", "header");
+      e = m("a"), i = m("div"), l = m("div"), n = z(t[1]), r = C(), o = m("img"), a(l, "class", "title"), a(o, "id", "logo"), a(o, "alt", "logo"), H(o.src, f = t[0] + "/logo.png") || a(o, "src", f), a(i, "class", "content"), a(e, "href", t[0]), a(e, "target", "_blank"), a(e, "id", "header");
     },
-    m(c, s) {
-      p(c, e, s), u(e, i), u(i, l), u(l, n), u(i, r), u(i, o);
+    m(s, c) {
+      k(s, e, c), u(e, i), u(i, l), u(l, n), u(i, r), u(i, o);
     },
-    p(c, s) {
-      s & 2 && T(n, c[1]), s & 1 && !H(o.src, f = c[0] + "/logo.png") && a(o, "src", f), s & 1 && a(e, "href", c[0]);
+    p(s, c) {
+      c & 2 && T(n, s[1]), c & 1 && !H(o.src, f = s[0] + "/logo.png") && a(o, "src", f), c & 1 && a(e, "href", s[0]);
     },
-    d(c) {
-      c && k(e);
+    d(s) {
+      s && x(e);
     }
   };
 }
 function oe(t) {
   let e;
   function i(r, o) {
-    return r[12].media.length ? Le : Te;
+    return r[13].media.length ? Le : Te;
   }
   let l = i(t), n = l(t);
   return {
@@ -299,13 +299,13 @@ function oe(t) {
       e = m("div"), n.c(), a(e, "class", "img");
     },
     m(r, o) {
-      p(r, e, o), n.m(e, null);
+      k(r, e, o), n.m(e, null);
     },
     p(r, o) {
       l === (l = i(r)) && n ? n.p(r, o) : (n.d(1), n = l(r), n && (n.c(), n.m(e, null)));
     },
     d(r) {
-      r && k(e), n.d();
+      r && x(e), n.d();
     }
   };
 }
@@ -313,16 +313,16 @@ function Te(t) {
   let e, i, l;
   return {
     c() {
-      e = m("img"), a(e, "style", "aspect-ratio=1.7778;"), a(e, "alt", i = t[12].title), H(e.src, l = t[0] + "/fallbackimage.png") || a(e, "src", l), a(e, "loading", "lazy");
+      e = m("img"), a(e, "style", "aspect-ratio=1.7778;"), a(e, "alt", i = t[13].title), H(e.src, l = t[0] + "/fallbackimage.png") || a(e, "src", l), a(e, "loading", "lazy");
     },
     m(n, r) {
-      p(n, e, r);
+      k(n, e, r);
     },
     p(n, r) {
-      r & 32 && i !== (i = n[12].title) && a(e, "alt", i), r & 1 && !H(e.src, l = n[0] + "/fallbackimage.png") && a(e, "src", l);
+      r & 32 && i !== (i = n[13].title) && a(e, "alt", i), r & 1 && !H(e.src, l = n[0] + "/fallbackimage.png") && a(e, "src", l);
     },
     d(n) {
-      n && k(e);
+      n && x(e);
     }
   };
 }
@@ -330,38 +330,38 @@ function Le(t) {
   let e, i, l, n;
   return {
     c() {
-      e = m("img"), a(e, "style", i = "object-position: " + ue(t[12]) + "; aspect-ratio=1.7778;"), a(e, "alt", l = t[12].media[0].name), H(e.src, n = t[0] + "/media/thumb/" + t[12].media[0].url) || a(e, "src", n), a(e, "loading", "lazy");
+      e = m("img"), a(e, "style", i = "object-position: " + ue(t[13]) + "; aspect-ratio=1.7778;"), a(e, "alt", l = t[13].media[0].name), H(e.src, n = t[0] + "/media/thumb/" + t[13].media[0].url) || a(e, "src", n), a(e, "loading", "lazy");
     },
     m(r, o) {
-      p(r, e, o);
+      k(r, e, o);
     },
     p(r, o) {
-      o & 32 && i !== (i = "object-position: " + ue(r[12]) + "; aspect-ratio=1.7778;") && a(e, "style", i), o & 32 && l !== (l = r[12].media[0].name) && a(e, "alt", l), o & 33 && !H(e.src, n = r[0] + "/media/thumb/" + r[12].media[0].url) && a(e, "src", n);
+      o & 32 && i !== (i = "object-position: " + ue(r[13]) + "; aspect-ratio=1.7778;") && a(e, "style", i), o & 32 && l !== (l = r[13].media[0].name) && a(e, "alt", l), o & 33 && !H(e.src, n = r[0] + "/media/thumb/" + r[13].media[0].url) && a(e, "src", n);
     },
     d(r) {
-      r && k(e);
+      r && x(e);
     }
   };
 }
 function ae(t) {
-  let e, i = t[12].place.address + "", l;
+  let e, i = t[13].place.address + "", l;
   return {
     c() {
-      e = m("span"), l = $(i), a(e, "class", "subtitle");
+      e = m("span"), l = z(i), a(e, "class", "subtitle");
     },
     m(n, r) {
-      p(n, e, r), u(e, l);
+      k(n, e, r), u(e, l);
     },
     p(n, r) {
-      r & 32 && i !== (i = n[12].place.address + "") && T(l, i);
+      r & 32 && i !== (i = n[13].place.address + "") && T(l, i);
     },
     d(n) {
-      n && k(e);
+      n && x(e);
     }
   };
 }
 function se(t) {
-  let e, i = t[12].tags, l = [];
+  let e, i = t[13].tags, l = [];
   for (let n = 0; n < i.length; n += 1)
     l[n] = ce(ie(t, i, n));
   return {
@@ -372,13 +372,13 @@ function se(t) {
       a(e, "class", "tags");
     },
     m(n, r) {
-      p(n, e, r);
+      k(n, e, r);
       for (let o = 0; o < l.length; o += 1)
         l[o].m(e, null);
     },
     p(n, r) {
       if (r & 32) {
-        i = n[12].tags;
+        i = n[13].tags;
         let o;
         for (o = 0; o < i.length; o += 1) {
           const f = ie(n, i, o);
@@ -390,42 +390,41 @@ function se(t) {
       }
     },
     d(n) {
-      n && k(e), be(l, n);
+      n && x(e), be(l, n);
     }
   };
 }
 function ce(t) {
-  let e, i, l = t[15] + "", n;
+  let e, i, l = t[16] + "", n;
   return {
     c() {
-      e = m("span"), i = $("#"), n = $(l), a(e, "class", "tag");
+      e = m("span"), i = z("#"), n = z(l), a(e, "class", "tag");
     },
     m(r, o) {
-      p(r, e, o), u(e, i), u(e, n);
+      k(r, e, o), u(e, i), u(e, n);
     },
     p(r, o) {
-      o & 32 && l !== (l = r[15] + "") && T(n, l);
+      o & 32 && l !== (l = r[16] + "") && T(n, l);
     },
     d(r) {
-      r && k(e);
+      r && x(e);
     }
   };
 }
 function fe(t) {
-  let e, i, l, n, r = V(t[12]) + "", o, f, c, s = t[12].title + "", w, g, _, A, y = t[12].place.name + "", d, z, h, v, C, q, E = t[3] !== "true" && oe(t), j = t[12].place.name !== "online" && ae(t), S = t[12].tags.length && se(t);
+  let e, i, l, n, r = V(t[13]) + "", o, f, s, c = t[13].title + "", w, g, _, A, E = t[13].place.name + "", M, d, h, p, v, q, $ = t[3] !== "true" && oe(t), j = t[13].place.name !== "online" && ae(t), S = t[13].tags.length && se(t);
   return {
     c() {
-      e = m("a"), E && E.c(), i = M(), l = m("div"), n = m("div"), o = $(r), f = M(), c = m("div"), w = $(s), g = M(), _ = m("span"), A = $('@"'), d = $(y), z = $(`"
-            `), j && j.c(), h = M(), S && S.c(), v = M(), a(n, "class", "subtitle"), a(c, "class", "title"), a(_, "class", "place"), a(l, "class", "content"), a(e, "href", C = t[0] + "/event/" + (t[12].slug || t[12].id)), a(e, "class", "event"), a(e, "title", q = t[12].title), a(e, "target", "_blank");
+      e = m("a"), $ && $.c(), i = C(), l = m("div"), n = m("div"), o = z(r), f = C(), s = m("div"), w = z(c), g = C(), _ = m("span"), A = z("@"), M = z(E), d = C(), j && j.c(), h = C(), S && S.c(), p = C(), a(n, "class", "subtitle"), a(s, "class", "title"), a(_, "class", "place"), a(l, "class", "content"), a(e, "href", v = t[0] + "/event/" + (t[13].slug || t[13].id)), a(e, "class", "event"), a(e, "title", q = t[13].title), a(e, "target", "_blank");
     },
     m(b, N) {
-      p(b, e, N), E && E.m(e, null), u(e, i), u(e, l), u(l, n), u(n, o), u(l, f), u(l, c), u(c, w), u(l, g), u(l, _), u(_, A), u(_, d), u(_, z), j && j.m(_, null), u(l, h), S && S.m(l, null), u(e, v);
+      k(b, e, N), $ && $.m(e, null), u(e, i), u(e, l), u(l, n), u(n, o), u(l, f), u(l, s), u(s, w), u(l, g), u(l, _), u(_, A), u(_, M), u(_, d), j && j.m(_, null), u(l, h), S && S.m(l, null), u(e, p);
     },
     p(b, N) {
-      b[3] !== "true" ? E ? E.p(b, N) : (E = oe(b), E.c(), E.m(e, i)) : E && (E.d(1), E = null), N & 32 && r !== (r = V(b[12]) + "") && T(o, r), N & 32 && s !== (s = b[12].title + "") && T(w, s), N & 32 && y !== (y = b[12].place.name + "") && T(d, y), b[12].place.name !== "online" ? j ? j.p(b, N) : (j = ae(b), j.c(), j.m(_, null)) : j && (j.d(1), j = null), b[12].tags.length ? S ? S.p(b, N) : (S = se(b), S.c(), S.m(l, null)) : S && (S.d(1), S = null), N & 33 && C !== (C = b[0] + "/event/" + (b[12].slug || b[12].id)) && a(e, "href", C), N & 32 && q !== (q = b[12].title) && a(e, "title", q);
+      b[3] !== "true" ? $ ? $.p(b, N) : ($ = oe(b), $.c(), $.m(e, i)) : $ && ($.d(1), $ = null), N & 32 && r !== (r = V(b[13]) + "") && T(o, r), N & 32 && c !== (c = b[13].title + "") && T(w, c), N & 32 && E !== (E = b[13].place.name + "") && T(M, E), b[13].place.name !== "online" ? j ? j.p(b, N) : (j = ae(b), j.c(), j.m(_, null)) : j && (j.d(1), j = null), b[13].tags.length ? S ? S.p(b, N) : (S = se(b), S.c(), S.m(l, null)) : S && (S.d(1), S = null), N & 33 && v !== (v = b[0] + "/event/" + (b[13].slug || b[13].id)) && a(e, "href", v), N & 32 && q !== (q = b[13].title) && a(e, "title", q);
     },
     d(b) {
-      b && k(e), E && E.d(), j && j.d(), S && S.d();
+      b && x(e), $ && $.d(), j && j.d(), S && S.d();
     }
   };
 }
@@ -433,10 +432,10 @@ function Ge(t) {
   let e, i, l = t[4] && le(t), n = t[5].length && ne(t);
   return {
     c() {
-      l && l.c(), e = M(), n && n.c(), i = pe(), this.c = G;
+      l && l.c(), e = C(), n && n.c(), i = pe(), this.c = G;
     },
     m(r, o) {
-      l && l.m(r, o), p(r, e, o), n && n.m(r, o), p(r, i, o);
+      l && l.m(r, o), k(r, e, o), n && n.m(r, o), k(r, i, o);
     },
     p(r, [o]) {
       r[4] ? l ? l.p(r, o) : (l = le(r), l.c(), l.m(e.parentNode, e)) : l && (l.d(1), l = null), r[5].length ? n ? n.p(r, o) : (n = ne(r), n.c(), n.m(i.parentNode, i)) : n && (n.d(1), n = null);
@@ -444,7 +443,7 @@ function Ge(t) {
     i: G,
     o: G,
     d(r) {
-      l && l.d(r), r && k(e), n && n.d(r), r && k(i);
+      l && l.d(r), r && x(e), n && n.d(r), r && x(i);
     }
   };
 }
@@ -456,34 +455,37 @@ function ue(t) {
   return "center center";
 }
 function He(t, e, i) {
-  let { baseurl: l = "" } = e, { title: n = "" } = e, { maxlength: r = !1 } = e, { tags: o = "" } = e, { places: f = "" } = e, { theme: c = "light" } = e, { show_recurrent: s = !1 } = e, { sidebar: w = "true" } = e, { external_style: g = "" } = e, _ = !1, A = [];
-  function y(d) {
-    if (!_)
+  let { baseurl: l = "" } = e, { title: n = "" } = e, { maxlength: r = !1 } = e, { collection: o = "" } = e, { tags: f = "" } = e, { places: s = "" } = e, { theme: c = "light" } = e, { show_recurrent: w = !1 } = e, { sidebar: g = "true" } = e, { external_style: _ = "" } = e, A = !1, E = [];
+  function M(d) {
+    if (!A)
       return;
-    const z = [];
-    r && z.push(`max=${r}`), o && z.push(`tags=${o}`), f && z.push(`places=${f}`), z.push(`show_recurrent=${s ? "true" : "false"}`), fetch(`${l}/api/events?${z.join("&")}`).then((h) => h.json()).then((h) => {
-      i(5, A = h);
-    }).catch((h) => {
-      console.error("Error loading Gancio API -> ", h);
+    const h = [];
+    r && h.push(`max=${r}`);
+    let p = "/api/events";
+    o ? p = `/api/collections/${o}` : (f && h.push(`tags=${f}`), s && h.push(`places=${s}`)), h.push(`show_recurrent=${w ? "true" : "false"}`), fetch(`${l}${p}?${h.join("&")}`).then((v) => v.json()).then((v) => {
+      i(5, E = v.events || v);
+    }).catch((v) => {
+      console.error("Error loading Gancio API -> ", v);
     });
   }
   return ke(() => {
-    _ = !0, y();
+    A = !0, M();
   }), t.$$set = (d) => {
-    "baseurl" in d && i(0, l = d.baseurl), "title" in d && i(1, n = d.title), "maxlength" in d && i(6, r = d.maxlength), "tags" in d && i(7, o = d.tags), "places" in d && i(8, f = d.places), "theme" in d && i(2, c = d.theme), "show_recurrent" in d && i(9, s = d.show_recurrent), "sidebar" in d && i(3, w = d.sidebar), "external_style" in d && i(4, g = d.external_style);
+    "baseurl" in d && i(0, l = d.baseurl), "title" in d && i(1, n = d.title), "maxlength" in d && i(6, r = d.maxlength), "collection" in d && i(7, o = d.collection), "tags" in d && i(8, f = d.tags), "places" in d && i(9, s = d.places), "theme" in d && i(2, c = d.theme), "show_recurrent" in d && i(10, w = d.show_recurrent), "sidebar" in d && i(3, g = d.sidebar), "external_style" in d && i(4, _ = d.external_style);
   }, t.$$.update = () => {
-    t.$$.dirty & 975 && y();
+    t.$$.dirty & 1999 && M();
   }, [
     l,
     n,
     c,
-    w,
     g,
-    A,
+    _,
+    E,
     r,
     o,
     f,
-    s
+    s,
+    w
   ];
 }
 class Re extends X {
@@ -508,21 +510,23 @@ class Re extends X {
         baseurl: 0,
         title: 1,
         maxlength: 6,
-        tags: 7,
-        places: 8,
+        collection: 7,
+        tags: 8,
+        places: 9,
         theme: 2,
-        show_recurrent: 9,
+        show_recurrent: 10,
         sidebar: 3,
         external_style: 4
       },
       null
-    ), e && (e.target && p(e.target, this, e.anchor), e.props && (this.$set(e.props), x()));
+    ), e && (e.target && k(e.target, this, e.anchor), e.props && (this.$set(e.props), y()));
   }
   static get observedAttributes() {
     return [
       "baseurl",
       "title",
       "maxlength",
+      "collection",
       "tags",
       "places",
       "theme",
@@ -535,72 +539,78 @@ class Re extends X {
     return this.$$.ctx[0];
   }
   set baseurl(e) {
-    this.$$set({ baseurl: e }), x();
+    this.$$set({ baseurl: e }), y();
   }
   get title() {
     return this.$$.ctx[1];
   }
   set title(e) {
-    this.$$set({ title: e }), x();
+    this.$$set({ title: e }), y();
   }
   get maxlength() {
     return this.$$.ctx[6];
   }
   set maxlength(e) {
-    this.$$set({ maxlength: e }), x();
+    this.$$set({ maxlength: e }), y();
   }
-  get tags() {
+  get collection() {
     return this.$$.ctx[7];
   }
-  set tags(e) {
-    this.$$set({ tags: e }), x();
+  set collection(e) {
+    this.$$set({ collection: e }), y();
   }
-  get places() {
+  get tags() {
     return this.$$.ctx[8];
   }
+  set tags(e) {
+    this.$$set({ tags: e }), y();
+  }
+  get places() {
+    return this.$$.ctx[9];
+  }
   set places(e) {
-    this.$$set({ places: e }), x();
+    this.$$set({ places: e }), y();
   }
   get theme() {
     return this.$$.ctx[2];
   }
   set theme(e) {
-    this.$$set({ theme: e }), x();
+    this.$$set({ theme: e }), y();
   }
   get show_recurrent() {
-    return this.$$.ctx[9];
+    return this.$$.ctx[10];
   }
   set show_recurrent(e) {
-    this.$$set({ show_recurrent: e }), x();
+    this.$$set({ show_recurrent: e }), y();
   }
   get sidebar() {
     return this.$$.ctx[3];
   }
   set sidebar(e) {
-    this.$$set({ sidebar: e }), x();
+    this.$$set({ sidebar: e }), y();
   }
   get external_style() {
     return this.$$.ctx[4];
   }
   set external_style(e) {
-    this.$$set({ external_style: e }), x();
+    this.$$set({ external_style: e }), y();
   }
 }
 customElements.define("gancio-events", Re);
 function de(t) {
-  let e, i, l, n, r = t[1].title + "", o, f, c, s = V(t[1]) + "", w, g, _, A, y = t[1].place.name + "", d, z, h = t[1].media.length && he(t);
+  let e, i, l, n, r = t[1].title + "", o, f, s, c = V(t[1]) + "", w, g, _, A, E = t[1].place.name + "", M, d, h = t[1].media.length && he(t);
   return {
     c() {
-      e = m("a"), h && h.c(), i = M(), l = m("div"), n = m("strong"), o = $(r), f = M(), c = m("div"), w = $(s), g = M(), _ = m("div"), A = $("@"), d = $(y), a(_, "class", "place"), a(l, "class", "container"), a(e, "href", z = t[0] + "/event/" + (t[1].slug || t[1].id)), a(e, "class", "card"), a(e, "target", "_blank");
+      e = m("a"), h && h.c(), i = C(), l = m("div"), n = m("strong"), o = z(r), f = C(), s = m("div"), w = z(c), g = C(), _ = m("div"), A = z("@"), M = z(E), a(_, "class", "place"), a(l, "class", "container"), a(e, "href", d = t[0] + "/event/" + (t[1].slug || t[1].id)), a(e, "class", "card"), a(e, "target", "_blank");
     },
-    m(v, C) {
-      p(v, e, C), h && h.m(e, null), u(e, i), u(e, l), u(l, n), u(n, o), u(l, f), u(l, c), u(c, w), u(l, g), u(l, _), u(_, A), u(_, d);
+    m(p, v) {
+      k(p, e, v), h && h.m(e, null), u(e, i), u(e, l), u(l, n), u(n, o), u(l, f), u(l, s), u(s, w), u(l, g), u(l, _), u(_, A), u(_, M);
     },
-    p(v, C) {
-      v[1].media.length ? h ? h.p(v, C) : (h = he(v), h.c(), h.m(e, i)) : h && (h.d(1), h = null), C & 2 && r !== (r = v[1].title + "") && T(o, r), C & 2 && s !== (s = V(v[1]) + "") && T(w, s), C & 2 && y !== (y = v[1].place.name + "") && T(d, y), C & 3 && z !== (z = v[0] + "/event/" + (v[1].slug || v[1].id)) && a(e, "href", z);
+    p(p, v) {
+      p[1].media.length ? h ? h.p(p, v) : (h = he(p), h.c(), h.m(e, i)) : h && (h.d(1), h = null), v & 2 && r !== (r = p[1].title + "") && T(o, r), v & 2 && c !== (c = V(p[1]) + "") && T(w, c), v & 2 && E !== (E = p[1].place.name + "") && T(M, E), v & 3 && d !== (d = p[0] + "/event/" + (p[1].slug || p[1].id)) && a(e, "href", d);
     },
-    d(v) {
-      v && k(e), h && h.d();
+    d(p) {
+      p && x(e), h && h.d();
     }
   };
 }
@@ -611,13 +621,13 @@ function he(t) {
       e = m("img"), H(e.src, i = t[2](t[1])) || a(e, "src", i), a(e, "alt", l = t[1].media[0].name), a(e, "style", n = "object-position: " + me(t[1]) + "; aspect-ratio=1.7778;");
     },
     m(r, o) {
-      p(r, e, o);
+      k(r, e, o);
     },
     p(r, o) {
       o & 2 && !H(e.src, i = r[2](r[1])) && a(e, "src", i), o & 2 && l !== (l = r[1].media[0].name) && a(e, "alt", l), o & 2 && n !== (n = "object-position: " + me(r[1]) + "; aspect-ratio=1.7778;") && a(e, "style", n);
     },
     d(r) {
-      r && k(e);
+      r && x(e);
     }
   };
 }
@@ -628,7 +638,7 @@ function Ie(t) {
       i && i.c(), e = pe(), this.c = G;
     },
     m(l, n) {
-      i && i.m(l, n), p(l, e, n);
+      i && i.m(l, n), k(l, e, n);
     },
     p(l, [n]) {
       l[1] ? i ? i.p(l, n) : (i = de(l), i.c(), i.m(e.parentNode, e)) : i && (i.d(1), i = null);
@@ -636,7 +646,7 @@ function Ie(t) {
     i: G,
     o: G,
     d(l) {
-      i && i.d(l), l && k(e);
+      i && i.d(l), l && x(e);
     }
   };
 }
@@ -649,20 +659,20 @@ function me(t) {
 }
 function Oe(t, e, i) {
   let { baseurl: l = "https://demo.gancio.org" } = e, { id: n } = e, r = !1, o;
-  function f(s, w) {
-    r && fetch(`${w}/api/event/detail/${s}`).then((g) => g.json()).then((g) => i(1, o = g));
+  function f(c, w) {
+    r && fetch(`${w}/api/event/detail/${c}`).then((g) => g.json()).then((g) => i(1, o = g));
   }
   ke(() => {
     r = !0, f(n, l);
   });
-  function c(s) {
-    return `${l}/media/thumb/${s.media[0].url}`;
+  function s(c) {
+    return `${l}/media/thumb/${c.media[0].url}`;
   }
-  return t.$$set = (s) => {
-    "baseurl" in s && i(0, l = s.baseurl), "id" in s && i(3, n = s.id);
+  return t.$$set = (c) => {
+    "baseurl" in c && i(0, l = c.baseurl), "id" in c && i(3, n = c.id);
   }, t.$$.update = () => {
     t.$$.dirty & 9 && f(n, l);
-  }, [l, o, c, n];
+  }, [l, o, s, n];
 }
 class Ue extends X {
   constructor(e) {
@@ -679,7 +689,7 @@ class Ue extends X {
       _e,
       { baseurl: 0, id: 3 },
       null
-    ), e && (e.target && p(e.target, this, e.anchor), e.props && (this.$set(e.props), x()));
+    ), e && (e.target && k(e.target, this, e.anchor), e.props && (this.$set(e.props), y()));
   }
   static get observedAttributes() {
     return ["baseurl", "id"];
@@ -688,13 +698,13 @@ class Ue extends X {
     return this.$$.ctx[0];
   }
   set baseurl(e) {
-    this.$$set({ baseurl: e }), x();
+    this.$$set({ baseurl: e }), y();
   }
   get id() {
     return this.$$.ctx[3];
   }
   set id(e) {
-    this.$$set({ id: e }), x();
+    this.$$set({ id: e }), y();
   }
 }
 customElements.define("gancio-event", Ue);

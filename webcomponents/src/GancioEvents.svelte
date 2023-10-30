@@ -6,6 +6,7 @@
   export let baseurl = ''
   export let title = ''
   export let maxlength = false
+  export let collection = ''
   export let tags = ''
   export let places = ''
   export let theme = 'light'
@@ -24,20 +25,24 @@
       params.push(`max=${maxlength}`)
     }
 
-    if (tags) {
-      params.push(`tags=${tags}`)
-    }
+    let api = '/api/events'
+    if (collection) {
+      api = `/api/collections/${collection}`
+    } else {
+      if (tags) {
+        params.push(`tags=${tags}`)
+      }
 
-    if (places) {
-      params.push(`places=${places}`)
+      if (places) {
+        params.push(`places=${places}`)
+      }
     }
-
     params.push(`show_recurrent=${show_recurrent ? 'true' : 'false'}`)
 
-    fetch(`${baseurl}/api/events?${params.join('&')}`)
+    fetch(`${baseurl}${api}?${params.join('&')}`)
       .then((res) => res.json())
       .then((e) => {
-        events = e
+        events = e.events || e
       })
       .catch((e) => {
         console.error('Error loading Gancio API -> ', e)
@@ -57,7 +62,7 @@
     update()
   })
   $: update(
-    maxlength && title && places && tags && theme && show_recurrent && sidebar && baseurl
+    maxlength && title && places && tags && theme && show_recurrent && sidebar && baseurl && collection
   )
 </script>
 

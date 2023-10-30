@@ -4,6 +4,7 @@ const { htmlToText } = require('html-to-text')
 const { Op, literal } = require('sequelize')
 const { DateTime } = require('luxon')
 const ics = require('ics')
+const collectionController = require('./collection')
 
 const exportController = {
 
@@ -11,6 +12,7 @@ const exportController = {
     const format = req.params.format
     const tags = req.query.tags
     const places = req.query.places
+    const collection = req.query.collection
     const show_recurrent = !!req.query.show_recurrent
 
     const opt = {
@@ -21,45 +23,55 @@ const exportController = {
     const where = {}
     const yesterday = DateTime.local(opt).minus({day: 1}).toUnixInteger()
 
+    if (!collection) {
 
-    if (tags && places) {
-      where[Op.or] = {
-        placeId: places ? places.split(',') : [],
-        '$tags.tag$': tags.split(',')
+      if (tags && places) {
+        where[Op.or] = {
+          placeId: places ? places.split(',') : [],
+          '$tags.tag$': tags.split(',')
+        }
       }
-    }
 
-    if (tags) {
-      where['$tags.tag$'] = tags.split(',')
-    }
+      if (tags) {
+        where['$tags.tag$'] = tags.split(',')
+      }
 
-    if (places) {
-      where.placeId = places.split(',')
+      if (places) {
+        where.placeId = places.split(',')
+      }
+
     }
 
     if (!show_recurrent) {
       where.parentId = null
     }
 
-    const events = await Event.findAll({
-      order: ['start_datetime'],
-      attributes: { exclude: ['is_visible', 'recurrent', 'createdAt', 'likes', 'boost', 'userId', 'placeId'] },
-      where: {
-        is_visible: true,
-        recurrent: null,
-        start_datetime: { [Op.gte]: yesterday },
-        ...where
-      },
-      include: [
-        {
-          model: Tag,
-          order: [literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
-          attributes: ['tag'],
-          required: !!tags,
-          through: { attributes: [] }
+    let events = []
+
+    if (collection) {
+      events = await collectionController._getEvents(collection)
+      console.error(events.map(e => e))
+    } else {
+      events = await Event.findAll({
+        order: ['start_datetime'],
+        attributes: { exclude: ['is_visible', 'recurrent', 'createdAt', 'likes', 'boost', 'userId', 'placeId'] },
+        where: {
+          is_visible: true,
+          recurrent: null,
+          start_datetime: { [Op.gte]: yesterday },
+          ...where
         },
-        { model: Place, attributes: ['name', 'id', 'address'] }]
-    })
+        include: [
+          {
+            model: Tag,
+            order: [literal('(SELECT COUNT("tagTag") FROM event_tags WHERE tagTag = tag) DESC')],
+            attributes: ['tag'],
+            required: !!tags,
+            through: { attributes: [] }
+          },
+          { model: Place, attributes: ['name', 'id', 'address'] }]
+      })
+    }
 
     switch (format) {
       case 'rss':
@@ -109,11 +121,11 @@ const exportController = {
         endInputType: 'utc',
         title: `[${settings.title}] ${e.title}`,
         description: htmlToText(e.description),
-        htmlContent: e.description.replace(/\n/g,"<br>"),
+        htmlContent: e.description && e.description.replace(/\n/g,"<br>"),
         location,
         url: `${settings.baseurl}/event/${e.slug || e.id}`,
         status: 'CONFIRMED',
-        categories: e.tags.map(t => t.tag),
+        categories: e.tags.map(t => t.tag || t),
         alarms
       }
 

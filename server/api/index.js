@@ -147,7 +147,7 @@ module.exports = () => {
     // remove event
     api.delete('/event/:id', isAuth, eventController.remove)
 
-    // get tags/places
+    // get tags/places/collection
     api.get('/event/meta', eventController.searchMeta)
 
     // add event notification TODO
