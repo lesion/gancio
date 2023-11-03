@@ -7,6 +7,19 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### 1.6.18 - 3 Nov '23
+  - [feat] allow to specify password while create new user via CLI to [support yunohost](https://github.com/YunoHost-Apps/gancio_ynh/pull/2#discussion_r1364285417)
+  - [feat] check if I'm reachable to myself to help in [#298](https://framagit.org/les/gancio/-/issues/298)
+  - [feat] improve recover and user_confirm error messages
+  - [feat] improve export and allow to export `collections` in rss/ics/widget
+  - [fix] fix postgres image version in docker-compose [#303](https://framagit.org/les/gancio/-/issues/303)
+  - [fix] Improve json-ld representation of events [#33](https://framagit.org/les/gancio/-/merge_requests/33)
+  - [fix] Add description field to admin's new user form, closes [#307](https://framagit.org/les/gancio/-/issues/307)
+  - [fix] use tls SSLv3 to send email, fix [#192](https://framagit.org/les/gancio/-/issues/192)
+  - [fix] notify user when accepted, fix [#308](https://framagit.org/les/gancio/-/issues/308)
+  - [fix] forgot password on active user only
+  - [fix] make search case insensitive, fix [#301](https://framagit.org/les/gancio/-/issues/301)
+
 ### 1.6.17 - 4 Oct '23
   - [fix] typo
 
