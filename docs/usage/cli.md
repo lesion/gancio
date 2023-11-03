@@ -38,7 +38,7 @@ To list all users use
 
 ### Create a new user
 
-`gancio users create <username|email>`
+`gancio users create <username|email>` [password]
 
 To create an user with administrator privileges use the `--admin` flag, e.g. `gancio users create admin@example.com --admin`
 
