@@ -4,13 +4,11 @@ v-container.pa-0.pa-md-3
     v-card-title {{$t('common.share')}}
     v-card-text
       p.text-body-1 {{$t('export.intro')}}
-      v-row
-        v-col(:md='2' :cols='12')
-          v-card-title.py-0 {{$t('common.filter')}}
-        v-col
-          Search(
-            :filters='filters'
-            @update='f => filters = f')
+      v-alert.blue-grey.darken-4.text-body-1.lime--text.text--lighten-3
+        v-card-title {{$t('common.filter')}}
+        v-card-subtitle {{$t('export.filter_description')}}
+        v-card-text
+          Search(v-model='filters')
     v-tabs(v-model='type' show-arrows :next-icon='mdiChevronRight' :prev-icon='mdiChevronLeft')
 
       //- TOFIX
@@ -52,7 +50,7 @@ v-container.pa-0.pa-md-3
               v-col.col-12.col-lg-4
                 v-text-field(v-model='list.title' :label='$t("common.title")')
                 v-text-field(v-model='list.maxEvents' type='number' min='1' :label='$t("common.max_events")')
-                v-switch(v-model='list.theme' inset true-value='dark' false-value='light' :label="$t('admin.is_dark')")
+                v-switch(v-model='list.theme' hide-details inset true-value='dark' false-value='light' :label="$t('admin.is_dark')")
                 v-switch(v-model='list.sidebar' inset true-value='true' false-value='false' :label="$t('admin.widget')")
               v-col.col-12.col-lg-8
                 gancio-events(:baseurl='settings.baseurl'

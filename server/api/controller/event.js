@@ -75,13 +75,6 @@ const eventController = {
       raw: true
     })
 
-    const collections = await Collection.findAll({
-      where: {
-        name: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + search + '%'),
-      },
-      attributes: [['name', 'label'], 'id'],
-      raw: true
-    })
 
     const ret = places.map(p => {
       p.type = 'place'
@@ -89,10 +82,7 @@ const eventController = {
     }).concat(tags.map(t => {
       t.type = 'tag'
       return t
-    }).concat(collections.map(c => {
-      c.type = 'collection'
-      return c
-    }))).sort((a, b) => b.w - a.w).slice(0, 10)
+    })).sort((a, b) => b.w - a.w).slice(0, 10)
 
     return res.json(ret)
   },
