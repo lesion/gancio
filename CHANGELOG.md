@@ -1,4 +1,13 @@
-All notable changes to this project will be documented in this file.
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [1.6.19](https://framagit.org/les/gancio/compare/v1.6.18...v1.6.19) (2023-11-04)
+
+
+### Bug Fixes
+
+* issue displaying recurrent event string ([a94ccda](https://framagit.org/les/gancio/commit/a94ccda049f7571a9caa90507141a0aac30331a9))
 
 ### 1.6.18 - 3 Nov '23
   - [feat] allow to specify password while create new user via CLI to [support yunohost](https://github.com/YunoHost-Apps/gancio_ynh/pull/2#discussion_r1364285417)
