@@ -4,7 +4,7 @@ v-container.pa-0.pa-md-3
     v-card-title {{$t('common.share')}}
     v-card-text
       p.text-body-1 {{$t('export.intro')}}
-      v-alert.blue-grey.darken-4.text-body-1.lime--text.text--lighten-3
+      v-card(outlined :dark='is_dark' :color="is_dark ? '#333' : '#ececec'")
         v-card-title {{$t('common.filter')}}
         v-card-subtitle {{$t('export.filter_description')}}
         v-card-text
@@ -80,7 +80,7 @@ v-container.pa-0.pa-md-3
 
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import FollowMe from '../components/FollowMe'
 import Search from '@/components/Search'
 import clipboard from '../assets/clipboard'
@@ -122,6 +122,7 @@ export default {
   },
   computed: {
     ...mapState(['settings']),
+    ...mapGetters(['is_dark']),
     code () {
       const params = [`baseurl="${this.settings.baseurl}"`]
 
