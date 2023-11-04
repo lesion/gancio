@@ -79,7 +79,7 @@ export default ({ app, store }, inject) => {
       const opt = {
         zone,
         locale: app.i18n.locale || store.state.settings.instance_locale
-      }      
+      }
       return DateTime.local(opt).toUnixInteger()
     },
 
@@ -89,14 +89,18 @@ export default ({ app, store }, inject) => {
 
 
     recurrentDetail (event) {
+      const opt = {
+        zone,
+        locale: app.i18n.locale || store.state.settings.instance_locale
+      }      
       const parent = event.parent
       if (!parent.recurrent || !parent.recurrent.frequency) return 'error!'
       const { frequency, type } = parent.recurrent
       let recurrent
       if (frequency === '1w' || frequency === '2w') {
-        recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: DateTime.fromSeconds(parent.start_datetime).toLocaleString('EEEE') })
+        recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: DateTime.fromSeconds(parent.start_datetime, opt).toFormat('EEEE')})
       } else if (frequency === '1m' || frequency === '2m') {
-        const d = type === 'ordinal' ? DateTime.fromSeconds(parent.start_datetime).day : DateTime.fromSeconds(parent.start_datetime).toLocaleString('EEEE')
+        const d = type === 'ordinal' ? DateTime.fromSeconds(parent.start_datetime, opt).day : DateTime.fromSeconds(parent.start_datetime, opt).toFormat('EEEE')
         if (type === 'ordinal') {
           recurrent = app.i18n.t(`event.recurrent_${frequency}_days`, { days: d })
         } else {
