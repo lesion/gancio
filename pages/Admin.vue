@@ -12,6 +12,13 @@ v-container.container.pa-0.pa-md-3
       v-tab-item(value='settings')
         Settings
 
+      //- EVENTS
+      v-tab(href='#unconfirmed_events')
+        v-badge(:value='!!unconfirmedEvents.length' :content='unconfirmedEvents.length') {{$t('common.events')}}
+      v-tab-item(value='unconfirmed_events')
+        Events(:unconfirmedEvents='unconfirmedEvents'
+          @confirmed='id => { unconfirmedEvents = unconfirmedEvents.filter(e => e.id !== id)}')
+
       //- THEME
       v-tab(href='#theme') {{$t('common.theme')}}
       v-tab-item(value='theme')
@@ -38,19 +45,11 @@ v-container.container.pa-0.pa-md-3
       v-tab-item(value='geolocation')
         client-only(placeholder='Loading...')
           Geolocation
-            
 
       //- Collections
       v-tab(href='#collections') {{$t('common.collections')}}
       v-tab-item(value='collections')
         Collections
-
-      //- EVENTS
-      v-tab(href='#unconfirmed_events')
-        v-badge(:value='!!unconfirmedEvents.length' :content='unconfirmedEvents.length') {{$t('common.events')}}
-      v-tab-item(value='unconfirmed_events')
-        Events(:unconfirmedEvents='unconfirmedEvents'
-          @confirmed='id => { unconfirmedEvents = unconfirmedEvents.filter(e => e.id !== id)}')
 
       //- ANNOUNCEMENTS
       v-tab(href='#announcements') {{$t('common.announcements')}}
