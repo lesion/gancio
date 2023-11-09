@@ -67,7 +67,7 @@ module.exports = {
   },
 
 
-  /** 
+  /**
    * search for tags by query string
    * sorted by usage
   */
