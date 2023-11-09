@@ -33,6 +33,7 @@ module.exports = {
       preferredUsername: name,
       inbox: `${config.baseurl}/federation/u/${name}/inbox`,
       outbox: `${config.baseurl}/federation/u/${name}/outbox`,
+      endpoints: { sharedInbox: `${config.baseurl}/federation/u/${name}/inbox` },
       // followers: `${config.baseurl}/federation/u/${name}/followers`,
       discoverable: true,
       attachment: [{
