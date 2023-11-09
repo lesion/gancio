@@ -244,8 +244,8 @@ export default {
         formData.append('place_longitude', this.event.place.longitude || '')
       }
 
-      if (this.event.online_locations) { 
-        this.event.online_locations.forEach(l => formData.append('online_locations[]', l)) 
+      if (this.event.online_locations) {
+        this.event.online_locations.forEach(l => formData.append('online_locations[]', l))
       }
 
       formData.append('description', this.event.description)

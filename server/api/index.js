@@ -25,7 +25,6 @@ const { DDOSProtectionApiRateLimiter, SPAMProtectionApiRateLimiter } = require('
 const helpers = require('../helpers')
 const storage = require('./storage')
 
-
 module.exports = () => {
 
   const api = express.Router()
@@ -196,9 +195,11 @@ module.exports = () => {
 
     // - FEDIVERSE INSTANCES, MODERATION, RESOURCES
     api.get('/instances', isAdmin, instanceController.getAll)
+    api.get('/instances/friendly', instanceController.getFriendly)
     api.get('/instances/:instance_domain', isAdmin, instanceController.get)
     api.post('/instances/toggle_block', isAdmin, instanceController.toggleBlock)
     api.post('/instances/toggle_user_block', isAdmin, apUserController.toggleBlock)
+    api.post('/instances/add_friendly', isAdmin, instanceController.addFriendly)
     api.put('/resources/:resource_id', isAdmin, resourceController.hide)
     api.delete('/resources/:resource_id', isAdmin, resourceController.remove)
     api.get('/resources', isAdmin, resourceController.getAll)
