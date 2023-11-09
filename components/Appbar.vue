@@ -46,6 +46,7 @@ nav {
 }
 
 #title {
+  word-break: break-all;
   font-size: 2rem;
   font-weight: 600;
   text-decoration: none;
