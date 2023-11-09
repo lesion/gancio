@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) =>
     primaryKey: true
   },
   follower: DataTypes.BOOLEAN,
+  following: DataTypes.BOOLEAN,
   blocked: DataTypes.BOOLEAN,
   object: DataTypes.JSON
 })
