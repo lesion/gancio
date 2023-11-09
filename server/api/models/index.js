@@ -68,7 +68,10 @@ const db = {
     
     Event.hasMany(Resource)
     Resource.belongsTo(Event)
-    
+
+    APUser.hasMany(Event)
+    Event.belongsTo(APUser)
+
     Event.hasMany(Event, { as: 'child', foreignKey: 'parentId' })
     Event.belongsTo(Event, { as: 'parent' })
     
