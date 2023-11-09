@@ -33,6 +33,7 @@ const Helpers = {
   },
 
   async signAndSend (message, inbox) {
+    log.debug('Sign and send %s to %s', message, inbox)
     // get the URI of the actor object and append 'inbox' to it
     const inboxUrl = new url.URL(inbox)
     const privkey = settingsController.secretSettings.privateKey
@@ -63,8 +64,7 @@ const Helpers = {
       })
       log.debug(`signed ${ret.status} => ${ret.data}`)
     } catch (e) {
-      log.debug(e)
-      log.error(`Response: ${ret.status} ${ret.data}`)
+      log.error(String(e))
     }
   },
 
@@ -77,7 +77,7 @@ const Helpers = {
     const followers = await APUser.findAll({ where: { follower: true } })
     const recipients = {}
     followers.forEach(follower => {
-      const sharedInbox = follower.object.endpoints.sharedInbox
+      const sharedInbox = follower.object?.endpoints?.sharedInbox || follower.object.inbox
       if (!recipients[sharedInbox]) { recipients[sharedInbox] = [] }
       recipients[sharedInbox].push(follower.ap_id)
     })
@@ -101,6 +101,21 @@ const Helpers = {
         }]
       await Helpers.signAndSend(JSON.stringify(body), sharedInbox)
     }
+  },
+
+  async followActor (actor) {
+    log.debug(`Following actor ${actor.ap_id}`)
+    const body = {
+      '@context': 'https://www.w3.org/ns/activitystreams',
+      id: `${config.baseurl}/federation/m/${actor.ap_id}#follow`,
+      type: 'Follow',
+      actor: `${config.baseurl}/federation/u/${settingsController.settings.instance_name}`,
+      object: actor.ap_id
+    }
+
+    await Helpers.signAndSend(JSON.stringify(body), actor.object.endpoints?.sharedInbox || actor.object.inbox)
+
+    await actor.update({ following: 1 })
   },
 
   async getActor (URL, instance, force = false) {
