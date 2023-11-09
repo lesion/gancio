@@ -30,7 +30,7 @@ v-container
           v-col(cols=4)
             v-autocomplete(v-model='filterActors'
               cache-items
-              :prepend-icon="mdiTagMultiple"
+              :prepend-inner-icon="mdiTagMultiple"
               chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
               :disabled="!collection.id"
               placeholder='Local'
