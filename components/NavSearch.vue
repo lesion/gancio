@@ -49,7 +49,7 @@ export default {
     query: ''
   }),
   async fetch () {
-    this.collections = await this.$axios.$get('collections').catch(_e => [])
+    this.collections = await this.$axios.$get('collections', { params: { pin: 'true' } }).catch(_e => [])
   },
   components: { Calendar },
   computed: {

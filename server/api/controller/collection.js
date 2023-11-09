@@ -8,16 +8,36 @@ const { Op, Sequelize } = require('sequelize')
 
 const collectionController = {
 
+  // get all collections
   async getAll (req, res) {
     const withFilters = queryParamToBool(req.query.withFilters)
+    const pin = req.query.pin
     let collections
     if (withFilters) {
       collections = await Collection.findAll({ include: [ Filter ] })
     } else {
-      collections = await Collection.findAll()
+      if (pin) {
+        collections = await Collection.findAll({ where: { isTop: true }})
+      } else {
+        collections = await Collection.findAll()
+      }
     }
 
     return res.json(collections)
+  },
+
+
+  async togglePin (req, res) {
+    const id = req.params.id
+    try {
+      const collection = await Collection.findByPk(id)
+      if (!collection) { return req.sendStatus(404) }
+      await collection.update({ isTop: !collection.isTop })
+      res.json(!collection.isTop)
+    } catch (e) {
+      log.error(e)
+      res.sendStatus(404)
+    }
   },
 
   async getEvents (req, res) {

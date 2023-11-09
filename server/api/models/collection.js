@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) =>
     isActor: {
       type: DataTypes.BOOLEAN
     },
-    isTop: {
+    isTop: { // is this collection shown in top navbar in home page?
       type: DataTypes.BOOLEAN
     }
   }, { timestamps: false })

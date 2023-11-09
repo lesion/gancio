@@ -3,9 +3,9 @@ v-container
   v-card-title {{ $t('common.collections') }}
     v-spacer
     v-text-field(v-model='search'
-    :append-icon='mdiMagnify' outlined rounded
-    :label="$t('common.search')"
-    single-line hide-details)
+      :append-icon='mdiMagnify' outlined rounded
+      :label="$t('common.search')"
+      single-line hide-details)
   v-card-subtitle(v-html="$t('admin.collections_description')")
 
   v-btn(color='primary' text @click='newCollection') <v-icon v-text='mdiPlus'></v-icon> {{ $t('admin.new_collection') }}
@@ -30,7 +30,7 @@ v-container
           v-col(cols=5)
             v-autocomplete(v-model='filterTags'
               cache-items
-              :prepend-icon="mdiTagMultiple"
+              :prepend-inner-icon="mdiTagMultiple"
               chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
               :disabled="!collection.id"
               placeholder='All'
@@ -46,7 +46,7 @@ v-container
           v-col(cols=5)
             v-autocomplete(v-model='filterPlaces'
               cache-items
-              :prepend-icon="mdiMapMarker"
+              :prepend-inner-icon="mdiMapMarker"
               chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
               auto-select-first
               clearable
@@ -81,9 +81,9 @@ v-container
               v-btn(@click='removeFilter(item)' color='error' icon)
                 v-icon(v-text='mdiDeleteForever')
             template(v-slot:item.tags='{ item }')
-              v-chip.ma-1(small v-for='tag in item.tags' v-text='tag' :key='tag')
+              v-chip.ma-1(small label v-for='tag in item.tags' v-text='tag' :key='tag')
             template(v-slot:item.places='{ item }')
-              v-chip.ma-1(small v-for='place in item.places' v-text='place.name' :key='place.id' )
+              v-chip.ma-1(small label v-for='place in item.places' v-text='place.name' :key='place.id' )
 
 
       v-card-actions
@@ -92,14 +92,17 @@ v-container
 
   v-card-text
     v-data-table(
-    :headers='collectionHeaders'
-    :items='collections'
-    :hide-default-footer='collections.length < 5'
-    :header-props='{ sortIcon: mdiChevronDown }'
-    :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
-    :search='search')
+      :headers='collectionHeaders'
+      :items='collections'
+      :hide-default-footer='collections.length < 5'
+      :header-props='{ sortIcon: mdiChevronDown }'
+      :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
+      :search='search'
+    )
       template(v-slot:item.filters='{ item }')
         span {{ collectionFilters(item) }}
+      template(v-slot:item.pin='{ item }')
+        v-switch.float-right(:input-value='item.isTop' @change="togglePinCollection(item)" inset dense hide-details)
       template(v-slot:item.actions='{ item }')
         v-btn(@click='editCollection(item)' color='primary' icon)
           v-icon(v-text='mdiPencil')
@@ -135,7 +138,8 @@ export default {
       collectionHeaders: [
         { value: 'name', text: this.$t('common.name') },
         { value: 'filters', text: this.$t('common.filter') },
-        { value: 'actions', text: this.$t('common.actions'), align: 'right' }
+        { value: 'pin', text: this.$t('common.pin'), align: 'right' },
+        { value: 'actions', text: this.$t('common.actions'), align: 'right', width: 150 }
       ],
       filterHeaders: [
         { value: 'tags', text: this.$t('common.tags') },
@@ -202,6 +206,14 @@ export default {
       this.$fetch()
       this.loading = false
     },
+    async togglePinCollection (collection) {
+      try {
+        collection.isTop = await this.$axios.$put(`/collection/toggle/${collection.id}`)
+      } catch (e) {
+        const err = get(e, 'response.data.errors[0].message', e)
+        this.$root.$message(this.$t(err), { color: 'error' })        
+      }
+    },
     async removeFilter(filter) {
       try {
         await this.$axios.$delete(`/filter/${filter.id}`)
@@ -228,3 +240,11 @@ export default {
   }
 }
 </script>
+<style>
+
+/**  this is for the switch */
+.v-data-table .v-input--selection-controls {
+  margin-top: 0;
+  padding-top: 0;
+}
+</style>
