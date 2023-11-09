@@ -8,6 +8,8 @@ v-col(cols=12)
 
     p {{ $t(`event.${type}_description`) }}
 
+    span {{ value }}
+
     v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-if='type === "recurrent"' color='primary' :value='value.recurrent.frequency' @change='fq => change("frequency", fq)')
       v-btn(v-for='f in frequencies' :key='f.value' :value='f.value') {{ f.text }}
     client-only
@@ -209,7 +211,7 @@ export default {
       if (what === 'type') {
         if (typeof value === 'undefined') { this.type = 'normal' }
         if (value === 'recurrent') {
-          this.$emit('input', { ...this.value, recurrent: { frequency: '1w' }, multidate: false })
+          this.$emit('input', { ...this.value, due: null, recurrent: { frequency: '1w' }, multidate: false })
         } else if (value === 'multidate') {
           this.$emit('input', { ...this.value, recurrent: null, multidate: true })
         } else {
