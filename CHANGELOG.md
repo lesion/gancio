@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://framagit.org/les/gancio/compare/v1.6.19...v1.7.0) (2023-11-10)
+
+
+### Features
+
+* **Collection:** allow to show/hide a collection from homepage ([f60ff37](https://framagit.org/les/gancio/commit/f60ff37a7024bde67e9ee7fd661bb234fbc77882))
+
+
+### Bug Fixes
+
+* **Admin:** Move the events tab to the left in the admin panel ([3658ee2](https://framagit.org/les/gancio/commit/3658ee26581cb4c34cee6efb0e16f2c4894eb6b5)), closes [#312](https://framagit.org/les/gancio/issues/312)
+* make title word-break, fix [#196](https://framagit.org/les/gancio/issues/196) ([e37d190](https://framagit.org/les/gancio/commit/e37d190eae1d3ff6bfc4681174a5d5c5e037fbb9))
+* **plugin-telegram-bridge:** fix infinite loop bug ([d1204a0](https://framagit.org/les/gancio/commit/d1204a093e5cde475c11310f7fc00c863b79f96a))
+* **recurrent:** clean due date when recurrent type is selected ([54af7c6](https://framagit.org/les/gancio/commit/54af7c662d97414b08ca2366eef77c28c6bf02de))
+
 ### [1.6.19](https://framagit.org/les/gancio/compare/v1.6.18...v1.6.19) (2023-11-04)
 
 
