@@ -78,7 +78,6 @@ v-container
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import get from 'lodash/get'
 import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown } from '@mdi/js'
 
 export default {
@@ -96,9 +95,8 @@ export default {
       friendly_instances: [],
       valid: false,
       headers: [
-        { value: 'object.id', text: 'Name' },
+        { value: 'object.preferredUsername', text: 'Name' },
         { value: 'ap_id', text: 'URL' },
-        { value: 'instance.domain', text: 'Instance' },
         { value: 'actions', text: 'Actions', align: 'right' }
       ]
     }
@@ -139,18 +137,11 @@ export default {
           this.instance_url = `https://${this.instance_url}`
         }
         this.instance_url = this.instance_url.replace(/\/$/, '')
-        // const instance = await this.$axios.$get(`${this.instance_url}/.well-known/nodeinfo/2.1`)
-        const ret = await this.$axios.$post('/instances/add_friendly', { instance_url: this.instance_url })
-        // this.setSetting({
-        //   key: 'trusted_instances',
-        //   value: this.settings.trusted_instances.concat({
-        //     url: this.instance_url,
-        //     name: get(instance, 'metadata.nodeName', ''),
-        //     label: get(instance, 'metadata.nodeLabel', '')
-        //   })
-        // })
+        await this.$axios.$post('/instances/add_friendly', { instance_url: this.instance_url })
         this.$refs.form.reset()
+        this.$fetch()
         this.dialogAddInstance = false
+        this.$root.$emit('update_friendly_instances')
       } catch (e) {
         this.$root.$message(e, { color: 'error' })
       }
@@ -159,10 +150,14 @@ export default {
     async deleteInstance (instance) {
       const ret = await this.$root.$confirm('admin.delete_trusted_instance_confirm')
       if (!ret) { return }
-      this.setSetting({
-        key: 'trusted_instances',
-        value: this.settings.trusted_instances.filter(i => i.url !== instance.url)
-      })
+      try {
+        await this.$axios.$delete('/instances/friendly', { params: { ap_id: instance.ap_id }})
+        this.$fetch()
+        this.$root.$emit('update_friendly_instances')
+        this.$root.$message('admin.instance_removed', { color: 'success' })
+      } catch (e) {
+        this.$root.$message(e, { color: 'error' })
+      }
     },
     save (key, value) {
       if (this.settings[key] !== value) {

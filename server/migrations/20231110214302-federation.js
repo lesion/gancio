@@ -12,6 +12,7 @@ module.exports = {
     return Promise.all(
       [
         await queryInterface.addColumn('ap_users', 'following', { type: Sequelize.BOOLEAN }),
+        await queryInterface.addColumn('ap_users', 'friendly', { type: Sequelize.BOOLEAN }),
         await queryInterface.addColumn('events', 'apUserApId', {
           type: Sequelize.STRING,
           references: {
@@ -34,7 +35,9 @@ module.exports = {
      */
     return Promise.all(
       [
+        await queryInterface.removeColumn('events', 'apUserApId'),
         await queryInterface.removeColumn('ap_users', 'following'),
+        await queryInterface.removeColumn('ap_users', 'friendly'),
       ])
   }
 };

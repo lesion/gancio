@@ -200,6 +200,7 @@ module.exports = () => {
     api.post('/instances/toggle_block', isAdmin, instanceController.toggleBlock)
     api.post('/instances/toggle_user_block', isAdmin, apUserController.toggleBlock)
     api.post('/instances/add_friendly', isAdmin, instanceController.addFriendly)
+    api.delete('/instances/friendly', isAdmin, instanceController.removeFriendly)
     api.put('/resources/:resource_id', isAdmin, resourceController.hide)
     api.delete('/resources/:resource_id', isAdmin, resourceController.remove)
     api.get('/resources', isAdmin, resourceController.getAll)
