@@ -13,7 +13,7 @@ module.exports = {
     })
 
     if (!tags.length) { return }
-    log.info(`Remove ${tags.length} orphan tags (${tags.join(', ')})`)
+    log.info(`Remove ${tags.length} orphan tags (${tags.map(p => p.tag).join(', ')})`)
 
     await Tag.destroy({
       where: { tag: { [Sequelize.Op.in]: tags.map(p => p.tag) } }
