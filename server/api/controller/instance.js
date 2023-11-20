@@ -1,5 +1,5 @@
 const { APUser, Instance, Resource } = require('../models/models')
-const { getActor, followActor } = require('../../federation/helpers')
+const { getActor, unfollowActor } = require('../../federation/helpers')
 const axios = require('axios')
 const get = require('lodash/get')
 
@@ -50,7 +50,7 @@ const instancesController = {
   },
 
   async getFriendly (req, res) {
-    const friendly_instances = await APUser.findAll({ where: { following: true }, include: [Instance]})
+    const friendly_instances = await APUser.findAll({ where: { friendly: true }, include: [Instance]})
     return res.json(friendly_instances)
   },
 
@@ -61,9 +61,37 @@ const instancesController = {
     return res.json(instance)
   },
 
+
+  async removeFriendly (req, res) {
+    let ap_id = req.query.ap_id
+    log.info(`Remove friendly instance ${ap_id} ...`)
+    
+    try {
+      const actor = await getActor(ap_id)
+      if (!actor || !actor.friendly) {
+        return res.sendStatus(404)
+      }
+
+      if (actor.following) {
+        // unfollow
+        await unfollowActor(actor)
+      }
+
+      // remove friendlyness
+      await actor.update({ friendly: false })
+
+    } catch (e) {
+      log.warn(e)
+      return res.status(400).send(e)      
+    }
+
+    return res.sendStatus(200)
+
+  },
+
   async addFriendly (req, res) {
 
-    let instance_url= req.body.instance_url
+    let instance_url = req.body.instance_url
     try {
       if (!instance_url.startsWith('http')) {
         instance_url = `https://${instance_url}`
@@ -84,7 +112,7 @@ const instancesController = {
 
       log.debug(`instance .well-known: ${instance.name} / ${instance.actor}`)
 
-      // if we have an actor, let's follow him
+      // if we have an actor, let's make friend
       if (instance.actor) {
 
         // send a well-known request
@@ -94,10 +122,10 @@ const instancesController = {
         // search for actor url
         const actorURL = wellknown?.links.find(l => l.rel === 'self').href
 
-        // retrieve the AP actor
+        // retrieve the AP actor and flat it as friendly
         const actor = await getActor(actorURL)
+        await actor.update({ friendly: true })
 
-        await followActor(actor)
         return res.json(actor)
       }
     } catch (e) {

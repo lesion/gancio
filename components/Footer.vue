@@ -8,21 +8,21 @@ v-footer(aria-label='Footer')
     :key='link.label' color='primary' text
     :href='link.href' :to='link.to' :target="link.href && '_blank'") {{link.label}}
 
-  v-menu(v-if='settings.enable_trusted_instances && settings.trusted_instances && settings.trusted_instances.length'
+  v-menu(v-if='settings.enable_trusted_instances && trusted_instances?.length'
     offset-y bottom open-on-hover transition="slide-y-transition")
     template(v-slot:activator="{ on, attrs }")
       v-btn.ml-1(v-bind='attrs' v-on='on' color='primary' text) {{ settings.trusted_instances_label || $t('admin.trusted_instances_label_default')}}
     v-list(subheaders two-lines)
-      v-list-item(v-for='instance in settings.trusted_instances'
+      v-list-item(v-for='instance in trusted_instances'
         :key='instance.name'
         target='_blank'
-        :href='instance.url'
+        :href='instance.ap_id'
         two-line)
+        //- p {{ instance.object }}
         v-list-item-avatar
-          v-img(:src='`${instance.url}/logo.png`')
+          v-img(:src='instance.object.icon.url')
         v-list-item-content
-          v-list-item-title {{instance.name}}
-          v-list-item-subtitle {{instance.label}}
+          v-list-item-title {{instance.object.preferredUsername}}
 
   v-btn.ml-1(v-if='settings.enable_federation' color='primary' text rel='me' @click.prevent='showFollowMe=true') {{$t('event.interact_with_me')}}
   v-spacer
@@ -37,8 +37,15 @@ export default {
   components: { FollowMe },
   data () {
     return {
-      showFollowMe: false
+      showFollowMe: false,
+      trusted_instances: []
     }
+  },
+  created () {
+    this.$root.$on('update_friendly_instances', this.$fetch)
+  },
+  async fetch () {
+    this.trusted_instances = await this.$axios.$get('/instances/friendly')
   },
   computed: {
     ...mapState(['settings']),

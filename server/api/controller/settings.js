@@ -21,7 +21,7 @@ const defaultSettings = {
   hostname: defaultHostname,
   instance_timezone: 'Europe/Rome',
   instance_locale: 'en',
-  instance_name: 'gancio',
+  instance_name: 'relay',
   instance_place: '',
   allow_registration: true,
   allow_anon_event: true,

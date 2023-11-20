@@ -30,7 +30,7 @@ module.exports = {
       type: 'Application',
       summary: config.description,
       name,
-      preferredUsername: name,
+      preferredUsername: settings.instance_place,
       inbox: `${config.baseurl}/federation/u/${name}/inbox`,
       outbox: `${config.baseurl}/federation/u/${name}/outbox`,
       endpoints: { sharedInbox: `${config.baseurl}/federation/u/${name}/inbox` },
