@@ -114,8 +114,20 @@ const Helpers = {
     }
 
     await Helpers.signAndSend(JSON.stringify(body), actor.object.endpoints?.sharedInbox || actor.object.inbox)
-
     await actor.update({ following: 1 })
+  },
+
+  async unfollowActor (actor) {
+    log.debug(`Unfollowing actor ${actor.ap_id}`)
+    const body = {
+      '@context': 'https://www.w3.org/ns/activitystreams',
+      id: `${config.baseurl}/federation/m/${actor.ap_id}#follow`,
+      type: 'Unfollow',
+      actor: `${config.baseurl}/federation/u/${settingsController.settings.instance_name}`,
+      object: actor.ap_id
+    }
+    await Helpers.signAndSend(JSON.stringify(body), actor.object.endpoints?.sharedInbox || actor.object.inbox)
+    await actor.update({ following: 0 })
   },
 
   async getActor (URL, instance, force = false) {
