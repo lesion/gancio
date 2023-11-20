@@ -14,6 +14,7 @@ module.exports = {
   pt: 'Português',
   'pt-BR': 'Português (Brasilian)',
   ru: 'Русский',
+  tr: 'Türkçe',
   sk: 'Slovak',
   zh: '中国'
 }
