@@ -289,10 +289,11 @@ module.exports = {
 
   async reachable(req, res) {
     try {
-      const response = await axios({ url: config.baseurl })
+      await axios({ url: config.baseurl })
       return res.sendStatus(200)
     } catch(e) {
-      return res.status(400).json(e)
+      log.debug(e)
+      return res.sendStatus(400)
     }
   },
 

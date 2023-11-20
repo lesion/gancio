@@ -279,6 +279,7 @@
     "admin_email_help": "The address we use as the sender to send emails. This is also the address to which admin emails are sent",
     "widget": "Widget",
     "wrong_domain_warning": "The baseurl configured in config.json <b>({baseurl})</b> differs from the one you're visiting <b>({url})</b>",
+    "not_reachable_warning": "Cannot reach myself ({baseurl}) from the server! Please check that proxy, firewall and network are correctly configured.",
     "new_collection": "New collection",
     "collections_description": "Collections are groupings of events by tags and places. They will be displayed on the home page",
     "edit_collection": "Edit Collection",
