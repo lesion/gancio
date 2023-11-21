@@ -1,1 +1,22 @@
-{}
+{
+    "register": {
+        "content": "Kayıt başvurunuzu aldık. Başvurunuzu en kısa sürede onaylayacağız.",
+        "subject": "Kayıt başvurusu alındı"
+    },
+    "user_confirm": {
+        "subject": "Şimdi etkinlik paylaşmaya başlayabilirsin"
+    },
+    "admin_register": {
+        "subject": "Yeni kayıt"
+    },
+    "confirm": {
+        "subject": "Şimdi etkinlik paylaşmaya başlayabilirsin"
+    },
+    "recover": {
+        "subject": "Şifreni sıfırla"
+    },
+    "test": {
+        "content": "Bu bir deneme epostasıdır. Bu epostayı okuyabiliyorsan ayarların çalışıyor demektir.",
+        "subject": "SMTP ayarların çalışıyor"
+    }
+}
