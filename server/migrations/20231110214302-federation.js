@@ -13,6 +13,7 @@ module.exports = {
       [
         await queryInterface.addColumn('ap_users', 'following', { type: Sequelize.BOOLEAN }),
         await queryInterface.addColumn('ap_users', 'friendly', { type: Sequelize.BOOLEAN }),
+        await queryInterface.addColumn('filters', 'actors', { type: Sequelize.JSON }),
         await queryInterface.addColumn('events', 'apUserApId', {
           type: Sequelize.STRING,
           references: {
