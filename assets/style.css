@@ -90,13 +90,24 @@ li {
   background-color: #292929;
 }
 
-.theme--dark.v-list {
+/* .theme--dark.v-list {
   background-color: #333;
-}
+} */
 
-.v-autocomplete__content.v-menu__content {
+.v-menu__content {
   scrollbar-width: thin;
   scrollbar-color: #FF4511 #111;
+  background-color: #333;
+  border: 1px solid #282828;
+}
+
+.v-autocomplete__content.v-menu__content .v-select-list {
+  border-radius: 0 !important;
+}
+
+.v-sheet.v-card {
+  box-shadow: none !important;
+  border-radius: 0 !important;
 }
 
 .event {
@@ -111,8 +122,10 @@ li {
   transition: all .5s;
   min-height: 288px;
   overflow: hidden;
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-  border-radius: 4px;
+  box-shadow: none;
+  border-radius: none;
+  /* box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12); */
+  /* border-radius: 4px; */
 
 }
 

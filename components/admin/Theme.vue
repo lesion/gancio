@@ -4,15 +4,15 @@ v-container
   v-card-text
 
     v-switch.mt-5(v-model='is_dark'
-      inset
+      inset hide-details
       :label="$t('admin.is_dark')")
       
     v-switch.mt-5(v-model='hide_thumbs'
-      inset
+      inset hide-details
       :label="$t('admin.hide_thumbs')")
 
     v-switch.mt-5(v-model='hide_calendar'
-      inset
+      inset hide-details
       :label="$t('admin.hide_calendar')")
 
   v-card-title {{$t('admin.default_images')}}
