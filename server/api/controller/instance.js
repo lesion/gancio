@@ -1,5 +1,5 @@
 const { APUser, Instance, Resource } = require('../models/models')
-const { getActor, unfollowActor } = require('../../federation/helpers')
+const { getActor, unfollowActor, followActor } = require('../../federation/helpers')
 const axios = require('axios')
 const get = require('lodash/get')
 
@@ -49,11 +49,13 @@ const instancesController = {
     return res.json(ap_users)
   },
 
+  // get friendly users
   async getFriendly (req, res) {
-    const friendly_instances = await APUser.findAll({ where: { friendly: true }, include: [Instance]})
-    return res.json(friendly_instances)
+    const friendly_users = await APUser.findAll({ where: { friendly: true }, include: [Instance]})
+    return res.json(friendly_users)
   },
 
+  // toggle instance block
   async toggleBlock (req, res) {
     const instance = await Instance.findByPk(req.body.instance)
     if (!instance) { return res.status(404).send('Not found') }
@@ -134,8 +136,6 @@ const instancesController = {
       log.warn(e)
       return res.status(400).send(e)
     }
-
-
   }
 }
 

@@ -43,12 +43,12 @@ module.exports = (sequelize, DataTypes) => {
       locale: settings.instance_locale
     }
     const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
-    const plainDescription = htmlToText(this.description && this.description.replace('\n', '').slice(0, 1000))
-    const content = `
+    const content = htmlToText(this.description || '')
+    const summary = `
     📍 ${this.place && this.place.name}
     📅 ${DateTime.fromSeconds(this.start_datetime, opt).toFormat('EEEE, d MMMM (HH:mm)')}
     
-    ${plainDescription}
+    ${content.slice(0, 1000)}
     `
     
     const attachment = []
@@ -89,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
       to: ['https://www.w3.org/ns/activitystreams#Public'],
       cc: [`${config.baseurl}/federation/u/${username}/followers`],
       content,
-      summary: content
+      summary
     }
   }
   return Event

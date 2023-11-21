@@ -225,7 +225,6 @@ module.exports = () => {
     api.get('/plugins', isAdmin, pluginController.getAll)
     api.post('/plugin/test/:plugin', isAdmin, pluginController.testPlugin)
     api.put('/plugin/:plugin', isAdmin, pluginController.togglePlugin)
-
     api.use('/plugin/:plugin', pluginController.routeAPI)
 
     // OAUTH

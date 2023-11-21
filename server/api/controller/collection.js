@@ -1,10 +1,11 @@
-const { Collection, Filter, Event, Tag, Place } = require('../models/models')
+const { Collection, Filter, Event, Tag, Place, APUser } = require('../models/models')
 const exportController = require('./export')
 
 const log = require('../../log')
 const { DateTime } = require('luxon')
 const { col: Col, queryParamToBool } = require('../../helpers')
 const { Op, Sequelize } = require('sequelize')
+const { getActor, followActor, unfollowActor } = require('../../federation/helpers')
 
 const collectionController = {
 
@@ -87,6 +88,8 @@ const collectionController = {
 
     const replacements = []
     const ors = []
+
+    // collections are a set of filters to match
     filters.forEach(f => {
       if (f.tags && f.tags.length) {
         const tags = Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=event.id AND ${Col('tagTag')} in (?)`))
@@ -98,6 +101,8 @@ const collectionController = {
         }
       } else if (f.places && f.places.length) {
         ors.push({ placeId: f.places.map(p => p.id) })
+      } else if (f.actors && f.actors.length) {
+        ors.push({ apUserApId: f.actors.map(a => a.ap_id)})
       }
     })
 
@@ -116,7 +121,7 @@ const collectionController = {
           attributes: ['tag'],
           through: { attributes: [] }
         },
-        { model: Place, required: true, attributes: ['id', 'name', 'address'] }
+        { model: Place, required: true, attributes: ['id', 'name', 'address'] },
       ],
       // limit: max,
       replacements
@@ -171,10 +176,14 @@ const collectionController = {
   },
 
   async addFilter (req, res) {
-    const { collectionId, tags, places } = req.body
+    const { collectionId, tags, places, actors } = req.body
 
     try {
-      filter = await Filter.create({ collectionId, tags, places })
+      if (actors?.length) {
+        const actors_to_follow = await APUser.findAll({ where: { ap_id: { [Op.in]: actors.map(a => a.ap_id) }} })
+        await Promise.all(actors_to_follow.map(followActor))
+      }
+      const filter = await Filter.create({ collectionId, tags, places, actors })
       return res.json(filter)
     } catch (e) {
       log.error(String(e))
