@@ -111,7 +111,8 @@
     "trusted_instances": "Trusted instances",
     "actors": "Node",
     "collection_in_home": "Show a collection in home",
-    "my_events": "My Events"
+    "my_events": "My Events",
+    "contact_user": "Contact user"
   },
   "login": {
     "description": "By logging in you can publish new events.",
@@ -214,9 +215,10 @@
     "event_remove_ok": "Event removed",
     "allow_registration_description": "Allow open registrations?",
     "allow_anon_event": "Allow anonymous events (has to be confirmed)?",
+    "allow_message_users": "Allow admin to message users",
     "allow_multidate_event": "Allow multi-day events",
     "allow_recurrent_event": "Allow recurring events",
-    "allow_online_event": "Allow online events",
+    "allow_online_event": "Allow online events",    
     "allow_online_event_hint": "Ask for urls ",
     "allow_geolocation": "Allow events geolocation",
     "recurrent_event_visible": "Show recurring events by default",

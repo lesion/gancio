@@ -60,6 +60,10 @@ v-container
       inset
       :label="$t('admin.allow_geolocation')")
 
+    v-switch.mt-1(v-model='allow_message_users'
+      inset
+      :label="$t('admin.allow_message_users')")
+
   v-dialog(v-model='showSMTP' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
     SMTP(@close='showSMTP = false')
 
@@ -133,6 +137,10 @@ export default {
     allow_online_event: {
       get () { return this.settings.allow_online_event },
       set (value) { this.setSetting({ key: 'allow_online_event', value }) }
+    },
+    allow_message_users: {
+      get () { return this.settings.allow_message_users },
+      set (value) { this.setSetting({ key: 'allow_message_users', value }) }
     },
     filteredTimezones () {
       const current_timezone = DateTime.local().zoneName

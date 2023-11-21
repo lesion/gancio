@@ -81,6 +81,7 @@ module.exports = () => {
     api.post('/user/recover', SPAMProtectionApiRateLimiter, userController.forgotPassword)
     api.post('/user/check_recover_code', userController.checkRecoverCode)
     api.post('/user/recover_password', SPAMProtectionApiRateLimiter, userController.updatePasswordWithRecoverCode)
+    api.post('/user/send_message', isAdmin, userController.sendMessage)
 
     // register and add users
     api.post('/user/register', SPAMProtectionApiRateLimiter, userController.register)

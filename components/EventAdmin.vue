@@ -27,6 +27,14 @@ span
         v-list-item-content
           v-list-item-title(v-text="$t('common.clone')")
 
+      //- Contact user
+      v-list-item(v-if='event.userId && event.userId !== $auth.user.id && settings.allow_message_users' @click='openContactUser = true')
+        v-list-item-icon
+          v-icon(v-text='mdiMessageTextOutline')
+        v-list-item-content
+          v-list-item-title(v-text="$t('common.contact_user')")
+
+
       //- Remove
       v-list-item(v-if='!event.parentId' @click='remove(false)')
         v-list-item-icon
@@ -60,19 +68,45 @@ span
           v-list-item-content
             v-list-item-title(v-text="$t('common.remove')")
 
+  v-dialog(v-model='openContactUser' :fullscreen="$vuetify.breakpoint.xsOnly" width='1000px')
+    v-card
+      v-card-title {{$t('common.contact_user')}}
+      v-card-text
+        v-textarea(type='text'
+          @input='v => message=v'
+          :value='value.message'
+          label='Message')
+        br
+        v-card-actions.justify-space-between
+          v-btn(text @click='openContactUser=false' color='warning') Cancel
+          v-btn(text color='primary' @click='sendMessageToUser') Send
+
 </template>
 <script>
-import { mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever, mdiScanner } from '@mdi/js'
+import { mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever, mdiScanner, mdiMessageTextOutline } from '@mdi/js'
+import { mapState } from 'vuex'
 export default {
   name: 'EventAdmin',
   data () {
-    return { mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever, mdiScanner }
+    return {
+      mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever, mdiScanner,  mdiMessageTextOutline,
+      openContactUser: false,
+      message: this.value.message || ''
+    }
   },
   props: {
     event: {
       type: Object,
       default: () => ({})
-    }
+    },
+    value: {
+      type: Object,
+      default: () => ({})
+    },
+    
+  },
+  computed: {
+    ...mapState(['settings'])
   },
   methods: {
     async remove (parent = false) {
@@ -95,6 +129,17 @@ export default {
         }
       } catch (e) {
         console.error(e)
+      }
+    },
+    async sendMessageToUser () {
+      try {
+	await this.$axios.$post('/user/send_message', {
+	  subject: this.event.title,
+	  message: this.message,
+	  userId: this.event.userId
+	})
+      } catch (e) {
+	console.error(e)
       }
     }
   }
