@@ -48,7 +48,7 @@ module.exports = async (req, res) => {
         log.debug('Create a resource!')
         await Resources.create(req, res)
       } else if (b.object.type === 'Event') {
-        log.debug(`Event is coming from ${res.locals.fedi_user}`)
+        log.debug(`Event is coming from ${res.locals.fedi_user.ap_id}`)
         await Events.create(req, res)
       } else {
         // await Resources.create(req, res)

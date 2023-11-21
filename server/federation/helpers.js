@@ -127,7 +127,7 @@ const Helpers = {
       object: actor.ap_id
     }
     await Helpers.signAndSend(JSON.stringify(body), actor.object.endpoints?.sharedInbox || actor.object.inbox)
-    await actor.update({ following: 0 })
+    return actor.update({ following: 0 })
   },
 
   async getActor (URL, instance, force = false) {
@@ -164,6 +164,22 @@ const Helpers = {
     return fedi_user
   },
 
+
+  async getNodeInfo (instance_url) {
+    const versions = await axios.get(`${instance_url}/.well-known/nodeinfo`, { headers: { Accept: 'application/json' } }).then(res => res.data)
+    console.error(versions)
+    if (versions.links) {
+      const choosen = versions.links.find(l => l.rel === 'http://nodeinfo.diaspora.software/ns/schema/2.1' || 'http://nodeinfo.diaspora.software/ns/schema/2.0')
+      console.error(choosen)
+      if (!choosen) {
+        throw new Error('Not found!')
+      }
+      const data = await axios.get(choosen.href).then(res => res.data)
+      console.error('INSTANCE', data)
+      return data
+    }
+  },
+
   async getInstance (actor_url, force = false) {
     actor_url = new url.URL(actor_url)
     const domain = actor_url.host
@@ -175,21 +191,13 @@ const Helpers = {
       if (instance) { return instance }
     }
 
-    // TODO: is this a standard? don't think so
-    instance = await axios.get(`${instance_url}/api/v1/instance`, { headers: { Accept: 'application/json' } })
-      .then(res => res.data)
-      .then(instance => {
-        const data = {
-          stats: instance.stats,
-          thumbnail: instance.thumbnail
-        }
-        return Instance.create({ name: instance.title, domain, data, blocked: false })
-      })
-      .catch(e => {
-        log.error('[INSTANCE CREATE]', e)
-        return Instance.create({ name: domain, domain, blocked: false })
-      })
-    return instance
+    try {
+      instance = await Helpers.getNodeInfo(instance_url)
+      return Instance.create({ name: instance?.metadata?.nodeLabel || instance?.metadata?.nodeName || domain, domain, data: instance, blocked: false })
+    } catch(e) {
+      log.error('NodeInfo not supported', e)
+      return Instance.create({ name: domain, domain, blocked: false })
+    }
   },
 
   // ref: https://blog.joinmastodon.org/2018/07/how-to-make-friends-and-verify-requests/
