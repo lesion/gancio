@@ -36,14 +36,15 @@ v-container
               placeholder='Local'
               @input.native='searchActors'
               @focus='searchActors'
-              item-text='ap_id'
+              return-object
+              item-text='object.preferredUsername'
               item-value='ap_id'
               :delimiters="[',', ';']"
               :items="actors"
-              :label="$t('common.actors')")
-                template(v-slot:selection="{ item, on, attrs, selected, parent }")
-                  v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
-                    :input-value="selected" label small) {{ item }}
+              :label="$t('common.trusted_instances')")
+                //- template(v-slot:selection="{ item, on, attrs, selected, parent }")
+                //-   v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+                //-     :input-value="selected" label small) {{ item }}
 
           v-col(cols=4)
             v-autocomplete(v-model='filterTags'
@@ -86,7 +87,7 @@ v-container
                 //-       v-list-item-title(v-text='item.name')
                 //-       v-list-item-subtitle(v-text='item.address')
 
-          v-btn(color='primary' :loading='loading' text @click='addFilter' :disabled='loading || !collection.id || !filterPlaces.length && !filterTags.length') add <v-icon v-text='mdiPlus'></v-icon>
+        v-btn(color='primary' :loading='loading' text @click='addFilter' :disabled='loading || !filterActors.length && !filterPlaces.length && !filterTags.length') add <v-icon v-text='mdiPlus'></v-icon>
 
         v-data-table(
           :headers='filterHeaders'
@@ -101,6 +102,8 @@ v-container
               v-chip.ma-1(small label v-for='tag in item.tags' v-text='tag' :key='tag')
             template(v-slot:item.places='{ item }')
               v-chip.ma-1(small label v-for='place in item.places' v-text='place.name' :key='place.id' )
+            template(v-slot:item.actors='{ item }')
+              v-chip.ma-1(small label v-for='actor in item.actors' v-text='actor.name' :key='actor.ap_id' )
 
 
       v-card-actions
@@ -116,8 +119,8 @@ v-container
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
       :search='search'
     )
-      template(v-slot:item.filters='{ item }')
-        span {{ collectionFilters(item) }}
+      //- template(v-slot:item.filters='{ item }')
+      //-   span {{ collectionFilters(item) }}
       template(v-slot:item.pin='{ item }')
         v-switch.float-right(:input-value='item.isTop' @change="togglePinCollection(item)" inset hide-details)
       template(v-slot:item.actions='{ item }')
@@ -156,7 +159,7 @@ export default {
       placeName: '',
       collectionHeaders: [
         { value: 'name', text: this.$t('common.name') },
-        { value: 'filters', text: this.$t('common.filter') },
+        // { value: 'filters', text: this.$t('common.filter') },
         { value: 'pin', text: this.$t('common.pin'), align: 'right' },
         { value: 'actions', text: this.$t('common.actions'), align: 'right', width: 150 }
       ],
@@ -182,24 +185,26 @@ export default {
     searchActors: debounce(async function (ev) {
       this.actors = await this.$axios.$get(`/instances/friendly?search=${ev.target.value}`)
     }, 100),
-    collectionFilters(collection) {
-      return collection.filters.map(f => {
-        const tags = f.tags?.join(', ')
-        const places = f.places?.map(p => p.name).join(', ')
-        return '(' + (tags && places ? tags + ' - ' + places : tags + places) + ')'
-      }).join(' - ')
-    },
+    // collectionFilters(collection) {
+    //   return collection.filters.map(f => {
+    //     const tags = f.tags?.join(', ')
+    //     const places = f.places?.map(p => p.name).join(', ')
+    //     const actors = f.actors?.map(a => a.name).join(', ')
+    //     return '(' + (tags && places ? tags + ' - ' + places : tags + places) + ')'
+    //   }).join(' - ')
+    // },
     async addFilter() {
       this.loading = true
       const tags = this.filterTags
       const places = this.filterPlaces.map(p => ({ id: p.id, name: p.name }))
-
-      const filter = { collectionId: this.collection.id, tags, places }
+      const actors = this.filterActors.map(a => ({ ap_id: a.ap_id, name: a.object.preferredUsername || a.object.username }))
+      const filter = { collectionId: this.collection.id, tags, places, actors }
 
       // tags and places are JSON field and there's no way to use them inside a unique constrain
-      //
       const alreadyExists = this.filters.find(f =>
-        isEqual(sortBy(f.places, 'id'), sortBy(filter.places, 'id')) && isEqual(sortBy(f.tags), sortBy(filter.tags))
+        isEqual(sortBy(f.places, 'id'), sortBy(filter.places, 'id')) && 
+        isEqual(sortBy(f.tags), sortBy(filter.tags)) &&
+        isEqual(sortBy(f.actors), sortBy(filter.actors))
       )
 
       if (alreadyExists) return
@@ -209,6 +214,7 @@ export default {
       this.filters.push(ret)
       this.filterTags = []
       this.filterPlaces = []
+      this.filterActors = []
       this.loading = false
     },
     async editCollection(collection) {

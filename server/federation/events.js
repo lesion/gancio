@@ -54,6 +54,7 @@ module.exports = {
     const event = await Event.create({
       title: APEvent.name.trim(),
       start_datetime: dayjs(APEvent.startTime).unix(),
+      end_datetime: dayjs(APEvent.endTime).unix(),
       description: helpers.sanitizeHTML(linkifyHtml(APEvent.content)),
       media,
       is_visible: true,

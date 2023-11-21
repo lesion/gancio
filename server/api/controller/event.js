@@ -570,6 +570,7 @@ const eventController = {
     places,
     show_recurrent,
     show_multidate,
+    ap_id=null,
     limit,
     page,
     older,
@@ -591,6 +592,10 @@ const eventController = {
     // include recurrent events?
     if (!show_recurrent) {
       where.parentId = null
+    }
+
+    if (typeof ap_id !== 'undefined') {
+      where.apUserApId = ap_id
     }
 
     if (!show_multidate) {
