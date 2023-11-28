@@ -1,6 +1,7 @@
 const { Event, Tag } = require('../api/models/models')
+const { Op } = require('sequelize')
 const { DateTime } = require('luxon')
-
+const log = require('../log')
 module.exports = {
   // remove past federated events
   async _cleanPastEvents () {
@@ -10,7 +11,9 @@ module.exports = {
         apUserApId: { [Op.ne]: null }
     }})
 
-    log.info(`Remove ${events.length} past federated events)`)
+    if (!events.length) { return }
+
+    log.info(`Remove ${events.length} past federated events`)
 
     await Event.destroy({
         where: {
