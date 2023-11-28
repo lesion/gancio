@@ -1,10 +1,10 @@
 <template lang="pug">
-v-container#event.h-event.pa-2.pa-sm-2(v-touch="{ left: goNext, right: goPrev }")
+#event.h-event.pa-2.pa-sm-2.container(v-touch="{ left: goNext, right: goPrev }" itemscope itemtype="https://schema.org/Event")
     //- EVENT PAGE
     //- gancio supports microformats (http://microformats.org/wiki/h-event)
     //- and microdata https://schema.org/Event
 
-    v-row(itemscope itemtype="https://schema.org/Event")
+    v-row
       v-col.col-12.col-md-8
         MyPicture(v-if='hasMedia' :event='event')
         .p-description.text-body-1.pa-3.rounded(v-if='!hasMedia && event.description' itemprop='description' v-html='event.description')
@@ -26,7 +26,8 @@ v-container#event.h-event.pa-2.pa-sm-2(v-touch="{ left: goNext, right: goPrev }"
 
             .p-location.h-adr(itemprop="location" itemscope itemtype="https://schema.org/Place")
               v-icon(v-text='mdiMapMarker' small)
-              nuxt-link.vcard.ml-2.p-name.text-decoration-none.text-uppercase(itemprop="name" :to='`/place/${encodeURIComponent(event.place.name)}`') {{event.place && event.place.name}}
+              nuxt-link.vcard.ml-2.p-name.text-decoration-none.text-uppercase(:to='`/place/${encodeURIComponent(event.place.name)}`') 
+                span(itemprop='name') {{event.place && event.place.name}}
               .font-weight-light.p-street-address(v-if='event.place.name !=="online"' itemprop='address') {{event.place && event.place.address}}
 
           //- tags, hashtags
