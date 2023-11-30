@@ -139,7 +139,7 @@ export default {
     todayEvents() {
       const start = this.$time.startOfDay(this.value.from)
       const end = this.$time.endOfDay(this.value.from)
-      return this.events.filter(e => e.start_datetime >= start && e.start_datetime <= end)
+      return this.events.filter(e => e.id !== this.event.id && e.start_datetime >= start && e.start_datetime <= end)
     },
     attributes() {
       return this.$time.attributesFromEvents(this.events.filter(e => e.id !== this.event.id))
