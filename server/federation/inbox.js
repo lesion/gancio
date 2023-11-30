@@ -34,13 +34,21 @@ module.exports = async (req, res) => {
       if (b.object.type === 'Note') {
         await Resources.remove(req, res)
       } else if (b.object.type === 'Event') {
+        if (!res.locals.fedi_user.following || !res.locals.fedi_user.friendly) {
+          log.warn(`APUser not followed or not friendly`)
+          return res.sendStatus(404)
+        }        
         await Events.remove(req, res)
       }
       break
     case 'Update':
       if (b.object.type === 'Event') {
-        log.debug(`Event update is coming from ${res.locals.fedi_user}`)
-        await Event.update(req, res)
+        log.debug(`Event update is coming from ${res.locals.fedi_user.ap_id}`)
+        if (!res.locals.fedi_user.following || !res.locals.fedi_user.friendly) {
+          log.warn(`APUser not followed or not friendly`)
+          return res.sendStatus(404)
+        }
+        await Events.update(req, res)
       }
     case 'Create':
       // this is a reply
@@ -49,6 +57,10 @@ module.exports = async (req, res) => {
         await Resources.create(req, res)
       } else if (b.object.type === 'Event') {
         log.debug(`Event is coming from ${res.locals.fedi_user.ap_id}`)
+        if (!res.locals.fedi_user.following || !res.locals.fedi_user.friendly) {
+          log.warn(`APUser not followed or not friendly`)
+          return res.sendStatus(404)
+        }        
         await Events.create(req, res)
       } else {
         // await Resources.create(req, res)
