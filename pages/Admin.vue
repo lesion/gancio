@@ -91,7 +91,7 @@ export default {
     Announcement: () => import(/* webpackChunkName: "admin" */'../components/admin/Announcement.vue'),
     Theme: () => import(/* webpackChunkName: "admin" */'../components/admin/Theme.vue')
   },
-  middleware: ['auth'],
+  middleware: ['auth', 'isAdmin'],
   async asyncData ({ $axios, req }) {
     let url
     if (process.client) {
