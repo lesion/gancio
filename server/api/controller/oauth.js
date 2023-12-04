@@ -22,7 +22,15 @@ passport.serializeUser((user, done) =>  done(null, user.id))
 
 passport.deserializeUser(async (id, done) => {
   const user = await User.findByPk(id)
-  done(null, user)
+  const userInfo = {
+    id: user.id,
+    settings: user.settings,
+    email: user.email,
+    role: user.role,
+    is_admin: user.role === 'admin',
+    is_active: user.is_active,
+  }
+  done(null, userInfo)
 })
 
 /**
@@ -258,7 +266,11 @@ const oauthController = {
       }
       next()
     },
-    passport.authenticate(['bearer', 'oauth2-client-password', 'anonymous'], { session: false })
+    passport.authenticate(['bearer', 'oauth2-client-password', 'anonymous'], { session: false }),
+    (req, res, next) => { // retrocompatibility
+      console.error('dentro questo middleware ', req.user.email, req.user.is_admin)
+      next()
+    }
   ],
 
   login: [

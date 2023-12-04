@@ -19,7 +19,17 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     password: DataTypes.STRING,
     recover_code: DataTypes.STRING,
-    is_admin: DataTypes.BOOLEAN,
+    role: {
+      type: DataTypes.ENUM,
+      values: ['admin', 'editor', 'user'],
+      defaultValue: 'user'
+    },
+    is_admin: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        return this.role === 'admin'
+      }
+    },
     is_active: DataTypes.BOOLEAN
   }, {
     scopes: {

@@ -106,7 +106,8 @@
     "test": "Test",
     "show_preview": "Show preview",
     "clone": "Clone",
-    "pin": "Pin"
+    "pin": "Pin",
+    "editor": "Editor"
   },
   "login": {
     "description": "By logging in you can publish new events.",

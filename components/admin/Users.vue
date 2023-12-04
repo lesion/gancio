@@ -20,7 +20,8 @@ v-container
             :label="$t('common.email')"
             :rules="$validators.email")
           v-text-field(v-model='new_user.description' :label="$t('common.description')")
-          v-switch(v-model='new_user.is_admin' :label="$t('common.admin')" inset)
+          v-switch.d-inline-block.mr-5(v-model='new_user.is_admin' :label="$t('common.admin')" inset)
+          v-switch.d-inline-block(v-if='!new_user.is_admin' v-model='new_user.is_editor' :label="$t('common.editor')" inset)
         v-alert(type='info' :closable='false' :icon='mdiInformation') {{$t('admin.user_add_help')}}
         v-card-actions
           v-spacer
@@ -37,15 +38,12 @@ v-container
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
       :search='search')
       template(v-slot:item.is_active='{item}')
-        v-icon(v-if='item.is_active' color='success' v-text='mdiCheck')
-        v-icon(v-else color='warning' v-text='mdiClose')
+        v-switch(:input-value='item.is_active' readonly @click.native.prevent="toggle(item)" inset dense hide-details)
+      template(v-slot:item.role='{item}')
+        v-select(:value="item.is_admin ? 'Admin' : item.is_editor ? 'Editor' : 'User'" :items='["User", "Editor", "Admin"]' dense hide-details
+          @change="selected => changeRole(item, selected)")
       template(v-slot:item.actions='{item}')
-        v-btn(text small @click='toggle(item)'
-          :color='item.is_active?"warning":"success"') {{item.is_active?$t('common.disable'):$t('common.enable')}}
-        v-btn(text small @click='toggleAdmin(item)'
-          :color='item.is_admin?"warning":"error"') {{item.is_admin?$t('common.remove_admin'):$t('common.admin')}}
-        v-btn(text small @click='deleteUser(item)'
-          color='error') {{$t('admin.delete_user')}}
+        v-btn(text small @click='deleteUser(item)' color='error' ) {{$t('admin.delete_user')}}
 
 </template>
 <script>
@@ -71,8 +69,10 @@ export default {
       headers: [
         { value: 'email', text: this.$t('common.email') },
         { value: 'description', text: this.$t('common.description') },
-        { value: 'is_active', text: 'Active' },
-        { value: 'actions', text: this.$t('common.actions'), align: 'right' }
+        { value: 'is_active', text: 'Active', width: 50 },
+        { value: 'role', text: 'Role', width: 150 },
+        // { value: 'is_editor', text: 'Editor' },
+        { value: 'actions', text: this.$t('common.actions'), align: 'right', width: 100 }
       ]
     }
   },
@@ -91,6 +91,9 @@ export default {
         this.$root.$message(this.$t(err), { color: 'error' })
         this.loading = false
       }
+    },
+    async changeRole (user, role) {
+      
     },
     async toggle (user) {
       if (user.is_active) {

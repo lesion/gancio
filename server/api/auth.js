@@ -4,7 +4,7 @@ const Auth = {
 
   isAuth (req, res, next) {
     // TODO: check anon user
-    if (req.user) {
+    if (req.user && req.user.is_active) {
       next()
     } else {
       res.sendStatus(403)
@@ -12,7 +12,7 @@ const Auth = {
   },
 
   isAdmin (req, res, next) {
-    if (req.user && req.user.is_admin) {
+    if (req.user && req.user.is_admin && req.user.is_active) {
       next()
     } else {
       res.sendStatus(403)
