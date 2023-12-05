@@ -99,6 +99,7 @@ module.exports = {
       tilelayer_provider: settings.tilelayer_provider,
       tilelayer_provider_attribution: settings.tilelayer_provider_attribution,
       footerLinks: settings.footerLinks,
+      admin_email: settings.admin_email,
       about: settings.about,
     }
     next()

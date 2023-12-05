@@ -49,7 +49,7 @@ const mail = {
         locale,
         locales: Object.keys(locales)
       },
-      transport: { ...settings.smtp, tls: { ciphers: 'SSLv3'}, requireTLS: true  } || {}
+      transport: settings.smtp || {}
     })
 
     const opt = {
