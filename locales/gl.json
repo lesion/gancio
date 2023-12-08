@@ -107,7 +107,8 @@
         "online": "En liña",
         "show_preview": "Mostrar vista previa",
         "test": "Proba",
-        "clone": "Clonar"
+        "clone": "Clonar",
+        "pin": "Fixar"
     },
     "recover": {
         "not_valid_code": "Algo fallou."
@@ -309,7 +310,8 @@
         "delete_collection_confirm": "Estás seguro de que queres eliminar a colección <u>{collection}</u>?",
         "colors": "Cores",
         "allow_online_event": "Permitir eventos en liña",
-        "allow_online_event_hint": "Solicitar URLs "
+        "allow_online_event_hint": "Solicitar URLs ",
+        "not_reachable_warning": "Non me atopo ({baseurl}) no meu propio servidor! Comproba que o proxy, cortalumes e a rede están correctamente configuradas."
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",
