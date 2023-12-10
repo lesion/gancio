@@ -290,7 +290,7 @@ module.exports = {
 
   async reachable(req, res) {
     try {
-      await axios({ url: config.baseurl })
+      await axios(config.baseurl + '/api/ping')
       return res.sendStatus(200)
     } catch(e) {
       log.debug(e)

@@ -102,7 +102,7 @@ v-container
       template(v-slot:item.filters='{ item }')
         span {{ collectionFilters(item) }}
       template(v-slot:item.pin='{ item }')
-        v-switch.float-right(:input-value='item.isTop' @change="togglePinCollection(item)" inset dense hide-details)
+        v-switch.float-right(:input-value='item.isTop' @change="togglePinCollection(item)" inset hide-details)
       template(v-slot:item.actions='{ item }')
         v-btn(@click='editCollection(item)' color='primary' icon)
           v-icon(v-text='mdiPencil')

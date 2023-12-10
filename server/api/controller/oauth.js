@@ -258,7 +258,10 @@ const oauthController = {
       }
       next()
     },
-    passport.authenticate(['bearer', 'oauth2-client-password', 'anonymous'], { session: false })
+    passport.authenticate(['bearer', 'oauth2-client-password', 'anonymous'], { session: false }),
+    (req, res, next) => { // retrocompatibility
+      next()
+    }
   ],
 
   login: [
