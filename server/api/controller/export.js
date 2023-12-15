@@ -49,8 +49,7 @@ const exportController = {
     let events = []
 
     if (collection) {
-      events = await collectionController._getEvents(collection)
-      console.error(events.map(e => e))
+      events = await collectionController._getEvents({ name: collection })
     } else {
       events = await Event.findAll({
         order: ['start_datetime'],

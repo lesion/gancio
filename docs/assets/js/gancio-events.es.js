@@ -462,7 +462,7 @@ function He(t, e, i) {
     const h = [];
     r && h.push(`max=${r}`);
     let p = "/api/events";
-    o ? p = `/api/collections/${o}` : (f && h.push(`tags=${f}`), s && h.push(`places=${s}`)), h.push(`show_recurrent=${w ? "true" : "false"}`), fetch(`${l}${p}?${h.join("&")}`).then((v) => v.json()).then((v) => {
+    o ? p = `/feed/json/collection/${o}` : (f && h.push(`tags=${f}`), s && h.push(`places=${s}`)), h.push(`show_recurrent=${w ? "true" : "false"}`), fetch(`${l}${p}?${h.join("&")}`).then((v) => v.json()).then((v) => {
       i(5, E = v.events || v);
     }).catch((v) => {
       console.error("Error loading Gancio API -> ", v);

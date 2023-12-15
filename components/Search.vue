@@ -101,7 +101,6 @@ export default {
     },
     search: debounce(async function(search) {
       this.items = await this.$axios.$get(`/event/meta?search=${search.target.value}`)
-      console.error('items ', this.items.length)
     }, 100),
     remove (item) {
       // const filters = {

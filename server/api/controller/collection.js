@@ -42,20 +42,13 @@ const collectionController = {
 
   async getEvents (req, res) {
     const name = req.params.name
-    const format = req.params.format || 'json'
+    const max = req.query.max || 10
+    const start_at = req.query.start_at || DateTime.local().toUnixInteger()
 
     try {
-      const events = await collectionController._getEvents(name)
-      switch (format) {
-        case 'rss':
-          return exportController.feed(req, res, events,
-              `${res.locals.settings.title} - Collection @${name}`,
-              `${res.locals.settings.baseurl}/feed/rss/collection/${name}`)
-        case 'ics':
-          return exportController.ics(req, res, events)
-        default:
-          return res.json(events )
-      }      
+      const events = await collectionController._getEvents({ name, start_at, max })
+      log.debug(`[COLLECTION] (${name}) events: ${events?.length}`)
+      return res.json(events)
     } catch (e) {
       log.error(e)
       return res.sendStatus(404)
@@ -63,7 +56,7 @@ const collectionController = {
   },
 
   // return events from collection
-  async _getEvents (name) {
+  async _getEvents ({ name, start_at, max = 10 }) {
 
     const collection = await Collection.findOne({ where: { name } })
     if (!collection) {
@@ -74,7 +67,7 @@ const collectionController = {
     if (!filters.length) {
       return []
     }
-    const start = DateTime.local().toUnixInteger()
+
     const where = {
       // do not include parent recurrent event
       recurrent: null,
@@ -82,7 +75,7 @@ const collectionController = {
       // confirmed event only
       is_visible: true,
 
-      start_datetime: { [Op.gte]: start },
+      start_datetime: { [Op.gte]: start_at },
     }
 
     const replacements = []
@@ -118,7 +111,7 @@ const collectionController = {
         },
         { model: Place, required: true, attributes: ['id', 'name', 'address'] }
       ],
-      // limit: max,
+      limit: max,
       replacements
     }).catch(e => {
       log.error('[EVENT]', e)

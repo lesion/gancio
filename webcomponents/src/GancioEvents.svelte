@@ -27,7 +27,7 @@
 
     let api = '/api/events'
     if (collection) {
-      api = `/api/collections/${collection}`
+      api = `/feed/json/collection/${collection}`
     } else {
       if (tags) {
         params.push(`tags=${tags}`)
