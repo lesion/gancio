@@ -20,7 +20,7 @@ router.use(cors())
 // is federation enabled? middleware
 router.use((_req, res, next) => {
   if (settingsController.settings.enable_federation) { return next() }
-  log.debug('Federation disabled!')
+  log.debug('[FEDI] Federation disabled!')
   return  res.status(401).send('Federation disabled')
 })
 
