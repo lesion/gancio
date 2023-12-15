@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://framagit.org/les/gancio/compare/v1.7.1...v1.8.0) (2023-12-15)
+
+
+### Features
+
+* add Turkish language ([c99772e](https://framagit.org/les/gancio/commit/c99772e0b5d8f92fabad9f24ecab5f1ad48053f0))
+* improve collections export adding max, start_at parameter ([c472e87](https://framagit.org/les/gancio/commit/c472e876760f172be7246a0aa5e1bc8a7610f7eb))
+
+
+### Bug Fixes
+
+* do not allow /admin rendering when normal user ([906dca2](https://framagit.org/les/gancio/commit/906dca2b100aa7308790c5948620a4ca3f3fa955))
+* hide event being edited in "on same day" area, fix [#318](https://framagit.org/les/gancio/issues/318) ([04c88a4](https://framagit.org/les/gancio/commit/04c88a468b53a8155942d44766b822f6c2beb2dd))
+* location name and description not correctly set in microdata ([9811d39](https://framagit.org/les/gancio/commit/9811d395540ca6c7e0f3e2d0caa9295dd4d9308e)), closes [#316](https://framagit.org/les/gancio/issues/316) [#315](https://framagit.org/les/gancio/issues/315)
+
 ### [1.7.1](https://framagit.org/les/gancio/compare/v1.7.0...v1.7.1) (2023-11-10)
 
 ## [1.7.0](https://framagit.org/les/gancio/compare/v1.6.19...v1.7.0) (2023-11-10)
