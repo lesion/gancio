@@ -5,6 +5,9 @@ const cors = require('cors')()
 const config = require('../config')
 const log = require('../log')
 
+// REMOVE ME
+// const federationController = require('../federation')
+
 const collectionController = require('./controller/collection')
 const setupController = require('./controller/setup')
 const settingsController = require('./controller/settings')
