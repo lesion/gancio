@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file. See [standa
 * do not allow /admin rendering when normal user ([906dca2](https://framagit.org/les/gancio/commit/906dca2b100aa7308790c5948620a4ca3f3fa955))
 * hide event being edited in "on same day" area, fix [#318](https://framagit.org/les/gancio/issues/318) ([04c88a4](https://framagit.org/les/gancio/commit/04c88a468b53a8155942d44766b822f6c2beb2dd))
 * location name and description not correctly set in microdata ([9811d39](https://framagit.org/les/gancio/commit/9811d395540ca6c7e0f3e2d0caa9295dd4d9308e)), closes [#316](https://framagit.org/les/gancio/issues/316) [#315](https://framagit.org/les/gancio/issues/315)
+* missing some style in detail collection page ([185b8bd](https://framagit.org/les/gancio/commit/185b8bd75e3cf9dddb160100d601951b60ab379e))
 
 ### [1.7.1](https://framagit.org/les/gancio/compare/v1.7.0...v1.7.1) (2023-11-10)
 
