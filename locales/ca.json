@@ -107,7 +107,8 @@
         "online": "En línia",
         "test": "Prova",
         "show_preview": "Previsualitza",
-        "clone": "Clonar"
+        "clone": "Clonar",
+        "pin": "Llista-la a la pàgina principal"
     },
     "login": {
         "description": "Amb la sessió iniciada pots afegir activitats noves.",
@@ -127,7 +128,8 @@
         "insert_your_address": "Introdueix la teva adreça de mail",
         "feed_description": "Per tal de seguir les actualitzacions sense haver d'entrar periòdicament aquí, et recomanem fer servir el flux RSS</p>\n\n<p>Hi ha aplicacions que agrupen i llegeixen fluxos RSS de diverses webs, blogs i aplicacions web. És una bona manera de mantenir-te informada sense haver de crear comptes a tot arreu.</p>\n\n<li>Per a Android recomanem <a href=\"https://play.google.com/store/apps/details?id=net.frju.flym\"> Flym </a> o Feeder</li>\n<li>Per a iPhone / iPad pots fer servir <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\"> Feed4U </a></li>\n<li>Per a l'ordinador recomanem Feedbro, que és una extensió de navegador disponible per a <a href=\"https://addons.mozilla.org/en-GB/firefox/addon/feedbroreader/\"> Firefox </a> i per a <a href=\"https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa\"> Chrome i Chromium</a>. Funciona en els principals sistemes operatius.</li>\n<br/>\nAfegeix aquest enllaç al teu lector de fluxos per mantenir-te al dia sense esforç.",
         "ical_description": "Els sistemes operatius d'ordinadors i mòbils solen oferir aplicacions de calendari. Algunes permeten importar calendaris remots, que van comprovant periòdicament.",
-        "list_description": "Si tens una web i vols encastar una llista d'activitats, pots fer servir el codi de sota"
+        "list_description": "Si tens una web i vols encastar una llista d'activitats, pots fer servir el codi de sota",
+        "filter_description": "Pots filtrar les activitats a exportar segons etiquetes, lloc o coŀleccions existents"
     },
     "register": {
         "description": "Els moviments socials necessitem organitzar-nos i auto-finançar-nos.<br/>\n<br/>Abans que puguis publicar, <strong> hem d'aprovar el teu compte </strong>, tingues en compte que <strong> darrere d'aquesta web hi ha persones </strong> de carn i ossos, així que escriviu dues línies per fer-nos saber quins esdeveniments voleu publicar.",
@@ -317,7 +319,8 @@
         "geolocation_description": "<b>1. Defineix una proveïdora de geocodificació</b>.<br>Actualment, de totes les llistades en <a href=\"https://wiki.openstreetmap.org/wiki/Nominatim#Alternatives_.2F_Third-party_providers\">la wiki d'OpenStreetMap</a>, són compatibles amb Gancio <a href=\"https://github.com/osm-search/Nominatim\">Nominatim</a> i <a href=\"https://github.com/komoot/photon\">Photon</a>.<br>Pots fer servir les instaŀlacions d'aquestes proveïdores copiant l'adreça de la instaŀlació al camp de 'Proveïdora de geolocodificació'<ul><li>https://nominatim.openstreetmap.org/search (<a href=\"https://operations.osmfoundation.org/policies/nominatim/\">Condicions del servei</a>)</li><li>https://photon.komoot.io/api/ (<a href=\"https://photon.komoot.io/\">Condicions del servei</a>)</li></ul><br><b>2. Defineix una proveïdora per mapes base.</b><br>Pots trobar-ne una llista aquí: <a href=\"https://leaflet-extras.github.io/leaflet-providers/preview/\">https://leaflet-extras.github.io/leaflet-providers/preview/</a>",
         "allow_online_event": "Permet activitats on-line",
         "allow_online_event_hint": "Demana urls ",
-        "colors": "Colors"
+        "colors": "Colors",
+        "not_reachable_warning": "S'ha perdut la connexió amb el servidor a ({baseurl}) ! Comprova que el proxy, tallafocs i els paràmetres de xarxa estiguin ben configurats."
     },
     "auth": {
         "not_confirmed": "Encara no s'ha confirmat…",
