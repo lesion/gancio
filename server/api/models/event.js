@@ -43,13 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       locale: settings.instance_locale
     }
     const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
-    const plainDescription = htmlToText(this.description && this.description.replace('\n', '').slice(0, 1000))
-    const content = `
-    📍 ${this.place && this.place.name}
-    📅 ${DateTime.fromSeconds(this.start_datetime, opt).toFormat('EEEE, d MMMM (HH:mm)')}
-    
-    ${plainDescription}
-    `
+    const summary = `${this.place && this.place.name}, ${DateTime.fromSeconds(this.start_datetime, opt).toFormat('EEEE, d MMMM (HH:mm)')}`
     
     const attachment = []
     if (this.media && this.media.length) {
@@ -62,7 +56,6 @@ module.exports = (sequelize, DataTypes) => {
         focalPoint: this.media[0].focalPoint || [0, 0]
       })
     }
-    
     
     return {
       id: `${config.baseurl}/federation/m/${this.id}`,
@@ -88,8 +81,8 @@ module.exports = (sequelize, DataTypes) => {
       attributedTo: `${config.baseurl}/federation/u/${username}`,
       to: ['https://www.w3.org/ns/activitystreams#Public'],
       cc: [`${config.baseurl}/federation/u/${username}/followers`],
-      content,
-      summary: content
+      content: this.description || '',
+      summary
     }
   }
   return Event
