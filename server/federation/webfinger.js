@@ -120,11 +120,14 @@ router.get('/x-nodeinfo2', async (req, res) => {
 
 router.get('/nodeinfo', (req, res) => {
   const settings = settingsController.settings
-
   const ret = {
     links: [
       { href: `${settings.baseurl}/.well-known/nodeinfo/2.0`, rel: 'http://nodeinfo.diaspora.software/ns/schema/2.0' },
-      { href: `${settings.baseurl}/.well-known/nodeinfo/2.1`, rel: 'http://nodeinfo.diaspora.software/ns/schema/2.1' }
+      { href: `${settings.baseurl}/.well-known/nodeinfo/2.1`, rel: 'http://nodeinfo.diaspora.software/ns/schema/2.1' },
+      {
+        "rel": "https://www.w3.org/ns/activitystreams#Application",
+        "href": `${settings.baseurl}/federation/u/${settings?.instance_name ?? 'relay' }`
+      }
     ]
   }
   res.json(ret)
