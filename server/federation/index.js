@@ -24,7 +24,7 @@ router.use((_req, res, next) => {
   return  res.status(401).send('Federation disabled')
 })
 
-router.use(express.json({ type: ['application/json', 'application/activity+json', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'] }))
+router.use(express.json({ type: ['application/json', 'application/activity+json', 'application/ld+json'] }))
 
 router.get('/m/:event_id', async (req, res) => {
   log.debug('[AP] Get event details ')
