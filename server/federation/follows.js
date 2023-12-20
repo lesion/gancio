@@ -12,7 +12,7 @@ module.exports = {
     if (typeof body.object !== 'string') { return }
     const username = body.object.replace(`${config.baseurl}/federation/u/`, '')
     if (username !== settings.instance_name) {
-      log.warn(`Following the wrong user: ${username} instead of ${settings.instance_name} (could be a wrong config.baseurl)`)
+      log.warn(`[FEDI] Following the wrong user: ${username} instead of ${settings.instance_name} (could be a wrong config.baseurl)`)
       return res.status(404).send('User not found')
     }
 
@@ -21,7 +21,7 @@ module.exports = {
     // await user.addFollowers([req.fedi_user.id])
     // await user.update({ followers: [...user.followers, body.actor] })
     await res.locals.fedi_user.update({ follower: true })
-    log.info(`Followed by ${body.actor}`)
+    log.info(`[FEDI] Followed by ${body.actor}`)
     const guid = crypto.randomBytes(16).toString('hex')
     const message = {
       '@context': 'https://www.w3.org/ns/activitystreams',

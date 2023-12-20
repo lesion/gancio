@@ -1,7 +1,7 @@
 const axios = require('axios')
 const crypto = require('crypto')
 const config = require('../config')
-const httpSignature = require('http-signature')
+const httpSignature = require('@peertube/http-signature')
 
 const { APUser, Instance } = require('../api/models/models')
 
@@ -32,39 +32,50 @@ const Helpers = {
     next()
   },
 
-  async signAndSend (message, inbox) {
-    // get the URI of the actor object and append 'inbox' to it
+  async signAndSend (message, inbox, method='post') {
+    log.debug('[FEDI] Sign and send %s to %s', message, inbox)
     const inboxUrl = new url.URL(inbox)
     const privkey = settingsController.secretSettings.privateKey
     const signer = crypto.createSign('sha256')
     const d = new Date()
-    // digest header added for Mastodon 3.2.1 compatibility
-    const digest = crypto.createHash('sha256')
-      .update(message)
-      .digest('base64')
-    const stringToSign = `(request-target): post ${inboxUrl.pathname}\nhost: ${inboxUrl.hostname}\ndate: ${d.toUTCString()}\ndigest: SHA-256=${digest}`
-    signer.update(stringToSign)
-    signer.end()
-    const signature = signer.sign(privkey)
-    const signature_b64 = signature.toString('base64')
-    const header = `keyId="${config.baseurl}/federation/u/${settingsController.settings.instance_name}",algorithm="rsa-sha256",headers="(request-target) host date digest",signature="${signature_b64}"`
+
+    let header
+    let digest
+    if (method === 'post') {
+      digest = crypto.createHash('sha256')
+        .update(message)
+        .digest('base64')
+      const stringToSign = `(request-target): post ${inboxUrl.pathname}\nhost: ${inboxUrl.hostname}\ndate: ${d.toUTCString()}\ndigest: SHA-256=${digest}`
+      signer.update(stringToSign)
+      signer.end()
+      const signature = signer.sign(privkey)
+      const signature_b64 = signature.toString('base64')
+      header = `keyId="${config.baseurl}/federation/u/${settingsController.settings.instance_name}#main-key",algorithm="rsa-sha256",headers="(request-target) host date digest",signature="${signature_b64}"`
+    } else {
+      const stringToSign = `(request-target): get ${inboxUrl.pathname}\nhost: ${inboxUrl.hostname}\ndate: ${d.toUTCString()}`
+      signer.update(stringToSign)
+      signer.end()
+      const signature = signer.sign(privkey)
+      const signature_b64 = signature.toString('base64')
+      header = `keyId="${config.baseurl}/federation/u/${settingsController.settings.instance_name}#main-key",algorithm="rsa-sha256",headers="(request-target) host date",signature="${signature_b64}"`
+    }
     try {
       const ret = await axios(inbox, {
         headers: {
           Host: inboxUrl.hostname,
           Date: d.toUTCString(),
           Signature: header,
-          Digest: `SHA-256=${digest}`,
-          'Content-Type': 'application/activity+json; charset=utf-8',
-          Accept: 'application/activity+json, application/json; chartset=utf-8'
+          ...(method === 'post' && ({ Digest: `SHA-256=${digest}` })),
+          'Content-Type': 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"',
+          Accept: 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'
         },
-        method: 'post',
-        data: message
+        method,
+        ...( method === 'post' && ({ data: message}))
       })
-      log.debug(`signed ${ret.status} => ${ret.data}`)
+      log.debug(`[FEDI] signed ${ret.status} => %s`, ret.data)
+      return ret.data
     } catch (e) {
-      log.debug(e)
-      log.error(`Response: ${ret.status} ${ret.data}`)
+      log.error("[FEDI] Error in sign and send [%s]: %s", inbox, e?.response?.data?.error ?? e?.response?.statusMessage + ' ' + String(e))
     }
   },
 
@@ -75,9 +86,10 @@ const Helpers = {
     }
 
     const followers = await APUser.findAll({ where: { follower: true } })
+    log.debug("[FEDI] Sending to [%s]", followers.map(f => f.ap_id).join(', '))
     const recipients = {}
     followers.forEach(follower => {
-      const sharedInbox = follower.object.endpoints.sharedInbox
+      const sharedInbox = follower?.object?.endpoints?.sharedInbox ?? follower?.object?.inbox
       if (!recipients[sharedInbox]) { recipients[sharedInbox] = [] }
       recipients[sharedInbox].push(follower.ap_id)
     })
@@ -117,16 +129,9 @@ const Helpers = {
       }
     }
 
-    fedi_user = await axios.get(URL, { headers: { Accept: 'application/jrd+json, application/json' } })
-      .then(res => {
-        if (res.status !== 200) {
-          log.warn(`Actor ${URL} => ${res.statusText}`)
-          return false
-        }
-        return res.data
-      })
+      fedi_user = await Helpers.signAndSend('', URL, 'get')
       .catch(e => {
-        log.error(`get Actor ${URL}`, String(e))
+        log.error(`[FEDI] getActor ${URL}: %s`, e?.response?.data?.error ?? String(e) )
         return false
       })
 
@@ -138,6 +143,7 @@ const Helpers = {
   },
 
   async getInstance (actor_url, force = false) {
+    log.debug(`[FEDI] getInstance ${actor_url}`)
     actor_url = new url.URL(actor_url)
     const domain = actor_url.host
     const instance_url = `${actor_url.protocol}//${actor_url.host}`

@@ -29,7 +29,7 @@ router.use(express.json({ type: ['application/json', 'application/activity+json'
 router.get('/m/:event_id', async (req, res) => {
   log.debug('[AP] Get event details ')
   const event_id = req.params.event_id
-  const acceptHtml = req.accepts('html', 'application/activity+json') === 'html'
+  const acceptHtml = req.accepts('html', 'application/json', 'application/activity+json', 'application/ld+json') === 'html'
   if (acceptHtml) { return res.redirect(301, `/event/${event_id}`) }
 
   const event = await Event.findByPk(req.params.event_id, { include: [User, Tag, Place] })
