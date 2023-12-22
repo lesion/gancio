@@ -7,6 +7,7 @@ const log = require('../log')
 
 // REMOVE ME
 // const federationController = require('../federation')
+// const federationControllerUsers = require('../federation/users')
 
 const collectionController = require('./controller/collection')
 const setupController = require('./controller/setup')
