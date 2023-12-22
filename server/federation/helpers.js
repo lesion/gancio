@@ -171,19 +171,20 @@ const Helpers = {
 
 
   async getNodeInfo (instance_url) {
-    const versions = await axios.get(`${instance_url}/.well-known/nodeinfo`, { headers: { Accept: 'application/json' } }).then(res => res.data)
-    console.error(versions)
-    if (versions.links) {
-      const choosen = versions.links.find(l => l.rel === 'http://nodeinfo.diaspora.software/ns/schema/2.1' || 'http://nodeinfo.diaspora.software/ns/schema/2.0')
-      console.error(choosen)
-      if (!choosen) {
-        throw new Error('Not found!')
+      let nodeInfo = await axios.get(`${instance_url}/.well-known/nodeinfo`, { headers: { Accept: 'application/json' } }).then(res => res.data)
+      
+      if (nodeInfo.links) {
+        const supportedVersion = nodeInfo.links.find(l => l.rel === 'http://nodeinfo.diaspora.software/ns/schema/2.1' || 'http://nodeinfo.diaspora.software/ns/schema/2.0')
+        if (!supportedVersion) {
+          return false
+        }
+        const applicationActor = nodeInfo.links.find(l => l.rel === 'https://www.w3.org/ns/activitystreams#Application')
+        nodeInfo = await axios.get(supportedVersion.href).then(res => res.data)
+        log.debug('[FEDI] getNodeInfo "%s", applicationActor: %s, nodeInfo: %s', instance_url, applicationActor?.href, nodeInfo)
+        return { applicationActor: applicationActor?.href, nodeInfo }
       }
-      const data = await axios.get(choosen.href).then(res => res.data)
-      console.error('INSTANCE', data)
-      return data
-    }
-  },
+      throw new Error(nodeInfo)
+    },
 
   async getInstance (actor_url, force = false) {
     log.debug(`[FEDI] getInstance ${actor_url}`)
@@ -198,11 +199,11 @@ const Helpers = {
     }
 
     try {
-      instance = await Helpers.getNodeInfo(instance_url)
-      return Instance.create({ name: instance?.metadata?.nodeLabel || instance?.metadata?.nodeName || domain, domain, data: instance, blocked: false })
+      ({ nodeInfo: instance } = await Helpers.getNodeInfo(instance_url))
+      return Instance.create({ name: instance?.name ?? instance?.metadata?.nodeLabel ?? instance?.metadata?.nodeName ?? domain, domain, data: instance, blocked: false })
     } catch(e) {
-      log.error('NodeInfo not supported', e)
-      return Instance.create({ name: domain, domain, blocked: false })
+      log.error('[FEDI] Wrong nodeInfo returned for "%s": %s', instance_url, e?.response?.data ?? String(e))
+      // return Instance.create({ name: domain, domain, blocked: false })
     }
   },
 
@@ -252,16 +253,16 @@ const Helpers = {
     // signature not valid, try without cache
     user = await Helpers.getActor(req.body.actor, instance, true)
     if (!user) {
-      log.info(`Actor ${req.body.actor} not found`)
+      log.info(`[FEDI] Actor ${req.body.actor} not found`)
       return res.status(401).send('Actor not found')
     }
     if (httpSignature.verifySignature(parsed, user.object.publicKey.publicKeyPem)) {
-      log.debug(`Valid signature from ${req.body.actor} `)
+      log.debug(`[FEDI] Valid signature from ${req.body.actor} `)
       return next()
     }
 
     // still not valid
-    log.info(`Invalid signature from user ${req.body.actor}`)
+    log.info(`[FEDI] Invalid signature from user ${req.body.actor}`)
     res.send('Request signature could not be verified', 401)
   }
 }

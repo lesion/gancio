@@ -5,6 +5,7 @@ const get = require('lodash/get')
 
 const Sequelize = require('sequelize')
 const log = require('../../log')
+const { getNodeInfo } = require('../../federation/helpers')
 
 const instancesController = {
   async getAll (req, res) {
@@ -93,6 +94,7 @@ const instancesController = {
 
   async addFriendly (req, res) {
 
+    // TODO: support actor uri directly, instance uri or @this@format
     let instance_url = req.body.instance_url
     try {
       if (!instance_url.startsWith('http')) {
@@ -100,18 +102,28 @@ const instancesController = {
       }
       instance_url = instance_url.replace(/\/$/, '')
 
-      log.info(`Add friendly instance ${instance_url} ...`)
-      const { data: nodeinfo } = await axios.get(`${instance_url}/.well-known/nodeinfo/2.1`)
+      log.info(`[FEDI] Adding trusted instance ${instance_url} ...`)
+      const { applicationActor, nodeInfo } = await getNodeInfo(instance_url)
 
       // create a new instance
       const instance = {
         url: instance_url,
-        name: get(nodeinfo, 'metadata.nodeName', ''),
-        label: get(nodeinfo, 'metadata.nodeLabel', ''),
-        actor: get(nodeinfo, 'metadata.nodeActor', ''),
-        timezone: get(nodeinfo, 'metadata.nodeTimezone', '')
+        name: get(nodeInfo, 'metadata.nodeName', ''),
+        label: get(nodeInfo, 'metadata.nodeLabel', ''),
+        timezone: get(nodeInfo, 'metadata.nodeTimezone', ''),
       }
 
+      if (applicationActor) {
+        const actor = await getActor(applicationActor)
+        await actor.update({ friendly: true })
+        return res.json(actor)        
+      }
+
+      if (nodeInfo?.software?.name === 'Mobilizon') {
+        instance.actor = 'relay'
+      } else if (nodeInfo?.software?.name === 'gancio') {
+        instance.actor = get(nodeInfo, 'metadata.nodeActor', 'relay')
+      }
       log.debug(`instance .well-known: ${instance.name} / ${instance.actor}`)
 
       // if we have an actor, let's make friend
@@ -131,7 +143,7 @@ const instancesController = {
         return res.json(actor)
       }
     } catch (e) {
-      console.error(e)
+      console.error(e?.response?.data)
       console.error(String(e))
       log.warn(e)
       return res.status(400).send(e)
