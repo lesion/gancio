@@ -37,7 +37,7 @@ v-container
               @input.native='searchActors'
               @focus='searchActors'
               return-object
-              item-text='object.preferredUsername'
+              item-text='object.name'
               item-value='ap_id'
               :delimiters="[',', ';']"
               :items="actors"
