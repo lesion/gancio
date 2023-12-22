@@ -114,7 +114,9 @@ const instancesController = {
       }
 
       if (applicationActor) {
+        log.debug('[FEDI] This node supports FEP-2677')
         const actor = await getActor(applicationActor)
+        log.debug('[FEDI] Actor %s', actor)
         await actor.update({ friendly: true })
         return res.json(actor)        
       }

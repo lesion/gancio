@@ -165,17 +165,16 @@ const Helpers = {
       })
 
     if (fedi_user) {
-      log.info(`Create a new AP User => ${URL}`)
+      log.info(`[FEDI] Create a new AP User => ${URL}`)
       fedi_user = await APUser.create({ ap_id: URL, object: fedi_user })
     }
     return fedi_user
   },
 
-
   async getNodeInfo (instance_url) {
       let nodeInfo = await axios.get(`${instance_url}/.well-known/nodeinfo`, { headers: { Accept: 'application/json' } }).then(res => res.data)
       
-      if (nodeInfo.links) {
+      if (nodeInfo?.links) {
         const supportedVersion = nodeInfo.links.find(l => l.rel === 'http://nodeinfo.diaspora.software/ns/schema/2.1' || 'http://nodeinfo.diaspora.software/ns/schema/2.0')
         if (!supportedVersion) {
           return false

@@ -105,7 +105,8 @@
         "search_coordinates": "Cerca coordinate",
         "online": "Online",
         "show_preview": "Mostra anteprima",
-        "clone": "Clona"
+        "clone": "Clona",
+        "actors": "Nodo"
     },
     "login": {
         "description": "Entrando puoi pubblicare nuovi eventi.",

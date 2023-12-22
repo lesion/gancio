@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     return res.status(404).send('User not found')
   }
 
-  log.debug('[FEDI] %', message.type)
+  log.debug('[FEDI] %s', message.type)
   switch (message.type) {
     case 'Follow':
       Follows.follow(req, res)
@@ -63,9 +63,9 @@ module.exports = async (req, res) => {
         log.debug('Create a resource!')
         await Resources.create(req, res)
       } else if (message.object.type === 'Event') {
-        log.debug(`Event is coming from ${res.locals.fedi_user.ap_id}`)
+        log.debug(`[FEDI] Event is coming from ${res.locals.fedi_user.ap_id}`)
         if (!res.locals.fedi_user.following || !res.locals.fedi_user.friendly) {
-          log.warn(`APUser not followed or not friendly`)
+          log.warn(`[FEDI] APUser not followed nor trusted`)
           return res.sendStatus(404)
         }        
         await Events.create(req, res)

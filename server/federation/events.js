@@ -14,12 +14,17 @@ module.exports = {
     const APEvent = req.body?.object
 
     // TODO: validate the event
-
+    // check ap_id
+    // check location
+    // check 
 
     // check if this event is new
     const ap_id = req.body.id
     const exists = await Event.findOne({ where: { ap_id }})
-    if (exists) { return res.sendStatus(404)}
+    if (exists) {
+      log.warn('[FEDI] Avoid creating a duplicated event %s', ap_id)
+      return res.sendStatus(404)
+    }
 
     const place = await eventController._findOrCreatePlace({
       place_name: APEvent.location?.name,
@@ -27,10 +32,11 @@ module.exports = {
     })
 
     let media = []
-    if (APEvent.attachment.length > 0) {
+    if (APEvent?.attachment?.length > 0) {
 
       const image_url = APEvent.attachment[0]?.url
       req.file = await helpers.getImageFromURL(image_url)
+      log.debug('[FEDI] Download attachment for event %s', image_url)
 
       // let focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
       // focalpoint = [parseFloat(parseFloat(focalpoint[0]).toFixed(2)), parseFloat(parseFloat(focalpoint[1]).toFixed(2))]
@@ -48,7 +54,7 @@ module.exports = {
     const event = await Event.create({
       title: APEvent.name.trim(),
       start_datetime: dayjs(APEvent.startTime).unix(),
-      end_datetime: dayjs(APEvent.endTime).unix(),
+      end_datetime: APEvent?.endTime ? dayjs(APEvent.endTime).unix() : null,
       description: helpers.sanitizeHTML(linkifyHtml(APEvent.content)),
       media,
       is_visible: true,

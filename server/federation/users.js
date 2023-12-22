@@ -34,6 +34,8 @@ module.exports = {
           // https://docs.joinmastodon.org/spec/activitypub/#Hashtag
           "Hashtag": "https://www.w3.org/ns/activitystreams#Hashtag",
 
+          manuallyApprovesFollowers: 'as:manuallyApprovesFollowers',
+
           // focal point - https://docs.joinmastodon.org/spec/activitypub/#focalPoint
           "focalPoint": {
             "@container": "@list",
@@ -48,7 +50,8 @@ module.exports = {
       preferredUsername: name, // settings.instance_place,
       inbox: `${config.baseurl}/federation/u/${name}/inbox`,
       outbox: `${config.baseurl}/federation/u/${name}/outbox`,
-      // endpoints: { sharedInbox: `${config.baseurl}/federation/u/${name}/inbox` },
+      manuallyApprovesFollowers: false,
+      endpoints: { sharedInbox: `${config.baseurl}/federation/u/${name}/inbox` },
       // followers: `${config.baseurl}/federation/u/${name}/followers`,
       discoverable: true,
       attachment: [

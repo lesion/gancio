@@ -107,7 +107,8 @@
     "show_preview": "Show preview",
     "clone": "Clone",
     "pin": "Pin",
-    "trusted_instances": "Trusted instances"
+    "trusted_instances": "Trusted instances",
+    "actors": "Node"
   },
   "login": {
     "description": "By logging in you can publish new events.",
