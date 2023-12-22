@@ -20,9 +20,9 @@ v-footer(aria-label='Footer')
         two-line)
         //- p {{ instance.object }}
         v-list-item-avatar
-          v-img(:src='instance.object.icon.url')
+          v-img(:src='instance?.object?.icon?.url ?? `${instance.url}/favicon.ico`')
         v-list-item-content
-          v-list-item-title {{instance.object.preferredUsername}}
+          v-list-item-title {{instance?.label || instance?.object?.name || instance?.object?.preferredUsername }}
 
   v-btn.ml-1(v-if='settings.enable_federation' color='primary' text rel='me' @click.prevent='showFollowMe=true') {{$t('event.interact_with_me')}}
   v-spacer
