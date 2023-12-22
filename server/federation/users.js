@@ -42,13 +42,13 @@ module.exports = {
         }
       ],
       id: `${config.baseurl}/federation/u/${name}`,
-      type: 'Person',
+      type: 'Application',
       summary: config.description,
       name,
-      // preferredUsername: settings.instance_place,
+      preferredUsername: name, // settings.instance_place,
       inbox: `${config.baseurl}/federation/u/${name}/inbox`,
       outbox: `${config.baseurl}/federation/u/${name}/outbox`,
-      endpoints: { sharedInbox: `${config.baseurl}/federation/u/${name}/inbox` },
+      // endpoints: { sharedInbox: `${config.baseurl}/federation/u/${name}/inbox` },
       // followers: `${config.baseurl}/federation/u/${name}/followers`,
       discoverable: true,
       attachment: [
@@ -71,7 +71,8 @@ module.exports = {
         id: `${config.baseurl}/federation/u/${name}#main-key`,
         owner: `${config.baseurl}/federation/u/${name}`,
         publicKeyPem: settings.publicKey
-      }
+      },
+      url: config.baseurl,
     }
     res.type('application/activity+json; charset=utf-8')
     res.json(ret)
@@ -156,7 +157,6 @@ module.exports = {
           }))
       })      
     } else {
-
       return res.json({
         '@context': 'https://www.w3.org/ns/activitystreams',
         id: `${settings.baseurl}/federation/u/${name}/outbox`,

@@ -13,6 +13,9 @@ module.exports = {
 
     const APEvent = req.body?.object
 
+    // TODO: validate the event
+
+
     // check if this event is new
     const ap_id = req.body.id
     const exists = await Event.findOne({ where: { ap_id }})
@@ -72,11 +75,13 @@ module.exports = {
 
     // check if this event is new
     const ap_id = req.body.id
-    const event = await Event.findOne({ where: { ap_id }})
+    const event = await Event.findOne({ where: { ap_id }, include: [APUser]})
     if (!event) { return res.sendStatus(404)}
 
     // TODO: is the owner the same?
-
+    if (res.locals.fedi_user.ap_id !== event?.ap_user?.ap_id) {
+      log.error('[FEDI] Event %s updated not from the owner! %s != %s', ap_id, res.locales.fedi_user.ap_id, event)
+    }
 
     const place = await eventController._findOrCreatePlace({
       place_name: APEvent.location?.name,

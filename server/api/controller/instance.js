@@ -143,9 +143,7 @@ const instancesController = {
         return res.json(actor)
       }
     } catch (e) {
-      console.error(e?.response?.data)
-      console.error(String(e))
-      log.warn(e)
+      log.error('[FEDI] Error adding friendly instance %s', e?.response?.data ?? String(e))
       return res.status(400).send(e)
     }
   }

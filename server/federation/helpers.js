@@ -3,6 +3,8 @@ const crypto = require('crypto')
 const config = require('../config')
 const httpSignature = require('@peertube/http-signature')
 
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED=0
+
 const { APUser, Instance } = require('../api/models/models')
 
 const url = require('url')
@@ -66,8 +68,8 @@ const Helpers = {
           Date: d.toUTCString(),
           Signature: header,
           ...(method === 'post' && ({ Digest: `SHA-256=${digest}` })),
-          'Content-Type': 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"',
-          Accept: 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'
+          'Content-Type': 'application/activity+json',
+          Accept: 'application/activity+json'
         },
         method,
         ...( method === 'post' && ({ data: message}))
