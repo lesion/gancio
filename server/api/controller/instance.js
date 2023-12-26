@@ -8,6 +8,11 @@ const log = require('../../log')
 const { getNodeInfo } = require('../../federation/helpers')
 
 const instancesController = {
+
+  /**
+   * get all fediverse instances
+   * used in moderation panel
+   */
   async getAll (req, res) {
     const instances = await Instance.findAll({
       attributes: [
@@ -94,20 +99,59 @@ const instancesController = {
 
   async addFriendly (req, res) {
 
-    // TODO: support actor uri directly, instance uri or @this@format
-    let instance_url = req.body.instance_url
-    try {
-      if (!instance_url.startsWith('http')) {
-        instance_url = `https://${instance_url}`
-      }
-      instance_url = instance_url.replace(/\/$/, '')
+    /**
+     * url
+     * in case we have a @ we should use webfinger 
+     * in case we have a full url could be an actor
+     * or a nodeinfo url to search for 
+     */
+    let url = req.body.url
 
-      log.info(`[FEDI] Adding trusted instance ${instance_url} ...`)
-      const { applicationActor, nodeInfo } = await getNodeInfo(instance_url)
+    if (url.includes('@')) {
+      const [ user, instance_url ] = url.replace(/^@/,'').split('@')
+      log.debug('[FEDI] Adds user: %s and instance: %s because url was: %s', user, instance_url, url)
+      try {
+        const webfinger = await axios.get(`https://${instance_url}/.well-known/webfinger?resource=acct:${user}@${instance_url}`).then(res => res.data)
+        if (webfinger?.links) {
+          const actor_url = webfinger.links.find(l => l.rel === 'self')
+
+          // if (!instance_url.startsWith('http')) {
+          //   instance_url = `https://${instance_url}`
+          // }          
+          log.info(`[FEDI] Adding trusted instance ${instance_url} and actor ${actor_url.href}...`)
+          const { applicationActor, nodeInfo } = await getNodeInfo('https://' + instance_url)
+    
+          // create a new instance
+          const instance = {
+            url: 'https://' + instance_url,
+            name: get(nodeInfo, 'metadata.nodeName', ''),
+            label: get(nodeInfo, 'metadata.nodeLabel', ''),
+            timezone: get(nodeInfo, 'metadata.nodeTimezone', ''),
+          }
+          const actor = await getActor(actor_url.href)
+          log.debug('[FEDI] Actor %s', actor)
+          await actor.update({ friendly: true })
+          return res.json(actor)    
+        }
+      } catch (e) {
+        console.error(e)
+        log.error('[FEDI] Wrong webfinger response from %s: %s ', url, e?.response?.data ?? String(e))
+        return res.sendStatus(404)
+      }
+    }
+
+    try {
+      if (!url.startsWith('http')) {
+        url = `https://${url}`
+      }
+      url = url.replace(/\/$/, '')
+
+      log.info(`[FEDI] Adding trusted instance ${url} ...`)
+      const { applicationActor, nodeInfo } = await getNodeInfo(url)
 
       // create a new instance
       const instance = {
-        url: instance_url,
+        url: url,
         name: get(nodeInfo, 'metadata.nodeName', ''),
         label: get(nodeInfo, 'metadata.nodeLabel', ''),
         timezone: get(nodeInfo, 'metadata.nodeTimezone', ''),
@@ -118,7 +162,7 @@ const instancesController = {
         const actor = await getActor(applicationActor)
         log.debug('[FEDI] Actor %s', actor)
         await actor.update({ friendly: true })
-        return res.json(actor)        
+        return res.json(actor)
       }
 
       if (nodeInfo?.software?.name === 'Mobilizon') {
@@ -132,8 +176,8 @@ const instancesController = {
       if (instance.actor) {
 
         // send a well-known request
-        const instance_hostname = new URL(instance_url).host
-        const { data: wellknown } = await axios.get(`${instance_url}/.well-known/webfinger?resource=acct:${instance.actor}@${instance_hostname}`)
+        const instance_hostname = new URL(url).host
+        const { data: wellknown } = await axios.get(`${url}/.well-known/webfinger?resource=acct:${instance.actor}@${instance_hostname}`)
 
         // search for actor url
         const actorURL = wellknown?.links.find(l => l.rel === 'self').href
@@ -145,6 +189,7 @@ const instancesController = {
         return res.json(actor)
       }
     } catch (e) {
+      console.error(e) 
       log.error('[FEDI] Error adding friendly instance %s', e?.response?.data ?? String(e))
       return res.status(400).send(e)
     }

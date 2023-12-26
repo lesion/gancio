@@ -6,7 +6,7 @@ module.exports = {
   async boost (req, res) {
     const match = req.body.object.match(`${config.baseurl}/federation/m/(.*)`)
     if (!match || match.length < 2) { return res.status(404).send('Event not found!') }
-    log.info(`boost ${match[1]}`)
+    log.info(`[FEDI] boost ${match[1]}`)
     const event = await Event.findByPk(Number(match[1]))
     if (!event) { return res.status(404).send('Event not found!') }
     // TODO, has to be unique...

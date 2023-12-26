@@ -16,10 +16,6 @@ module.exports = {
       return res.status(404).send('User not found')
     }
 
-    // check for duplicate
-    // if (!user.followers.includes(body.actor)) {
-    // await user.addFollowers([req.fedi_user.id])
-    // await user.update({ followers: [...user.followers, body.actor] })
     await res.locals.fedi_user.update({ follower: true })
     log.info(`[FEDI] Followed by ${body.actor}`)
     const guid = crypto.randomBytes(16).toString('hex')
@@ -44,10 +40,6 @@ module.exports = {
       return res.status(404).send('User not found')
     }
 
-    if (body.actor !== body.object.actor || body.actor !== res.locals.fedi_user.ap_id) {
-      log.info('[FEDI] Unfollow an user created by a different actor !?!?')
-      return res.status(400).send('Bad things')
-    }
     await res.locals.fedi_user.update({ follower: false })
     log.info(`[FEDI] Unfollowed by ${body.actor}`)
     res.sendStatus(200)
