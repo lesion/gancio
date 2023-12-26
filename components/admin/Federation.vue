@@ -65,12 +65,12 @@ v-container
 
     v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.add_instance')}}
     v-data-table(
-      v-if='friendly_instances.length'
-      :hide-default-footer='friendly_instances.length<10'
+      v-if='trusted_instances.length'
+      :hide-default-footer='trusted_instances.length<10'
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
       :header-props='{ sortIcon: mdiChevronDown }'
       :headers='headers'
-      :items='friendly_instances')
+      :items='trusted_instances')
       template(v-slot:item.ap_id="{item}")
         span {{ item?.object?.summary ?? item?.instance?.data?.metadata?.nodeDescription}}
       template(v-slot:item.actions="{item}")
@@ -95,7 +95,7 @@ export default {
       url2host: $options.filters.url2host,
       dialogAddInstance: false,
       loading: false,
-      friendly_instances: [],
+      trusted_instances: [],
       valid: false,
       headers: [
         { value: 'object.type', text: 'Type' },
@@ -106,7 +106,7 @@ export default {
     }
   },
   async fetch() {
-    this.friendly_instances = await this.$axios.$get('/instances/friendly')
+    this.trusted_instances = await this.$axios.$get('/instances/trusted')
   },
   computed: {
     ...mapState(['settings']),
@@ -141,7 +141,7 @@ export default {
         //   this.instance_url = `https://${this.instance_url}`
         // }
         this.instance_url = this.instance_url.replace(/\/$/, '')
-        await this.$axios.$post('/instances/add_friendly', { url: this.instance_url })
+        await this.$axios.$post('/instances/add_trust', { url: this.instance_url })
         this.$refs.form.reset()
         this.$fetch()
         this.dialogAddInstance = false
@@ -155,7 +155,7 @@ export default {
       const ret = await this.$root.$confirm('admin.delete_trusted_instance_confirm')
       if (!ret) { return }
       try {
-        await this.$axios.$delete('/instances/friendly', { params: { ap_id: instance.ap_id }})
+        await this.$axios.$delete('/instances/trust', { params: { ap_id: instance.ap_id }})
         this.$fetch()
         this.$root.$emit('update_friendly_instances')
         this.$root.$message('admin.instance_removed', { color: 'success' })

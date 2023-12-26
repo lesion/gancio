@@ -3,7 +3,7 @@ const helpers = require('../helpers')
 const linkifyHtml = require('linkify-html')
 const dayjs = require('dayjs')
 const eventController = require('../api/controller/event')
-const { Event, APUser } = require('../api/models/models')
+const { Event, APUser, Resource } = require('../api/models/models')
 const tagController = require('../api/controller/tag')
 
 module.exports = {
@@ -116,7 +116,7 @@ module.exports = {
     event.update({
       title: APEvent.name.trim(),
       start_datetime: dayjs(APEvent.startTime).unix(),
-      end_datetime: dayjs(APEvent.endTime).unix(),
+      end_datetime: APEvent?.endTime ? dayjs(APEvent.endTime).unix() : null,
       description: helpers.sanitizeHTML(linkifyHtml(APEvent.content)),
       media,
       is_visible: true,
@@ -141,11 +141,40 @@ module.exports = {
   async remove (req, res) {
     const APEvent = req.body?.object
 
-    // check if we are following this user
-    console.error(req.body)
+    const event = await Event.findOne({ where: { ap_id: APEvent.id }})
+    if (!event) {
+      log.error('[FEDI] Event not found: %s', APEvent.id)
+      return res.sendStatus(404)
+    }
 
-    //
-    console.error(APEvent)
+    if (event.media && event.media.length && !event.recurrent) {
+      try {
+        const old_path = path.join(config.upload_path, event.media[0].url)
+        const old_thumb_path = path.join(config.upload_path, 'thumb', event.media[0].url)
+        await fs.unlink(old_thumb_path)
+        await fs.unlink(old_path)
+      } catch (e) {
+        log.info(e.toString())
+      }
+    }
+
+    if (event.recurrent) {
+      await Event.update({ parentId: null }, { where: { parentId: event.id } })
+    }
+
+    log.debug('[EVENT REMOVED] ' + event.title)
+    try {
+      // remove related resources
+      await Resource.destroy({ where: { eventId: event.id }})
+      
+      // and finally remove the event
+      await event.destroy()
+    } catch (e) {
+      log.error('[FEDI] Error removing event: %s', String(e))
+      return  res.sendStatus(500)
+    }
+
+    return res.sendStatus(201)
 
   }
 

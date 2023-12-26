@@ -56,6 +56,35 @@ module.exports = {
     res.sendStatus(201)
   },
 
+  // update a resource from AP Note
+  async update (req, res) {
+
+    if (!res.locals.settings.enable_resources) {
+      log.info('[FEDI] Ignore resource as it is disabled in settings')
+      return
+    }
+
+    const body = req.body
+    
+    // TODO: check if it is the same author
+    const resource = await Resource.findOne({ where: { activitypub_id: body.object?.id }, include: [Event] })
+    if (!resource) {
+      log.warn('[FEDI] Resource not found')
+      return res.sendStatus(404)
+    }
+
+    // search for related event
+    body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content || ''))
+
+    await resource.update({
+      data: body.object
+    })
+
+    log.debug('[FEDI] Resource updated!')
+    res.sendStatus(201)
+  },
+
+
   async remove (req, res) {
     const resource = await Resource.findOne({
       where: { activitypub_id: get(req.body, 'object.id', req.body.object) },

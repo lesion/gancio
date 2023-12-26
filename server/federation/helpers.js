@@ -191,7 +191,10 @@ const Helpers = {
     let instance
     if (!force) {
       instance = await Instance.findByPk(domain)
-      if (instance) { return instance }
+      if (instance) {
+        log.debug('[FEDI] Use cached instance: %s', instance.name)
+        return instance
+      }
     }
 
     try {
@@ -203,10 +206,11 @@ const Helpers = {
           blocked: false,
           applicationActor
         })
+      log.debug('[FEDI] Create a new instance from %s: %s %s', instance_url, instance.name, nodeInfo)
       return instance
     } catch(e) {
       log.error('[FEDI] Wrong nodeInfo returned for "%s": %s', instance_url, e?.response?.data ?? String(e))
-      // return Instance.create({ name: domain, domain, blocked: false })
+      return false
     }
   },
 

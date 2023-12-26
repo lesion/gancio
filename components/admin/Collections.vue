@@ -183,7 +183,7 @@ export default {
       this.places = await this.$axios.$get(`/place?search=${ev.target.value}`)
     }, 100),
     searchActors: debounce(async function (ev) {
-      this.actors = await this.$axios.$get(`/instances/friendly?search=${ev.target.value}`)
+      this.actors = await this.$axios.$get(`/instances/trusted?search=${ev.target.value}`)
     }, 100),
     // collectionFilters(collection) {
     //   return collection.filters.map(f => {
