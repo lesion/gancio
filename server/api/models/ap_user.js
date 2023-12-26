@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) =>
   },
   follower: DataTypes.BOOLEAN,
   following: DataTypes.BOOLEAN,
-  friendly: DataTypes.BOOLEAN,
+  trusted: DataTypes.BOOLEAN,
   blocked: DataTypes.BOOLEAN,
   object: {
     type: DataTypes.JSON,

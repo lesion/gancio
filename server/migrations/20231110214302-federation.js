@@ -11,8 +11,9 @@ module.exports = {
      */
     return Promise.all(
       [
+        await queryInterface.addColumn('ap_users', 'trusted', { type: Sequelize.BOOLEAN }),
+        await queryInterface.addColumn('instances', 'applicationActor', { type: Sequelize.STRING }),
         await queryInterface.addColumn('ap_users', 'following', { type: Sequelize.BOOLEAN }),
-        await queryInterface.addColumn('ap_users', 'friendly', { type: Sequelize.BOOLEAN }),
         await queryInterface.addColumn('filters', 'actors', { type: Sequelize.JSON }),
         await queryInterface.addColumn('events', 'ap_id', { type: Sequelize.STRING, index: true }),
         await queryInterface.addColumn('events', 'apUserApId', {
@@ -24,17 +25,17 @@ module.exports = {
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE'
         }),
-        apUserApId
-      ])    
+      ])
   },
 
   async down (queryInterface, Sequelize) {
     return Promise.all(
       [
+        await queryInterface.removeColumn('instances', 'applicationActor'),
         await queryInterface.removeColumn('events', 'apUserApId'),
         await queryInterface.removeColumn('events', 'ap_id'),
         await queryInterface.removeColumn('ap_users', 'following'),
-        await queryInterface.removeColumn('ap_users', 'friendly'),
+        await queryInterface.removeColumn('ap_users', 'trusted'),
       ])
   }
 };
