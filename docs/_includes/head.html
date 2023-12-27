@@ -1,27 +1,26 @@
-<!DOCTYPE html> <html lang="en-US"> 
-  <head> <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <title>{{ page.title }} - {{ site.title }}</title>    
-    
-    {% if page.description %}
-      <meta name="Description" content="{{ page.description }}">
-    {% endif %}
+<head> <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <title>{{ page.title }} - {{ site.title }}</title>    
+  
+  {% if page.description %}
+    <meta name="Description" content="{{ page.description }}">
+  {% endif %}
 
-    <link href="https://github.com/lesion" rel="me">
-    <link href="eventi@cisti.org" rel="me">
+  <link href="https://github.com/lesion" rel="me">
+  <link href="eventi@cisti.org" rel="me">
 
-    <link rel="webmention" href="https://webmention.io/gancio.org/webmention" />
-    <link rel="pingback" href="https://webmention.io/gancio.org/xmlrpc" />
+  <link rel="webmention" href="https://webmention.io/gancio.org/webmention" />
+  <link rel="pingback" href="https://webmention.io/gancio.org/xmlrpc" />
 
-    <link rel="shortcut icon" href="{{ '/favicon.ico' | absolute_url }}" type="image/x-icon">
-    <link rel="stylesheet" href="{{ '/assets/css/just-the-docs-default.css' | absolute_url }}">
-    <link rel="stylesheet" href="{{ '/assets/css/premonition.css' | absolute_url }}">
-    <script type="text/javascript" src="{{ '/assets/js/vendor/lunr.min.js' | absolute_url }}"></script>
-    <script type="text/javascript" src="{{ '/assets/js/just-the-docs.js' | absolute_url }}"></script>
-    <script src="{{ '/assets/js/jquery-3.3.1.min.js' | absolute_url }}"></script>
-    <link rel="stylesheet" href="{{ '/assets/css/jquery.fancybox.min.css' | absolute_url }}">
-    <script src="{{ '/assets/js/jquery.fancybox.min.js' | absolute_url }}"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="{{ '/favicon.ico' | absolute_url }}" type="image/x-icon">
+  <link rel="stylesheet" href="{{ '/assets/css/just-the-docs-default.css' | absolute_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/premonition.css' | absolute_url }}">
+  <script type="text/javascript" src="{{ '/assets/js/vendor/lunr.min.js' | absolute_url }}"></script>
+  <script type="text/javascript" src="{{ '/assets/js/just-the-docs.js' | absolute_url }}"></script>
+  <script src="{{ '/assets/js/jquery-3.3.1.min.js' | absolute_url }}"></script>
+  <link rel="stylesheet" href="{{ '/assets/css/jquery.fancybox.min.css' | absolute_url }}">
+  <script src="{{ '/assets/js/jquery.fancybox.min.js' | absolute_url }}"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  {% seo %}
-  </head>
+{% seo %}
+</head>
