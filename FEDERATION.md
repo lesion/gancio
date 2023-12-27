@@ -1,9 +1,3 @@
----
-layout: default
-title: Federation
-permalink: /federation
-nav_order: 9
----
 
 ## Federation / ActivityPub
 
