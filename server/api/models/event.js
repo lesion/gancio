@@ -32,10 +32,14 @@ module.exports = (sequelize, DataTypes) => {
     recurrent: DataTypes.JSON,
     likes: { type: DataTypes.JSON, defaultValue: [] },
     boost: { type: DataTypes.JSON, defaultValue: [] },
-    online_locations: { type: DataTypes.JSON, defaultValue: [] }
+    online_locations: { type: DataTypes.JSON, defaultValue: [] },
+    ap_id: {
+      type: DataTypes.STRING,
+      index: true
+    }
   })
   
-  Event.prototype.toAP = function (settings, to = []) {
+  Event.prototype.toAP = function (settings, to = ['https://www.w3.org/ns/activitystreams#Public']) {
 
     const username = settings.instance_name
     const opt = {
@@ -52,7 +56,6 @@ module.exports = (sequelize, DataTypes) => {
         mediaType: 'image/jpeg',
         url: `${config.baseurl}/media/${this.media[0].url}`,
         name: this.media[0].name || this.title || '',
-        blurHash: null,
         focalPoint: this.media[0].focalPoint || [0, 0]
       })
     }

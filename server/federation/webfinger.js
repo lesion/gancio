@@ -48,7 +48,7 @@ router.get('/webfinger', allowFederation, (req, res) => {
       }
     ]
   }
-  res.set('Content-Type', 'application/jrd+json; charset=utf-8')
+  res.set('Content-Type', 'application/json; charset=utf-8')
   res.json(ret)
 })
 

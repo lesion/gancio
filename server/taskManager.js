@@ -1,10 +1,11 @@
 const log = require('./log')
 const placeHelpers = require('./helpers/place')
 const tagHelpers = require('./helpers/tag')
+const apHelpers = require('./helpers/ap.js')
 // const notifier = require('./notifier')
 
-const loopInterval = 1 // process.env.NODE_ENV === 'production' ? 1 : 1
-const minute = 60 / loopInterval
+const loopInterval = 10 // process.env.NODE_ENV === 'production' ? 1 : 1
+const minute = 6 / loopInterval
 const hour = minute * 60
 const day = hour * 24
 
@@ -75,6 +76,14 @@ class TaskManager {
     this.add(new Task({
       name: 'CLEAN_UNUSED_TAGS',
       method: tagHelpers._cleanUnused,
+      repeatDelay: day,
+      repeat: true,
+      callAtStart: true
+    }))
+
+    this.add(new Task({
+      name: 'CLEAN_FEDIVERSE_PAST_EVENT',
+      method: apHelpers._cleanPastEvents,
       repeatDelay: day,
       repeat: true,
       callAtStart: true

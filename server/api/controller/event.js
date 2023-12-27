@@ -520,8 +520,10 @@ const eventController = {
       if (event.recurrent) {
         eventController._createRecurrent()
       } else {
-        const notifier = require('../../notifier')
-        notifier.notifyEvent('Update', event.id)
+        if (!event.ap_id) {
+          const notifier = require('../../notifier')
+          notifier.notifyEvent('Update', event.id)
+        }
       }
     } catch (e) {
       log.error('[EVENT UPDATE]', e)
@@ -543,15 +545,28 @@ const eventController = {
           log.info(e.toString())
         }
       }
-      const notifier = require('../../notifier')
-      await notifier.notifyEvent('Delete', event.id)
+
+      // notify local events only
+      if (!event.ap_id) {
+        const notifier = require('../../notifier')
+        await notifier.notifyEvent('Delete', event.id)
+      }
 
       // unassociate child events
       if (event.recurrent) {
         await Event.update({ parentId: null }, { where: { parentId: event.id } })
       }
       log.debug('[EVENT REMOVED] ' + event.title)
-      await event.destroy()
+      try {
+        // remove related resources
+        await Resource.destroy({ where: { eventId: event.id }})
+        
+        // and finally remove the event
+        await event.destroy()
+      } catch (e) {
+        console.error(e)
+      }
+
       res.sendStatus(200)
     } else {
       res.sendStatus(403)
@@ -570,6 +585,7 @@ const eventController = {
     places,
     show_recurrent,
     show_multidate,
+    ap_id=null,
     limit,
     page,
     older,
@@ -591,6 +607,10 @@ const eventController = {
     // include recurrent events?
     if (!show_recurrent) {
       where.parentId = null
+    }
+
+    if (typeof ap_id !== 'undefined') {
+      where.apUserApId = ap_id
     }
 
     if (!show_multidate) {

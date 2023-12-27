@@ -2,7 +2,6 @@ const axios = require('axios')
 const crypto = require('crypto')
 const config = require('../config')
 const httpSignature = require('@peertube/http-signature')
-
 const { APUser, Instance } = require('../api/models/models')
 
 const url = require('url')
@@ -66,8 +65,8 @@ const Helpers = {
           Date: d.toUTCString(),
           Signature: header,
           ...(method === 'post' && ({ Digest: `SHA-256=${digest}` })),
-          'Content-Type': 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"',
-          Accept: 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'
+          'Content-Type': 'application/activity+json',
+          Accept: 'application/activity+json'
         },
         method,
         ...( method === 'post' && ({ data: message}))
@@ -115,6 +114,35 @@ const Helpers = {
     }
   },
 
+  async followActor (actor) {
+    log.debug(`Following actor ${actor.ap_id}`)
+    const body = {
+      '@context': 'https://www.w3.org/ns/activitystreams',
+      id: `${config.baseurl}/federation/m/${actor.ap_id}#follow`,
+      type: 'Follow',
+      actor: `${config.baseurl}/federation/u/${settingsController.settings.instance_name}`,
+      object: actor.ap_id
+    }
+
+    await Helpers.signAndSend(JSON.stringify(body), actor.object.endpoints?.sharedInbox || actor.object.inbox)
+    await actor.update({ following: 1 })
+  },
+
+  async unfollowActor (actor) {
+    log.debug(`Unfollowing actor ${actor.ap_id}`)
+    const body = {
+      '@context': 'https://www.w3.org/ns/activitystreams',
+      id: `${config.baseurl}/federation/m/${actor.ap_id}#follow`,
+      type: 'Unfollow',
+      actor: `${config.baseurl}/federation/u/${settingsController.settings.instance_name}`,
+      object: actor.ap_id
+    }
+    await Helpers.signAndSend(JSON.stringify(body), actor.object.endpoints?.sharedInbox || actor.object.inbox)
+    return actor.update({ following: 0 })
+  },
+
+
+  // get Actor from URL using GET HTTP Signature 
   async getActor (URL, instance, force = false) {
     let fedi_user
 
@@ -122,82 +150,121 @@ const Helpers = {
     if (!force) {
       fedi_user = await APUser.findByPk(URL, { include: Instance })
       if (fedi_user) {
-        if (!fedi_user.instances) {
-          fedi_user.setInstance(instance)
-        }
         return fedi_user
       }
     }
 
-      fedi_user = await Helpers.signAndSend('', URL, 'get')
+    fedi_user = await Helpers.signAndSend('', URL, 'get')
       .catch(e => {
         log.error(`[FEDI] getActor ${URL}: %s`, e?.response?.data?.error ?? String(e) )
         return false
       })
 
     if (fedi_user) {
-      log.info(`Create a new AP User => ${URL}`)
-      fedi_user = await APUser.create({ ap_id: URL, object: fedi_user })
+      log.info('[FEDI] Create a new AP User "%s" and associate it to instance "%s"', URL, instance.domain)
+      fedi_user = await APUser.create({ ap_id: URL, object: fedi_user, instanceDomain: instance.domain, blocked: false })
     }
     return fedi_user
   },
 
+  async getNodeInfo (instance_url) {
+      let nodeInfo = await axios.get(`${instance_url}/.well-known/nodeinfo`, { headers: { Accept: 'application/json' } }).then(res => res.data)
+      
+      if (nodeInfo?.links) {
+        const supportedVersion = nodeInfo.links.find(l => l.rel === 'http://nodeinfo.diaspora.software/ns/schema/2.1' || 'http://nodeinfo.diaspora.software/ns/schema/2.0')
+        if (!supportedVersion) {
+          return false
+        }
+        const applicationActor = nodeInfo.links.find(l => l.rel === 'https://www.w3.org/ns/activitystreams#Application')
+        nodeInfo = await axios.get(supportedVersion.href).then(res => res.data)
+        log.debug('[FEDI] getNodeInfo "%s", applicationActor: %s, nodeInfo: %s', instance_url, applicationActor?.href, nodeInfo)
+        return { applicationActor: applicationActor?.href, nodeInfo }
+      }
+      throw new Error(nodeInfo)
+    },
+
   async getInstance (actor_url, force = false) {
-    log.debug(`[FEDI] getInstance ${actor_url}`)
+    log.debug(`[FEDI] getInstance for ${actor_url}`)
     actor_url = new url.URL(actor_url)
     const domain = actor_url.host
     const instance_url = `${actor_url.protocol}//${actor_url.host}`
-    log.debug(`getInstance ${domain}`)
     let instance
     if (!force) {
       instance = await Instance.findByPk(domain)
-      if (instance) { return instance }
+      if (instance) {
+        log.debug('[FEDI] Use cached instance: %s', instance.name)
+        return instance
+      }
     }
 
-    // TODO: is this a standard? don't think so
-    instance = await axios.get(`${instance_url}/api/v1/instance`, { headers: { Accept: 'application/json' } })
-      .then(res => res.data)
-      .then(instance => {
-        const data = {
-          stats: instance.stats,
-          thumbnail: instance.thumbnail
-        }
-        return Instance.create({ name: instance.title, domain, data, blocked: false })
-      })
-      .catch(e => {
-        log.error('[INSTANCE CREATE]', e)
-        return Instance.create({ name: domain, domain, blocked: false })
-      })
-    return instance
+    try {
+      const { applicationActor, nodeInfo } = await Helpers.getNodeInfo(instance_url)
+      const instance = Instance.create({
+          name: nodeInfo?.name ?? nodeInfo?.metadata?.nodeLabel ?? nodeInfo?.metadata?.nodeName ?? domain,
+          domain,
+          data: nodeInfo,
+          blocked: false,
+          applicationActor
+        })
+      log.debug('[FEDI] Create a new instance from %s: %s %s', instance_url, instance.name, nodeInfo)
+      return instance
+    } catch(e) {
+      log.error('[FEDI] Wrong nodeInfo returned for "%s": %s', instance_url, e?.response?.data ?? String(e))
+      return false
+    }
   },
 
-  // ref: https://blog.joinmastodon.org/2018/07/how-to-make-friends-and-verify-requests/
+  /**
+   * HTTP Signature middleware
+   * https://www.w3.org/wiki/SocialCG/ActivityPub/Authentication_Authorization#Signing_requests_using_HTTP_Signatures
+   * Each POST to /inbox coming from fediverse has to be verified.
+   * Signature checking needs Actor's public key
+   */
   async verifySignature (req, res, next) {
-    // TODO: why do I need instance?
-    const instance = await Helpers.getInstance(req.body.actor)
+
+    const actor_url = req?.body?.actor
+
+    // do we have an actor?
+    if (!actor_url) {
+      log.warn(`[FEDI] Verify Signature: No actor url or empty body`)
+      return res.status(401).send('Actor not found')
+    }
+
+    // Get instance's nodeinfo
+    // getting this from db if it is not the first time we interact with it
+    const instance = await Helpers.getInstance(actor_url)
     if (!instance) {
-      log.warn(`Verify Signature: Instance not found ${req.body.actor}`)
+      log.warn(`[FEDI] Verify Signature: Instance not found ${actor_url}`)
       return res.status(401).send('Instance not found')
     }
+
+    // Is this instance blocked?
     if (instance.blocked) {
-      log.warn(`Instance ${instance.domain} blocked`)
+      log.warn(`[FEDI] Instance ${instance.domain} blocked`)
       return res.status(401).send('Instance blocked')
     }
 
-    let user = await Helpers.getActor(req.body.actor, instance)
-    if (!user) {
-      log.info(`Actor ${req.body.actor} not found`)
-      if (req.body.type === 'Delete') {
+    // get actor
+    let ap_actor = await Helpers.getActor(actor_url, instance)
+    if (!ap_actor) {
+      log.info(`[FEDI] Actor ${actor_url} not found`)
+      if (req?.body?.type === 'Delete') {
         return res.sendStatus(201)
       }
       return res.status(401).send('Actor not found')
     }
-    if (user.blocked) {
-      log.info(`User ${user.ap_id} blocked`)
-      return res.status(401).send('User blocked')
+
+    if (ap_actor.blocked) {
+      log.info(`[FEDI] Actor ${ap_actor.ap_id} blocked`)
+      return res.status(401).send('Actor blocked')
     }
 
-    res.locals.fedi_user = user
+    if (!ap_actor?.object?.publicKey?.publicKeyPem) {
+      log.info(`[FEDI] Actor %s has no publicKey at %s`, ap_actor.ap_id, actor_url)
+      return res.status(401).send('No public key')
+    }
+
+    res.locals.fedi_user = ap_actor
 
     // TODO: check Digest // cannot do this with json bodyparser
     // const digest = crypto.createHash('sha256')
@@ -212,21 +279,27 @@ const Helpers = {
     // https://github.com/joyent/node-http-signature/issues/87
     req.url = '/federation' + req.url
     const parsed = httpSignature.parseRequest(req)
-    if (httpSignature.verifySignature(parsed, user.object.publicKey.publicKeyPem)) { return next() }
+    if (httpSignature.verifySignature(parsed, ap_actor.object.publicKey.publicKeyPem)) { return next() }
 
     // signature not valid, try without cache
-    user = await Helpers.getActor(req.body.actor, instance, true)
-    if (!user) {
-      log.info(`Actor ${req.body.actor} not found`)
+    ap_actor = await Helpers.getActor(actor_url, instance, true)
+    if (!ap_actor) {
+      log.info(`[FEDI] Actor ${actor_url} not found`)
       return res.status(401).send('Actor not found')
     }
-    if (httpSignature.verifySignature(parsed, user.object.publicKey.publicKeyPem)) {
-      log.debug(`Valid signature from ${req.body.actor} `)
+
+    if (!ap_actor?.object?.publicKey?.publicKeyPem) {
+      log.info(`[FEDI] Actor %s has no publicKey at %s`, ap_actor.ap_id, actor_url)
+      return res.status(401).send('No public key')
+    }
+
+    if (httpSignature.verifySignature(parsed, ap_actor.object.publicKey.publicKeyPem)) {
+      log.debug(`[FEDI] Valid signature from ${actor_url} `)
       return next()
     }
 
     // still not valid
-    log.info(`Invalid signature from user ${req.body.actor}`)
+    log.info(`[FEDI] Invalid signature from Actor ${actor_url}`)
     res.send('Request signature could not be verified', 401)
   }
 }

@@ -6,6 +6,9 @@ const resourceController = {
     const resource_id = req.params.resource_id
     const hidden = req.body.hidden
     const resource = await Resource.findByPk(resource_id)
+    if (!resource) {
+      return res.sendStatus(404)
+    }
     await resource.update({ hidden })
     res.json(resource)
   },
@@ -13,6 +16,9 @@ const resourceController = {
   async remove (req, res) {
     const resource_id = req.params.resource_id
     const resource = await Resource.findByPk(resource_id)
+    if (!resource) {
+      return res.sendStatus(404)
+    }
     await resource.destroy()
     res.sendStatus(200)
   },

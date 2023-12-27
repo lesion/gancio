@@ -5,6 +5,10 @@ const cors = require('cors')()
 const config = require('../config')
 const log = require('../log')
 
+// REMOVE ME
+// const federationController = require('../federation')
+// const federationControllerUsers = require('../federation/users')
+
 const collectionController = require('./controller/collection')
 const setupController = require('./controller/setup')
 const settingsController = require('./controller/settings')
@@ -24,7 +28,6 @@ const localeController = require('./controller/locale')
 const { DDOSProtectionApiRateLimiter, SPAMProtectionApiRateLimiter } = require('./limiter')
 const helpers = require('../helpers')
 const storage = require('./storage')
-
 
 module.exports = () => {
 
@@ -196,9 +199,12 @@ module.exports = () => {
 
     // - FEDIVERSE INSTANCES, MODERATION, RESOURCES
     api.get('/instances', isAdmin, instanceController.getAll)
+    api.get('/instances/trusted', instanceController.getTrusted)
     api.get('/instances/:instance_domain', isAdmin, instanceController.get)
     api.post('/instances/toggle_block', isAdmin, instanceController.toggleBlock)
     api.post('/instances/toggle_user_block', isAdmin, apUserController.toggleBlock)
+    api.post('/instances/add_trust', isAdmin, instanceController.addTrust)
+    api.delete('/instances/trust', isAdmin, instanceController.removeTrust)
     api.put('/resources/:resource_id', isAdmin, resourceController.hide)
     api.delete('/resources/:resource_id', isAdmin, resourceController.remove)
     api.get('/resources', isAdmin, resourceController.getAll)
@@ -223,7 +229,6 @@ module.exports = () => {
     api.get('/plugins', isAdmin, pluginController.getAll)
     api.post('/plugin/test/:plugin', isAdmin, pluginController.testPlugin)
     api.put('/plugin/:plugin', isAdmin, pluginController.togglePlugin)
-
     api.use('/plugin/:plugin', pluginController.routeAPI)
 
     // OAUTH

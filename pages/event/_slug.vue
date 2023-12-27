@@ -95,20 +95,21 @@
     #resources.mt-1(v-if='settings.enable_federation')
       div.mb-3(v-if='!settings.hide_boosts && (event.boost?.length || event.likes?.length) ')
         client-only
-          v-menu(open-on-hover top offset-y)
+          v-menu(open-on-hover top offset-y v-if='event.likes.length')
             template( v-slot:activator="{ on, attrs }")
-              span.mr-3(v-bind='attrs' v-on='on') <v-icon color='primary' v-text='mdiBookmark' /> {{event.likes.length}}
+              span.mr-3(v-bind='attrs' v-on='on') <v-icon color='primary' v-text='mdiStar' /> {{event.likes.length}}
             v-list
               v-list-item(v-for='(like, idx) in event.likes' :key='idx')
                 v-list-item-title(v-text='like')
-          v-menu(open-on-hover top offset-y)
+
+          v-menu(open-on-hover top offset-y v-if='event.boost.length')
             template( v-slot:activator="{ on, attrs }")
               span(v-bind='attrs' v-on='on') <v-icon v-text='mdiShareAll' /> {{event.boost.length}}
             v-list
               v-list-item(v-for='(boost, idx) in event.boost' :key='idx')
                 v-list-item-title(v-text='boost')
           template(slot='placeholder')
-            span.mr-3 <v-icon color='primary' v-text='mdiBookmark' /> {{event.likes.length}}
+            span.mr-3 <v-icon color='primary' v-text='mdiStar' /> {{event.likes.length}}
             span <v-icon v-text='mdiShareAll' /> {{event.boost.length}}
 
       v-dialog(v-model='showResources' max-width="900" width="900" :fullscreen='$vuetify.breakpoint.xsOnly'
@@ -190,7 +191,7 @@ import EventMapDialog from '@/components/EventMapDialog'
 
 import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose, mdiMap,
   mdiEye, mdiEyeOff, mdiDelete, mdiRepeat, mdiLock, mdiFileDownloadOutline, mdiShareAll,
-  mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker, mdiChevronUp, mdiMonitorAccount, mdiBookmark } from '@mdi/js'
+  mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker, mdiChevronUp, mdiMonitorAccount, mdiBookmark, mdiStar } from '@mdi/js'
 
 export default {
   name: 'Event',
@@ -212,7 +213,7 @@ export default {
   data ({$store}) {
     return {
       mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar, mdiFileDownloadOutline,
-      mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat, mdiLock, mdiMap, mdiChevronUp, mdiMonitorAccount, mdiBookmark, mdiShareAll,
+      mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat, mdiLock, mdiMap, mdiChevronUp, mdiMonitorAccount, mdiBookmark, mdiStar, mdiShareAll,
       currentAttachment: 0,
       event: {},
       diocane: '',
