@@ -215,7 +215,15 @@
         "geocoding_provider_type": "Software de geocodificação",
         "geocoding_provider": "Provedor de geocodificação",
         "tilelayer_provider_help": "O provedor padrão é o  OpenStreetMap",
-        "edit_tag_help": "Você pode alterar o marcador ao substituí-lo por um novo ou mesclando-o com um já existente. Os {n} eventos associados também serão alterados."
+        "edit_tag_help": "Você pode alterar o marcador ao substituí-lo por um novo ou mesclando-o com um já existente. Os {n} eventos associados também serão alterados.",
+        "geocoding_test_error": "O serviço de geocodificação não pode ser acessado em {service_name}",
+        "tilelayer_test_button": "Testar tilelayer",
+        "tilelayer_provider": "Provedor de tilelayer",
+        "geocoding_countrycodes_help": "Permite definir um filtro para pesquisas com base em códigos de área",
+        "tilelayer_test_error": "O serviço tilelayer não pode ser acessado em {service_name}",
+        "tilelayer_test_success": "O serviço tilelayer em {service_name} funciona",
+        "geocoding_test_button": "Testar geocodificação",
+        "geocoding_test_success": "O serviço de geocodificação em {service_name} funciona"
     },
     "event": {
         "follow_me_description": "Uma das maneiras de se manter atualizado com os eventos publicados aqui em {title},\né seguir a conta <u>{account}</u> no Fediverso, por exemplo, via Mastodon, e possivelmente adicionar recursos para um evento a partir de lá.<br/><br/>\nSe nunca ouviu falar sobre Mastodon ou no Fediverso nós recomendamos ler <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>este artigo</a>.<br/><br/>Entre com o seu domínio abaixo (e.g. mastodon.social)",
@@ -288,7 +296,8 @@
         "feed_description": "Para seguir as atualizações de um computador ou telemóvel sem que precise de aceder a esta página periodicamente, utilize um leitor de feeds RSS. </p>\n\n<p> Com feeds RSS pode utilizar uma aplicação especial para receber atualizações de páginas que sejam do teu interesse. É uma boa maneira de seguir muitas páginas rapidamente, sem a necessidade de criar contas de utilizadores ou outras complicações. </p>\n\n<li> Se possui um Android, recomendamos <a href=\"https://f-droid.org/en/packages/net.frju.flym/\">Flym</a> ou Feeder </li>\n<li> Para iPhone / iPad pode utilizar <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\"> Feed4U </a> </li>\n<li> Para computador fixo/ portátil nós recomendamos Feedbro, que pode ser instalado no <a href=\"https://addons.mozilla.org/en-GB/firefox/addon/feedbroreader/\"> Firefox </a> ou <a href=\"https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa\"> Chrome </a>. </li>\n<br/>\nAdicionado este link ao seu leitor de RSS irá mantê-lo atualizado.",
         "ical_description": "Computadores e smartphones normalmente possuem aplicações de calendário capazes de importar um calendário remoto.",
         "list_description": "Se têm uma página e quer exibir uma lista de eventos, use o seguinte código",
-        "email_description": "Podes obter eventos que sejam do teu interesse via e-mail."
+        "email_description": "Podes obter eventos que sejam do teu interesse via e-mail.",
+        "filter_description": "Pode filtrar a sua exportação aqui por tags e local ou por uma coleção predefinida"
     },
     "oauth": {
         "authorization_request": "A aplicação <code>{app}</code> solicita autorização em <code>{instance_name}</code>:",
