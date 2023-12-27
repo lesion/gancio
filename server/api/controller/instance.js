@@ -115,7 +115,7 @@ const instancesController = {
         if (!instance) { 
           return res.sendStatus(404)
         }
-        const webfinger = await axios.get(`https://${instance_url}/.well-known/webfinger?resource=acct:${user}@${instance_url}`).then(res => res.data)
+        const webfinger = await axios.get(`https://${instance_url}/.well-known/webfinger?resource=acct:${user}@${instance_url}`).then(ret => ret.data)
         if (webfinger?.links) {
           const actor_url = webfinger.links.find(l => l.rel === 'self')
           if (!actor_url) {
@@ -155,29 +155,35 @@ const instancesController = {
         return res.json(actor)
       }
 
-      // if (nodeInfo?.software?.name === 'Mobilizon') {
-      //   instance.actor = 'relay'
-      // } else if (nodeInfo?.software?.name === 'gancio') {
-      //   instance.actor = get(nodeInfo, 'metadata.nodeActor', 'relay')
-      // }
-      // log.debug(`[FEDI] instance .well-known: ${instance.name} / ${instance.applicationActor}`)
 
-      // // if we have an actor, let's make a new friend
-      // if (instance.actor) {
+      // supports old gancio / mobilizon instances
+      if (instance?.data?.software?.name === 'Mobilizon') {
+        instance.actor = 'relay'
+      } else if (instance?.data?.software?.name === 'gancio') {
+        instance.actor = get(instance?.data, 'metadata.nodeActor', 'relay')
+      }
+      log.debug(`[FEDI] instance .well-known: ${instance.name} - ${instance.domain}`)
 
-      //   // send a well-known request
-      //   const instance_hostname = new URL(url).host
-      //   const { data: wellknown } = await axios.get(`${url}/.well-known/webfinger?resource=acct:${instance.actor}@${instance_hostname}`)
+      // if we have an actor, let's make a new friend
+      if (instance.actor) {
 
-      //   // search for actor url
-      //   const actorURL = wellknown?.links.find(l => l.rel === 'self').href
+        // send a well-known request
+        const instance_hostname = new URL(url).host
+        const webfinger = await axios.get(`${url}/.well-known/webfinger?resource=acct:${instance.actor}@${instance_hostname}`).then(ret => ret.data)
+        if (!webfinger?.links) {
+          return res.sendStatus(404)
+        }
 
-      //   // retrieve the AP actor and flat it as trusted
-      //   const actor = await getActor(actorURL, instance)
-      //   await actor.update({ trusted: true })
+        // search for actor url
+        const actorURL = webfinger?.links.find(l => l.rel === 'self').href
 
-      //   return res.json(actor)
-      // }
+        // retrieve the AP actor and flat it as trusted
+        const actor = await getActor(actorURL, instance)
+        await actor.update({ trusted: true })
+
+        return res.json(actor)
+      }
+      return res.sendStatus(404)
     } catch (e) {
       console.error(e) 
       log.error('[FEDI] Error adding trusted instance %s', e?.response?.data ?? String(e))

@@ -108,7 +108,8 @@
     "clone": "Clone",
     "pin": "Pin",
     "trusted_instances": "Trusted instances",
-    "actors": "Node"
+    "actors": "Node",
+    "collection_in_home": "Show a collection in home"
   },
   "login": {
     "description": "By logging in you can publish new events.",

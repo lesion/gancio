@@ -52,7 +52,8 @@ const defaultSettings = {
   ],
   plugins: [],
   admin_email: config.admin_email || '',
-  smtp: config.smtp || {}
+  smtp: config.smtp || {},
+  collection_in_home: null
 }
 
 /**

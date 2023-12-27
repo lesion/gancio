@@ -19,7 +19,7 @@ module.exports = {
     // check 
 
     // check if this event is new
-    const ap_id = req.body.id
+    const ap_id = req.body.object.id
     const exists = await Event.findOne({ where: { ap_id }})
     if (exists) {
       log.warn('[FEDI] Avoid creating a duplicated event %s', ap_id)

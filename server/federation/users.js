@@ -70,6 +70,7 @@ module.exports = {
         mediaType: 'image/png',
         url: config.baseurl + '/logo.png'
       },
+      summary: settings.description,
       publicKey: {
         id: `${config.baseurl}/federation/u/${name}#main-key`,
         owner: `${config.baseurl}/federation/u/${name}`,
@@ -156,7 +157,7 @@ module.exports = {
             to: 'https://www.w3.org/ns/activitystreams#Public',
             published: new DateTime(e.createdAt).toISO(),
             actor: `${config.baseurl}/federation/u/${name}`,
-            object: e.toAP(name)
+            object: e.toAP(settings)
           }))
       })      
     } else {

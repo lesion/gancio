@@ -101,6 +101,7 @@ module.exports = {
       footerLinks: settings.footerLinks,
       admin_email: settings.admin_email,
       about: settings.about,
+      collection_in_home: settings.collection_in_home
     }
     next()
   },

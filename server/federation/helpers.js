@@ -200,7 +200,7 @@ const Helpers = {
     try {
       const { applicationActor, nodeInfo } = await Helpers.getNodeInfo(instance_url)
       const instance = Instance.create({
-          name: nodeInfo?.name ?? nodeInfo?.metadata?.nodeLabel ?? nodeInfo?.metadata?.nodeName ?? domain,
+          name: nodeInfo?.metadata?.nodeName ?? nodeInfo?.metadata?.nodeDescription ?? domain,
           domain,
           data: nodeInfo,
           blocked: false,

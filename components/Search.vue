@@ -60,12 +60,7 @@ v-row
       clearable
       :clear-icon='mdiCloseCircle'
       item-text='name')
-      template(v-slot:itsdfems='{ item }')
-          v-list-item-avatar
-            v-icon(v-text="item.type === 'place' ? mdiMapMarker : item.type === 'tag' ? mdiTag : mdiCollage")
-          v-list-item-content
-            v-list-item-title(v-text='item.label')
-            v-list-item-subtitle(v-if='item.type ==="place"' v-text='item.label !== "online" && item.address')            
+
 </template>
 
 <script>

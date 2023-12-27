@@ -2,11 +2,29 @@
 v-container
   v-card-title {{ $t('common.collections') }}
     v-spacer
-    v-text-field(v-model='search'
-      :append-icon='mdiMagnify' outlined rounded
-      :label="$t('common.search')"
-      single-line hide-details)
+
   v-card-subtitle(v-html="$t('admin.collections_description')")
+
+  v-card-text
+    v-row
+      v-col
+        v-switch(:label="$t('common.collection_in_home')" inset v-model='in_home')
+      v-col
+        v-autocomplete(
+          v-if='in_home'
+          :disabled='!!filters.length'
+          v-model="collection_in_home"
+          outlined
+          :label='$t("common.collections")'
+          hide-details
+          color='primary'
+          hide-selected
+          :menu-props="{ maxWidth: '400' }"
+          :items='collections'
+          hide-no-data
+          clearable
+          :clear-icon='mdiCloseCircle'
+          item-text='name')
 
   v-btn(color='primary' text @click='newCollection') <v-icon v-text='mdiPlus'></v-icon> {{ $t('admin.new_collection') }}
 
@@ -37,14 +55,15 @@ v-container
               @input.native='searchActors'
               @focus='searchActors'
               return-object
-              item-text='object.name'
               item-value='ap_id'
               :delimiters="[',', ';']"
               :items="actors"
               :label="$t('common.trusted_instances')")
-                //- template(v-slot:selection="{ item, on, attrs, selected, parent }")
-                //-   v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
-                //-     :input-value="selected" label small) {{ item }}
+                template(v-slot:item="{ item }")
+                  v-list-item-content @{{ item?.object?.name }}@{{ item?.instanceDomain }}
+                template(v-slot:selection="{ item, on, attrs, selected, parent }")
+                  v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+                    :input-value="selected" label small) @{{ item?.object?.name }}@{{ item?.instanceDomain }}
 
           v-col(cols=4)
             v-autocomplete(v-model='filterTags'
@@ -117,7 +136,6 @@ v-container
       :hide-default-footer='collections.length < 5'
       :header-props='{ sortIcon: mdiChevronDown }'
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
-      :search='search'
     )
       //- template(v-slot:item.filters='{ item }')
       //-   span {{ collectionFilters(item) }}
@@ -131,6 +149,7 @@ v-container
 
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
 import get from 'lodash/get'
 import debounce from 'lodash/debounce'
 import isEqual from 'lodash/isEqual'
@@ -139,13 +158,12 @@ import sortBy from 'lodash/sortBy'
 import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle, mdiChevronDown } from '@mdi/js'
 
 export default {
-  data() {
+  data({ $store }) {
     return {
       mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle, mdiChevronDown,
       loading: false,
       dialog: false,
       valid: false,
-      search: '',
       collection: { name: '', id: null },
       filterTags: [],
       filterPlaces: [],
@@ -168,14 +186,27 @@ export default {
         { value: 'tags', text: this.$t('common.tags') },
         { value: 'places', text: this.$t('common.places') },
         { value: 'actions', text: this.$t('common.actions'), align: 'right' }
-      ]
+      ],
+      in_home: $store.state.settings.collection_in_home !== null,
     }
   },
   async fetch() {
     this.collections = await this.$axios.$get('/collections?withFilters=true')
   },
-
+  computed: {
+    ...mapState(['settings']),
+    collection_in_home: {
+      get () { return this.settings.collection_in_home },
+      set (value) { this.setSetting({ key: 'collection_in_home', value }) }
+    },
+  },
+  watch: {
+    in_home (val) {
+      this.collection_in_home = null
+    }
+  },
   methods: {
+    ...mapActions(['setSetting']),
     searchTags: debounce(async function (ev) {
       this.tags = await this.$axios.$get(`/tag?search=${encodeURIComponent(ev.target.value)}`)
     }, 100),
@@ -237,7 +268,8 @@ export default {
     },
     async togglePinCollection (collection) {
       try {
-        collection.isTop = await this.$axios.$put(`/collection/toggle/${collection.id}`)
+        await this.$axios.$put(`/collection/toggle/${collection.id}`)
+        collection.isTop = !collection.isTop
       } catch (e) {
         const err = get(e, 'response.data.errors[0].message', e)
         this.$root.$message(this.$t(err), { color: 'error' })        

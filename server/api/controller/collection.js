@@ -1,5 +1,4 @@
 const { Collection, Filter, Event, Tag, Place, APUser } = require('../models/models')
-const exportController = require('./export')
 
 const log = require('../../log')
 const { DateTime } = require('luxon')
@@ -43,21 +42,21 @@ const collectionController = {
 
   async getEvents (req, res) {
     const name = req.params.name
-    const max = req.query.max || 10
-    const start_at = req.query.start_at || DateTime.local().toUnixInteger()
+    const limit = req.query.max || 10
+    const start = req.query.start_at || DateTime.local().toUnixInteger()
 
     try {
-      const events = await collectionController._getEvents({ name, start_at, max })
+      const events = await collectionController._getEvents({ name, start, limit })
       log.debug(`[COLLECTION] (${name}) events: ${events?.length}`)
       return res.json(events)
     } catch (e) {
-      log.error(e)
+      log.error('[COLLECTION] Error in getEvents: %s', String(e))
       return res.sendStatus(404)
     }
   },
 
   // return events from collection
-  async _getEvents ({ name, start_at, max = 10 }) {
+  async _getEvents ({ name, start, end, limit }) {
 
     const collection = await Collection.findOne({ where: { name } })
     if (!collection) {
@@ -65,18 +64,27 @@ const collectionController = {
     }
 
     const filters = await Filter.findAll({ where: { collectionId: collection.id } })
+
+    // collection is empty if there are no filters
     if (!filters.length) {
       return []
     }
 
+    // init stardard filter
     const where = {
       // do not include parent recurrent event
       recurrent: null,
 
       // confirmed event only
       is_visible: true,
+      [Op.or]: {
+        start_datetime: { [Op.gte]: 1*start },
+        end_datetime: { [Op.gte]: 1*start }
+      }
+    }
 
-      start_datetime: { [Op.gte]: start_at },
+    if (end) {
+      where.start_datetime = { [Op.lte]: end }
     }
 
     const replacements = []
@@ -84,19 +92,25 @@ const collectionController = {
 
     // collections are a set of filters to match
     filters.forEach(f => {
+
+      let conditions = []
+
       if (f.tags && f.tags.length) {
         const tags = Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=event.id AND ${Col('tagTag')} in (?)`))
         replacements.push(f.tags)
-        if (f.places && f.places.length) {
-          ors.push({ [Op.and]: [ { placeId: f.places.map(p => p.id) },tags] })
-        } else {
-          ors.push(tags)
-        }
-      } else if (f.places && f.places.length) {
-        ors.push({ placeId: f.places.map(p => p.id) })
-      } else if (f.actors && f.actors.length) {
-        ors.push({ apUserApId: f.actors.map(a => a.ap_id)})
+        conditions.push(tags)
       }
+
+      if (f.places && f.places.length) {
+          conditions.push({ placeId: f.places.map(p => p.id) })
+      }
+      
+      if (f.actors && f.actors.length) {
+        conditions.push({ apUserApId: f.actors.map(a => a.ap_id)})
+      }
+
+      if (!conditions.length) return
+      ors.push(conditions.length === 1 ? conditions[0] : { [Op.and]: conditions })
     })
 
     where[Op.and] = { [Op.or]: ors }
@@ -104,7 +118,7 @@ const collectionController = {
     const events = await Event.findAll({
       where,
       attributes: {
-        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'description', 'resources']
+        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'description', 'resources', 'ap_id']
       },
       order: ['start_datetime'],
       include: [
@@ -116,7 +130,7 @@ const collectionController = {
         },
         { model: Place, required: true, attributes: ['id', 'name', 'address'] },
       ],
-      limit: max,
+      ...( limit && { limit }),
       replacements
     }).catch(e => {
       log.error('[EVENT]', e)

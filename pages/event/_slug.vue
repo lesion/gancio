@@ -15,6 +15,8 @@
             v-icon.float-right(v-if='event.parentId' color='success' v-text='mdiRepeat')
             .title.text-h5
               strong.p-name.text--primary(itemprop="name") {{event.title}}
+            a.d-block(v-if='event.ap_id' :href="event.ap_id") {{ event.ap_id }}
+            a(v-if='event.ap_user'  :href="event.ap_user.ap_id") @{{event.ap_user?.object?.preferredUsername}}@{{ event.ap_user?.instanceDomain }}
           v-divider
           v-container.eventDetails
             time.dt-start(:datetime='$time.unixFormat(event.start_datetime, "yyyy-MM-dd HH:mm")' itemprop="startDate" :content='$time.unixFormat(event.start_datetime, "yyyy-MM-dd\'T\'HH:mm")')

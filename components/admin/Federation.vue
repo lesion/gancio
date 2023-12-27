@@ -65,29 +65,42 @@ v-container
 
     v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.add_instance')}}
     v-data-table(
+      dense
       v-if='trusted_instances.length'
       :hide-default-footer='trusted_instances.length<10'
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
       :header-props='{ sortIcon: mdiChevronDown }'
       :headers='headers'
       :items='trusted_instances')
-      template(v-slot:item.ap_id="{item}")
-        span {{ item?.object?.summary ?? item?.instance?.data?.metadata?.nodeDescription}}
+      template(v-slot:item.logo="{item}")
+        v-img(height=20 width=20 :src="item?.object?.icon?.url") 
+      template(v-slot:item.name="{item}")
+        span @{{ item?.object?.name ?? item?.instance?.data?.metadata?.nodeName}}@{{ item.instance.domain }}
+      template(v-slot:item.info="{item}")
+        span {{ item?.object?.summary ?? item?.instance?.data?.metadata?.nodeDescription}} / {{ item.instance.name }}
+      template(v-slot:item.url="{item}")
+        a(:href='item.ap_id') {{ item.ap_id }}
+      template(v-slot:item.status="{item}")
+        v-icon(v-if='item.following' v-text='mdiDownload')
+        v-icon(v-if='item.follower' v-text='mdiUpload')
       template(v-slot:item.actions="{item}")
-        v-img(height=30 width=30 :src="item?.object?.icon?.url")
+
+        //- v-btn(icon @click='deleteInstance(item)' color='error')
+        //-   v-icon(v-text='mdiDeleteForever')
+
         v-btn(icon @click='deleteInstance(item)' color='error')
           v-icon(v-text='mdiDeleteForever')
 
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown } from '@mdi/js'
+import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown, mdiDownload, mdiUpload } from '@mdi/js'
 
 export default {
   name: 'Federation',
   data ({ $store, $options }) {
     return {
-      mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown,
+      mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown, mdiDownload, mdiUpload,
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
       instance_place: $store.state.settings.instance_place,
@@ -98,9 +111,11 @@ export default {
       trusted_instances: [],
       valid: false,
       headers: [
-        { value: 'object.type', text: 'Type' },
-        { value: 'object.preferredUsername', text: 'Name' },
-        { value: 'ap_id', text: 'URL' },
+        { value: 'logo', text: 'Logo', width: 60, sortable: false },
+        { value: 'name', text: 'Name' },
+        { value: 'info', text: 'Info' },
+        { value: 'url', text: 'URL' },
+        { value: 'status', text: 'Status' },
         { value: 'actions', text: 'Actions', align: 'right' }
       ]
     }

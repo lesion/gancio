@@ -18,6 +18,7 @@ const exportController = require('./export')
 const tagController = require('./tag')
 
 const log = require('../../log')
+const collectionController = require('./collection')
 
 const eventController = {
 
@@ -130,7 +131,8 @@ const eventController = {
             required: false,
             attributes: ['id', 'activitypub_id', 'data', 'hidden']
           },
-          { model: Event, required: false, as: 'parent', attributes: ['id', 'recurrent', 'is_visible', 'start_datetime'] }
+          { model: Event, required: false, as: 'parent', attributes: ['id', 'recurrent', 'is_visible', 'start_datetime'] },
+          { model: APUser, required: false }
         ],
         order: [[Resource, 'id', 'DESC']]
       })
@@ -703,15 +705,24 @@ const eventController = {
     const page = Number(req.query.page) || 0
     const older = req.query.older || false
 
-    const show_multidate = settings.allow_multidate_event &&
-    typeof req.query.show_multidate !== 'undefined' ? req.query.show_multidate !== 'false' : true
+    const show_multidate = settings.allow_multidate_event && helpers.queryParamToBool(req.query.show_multidate, true)
+    // typeof req.query.show_multidate !== 'undefined' ? req.query.show_multidate !== 'false' : true
 
-    const show_recurrent = settings.allow_recurrent_event &&
-      typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settings.recurrent_event_visible
+    const show_recurrent = settings.allow_recurrent_event && helpers.queryParamToBool(req.query.show_recurrent, settings.recurrent_event_visible)
+      // typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settings.recurrent_event_visible
 
-    res.json(await eventController._select({
-      start, end, query, places, tags, show_recurrent, show_multidate, limit, page, older
-    }))
+    if (settings.collection_in_home) {
+      return res.json(await collectionController._getEvents({
+        name: settings.collection_in_home,
+        start,
+        end,
+        limit
+      }))
+    } else {
+      return res.json(await eventController._select({
+        start, end, query, places, tags, show_recurrent, show_multidate, limit, page, older
+      }))
+    }
   },
 
   /**
