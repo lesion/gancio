@@ -8,6 +8,8 @@ const url = require('url')
 const settingsController = require('../api/controller/settings')
 const log = require('../log')
 
+// process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+
 const Helpers = {
 
   // ignore unimplemented ping url from fediverse
