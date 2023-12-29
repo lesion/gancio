@@ -132,12 +132,19 @@ const Helpers = {
 
   async unfollowActor (actor) {
     log.debug(`Unfollowing actor ${actor.ap_id}`)
+
+    const object = {
+      id: `${config.baseurl}/federation/m/${actor.ap_id}#follow`,
+      type: 'Follow',
+      object: actor.ap_id
+    }
+    
     const body = {
       '@context': 'https://www.w3.org/ns/activitystreams',
-      id: `${config.baseurl}/federation/m/${actor.ap_id}#follow`,
-      type: 'Unfollow',
+      id: `${config.baseurl}/federation/m/${actor.ap_id}#unfollow`,
+      type: 'Undo',
       actor: `${config.baseurl}/federation/u/${settingsController.settings.instance_name}`,
-      object: actor.ap_id
+      object
     }
     await Helpers.signAndSend(JSON.stringify(body), actor.object.endpoints?.sharedInbox || actor.object.inbox)
     return actor.update({ following: 0 })
