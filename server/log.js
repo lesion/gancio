@@ -27,12 +27,12 @@ const logger = createLogger({
         zippedArchive: true,
         maxSize: '10m',
         maxFiles: '10d',
-        format: format.combine(format.timestamp(), gancioFormat)
+        format: format.combine(format.splat(), format.timestamp(), gancioFormat)
       }),
       new transports.Console(
         {
           level: config.log_level || 'info',
-          format: format.combine(format.timestamp(), format.colorize(), gancioFormat)
+          format: format.combine(format.splat(), format.timestamp(), format.colorize(), gancioFormat)
         }
       )]
 })
