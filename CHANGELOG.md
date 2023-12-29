@@ -17,6 +17,7 @@ Thanks to @linos from [event-federation.eu](https://event-federation.eu/) and @t
 * **AP:** support Note/Event update and removal ([f1158db](https://framagit.org/les/gancio/commit/f1158dba73501e98918d7fa499289554743832b9))
 * **AP:** improve interaction with AP, [#322](https://framagit.org/les/gancio/issues/322) ([340d503](https://framagit.org/les/gancio/commit/340d50301f1b76ebc17dd4fe6d419c2afc5fb556))
 * **AP:** init unit test ([12c0f21](https://framagit.org/les/gancio/commit/12c0f21a8984acd9d10f2fb86e6dc6b7b8d25aef))
+* **AP:** minor with unfollow ([a70529d](https://framagit.org/les/gancio/commit/a70529d771f4cb70b9c0946e97810ba85b4242f1))
 * **collections:** add instances as potential filter in collections ([7a6101b](https://framagit.org/les/gancio/commit/7a6101be7ba4990bd0c0cf32344e8ca59c4de8c2))
 * **collections:** a collection could be used as homepage ([3fd9f5a](https://framagit.org/les/gancio/commit/3fd9f5a8cbc5766c8c6e65fc1ff97ed69cf7edf9))
 * **locale** add Românesc ([bdc6b39](https://framagit.org/les/gancio/commit/bdc6b3925a68314d75a3c3ca4fd1af72149d1199))
@@ -24,6 +25,7 @@ Thanks to @linos from [event-federation.eu](https://event-federation.eu/) and @t
 
 ### Bug Fixes
 
+* use .splat in production too ([5dcae0d](https://framagit.org/les/gancio/commit/5dcae0d9755726553974b32338187bf3b8a01067))
 * body parse ld+json coming from fediverse ([f96c826](https://framagit.org/les/gancio/commit/f96c8261d778bc2b9dc3b9e9a4446bda459bd6c3))
 
 
