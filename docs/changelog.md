@@ -7,6 +7,32 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+
+## [1.10.0](https://framagit.org/les/gancio/compare/v1.8.0...v1.10.0) (2023-12-29)
+
+This release is a big step toward interoperability with ActivityPub, look at the [documentation](https://gancio.org/federation) for the details.  
+Thanks to @linos from [event-federation.eu](https://event-federation.eu/) and @tcit from [mobilizon](https://joinmobilizon.org/)
+
+
+### Features
+
+* **AP:**  implement FEP-2677 in nodeinfo ([07fcbbd](https://framagit.org/les/gancio/commit/07fcbbd4ce6727817812b9c71903ca1bf61d394e))
+* **AP:** implement application Actor retrieval FEP-2677 ([9c74f51](https://framagit.org/les/gancio/commit/9c74f5198d7c2c360fdb70ebbd0d4bfc2e6999b4))
+* **AP:** improve logging and interoperability ([ca1bd24](https://framagit.org/les/gancio/commit/ca1bd2487cd2c42af096dd9cd1b8f07beceb90eb))
+* **AP:** retrieve instance info via nodeinfo ([1e0665d](https://framagit.org/les/gancio/commit/1e0665dc3d2de8f0f459d8941403ce1276269b39))
+* **AP:** support Note/Event update and removal ([f1158db](https://framagit.org/les/gancio/commit/f1158dba73501e98918d7fa499289554743832b9))
+* **AP:** improve interaction with AP, [#322](https://framagit.org/les/gancio/issues/322) ([340d503](https://framagit.org/les/gancio/commit/340d50301f1b76ebc17dd4fe6d419c2afc5fb556))
+* **AP:** init unit test ([12c0f21](https://framagit.org/les/gancio/commit/12c0f21a8984acd9d10f2fb86e6dc6b7b8d25aef))
+* **collections:** add instances as potential filter in collections ([7a6101b](https://framagit.org/les/gancio/commit/7a6101be7ba4990bd0c0cf32344e8ca59c4de8c2))
+* **collections:** a collection could be used as homepage ([3fd9f5a](https://framagit.org/les/gancio/commit/3fd9f5a8cbc5766c8c6e65fc1ff97ed69cf7edf9))
+* **locale** add Românesc ([bdc6b39](https://framagit.org/les/gancio/commit/bdc6b3925a68314d75a3c3ca4fd1af72149d1199))
+
+
+### Bug Fixes
+
+* body parse ld+json coming from fediverse ([f96c826](https://framagit.org/les/gancio/commit/f96c8261d778bc2b9dc3b9e9a4446bda459bd6c3))
+
+
 ## [1.8.0](https://framagit.org/les/gancio/compare/v1.7.1...v1.8.0) (2023-12-15)
 
 

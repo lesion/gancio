@@ -1,33 +1,31 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [1.9.0](https://framagit.org/les/gancio/compare/v1.7.1...v1.9.0) (2023-12-27)
+## [1.10.0](https://framagit.org/les/gancio/compare/v1.8.0...v1.10.0) (2023-12-29)
+
+This release is a big step toward interoperability with ActivityPub, look at the [documentation](https://gancio.org/federation) for the details.  
+Thanks to @linos from [event-federation.eu](https://event-federation.eu/) and @tcit from [mobilizon](https://joinmobilizon.org/)
 
 
 ### Features
 
-* add Turkish language ([c99772e](https://framagit.org/les/gancio/commit/c99772e0b5d8f92fabad9f24ecab5f1ad48053f0))
 * **AP:**  implement FEP-2677 in nodeinfo ([07fcbbd](https://framagit.org/les/gancio/commit/07fcbbd4ce6727817812b9c71903ca1bf61d394e))
 * **AP:** implement application Actor retrieval FEP-2677 ([9c74f51](https://framagit.org/les/gancio/commit/9c74f5198d7c2c360fdb70ebbd0d4bfc2e6999b4))
-* **AP:** improve logging and improve interoperability ([ca1bd24](https://framagit.org/les/gancio/commit/ca1bd2487cd2c42af096dd9cd1b8f07beceb90eb))
-* **Collection:** allow to show/hide a collection from homepage ([d4db4e3](https://framagit.org/les/gancio/commit/d4db4e3d67a585596646697a0e5072e12229f2ad))
-* **fedi/collections:** add instances as potential filter in collections ([7a6101b](https://framagit.org/les/gancio/commit/7a6101be7ba4990bd0c0cf32344e8ca59c4de8c2))
-* improve collections export adding max, start_at parameter ([c472e87](https://framagit.org/les/gancio/commit/c472e876760f172be7246a0aa5e1bc8a7610f7eb))
-* retrieve fedi instance info via nodeinfo ([1e0665d](https://framagit.org/les/gancio/commit/1e0665dc3d2de8f0f459d8941403ce1276269b39))
+* **AP:** improve logging and interoperability ([ca1bd24](https://framagit.org/les/gancio/commit/ca1bd2487cd2c42af096dd9cd1b8f07beceb90eb))
+* **AP:** retrieve instance info via nodeinfo ([1e0665d](https://framagit.org/les/gancio/commit/1e0665dc3d2de8f0f459d8941403ce1276269b39))
+* **AP:** support Note/Event update and removal ([f1158db](https://framagit.org/les/gancio/commit/f1158dba73501e98918d7fa499289554743832b9))
+* **AP:** improve interaction with AP, [#322](https://framagit.org/les/gancio/issues/322) ([340d503](https://framagit.org/les/gancio/commit/340d50301f1b76ebc17dd4fe6d419c2afc5fb556))
+* **AP:** init unit test ([12c0f21](https://framagit.org/les/gancio/commit/12c0f21a8984acd9d10f2fb86e6dc6b7b8d25aef))
+* **collections:** add instances as potential filter in collections ([7a6101b](https://framagit.org/les/gancio/commit/7a6101be7ba4990bd0c0cf32344e8ca59c4de8c2))
+* **collections:** a collection could be used as homepage ([3fd9f5a](https://framagit.org/les/gancio/commit/3fd9f5a8cbc5766c8c6e65fc1ff97ed69cf7edf9))
+* **locale** add Românesc ([bdc6b39](https://framagit.org/les/gancio/commit/bdc6b3925a68314d75a3c3ca4fd1af72149d1199))
 
 
 ### Bug Fixes
 
-* add `ro` locale ([bdc6b39](https://framagit.org/les/gancio/commit/bdc6b3925a68314d75a3c3ca4fd1af72149d1199))
-* **AP:** improve interaction with AP, [#322](https://framagit.org/les/gancio/issues/322) ([340d503](https://framagit.org/les/gancio/commit/340d50301f1b76ebc17dd4fe6d419c2afc5fb556))
-* **AP:** support Note/Event update and removal ([f1158db](https://framagit.org/les/gancio/commit/f1158dba73501e98918d7fa499289554743832b9))
 * body parse ld+json coming from fediverse ([f96c826](https://framagit.org/les/gancio/commit/f96c8261d778bc2b9dc3b9e9a4446bda459bd6c3))
-* do not allow /admin rendering when normal user ([906dca2](https://framagit.org/les/gancio/commit/906dca2b100aa7308790c5948620a4ca3f3fa955))
-* hide event being edited in "on same day" area, fix [#318](https://framagit.org/les/gancio/issues/318) ([04c88a4](https://framagit.org/les/gancio/commit/04c88a468b53a8155942d44766b822f6c2beb2dd))
-* init AP unit test ([12c0f21](https://framagit.org/les/gancio/commit/12c0f21a8984acd9d10f2fb86e6dc6b7b8d25aef))
-* location name and description not correctly set in microdata ([9811d39](https://framagit.org/les/gancio/commit/9811d395540ca6c7e0f3e2d0caa9295dd4d9308e)), closes [#316](https://framagit.org/les/gancio/issues/316) [#315](https://framagit.org/les/gancio/issues/315)
-* missing some style in detail collection page ([185b8bd](https://framagit.org/les/gancio/commit/185b8bd75e3cf9dddb160100d601951b60ab379e))
+
 
 ## [1.8.0](https://framagit.org/les/gancio/compare/v1.7.1...v1.8.0) (2023-12-15)
 
