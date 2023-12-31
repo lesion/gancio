@@ -108,7 +108,10 @@
         "test": "Prueba",
         "show_preview": "Mostrar una vista previa",
         "clone": "Clon",
-        "pin": "Pin"
+        "pin": "Pin",
+        "actors": "Nodo",
+        "collection_in_home": "Mostrar una colección en el inicio",
+        "trusted_instances": "Instancias de confianza"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
