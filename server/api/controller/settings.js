@@ -134,7 +134,10 @@ const settingsController = {
       try {
         const pluginController = require('./plugins')
         pluginController.unloadPlugin(pluginName)
-        pluginController.loadPlugin(pluginName)
+        // Do not reload the plugin if the change in its settings was to disable it
+        if (value.enable) {
+          pluginController.loadPlugin(pluginName)
+        }
       } catch (e) {
         log.error(e)
       }
