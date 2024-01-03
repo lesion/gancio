@@ -24,15 +24,25 @@ beforeAll(async () => {
   try {
     app = await require('../server/routes.js').main()
     const { sequelize } = require('../server/api/models/index')
+    // sequelize.sync({ force: true })
+    await sequelize.query('PRAGMA foreign_keys = OFF')
     await sequelize.query('DELETE FROM settings')
-    await sequelize.query('DELETE FROM events')
     await sequelize.query('DELETE FROM user_followers')
-    await sequelize.query('DELETE FROM users')
+    await sequelize.query('DELETE FROM events where parentId IS NOT NULL')
     await sequelize.query('DELETE FROM ap_users')
+    await sequelize.query('DELETE FROM events')
+    await sequelize.query('DELETE FROM event_tags')
+    await sequelize.query('DELETE FROM resources')
+    await sequelize.query('DELETE FROM instances')
+    await sequelize.query('DELETE FROM announcements')
+    await sequelize.query('DELETE FROM users')
     await sequelize.query('DELETE FROM tags')
     await sequelize.query('DELETE FROM places')
     await sequelize.query('DELETE FROM filters')
     await sequelize.query('DELETE FROM collections')
+    await sequelize.query('DELETE FROM notifications')
+    await sequelize.query('DELETE FROM event_notifications')
+    await sequelize.query('PRAGMA foreign_keys = ON')
   } catch (e) {
     console.error(e)
   }
@@ -70,7 +80,6 @@ describe('Authentication / Authorization', () => {
       .send({ email: 'admin', password: 'test' })
       .expect(200)
     expect(response.body.id).toBeDefined()
-    return response
   })
 
   test('should authenticate with correct user/password', async () => {
@@ -96,7 +105,7 @@ describe('Authentication / Authorization', () => {
 
 describe('Settings', () => {
 
-  test('should not change settings when not allowed', async () => {
+  test('should not change settings when not allowed', () => {
     return request(app).post('/api/settings')
       .send({ key: 'allow_anon_event', value: false })
       .expect(403)
@@ -171,12 +180,11 @@ describe('Events', () => {
       expect(response.text).toBe(`${field} required`)
     })
 
-    return Promise.all(promises)
+    await Promise.all(promises)
   })
 
 
   test('should create anon event only when allowed', async () => {
-
     await request(app).post('/api/settings')
       .send({ key: 'allow_anon_event', value: false })
       .auth(token.access_token, { type: 'bearer' })
@@ -210,6 +218,7 @@ describe('Events', () => {
 
 
   test('should not allow start_datetime greater than end_datetime', async () => {
+
     const event = {
       title: ' test title 5',
       place_id: places[0],
@@ -225,6 +234,7 @@ describe('Events', () => {
   })
 
   test('should not allow start_datetime greater than 3000', async () => {
+
     const event = {
       title: ' test title 5',
       start_datetime: dayjs().set('year', 4000).unix(),
@@ -269,6 +279,7 @@ describe('Events', () => {
 
 
   test('should sanitize htlm in description', async () => {
+
     const event = {
       title: 'test title',
       place_id: places[0],
@@ -292,6 +303,7 @@ describe('Events', () => {
 let event = {}
 describe('Tags', () => {
   test('should create event with tags', async () => {
+
     event = await request(app).post('/api/event')
       .send({ title: 'test tags', place_id: places[1], start_datetime: dayjs().unix() + 1000, tags: ['tag1', 'Tag2', 'tAg3'] })
       .auth(token.access_token, { type: 'bearer' })
@@ -314,6 +326,7 @@ describe('Tags', () => {
   })
 
   test('should modify event tags', async () => {
+
     const ret = await request(app).put('/api/event')
       .send({ id: event.body.id, tags: ['tag1', 'tag3', 'tag4'], place_id: places[1] })
       .auth(token.access_token, { type: 'bearer' })
@@ -323,6 +336,7 @@ describe('Tags', () => {
   })
 
   test('should return events searching for tags', async () => {
+
     const response = await request(app).get('/api/events?tags=tAg3')
       .expect(200)
 
@@ -332,19 +346,23 @@ describe('Tags', () => {
   })
 
   test('should return limited events', async () => {
-    let response = await request(app).get('/api/events?max=1')
-      .expect(200)
 
+    let response = await request(app).get('/api/events?max=1')
+    .expect(200)
     expect(response.body.length).toBe(1)
+
     response = await request(app).get('/api/events?max=2')
       .expect(200)
 
-    expect(response.body.length).toBe(2)
+    expect(response.body.length).toBe(2) 
+
+
   })
 })
 
 describe('Place', () => {
   test('should get events by place', async () => {
+
     const response = await request(app).get('/api/place/place name 2')
       .expect(200)
 
