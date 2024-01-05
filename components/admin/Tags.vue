@@ -13,8 +13,9 @@ v-container
         strong.ml-2 {{tag.tag}}
       v-card-subtitle {{$tc('admin.edit_tag_help', tag.count)}}
       v-card-text
-        v-form(v-model='valid' ref='form' lazy-validation)
+        v-form(v-model='valid' ref='form')
           v-combobox(v-model='newTag'
+            @update:search-input="newTag = $event"
             :prepend-icon="mdiTag"
             hide-no-data
             persistent-hint
@@ -22,7 +23,7 @@ v-container
             :return-object='false'
             item-value='tag'
             item-text='tag'
-            :label="$t('common.tags')")
+            :label="$t('common.tag')")
               template(v-slot:item="{ item, on, attrs }")
                 span "{{item.tag}}" <small>({{item.count}})</small>
 
@@ -30,7 +31,7 @@ v-container
         v-spacer
         v-btn(@click='dialog = false' outlined color='warning') {{ $t('common.cancel') }}
         v-btn(@click='saveTag' color='primary' outlined :loading='loading'
-          :disable='!valid || loading') {{ $t('common.save') }}
+          :disabled='!newTag || loading') {{ $t('common.save') }}
 
   v-card-text
     v-data-table(
@@ -87,15 +88,12 @@ export default {
       this.dialog = true
     },
     async saveTag() {
-      if (!this.$refs.form.validate()) return
       this.loading = true
-      this.$nextTick( async () => {
-        await this.$axios.$put('/tag', { tag: this.tag.tag, newTag: this.newTag })
-        await this.$fetch()
-        this.newTag = ''
-        this.loading = false
-        this.dialog = false
-      })
+      await this.$axios.$put('/tag', { tag: this.tag.tag, newTag: this.newTag })
+      await this.$fetch()
+      this.newTag = ''
+      this.loading = false
+      this.dialog = false
     },
     async removeTag(tag) {
       const ret = await this.$root.$confirm('admin.delete_tag_confirm', { tag: tag.tag, n: tag.count })
