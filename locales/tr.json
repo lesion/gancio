@@ -106,12 +106,14 @@
         "label": "İsim",
         "instances": "Sunucular",
         "n_resources": "medya yok|medya|{n} medya",
-        "pin": "Sabitle"
+        "pin": "Sabitle",
+        "trusted_instances": "Güvenilen sunucular",
+        "collection_in_home": "Ana sayfada koleksiyon göster"
     },
     "export": {
         "email_description": "İstersen ilginç etkinlerden e-posta yoluyla haberdar olabilirsin.",
         "feed_description": "Bu sitedeki güncellemelerden siteyi sürekli açmadan haberdar olmak için telefonunda ya da bilgisayarında RSS akışlarını takip edebilirsin.</p>\n\n<p> RSS akışları sayesinde, özel bir program kullanarak takip ettiğin sitelerden haber alabilirsin. RSS, birden çok siteyi hesap açamadan takip etmek için güzel bir yöntemdir.</p>\n\n<li> Android kullanıyorsan <a href=\"https://f-droid.org/en/packages/net.frju.flym/\">Flym</a> ya da Feeder öneriyoruz.</li>\n<li> iPhone ya da iPad kullanıyorsan <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\"> Feed4U </a> güzel bir seçenek. </li>\n<li>Bilgisayarından takip ediyorsan tarayıcına Feedbro eklentisini kurabilirsin.</li>\n<br/>\nBu bağlantıyı RSS okuyucuna ekleyerek bu sayfayı takip edebilirsin.",
-        "intro": "Kullanıcıları ve verilerini tutmak için her şeyi yapan diğer asosyal platformların aksine; biz, insanlar gibi verilerinde özgür olması gerektiğine inanıyoruz. Bu yüzden bu sitedeki etkinlikleri istediğin yöntemle takip edebilirsin.",
+        "intro": "Kullanıcıları ve verilerini tutmak için her şeyi yapan diğer asosyal platformların aksine; verilerinizin özgür olması gerektiğine inanıyoruz. Bu yüzden bu sitedeki etkinlikleri istediğin yöntemle takip edebilirsin.",
         "list_description": "Sitende etkinliklerin listesini göstermek istiyorsan, bu kod parçasını kullan",
         "ical_description": "Telefonlardaki ve bilgisayarlardaki takvim programları, bir bağlantı üzerinden internetteki takvimleri takip edebilirler.",
         "filter_description": "Dışarı aktaracaklarını burada etiketleri, mekanları ya da dahil olduğu koleksiyonu aracılığıyla filtreleyebilirsin",
