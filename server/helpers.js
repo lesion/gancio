@@ -304,7 +304,7 @@ module.exports = {
     if (res.locals.settings.allow_geolocation) {
       next()
     } else {
-      res.sendStatus(403)
+      return res.sendStatus(403)
     }
   },
 

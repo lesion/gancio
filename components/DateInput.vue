@@ -270,7 +270,7 @@ export default {
         } else {
           let from = value
           let due = this.value.due
-          // if a user edits an event by postponing it, say by a week, without changing the hours, the end date should be recalculate
+          // recalculated end date
           if (this.value.from) {
             let newDueDate = new Date(value).toDateString()
             if (this.value.dueHour < this.value.fromHour) {
