@@ -9,7 +9,7 @@ const collectionController = require('./collection')
 const exportController = {
 
   async export (req, res) {
-    const format = req.params.format
+    const format = req.params.format || 'json'
     const tags = req.query.tags
     const places = req.query.places
     const collection = req.query.collection

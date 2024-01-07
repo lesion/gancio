@@ -5,6 +5,7 @@ const { DateTime } = require('luxon')
 const { col: Col, queryParamToBool } = require('../../helpers')
 const { Op, Sequelize } = require('sequelize')
 const { getActor, followActor, unfollowActor } = require('../../federation/helpers')
+const exportController = require('./export')
 
 const collectionController = {
 
@@ -41,6 +42,7 @@ const collectionController = {
   },
 
   async getEvents (req, res) {
+    const format = req.params.format || 'json'
     const name = req.params.name
     const limit = req.query.max || 10
     const start = req.query.start_at || DateTime.local().toUnixInteger()
@@ -48,7 +50,17 @@ const collectionController = {
     try {
       const events = await collectionController._getEvents({ name, start, limit })
       log.debug(`[COLLECTION] (${name}) events: ${events?.length}`)
-      return res.json(events)
+
+      switch (format) {
+        case 'rss':
+          return exportController.feed(req, res, events,
+              `${res.locals.settings.title} - Collection @${name}`,
+              `${res.locals.settings.baseurl}/feed/rss/collection/${name}`)
+        case 'ics':
+          return exportController.ics(req, res, events)
+        default:
+          return res.json(events)
+      }
     } catch (e) {
       log.error('[COLLECTION] Error in getEvents: %s', String(e))
       return res.sendStatus(404)
