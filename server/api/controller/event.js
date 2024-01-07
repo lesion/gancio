@@ -438,14 +438,36 @@ const eventController = {
         return res.sendStatus(403)
       }
 
+      const start_datetime = body.start_datetime || event.start_datetime
+      const end_datetime = body.end_datetime || event.end_datetime || null
+
+      // // validate start_datetime and end_datetime
+      if (end_datetime) {
+        if (start_datetime > end_datetime) {
+          return res.status(400).send(`start datetime is greater than end datetime`)
+        }
+
+        if (Number(end_datetime) > 1000*24*60*60*365) {
+          return res.status(400).send('are you sure?')
+        }
+      }
+
+      if (!Number(start_datetime)) {
+        return res.status(400).send(`Wrong format for start datetime`)
+      }
+
+      if (Number(start_datetime) > 1000*24*60*60*365) {
+        return res.status(400).send('are you sure?')
+      }
+
       const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
       const eventDetails = {
         title: body.title || event.title,
         // sanitize and linkify html
         description: helpers.sanitizeHTML(linkifyHtml(body.description || '', { target: '_blank' })) || event.description,
         multidate: body.multidate,
-        start_datetime: body.start_datetime || event.start_datetime,
-        end_datetime: body.end_datetime || null,
+        start_datetime,
+        end_datetime,
         online_locations: body.online_locations,
         recurrent
       }
