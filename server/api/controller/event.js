@@ -728,23 +728,24 @@ const eventController = {
     const older = req.query.older || false
 
     const show_multidate = settings.allow_multidate_event && helpers.queryParamToBool(req.query.show_multidate, true)
-    // typeof req.query.show_multidate !== 'undefined' ? req.query.show_multidate !== 'false' : true
 
     const show_recurrent = settings.allow_recurrent_event && helpers.queryParamToBool(req.query.show_recurrent, settings.recurrent_event_visible)
-      // typeof req.query.show_recurrent !== 'undefined' ? req.query.show_recurrent === 'true' : settings.recurrent_event_visible
 
-    if (settings.collection_in_home) {
-      return res.json(await collectionController._getEvents({
+    let events = []
+    if (settings.collection_in_home && !(tags || places)) {
+      events = await collectionController._getEvents({
         name: settings.collection_in_home,
         start,
         end,
         limit
-      }))
+      })
     } else {
-      return res.json(await eventController._select({
+      events = await eventController._select({
         start, end, query, places, tags, show_recurrent, show_multidate, limit, page, older
-      }))
+      })
     }
+
+    return res.json(events)
   },
 
   /**
