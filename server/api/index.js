@@ -105,8 +105,8 @@ module.exports = () => {
      * @param {string}  [query] - search for this string
      * @param {array} [tags] - List of tags
      * @param {array} [places] - List of places id
-     * @param {array} [online_locations] - List of online locations
      * @param {integer} [max] - Limit events
+     * @param {boolean} [show_multidate] - Show also multidate events (default: true)
      * @param {boolean} [show_recurrent] - Show also recurrent events (default: as choosen in admin settings)
      * @param {integer} [page] - Pagination
      * @param {boolean} [older] - select <= start instead of >=

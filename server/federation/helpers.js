@@ -164,10 +164,6 @@ const Helpers = {
     }
 
     fedi_user = await Helpers.signAndSend('', URL, 'get')
-      .catch(e => {
-        log.error(`[FEDI] getActor ${URL}: %s`, e?.response?.data?.error ?? String(e) )
-        return false
-      })
 
     if (fedi_user) {
       log.info('[FEDI] Create a new AP User "%s" and associate it to instance "%s"', URL, instance.domain)

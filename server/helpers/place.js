@@ -11,7 +11,7 @@ module.exports = {
       having: Sequelize.where(Sequelize.fn('COUNT', Sequelize.col('events.id')), '=', 0)
     })
     if (!places.length) { return }
-    log.debug(`Remove ${places.length} unrelated places`)
+    log.debug(`Remove ${places.length} unrelated places: %s`, places.map(p => p.name).join(', '))
 
     const ids = places.map(p => p.id)
     await Place.destroy({
