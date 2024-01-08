@@ -54,7 +54,7 @@ router.get('/m/:event_id:json(.json)?', async (req, res) => {
 router.post('/u/:name/inbox', Helpers.verifySignature, Inbox)
 
 router.get('/u/:name/outbox', Users.outbox)
-// router.get('/u/:name/followers', Users.followers)
+router.get('/u/:name/followers', Users.followers)
 
 router.get('/u/:name', Users.get)
 
