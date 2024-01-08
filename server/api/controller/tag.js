@@ -41,7 +41,7 @@ module.exports = {
         Sequelize.Op.eq, tags.toLocaleLowerCase())})) {
       return res.sendStatus(404)
     }
-    const events = await eventController._select({ tags: tags.toLocaleLowerCase(), show_recurrent: true, show_multidate: true, start: 0, reverse: true })
+    const events = await eventController._select({ tags: tags.toLocaleLowerCase(), show_recurrent: true, show_multidate: true, start: 0, reverse: true, include_description: true })
     switch (format) {
       case 'rss':
         return exportController.feed(req, res, events,

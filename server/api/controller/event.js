@@ -613,7 +613,8 @@ const eventController = {
     limit,
     page,
     older,
-    reverse }) {
+    reverse,
+    include_description=false }) {
 
     const where = {
       // do not include _parent_ recurrent event
@@ -687,7 +688,7 @@ const eventController = {
     const events = await Event.findAll({
       where,
       attributes: {
-        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'description', 'resources', 'recurrent', 'placeId', 'image_path']
+        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'resources', 'recurrent', 'placeId', 'image_path', ...(!include_description && ['description'])]
       },
       order: [['start_datetime', reverse ? 'DESC' : 'ASC']],
       include: [

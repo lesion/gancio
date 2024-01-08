@@ -4,7 +4,6 @@ const log = require('../../log')
 const { DateTime } = require('luxon')
 const { col: Col, queryParamToBool } = require('../../helpers')
 const { Op, Sequelize } = require('sequelize')
-const { getActor, followActor, unfollowActor } = require('../../federation/helpers')
 const exportController = require('./export')
 
 const collectionController = {
@@ -68,7 +67,7 @@ const collectionController = {
   },
 
   // return events from collection
-  async _getEvents ({ name, start, end, limit }) {
+  async _getEvents ({ name, start, end, limit, include_description=false }) {
 
     const collection = await Collection.findOne({ where: { name } })
     if (!collection) {
@@ -130,7 +129,7 @@ const collectionController = {
     const events = await Event.findAll({
       where,
       attributes: {
-        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'description', 'resources', 'ap_id']
+        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'resources', 'ap_id', ...(!include_description && ['description'])]
       },
       order: ['start_datetime'],
       include: [
@@ -198,10 +197,10 @@ const collectionController = {
     const { collectionId, tags, places, actors } = req.body
 
     try {
-      if (actors?.length) {
-        const actors_to_follow = await APUser.findAll({ where: { ap_id: { [Op.in]: actors.map(a => a.ap_id) }} })
-        await Promise.all(actors_to_follow.map(followActor))
-      }
+      // if (actors?.length) {
+      //   const actors_to_follow = await APUser.findAll({ where: { ap_id: { [Op.in]: actors.map(a => a.ap_id) }} })
+      //   await Promise.all(actors_to_follow.map(followActor))
+      // }
       const filter = await Filter.create({ collectionId, tags, places, actors })
       return res.json(filter)
     } catch (e) {
