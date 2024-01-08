@@ -7,8 +7,7 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
-
-## [1.10.1](https://framagit.org/les/gancio/compare/v1.10.0...v1.10.1) (2024-01-08)
+## [1.10.2](https://framagit.org/les/gancio/compare/v1.10.0...v1.10.2) (2024-01-08)
 
 
 ### Bug Fixes

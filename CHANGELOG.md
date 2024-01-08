@@ -7,30 +7,6 @@ All notable changes to this project will be documented in this file. See [commit
 
 ### Bug Fixes
 
-* add whole jsonLD object to events ([cb7932c](https://framagit.org/les/gancio/commit/cb7932c09dde83bb876419488592e4cdd926ffea))
-* admin tag editing without blur, fix [#326](https://framagit.org/les/gancio/issues/326) ([9f8d137](https://framagit.org/les/gancio/commit/9f8d137d3033a0b0a667ac15a672bc016bb2cf2d))
-* **AP:** follow trusted node ([8b54ed1](https://framagit.org/les/gancio/commit/8b54ed179a6305a5a7f849ee1a892bdf493d7a81))
-* **AP:** return a 201 on Create/Update/Delete ([4868c0a](https://framagit.org/les/gancio/commit/4868c0af580296ec71a5cf3d799aed5fa316c94e))
-* dedup tags, minor with [#169](https://framagit.org/les/gancio/issues/169) ([44daa90](https://framagit.org/les/gancio/commit/44daa901dc3a95a2e1eefab41cf9a8114d8d18bd))
-* event exports when collection_in_home and tags or places are selected ([f160430](https://framagit.org/les/gancio/commit/f1604306259f8a4e09a0356ae7604ec4a44cdcb4))
-* export collection's feeds (ics/rss) ([04403e0](https://framagit.org/les/gancio/commit/04403e0a345ebb8932883926273ac59c7cec5242))
-* if a user edits an event by postponing it, say by a week, without changing the hours, the end date should be recalculate ([6c2840a](https://framagit.org/les/gancio/commit/6c2840a7fa4be6f50ca1ad51877b3436c9663b40))
-* improve fedi events validation ([07a0ea0](https://framagit.org/les/gancio/commit/07a0ea01463dd6a0b56181a3f9d03caef4b661c9))
-* improve trusted node display in Admin>Collection ([dcb7498](https://framagit.org/les/gancio/commit/dcb7498c675ddb96fc974146a7e0d12e30d7dd33))
-* improve unit testing ([9482ba9](https://framagit.org/les/gancio/commit/9482ba9e394d1e05615386e98b2085c202b922bc))
-* improve validation on event's update ([90deb79](https://framagit.org/les/gancio/commit/90deb79d6b70f9b10cb24aadf6ef59319f134d07))
-* include description into rss/ics ([4f99a5d](https://framagit.org/les/gancio/commit/4f99a5df30cc2914932d0b04b4dbfd48e9d0f526))
-* include_description ([385bac6](https://framagit.org/les/gancio/commit/385bac6c769fdd758c15d2b1b462fa739b68d457))
-* re-add followers ([2971956](https://framagit.org/les/gancio/commit/29719569a1c97b9d6cfadcd7bff427e578850852))
-* update deps ([16a0695](https://framagit.org/les/gancio/commit/16a06959f488b504e1cb726f6664a45427a27fca))
-* update instances ([f7d4824](https://framagit.org/les/gancio/commit/f7d4824349932ad6d427613ad946176067739bee))
-* use online_locations instead of place address for online events in rss feed ([0f047a2](https://framagit.org/les/gancio/commit/0f047a264ea36d9226231aede410cf8034c780e7))
-
-## [1.10.1](https://framagit.org/les/gancio/compare/v1.10.0...v1.10.1) (2024-01-08)
-
-
-### Bug Fixes
-
 * admin tag editing without blur, fix [#326](https://framagit.org/les/gancio/issues/326) ([9f8d137](https://framagit.org/les/gancio/commit/9f8d137d3033a0b0a667ac15a672bc016bb2cf2d))
 * **AP:** add whole jsonLD object to events ([cb7932c](https://framagit.org/les/gancio/commit/cb7932c09dde83bb876419488592e4cdd926ffea))
 * **AP:** follow trusted node ([8b54ed1](https://framagit.org/les/gancio/commit/8b54ed179a6305a5a7f849ee1a892bdf493d7a81))
