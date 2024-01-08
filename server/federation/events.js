@@ -13,10 +13,13 @@ module.exports = {
 
     const APEvent = req.body?.object
 
-    // TODO: validate the event
-    // check ap_id
-    // check location
-    // check 
+    // validate coming events
+    const required_fields = ['name', 'startTime']
+    let missing_field = required_fields.find(required_field => !APEvent[required_field])
+    if (missing_field) {
+      log.warn(`[FEDI] ${missing_field} required`)
+      return res.status(400).send(`${missing_field} required`)
+    }
 
     // check if this event is new
     const ap_id = req.body.object.id
@@ -38,8 +41,6 @@ module.exports = {
       req.file = await helpers.getImageFromURL(image_url)
       log.debug('[FEDI] Download attachment for event %s', image_url)
 
-      // let focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
-      // focalpoint = [parseFloat(parseFloat(focalpoint[0]).toFixed(2)), parseFloat(parseFloat(focalpoint[1]).toFixed(2))]
       media = [{
         url: req.file.filename,
         height: req.file.height,
@@ -85,7 +86,7 @@ module.exports = {
     const event = await Event.findOne({ where: { ap_id }, include: [APUser]})
     if (!event) { return res.sendStatus(404)}
 
-    // TODO: is the owner the same?
+    // is the owner the same?
     if (res.locals.fedi_user.ap_id !== event?.ap_user?.ap_id) {
       log.error('[FEDI] Event %s updated not from the owner! %s != %s', ap_id, res.locales.fedi_user.ap_id, event)
     }
@@ -101,8 +102,6 @@ module.exports = {
       const image_url = APEvent.attachment[0]?.url
       req.file = await helpers.getImageFromURL(image_url)
 
-      // let focalpoint = body.image_focalpoint ? body.image_focalpoint.split(',') : ['0', '0']
-      // focalpoint = [parseFloat(parseFloat(focalpoint[0]).toFixed(2)), parseFloat(parseFloat(focalpoint[1]).toFixed(2))]
       media = [{
         url: req.file.filename,
         height: req.file.height,
@@ -142,11 +141,21 @@ module.exports = {
   // remove an event from AP
   async remove (req, res) {
     const APEvent = req.body?.object
+    const ap_id = APEvent?.id ?? APEvent
 
-    const event = await Event.findOne({ where: { ap_id: APEvent.id }})
-    if (!event) {
-      log.error('[FEDI] Event not found: %s', APEvent.id)
+    if (!ap_id) {
       return res.sendStatus(404)
+    }
+
+    const event = await Event.findOne({ where: { ap_id: APEvent?.id ?? APEvent }, include: [APUser]})
+    if (!event) {
+      log.error('[FEDI] Event not found: %s', APEvent?.id ?? APEvent)
+      return res.sendStatus(404)
+    }
+    
+    // is the owner the same?
+    if (res.locals.fedi_user.ap_id !== event?.ap_user?.ap_id) {
+      log.error('[FEDI] Event %s updated not from the owner! %s != %s', ap_id, res.locales.fedi_user.ap_id, event)
     }
 
     if (event.media && event.media.length && !event.recurrent) {
