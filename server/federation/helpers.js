@@ -87,7 +87,7 @@ const Helpers = {
     }
 
     const followers = await APUser.findAll({ where: { follower: true } })
-    log.debug("[FEDI] Sending to [%s]", followers.map(f => f.ap_id).join(', '))
+    log.debug("[FEDI] Sending to %d followers: [%s]", followers.length, followers.map(f => f.ap_id).join(', '))
     const recipients = {}
     followers.forEach(follower => {
       const sharedInbox = follower?.object?.endpoints?.sharedInbox ?? follower?.object?.inbox
@@ -204,8 +204,8 @@ const Helpers = {
 
     try {
       const { applicationActor, nodeInfo } = await Helpers.getNodeInfo(instance_url)
-      const instance = Instance.create({
-          name: nodeInfo?.metadata?.nodeName ?? nodeInfo?.metadata?.nodeDescription ?? domain,
+      const instance = await Instance.create({
+          name: nodeInfo?.metadata?.nodeName ?? domain,
           domain,
           data: nodeInfo,
           blocked: false,
