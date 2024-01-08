@@ -13,7 +13,8 @@ module.exports = {
 
     if (!events.length) { return }
 
-    log.info(`Remove ${events.length} past federated events`)
+    log.info(`Remove ${events.length} past federated events and related resources`)
+    await Resource.destroy({ where: { eventId: events.map(e => e.id) }})
 
     await Event.destroy({
         where: {

@@ -73,7 +73,7 @@ module.exports = {
       await event.setTags(tags)
     }
 
-    return event
+    return res.sendStatus(201)
 
   },
 
@@ -134,7 +134,7 @@ module.exports = {
       await event.setTags(tags)
     }
 
-    return event
+    return res.sendStatus(201)
 
   },
 

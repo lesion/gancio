@@ -79,6 +79,7 @@ module.exports = async (req, res) => {
       } else {
         // await Resources.create(req, res)
         log.warn(`[FEDI] Create with unsupported Object or not a reply => ${message.object.type}`)
+        return res.sendStatus(404)
       }
       break
     default:
