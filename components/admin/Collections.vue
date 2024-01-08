@@ -46,24 +46,25 @@ v-container
 
         v-row
           v-col(cols=4)
+            //- @input.native='searchActors'
+            //- @focus='searchActors'
             v-autocomplete(v-model='filterActors'
               cache-items
               :prepend-inner-icon="mdiTagMultiple"
               chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
               :disabled="!collection.id"
               placeholder='Local'
-              @input.native='searchActors'
-              @focus='searchActors'
               return-object
               item-value='ap_id'
+              item-text='instanceDomain'
               :delimiters="[',', ';']"
               :items="actors"
               :label="$t('common.trusted_instances')")
                 template(v-slot:item="{ item }")
-                  v-list-item-content @{{ item?.object?.name }}@{{ item?.instanceDomain }}
+                  v-list-item-content @{{ item?.object?.preferredUsername }}@{{ item?.instanceDomain }}
                 template(v-slot:selection="{ item, on, attrs, selected, parent }")
                   v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
-                    :input-value="selected" label small) @{{ item?.object?.name }}@{{ item?.instanceDomain }}
+                    :input-value="selected" label small) @{{ item?.object?.preferredUsername }}@{{ item?.instanceDomain }}
 
           v-col(cols=4)
             v-autocomplete(v-model='filterTags'
@@ -122,7 +123,7 @@ v-container
             template(v-slot:item.places='{ item }')
               v-chip.ma-1(small label v-for='place in item.places' v-text='place.name' :key='place.id' )
             template(v-slot:item.actors='{ item }')
-              v-chip.ma-1(small label v-for='actor in item.actors' v-text='actor.name' :key='actor.ap_id' )
+              v-chip.ma-1(small label v-for='actor in item.actors' :key='actor.ap_id' ) @{{ actor.name }}@{{ actor?.domain }}
 
 
       v-card-actions
@@ -192,6 +193,7 @@ export default {
   },
   async fetch() {
     this.collections = await this.$axios.$get('/collections?withFilters=true')
+    this.actors = await this.$axios.$get('/instances/trusted')
   },
   computed: {
     ...mapState(['settings']),
@@ -213,9 +215,9 @@ export default {
     searchPlaces: debounce(async function (ev) {
       this.places = await this.$axios.$get(`/place?search=${ev.target.value}`)
     }, 100),
-    searchActors: debounce(async function (ev) {
-      this.actors = await this.$axios.$get(`/instances/trusted?search=${ev.target.value}`)
-    }, 100),
+    // searchActors: debounce(async function (ev) {
+    //   this.actors = await this.$axios.$get(`/instances/trusted?search=${ev.target.value}`)
+    // }, 100),
     // collectionFilters(collection) {
     //   return collection.filters.map(f => {
     //     const tags = f.tags?.join(', ')
@@ -228,7 +230,7 @@ export default {
       this.loading = true
       const tags = this.filterTags
       const places = this.filterPlaces.map(p => ({ id: p.id, name: p.name }))
-      const actors = this.filterActors.map(a => ({ ap_id: a.ap_id, name: a.object.preferredUsername || a.object.username }))
+      const actors = this.filterActors.map(a => ({ ap_id: a.ap_id, name: a.object?.preferredUsername ?? a.object?.username, domain: a.instanceDomain  }))
       const filter = { collectionId: this.collection.id, tags, places, actors }
 
       // tags and places are JSON field and there's no way to use them inside a unique constrain
