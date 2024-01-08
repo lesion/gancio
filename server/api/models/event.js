@@ -1,5 +1,4 @@
 const config = require('../../config')
-const { htmlToText } = require('html-to-text')
 const { DateTime } = require('luxon')
 
 module.exports = (sequelize, DataTypes) => {
@@ -33,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     likes: { type: DataTypes.JSON, defaultValue: [] },
     boost: { type: DataTypes.JSON, defaultValue: [] },
     online_locations: { type: DataTypes.JSON, defaultValue: [] },
+    ap_object: DataTypes.JSON,
     ap_id: {
       type: DataTypes.STRING,
       index: true

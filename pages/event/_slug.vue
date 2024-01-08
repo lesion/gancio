@@ -15,7 +15,7 @@
             v-icon.float-right(v-if='event.parentId' color='success' v-text='mdiRepeat')
             .title.text-h5
               strong.p-name.text--primary(itemprop="name") {{event.title}}
-            a.d-block(v-if='event.ap_id' :href="event.ap_id") {{ event.ap_id }}
+            a.d-block(v-if='event.ap_object?.url' :href="event.ap_object?.url") {{ event.ap_object?.url }}
             a(v-if='event.ap_user'  :href="event.ap_user.ap_id") @{{event.ap_user?.object?.preferredUsername}}@{{ event.ap_user?.instanceDomain }}
           v-divider
           v-container.eventDetails

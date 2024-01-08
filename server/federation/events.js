@@ -59,6 +59,7 @@ module.exports = {
       media,
       is_visible: true,
       ap_id,
+      ap_object: APEvent,
       apUserApId: req.body.actor,
     })
 
@@ -121,6 +122,7 @@ module.exports = {
       media,
       is_visible: true,
       ap_id,
+      ap_object: APEvent,
       apUserApId: req.body.actor,
     })
 
