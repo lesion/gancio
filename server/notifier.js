@@ -68,7 +68,7 @@ const notifier = {
     })
     
     notifier.emitter.emit(action, event.get({ plain: true, raw: true }))
-    log.debug(action, event.title)
+    log.debug('[NOTIFY] %s, %s [%d]', action, event.title, event.id)
 
     // insert notifications
     const notifications = await notifier.getNotifications(event, action)

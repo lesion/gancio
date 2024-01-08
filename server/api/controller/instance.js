@@ -111,7 +111,7 @@ const instancesController = {
       const [ user, instance_url ] = url.replace(/^@/,'').split('@')
       log.debug('[FEDI] Adds user: %s and instance: %s because url was: %s', user, instance_url, url)
       try {
-        instance = await getInstance('https:// ' + instance_url)
+        instance = await getInstance('https://' + instance_url)
         if (!instance) { 
           return res.sendStatus(404)
         }
@@ -127,6 +127,7 @@ const instancesController = {
           const actor = await getActor(actor_url.href, instance)
           log.debug('[FEDI] Actor %s', actor)
           await actor.update({ trusted: true })
+          await followActor(actor)
           return res.json(actor)    
         }
       } catch (e) {
@@ -152,6 +153,7 @@ const instancesController = {
         const actor = await getActor(instance.applicationActor, instance)
         log.debug('[FEDI] Actor %s', actor)
         await actor.update({ trusted: true })
+        await followActor(actor)
         return res.json(actor)
       }
 
@@ -180,13 +182,13 @@ const instancesController = {
         // retrieve the AP actor and flat it as trusted
         const actor = await getActor(actorURL, instance)
         await actor.update({ trusted: true })
-
+        await followActor(actor)
         return res.json(actor)
       }
       return res.sendStatus(404)
     } catch (e) {
       console.error(e) 
-      log.error('[FEDI] Error adding trusted instance %s', e?.response?.data ?? String(e))
+      log.error('[FEDI] Error adding trusted actor %s', e?.response?.data ?? String(e))
       return res.status(400).send(e)
     }
   }
