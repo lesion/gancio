@@ -688,7 +688,7 @@ const eventController = {
     const events = await Event.findAll({
       where,
       attributes: {
-        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'resources', 'recurrent', 'placeId', 'image_path', ...(!include_description && ['description'])]
+        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'resources', 'recurrent', 'placeId', 'image_path', ...(!include_description ? ['description']: [])]
       },
       order: [['start_datetime', reverse ? 'DESC' : 'ASC']],
       include: [

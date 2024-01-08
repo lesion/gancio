@@ -129,7 +129,7 @@ const collectionController = {
     const events = await Event.findAll({
       where,
       attributes: {
-        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'resources', 'ap_id', ...(!include_description && ['description'])]
+        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'resources', 'ap_id', ...(!include_description ? ['description'] : [])]
       },
       order: ['start_datetime'],
       include: [
