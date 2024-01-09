@@ -1,4 +1,4 @@
-FROM node:16-slim AS nodejs-base
+FROM node:18-slim AS nodejs-base
 RUN apt-get -q update && \
     env DEBIAN_FRONTEND=noninteractive apt-get -y install git && \
     apt-get clean && rm -fr /var/lib/apt/lists/*
