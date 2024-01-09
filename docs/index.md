@@ -10,7 +10,7 @@ permalink: /
 
 A shared agenda for local communities.
 {: .fs-6 }
-Last release  **[1.10.2 - 8 January 2024](/changelog#1102-2024-01-08)**
+Last release  **[1.10.3 - 9 January 2024](/changelog#1103-2024-01-09)**
 
 [Install]({% link install/install.md %}){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 [Demo](https://demo.gancio.org){: .btn .btn-green .fs-5 .mb-4 .mb-md-0 .mr-2 }

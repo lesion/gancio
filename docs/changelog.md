@@ -7,6 +7,15 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.3](https://framagit.org/les/gancio/compare/v1.10.2...v1.10.3) (2024-01-09)
+
+
+### Bug Fixes
+
+* sequelize does not really support mariadb@3 ([3d5ab85](https://framagit.org/les/gancio/commit/3d5ab85de60ddfe19ebb92ccf04a500fe1c4ea01))
+* use nodejs 18 in Docker image ([329a6bd](https://framagit.org/les/gancio/commit/329a6bd5c3e09f751f6b398b1a74c745cb219d1d))
+
+
 ## [1.10.2](https://framagit.org/les/gancio/compare/v1.10.0...v1.10.2) (2024-01-08)
 
 
