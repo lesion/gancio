@@ -7,7 +7,7 @@ const log = require('../log')
 module.exports = async (req, res) => {
   const message = req.body
 
-  // has to have an object property..
+  // has to have an object and a type property..
   if (!message?.object || !message?.type) {
     log.warn('[FEDI] message without `object` or `type` property: %s', message)
     return res.status(404).send('Wrong AP message: no object or type property')
@@ -63,6 +63,8 @@ module.exports = async (req, res) => {
       } else if (message.object?.type === 'Note') {
         log.debug('[FEDI] Note update is coming from %s', res.locals.fedi_user.ap_id)
         await Resources.update(req, res)
+      } else {
+        log.debug('[FEDI] Unsupported Update: %s', JSON.stringify(message?.object))
       }
       break
     case 'Create':
@@ -78,12 +80,12 @@ module.exports = async (req, res) => {
         await Events.create(req, res)
       } else {
         // await Resources.create(req, res)
-        log.warn(`[FEDI] Create with unsupported Object or not a reply => ${message.object.type}`)
+        log.warn('[FEDI] Create with unsupported Object or not a reply => %s', JSON.stringify(message?.object))
         return res.sendStatus(404)
       }
       break
     default:
-      log.error('[FEDI] Unknown message type: %s', message.type)
+      log.error('[FEDI] Unknown message type: %s', message?.type)
       res.sendStatus(404)
   }
 }
