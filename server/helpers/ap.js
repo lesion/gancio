@@ -1,4 +1,4 @@
-const { Event, Tag } = require('../api/models/models')
+const { Event, Resource } = require('../api/models/models')
 const { Op } = require('sequelize')
 const { DateTime } = require('luxon')
 const log = require('../log')
