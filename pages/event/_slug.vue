@@ -16,7 +16,7 @@
             .title.text-h5
               strong.p-name.text--primary(itemprop="name") {{event.title}}
             a.d-block(v-if='event.ap_object?.url' :href="event.ap_object?.url") {{ event.ap_object?.url }}
-            a(v-if='event.ap_user'  :href="event.ap_user.ap_id") @{{event.ap_user?.object?.preferredUsername}}@{{ event.ap_user?.instanceDomain }}
+            a(v-if='event?.ap_user'  :href="event?.ap_user?.object?.url ?? event?.ap_user?.ap_id") @{{event.ap_user?.object?.preferredUsername}}@{{ event.ap_user?.instanceDomain }}
           v-divider
           v-container.eventDetails
             time.dt-start(:datetime='$time.unixFormat(event.start_datetime, "yyyy-MM-dd HH:mm")' itemprop="startDate" :content='$time.unixFormat(event.start_datetime, "yyyy-MM-dd\'T\'HH:mm")')
