@@ -137,7 +137,7 @@ router.use('/host-meta', (req, res) => {
   const settings = settingsController.settings
 
   log.debug('host-meta')
-  res.type('application/xml')
+  res.type('application/xrd+xml')
   res.send(`<?xml version="1.0" encoding="UTF-8"?>
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
   <Link rel="lrdd" type="application/xrd+xml" template="${settings.baseurl}/.well-known/webfinger?resource={uri}"/>
