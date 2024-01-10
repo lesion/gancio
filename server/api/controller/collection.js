@@ -67,7 +67,7 @@ const collectionController = {
   },
 
   // return events from collection
-  async _getEvents ({ name, start, end, limit, include_description=false }) {
+  async _getEvents ({ name, start, end, limit, include_description=false, older, reverse }) {
 
     const collection = await Collection.findOne({ where: { name } })
     if (!collection) {
@@ -89,13 +89,13 @@ const collectionController = {
       // confirmed event only
       is_visible: true,
       [Op.or]: {
-        start_datetime: { [Op.gte]: 1*start },
-        end_datetime: { [Op.gte]: 1*start }
+        start_datetime: { [older ? Op.lte : Op.gte]: start },
+        end_datetime: { [older ? Op.lte : Op.gte]: start }
       }
     }
 
     if (end) {
-      where.start_datetime = { [Op.lte]: end }
+      where.start_datetime = { [older ? Op.gte : Op.lte]: end }
     }
 
     const replacements = []
@@ -131,7 +131,7 @@ const collectionController = {
       attributes: {
         exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'resources', 'ap_id', ...(!include_description ? ['description'] : [])]
       },
-      order: ['start_datetime'],
+      order: [['start_datetime', reverse ? 'DESC' : 'ASC']],
       include: [
         {
           model: Tag,
