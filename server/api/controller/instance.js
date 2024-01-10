@@ -107,7 +107,9 @@ const instancesController = {
     let url = req.body.url
     let instance
 
-    if (url.includes('@')) {
+
+    // @actor@instance.tld syntax, let's use webfinger
+    if (!url.startsWith('http') && url.includes('@')) {
       const [ user, instance_url ] = url.replace(/^@/,'').split('@')
       log.debug('[FEDI] Adds user: %s and instance: %s because url was: %s', user, instance_url, url)
       try {
@@ -137,6 +139,7 @@ const instancesController = {
     }
 
     try {
+      // this could be an actor
       if (!url.startsWith('http')) {
         url = `https://${url}`
       }
@@ -148,17 +151,30 @@ const instancesController = {
         return res.sendStatus(404)
       }
 
-      if (instance?.applicationActor) {
+      // try to use URL as actor
+      let actor
+      try {
+        log.debug('[FEDI] Trying to use %s as actor', url)
+        actor = await getActor(url, instance)
+        log.debug('[FEDI] Actor %s', actor)
+        await actor.update({ trusted: true })
+        await followActor(actor)
+        return res.json(actor)
+      } catch (e) {
+        log.debug('[FEDI] %s is probably not an actor: %s', url, e)
+      }
+
+      // ok this wasn't an actor, let's use the applicationActor if exists
+      if (!actor && instance?.applicationActor) {
         log.debug('[FEDI] This node supports FEP-2677 and applicationActor is: %s', instance.applicationActor)
-        const actor = await getActor(instance.applicationActor, instance)
+        actor = await getActor(instance.applicationActor, instance)
         log.debug('[FEDI] Actor %s', actor)
         await actor.update({ trusted: true })
         await followActor(actor)
         return res.json(actor)
       }
 
-
-      // supports old gancio / mobilizon instances
+      // supports old gancio / mobilizon instances default actor
       if (instance?.data?.software?.name === 'Mobilizon') {
         instance.actor = 'relay'
       } else if (instance?.data?.software?.name === 'gancio') {
