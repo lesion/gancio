@@ -76,7 +76,7 @@ const Helpers = {
       log.debug(`[FEDI] signed ${ret.status} => %s`, ret.data)
       return ret.data
     } catch (e) {
-      log.error("[FEDI] Error in sign and send [%s]: %s", inbox, e?.response?.data?.error ?? e?.response?.statusMessage + ' ' + String(e))
+      log.error("[FEDI] Error in sign and send [%s]: %s", inbox, e?.response?.data?.error ?? e?.response?.statusMessage ?? '' + ' ' + String(e))
     }
   },
 
@@ -166,8 +166,12 @@ const Helpers = {
     fedi_user = await Helpers.signAndSend('', URL, 'get')
 
     if (fedi_user) {
-      log.info('[FEDI] Create a new AP User "%s" and associate it to instance "%s"', URL, instance.domain)
-      fedi_user = await APUser.create({ ap_id: URL, object: fedi_user, instanceDomain: instance.domain, blocked: false })
+      log.info('[FEDI] Create/Update a new AP User "%s" and associate it to instance "%s"', URL, instance.domain)
+      try {
+        ([ fedi_user ] = await APUser.upsert({ ap_id: URL, object: fedi_user, instanceDomain: instance.domain, blocked: false }))
+      } catch (e) {
+        log.debug('[FEDI] Error in update/create ')
+      }
     }
     return fedi_user
   },
@@ -204,7 +208,7 @@ const Helpers = {
 
     try {
       const { applicationActor, nodeInfo } = await Helpers.getNodeInfo(instance_url)
-      const instance = await Instance.create({
+      const [ instance ] = await Instance.upsert({
           name: nodeInfo?.metadata?.nodeName ?? domain,
           domain,
           data: nodeInfo,
