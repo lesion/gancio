@@ -82,7 +82,12 @@ module.exports = {
     const APEvent = req.body?.object
 
     // check if this event is new
-    const ap_id = req.body.id
+    const ap_id = APEvent?.id ?? APEvent
+
+    if (!ap_id) {
+      return res.sendStatus(404)
+    }
+
     const event = await Event.findOne({ where: { ap_id }, include: [APUser]})
     if (!event) { return res.sendStatus(404)}
 
@@ -147,7 +152,7 @@ module.exports = {
       return res.sendStatus(404)
     }
 
-    const event = await Event.findOne({ where: { ap_id: APEvent?.id ?? APEvent }, include: [APUser]})
+    const event = await Event.findOne({ where: { ap_id }, include: [APUser]})
     if (!event) {
       log.error('[FEDI] Event not found: %s', APEvent?.id ?? APEvent)
       return res.sendStatus(404)
