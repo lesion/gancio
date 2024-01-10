@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.11.0](https://framagit.org/les/gancio/compare/v1.10.3...v1.11.0) (2024-01-10)
+
+
+### Features
+
+* add `reverse` and `older` flag to collection API ([cccb670](https://framagit.org/les/gancio/commit/cccb670cc76ba336f4d459f1da68748289cb2ff0))
+
+
+### Bug Fixes
+
+* **AP:** allow to follow trusted actor from url ([35c7888](https://framagit.org/les/gancio/commit/35c78882a251f1a739721bd0c946303c25405f22))
+* **AP:** delete federated events ([9de5773](https://framagit.org/les/gancio/commit/9de5773f0a96614e13b6b9e9f3ed20e71285bbdc))
+* display user URL in federated event ([567531b](https://framagit.org/les/gancio/commit/567531b2c546e29049cf85e0c0ef61635f2dc0b7))
+* fix host-meta RFC6415 Content-Type ([550ee5c](https://framagit.org/les/gancio/commit/550ee5c317c18c6bb923e90d5281b005d4b996a9))
+* minor getting actors and instances ([5d0970a](https://framagit.org/les/gancio/commit/5d0970aad7f3d183816b60a912cf369e55b7c19b))
+* remove related comments/resources when an event is deleted ([cf5bc1b](https://framagit.org/les/gancio/commit/cf5bc1b6210d6c9a6a44e445a49b55c2be4e8383))
+
 ## [1.10.3](https://framagit.org/les/gancio/compare/v1.10.2...v1.10.3) (2024-01-09)
 
 
