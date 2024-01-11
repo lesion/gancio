@@ -42,14 +42,19 @@ module.exports = async (req, res) => {
       Ego.bookmark(req, res)
       break
     case 'Delete':
-      if (['Note','Tombstone'].includes(message.object?.type)) {
+      if (message.object?.type === 'Tombstone') {
+        message.object.type = message.object?.formerType ?? 'Tombstone'
+      }
+      if (message.object?.type==='Note') {
         await Resources.remove(req, res)
       } else if (message.object?.type === 'Event') {
         if (!res.locals.fedi_user.following || !res.locals.fedi_user.trusted) {
           log.warn(`[FEDI] APUser not followed or not trusted`)
           return res.sendStatus(404)
-        }        
+        }
         await Events.remove(req, res)
+      } else {
+        log.debug('[FEDI] Delete of unknown object: %s', JSON.stringify(message.object))
       }
       break
     case 'Update':

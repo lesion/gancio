@@ -13,6 +13,8 @@ module.exports = {
 
     const APEvent = req.body?.object
 
+    console.error(JSON.stringify(req.body))
+
     // validate coming events
     const required_fields = ['name', 'startTime']
     let missing_field = required_fields.find(required_field => !APEvent[required_field])
@@ -31,7 +33,7 @@ module.exports = {
 
     const place = await eventController._findOrCreatePlace({
       place_name: APEvent.location?.name,
-      place_address: APEvent.location?.address,
+      place_address: APEvent.location?.address?.streetAddress ?? APEvent.location?.address 
     })
 
     let media = []
@@ -56,7 +58,7 @@ module.exports = {
       title: APEvent.name.trim(),
       start_datetime: dayjs(APEvent.startTime).unix(),
       end_datetime: APEvent?.endTime ? dayjs(APEvent.endTime).unix() : null,
-      description: helpers.sanitizeHTML(linkifyHtml(APEvent.content)),
+      description: helpers.sanitizeHTML(linkifyHtml(APEvent?.content ?? APEvent?.summary ?? '')),
       media,
       is_visible: true,
       ap_id,

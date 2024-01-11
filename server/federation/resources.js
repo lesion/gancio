@@ -92,7 +92,6 @@ module.exports = {
     })
     if (!resource) {
       log.info(`[FEDI] Comment not found`)
-      log.debug(req.body)
       return res.status(404).send('Not found')
     }
     // check if fedi_user that requested resource removal

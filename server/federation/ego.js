@@ -4,18 +4,25 @@ const log = require('../log')
 
 module.exports = {
   async boost (req, res) {
-    const match = req.body.object.match(`${config.baseurl}/federation/m/(.*)`)
-    if (!match || match.length < 2) { return res.status(404).send('Event not found!') }
+    log.debug('[FEDI] %s', JSON.stringify(req.body))
+    const match = req.body?.object?.match(`${config.baseurl}/federation/m/(.*)`)
+    if (!match || match.length < 2) {
+      log.debug('[FEDI] Boosted something not local: %s', req.body.object)
+      return res.status(404).send('Event not found!')
+    }
     log.info(`[FEDI] boost ${match[1]}`)
     const event = await Event.findByPk(Number(match[1]))
-    if (!event) { return res.status(404).send('Event not found!') }
-    // TODO, has to be unique...
+    if (!event) {
+      log.debug('[FEDI] Boosted event not found: %s', req.body.object)
+      return res.status(404).send('Event not found!')
+    }
+
     await event.update({ boost: [...event.boost, req.body.actor] })
     res.sendStatus(201)
   },
 
   async unboost (req, res) {
-    const match = req.body.object.match(`${config.baseurl}/federation/m/(.*)`)
+    const match = req.body?.object?.match(`${config.baseurl}/federation/m/(.*)`)
     if (!match || match.length < 2) { return res.status(404).send('Event not found!') }
     log.info(`unboost ${match[1]}`)
     const event = await Event.findByPk(Number(match[1]))
