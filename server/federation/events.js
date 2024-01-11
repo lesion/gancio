@@ -100,7 +100,7 @@ module.exports = {
 
     const place = await eventController._findOrCreatePlace({
       place_name: APEvent.location?.name,
-      place_address: APEvent.location?.address,
+      place_address: APEvent.location?.address?.streetAddress ?? APEvent.location?.address 
     })
 
     let media = []
