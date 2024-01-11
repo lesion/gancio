@@ -4,7 +4,6 @@ const log = require('../../log')
 const { DateTime } = require('luxon')
 const { col: Col, queryParamToBool } = require('../../helpers')
 const { Op, Sequelize } = require('sequelize')
-const exportController = require('./export')
 
 const collectionController = {
 
@@ -41,6 +40,7 @@ const collectionController = {
   },
 
   async getEvents (req, res) {
+    const exportController = require('./export')
     const format = req.params.format || 'json'
     const name = req.params.name
     const limit = req.query.max || 10
