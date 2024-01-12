@@ -108,7 +108,7 @@
         "n_resources": "medya yok|medya|{n} medya",
         "pin": "Sabitle",
         "trusted_instances": "Güvenilen sunucular",
-        "collection_in_home": "Ana sayfada koleksiyon göster"
+        "collection_in_home": "Ana sayfada gösterilecek koleksiyon"
     },
     "export": {
         "email_description": "İstersen ilginç etkinlerden e-posta yoluyla haberdar olabilirsin.",
@@ -205,7 +205,7 @@
         "block": "Engelle",
         "domain": "Internet adresi",
         "tilelayer_test_button": "Haritayı test et",
-        "collections_description": "Koleksiyonlar; etiketler ve mekanlara göre etkinliklerin gruplandırılmasıdır. Ana sayfada gösterileceklerdir",
+        "collections_description": "Koleksiyonlar; etiketler ve mekanlara göre etkinliklerin gruplandırılmasıdır. Ana sayfada gösterilebilirler",
         "edit_tag": "Etiketi düzenle",
         "smtp_port": "SMPT Portu",
         "new_announcement": "Yeni duyuru",
