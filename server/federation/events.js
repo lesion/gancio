@@ -33,7 +33,9 @@ module.exports = {
 
     const place = await eventController._findOrCreatePlace({
       place_name: APEvent.location?.name,
-      place_address: APEvent.location?.address?.streetAddress ?? APEvent.location?.address 
+      place_address: APEvent.location?.address?.streetAddress ?? APEvent.location?.address?.addressLocality ?? APEvent.location?.address?.addressCountry ?? APEvent.location?.address ?? '',
+      place_latitude: APEvent.location?.latitude,
+      place_longitude: APEvent.location?.longitude,
     })
 
     let media = []
@@ -100,7 +102,9 @@ module.exports = {
 
     const place = await eventController._findOrCreatePlace({
       place_name: APEvent.location?.name,
-      place_address: APEvent.location?.address?.streetAddress ?? APEvent.location?.address 
+      place_address: APEvent.location?.address?.streetAddress ?? APEvent.location?.address?.addressLocality ?? APEvent.location?.address?.addressCountry ?? APEvent.location?.address ?? '',
+      place_latitude: APEvent.location?.latitude,
+      place_longitude: APEvent.location?.longitude
     })
 
     let media = []
