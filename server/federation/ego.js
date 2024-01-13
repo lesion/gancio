@@ -4,7 +4,10 @@ const log = require('../log')
 
 module.exports = {
   async boost (req, res) {
-    log.debug('[FEDI] %s', JSON.stringify(req.body))
+    if (typeof req.body?.object !== 'string') {
+      log.debug('[FEDI] Igonre Boost for a whole object? %s', JSON.stringify(req.body?.object))
+      return res.status(404).send('?')
+    }
     const match = req.body?.object?.match(`${config.baseurl}/federation/m/(.*)`)
     if (!match || match.length < 2) {
       log.debug('[FEDI] Boosted something not local: %s', req.body.object)
