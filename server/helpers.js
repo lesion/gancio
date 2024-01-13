@@ -276,6 +276,7 @@ module.exports = {
     if (acceptJson) {
       const event = await eventController._get(req.params.slug)
       if (event) {
+        log.debug('[FEDI] APRedirect for %s', event.title)
         return res.redirect(`/federation/m/${event.id}`)
       }
     }
