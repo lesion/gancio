@@ -7,7 +7,6 @@ export default ({ res, nuxtState }) => {
   
   return {
     lang: { locales: { ca, cs, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, tr, ro, ru, zhHans } },
-    treeShake: true,
     theme: {
       options: {
         customProperties: false,
@@ -20,6 +19,5 @@ export default ({ res, nuxtState }) => {
         light: settings.light_colors
       }
     },
-    defaultAssets: false
   }
 }
