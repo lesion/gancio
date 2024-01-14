@@ -109,8 +109,27 @@ const Helpers = {
         'https://www.w3.org/ns/activitystreams',
         'https://w3id.org/security/v1',
         {
-          Hashtag: 'as:Hashtag',
-          focalPoint: { '@container': '@list', '@id': 'toot:focalPoint' }
+          toot: 'http://joinmastodon.org/ns#',
+
+          // A property-value pair, e.g. representing a feature of a product or place. We use this to publish this very same instance
+          // https://docs.joinmastodon.org/spec/activitypub/#PropertyValue
+          schema: 'http://schema.org#',
+          ProperyValue: 'schema:PropertyValue',
+          value: 'schema:value',
+
+          // https://docs.joinmastodon.org/spec/activitypub/#discoverable
+          "discoverable": "toot:discoverable",
+
+          // https://docs.joinmastodon.org/spec/activitypub/#Hashtag
+          "Hashtag": "https://www.w3.org/ns/activitystreams#Hashtag",
+
+          manuallyApprovesFollowers: 'as:manuallyApprovesFollowers',
+
+          // focal point - https://docs.joinmastodon.org/spec/activitypub/#focalPoint
+          "focalPoint": {
+            "@container": "@list",
+            "@id": "toot:focalPoint"
+          }
         }]
       await Helpers.signAndSend(JSON.stringify(body), sharedInbox)
     }

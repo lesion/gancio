@@ -40,7 +40,7 @@ module.exports = {
           "focalPoint": {
             "@container": "@list",
             "@id": "toot:focalPoint"
-          }          
+          }
         }
       ],
       id: `${config.baseurl}/federation/u/${name}`,
