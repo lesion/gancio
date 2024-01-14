@@ -57,10 +57,10 @@ module.exports = {
 
     // create it
     const event = await Event.create({
-      title: APEvent.name.trim(),
+      title: APEvent?.name?.trim() ?? '',
       start_datetime: dayjs(APEvent.startTime).unix(),
       end_datetime: APEvent?.endTime ? dayjs(APEvent.endTime).unix() : null,
-      description: helpers.sanitizeHTML(linkifyHtml(APEvent?.content ?? APEvent?.summary ?? '')),
+      description: helpers.sanitizeHTML(APEvent?.content ?? APEvent?.summary ?? ''),
       media,
       is_visible: true,
       ap_id,
