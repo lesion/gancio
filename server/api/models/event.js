@@ -46,11 +46,21 @@ module.exports = (sequelize, DataTypes) => {
       zone: settings.instance_timezone,
       locale: settings.instance_locale
     }
-    const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
+    // const tags = this.tags && this.tags.map(t => t.tag.replace(/[#]/g, '_'))
     const summary = `${this.place && this.place.name}, ${DateTime.fromSeconds(this.start_datetime, opt).toFormat('EEEE, d MMMM (HH:mm)')}`
     
-    const attachment = []
-    if (this.media && this.media.length) {
+    let attachment = []
+
+    if (this?.online_locations?.length) {
+      attachment = this.online_locations.map( href => ({
+        type: 'Link',
+        mediaType: 'text/html',
+        name: href,
+        href
+      }))
+    }
+        
+    if (this?.media?.length) {
       attachment.push({
         type: 'Document',
         mediaType: 'image/jpeg',
@@ -59,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
         focalPoint: this.media[0].focalPoint || [0, 0]
       })
     }
-    
+
     return {
       id: `${config.baseurl}/federation/m/${this.id}`,
       name: this.title,
@@ -75,10 +85,10 @@ module.exports = (sequelize, DataTypes) => {
         longitude: this.place.longitude
       },
       attachment,
-      tag: tags && tags.map(tag => ({
+      tag: this.tags && this.tags.map(tag => ({
         type: 'Hashtag',
-        name: '#' + tag,
-        href: `${config.baseurl}/tag/${tag}`
+        name: '#' + tag.tag,
+        href: `${config.baseurl}/tag/${tag.tag}`
       })),
       published: this.createdAt,
       attributedTo: `${config.baseurl}/federation/u/${username}`,
