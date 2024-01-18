@@ -102,7 +102,7 @@ module.exports = {
 
       // if the new tag does not exists, just rename the old one
       if (!newtag) {
-        log.info(`Rename tag ${oldtag.tag} to ${req.body.newTag}`)
+        log.info(`Rename tag "${oldtag.tag}" to "${req.body.newTag}"`)
         await Tag.update({ tag: req.body.newTag }, { where: { tag: req.body.tag }, raw: true })
 
       } else {

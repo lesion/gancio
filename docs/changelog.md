@@ -7,6 +7,19 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+## [1.12.0](https://framagit.org/les/gancio/compare/v1.11.0...v1.12.0) (2024-01-14)
+
+
+### Features
+
+* add lat/lng to federated events ([a26fb80](https://framagit.org/les/gancio/commit/a26fb80a8fd9b1ec71ba4104b19f470042ac794b))
+
+### Bug Fixes
+
+* **AP** improve @context (https://framagit.org/context) ([452aa6e](https://framagit.org/les/gancio/commit/452aa6eaa1b7eea45d66af8ca14b9f7abf18804a))
+* restore vuetify defaultAssets in the right place! ([80276a1](https://framagit.org/les/gancio/commit/80276a16e49abea514ca3d442df33c0f75cb7a20))
+
+
 ## [1.11.0](https://framagit.org/les/gancio/compare/v1.10.3...v1.11.0) (2024-01-10)
 
 

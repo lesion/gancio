@@ -143,6 +143,8 @@ module.exports = {
   },
   buildModules: ['@nuxtjs/vuetify'],
   vuetify: {
+    treeShake: true,
+    defaultAssets: false,    
     optionsPath: './vuetify.options.js'
   },
   build: {

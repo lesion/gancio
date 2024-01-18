@@ -151,21 +151,21 @@ const instancesController = {
         return res.sendStatus(404)
       }
 
-      // try to use URL as actor
       let actor
-      try {
-        log.debug('[FEDI] Trying to use %s as actor', url)
-        actor = await getActor(url, instance)
-        log.debug('[FEDI] Actor %s', actor)
-        await actor.update({ trusted: true })
-        await followActor(actor)
-        return res.json(actor)
-      } catch (e) {
-        log.debug('[FEDI] %s is probably not an actor: %s', url, e)
-      }
+      // should we try to use URL as actor? to review
+      // try {
+      //   log.debug('[FEDI] Trying to use %s as actor', url)
+      //   actor = await getActor(url, instance)
+      //   log.debug('[FEDI] Actor %s', actor)
+      //   await actor.update({ trusted: true })
+      //   await followActor(actor)
+      //   return res.json(actor)
+      // } catch (e) {
+      //   log.debug('[FEDI] %s is probably not an actor: %s', url, e)
+      // }
 
       // ok this wasn't an actor, let's use the applicationActor if exists
-      if (!actor && instance?.applicationActor) {
+      if (instance?.applicationActor) {
         log.debug('[FEDI] This node supports FEP-2677 and applicationActor is: %s', instance.applicationActor)
         actor = await getActor(instance.applicationActor, instance)
         log.debug('[FEDI] Actor %s', actor)

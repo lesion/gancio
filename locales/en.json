@@ -316,7 +316,8 @@
     "tilelayer_test_success": "The tilelayer service at {service_name} is working",
     "tilelayer_test_error": "The tilelayer service is not reachable at {service_name}",
     "geolocation": "Geolocation",
-    "colors": "Colors"
+    "colors": "Colors",
+    "tag_renamed": "Tag \"{oldTag}\" renamed to \"{newTag}\""
   },
   "auth": {
     "not_confirmed": "Not confirmed yet…",
