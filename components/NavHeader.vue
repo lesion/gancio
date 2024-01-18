@@ -10,7 +10,9 @@
       <v-btn icon large to='/about' :title='$t("common.about")' :aria-label='$t("common.about")'>
         <v-icon v-text='mdiInformation' />
       </v-btn>
-
+      <v-btn icon large @click='toggleDark'>
+        <v-icon v-text='mdiContrastCircle' />
+      </v-btn>
       <client-only>
         <v-menu offset-y transition="slide-y-transition">
           <template v-slot:activator="{ on, attrs }">
@@ -83,13 +85,22 @@
 </template>
 <script>
 
-import { mdiLogin, mdiDotsVertical, mdiLogout, mdiAccount, mdiCog, mdiInformation } from '@mdi/js'
+import { mdiLogin, mdiDotsVertical, mdiLogout, mdiAccount, mdiCog, mdiInformation, mdiContrastCircle } from '@mdi/js'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   data () {
-    return { mdiLogin, mdiDotsVertical, mdiLogout, mdiAccount, mdiCog, mdiInformation }
+    return { mdiLogin, mdiDotsVertical, mdiLogout, mdiAccount, mdiCog, mdiInformation, mdiContrastCircle }
   },
+  computed: {
+    ...mapGetters(['hide_thumbs', 'is_dark']),
+  },  
   methods: {
+    ...mapActions(['setLocalSetting']),
+    async toggleDark() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      this.setLocalSetting({ key: 'theme.is_dark', value: !this.is_dark })
+    },    
     logout () {
       this.$root.$message('common.logout_ok')
       this.$auth.logout()
