@@ -1,14 +1,10 @@
 <template>
   <nuxt-link :to='`/announcement/${announcement.id}`'>
-    <v-alert class='mb-1' outlined type='info' color="primary" :icon='mdiInformation'>{{announcement.title}}</v-alert>
+    <v-alert class='mb-1 text-h5 font-weight-bold' rounded="0" type='info' color="primary" flat border="left">{{announcement.title}}</v-alert>
   </nuxt-link>
 </template>
 <script>
-import { mdiInformation } from '@mdi/js'
 export default {
-  data () {
-    return { mdiInformation }
-  },
   props: {
     announcement: { type: Object, default: () => ({}) }
   }
