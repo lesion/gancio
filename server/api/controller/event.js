@@ -182,6 +182,8 @@ const eventController = {
 
     if (event && (event.is_visible || is_admin)) {
       event = event.get()
+      event.isMine = event.userId === req.user.id
+      delete event.userId
       event.next = next && (next.slug || next.id)
       event.prev = prev && (prev.slug || prev.id)
       event.tags = event.tags.map(t => t.tag)

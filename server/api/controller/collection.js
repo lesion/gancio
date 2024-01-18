@@ -61,7 +61,7 @@ const collectionController = {
           return res.json(events)
       }
     } catch (e) {
-      log.error('[COLLECTION] Error in getEvents: %s', String(e))
+      log.warn('[COLLECTION] getEvents: %s', String(e))
       return res.sendStatus(404)
     }
   },

@@ -323,7 +323,7 @@ export default {
         return false
       }
       return (
-        this.event.userId === this.$auth.user.id || this.$auth.user.is_admin
+        this.event.isMine || this.$auth.user.is_admin
       )
     }
   },
