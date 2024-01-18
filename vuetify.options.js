@@ -4,7 +4,8 @@ import { ca, cs, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, tr, sk, ro, ru, zhH
 export default ({ res, nuxtState }) => {
 
   const settings = process.server ? (res.locals.settings || {}) : nuxtState.state.settings || {}
-  
+  const is_dark = nuxtState?.state?.localSettings['theme.is_dark'] ?? settings['theme.is_dark']
+
   return {
     lang: { locales: { ca, cs, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, tr, ro, ru, zhHans } },
     theme: {
@@ -13,7 +14,7 @@ export default ({ res, nuxtState }) => {
         variations: false,
         minifyTheme,
       },
-      dark: settings['theme.is_dark'],
+      dark: is_dark,
       themes: {
         dark: settings.dark_colors,
         light: settings.light_colors
