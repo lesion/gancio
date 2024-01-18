@@ -2,15 +2,49 @@ const axios = require('axios')
 const crypto = require('crypto')
 const config = require('../config')
 const httpSignature = require('@peertube/http-signature')
-const { APUser, Instance } = require('../api/models/models')
+const { APUser, Instance, Event } = require('../api/models/models')
+const dayjs = require('dayjs')
 
 const url = require('url')
 const settingsController = require('../api/controller/settings')
 const log = require('../log')
+const helpers = require('../helpers')
 
 // process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
 const Helpers = {
+
+  '@context': [
+    'https://www.w3.org/ns/activitystreams',
+    'https://w3id.org/security/v1',
+    {
+      toot: 'http://joinmastodon.org/ns#',
+
+      // A property-value pair, e.g. representing a feature of a product or place.
+      // https://docs.joinmastodon.org/spec/activitypub/#PropertyValue
+      schema: 'http://schema.org#',
+      ProperyValue: 'schema:PropertyValue',
+      value: 'schema:value',
+
+      // https://docs.joinmastodon.org/spec/activitypub/#discoverable
+      // This flag may be used as an indicator of the user’s preferences toward being included
+      // in external discovery services, such as search engines or other indexing tools
+      // in gancio is always true
+      "discoverable": "toot:discoverable",
+
+      // https://docs.joinmastodon.org/spec/activitypub/#Hashtag
+      "Hashtag": "https://www.w3.org/ns/activitystreams#Hashtag",
+
+      // supported but always false
+      manuallyApprovesFollowers: 'as:manuallyApprovesFollowers',
+
+      // focal point - https://docs.joinmastodon.org/spec/activitypub/#focalPoint
+      "focalPoint": {
+        "@container": "@list",
+        "@id": "toot:focalPoint"
+      }
+    }
+  ],
 
   // ignore unimplemented ping url from fediverse
   spamFilter (req, res, next) {
@@ -135,6 +169,122 @@ const Helpers = {
     }
   },
 
+  async parsePlace (APEvent) {
+    const eventController = require('../api/controller/event')
+    let place
+    if (APEvent?.location) {
+      place = {
+        place_name: APEvent.location?.name,
+        place_address: APEvent.location?.address?.streetAddress ?? APEvent.location?.address?.addressLocality ?? APEvent.location?.address?.addressCountry ?? APEvent.location?.address ?? '',
+        place_latitude: APEvent.location?.latitude,
+        place_longitude: APEvent.location?.longitude
+      }
+    }
+
+    // could have online locations too
+    let online_locations = []
+    if (APEvent?.attachment?.length) {
+      online_locations = APEvent.attachment.filter(a => a?.type === 'Link' && a?.href).map(a => a.href)
+    }
+
+    if (!place) {
+      if (online_locations) {
+        place = { place_name: 'online' }
+      } else {
+        throw new Error ('No location nor online location')
+      }
+    }
+
+    place = await eventController._findOrCreatePlace(place)
+
+    return [place, online_locations]
+  },
+
+  async parseAP (message, actor) {
+      const tagController = require('../api/controller/tag')
+
+      // has to have an object and a type property..
+      if (!message?.object || !message?.type) {
+        log.warn('[FEDI] message without `object` or `type` property: %s', message)
+        throw new Error ('Wrong AP message: no object or type property')
+      }
+
+      // supporting Announce of a Create
+      if (message.type === 'Announce' && message.object?.type === 'Create' && message.object?.object) {
+        message.object = message.object.object
+        message.type = 'Create'
+      }
+
+      // we only support Create / Event
+      if (message.type === 'Create' && message.object.type === 'Event') {
+
+        const APEvent = message.object
+
+        // validate coming events
+        const required_fields = ['name', 'startTime']
+        let missing_field = required_fields.find(required_field => !APEvent[required_field])
+        if (missing_field) {
+          log.warn(`[FEDI] ${missing_field} required`)
+          throw new Error(`${missing_field} required`)
+        }
+    
+        // check if this event is new
+        const ap_id = APEvent.id
+        const exists = await Event.findOne({ where: { ap_id }})
+        if (exists) {
+          log.warn('[FEDI] Avoid creating a duplicated event %s', ap_id)
+          return exists
+        }
+    
+        const [ place, online_locations ] = await Helpers.parsePlace(APEvent)
+    
+        let media = []
+        const image_url = APEvent?.attachment?.find(a => a?.mediaType.includes('image') && a.url)?.url
+        if (image_url) {
+    
+          const file = await helpers.getImageFromURL(image_url)
+          log.debug('[FEDI] Download attachment for event %s', image_url)
+    
+          media = [{
+            url: file.filename,
+            height: file.height,
+            width: file.width,
+            name: APEvent.attachment[0]?.name || APEvent.name.trim() || '',
+            size: file.size || 0,
+            focalpoint: APEvent.attachment[0]?.focalPoint
+          }]
+        }
+    
+        // create it
+        const event = await Event.create({
+          title: APEvent?.name?.trim() ?? '',
+          start_datetime: dayjs(APEvent.startTime).unix(),
+          end_datetime: APEvent?.endTime ? dayjs(APEvent.endTime).unix() : null,
+          description: helpers.sanitizeHTML(APEvent?.content ?? APEvent?.summary ?? ''),
+          online_locations,
+          media,
+          is_visible: true,
+          ap_id,
+          ap_object: APEvent, 
+          apUserApId: actor.ap_id,
+        }).catch(e => {
+          console.error(e)
+          console.error(e?.message)
+          console.error(e?.errors)
+          return false
+        })
+    
+        await event.setPlace(place)
+    
+        // create/assign tags
+        let tags = []
+        if (APEvent.tag) {
+          tags = await tagController._findOrCreate(APEvent.tag.map(t => t?.name.substr(1)))
+          await event.setTags(tags)
+        }
+      }
+  },
+
   async followActor (actor) {
     log.debug(`Following actor ${actor.ap_id}`)
     const body = {
@@ -147,6 +297,35 @@ const Helpers = {
 
     await Helpers.signAndSend(JSON.stringify(body), actor.object.endpoints?.sharedInbox || actor.object.inbox)
     await actor.update({ following: 1 })
+
+    // let's try to get remote outbox
+    const events = await Helpers.getOutbox(actor, 10)
+    if (!events) { return }
+    const promises = events.map(message => Helpers.parseAP(message, actor))
+    const ret = await Promise.allSettled(promises)
+    console.error(ret)
+  },
+
+  async getOutbox(actor, limit) {
+    log.debug('[FEDI] Get %s outbox', actor?.ap_id)
+    
+    let events = []
+    if (!actor?.object?.outbox) return
+    try {
+      let collection = await Helpers.signAndSend('', actor?.object?.outbox, 'get')
+      // embedded collection
+      if (typeof collection?.first !== 'string') {
+        return collection.first?.orderedItems ?? []
+      } else if (/^https?:\/\//.test(collection?.first)) {
+        collection = await Helpers.signAndSend('', collection.first, 'get')
+        if (Array.isArray(collection?.orderedItems)) {
+          return collection?.orderedItems ?? []
+        }
+      }
+    } catch (e) {
+      log.warn('[FEDI] getOutbox %s failed: %s', actor.ap_id, e )
+      return []
+    }
   },
 
   async unfollowActor (actor) {
