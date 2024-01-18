@@ -5,6 +5,7 @@ const config = require('../config')
 const log = require('../log')
 const settingsController = require('../api/controller/settings')
 const { DateTime } = require('luxon')
+const Helpers = require('./helpers')
 
 module.exports = {
   get (req, res) {
@@ -30,17 +31,6 @@ module.exports = {
 
           // https://docs.joinmastodon.org/spec/activitypub/#discoverable
           "discoverable": "toot:discoverable",
-
-          // https://docs.joinmastodon.org/spec/activitypub/#Hashtag
-          "Hashtag": "https://www.w3.org/ns/activitystreams#Hashtag",
-
-          manuallyApprovesFollowers: 'as:manuallyApprovesFollowers',
-
-          // focal point - https://docs.joinmastodon.org/spec/activitypub/#focalPoint
-          "focalPoint": {
-            "@container": "@list",
-            "@id": "toot:focalPoint"
-          }
         }
       ],
       id: `${config.baseurl}/federation/u/${name}`,
@@ -129,11 +119,11 @@ module.exports = {
       return res.status(400).send('Bad request.')
     }
     if (name !== settings.instance_name) {
-      log.info(`[FEDI] No record found for ${name} (instance name is ${settings.instance_name})`)
+      log.info(`[FEDI] No record found for ${name} (applicationActor is ${settings.instance_name})`)
       return res.status(404).send(`No record found for ${escape(name)}`)
     }
 
-    const n_events = await Event.count({ where: { is_visible: true }}) // should hide events from the fedi?
+    const n_events = await Event.count({ where: { is_visible: true, ap_id: null }})
     let events = []
     log.debug(`[FEDI] GET /outbox, should return all events from this instance: ${n_events}`)
     // https://www.w3.org/TR/activitypub/#outbox
@@ -142,12 +132,18 @@ module.exports = {
     const last_page = Math.ceil(n_events/10)
 
     if (page) {
-      events = await Event.findAll({ where: { is_visible: true }, include: [{ model: Tag, required: false }, Place], limit: events_per_page, offset: (page-1)*events_per_page })
+      events = await Event.findAll({
+        where: { is_visible: true, ap_id: null },
+        include: [{ model: Tag, required: false }, Place],
+        limit: events_per_page,
+        offset: (page-1)*events_per_page,
+        order: [['start_datetime', 'DESC']],
+      })
       return res.json({
-        '@context': 'https://www.w3.org/ns/activitystreams',
+        '@context': Helpers['@context'],
         id: `${config.baseurl}/federation/u/${name}/outbox?page=${page}`,
         type: 'OrderedCollectionPage',
-        totalItems: events.length,
+        totalItems: n_events,
         partOf: `${config.baseurl}/federation/u/${name}/outbox`,
         ...( page > 1 && { prev: `${config.baseurl}/federation/u/${name}/outbox?page=${page-1}`}),
         ...( page !== last_page && { next: `${config.baseurl}/federation/u/${name}/outbox?page=${page+1}`}),
