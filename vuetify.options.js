@@ -4,9 +4,7 @@ import { ca, cs, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, tr, sk, ro, ru, zhH
 export default ({ res, nuxtState }) => {
 
   const settings = process.server ? (res.locals.settings || {}) : nuxtState.state.settings || {}
-  const is_dark = process.client
-    ? (typeof nuxtState.state.localSettings['theme.is_dark'] !== 'undefined' ? nuxtState.state.localSettings['theme.is_dark'] : settings['theme.is_dark'])
-    : settings['theme.is_dark']
+  const is_dark = nuxtState?.state?.localSettings['theme.is_dark'] ?? settings['theme.is_dark']
 
   return {
     lang: { locales: { ca, cs, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, tr, ro, ru, zhHans } },
