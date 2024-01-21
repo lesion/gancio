@@ -11,7 +11,7 @@ const Col = helpers.col
 const notifier = require('../../notifier')
 const { htmlToText } = require('html-to-text')
 
-const { Event, Resource, Tag, Place, Notification, APUser, Collection } = require('../models/models')
+const { Event, Resource, Tag, Place, Notification, APUser, Collection, EventNotification } = require('../models/models')
 
 
 const exportController = require('./export')
@@ -586,6 +586,7 @@ const eventController = {
       try {
         // remove related resources
         await Resource.destroy({ where: { eventId: event.id }})
+        await EventNotification.destroy({ where: { eventId: event.id }})
         
         // and finally remove the event
         await event.destroy()
