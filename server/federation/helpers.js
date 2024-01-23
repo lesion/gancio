@@ -196,11 +196,18 @@ const Helpers = {
     }
 
     place = await eventController._findOrCreatePlace(place)
+    if (!place) {
+      throw new Error('Place not found nor created')
+    }
 
     return [place, online_locations]
   },
 
-  async parseAP (message, actor) {
+  /**
+   *  Event object.type
+   *  Create / Announce
+   */
+  async parseAPEvent (message, actor) {
       const tagController = require('../api/controller/tag')
 
       // has to have an object and a type property..
@@ -221,7 +228,7 @@ const Helpers = {
         const APEvent = message.object
 
         // validate coming events
-        const required_fields = ['name', 'startTime']
+        const required_fields = ['name', 'startTime', 'id']
         let missing_field = required_fields.find(required_field => !APEvent[required_field])
         if (missing_field) {
           log.warn(`[FEDI] ${missing_field} required`)
@@ -279,7 +286,7 @@ const Helpers = {
         // create/assign tags
         let tags = []
         if (APEvent.tag) {
-          tags = await tagController._findOrCreate(APEvent.tag.map(t => t?.name.substr(1)))
+          tags = await tagController._findOrCreate(APEvent.tag.map(t => t?.name?.substr(1)))
           await event.setTags(tags)
         }
       }
@@ -295,15 +302,23 @@ const Helpers = {
       object: actor.ap_id
     }
 
-    await Helpers.signAndSend(JSON.stringify(body), actor.object.endpoints?.sharedInbox || actor.object.inbox)
+    await Helpers.signAndSend(JSON.stringify(body), actor.object.endpoints?.sharedInbox ?? actor.object.inbox)
     await actor.update({ following: 1 })
 
     // let's try to get remote outbox
     const events = await Helpers.getOutbox(actor, 10)
-    if (!events) { return }
-    const promises = events.map(message => Helpers.parseAP(message, actor))
-    const ret = await Promise.allSettled(promises)
-    console.error(ret)
+    if (!events) {
+      log.debug('[FEDI] No outbox events for %s', actor.ap_id)
+      return
+    }
+    
+    for(const event of events) {
+      await Helpers.parseAPEvent(event, actor).catch(e => {
+        console.error(e.message)
+        console.error(e.error)
+        console.error(e)
+      })
+    }
   },
 
   async getOutbox(actor, limit) {
@@ -329,7 +344,7 @@ const Helpers = {
   },
 
   async unfollowActor (actor) {
-    log.debug(`Unfollowing actor ${actor.ap_id}`)
+    log.debug(`[FEDI] Unfollowing actor ${actor.ap_id}`)
 
     const object = {
       id: `${config.baseurl}/federation/m/${actor.ap_id}#follow`,
@@ -375,7 +390,11 @@ const Helpers = {
   },
 
   async getNodeInfo (instance_url) {
-      let nodeInfo = await axios.get(`${instance_url}/.well-known/nodeinfo`, { headers: { Accept: 'application/json' } }).then(res => res.data)
+      let nodeInfo = await axios.get(`${instance_url}/.well-known/nodeinfo`, { headers: { Accept: 'application/json' } })
+        .then(res => res.data)
+        .catch(e => {
+          log.debug('[FEDI] Node %s does not support nodeInfo', instance_url)
+        })
       
       if (nodeInfo?.links) {
         const supportedVersion = nodeInfo.links.find(l => l.rel === 'http://nodeinfo.diaspora.software/ns/schema/2.1' || 'http://nodeinfo.diaspora.software/ns/schema/2.0')
@@ -405,11 +424,11 @@ const Helpers = {
     }
 
     try {
-      const { applicationActor, nodeInfo } = await Helpers.getNodeInfo(instance_url)
+      const { applicationActor, nodeInfo } = await Helpers.getNodeInfo(instance_url).catch(e => ({ }))
       const [ instance ] = await Instance.upsert({
           name: nodeInfo?.metadata?.nodeName ?? domain,
           domain,
-          data: nodeInfo,
+          data: nodeInfo ?? {},
           blocked: false,
           applicationActor
         })

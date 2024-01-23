@@ -65,6 +65,7 @@ const instancesController = {
     const instance = await Instance.findByPk(req.body.instance)
     if (!instance) { return res.status(404).send('Not found') }
     await instance.update({ blocked: req.body.blocked })
+    log.debug('[AP] Instace %s %s', instance.domain, instance.blocked ? 'unblocked' : 'blocked')
     return res.json(instance)
   },
 
