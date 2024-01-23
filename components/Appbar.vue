@@ -6,7 +6,7 @@
     <div class="text-center">
       <nuxt-link id="title" v-text="settings.title" to="/" />
       <div
-        class="text-body-1 font-weight-light"
+        class="text-body-1 font-weight-light pb-3"
         v-text="settings?.description"
       />
     </div>
