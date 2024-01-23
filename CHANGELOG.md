@@ -1,6 +1,40 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [1.13.0](https://framagit.org/les/gancio/compare/v1.12.0...v1.13.0) (2024-01-23)
+
+
+### Features
+
+* **AP:** implement AP parser ([a46c202](https://framagit.org/les/gancio/commit/a46c202ac96f46b7189a43797a8ed42a282231e2))
+* **AP:** improve online events format ([975c752](https://framagit.org/les/gancio/commit/975c752ba2ba21a36b2208e62f9ff430d46a4115))
+* remove theme view fome homepage ([3d3a6e7](https://framagit.org/les/gancio/commit/3d3a6e7c76a8ab4f511f6985fd2ad9b2971f163f))
+* **UI:** announcement style ([843d0a9](https://framagit.org/les/gancio/commit/843d0a9953df253da15ad5c85095926e31c76c87))
+
+
+### Bug Fixes
+
+* About label not translated on About page, fix [#328](https://framagit.org/les/gancio/issues/328) ([dad65e1](https://framagit.org/les/gancio/commit/dad65e140e4101e21bcab506b6cb4368990052ea))
+* **AP:** improve outbox collection ([67b738f](https://framagit.org/les/gancio/commit/67b738f7f9e5d35e128fed6eace313248aab1a67))
+* avoid using 'online' as a place name (case insensitive) ([e5bbb18](https://framagit.org/les/gancio/commit/e5bbb181569cf8ad228f8852e13d302a25b3d729))
+* dark mode icon in navbar ([c0907fe](https://framagit.org/les/gancio/commit/c0907fe6d6ef5f073d93fef8cebe64d7f5d5681c))
+* do not export federated events in general rss / ics  feed ([3844a6b](https://framagit.org/les/gancio/commit/3844a6ba51550982addf712d23214719cdf0fb23))
+* do not leak userId but return isMine flag ([1a865ae](https://framagit.org/les/gancio/commit/1a865aefbb0bed2f746f190009ee8b3e4a803e1b))
+* improve AP Event parsing ([8ebfad6](https://framagit.org/les/gancio/commit/8ebfad651ef94e83f8381e825bbac2132330cfe3))
+* improve footer trusted nodes view ([3f027a2](https://framagit.org/les/gancio/commit/3f027a2fe276c83142c898d4b6aea3c7159ae501))
+* improve search events api ([f83bc7f](https://framagit.org/les/gancio/commit/f83bc7f7804a139fcc56caa0ab36113710e6d615))
+* make events AP indexable by default ([d5620ac](https://framagit.org/les/gancio/commit/d5620ac8e97f7c42a2d07d84437e019965b569ac))
+* minor on tag editing, [#326](https://framagit.org/les/gancio/issues/326) ([5e967e4](https://framagit.org/les/gancio/commit/5e967e4d37ebbe72b79c759b36e293a3cf099f46))
+* refactoring event page ([5a7f3a5](https://framagit.org/les/gancio/commit/5a7f3a5ace0f76a7a312d3a2773b74a53aa39559))
+* refactoring Search export component ([5fdd9bc](https://framagit.org/les/gancio/commit/5fdd9bcc2effff1b0bb12060cbebd8db5cca488d))
+* remote events removal ([742ed44](https://framagit.org/les/gancio/commit/742ed445348d38acde0a75aa982269d16c938a26))
+* reverse and older parameter for collections ([d6a9a7f](https://framagit.org/les/gancio/commit/d6a9a7f00b6d42c122ac71eeb0c5dd522f18e6e4))
+* simplify local dark theme selection and fix [#332](https://framagit.org/les/gancio/issues/332) ([223437f](https://framagit.org/les/gancio/commit/223437f9c1f372ef6951c9f89f3a96b7508ae65b))
+* Tags with non-ascii characters cannot be resolved, [#329](https://framagit.org/les/gancio/issues/329) ([7eec86e](https://framagit.org/les/gancio/commit/7eec86e43c2c3d030c7910d1cf469a6db413b8dd))
+* ui color theme wrong selection [#332](https://framagit.org/les/gancio/issues/332) ([841e2b6](https://framagit.org/les/gancio/commit/841e2b69c06125c72adc4eeb1b40316787f1cc3a))
+* **UI:** minimalism ([d31ef55](https://framagit.org/les/gancio/commit/d31ef5545432477e075456de3e70eb8ef37a5538))
+* **UI:** remove home link from tabbar, minimalism ([3768fa2](https://framagit.org/les/gancio/commit/3768fa226c506fa605ce0742066bb5c84bdcbb84))
 
 ## [1.12.0](https://framagit.org/les/gancio/compare/v1.11.0...v1.12.0) (2024-01-14)
 
