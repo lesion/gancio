@@ -1,6 +1,5 @@
 const { Tag, Event } = require('../models/models')
-const uniqBy = require('lodash/uniqBy')
-const toLower = require('lodash/toLower')
+const { uniqBy, toLower } = require('lodash')
 const log = require('../../log')
 const Sequelize = require('sequelize')
 
@@ -12,14 +11,14 @@ module.exports = {
   async _findOrCreate (tags) {
     // trim tags
     const trimmedTags = tags.map(t => t.trim())
-    const lowercaseTags = trimmedTags.map(t => t.toLocaleLowerCase())
 
-    // search for already existing tags (tag is the same as TaG)
-    const existingTags = await Tag.findAll({ where: { [Op.and]: where(fn('LOWER', col('tag')), { [Op.in]: lowercaseTags }) } })
+    // search for already existing tags (case insensitive, note that LOWER sql function is not the same as toLocaleLowerCase due to #329)
+    const existingTags = await Tag.findAll({ where: { [Op.and]: where(fn('LOWER', col('tag')), { [Op.in]: trimmedTags.map(t => fn('LOWER', t)) }) } })
+
     const lowercaseExistingTags = existingTags.map(t => t.tag.toLocaleLowerCase())
     const remainingTags = uniqBy(trimmedTags.filter(t => ! lowercaseExistingTags.includes(t.toLocaleLowerCase())), toLower)
 
-    // create remaining tags (cannot use updateOnDuplicate or manage conflicts)
+    // create remaining tags and return all
     return [].concat(
       existingTags,
       await Tag.bulkCreate(remainingTags.map(t => ({ tag: t })))
@@ -33,20 +32,22 @@ module.exports = {
   async getEvents (req, res) {
     const eventController = require('./event')
     const format = req.params.format || 'json'
-    const tags = req.params.tag
+    const tag = req.params.tag
 
     // check if this tag exists
     if(!await Tag.findOne({ where:
-      Sequelize.where( Sequelize.fn( 'LOWER', Sequelize.col('tag')),
-        Sequelize.Op.eq, tags.toLocaleLowerCase())})) {
+      Sequelize.where(
+        Sequelize.fn( 'LOWER', Sequelize.col('tag')),
+        Sequelize.Op.eq, Sequelize.fn('LOWER', tag))
+      })) {
       return res.sendStatus(404)
     }
-    const events = await eventController._select({ tags: tags.toLocaleLowerCase(), show_recurrent: true, show_multidate: true, start: 0, reverse: true, include_description: true })
+    const events = await eventController._select({ tag, show_recurrent: true, show_multidate: true, start: 0, reverse: true, include_description: true })
     switch (format) {
       case 'rss':
         return exportController.feed(req, res, events,
-            `${res.locals.settings.title} - Tag #${tags}`,
-            `${res.locals.settings.baseurl}/feed/rss/tag/${tags}`)
+            `${res.locals.settings.title} - Tag #${tag}`,
+            `${res.locals.settings.baseurl}/feed/rss/tag/${tag}`)
       case 'ics':
         return exportController.ics(req, res, events)
       default:

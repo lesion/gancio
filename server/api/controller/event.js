@@ -33,7 +33,7 @@ const eventController = {
 
     const place_name = body.place_name && body.place_name.trim()
     const place_address = body.place_address && body.place_address.trim()
-    if (!place_name || !place_address && place_name !== 'online') {
+    if (!place_name || !place_address && place_name?.toLocaleLowerCase() !== 'online') {
       throw new Error(`place_id or place_name and place_address are required`)
     }
     let place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Sequelize.Op.eq, place_name.toLocaleLowerCase()) })
@@ -43,6 +43,9 @@ const eventController = {
         address: place_address || '',
         latitude: Number(body.place_latitude) || null,
         longitude: Number(body.place_longitude) || null
+      }).catch(e => {
+        console.error(e)
+        console.error(e?.errors)
       })
     }
     return place
@@ -50,7 +53,6 @@ const eventController = {
 
   async searchMeta(req, res) {
     const search = req.query.search.toLocaleLowerCase()
-
     const places = await Place.findAll({
       order: [[Sequelize.col('w'), 'DESC']],
       where: {
@@ -182,7 +184,7 @@ const eventController = {
 
     if (event && (event.is_visible || is_admin)) {
       event = event.get()
-      event.isMine = event.userId === req.user.id
+      event.isMine = event.userId === req.user?.id
       delete event.userId
       event.next = next && (next.slug || next.id)
       event.prev = prev && (prev.slug || prev.id)
@@ -612,7 +614,6 @@ const eventController = {
     places,
     show_recurrent,
     show_multidate,
-    ap_id=null,
     limit,
     page,
     older,
@@ -626,6 +627,8 @@ const eventController = {
       // confirmed event only
       is_visible: true,
 
+      apUserApId: null,
+
       [Op.or]: {
         start_datetime: { [older ? Op.lte : Op.gte]: start },
         end_datetime: { [older ? Op.lte : Op.gte]: start }
@@ -635,10 +638,6 @@ const eventController = {
     // include recurrent events?
     if (!show_recurrent) {
       where.parentId = null
-    }
-
-    if (typeof ap_id !== 'undefined') {
-      where.apUserApId = ap_id
     }
 
     if (!show_multidate) {
@@ -651,18 +650,18 @@ const eventController = {
 
     // normalize tags
     if (tags) {
-      tags = tags.split(',').map(t => t.trim().toLocaleLowerCase())
+      tags = tags.split(',').map(t => t.trim())
     }
 
     const replacements = []
     if (tags && places) {
       where[Op.and] = [
         { placeId: places ? places.split(',') : [] },
-        Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND LOWER(${Col('tagTag')}) in (?)`))
+        Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND ${Col('tagTag')} in (?)`))
       ]
       replacements.push(tags)
     } else if (tags) {
-      where[Op.and] = Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND LOWER(${Col('tagTag')}) in (?)`))
+      where[Op.and] = Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=${Col('event.id')} AND ${Col('tagTag')} in (?)`))
       replacements.push(tags)
     } else if (places) {
       where.placeId = places.split(',')
