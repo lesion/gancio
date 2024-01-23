@@ -4,6 +4,7 @@ const log = require('../../log')
 const { DateTime } = require('luxon')
 const { col: Col, queryParamToBool } = require('../../helpers')
 const { Op, Sequelize } = require('sequelize')
+const helpers = require('../../helpers')
 
 const collectionController = {
 
@@ -45,9 +46,11 @@ const collectionController = {
     const name = req.params.name
     const limit = req.query.max || 10
     const start = req.query.start_at || DateTime.local().toUnixInteger()
+    const reverse = helpers.queryParamToBool(req.query.reverse)
+    const older = helpers.queryParamToBool(req.query.older)
 
     try {
-      const events = await collectionController._getEvents({ name, start, limit })
+      const events = await collectionController._getEvents({ name, start, reverse, older, limit })
       log.debug(`[COLLECTION] (${name}) events: ${events?.length}`)
 
       switch (format) {
@@ -78,6 +81,7 @@ const collectionController = {
 
     // collection is empty if there are no filters
     if (!filters.length) {
+      log.debug('[COLLECTION] This collection has no filter!')
       return []
     }
 
