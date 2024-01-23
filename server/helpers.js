@@ -200,7 +200,7 @@ module.exports = {
   async importURL(req, res) {
     const url = req.query.URL
     try {
-      const response = await axios.get(url)
+      const response = await axios.get(url, { headers: { Accept: 'text/html, text/calendar'}})
       const contentType = response.headers['content-type']
 
       if (contentType.includes('text/html')) {
@@ -243,6 +243,9 @@ module.exports = {
             end_datetime: dayjs(get(event, 'endDate', null)).unix()
           }
         }))
+      } else {
+        log.debug('[IMPORT URL] %s -> Content type not supported %s', url, contentType)
+        return res.status(400).json('Content type not supported')
       }
     } catch (e) {
       log.error('[Import URL]', e)
