@@ -57,6 +57,7 @@ const exportController = {
         where: {
           is_visible: true,
           recurrent: null,
+          apUserApId: null,
           start_datetime: { [Op.gte]: yesterday },
           ...where
         },
