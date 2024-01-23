@@ -289,7 +289,7 @@ module.exports = {
 
   async feedRedirect(req, res, next) {
     const accepted = req.accepts('html', 'application/rss+xml', 'text/calendar')
-    if (['application/rss+xml', 'text/calendar'].includes(accepted) && /^\/(tag|place|collection)\/.*/.test(req.path)) {
+    if (['application/rss+xml', 'text/calendar'].includes(accepted) && (/^\/(tag|place|collection)\/.*/.test(req.path) || req.path === '/')) {
       return res.redirect((accepted === 'application/rss+xml' ? '/feed/rss' : '/feed/ics') + req.path)
     }
     next()
