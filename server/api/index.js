@@ -8,6 +8,7 @@ const log = require('../log')
 // REMOVE ME
 // const federationController = require('../federation')
 // const federationControllerUsers = require('../federation/users')
+// const federationHelpers = require('../federation/helpers')
 
 const collectionController = require('./controller/collection')
 const setupController = require('./controller/setup')
@@ -102,14 +103,15 @@ module.exports = () => {
      * @type GET
      * @param {integer} [start] - start timestamp (default: now)
      * @param {integer} [end] - end timestamp (optional)
-     * @param {string}  [query] - search for this string
+     * @param {string}  [query] - search for this string ()
      * @param {array} [tags] - List of tags
      * @param {array} [places] - List of places id
-     * @param {integer} [max] - Limit events
      * @param {boolean} [show_multidate] - Show also multidate events (default: true)
      * @param {boolean} [show_recurrent] - Show also recurrent events (default: as choosen in admin settings)
+     * @param {integer} [max] - Limit events
      * @param {integer} [page] - Pagination
      * @param {boolean} [older] - select <= start instead of >=
+     * @param {boolean} [reverse] - reverse order
      * @example ***Example***
      * [https://demo.gancio.org/api/events](https://demo.gancio.org/api/events)
      * [usage example](https://framagit.org/les/gancio/-/blob/master/webcomponents/src/GancioEvents.svelte#L18-42)
