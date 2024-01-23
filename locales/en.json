@@ -262,6 +262,7 @@
     "add_trusted_instance": "Add a trusted node",
     "instance_place_help": "The label to show in nodes of others",
     "delete_trusted_instance_confirm": "Do you really want to delete this trusted node?",
+    "instance_removed": "Instance removed",
     "is_dark": "Dark theme",
     "add_link": "Add link",
     "footer_links": "Footer links",
