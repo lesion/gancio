@@ -33,7 +33,7 @@
             v-card-actions.align-center.justify-center
                 span {{currentAttachmentLabel}}
 
-    v-card.mb-3.resources(v-if='settings.enable_resources' v-for='resource in event.resources' :key='resource.id' elevation='10' :flat='resource.hidden' outlined)
+    v-card.mb-3.resources(v-if='settings.enable_resources' v-for='resource in event.resources' :key='resource.id' outlined :class="{ 'vc-past': resource.hidden }")
         v-card-title
             v-menu(v-if='$auth.user && $auth.user.is_admin' offset-y)
                 template(v-slot:activator="{ on }")
