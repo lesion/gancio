@@ -314,7 +314,8 @@
         "colors": "Cores",
         "allow_online_event": "Permitir eventos en liña",
         "allow_online_event_hint": "Solicitar URLs ",
-        "not_reachable_warning": "Non me atopo ({baseurl}) no meu propio servidor! Comproba que o proxy, cortalumes e a rede están correctamente configuradas."
+        "not_reachable_warning": "Non me atopo ({baseurl}) no meu propio servidor! Comproba que o proxy, cortalumes e a rede están correctamente configuradas.",
+        "tag_renamed": "Cambio de nome da etiqueta \"{oldTag}\" a \"{newTag}\""
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",
