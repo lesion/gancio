@@ -30,7 +30,9 @@ module.exports = {
           value: 'schema:value',
 
           // https://docs.joinmastodon.org/spec/activitypub/#discoverable
-          "discoverable": "toot:discoverable",
+          discoverable: 'toot:discoverable',
+
+          indexable: 'toot:indexable'
         }
       ],
       id: `${config.baseurl}/federation/u/${name}`,
@@ -44,6 +46,7 @@ module.exports = {
       endpoints: { sharedInbox: `${config.baseurl}/federation/u/${name}/inbox` },
       // followers: `${config.baseurl}/federation/u/${name}/followers`,
       discoverable: true,
+      indexable: true,
       attachment: [
         {
           type: 'PropertyValue',
