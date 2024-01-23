@@ -8,6 +8,15 @@ nav_order: 10
 All notable changes to this project will be documented in this file.
 
 
+### [1.13.1](https://framagit.org/les/gancio/compare/v1.13.0...v1.13.1) (2024-01-23)
+
+
+### Bug Fixes
+
+* import event ([1d74903](https://framagit.org/les/gancio/commit/1d749039c07626eb6c7e06e5a6602a51e72296ab))
+* minor on hidden resources ([770c638](https://framagit.org/les/gancio/commit/770c638d03f513b539eaadf345f32dbb5e8bde96))
+* tags selection ([3f896a1](https://framagit.org/les/gancio/commit/3f896a106f0e0c91aea98bc85350eec280b95d87))
+
 ## [1.13.0](https://framagit.org/les/gancio/compare/v1.12.0...v1.13.0) (2024-01-23)
 
 
