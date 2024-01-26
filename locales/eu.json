@@ -109,7 +109,8 @@
         "clone": "Klonatu",
         "actors": "Nodoa",
         "trusted_instances": "Instantzia fidagarriak",
-        "pin": "Finkatu"
+        "pin": "Finkatu",
+        "collection_in_home": "Erakutsi bilduma bat hasieran"
     },
     "login": {
         "description": "Saioa hasten baduzu ekitaldi berriak sortu ahal izango dituzu.",
@@ -129,7 +130,8 @@
         "insert_your_address": "Sartu zure eposta helbidea",
         "feed_description": "Eguneraketak sakelekoan edo ordenagailuan jaso nahi badituzu webgune hau bisitatu gabe, RSS jarioa erabiltzea gomendatzen dizugu.</p>\n\n<p>RSS jarioarentzat aplikazio berezi bat erabiliko duzu gogoko dituzun weguneetatik berriak jasotzeko. Oso modu egokia da gune askotako berriak erraz eta azkar jasotzeko eta ez da konturik sortu behar! </p>\n\n<li>Android baldin badaukazu <a href=\"https://play.google.com/store/apps/details?id=net.frju.flym\">Flym</a> edo Feeder gomendatzen dizugu</li>\n<li>iPhone/iPad-erako eskuragarri daukazu <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\">Feed4U</a></li>\n<li>Ordenagailuaren kasuan Feedbro iradokitzen dugu, <a href=\"https://addons.mozilla.org/en-GB/firefox/addon/feedbroreader/\">Firefoxeko</a> edo <a href=\"https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa\">Chromeko</a> gehigarri gisa instalatzen da eta sistema gehienetan dabil.</li>\n<br/>\nHonako esteka jario irakurgailuan sartuta, eguneraketa guztiak jasoko dituzu.",
         "ical_description": "Ordenagailuak eta telefonoak maiz egutegiak inportatzeko eta kudeatzeko aplikazioekin datoz.",
-        "list_description": "Webgune bat baduzu eta ekitaldien zerrenda erakutsi nahi baduzu, ondorengo kodea erabili"
+        "list_description": "Webgune bat baduzu eta ekitaldien zerrenda erakutsi nahi baduzu, ondorengo kodea erabili",
+        "filter_description": "Esportazioa etiketen, lekuaren edo aurrez ezarritako bilduma baten arabera iragaz dezakezu hemen"
     },
     "register": {
         "description": "Gizarte mugimenduak beraien kabuz antolatu behar dira.<br/>\n<br/>Argitaratzen hasi baino lehen <strong>zure kontu berria onartua izan behar da</strong>, beraz, <strong>webgune honen atzean hezur-haragizko pertsonak</strong> gaudela kontuan izanik, azal iezaguzu mesedez pare bat lerrotan zer nolako ekitaldiak argitaratu nahi dituzun.",
@@ -313,7 +315,8 @@
         "edit_tag": "Editatu etiketa",
         "allow_online_event_hint": "URLak eskatu ",
         "allow_online_event": "Online ekitaldiak ahalbidetu",
-        "delete_tag_confirm": "Ziur al zaude \"{tag}\" etiketa ezabatu nahi duzula? Etiketa {n} ekitalditik ezabatuko da."
+        "delete_tag_confirm": "Ziur al zaude \"{tag}\" etiketa ezabatu nahi duzula? Etiketa {n} ekitalditik ezabatuko da.",
+        "edit_tag_help": "Etiketa alda dezakezu, berria jarriz edo lehendik dagoen batekin bat eginez. Lotutako {n} ekitaldiak ere aldatu egingo dira."
     },
     "auth": {
         "not_confirmed": "Oraindik baieztatu gabe dago…",
