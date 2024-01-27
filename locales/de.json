@@ -106,14 +106,18 @@
         "search_coordinates": "Suche Koordinaten",
         "online": "On-line",
         "show_preview": "Vorschau anzeigen",
-        "test": "Test"
+        "test": "Test",
+        "trusted_instances": "Vertrauten Instanzen",
+        "actors": "Node",
+        "collection_in_home": "Eine Kollektion auf Home anzeigen",
+        "pin": "Pin"
     },
     "admin": {
         "delete_footer_link_confirm": "Möchtest du diesen Link löschen?",
         "footer_links": "Fußnotenlinks",
         "add_link": "Link hinzufügen",
         "is_dark": "Dunkles Design",
-        "delete_trusted_instance_confirm": "Willst du diesen Eintrag wirklich aus dem Menü der befreundeten Instanz löschen?",
+        "delete_trusted_instance_confirm": "Diesen vertrauenswürdigen Node wirklich löschen?",
         "new_announcement": "Neue Ankündigung",
         "edit_place": "Ort bearbeiten",
         "enable_resources": "Ressourcen freischalten",
@@ -127,7 +131,7 @@
         "user_block_confirm": "Bestätige, dass du die nutzende Person {user} sperren möchtest?",
         "instance_locale": "Vorgegebene Sprache",
         "instance_place": "Vorläufiger Ort dieser Instanz",
-        "enable_trusted_instances": "Freigabe von befreundeten Instanzen",
+        "enable_trusted_instances": "Einschalten von vertrauenswürdigen Instanzen",
         "smtp_port": "SMTP-Port",
         "smtp_secure": "SMTP Secure (TLS oder STARTTLS)",
         "smtp_use_sendmail": "Sendmail verwenden",
@@ -136,17 +140,17 @@
         "new_collection": "Bubble anlegen",
         "edit_collection": "Bubble bearbeiten",
         "wrong_domain_warning": "Die \"baseurl\" die in config.json konfiguriert ist <b>({baseurl})</b> unterscheidet sich von derjenigen <b>({url})</b> die du besuchst",
-        "instance_place_help": "Diese Textzeile wird im Menü der anderen befreundeten Instanzen angezeigt",
+        "instance_place_help": "Das Label wird in Nodes von anderen angezeigt",
         "place_description": "Falls ein Ort falsch ist oder sich die Adresse ändert, kannst du ihn ändern.<br/>Bitte beachte, dass alle Veranstaltungen, die mit diesem Ort verbunden sind, die Adresse ändern (auch zurückliegende).",
         "enable_admin_user_confirm": "Bist du dir sicher, dass du {user} Admin-Rechte zuordnen möchtest?",
-        "trusted_instances_help": "Befreundete Instanzen werden in der Navigationsleiste oben auf der Seite angezeigt",
-        "trusted_instances_label": "Navigationsbezeichnung zu Friend-Instanzen",
-        "trusted_instances_label_default": "Freundliche Instanzen",
-        "trusted_instances_label_help": "Die Standardbezeichnung ist 'Freundliche Instanzen'",
+        "trusted_instances_help": "Vertrauenswürdige Instanzen werden in der Navigationsleiste oben auf der Seite angezeigt",
+        "trusted_instances_label": "Navigationsbezeichnung zu vertrauenswürdigen Instanzen",
+        "trusted_instances_label_default": "Vertrauenswürdige Instanzen",
+        "trusted_instances_label_help": "Die Standardbezeichnung ist 'Vertrauenswürdige Instanzen'",
         "delete_announcement_confirm": "Möchtest du diesen Hinweis entfernen?",
         "instance_timezone_description": "Gancio wurde dazu entwickelt, um die Veranstaltungen eines bestimmten Ortes, z. B. einer Stadt, zu erfassen. Wenn du die Zeitzone dieses Ortes eingibst und auswählst, werden alle Zeiten angezeigt und wie ausgewählt eingegeben.",
         "instance_locale_description": "Die Sprache, in der die Seiten angezeigt werden, ist die von der nutzenden Person bevorzugte Sprache. In einigen Fällen ist es jedoch erforderlich, die Meldungen für alle auf dieselbe Weise anzuzeigen (z. B. bei der Veröffentlichung über ActivityPub oder beim Versand bestimmter E-Mails). In diesen Fällen wird die oben gewählte Sprache verwendet.",
-        "add_trusted_instance": "Hinzufügen einer befreundeten Instanz",
+        "add_trusted_instance": "Hinzufügen einer vertrauenswürdigen Instanz",
         "collections_description": "Bubbles sind Gruppierungen von Ereignissen nach Tags und Orten",
         "disable_admin_user_confirm": "Möchtest du der nutzenden Person {user} die Adminrechte entziehen?",
         "announcement_description": "In diesem Bereich kannst du Hinweise schalten, die auf der Homepage bleiben",
@@ -222,7 +226,8 @@
         "edit_tag": "Stichwort bearbeiten",
         "allow_online_event_hint": "Nach Internetadressen fragen ",
         "allow_online_event": "Erlaube Online-Veranstaltungen",
-        "colors": "Farben"
+        "colors": "Farben",
+        "delete_tag_confirm": "Soll der Tag \"{tag}\" wirklich gelöscht werden? Der Tag wird bei {n} Events gelöscht."
     },
     "settings": {
         "update_confirm": "Willst du deine Änderung speichern?",
@@ -339,7 +344,8 @@
         "insert_your_address": "Gib deine E-Mail-Adresse ein",
         "email_description": "Du kannst interessante Veranstaltungen per E-Mail erhalten.",
         "feed_description": "Um Aktualisierungen auf deinem Computer oder Smartphone zu erhalten, ohne regelmäßig diese Seite zu öffnen, kannst du RSS-Feeds benutzen. </p>\n\n<p> Mit RSS-Feeds nutzt du eine spezielle App, um Aktualisierungen von den Seiten, die dich interessieren, zu erhalten. Damit kannst du viele Seiten überblicken, ohne ein Benutzerkonto erstellen zu müssen oder sonstige Komplikationen. </p>\n\n\n<li> Für Android-Geräte empfehlen wir <a href=\"https://f-droid.org/en/packages/net.frju.flym/\">Flym</a> oder Feeder </li>\n<li> Auf iPhones / iPads kannst du <a href=\"https://itunes.apple.com/ua/app/feeds4u/id1038456442?mt=8\"> Feed4U </a> nutzen</li>\n<li> Auf Desktop-PCs oder Laptops empfehlen wir Feedbro, den du in <a href=\"https://addons.mozilla.org/en-GB/firefox/addon/feedbroreader/\"> Firefox </a> oder <a \nref=\"https://chrome.google.com/webstore/detail/feedbro/mefgmmbdailogpfhfblcnnjfmnpnmdfa\"> Chrome </a> installieren kannst. </li>\n<br/>\nFügst du diesen Link dem RSS-Feed-Reader hinzu, wird dieser dich auf dem Laufenden halten.",
-        "intro": "Anders als unsoziale Netzwerke, die alles unternehmen, um nutzende Personen und deren Daten bei sich zu (be)halten, glauben wir, dass Informationen und Menschen gleichermaßen frei sein müssen. Deshalb kannst du dich über Veranstaltungen aktuell informieren, ohne zwangsläufig über diese Seite zu gehen."
+        "intro": "Anders als unsoziale Netzwerke, die alles unternehmen, um nutzende Personen und deren Daten bei sich zu (be)halten, glauben wir, dass Informationen und Menschen gleichermaßen frei sein müssen. Deshalb kannst du dich über Veranstaltungen aktuell informieren, ohne zwangsläufig über diese Seite zu gehen.",
+        "filter_description": "Hier kann der Export nach Tags und Orten oder nach einer voreingestellten Sammlung gefiltert werden"
     },
     "recover": {
         "not_valid_code": "Etwas ist schief gelaufen."
