@@ -54,7 +54,7 @@ module.exports = {
 
   sanitizeHTML(html) {
     return domPurify.sanitize(html, {
-      ALLOWED_TAGS: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'br', 'i', 'span',
+      ALLOWED_TAGS: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'br', 'i', 'span', 'em',
         'h6', 'b', 'a', 'li', 'ul', 'ol', 'code', 'blockquote', 'u', 's', 'strong'],
       ALLOWED_ATTR: ['href', 'target']
     })
