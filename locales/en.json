@@ -109,7 +109,8 @@
     "pin": "Pin",
     "trusted_instances": "Trusted instances",
     "actors": "Node",
-    "collection_in_home": "Show a collection in home"
+    "collection_in_home": "Show a collection in home",
+    "my_events": "My Events"
   },
   "login": {
     "description": "By logging in you can publish new events.",

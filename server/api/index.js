@@ -117,6 +117,7 @@ module.exports = () => {
      * [usage example](https://framagit.org/les/gancio/-/blob/master/webcomponents/src/GancioEvents.svelte#L18-42)
      */
 
+    api.get('/events/mine', isAuth, eventController.mine)
     api.get('/events', cors, eventController.select)
 
     /**

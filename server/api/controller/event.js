@@ -437,8 +437,13 @@ const eventController = {
     try {
       const body = req.body
       const event = await Event.findByPk(body.id)
-      if (!event) { return res.sendStatus(404) }
+      if (!event) {
+        log.debug('[UPDATE] Event not found: %s', body?.id)
+        return res.sendStatus(404)
+      }
+
       if (!req.user.is_admin && event.userId !== req.user.id) {
+        log.debug('[UPDATE] the user is neither an admin nor the owner of the event')
         return res.sendStatus(403)
       }
 
@@ -448,19 +453,23 @@ const eventController = {
       // // validate start_datetime and end_datetime
       if (end_datetime) {
         if (start_datetime > end_datetime) {
+          log.debug('[UPDATE] start_datetime is greated than end_datetime')
           return res.status(400).send(`start datetime is greater than end datetime`)
         }
 
         if (Number(end_datetime) > 1000*24*60*60*365) {
+        log.debug('[UPDATE] end_datetime is too much in the future')
           return res.status(400).send('are you sure?')
         }
       }
 
       if (!Number(start_datetime)) {
+        log.debug('[UPDATE] start_datetime has to be a number')
         return res.status(400).send(`Wrong format for start datetime`)
       }
 
       if (Number(start_datetime) > 1000*24*60*60*365) {
+        log.debug('[UPDATE] start_datetime is too much in the future')
         return res.status(400).send('are you sure?')
       }
 
@@ -523,9 +532,11 @@ const eventController = {
       try {
         place = await eventController._findOrCreatePlace(body)
         if (!place) {
+          log.info('[UPDATE] Place not found')
           return res.status(400).send(`Place not found`)
         }
       } catch (e) {
+        log.info('[UPDATE] %s', e?.message ?? String(e))
         return res.status(400).send(e.message)
       }
       await event.setPlace(place)
@@ -618,14 +629,12 @@ const eventController = {
     page,
     older,
     reverse,
+    user_id,
+    include_unconfirmed = false,
+    include_parent = false,
     include_description=false }) {
 
     const where = {
-      // do not include _parent_ recurrent event
-      recurrent: null,
-
-      // confirmed event only
-      is_visible: true,
 
       apUserApId: null,
 
@@ -633,6 +642,20 @@ const eventController = {
         start_datetime: { [older ? Op.lte : Op.gte]: start },
         end_datetime: { [older ? Op.lte : Op.gte]: start }
       }
+    }
+
+    if (user_id) {
+      where.userId = user_id
+    }
+
+    if (include_parent !== true) {
+      // do not include _parent_ recurrent event
+      where.recurrent = null
+    }
+
+    if (include_unconfirmed !== true) {
+      // confirmed event only
+      where.is_visible = true
     }
 
     // include recurrent events?
@@ -689,7 +712,12 @@ const eventController = {
     const events = await Event.findAll({
       where,
       attributes: {
-        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'resources', 'recurrent', 'placeId', 'image_path', ...(!include_description ? ['description']: [])]
+        exclude: [
+          'likes', 'boost', 'userId', 'createdAt', 'resources', 'placeId', 'image_path',
+          ...(!include_parent ? ['recurrent']: []),
+          ...(!include_unconfirmed ? ['is_visible']: []),
+          ...(!include_description ? ['description']: [])
+        ]
       },
       order: [['start_datetime', reverse ? 'DESC' : 'ASC']],
       include: [
@@ -713,6 +741,17 @@ const eventController = {
       e.tags = e.tags ? e.tags.map(t => t && t.tag) : []
       return e
     })
+  },
+
+  async mine (req, res) {
+    const events = await eventController._select({
+      user_id: req.user.id,
+      include_parent: true,
+      include_unconfirmed: true,
+      show_recurrent: true,
+      show_multidate: true
+    })
+    return res.json(events)
   },
 
   /**
