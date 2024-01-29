@@ -315,7 +315,8 @@
         "allow_online_event": "Permitir eventos en liña",
         "allow_online_event_hint": "Solicitar URLs ",
         "not_reachable_warning": "Non me atopo ({baseurl}) no meu propio servidor! Comproba que o proxy, cortalumes e a rede están correctamente configuradas.",
-        "tag_renamed": "Cambio de nome da etiqueta \"{oldTag}\" a \"{newTag}\""
+        "tag_renamed": "Cambio de nome da etiqueta \"{oldTag}\" a \"{newTag}\"",
+        "instance_removed": "Eliminouse a instancia"
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",
