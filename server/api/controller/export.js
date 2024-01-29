@@ -119,7 +119,7 @@ const exportController = {
         start,
         startInputType: 'utc',
         endInputType: 'utc',
-        title: `[${settings.title}] ${e.title}`,
+        title: e.title,
         description: htmlToText(e.description),
         htmlContent: e.description && e.description.replace(/\n/g,"<br>"),
         location,
