@@ -87,7 +87,7 @@ li {
 }
 
 .editor .ProseMirror {
-  background-color: #f7f7f7;
+  background-color: #eee;
 }
 
 .theme--dark .editor .ProseMirror {
@@ -95,7 +95,7 @@ li {
 }
 
 .theme--dark .v-menu__content {
-  border: 1px solid #1e1e1e;
+  border: 1px solid #333;
 }
 
 .theme--light .v-menu__content {
