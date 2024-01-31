@@ -25,10 +25,11 @@ beforeAll(async () => {
   try {
     app = await require('../server/routes.js').main()
     const { sequelize } = require('../server/api/models/index')
+    const { col } = require('../server/helpers')
     // sequelize.sync({ force: true })
-    await sequelize.query('PRAGMA foreign_keys = OFF')
-    await sequelize.query('DELETE FROM user_followers')
-    await sequelize.query('DELETE FROM events where parentId IS NOT NULL')
+    // await sequelize.query('PRAGMA foreign_keys = OFF')
+    await sequelize.query(`DELETE FROM ${col('user_followers')}`)
+    await sequelize.query(`DELETE FROM ${col('events')} where ${col('parentId')} IS NOT NULL`)
     await sequelize.query('DELETE FROM ap_users')
     await sequelize.query('DELETE FROM events')
     await sequelize.query('DELETE FROM event_tags')
@@ -36,6 +37,7 @@ beforeAll(async () => {
     await sequelize.query('DELETE FROM instances')
     await sequelize.query('DELETE FROM settings')
     await sequelize.query('DELETE FROM announcements')
+    await sequelize.query('DELETE FROM oauth_tokens')
     await sequelize.query('DELETE FROM users')
     await sequelize.query('DELETE FROM tags')
     await sequelize.query('DELETE FROM places')
@@ -43,7 +45,7 @@ beforeAll(async () => {
     await sequelize.query('DELETE FROM collections')
     await sequelize.query('DELETE FROM notifications')
     await sequelize.query('DELETE FROM event_notifications')
-    await sequelize.query('PRAGMA foreign_keys = ON')
+    // await sequelize.query('PRAGMA foreign_keys = ON')
   } catch (e) {
     console.error(e)
   }
@@ -399,11 +401,34 @@ describe('Tags', () => {
 
   test('should modify event tags', async () => {
     const ret = await request(app).put('/api/event')
-      .send({ id: event.body.id, tags: ['tag1', 'tag3', 'tag4'], place_id: places[1] })
+      .send({ id: event.body.id, tags: ['tag1', 'tag3', 'tag4'], place_id: places[0] })
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
     expect(ret.body.tags).toStrictEqual(['tag1', 'tAg3', 'tag4'])
+  })
+
+  test('shoud support utf-8 chars in tag', async () => {
+    let ret = await request(app).post('/api/event')
+      .send({ title: 'test trimming tags',
+        place_id: places[1],
+        start_datetime: dayjs().unix() + 1000,
+        tags: ['/\'"%^&*~`!@#$*()_+=-\\}{', 'üniversite etkinliği', 'ÜNIVERSITE ETKINLIĞI', 'antani', '$$antan$i'] })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
+    expect(ret.body.tags).toEqual(expect.arrayContaining(['/\'"%^&*~`!@#$*()_+=-\\}{', 'üniversite etkinliği', 'antani', '$$antan$i']))
+
+    ret = await request(app).post('/api/event')
+    .send({ title: 'test trimming tags',
+      place_id: places[0],
+      start_datetime: dayjs().unix() + 1000,
+      tags: ['/\'"%^&*~`!@#$*()_+=-\\}{', 'üniversite etkinliği', 'ÜNIVERSITE ETKINLIĞI', 'antani', '$$antan$i'] })
+    .auth(token.access_token, { type: 'bearer' })
+    .expect(200)
+
+    expect(ret.body.tags).toStrictEqual(expect.arrayContaining(['/\'"%^&*~`!@#$*()_+=-\\}{', 'üniversite etkinliği', 'antani', '$$antan$i']))
+
   })
 
   test('should return events searching for tags', async () => {

@@ -24,17 +24,20 @@ beforeAll(async () => {
   try {
     app = await require('../server/routes.js').main()
     const { sequelize } = require('../server/api/models/index')
+    const { col } = require('../server/helpers')
+
     // sequelize.sync({ force: true })
-    await sequelize.query('PRAGMA foreign_keys = OFF')
+    // await sequelize.query('PRAGMA foreign_keys = OFF')
     await sequelize.query('DELETE FROM settings')
-    await sequelize.query('DELETE FROM user_followers')
-    await sequelize.query('DELETE FROM events where parentId IS NOT NULL')
+    await sequelize.query(`DELETE FROM ${col('user_followers')}`)
+    await sequelize.query(`DELETE FROM ${col('events')} where ${col('parentId')} IS NOT NULL`)
     await sequelize.query('DELETE FROM ap_users')
     await sequelize.query('DELETE FROM events')
     await sequelize.query('DELETE FROM event_tags')
     await sequelize.query('DELETE FROM resources')
     await sequelize.query('DELETE FROM instances')
     await sequelize.query('DELETE FROM announcements')
+    await sequelize.query('DELETE FROM oauth_tokens')
     await sequelize.query('DELETE FROM users')
     await sequelize.query('DELETE FROM tags')
     await sequelize.query('DELETE FROM places')
@@ -42,7 +45,7 @@ beforeAll(async () => {
     await sequelize.query('DELETE FROM collections')
     await sequelize.query('DELETE FROM notifications')
     await sequelize.query('DELETE FROM event_notifications')
-    await sequelize.query('PRAGMA foreign_keys = ON')
+    // await sequelize.query('PRAGMA foreign_keys = ON')
   } catch (e) {
     console.error(e)
   }
