@@ -1,9 +1,10 @@
 const { Tag, Event } = require('../models/models')
+const { sequelize } = require('../models/index')
 const { uniqBy, toLower } = require('lodash')
 const log = require('../../log')
 const Sequelize = require('sequelize')
-
-const { where, fn, col, Op } = require('sequelize')
+const { col: escapeCol } = require('../../helpers')
+const { fn, col, Op } = require('sequelize')
 const exportController = require('./export')
 
 module.exports = {
@@ -11,12 +12,17 @@ module.exports = {
   async _findOrCreate (tags) {
     // trim tags
     const trimmedTags = tags.map(t => t.trim())
+    log.debug('[TAG] find or create: [%s]', trimmedTags.join(', '))
 
     // search for already existing tags (case insensitive, note that LOWER sql function is not the same as toLocaleLowerCase due to #329)
-    const existingTags = await Tag.findAll({ where: { [Op.and]: where(fn('LOWER', col('tag')), { [Op.in]: trimmedTags.map(t => fn('LOWER', t)) }) } })
-
+    const existingTags = await sequelize.query(`SELECT * FROM ${escapeCol('tags')} where LOWER(${escapeCol('tag')}) in (${tags.map(t => 'LOWER(?)').join(',')})`,
+      { model: Tag, mapToModel: true, replacements: trimmedTags, type: Sequelize.QueryTypes.SELECT })
     const lowercaseExistingTags = existingTags.map(t => t.tag.toLocaleLowerCase())
+
+    log.debug('[TAG] existing [%s]', lowercaseExistingTags.join(', '))
+
     const remainingTags = uniqBy(trimmedTags.filter(t => ! lowercaseExistingTags.includes(t.toLocaleLowerCase())), toLower)
+    log.debug('[TAG] remaining  [%s]', remainingTags.join(', '))
 
     // create remaining tags and return all
     return [].concat(
@@ -35,11 +41,7 @@ module.exports = {
     const tag = req.params.tag
 
     // check if this tag exists
-    if(!await Tag.findOne({ where:
-      Sequelize.where(
-        Sequelize.fn( 'LOWER', Sequelize.col('tag')),
-        Sequelize.Op.eq, Sequelize.fn('LOWER', tag))
-      })) {
+    if(!await Tag.findOne({ where: { tag } })) {
       return res.sendStatus(404)
     }
     const events = await eventController._select({ tags: tag, show_recurrent: true, show_multidate: true, start: 0, reverse: true, include_description: true })
@@ -79,11 +81,12 @@ module.exports = {
       order: [[fn('COUNT', col('tag.tag')), 'DESC']],
       attributes: ['tag'],
       where: {
-        tag: where(fn('LOWER', col('tag')), 'LIKE', '%' + search + '%'),
+        tag: { [Op.like]: `%${search}%` }
       },
       include: [{ model: Event, where: { is_visible: true }, attributes: [], through: { attributes: [] }, required: true }],
       group: ['tag.tag'],
       limit: 10,
+      raw: true,
       subQuery: false
     })
 
