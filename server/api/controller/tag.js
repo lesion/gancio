@@ -12,17 +12,13 @@ module.exports = {
   async _findOrCreate (tags) {
     // trim tags
     const trimmedTags = tags.map(t => t.trim())
-    log.debug('[TAG] find or create: [%s]', trimmedTags.join(', '))
 
     // search for already existing tags (case insensitive, note that LOWER sql function is not the same as toLocaleLowerCase due to #329)
     const existingTags = await sequelize.query(`SELECT * FROM ${escapeCol('tags')} where LOWER(${escapeCol('tag')}) in (${tags.map(t => 'LOWER(?)').join(',')})`,
       { model: Tag, mapToModel: true, replacements: trimmedTags, type: Sequelize.QueryTypes.SELECT })
     const lowercaseExistingTags = existingTags.map(t => t.tag.toLocaleLowerCase())
 
-    log.debug('[TAG] existing [%s]', lowercaseExistingTags.join(', '))
-
     const remainingTags = uniqBy(trimmedTags.filter(t => ! lowercaseExistingTags.includes(t.toLocaleLowerCase())), toLower)
-    log.debug('[TAG] remaining  [%s]', remainingTags.join(', '))
 
     // create remaining tags and return all
     return [].concat(
