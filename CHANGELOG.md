@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0](https://framagit.org/les/gancio/compare/v1.13.1...v1.14.0) (2024-01-31)
+
+
+### Features
+
+* user events page view, fix [#340](https://framagit.org/les/gancio/issues/340) and [#156](https://framagit.org/les/gancio/issues/156) ([2492f6b](https://framagit.org/les/gancio/commit/2492f6b545a87bd5eb9820e17cd74147bfd36379))
+
+
+### Bug Fixes
+
+* allow <em> tag in html sanitization, fix [#343](https://framagit.org/les/gancio/issues/343) ([fb9a9fb](https://framagit.org/les/gancio/commit/fb9a9fba998953144d20db7c0e62eaa978a84557))
+* allow default page redirection for content-type ([3a9a132](https://framagit.org/les/gancio/commit/3a9a13291067658f14ebf55d5736da4099761754))
+* minor on style ([61b796e](https://framagit.org/les/gancio/commit/61b796efd61cba49f70eaae15a68c07dfab7f0e8))
+* refactoring clean past federated events ([8910b13](https://framagit.org/les/gancio/commit/8910b1390df2db8771ba86753c30a1fc413b4480))
+* remove instance  title from ics event title, fix [#339](https://framagit.org/les/gancio/issues/339) ([9be6fbc](https://framagit.org/les/gancio/commit/9be6fbc19c7d965b244cc349a8946cfd3db303d4))
+* tags with a dollar characters cause problem saving event, fix [#344](https://framagit.org/les/gancio/issues/344) ([90b9a47](https://framagit.org/les/gancio/commit/90b9a479caf1af85814d2cbaa8c44a663a31f4f5))
+
 ### [1.13.1](https://framagit.org/les/gancio/compare/v1.13.0...v1.13.1) (2024-01-23)
 
 
