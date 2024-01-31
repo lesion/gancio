@@ -14,16 +14,13 @@ module.exports = {
     if (!events.length) { return }
 
     log.info(`[AP] Remove ${events.length} past federated events and related resources`)
-    await Resource.destroy({ where: { eventId: events.map(e => e.id) }})
+    const eventsId = events.map(e => e.id)
+    await Resource.destroy({ where: { eventId: eventsId }})
 
-    await EventNotification.destroy({ where: { eventId: events.map(e => e.id) }})
+    await EventNotification.destroy({ where: { eventId: eventsId }})
 
-    await Event.destroy({
-        where: {
-            start_datetime: { [Op.lt]: now },
-            apUserApId: { [Op.ne]: null }
-        }
-    }).catch(e => {
+
+    await Event.destroy({ where: { id: eventsId } }).catch(e => {
       log.debug('[AP] Error while removing past federated events: %s', JSON.stringify(e))
     })
   }
