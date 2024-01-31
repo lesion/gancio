@@ -744,14 +744,46 @@ const eventController = {
   },
 
   async mine (req, res) {
-    const events = await eventController._select({
-      user_id: req.user.id,
-      include_parent: true,
-      include_unconfirmed: true,
-      show_recurrent: true,
-      show_multidate: true
+
+    const start = DateTime.local().toUnixInteger()
+
+    const where = {
+      userId: req.user.id,
+      apUserApId: null,
+      [Op.or]: {
+        [Op.or]: {
+          start_datetime: { [Op.gte]: start },
+          end_datetime: { [Op.gte]: start }
+        },
+        recurrent: { [Op.not]: null }
+      }
+    }
+    
+    const events = await Event.findAll({
+      where,
+      attributes: {
+        exclude: ['likes', 'boost', 'userId', 'createdAt', 'resources', 'placeId', 'image_path', 'description']
+      },
+      order: [['recurrent', 'DESC'],['start_datetime', 'DESC']],
+      include: [
+        {
+          model: Tag,
+          attributes: ['tag'],
+          through: { attributes: [] }
+        },
+        { model: Place, required: true, attributes: ['id', 'name', 'address', 'latitude', 'longitude'] }
+      ],
+    }).catch(e => {
+      log.error('[EVENT]' + String(e))
+      return []
     })
-    return res.json(events)
+
+    return res.json(events.map(e => {
+      e = e.get()
+      e.tags = e.tags ? e.tags.map(t => t && t.tag) : []
+      return e
+    }))
+
   },
 
   /**
