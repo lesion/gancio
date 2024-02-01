@@ -764,7 +764,7 @@ const eventController = {
       attributes: {
         exclude: ['likes', 'boost', 'userId', 'createdAt', 'resources', 'placeId', 'image_path', 'description']
       },
-      order: [['recurrent', 'DESC'],['start_datetime', 'DESC']],
+      order: [['start_datetime', 'DESC']],
       include: [
         {
           model: Tag,
