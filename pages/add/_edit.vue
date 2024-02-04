@@ -114,7 +114,7 @@ export default {
       let event
       try {
         event = await $axios.$get('/event/detail/' + data.id)
-        if (!$auth.user.is_admin && event.isMine) {
+        if (!$auth.user.is_admin && !event.isMine) {
           error({ statusCode: 401, message: 'Not allowed' })
           return {}
         }
