@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.1](https://framagit.org/les/gancio/compare/v1.14.0...v1.14.1) (2024-02-04)
+
+
+### Bug Fixes
+
+* avoid useless sort by recurrent, fix [#340](https://framagit.org/les/gancio/issues/340) ([1d794c0](https://framagit.org/les/gancio/commit/1d794c0784d58479a34437dd65f3575629886f73))
+* edit mine event permission ([b917bc6](https://framagit.org/les/gancio/commit/b917bc6ae08aaf660f7f507b6752a279c4f67429))
+
 ## [1.14.0](https://framagit.org/les/gancio/compare/v1.13.1...v1.14.0) (2024-01-31)
 
 
