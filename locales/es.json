@@ -322,7 +322,8 @@
         "allow_online_event": "Permitir acontecimientos en línea",
         "allow_online_event_hint": "Pedir las urls ",
         "not_reachable_warning": "¡No puedo conectarme ({baseurl}) desde el servidor!. Por favor, compruebe que el proxy, el cortafuegos y la red están correctamente configurados.",
-        "tag_renamed": "La etiqueta \"{oldTag}\" se renombró a \"{newTag}\""
+        "tag_renamed": "La etiqueta \"{oldTag}\" se renombró a \"{newTag}\"",
+        "instance_removed": "Instancia eliminada"
     },
     "auth": {
         "not_confirmed": "Todavía no hemos confirmado este email…",
