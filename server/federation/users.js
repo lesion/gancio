@@ -38,7 +38,7 @@ module.exports = {
       id: `${config.baseurl}/federation/u/${name}`,
       type: 'Application',
       summary: config.description,
-      name,
+      name: settings.instance_name,
       preferredUsername: name, // settings.instance_place,
       inbox: `${config.baseurl}/federation/u/${name}/inbox`,
       outbox: `${config.baseurl}/federation/u/${name}/outbox`,
