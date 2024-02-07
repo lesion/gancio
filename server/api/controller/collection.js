@@ -74,7 +74,8 @@ const collectionController = {
 
     const collection = await Collection.findOne({ where: { name } })
     if (!collection) {
-      throw new Error(`Collection ${name} not found`)
+      log.warn(`[COLLECTION] "%s" not found`, name)
+      return []
     }
 
     const filters = await Filter.findAll({ where: { collectionId: collection.id } })
