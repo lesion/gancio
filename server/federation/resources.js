@@ -11,7 +11,7 @@ module.exports = {
   async create (req, res) {
 
     if (!res.locals.settings.enable_resources) {
-      log.info('Ignore resource as it is disabled in settings')
+      log.info('[FEDI] Ignore resource as it is disabled in settings')
       return
     }
 
@@ -21,12 +21,12 @@ module.exports = {
     let event
 
     // it's an answer
-    const inReplyTo = body.object.inReplyTo
+    const inReplyTo = body.object?.inReplyTo
 
     if (inReplyTo) {
       // .. to an event ?
       const match = inReplyTo && inReplyTo.match('.*/federation/m/(.*)')
-      log.info(`Event reply => ${inReplyTo}`)
+      log.info(`[FEDI] Event reply => ${inReplyTo}`)
       if (match) {
         event = await Event.findByPk(Number(match[1]))
       } else {
@@ -42,7 +42,7 @@ module.exports = {
       return res.status(404).send('Not found')
     }
 
-    log.debug(`resource from ${req.body.actor} to "${event.title}"`)
+    log.debug(`[FEDI] Reply from ${req.body.actor} to "${event.title}"`)
 
     body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content || ''))
 
@@ -56,21 +56,49 @@ module.exports = {
     res.sendStatus(201)
   },
 
+  // update a resource from AP Note
+  async update (req, res) {
+
+    if (!res.locals.settings.enable_resources) {
+      log.info('[FEDI] Ignore resource as it is disabled in settings')
+      return
+    }
+
+    const body = req.body
+    
+    // TODO: check if it is the same author
+    const resource = await Resource.findOne({ where: { activitypub_id: body.object?.id }, include: [Event] })
+    if (!resource) {
+      log.warn('[FEDI] Resource not found')
+      return res.sendStatus(404)
+    }
+
+    // search for related event
+    body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content || ''))
+
+    await resource.update({
+      data: body.object
+    })
+
+    log.debug('[FEDI] Resource updated!')
+    res.sendStatus(201)
+  },
+
+
   async remove (req, res) {
     const resource = await Resource.findOne({
       where: { activitypub_id: get(req.body, 'object.id', req.body.object) },
       include: [{ model: APUser, required: true, attributes: ['ap_id'] }]
     })
     if (!resource) {
-      log.info(`Comment not found`)
-      log.debug(req.body)
+      log.info(`[FEDI] Comment not found`)
       return res.status(404).send('Not found')
     }
     // check if fedi_user that requested resource removal
     // is the same that created the resource at first place
     if (res.locals.fedi_user.ap_id === resource.ap_user.ap_id) {
       await resource.destroy()
-      log.info(`Comment ${req.body.object.id} removed`)
+      log.info(`[FEDI] Comment ${req.body.object.id} removed`)
       res.sendStatus(201)
     } else {
       res.sendStatus(403)

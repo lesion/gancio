@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) =>
       index: true,
       allowNull: false
     },
-    isActor: {
+    isActor: { // not used yet
       type: DataTypes.BOOLEAN
     },
     isTop: { // is this collection shown in top navbar in home page?

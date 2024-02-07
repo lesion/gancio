@@ -107,7 +107,11 @@
         "online": "En liña",
         "show_preview": "Mostrar vista previa",
         "test": "Proba",
-        "clone": "Clonar"
+        "clone": "Clonar",
+        "pin": "Fixar",
+        "actors": "Nodo",
+        "collection_in_home": "Mostrar unha colección no Inicio",
+        "trusted_instances": "Instancias de confianza"
     },
     "recover": {
         "not_valid_code": "Algo fallou."
@@ -203,7 +207,7 @@
         "title_description": "Utilízase no título da páxina, no asunto do email e para as fontes RSS e ICS exportadas.",
         "description_description": "Aparece na cabeceira a carón do título",
         "instance_name_help": "Conta ActivityPub a seguir",
-        "add_trusted_instance": "Engade unha instancia amiga",
+        "add_trusted_instance": "Engade un nodo de confianza",
         "edit_place": "Editar lugar",
         "smtp_test_success": "Enviado un email de proba a {admin_email}, comproba a caixa de correo",
         "smtp_test_button": "Enviar un email de proba",
@@ -243,13 +247,13 @@
         "instance_locale": "Idioma por defecto",
         "delete_announcement_confirm": "Tes a certeza de querer eliminar o anuncio?",
         "instance_locale_description": "Idioma preferido para as páxinas. A veces as mensaxes teñen que mostrarse no mesmo idioma para tódalas persoas (por exemplo cando publicas vía ActivityPub ou cando envías os emails). Nestos casos usarase o idioma elexido aquí arriba.",
-        "enable_trusted_instances": "Activar instancias amigables",
-        "trusted_instances_help": "A lista das instancias recomendadas será mostrada na cabeceira",
-        "trusted_instances_label": "Etiqueta de navegación para instancias recomendadas",
-        "trusted_instances_label_default": "Instancias amigables",
-        "trusted_instances_label_help": "A etiqueta por defecto é 'Instáncias amigables'",
-        "delete_trusted_instance_confirm": "Tes a certeza de querer eliminar este elemento do menú de instancias amigas?",
-        "instance_place_help": "A etiqueta a mostrar nas instancias de outras",
+        "enable_trusted_instances": "Activar nodos de confianza",
+        "trusted_instances_help": "A lista de nodos de confianza será mostrada na cabeceira",
+        "trusted_instances_label": "Etiqueta de navegación para nodos de confianza",
+        "trusted_instances_label_default": "Nodos de confianza",
+        "trusted_instances_label_help": "A etiqueta por defecto é 'Nodos de confianza'",
+        "delete_trusted_instance_confirm": "Tes a certeza de querer eliminar este nodo de confianza?",
+        "instance_place_help": "A etiqueta a mostrar en nodos de outras",
         "add_link": "Engadir ligazón",
         "instance_place": "Lugar de referencia para esta instancia",
         "is_dark": "Decorado escuro",
@@ -309,7 +313,10 @@
         "delete_collection_confirm": "Estás seguro de que queres eliminar a colección <u>{collection}</u>?",
         "colors": "Cores",
         "allow_online_event": "Permitir eventos en liña",
-        "allow_online_event_hint": "Solicitar URLs "
+        "allow_online_event_hint": "Solicitar URLs ",
+        "not_reachable_warning": "Non me atopo ({baseurl}) no meu propio servidor! Comproba que o proxy, cortalumes e a rede están correctamente configuradas.",
+        "tag_renamed": "Cambio de nome da etiqueta \"{oldTag}\" a \"{newTag}\"",
+        "instance_removed": "Eliminouse a instancia"
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",

@@ -2,6 +2,177 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.1](https://framagit.org/les/gancio/compare/v1.14.0...v1.14.1) (2024-02-04)
+
+
+### Bug Fixes
+
+* avoid useless sort by recurrent, fix [#340](https://framagit.org/les/gancio/issues/340) ([1d794c0](https://framagit.org/les/gancio/commit/1d794c0784d58479a34437dd65f3575629886f73))
+* edit mine event permission ([b917bc6](https://framagit.org/les/gancio/commit/b917bc6ae08aaf660f7f507b6752a279c4f67429))
+
+## [1.14.0](https://framagit.org/les/gancio/compare/v1.13.1...v1.14.0) (2024-01-31)
+
+
+### Features
+
+* user events page view, fix [#340](https://framagit.org/les/gancio/issues/340) and [#156](https://framagit.org/les/gancio/issues/156) ([2492f6b](https://framagit.org/les/gancio/commit/2492f6b545a87bd5eb9820e17cd74147bfd36379))
+
+
+### Bug Fixes
+
+* allow <em> tag in html sanitization, fix [#343](https://framagit.org/les/gancio/issues/343) ([fb9a9fb](https://framagit.org/les/gancio/commit/fb9a9fba998953144d20db7c0e62eaa978a84557))
+* allow default page redirection for content-type ([3a9a132](https://framagit.org/les/gancio/commit/3a9a13291067658f14ebf55d5736da4099761754))
+* minor on style ([61b796e](https://framagit.org/les/gancio/commit/61b796efd61cba49f70eaae15a68c07dfab7f0e8))
+* refactoring clean past federated events ([8910b13](https://framagit.org/les/gancio/commit/8910b1390df2db8771ba86753c30a1fc413b4480))
+* remove instance  title from ics event title, fix [#339](https://framagit.org/les/gancio/issues/339) ([9be6fbc](https://framagit.org/les/gancio/commit/9be6fbc19c7d965b244cc349a8946cfd3db303d4))
+* tags with a dollar characters cause problem saving event, fix [#344](https://framagit.org/les/gancio/issues/344) ([90b9a47](https://framagit.org/les/gancio/commit/90b9a479caf1af85814d2cbaa8c44a663a31f4f5))
+
+### [1.13.1](https://framagit.org/les/gancio/compare/v1.13.0...v1.13.1) (2024-01-23)
+
+
+### Bug Fixes
+
+* import event ([1d74903](https://framagit.org/les/gancio/commit/1d749039c07626eb6c7e06e5a6602a51e72296ab))
+* minor on hidden resources ([770c638](https://framagit.org/les/gancio/commit/770c638d03f513b539eaadf345f32dbb5e8bde96))
+* tags selection ([3f896a1](https://framagit.org/les/gancio/commit/3f896a106f0e0c91aea98bc85350eec280b95d87))
+
+## [1.13.0](https://framagit.org/les/gancio/compare/v1.12.0...v1.13.0) (2024-01-23)
+
+
+### Features
+
+* **AP:** implement AP parser ([a46c202](https://framagit.org/les/gancio/commit/a46c202ac96f46b7189a43797a8ed42a282231e2))
+* **AP:** improve online events format ([975c752](https://framagit.org/les/gancio/commit/975c752ba2ba21a36b2208e62f9ff430d46a4115))
+* remove theme view fome homepage ([3d3a6e7](https://framagit.org/les/gancio/commit/3d3a6e7c76a8ab4f511f6985fd2ad9b2971f163f))
+* **UI:** announcement style ([843d0a9](https://framagit.org/les/gancio/commit/843d0a9953df253da15ad5c85095926e31c76c87))
+
+
+### Bug Fixes
+
+* About label not translated on About page, fix [#328](https://framagit.org/les/gancio/issues/328) ([dad65e1](https://framagit.org/les/gancio/commit/dad65e140e4101e21bcab506b6cb4368990052ea))
+* **AP:** improve outbox collection ([67b738f](https://framagit.org/les/gancio/commit/67b738f7f9e5d35e128fed6eace313248aab1a67))
+* avoid using 'online' as a place name (case insensitive) ([e5bbb18](https://framagit.org/les/gancio/commit/e5bbb181569cf8ad228f8852e13d302a25b3d729))
+* dark mode icon in navbar ([c0907fe](https://framagit.org/les/gancio/commit/c0907fe6d6ef5f073d93fef8cebe64d7f5d5681c))
+* do not export federated events in general rss / ics  feed ([3844a6b](https://framagit.org/les/gancio/commit/3844a6ba51550982addf712d23214719cdf0fb23))
+* do not leak userId but return isMine flag ([1a865ae](https://framagit.org/les/gancio/commit/1a865aefbb0bed2f746f190009ee8b3e4a803e1b))
+* improve AP Event parsing ([8ebfad6](https://framagit.org/les/gancio/commit/8ebfad651ef94e83f8381e825bbac2132330cfe3))
+* improve footer trusted nodes view ([3f027a2](https://framagit.org/les/gancio/commit/3f027a2fe276c83142c898d4b6aea3c7159ae501))
+* improve search events api ([f83bc7f](https://framagit.org/les/gancio/commit/f83bc7f7804a139fcc56caa0ab36113710e6d615))
+* make events AP indexable by default ([d5620ac](https://framagit.org/les/gancio/commit/d5620ac8e97f7c42a2d07d84437e019965b569ac))
+* minor on tag editing, [#326](https://framagit.org/les/gancio/issues/326) ([5e967e4](https://framagit.org/les/gancio/commit/5e967e4d37ebbe72b79c759b36e293a3cf099f46))
+* refactoring event page ([5a7f3a5](https://framagit.org/les/gancio/commit/5a7f3a5ace0f76a7a312d3a2773b74a53aa39559))
+* refactoring Search export component ([5fdd9bc](https://framagit.org/les/gancio/commit/5fdd9bcc2effff1b0bb12060cbebd8db5cca488d))
+* remote events removal ([742ed44](https://framagit.org/les/gancio/commit/742ed445348d38acde0a75aa982269d16c938a26))
+* reverse and older parameter for collections ([d6a9a7f](https://framagit.org/les/gancio/commit/d6a9a7f00b6d42c122ac71eeb0c5dd522f18e6e4))
+* simplify local dark theme selection and fix [#332](https://framagit.org/les/gancio/issues/332) ([223437f](https://framagit.org/les/gancio/commit/223437f9c1f372ef6951c9f89f3a96b7508ae65b))
+* Tags with non-ascii characters cannot be resolved, [#329](https://framagit.org/les/gancio/issues/329) ([7eec86e](https://framagit.org/les/gancio/commit/7eec86e43c2c3d030c7910d1cf469a6db413b8dd))
+* ui color theme wrong selection [#332](https://framagit.org/les/gancio/issues/332) ([841e2b6](https://framagit.org/les/gancio/commit/841e2b69c06125c72adc4eeb1b40316787f1cc3a))
+* **UI:** minimalism ([d31ef55](https://framagit.org/les/gancio/commit/d31ef5545432477e075456de3e70eb8ef37a5538))
+* **UI:** remove home link from tabbar, minimalism ([3768fa2](https://framagit.org/les/gancio/commit/3768fa226c506fa605ce0742066bb5c84bdcbb84))
+
+## [1.12.0](https://framagit.org/les/gancio/compare/v1.11.0...v1.12.0) (2024-01-14)
+
+
+### Features
+
+* add lat/lng to federated events ([a26fb80](https://framagit.org/les/gancio/commit/a26fb80a8fd9b1ec71ba4104b19f470042ac794b))
+
+### Bug Fixes
+
+* **AP** improve @context (https://framagit.org/context) ([452aa6e](https://framagit.org/les/gancio/commit/452aa6eaa1b7eea45d66af8ca14b9f7abf18804a))
+* restore vuetify defaultAssets in the right place! ([80276a1](https://framagit.org/les/gancio/commit/80276a16e49abea514ca3d442df33c0f75cb7a20))
+
+## [1.11.0](https://framagit.org/les/gancio/compare/v1.10.3...v1.11.0) (2024-01-10)
+
+
+### Features
+
+* add `reverse` and `older` flag to collection API ([cccb670](https://framagit.org/les/gancio/commit/cccb670cc76ba336f4d459f1da68748289cb2ff0))
+
+
+### Bug Fixes
+
+* **AP:** allow to follow trusted actor from url ([35c7888](https://framagit.org/les/gancio/commit/35c78882a251f1a739721bd0c946303c25405f22))
+* **AP:** delete federated events ([9de5773](https://framagit.org/les/gancio/commit/9de5773f0a96614e13b6b9e9f3ed20e71285bbdc))
+* display user URL in federated event ([567531b](https://framagit.org/les/gancio/commit/567531b2c546e29049cf85e0c0ef61635f2dc0b7))
+* fix host-meta RFC6415 Content-Type ([550ee5c](https://framagit.org/les/gancio/commit/550ee5c317c18c6bb923e90d5281b005d4b996a9))
+* minor getting actors and instances ([5d0970a](https://framagit.org/les/gancio/commit/5d0970aad7f3d183816b60a912cf369e55b7c19b))
+* remove related comments/resources when an event is deleted ([cf5bc1b](https://framagit.org/les/gancio/commit/cf5bc1b6210d6c9a6a44e445a49b55c2be4e8383))
+
+## [1.10.3](https://framagit.org/les/gancio/compare/v1.10.2...v1.10.3) (2024-01-09)
+
+
+### Bug Fixes
+
+* sequelize does not really support mariadb@3 ([3d5ab85](https://framagit.org/les/gancio/commit/3d5ab85de60ddfe19ebb92ccf04a500fe1c4ea01))
+* use nodejs 18 in Docker image ([329a6bd](https://framagit.org/les/gancio/commit/329a6bd5c3e09f751f6b398b1a74c745cb219d1d))
+
+## [1.10.2](https://framagit.org/les/gancio/compare/v1.10.0...v1.10.2) (2024-01-08)
+
+
+### Bug Fixes
+
+* admin tag editing without blur, fix [#326](https://framagit.org/les/gancio/issues/326) ([9f8d137](https://framagit.org/les/gancio/commit/9f8d137d3033a0b0a667ac15a672bc016bb2cf2d))
+* **AP:** add whole jsonLD object to events ([cb7932c](https://framagit.org/les/gancio/commit/cb7932c09dde83bb876419488592e4cdd926ffea))
+* **AP:** follow trusted node ([8b54ed1](https://framagit.org/les/gancio/commit/8b54ed179a6305a5a7f849ee1a892bdf493d7a81))
+* **AP:** return a 201 on Create/Update/Delete ([4868c0a](https://framagit.org/les/gancio/commit/4868c0af580296ec71a5cf3d799aed5fa316c94e))
+* **AP:** improve fedi events validation ([07a0ea0](https://framagit.org/les/gancio/commit/07a0ea01463dd6a0b56181a3f9d03caef4b661c9))
+* **AP:** improve trusted node display in Admin>Collection ([dcb7498](https://framagit.org/les/gancio/commit/dcb7498c675ddb96fc974146a7e0d12e30d7dd33))
+* **AP:** improve validation on event's update ([90deb79](https://framagit.org/les/gancio/commit/90deb79d6b70f9b10cb24aadf6ef59319f134d07))
+* **AP:** update instances ([f7d4824](https://framagit.org/les/gancio/commit/f7d4824349932ad6d427613ad946176067739bee))
+* **AP:** re-add followers ([2971956](https://framagit.org/les/gancio/commit/29719569a1c97b9d6cfadcd7bff427e578850852))
+* dedup tags, minor with [#169](https://framagit.org/les/gancio/issues/169) ([44daa90](https://framagit.org/les/gancio/commit/44daa901dc3a95a2e1eefab41cf9a8114d8d18bd))
+* event exports when collection_in_home and tags or places are selected ([f160430](https://framagit.org/les/gancio/commit/f1604306259f8a4e09a0356ae7604ec4a44cdcb4))
+* export collection's feeds (ics/rss) ([04403e0](https://framagit.org/les/gancio/commit/04403e0a345ebb8932883926273ac59c7cec5242))
+* recalculate end date ([6c2840a](https://framagit.org/les/gancio/commit/6c2840a7fa4be6f50ca1ad51877b3436c9663b40)) thanks @sedum
+* improve unit testing ([9482ba9](https://framagit.org/les/gancio/commit/9482ba9e394d1e05615386e98b2085c202b922bc))
+* include description into rss/ics ([4f99a5d](https://framagit.org/les/gancio/commit/4f99a5df30cc2914932d0b04b4dbfd48e9d0f526))
+* update deps ([16a0695](https://framagit.org/les/gancio/commit/16a06959f488b504e1cb726f6664a45427a27fca))
+* use online_locations instead of place address for online events in rss feed ([0f047a2](https://framagit.org/les/gancio/commit/0f047a264ea36d9226231aede410cf8034c780e7))
+
+## [1.10.0](https://framagit.org/les/gancio/compare/v1.8.0...v1.10.0) (2023-12-29)
+
+This release is a big step toward interoperability with ActivityPub, look at the [documentation](https://gancio.org/federation) for the details.  
+Thanks to @linos from [event-federation.eu](https://event-federation.eu/) and @tcit from [mobilizon](https://joinmobilizon.org/)
+
+
+### Features
+
+* **AP:**  implement FEP-2677 in nodeinfo ([07fcbbd](https://framagit.org/les/gancio/commit/07fcbbd4ce6727817812b9c71903ca1bf61d394e))
+* **AP:** implement application Actor retrieval FEP-2677 ([9c74f51](https://framagit.org/les/gancio/commit/9c74f5198d7c2c360fdb70ebbd0d4bfc2e6999b4))
+* **AP:** improve logging and interoperability ([ca1bd24](https://framagit.org/les/gancio/commit/ca1bd2487cd2c42af096dd9cd1b8f07beceb90eb))
+* **AP:** retrieve instance info via nodeinfo ([1e0665d](https://framagit.org/les/gancio/commit/1e0665dc3d2de8f0f459d8941403ce1276269b39))
+* **AP:** support Note/Event update and removal ([f1158db](https://framagit.org/les/gancio/commit/f1158dba73501e98918d7fa499289554743832b9))
+* **AP:** improve interaction with AP, [#322](https://framagit.org/les/gancio/issues/322) ([340d503](https://framagit.org/les/gancio/commit/340d50301f1b76ebc17dd4fe6d419c2afc5fb556))
+* **AP:** init unit test ([12c0f21](https://framagit.org/les/gancio/commit/12c0f21a8984acd9d10f2fb86e6dc6b7b8d25aef))
+* **AP:** minor with unfollow ([a70529d](https://framagit.org/les/gancio/commit/a70529d771f4cb70b9c0946e97810ba85b4242f1))
+* **collections:** add instances as potential filter in collections ([7a6101b](https://framagit.org/les/gancio/commit/7a6101be7ba4990bd0c0cf32344e8ca59c4de8c2))
+* **collections:** a collection could be used as homepage ([3fd9f5a](https://framagit.org/les/gancio/commit/3fd9f5a8cbc5766c8c6e65fc1ff97ed69cf7edf9))
+* **locale** add Românesc ([bdc6b39](https://framagit.org/les/gancio/commit/bdc6b3925a68314d75a3c3ca4fd1af72149d1199))
+
+
+### Bug Fixes
+
+* use .splat in production too ([5dcae0d](https://framagit.org/les/gancio/commit/5dcae0d9755726553974b32338187bf3b8a01067))
+* body parse ld+json coming from fediverse ([f96c826](https://framagit.org/les/gancio/commit/f96c8261d778bc2b9dc3b9e9a4446bda459bd6c3))
+
+
+## [1.8.0](https://framagit.org/les/gancio/compare/v1.7.1...v1.8.0) (2023-12-15)
+
+
+### Features
+
+* add Turkish language ([c99772e](https://framagit.org/les/gancio/commit/c99772e0b5d8f92fabad9f24ecab5f1ad48053f0))
+* improve collections export adding max, start_at parameter ([c472e87](https://framagit.org/les/gancio/commit/c472e876760f172be7246a0aa5e1bc8a7610f7eb))
+
+
+### Bug Fixes
+
+* do not allow /admin rendering when normal user ([906dca2](https://framagit.org/les/gancio/commit/906dca2b100aa7308790c5948620a4ca3f3fa955))
+* hide event being edited in "on same day" area, fix [#318](https://framagit.org/les/gancio/issues/318) ([04c88a4](https://framagit.org/les/gancio/commit/04c88a468b53a8155942d44766b822f6c2beb2dd))
+* location name and description not correctly set in microdata ([9811d39](https://framagit.org/les/gancio/commit/9811d395540ca6c7e0f3e2d0caa9295dd4d9308e)), closes [#316](https://framagit.org/les/gancio/issues/316) [#315](https://framagit.org/les/gancio/issues/315)
+* missing some style in detail collection page ([185b8bd](https://framagit.org/les/gancio/commit/185b8bd75e3cf9dddb160100d601951b60ab379e))
+
 ### [1.7.1](https://framagit.org/les/gancio/compare/v1.7.0...v1.7.1) (2023-11-10)
 
 ## [1.7.0](https://framagit.org/les/gancio/compare/v1.6.19...v1.7.0) (2023-11-10)

@@ -9,7 +9,7 @@ const collectionController = require('./collection')
 const exportController = {
 
   async export (req, res) {
-    const format = req.params.format
+    const format = req.params.format || 'json'
     const tags = req.query.tags
     const places = req.query.places
     const collection = req.query.collection
@@ -49,8 +49,7 @@ const exportController = {
     let events = []
 
     if (collection) {
-      events = await collectionController._getEvents(collection)
-      console.error(events.map(e => e))
+      events = await collectionController._getEvents({ name: collection })
     } else {
       events = await Event.findAll({
         order: ['start_datetime'],
@@ -58,6 +57,7 @@ const exportController = {
         where: {
           is_visible: true,
           recurrent: null,
+          apUserApId: null,
           start_datetime: { [Op.gte]: yesterday },
           ...where
         },
@@ -119,7 +119,7 @@ const exportController = {
         start,
         startInputType: 'utc',
         endInputType: 'utc',
-        title: `[${settings.title}] ${e.title}`,
+        title: e.title,
         description: htmlToText(e.description),
         htmlContent: e.description && e.description.replace(/\n/g,"<br>"),
         location,

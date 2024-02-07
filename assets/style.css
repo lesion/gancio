@@ -10,8 +10,12 @@ li {
   margin-left: 10px;
 }
 
+.theme--light .v-card {
+  background-color: #f8f8f8 !important;
+}
+
 .v-dialog .theme--dark.v-card {
-  background-color: #434343;
+  background-color: #333;
 }
 
 .v-application {
@@ -83,22 +87,25 @@ li {
 }
 
 .editor .ProseMirror {
-  background-color: #f7f7f7;
+  background-color: #eee;
 }
 
 .theme--dark .editor .ProseMirror {
   background-color: #292929;
 }
 
-/* .theme--dark.v-list {
-  background-color: #333;
-} */
+.theme--dark .v-menu__content {
+  border: 1px solid #333;
+}
+
+.theme--light .v-menu__content {
+  border: 1px solid #ccc;
+}
 
 .v-menu__content {
   scrollbar-width: thin;
   scrollbar-color: #FF4511 #111;
-  background-color: #333;
-  border: 1px solid #282828;
+  box-shadow: none !important;
 }
 
 .v-autocomplete__content.v-menu__content .v-select-list {
@@ -108,6 +115,15 @@ li {
 .v-sheet.v-card {
   box-shadow: none !important;
   border-radius: 0 !important;
+}
+
+
+.theme--dark .event {
+  border: 1px solid #333;
+}
+
+.theme--light .event {
+  border: 1px solid #e9e9e9;
 }
 
 .event {
@@ -122,8 +138,8 @@ li {
   transition: all .5s;
   min-height: 288px;
   overflow: hidden;
-  box-shadow: none;
-  border-radius: none;
+  /* box-shadow: none; */
+  /* border-radius: none; */
   /* box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12); */
   /* border-radius: 4px; */
 

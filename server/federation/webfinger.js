@@ -48,7 +48,7 @@ router.get('/webfinger', allowFederation, (req, res) => {
       }
     ]
   }
-  res.set('Content-Type', 'application/jrd+json; charset=utf-8')
+  res.set('Content-Type', 'application/json; charset=utf-8')
   res.json(ret)
 })
 
@@ -120,11 +120,14 @@ router.get('/x-nodeinfo2', async (req, res) => {
 
 router.get('/nodeinfo', (req, res) => {
   const settings = settingsController.settings
-
   const ret = {
     links: [
       { href: `${settings.baseurl}/.well-known/nodeinfo/2.0`, rel: 'http://nodeinfo.diaspora.software/ns/schema/2.0' },
-      { href: `${settings.baseurl}/.well-known/nodeinfo/2.1`, rel: 'http://nodeinfo.diaspora.software/ns/schema/2.1' }
+      { href: `${settings.baseurl}/.well-known/nodeinfo/2.1`, rel: 'http://nodeinfo.diaspora.software/ns/schema/2.1' },
+      {
+        "rel": "https://www.w3.org/ns/activitystreams#Application",
+        "href": `${settings.baseurl}/federation/u/${settings?.instance_name ?? 'relay' }`
+      }
     ]
   }
   res.json(ret)
@@ -134,7 +137,7 @@ router.use('/host-meta', (req, res) => {
   const settings = settingsController.settings
 
   log.debug('host-meta')
-  res.type('application/xml')
+  res.type('application/xrd+xml')
   res.send(`<?xml version="1.0" encoding="UTF-8"?>
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
   <Link rel="lrdd" type="application/xrd+xml" template="${settings.baseurl}/.well-known/webfinger?resource={uri}"/>

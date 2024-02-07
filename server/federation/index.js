@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const cors = require('cors')
+// const cors = require('cors')
 const Users = require('./users')
 const { Event, User, Tag, Place } = require('../api/models/models')
 
@@ -15,33 +15,50 @@ const log = require('../log')
  * ref: https://www.w3.org/TR/activitypub/#Overview
  */
 
-router.use(cors())
+// router.use(cors())
 
-// is federation enabled? middleware
+// middleware to check if federation is enabled
 router.use((_req, res, next) => {
   if (settingsController.settings.enable_federation) { return next() }
-  log.debug('Federation disabled!')
+  log.debug('[FEDI] Federation disabled!')
   return  res.status(401).send('Federation disabled')
 })
 
-router.use(express.json({ type: ['application/json', 'application/activity+json', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'] }))
+router.use(express.json({ type: ['application/json', 'application/activity+json', 'application/ld+json'] }))
 
-router.get('/m/:event_id', async (req, res) => {
+router.get('/m/:event_id:json(.json)?', async (req, res) => {
   log.debug('[AP] Get event details ')
   const event_id = req.params.event_id
-  const acceptHtml = req.accepts('html', 'application/activity+json') === 'html'
-  if (acceptHtml) { return res.redirect(301, `/event/${event_id}`) }
-
+  const json = req.params.json
+  const acceptHtml = req.accepts('html', 'application/json', 'application/activity+json', 'application/ld+json') === 'html'
+  if (acceptHtml && !json) { return res.redirect(301, `/event/${event_id}`) }
   const event = await Event.findByPk(req.params.event_id, { include: [User, Tag, Place] })
   if (!event) { return res.status(404).send('Not found') }
   const eventAp = event.toAP(settingsController.settings)
   eventAp['@context'] = [
-    "https://www.w3.org/ns/activitystreams",
+    'https://www.w3.org/ns/activitystreams',
+    'https://w3id.org/security/v1',
     {
-      "sc": "http://schema.org/",
-      "address": {
-        "@id": "sc:address",
-        "@type": "sc:Text"
+      toot: 'http://joinmastodon.org/ns#',
+
+      // A property-value pair, e.g. representing a feature of a product or place. We use this to publish this very same instance
+      // https://docs.joinmastodon.org/spec/activitypub/#PropertyValue
+      schema: 'http://schema.org#',
+      ProperyValue: 'schema:PropertyValue',
+      value: 'schema:value',
+
+      // https://docs.joinmastodon.org/spec/activitypub/#discoverable
+      "discoverable": "toot:discoverable",
+
+      // https://docs.joinmastodon.org/spec/activitypub/#Hashtag
+      "Hashtag": "https://www.w3.org/ns/activitystreams#Hashtag",
+
+      manuallyApprovesFollowers: 'as:manuallyApprovesFollowers',
+
+      // focal point - https://docs.joinmastodon.org/spec/activitypub/#focalPoint
+      "focalPoint": {
+        "@container": "@list",
+        "@id": "toot:focalPoint"
       }
     }
   ]
@@ -55,11 +72,12 @@ router.post('/u/:name/inbox', Helpers.verifySignature, Inbox)
 
 router.get('/u/:name/outbox', Users.outbox)
 router.get('/u/:name/followers', Users.followers)
+
 router.get('/u/:name', Users.get)
 
 // Handle 404
 router.use((req, res) => {
-  log.warn(`404 Page not found: ${req.path}`)
+  log.warn(`[FEDI] 404 Page not found: ${req.path}`)
   res.status(404).send('404: Page not Found')
 })
 

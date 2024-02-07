@@ -7,6 +7,7 @@ const admin = { username: 'admin', password: 'test', grant_type: 'password', cli
 let token
 let app
 let places = []
+let event_id
 
 beforeAll(async () => {
 
@@ -24,15 +25,27 @@ beforeAll(async () => {
   try {
     app = await require('../server/routes.js').main()
     const { sequelize } = require('../server/api/models/index')
-    await sequelize.query('DELETE FROM settings')
-    await sequelize.query('DELETE FROM events')
-    await sequelize.query('DELETE FROM user_followers')
-    await sequelize.query('DELETE FROM users')
+    const { col } = require('../server/helpers')
+    // sequelize.sync({ force: true })
+    // await sequelize.query('PRAGMA foreign_keys = OFF')
+    await sequelize.query(`DELETE FROM ${col('user_followers')}`)
+    await sequelize.query(`DELETE FROM ${col('events')} where ${col('parentId')} IS NOT NULL`)
     await sequelize.query('DELETE FROM ap_users')
+    await sequelize.query('DELETE FROM events')
+    await sequelize.query('DELETE FROM event_tags')
+    await sequelize.query('DELETE FROM resources')
+    await sequelize.query('DELETE FROM instances')
+    await sequelize.query('DELETE FROM settings')
+    await sequelize.query('DELETE FROM announcements')
+    await sequelize.query('DELETE FROM oauth_tokens')
+    await sequelize.query('DELETE FROM users')
     await sequelize.query('DELETE FROM tags')
     await sequelize.query('DELETE FROM places')
     await sequelize.query('DELETE FROM filters')
     await sequelize.query('DELETE FROM collections')
+    await sequelize.query('DELETE FROM notifications')
+    await sequelize.query('DELETE FROM event_notifications')
+    // await sequelize.query('PRAGMA foreign_keys = ON')
   } catch (e) {
     console.error(e)
   }
@@ -70,7 +83,6 @@ describe('Authentication / Authorization', () => {
       .send({ email: 'admin', password: 'test' })
       .expect(200)
     expect(response.body.id).toBeDefined()
-    return response
   })
 
   test('should authenticate with correct user/password', async () => {
@@ -96,7 +108,7 @@ describe('Authentication / Authorization', () => {
 
 describe('Settings', () => {
 
-  test('should not change settings when not allowed', async () => {
+  test('should not change settings when not allowed', () => {
     return request(app).post('/api/settings')
       .send({ key: 'allow_anon_event', value: false })
       .expect(403)
@@ -171,12 +183,11 @@ describe('Events', () => {
       expect(response.text).toBe(`${field} required`)
     })
 
-    return Promise.all(promises)
+    await Promise.all(promises)
   })
 
 
   test('should create anon event only when allowed', async () => {
-
     await request(app).post('/api/settings')
       .send({ key: 'allow_anon_event', value: false })
       .auth(token.access_token, { type: 'bearer' })
@@ -207,9 +218,37 @@ describe('Events', () => {
 
   })
 
+  test('should not confirm anon events', async () => {
+    const response = await request(app).post('/api/event')
+      .send({ title: 'test title 6', place_id: places[0], start_datetime: dayjs().unix() + 1000 })
+      .expect(200)
+    
+    expect(response.body.is_visible).toBe(false)
+    event_id = response.body.id
+  })
 
+  test('should not get unconfirmed events', async () => {
+    let response = await request(app).get(`/api/event/detail/${event_id}`)
+      .expect(404)
+
+      response = await request(app).get(`/api/event/detail/${event_id}`)
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)      
+  })
+
+  test('should confirm event if allowed', async () => {
+    let response = await request(app).put(`/api/event/confirm/${event_id}`)
+      .send()
+      .expect(403)
+
+    response = await request(app).put(`/api/event/confirm/${event_id}`)
+      .auth(token.access_token, { type: 'bearer' })
+      .send()
+      .expect(200)      
+  })
 
   test('should not allow start_datetime greater than end_datetime', async () => {
+
     const event = {
       title: ' test title 5',
       place_id: places[0],
@@ -225,6 +264,7 @@ describe('Events', () => {
   })
 
   test('should not allow start_datetime greater than 3000', async () => {
+
     const event = {
       title: ' test title 5',
       start_datetime: dayjs().set('year', 4000).unix(),
@@ -269,6 +309,7 @@ describe('Events', () => {
 
 
   test('should sanitize htlm in description', async () => {
+
     const event = {
       title: 'test title',
       place_id: places[0],
@@ -283,15 +324,49 @@ describe('Events', () => {
       .expect(200)
       .expect('Content-Type', /json/)
 
+    event_id = response.body.id
     expect(response.body.description).toBe(`<p>inside paragraph</p><a href="https://test.com/?query=true">link with fb reference</a>`)
 
   })
+
+  test('should not update event with invalid start_datetime', async () => {
+    const event = {
+      id: event_id,
+      place_id: places[0],
+      start_datetime: "antani"
+    }
+
+    const response = await request(app).put('/api/event')
+      .auth(token.access_token, { type: 'bearer' })
+      .send(event)
+      .expect(400)
+      
+    expect(response.text).toBe('Wrong format for start datetime')
+  })
+
+
+  test('should not update event with invalid end_datetime', async () => {
+    const event = {
+      id: event_id,
+      place_id: places[0],
+      end_datetime: 2
+    }
+
+    const response = await request(app).put('/api/event')
+      .auth(token.access_token, { type: 'bearer' })
+      .send(event)
+      .expect(400)
+      
+    expect(response.text).toBe('start datetime is greater than end datetime')
+  })
+
 
 })
 
 let event = {}
 describe('Tags', () => {
   test('should create event with tags', async () => {
+
     event = await request(app).post('/api/event')
       .send({ title: 'test tags', place_id: places[1], start_datetime: dayjs().unix() + 1000, tags: ['tag1', 'Tag2', 'tAg3'] })
       .auth(token.access_token, { type: 'bearer' })
@@ -299,6 +374,17 @@ describe('Tags', () => {
 
     expect(event.body.tags.length).toBe(3)
     expect(event.body.tags).toStrictEqual(['tag1', 'Tag2', 'tAg3'])
+  })
+
+  test('should dedup tags', async () => {
+
+    event = await request(app).post('/api/event')
+      .send({ title: 'test tags', place_id: places[0], start_datetime: dayjs().unix() + 1000, tags: ['ciao', ' Ciao '] })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
+    expect(event.body.tags.length).toBe(1)
+    expect(event.body.tags).toStrictEqual(['ciao'])
   })
 
   test('should create event trimming tags / ignore sensitiviness', async () => {
@@ -315,41 +401,69 @@ describe('Tags', () => {
 
   test('should modify event tags', async () => {
     const ret = await request(app).put('/api/event')
-      .send({ id: event.body.id, tags: ['tag1', 'tag3', 'tag4'], place_id: places[1] })
+      .send({ id: event.body.id, tags: ['tag1', 'tag3', 'tag4'], place_id: places[0] })
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
     expect(ret.body.tags).toStrictEqual(['tag1', 'tAg3', 'tag4'])
   })
 
+  test('shoud support utf-8 chars in tag', async () => {
+    let ret = await request(app).post('/api/event')
+      .send({ title: 'test trimming tags',
+        place_id: places[1],
+        start_datetime: dayjs().unix() + 1000,
+        tags: ['/\'"%^&*~`!@#$*()_+=-\\}{', 'üniversite etkinliği', 'ÜNIVERSITE ETKINLIĞI', 'antani', '$$antan$i'] })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
+    expect(ret.body.tags).toEqual(expect.arrayContaining(['/\'"%^&*~`!@#$*()_+=-\\}{', 'üniversite etkinliği', 'antani', '$$antan$i']))
+
+    ret = await request(app).post('/api/event')
+    .send({ title: 'test trimming tags',
+      place_id: places[0],
+      start_datetime: dayjs().unix() + 1000,
+      tags: ['/\'"%^&*~`!@#$*()_+=-\\}{', 'üniversite etkinliği', 'ÜNIVERSITE ETKINLIĞI', 'antani', '$$antan$i'] })
+    .auth(token.access_token, { type: 'bearer' })
+    .expect(200)
+
+    expect(ret.body.tags).toStrictEqual(expect.arrayContaining(['/\'"%^&*~`!@#$*()_+=-\\}{', 'üniversite etkinliği', 'antani', '$$antan$i']))
+
+  })
+
   test('should return events searching for tags', async () => {
+
     const response = await request(app).get('/api/events?tags=tAg3')
       .expect(200)
 
-    expect(response.body.length).toBe(1)
+    expect(response.body.length).toBe(2)
     // expect(response.body[0].title).toBe('test tags')
     expect(response.body[0].tags.length).toBe(3)
   })
 
   test('should return limited events', async () => {
-    let response = await request(app).get('/api/events?max=1')
-      .expect(200)
 
+    let response = await request(app).get('/api/events?max=1')
+    .expect(200)
     expect(response.body.length).toBe(1)
+
     response = await request(app).get('/api/events?max=2')
       .expect(200)
 
-    expect(response.body.length).toBe(2)
+    expect(response.body.length).toBe(2) 
+
+
   })
 })
 
 describe('Place', () => {
   test('should get events by place', async () => {
+
     const response = await request(app).get('/api/place/place name 2')
       .expect(200)
 
     expect(response.body.place.name).toBe('place name 2')
-    expect(response.body.events.length).toBe(2)
+    expect(response.body.events.length).toBe(3)
     expect(response.body.events[0].place.name).toBe('place name 2')
   })
 
@@ -527,6 +641,13 @@ describe('Export', () => {
 
 describe('Geocoding', () => {
   test('should not be enabled by default', async () => {
+
+    await request(app)
+      .post('/api/settings')
+      .send({ key: 'allow_geolocation', value: false })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+    
 
     const response = await request(app).get('/api/placeOSM/Nominatim/test')
       .expect(403)

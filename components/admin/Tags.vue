@@ -7,22 +7,24 @@ v-container
       :label="$t('common.search')"
       single-line hide-details)
 
-  v-dialog(v-model='dialog' width='600' :fullscreen='$vuetify.breakpoint.xsOnly')
+  v-dialog(v-model='dialog' width='600' :fullscreen='$vuetify.breakpoint.xsOnly' v-if='dialog')
     v-card
       v-card-title {{$t('admin.edit_tag')}} -
         strong.ml-2 {{tag.tag}}
       v-card-subtitle {{$tc('admin.edit_tag_help', tag.count)}}
       v-card-text
-        v-form(v-model='valid' ref='form' lazy-validation)
+        v-form(v-model='valid' ref='form')
           v-combobox(v-model='newTag'
+            :search-input.sync="newTag"
             :prepend-icon="mdiTag"
             hide-no-data
             persistent-hint
-            :items="tags"
+            :items="newTag ? tags.filter(t => t.tag.includes(newTag)) : tags"
             :return-object='false'
             item-value='tag'
             item-text='tag'
-            :label="$t('common.tags')")
+            @keyup.enter='saveTag'
+            :label="$t('common.tag')")
               template(v-slot:item="{ item, on, attrs }")
                 span "{{item.tag}}" <small>({{item.count}})</small>
 
@@ -30,7 +32,7 @@ v-container
         v-spacer
         v-btn(@click='dialog = false' outlined color='warning') {{ $t('common.cancel') }}
         v-btn(@click='saveTag' color='primary' outlined :loading='loading'
-          :disable='!valid || loading') {{ $t('common.save') }}
+          :disabled='!newTag || loading') {{ $t('common.save') }}
 
   v-card-text
     v-data-table(
@@ -87,15 +89,16 @@ export default {
       this.dialog = true
     },
     async saveTag() {
-      if (!this.$refs.form.validate()) return
       this.loading = true
-      this.$nextTick( async () => {
-        await this.$axios.$put('/tag', { tag: this.tag.tag, newTag: this.newTag })
-        await this.$fetch()
-        this.newTag = ''
-        this.loading = false
-        this.dialog = false
-      })
+      if (!this.$refs.form.validate()) {
+        return
+      }
+      await this.$axios.$put('/tag', { tag: this.tag.tag, newTag: this.newTag })
+      this.dialog = false
+      await this.$fetch()
+      this.loading = false
+      this.$root.$message(this.$t('admin.tag_renamed', { oldTag: this.tag.tag, newTag: this.newTag }), { color: 'success' })
+      this.newTag = ''
     },
     async removeTag(tag) {
       const ret = await this.$root.$confirm('admin.delete_tag_confirm', { tag: tag.tag, n: tag.count })

@@ -15,9 +15,12 @@ rss(version='2.0' xmlns:atom="http://www.w3.org/2005/Atom")
                   category #{tag.tag || tag}
                 description
                     | <![CDATA[
-                    | <h4>#{event.title}</h4>
-                    | <strong>#{event.place.name} - #{event.place.address}</strong>
-                    | <small>(#{unixFormat(event.start_datetime,"EEEE, d MMMM HH:mm")})</small><br/>
+                    | <h3>#{event.title}</h3>
+                    if (event.place.name === 'online')
+                      | <strong>online - <a href="#{event.online_locations[0]}">#{event.online_locations[0]}</a></strong>
+                    else
+                      | <strong>#{event.place.name} - #{event.place.address}</strong>
+                    | <br/><small>(#{unixFormat(event.start_datetime,"EEEE, d MMMM HH:mm")})</small><br/>
                     if (event.media && event.media.length)
                         | <img alt="#{event.media[0].name || ''}" src="#{settings.baseurl}/media/#{event.media[0].url}"/>
                     | !{event.description}

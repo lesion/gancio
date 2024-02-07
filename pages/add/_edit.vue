@@ -114,7 +114,7 @@ export default {
       let event
       try {
         event = await $axios.$get('/event/detail/' + data.id)
-        if (!$auth.user.is_admin && $auth.user.id !== event.userId) {
+        if (!$auth.user.is_admin && !event.isMine) {
           error({ statusCode: 401, message: 'Not allowed' })
           return {}
         }
@@ -244,8 +244,8 @@ export default {
         formData.append('place_longitude', this.event.place.longitude || '')
       }
 
-      if (this.event.online_locations) { 
-        this.event.online_locations.forEach(l => formData.append('online_locations[]', l)) 
+      if (this.event.online_locations) {
+        this.event.online_locations.forEach(l => formData.append('online_locations[]', l))
       }
 
       formData.append('description', this.event.description)

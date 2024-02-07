@@ -12,6 +12,7 @@ v-row
     v-autocomplete.p-0(
       :disabled='!!collection'
       v-model="filters"
+      no-filter
       outlined
       :label='$t("common.filter")'
       hide-details
@@ -42,7 +43,7 @@ v-row
             v-icon(v-text="item.type === 'place' ? mdiMapMarker : item.type === 'tag' ? mdiTag : mdiCollage")
           v-list-item-content
             v-list-item-title(v-text='item.label')
-            v-list-item-subtitle(v-if='item.type ==="place"' v-text='item.label !== "online" && item.address')
+            v-list-item-subtitle(v-if='item.type ==="place"' v-text='item.label !== "online" ? item.address : ""')
 
   v-col(sm=4 cols=12)
     v-autocomplete.p-0(
@@ -60,12 +61,7 @@ v-row
       clearable
       :clear-icon='mdiCloseCircle'
       item-text='name')
-      template(v-slot:itsdfems='{ item }')
-          v-list-item-avatar
-            v-icon(v-text="item.type === 'place' ? mdiMapMarker : item.type === 'tag' ? mdiTag : mdiCollage")
-          v-list-item-content
-            v-list-item-title(v-text='item.label')
-            v-list-item-subtitle(v-if='item.type ==="place"' v-text='item.label !== "online" && item.address')            
+
 </template>
 
 <script>
@@ -95,22 +91,11 @@ export default {
     ...mapState(['settings']),
   },
   methods: {
-    filter (item, queryText, itemText) {
-      return itemText.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1 || 
-              item.address && item.address.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
-    },
     search: debounce(async function(search) {
       this.items = await this.$axios.$get(`/event/meta?search=${search.target.value}`)
-      console.error('items ', this.items.length)
     }, 100),
     remove (item) {
-      // const filters = {
-      //     tags: this.filters.filter(t => t.type === 'tag' && t.label !== item.label).map(t => t.label),
-      //     places: this.filters.filter(p => p.type === 'place' && p.id !== item.id).map(p => p.id),
-      //     show_recurrent: this.show_recurrent
-      //   }      
       this.filters = this.filters.filter(m => m.type !== item.type || m.type === 'place' ? m.id !== item.id : m.label !== item.label)
-      // this.$emit('input', filters)
       this.change()
     },
     change () {

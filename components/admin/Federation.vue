@@ -21,71 +21,86 @@ v-container
         persistent-hint inset)
 
       //- div.mt-4 {{$t('admin.instance_name')}}
-      v-text-field.mt-5(v-model='instance_name'
-        :label="$t('admin.instance_name')"
-        :hint="`${$t('admin.instance_name_help')} ${instance_ap_url}`"
-        placeholder='Instance name' persistent-hint
-        @blur='save("instance_name", instance_name)')
+      //- v-text-field.mt-5(v-model='instance_name'
+      //-   :label="$t('admin.instance_name')"
+      //-   :hint="`${$t('admin.instance_name_help')} ${instance_ap_url}`"
+      //-   placeholder='Instance name' persistent-hint
+      //-   @blur='save("instance_name", instance_name)')
 
-    v-switch.mt-4(v-model='enable_trusted_instances'
-      :label="$t('admin.enable_trusted_instances')"
+    //- v-switch.mt-4(v-model='enable_trusted_instances'
+    //-   :label="$t('admin.enable_trusted_instances')"
+    //-   persistent-hint inset
+    //-   :hint="$t('admin.trusted_instances_help')")
+
+    //- template(v-if='enable_trusted_instances')
+    v-text-field.mt-4(v-model='instance_place'
+      :label="$t('admin.instance_place')"
+      persistent-hint
+      :hint="$t('admin.instance_place_help')"
+      @blur='save("instance_place", instance_place)'
+    )
+
+    v-text-field.mt-4(v-model='trusted_instances_label'
+      :label="$t('admin.trusted_instances_label')"
       persistent-hint inset
-      :hint="$t('admin.trusted_instances_help')")
+      :hint="$t('admin.trusted_instances_label_help')"
+      @blur='save("trusted_instances_label", trusted_instances_label)'
+    )
 
-    template(v-if='enable_trusted_instances')
-      v-text-field.mt-4(v-model='instance_place'
-        :label="$t('admin.instance_place')"
-        persistent-hint
-        :hint="$t('admin.instance_place_help')"
-        @blur='save("instance_place", instance_place)'
-      )
+    v-dialog(v-model='dialogAddInstance' width='500px' :fullscreen='$vuetify.breakpoint.xsOnly')
+      v-card
+        v-card-title {{$t('admin.add_trusted_instance')}}
+        v-card-text
+          v-form(v-model='valid' @submit.prevent='createTrustedInstance' ref='form' lazy-validation)
+            v-text-field.mt-4(v-model='instance_url'
+              persistent-hint
+              :rules="[$validators.required('common.url')]"
+              :loading='loading'
+              :hint="$t('admin.add_trusted_instance')"
+              :label="$t('common.url')")
+        v-card-actions
+          v-spacer
+          v-btn(outlined color='error' @click='dialogAddInstance=false') {{$t('common.cancel')}}
+          v-btn(outlined color='primary' :disabled='!valid || loading' :loading='loading' @click='createTrustedInstance') {{$t('common.ok')}}
 
-      v-text-field.mt-4(v-model='trusted_instances_label'
-        :label="$t('admin.trusted_instances_label')"
-        persistent-hint inset
-        :hint="$t('admin.trusted_instances_label_help')"
-        @blur='save("trusted_instances_label", trusted_instances_label)'
-      )
+    v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.add_instance')}}
+    v-data-table(
+      dense
+      v-if='trusted_instances.length'
+      :hide-default-footer='trusted_instances.length<10'
+      :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
+      :header-props='{ sortIcon: mdiChevronDown }'
+      :headers='headers'
+      :items='trusted_instances')
+      template(v-slot:item.logo="{item}")
+        v-img(height=20 width=20 :src="item?.object?.icon?.url") 
+      template(v-slot:item.name="{item}")
+        span @{{ item?.object?.name ?? item?.instance?.data?.metadata?.nodeName}}@{{ item.instance.domain }}
+      template(v-slot:item.info="{item}")
+        span {{ item?.object?.summary ?? item?.instance?.data?.metadata?.nodeDescription}} / {{ item.instance.name }}
+      template(v-slot:item.url="{item}")
+        a(:href='item.ap_id') {{ item.ap_id }}
+      template(v-slot:item.status="{item}")
+        v-icon(v-if='item.following' v-text='mdiDownload')
+        v-icon(v-if='item.follower' v-text='mdiUpload')
+      template(v-slot:item.actions="{item}")
 
-      v-dialog(v-model='dialogAddInstance' width='500px' :fullscreen='$vuetify.breakpoint.xsOnly')
-        v-card
-          v-card-title {{$t('admin.add_trusted_instance')}}
-          v-card-text
-            v-form(v-model='valid' @submit.prevent='createTrustedInstance' ref='form' lazy-validation)
-              v-text-field.mt-4(v-model='instance_url'
-                persistent-hint
-                :rules="[$validators.required('common.url')]"
-                :loading='loading'
-                :hint="$t('admin.add_trusted_instance')"
-                :label="$t('common.url')")
-          v-card-actions
-            v-spacer
-            v-btn(outlined color='error' @click='dialogAddInstance=false') {{$t('common.cancel')}}
-            v-btn(outlined color='primary' :disabled='!valid || loading' :loading='loading' @click='createTrustedInstance') {{$t('common.ok')}}
+        //- v-btn(icon @click='deleteInstance(item)' color='error')
+        //-   v-icon(v-text='mdiDeleteForever')
 
-      v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.add_instance')}}
-      v-data-table(
-        v-if='settings.trusted_instances.length'
-        :hide-default-footer='settings.trusted_instances.length<10'
-        :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
-        :header-props='{ sortIcon: mdiChevronDown }'
-        :headers='headers'
-        :items='settings.trusted_instances')
-        template(v-slot:item.actions="{item}")
-          v-btn(icon @click='deleteInstance(item)' color='error')
-            v-icon(v-text='mdiDeleteForever')
+        v-btn(icon @click='deleteInstance(item)' color='error')
+          v-icon(v-text='mdiDeleteForever')
 
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import get from 'lodash/get'
-import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown } from '@mdi/js'
+import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown, mdiDownload, mdiUpload } from '@mdi/js'
 
 export default {
   name: 'Federation',
   data ({ $store, $options }) {
     return {
-      mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown,
+      mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown, mdiDownload, mdiUpload,
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
       instance_place: $store.state.settings.instance_place,
@@ -93,14 +108,20 @@ export default {
       url2host: $options.filters.url2host,
       dialogAddInstance: false,
       loading: false,
+      trusted_instances: [],
       valid: false,
       headers: [
+        { value: 'logo', text: 'Logo', width: 60, sortable: false },
         { value: 'name', text: 'Name' },
+        { value: 'info', text: 'Info' },
         { value: 'url', text: 'URL' },
-        { value: 'label', text: 'Place' },
+        { value: 'status', text: 'Status' },
         { value: 'actions', text: 'Actions', align: 'right' }
       ]
     }
+  },
+  async fetch() {
+    this.trusted_instances = await this.$axios.$get('/instances/trusted')
   },
   computed: {
     ...mapState(['settings']),
@@ -131,21 +152,15 @@ export default {
       if (!this.$refs.form.validate()) { return }
       this.loading = true
       try {
-        if (!this.instance_url.startsWith('http')) {
-          this.instance_url = `https://${this.instance_url}`
-        }
+        // if (!this.instance_url.startsWith('http')) {
+        //   this.instance_url = `https://${this.instance_url}`
+        // }
         this.instance_url = this.instance_url.replace(/\/$/, '')
-        const instance = await this.$axios.$get(`${this.instance_url}/.well-known/nodeinfo/2.1`)
-        this.setSetting({
-          key: 'trusted_instances',
-          value: this.settings.trusted_instances.concat({
-            url: this.instance_url,
-            name: get(instance, 'metadata.nodeName', ''),
-            label: get(instance, 'metadata.nodeLabel', '')
-          })
-        })
+        await this.$axios.$post('/instances/add_trust', { url: this.instance_url })
         this.$refs.form.reset()
+        this.$fetch()
         this.dialogAddInstance = false
+        this.$root.$emit('update_friendly_instances')
       } catch (e) {
         this.$root.$message(e, { color: 'error' })
       }
@@ -154,10 +169,14 @@ export default {
     async deleteInstance (instance) {
       const ret = await this.$root.$confirm('admin.delete_trusted_instance_confirm')
       if (!ret) { return }
-      this.setSetting({
-        key: 'trusted_instances',
-        value: this.settings.trusted_instances.filter(i => i.url !== instance.url)
-      })
+      try {
+        await this.$axios.$delete('/instances/trust', { params: { ap_id: instance.ap_id }})
+        this.$fetch()
+        this.$root.$emit('update_friendly_instances')
+        this.$root.$message('admin.instance_removed', { color: 'success' })
+      } catch (e) {
+        this.$root.$message(e, { color: 'error' })
+      }
     },
     save (key, value) {
       if (this.settings[key] !== value) {

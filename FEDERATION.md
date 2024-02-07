@@ -1,9 +1,3 @@
----
-layout: default
-title: Federation
-permalink: /federation
-nav_order: 9
----
 
 ## Federation / ActivityPub
 
@@ -32,7 +26,7 @@ Each AP enabled software could decide how to interact with coming events, e.g. o
 We are considering the introduction of other `Actor` but they will not be linked to users, rather to places, tags or collections.
 There are no personal timeline of people you follow, everyone has a sort of local timeline of the instance, it’s an anti filter-bubble feature.
 
-Since v1.10.0 each instance could follow other instances or actors (`Admin > Federation > Add trusted node`) and use the events coming from the federation to fill choosen collections (`Admin > Collections`).
+Since v1.9.0 each instance could follow other instances or actors (`Admin > Federation > Add trusted node`) and use the events coming from the federation to fill choosen collections (`Admin > Collections`).
 
 Note that events coming from the federation will be removed after the end.
 
@@ -47,10 +41,10 @@ All federation's related operations uses `/federation` as endpoint. You can disa
 | Receive a Note | <span class='label label-yellow'>0.21.0</span> | Adds images, audio and notes to an event with a simple reply |
 | Delete a Note | <span class='label label-yellow'>0.21.0</span> |
 | Update a Note | <span class='label label-yellow'>0.21.0</span> |
-| Follow an Actor | <span class='label label-yellow'>1.10.0</span> | |
-| Receive an Event | <span class='label label-yellow'>1.10.0</span> | 
-| Update an Event | <span class='label label-yellow'>1.10.0</span> |
-| Delete an Event | <span class='label label-yellow'>1.10.0</span> |
+| Follow an Actor | <span class='label label-yellow'>1.9.0</span> | |
+| Receive an Event | <span class='label label-yellow'>1.9.0</span> | 
+| Update an Event | <span class='label label-yellow'>1.9.0</span> |
+| Delete an Event | <span class='label label-yellow'>1.9.0</span> |
 
 
 ### Moderation

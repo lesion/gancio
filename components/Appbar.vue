@@ -6,14 +6,13 @@
     <div class="text-center">
       <nuxt-link id="title" v-text="settings.title" to="/" />
       <div
-        class="text-body-1 font-weight-light"
-        v-text="settings.description"
+        class="text-body-1 font-weight-light pb-3"
+        v-text="settings?.description"
       />
     </div>
 
     <NavSearch />
-
-    <NavBar />
+    <NavBar v-if="!['event-slug','e-slug'].includes($route.name)"/>
   </nav>
 </template>
 <script>

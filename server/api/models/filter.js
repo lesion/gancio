@@ -11,10 +11,13 @@ module.exports = (sequelize, DataTypes) =>
     },
     places: {
       type: DataTypes.JSON,
+    },
+    actors: {
+      type: DataTypes.JSON
     }
   }, {
     indexes: [
-      { fields: ['collectionId', 'tags', 'places'], unique: true }
+      { fields: ['collectionId', 'tags', 'places', 'actors'], unique: true }
     ],
     timestamps: false
   })

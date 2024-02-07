@@ -1,9 +1,10 @@
 const { Tag, Event } = require('../models/models')
-const uniq = require('lodash/uniq')
+const { sequelize } = require('../models/index')
+const { uniqBy, toLower } = require('lodash')
 const log = require('../../log')
 const Sequelize = require('sequelize')
-
-const { where, fn, col, Op } = require('sequelize')
+const { col: escapeCol } = require('../../helpers')
+const { fn, col, Op } = require('sequelize')
 const exportController = require('./export')
 
 module.exports = {
@@ -11,14 +12,15 @@ module.exports = {
   async _findOrCreate (tags) {
     // trim tags
     const trimmedTags = tags.map(t => t.trim())
-    const lowercaseTags = trimmedTags.map(t => t.toLocaleLowerCase())
 
-    // search for already existing tags (tag is the same as TaG)
-    const existingTags = await Tag.findAll({ where: { [Op.and]: where(fn('LOWER', col('tag')), { [Op.in]: lowercaseTags }) } })
+    // search for already existing tags (case insensitive, note that LOWER sql function is not the same as toLocaleLowerCase due to #329)
+    const existingTags = await sequelize.query(`SELECT * FROM ${escapeCol('tags')} where LOWER(${escapeCol('tag')}) in (${tags.map(t => 'LOWER(?)').join(',')})`,
+      { model: Tag, mapToModel: true, replacements: trimmedTags, type: Sequelize.QueryTypes.SELECT })
     const lowercaseExistingTags = existingTags.map(t => t.tag.toLocaleLowerCase())
-    const remainingTags = uniq(trimmedTags.filter(t => ! lowercaseExistingTags.includes(t.toLocaleLowerCase())))
 
-    // create remaining tags (cannot use updateOnDuplicate or manage conflicts)
+    const remainingTags = uniqBy(trimmedTags.filter(t => ! lowercaseExistingTags.includes(t.toLocaleLowerCase())), toLower)
+
+    // create remaining tags and return all
     return [].concat(
       existingTags,
       await Tag.bulkCreate(remainingTags.map(t => ({ tag: t })))
@@ -32,20 +34,18 @@ module.exports = {
   async getEvents (req, res) {
     const eventController = require('./event')
     const format = req.params.format || 'json'
-    const tags = req.params.tag
+    const tag = req.params.tag
 
     // check if this tag exists
-    if(!await Tag.findOne({ where:
-      Sequelize.where( Sequelize.fn( 'LOWER', Sequelize.col('tag')),
-        Sequelize.Op.eq, tags.toLocaleLowerCase())})) {
+    if(!await Tag.findOne({ where: { tag } })) {
       return res.sendStatus(404)
     }
-    const events = await eventController._select({ tags: tags.toLocaleLowerCase(), show_recurrent: true, show_multidate: true, start: 0, reverse: true })
+    const events = await eventController._select({ tags: tag, show_recurrent: true, show_multidate: true, start: 0, reverse: true, include_description: true })
     switch (format) {
       case 'rss':
         return exportController.feed(req, res, events,
-            `${res.locals.settings.title} - Tag #${tags}`,
-            `${res.locals.settings.baseurl}/feed/rss/tag/${tags}`)
+            `${res.locals.settings.title} - Tag #${tag}`,
+            `${res.locals.settings.baseurl}/feed/rss/tag/${tag}`)
       case 'ics':
         return exportController.ics(req, res, events)
       default:
@@ -67,7 +67,7 @@ module.exports = {
   },
 
 
-  /** 
+  /**
    * search for tags by query string
    * sorted by usage
   */
@@ -77,11 +77,12 @@ module.exports = {
       order: [[fn('COUNT', col('tag.tag')), 'DESC']],
       attributes: ['tag'],
       where: {
-        tag: where(fn('LOWER', col('tag')), 'LIKE', '%' + search + '%'),
+        tag: { [Op.like]: `%${search}%` }
       },
       include: [{ model: Event, where: { is_visible: true }, attributes: [], through: { attributes: [] }, required: true }],
       group: ['tag.tag'],
       limit: 10,
+      raw: true,
       subQuery: false
     })
 
@@ -101,7 +102,7 @@ module.exports = {
 
       // if the new tag does not exists, just rename the old one
       if (!newtag) {
-        log.info(`Rename tag ${oldtag.tag} to ${req.body.newTag}`)
+        log.info(`Rename tag "${oldtag.tag}" to "${req.body.newTag}"`)
         await Tag.update({ tag: req.body.newTag }, { where: { tag: req.body.tag }, raw: true })
 
       } else {

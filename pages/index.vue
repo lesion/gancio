@@ -1,10 +1,6 @@
 <template lang="pug">
 v-container.px-2.px-sm-6.pt-0#home
 
-  //- View
-  #themeview.mt-sm-4.mt-2
-    ThemeView
-
   //- Announcements
   #announcements.mt-2.mt-sm-4(v-if='announcements.length')
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
@@ -60,8 +56,8 @@ export default {
       title: this.settings.title,
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description', name: 'description', content: this.settings.description },
-        { hid: 'og-description', name: 'og:description', content: this.settings.description },
+        { hid: 'description', name: 'description', content: this.settings?.description },
+        { hid: 'og-description', name: 'og:description', content: this.settings?.description },
         { hid: 'og-title', property: 'og:title', content: this.settings.title },
         { hid: 'og-url', property: 'og:url', content: this.settings.baseurl },
         { property: 'og:image', content: this.settings.baseurl + '/logo.png' }

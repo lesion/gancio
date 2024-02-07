@@ -1,5 +1,4 @@
 const config = require('../../config')
-const { htmlToText } = require('html-to-text')
 const { DateTime } = require('luxon')
 
 module.exports = (sequelize, DataTypes) => {
@@ -32,38 +31,45 @@ module.exports = (sequelize, DataTypes) => {
     recurrent: DataTypes.JSON,
     likes: { type: DataTypes.JSON, defaultValue: [] },
     boost: { type: DataTypes.JSON, defaultValue: [] },
-    online_locations: { type: DataTypes.JSON, defaultValue: [] }
+    online_locations: { type: DataTypes.JSON, defaultValue: [] },
+    ap_object: DataTypes.JSON,
+    ap_id: {
+      type: DataTypes.STRING,
+      index: true
+    }
   })
   
-  Event.prototype.toAP = function (settings, to = []) {
+  Event.prototype.toAP = function (settings, to = ['https://www.w3.org/ns/activitystreams#Public']) {
 
     const username = settings.instance_name
     const opt = {
       zone: settings.instance_timezone,
       locale: settings.instance_locale
     }
-    const tags = this.tags && this.tags.map(t => t.tag.replace(/[ #]/g, '_'))
-    const plainDescription = htmlToText(this.description && this.description.replace('\n', '').slice(0, 1000))
-    const content = `
-    📍 ${this.place && this.place.name}
-    📅 ${DateTime.fromSeconds(this.start_datetime, opt).toFormat('EEEE, d MMMM (HH:mm)')}
+    // const tags = this.tags && this.tags.map(t => t.tag.replace(/[#]/g, '_'))
+    const summary = `${this.place && this.place.name}, ${DateTime.fromSeconds(this.start_datetime, opt).toFormat('EEEE, d MMMM (HH:mm)')}`
     
-    ${plainDescription}
-    `
-    
-    const attachment = []
-    if (this.media && this.media.length) {
+    let attachment = []
+
+    if (this?.online_locations?.length) {
+      attachment = this.online_locations.map( href => ({
+        type: 'Link',
+        mediaType: 'text/html',
+        name: href,
+        href
+      }))
+    }
+        
+    if (this?.media?.length) {
       attachment.push({
         type: 'Document',
         mediaType: 'image/jpeg',
         url: `${config.baseurl}/media/${this.media[0].url}`,
         name: this.media[0].name || this.title || '',
-        blurHash: null,
         focalPoint: this.media[0].focalPoint || [0, 0]
       })
     }
-    
-    
+
     return {
       id: `${config.baseurl}/federation/m/${this.id}`,
       name: this.title,
@@ -79,17 +85,17 @@ module.exports = (sequelize, DataTypes) => {
         longitude: this.place.longitude
       },
       attachment,
-      tag: tags && tags.map(tag => ({
+      tag: this.tags && this.tags.map(tag => ({
         type: 'Hashtag',
-        name: '#' + tag,
-        href: `${config.baseurl}/tag/${tag}`
+        name: '#' + tag.tag,
+        href: `${config.baseurl}/tag/${tag.tag}`
       })),
       published: this.createdAt,
       attributedTo: `${config.baseurl}/federation/u/${username}`,
       to: ['https://www.w3.org/ns/activitystreams#Public'],
       cc: [`${config.baseurl}/federation/u/${username}/followers`],
-      content,
-      summary: content
+      content: this.description || '',
+      summary
     }
   }
   return Event

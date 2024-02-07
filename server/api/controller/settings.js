@@ -21,7 +21,7 @@ const defaultSettings = {
   hostname: defaultHostname,
   instance_timezone: 'Europe/Rome',
   instance_locale: 'en',
-  instance_name: 'gancio',
+  instance_name: 'relay',
   instance_place: '',
   allow_registration: true,
   allow_anon_event: true,
@@ -52,7 +52,8 @@ const defaultSettings = {
   ],
   plugins: [],
   admin_email: config.admin_email || '',
-  smtp: config.smtp || {}
+  smtp: config.smtp || {},
+  collection_in_home: null
 }
 
 /**
@@ -133,7 +134,10 @@ const settingsController = {
       try {
         const pluginController = require('./plugins')
         pluginController.unloadPlugin(pluginName)
-        pluginController.loadPlugin(pluginName)
+        // Do not reload the plugin if the change in its settings was to disable it
+        if (value.enable) {
+          pluginController.loadPlugin(pluginName)
+        }
       } catch (e) {
         log.error(e)
       }

@@ -29,7 +29,7 @@ v-row.mb-4
   v-col(cols=12 md=6)
     v-row.mx-0.my-0.align-center.justify-center
 
-      v-text-field.mr-4(ref='address' v-if="value.name !== 'online' || !settings.allow_online_event"
+      v-text-field.mr-4(ref='address' v-if="value.name?.toLocaleLowerCase() !== 'online' || !settings.allow_online_event"
         v-model='value.address'
         :prepend-icon='mdiMap'
         :disabled='disableAddress'
@@ -118,7 +118,7 @@ export default {
 
       // Filter out the place with name 'online' if not allowed
       if (this.places.length) {
-        this.places = this.places.filter(p => p.name !== 'online')
+        this.places = this.places.filter(p => p.name?.toLocaleLowerCase() !== 'online')
       }
       if (this.settings.allow_online_event) {
         this.places.push({ online: true, name: 'online' })

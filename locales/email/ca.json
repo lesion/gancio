@@ -17,7 +17,7 @@
     },
     "admin_register": {
         "subject": "Registre nou",
-        "content": "{{user.email}} ha soŀlicitat regsitrar-se a {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Respon a la soŀlicitud <a href='{{config.baseurl}}/admin'>aquí</a>."
+        "content": "{{user.email}} ha soŀlicitat registrar-se a {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Respon a la soŀlicitud <a href='{{config.baseurl}}/admin'>aquí</a>."
     },
     "event_confirm": {
         "content": "Pots confirmar aquesta activitat a <a href='{{url}}'>la pàgina de confirmació</a>"

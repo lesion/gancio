@@ -268,7 +268,6 @@ const oauthController = {
     },
     passport.authenticate(['bearer', 'oauth2-client-password', 'anonymous'], { session: false }),
     (req, res, next) => { // retrocompatibility
-      console.error('dentro questo middleware ', req.user.email, req.user.is_admin)
       next()
     }
   ],

@@ -1,7 +1,7 @@
 <template lang="pug">
 v-container
   v-card
-    v-card-title {{announcement.title}}
+    v-card-title.text-h4.font-weight-bold {{announcement.title}}
     v-card-text(v-html='announcement.announcement')
 </template>
 <script>

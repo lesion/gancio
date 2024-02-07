@@ -270,6 +270,14 @@ export default {
         } else {
           let from = value
           let due = this.value.due
+          // recalculated end date
+          if (this.value.from) {
+            let newDueDate = new Date(value).toDateString()
+            if (this.value.dueHour < this.value.fromHour) {
+              newDueDate = new Date(DateTime.fromJSDate(from, {zone: this.settings.instance_timezone}).plus({day: 1}).toJSDate()).toDateString()
+            }
+            due = new Date(newDueDate + " " + this.value.dueHour)
+          }
           this.$emit('input', { ...this.value, from, due })
         }
       }

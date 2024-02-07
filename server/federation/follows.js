@@ -12,16 +12,12 @@ module.exports = {
     if (typeof body.object !== 'string') { return }
     const username = body.object.replace(`${config.baseurl}/federation/u/`, '')
     if (username !== settings.instance_name) {
-      log.warn(`Following the wrong user: ${username} instead of ${settings.instance_name} (could be a wrong config.baseurl)`)
+      log.warn(`[FEDI] Following the wrong user: ${username} instead of ${settings.instance_name} (could be a wrong config.baseurl)`)
       return res.status(404).send('User not found')
     }
 
-    // check for duplicate
-    // if (!user.followers.includes(body.actor)) {
-    // await user.addFollowers([req.fedi_user.id])
-    // await user.update({ followers: [...user.followers, body.actor] })
     await res.locals.fedi_user.update({ follower: true })
-    log.info(`Followed by ${body.actor}`)
+    log.info(`[FEDI] Followed by ${body.actor}`)
     const guid = crypto.randomBytes(16).toString('hex')
     const message = {
       '@context': 'https://www.w3.org/ns/activitystreams',
@@ -30,7 +26,7 @@ module.exports = {
       actor: `${config.baseurl}/federation/u/${username}`,
       object: body
     }
-    Helpers.signAndSend(JSON.stringify(message), res.locals.fedi_user.object.inbox)
+    await Helpers.signAndSend(JSON.stringify(message), res.locals.fedi_user.object.inbox)
     res.sendStatus(200)
   },
 
@@ -40,16 +36,12 @@ module.exports = {
     const body = req.body
     const username = body.object.object.replace(`${config.baseurl}/federation/u/`, '')
     if (username !== settings.instance_name) {
-      log.warn(`Unfollowing wrong user: ${username} instead of ${settings.instance_name}`)
+      log.warn(`[FEDI] Unfollowing wrong user: ${username} instead of ${settings.instance_name}`)
       return res.status(404).send('User not found')
     }
 
-    if (body.actor !== body.object.actor || body.actor !== res.locals.fedi_user.ap_id) {
-      log.info('Unfollow an user created by a different actor !?!?')
-      return res.status(400).send('Bad things')
-    }
     await res.locals.fedi_user.update({ follower: false })
-    log.info(`Unfollowed by ${body.actor}`)
+    log.info(`[FEDI] Unfollowed by ${body.actor}`)
     res.sendStatus(200)
   }
 }

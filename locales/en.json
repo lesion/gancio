@@ -107,7 +107,11 @@
     "show_preview": "Show preview",
     "clone": "Clone",
     "pin": "Pin",
-    "editor": "Editor"
+    "editor": "Editor",
+    "trusted_instances": "Trusted instances",
+    "actors": "Node",
+    "collection_in_home": "Show a collection in home",
+    "my_events": "My Events"
   },
   "login": {
     "description": "By logging in you can publish new events.",
@@ -252,14 +256,15 @@
     "description_description": "Appears in the header next to the title",
     "instance_place": "Indicative place of this instance",
     "instance_name_help": "ActivityPub's account to follow",
-    "enable_trusted_instances": "Turn on friendly instances",
-    "trusted_instances_help": "The list of friendly instances will be shown in the header",
-    "trusted_instances_label": "Navigation label to friendly instances",
-    "trusted_instances_label_default": "Friendly instances",
-    "trusted_instances_label_help": "The default label is 'Friendly instances'",
-    "add_trusted_instance": "Add a friendly instance",
-    "instance_place_help": "The label to show in instances of others",
-    "delete_trusted_instance_confirm": "Do you really want to delete this item from the friend instance menu?",
+    "enable_trusted_instances": "Turn on trusted nodes",
+    "trusted_instances_help": "The list of trusted nodes will be shown in the header",
+    "trusted_instances_label": "Navigation label for trusted nodes",
+    "trusted_instances_label_default": "Trusted nodes",
+    "trusted_instances_label_help": "The default label is 'Trusted nodes'",
+    "add_trusted_instance": "Add a trusted node",
+    "instance_place_help": "The label to show in nodes of others",
+    "delete_trusted_instance_confirm": "Do you really want to delete this trusted node?",
+    "instance_removed": "Instance removed",
     "is_dark": "Dark theme",
     "add_link": "Add link",
     "footer_links": "Footer links",
@@ -314,7 +319,8 @@
     "tilelayer_test_success": "The tilelayer service at {service_name} is working",
     "tilelayer_test_error": "The tilelayer service is not reachable at {service_name}",
     "geolocation": "Geolocation",
-    "colors": "Colors"
+    "colors": "Colors",
+    "tag_renamed": "Tag \"{oldTag}\" renamed to \"{newTag}\""
   },
   "auth": {
     "not_confirmed": "Not confirmed yet…",

@@ -1,0 +1,29 @@
+{
+    "register": {
+        "content": "Am primit cererea de înregistrare. Îl vom confirma cât mai curând posibil.",
+        "subject": "Solicitare de înregistrare primită"
+    },
+    "user_confirm": {
+        "content": "Bună, contul dvs. de pe <a href='{{config.baseurl}}'>{{config.title}}</a> a fost creat. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confirmați-l și alegeți o parolă.</a>.",
+        "subject": "Acum puteți începe să publicați evenimente"
+    },
+    "event_confirm": {
+        "content": "Puteți confirma acest eveniment la <a href='{{url}}'>această pagină</a>"
+    },
+    "admin_register": {
+        "subject": "Înregistrare nouă",
+        "content": "{{user.email}} a solicitat înregistrarea pe {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confirmați-o <a href='{{ config.baseurl}}/admin'>aici</a>."
+    },
+    "confirm": {
+        "subject": "Acum puteți începe să publicați evenimente",
+        "content": "Bună, contul dvs. de pe <a href='{{config.baseurl}}'>{{config.title}}</a> a fost confirmat. Scrieți-ne la {{config.admin_email}} pentru orice informații."
+    },
+    "recover": {
+        "subject": "Recuperare parolă",
+        "content": "Bună, ați solicitat o recuperare a parolei pe {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Faceți clic aici</a> pentru a confirma."
+    },
+    "test": {
+        "content": "Acesta este un e-mail de testare, dacă citiți acest lucru, configurația dvs. funcționează.",
+        "subject": "Configurația dvs. SMTP funcționează"
+    }
+}

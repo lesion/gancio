@@ -70,7 +70,6 @@ const setupController = {
 
         // calculate default settings values
         await settingsController.set('theme.is_dark', true)
-        await settingsController.set('instance_name', settingsController.settings.title.toLowerCase().replace(/ /g, ''))
         // create admin
         const password = helpers.randomString()
         const email = `admin`

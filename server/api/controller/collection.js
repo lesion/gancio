@@ -1,10 +1,10 @@
-const { Collection, Filter, Event, Tag, Place } = require('../models/models')
-const exportController = require('./export')
+const { Collection, Filter, Event, Tag, Place, APUser } = require('../models/models')
 
 const log = require('../../log')
 const { DateTime } = require('luxon')
 const { col: Col, queryParamToBool } = require('../../helpers')
 const { Op, Sequelize } = require('sequelize')
+const helpers = require('../../helpers')
 
 const collectionController = {
 
@@ -41,11 +41,18 @@ const collectionController = {
   },
 
   async getEvents (req, res) {
-    const name = req.params.name
+    const exportController = require('./export')
     const format = req.params.format || 'json'
+    const name = req.params.name
+    const limit = req.query.max || 10
+    const start = req.query.start_at || DateTime.local().toUnixInteger()
+    const reverse = helpers.queryParamToBool(req.query.reverse)
+    const older = helpers.queryParamToBool(req.query.older)
 
     try {
-      const events = await collectionController._getEvents(name)
+      const events = await collectionController._getEvents({ name, start, reverse, older, limit })
+      log.debug(`[COLLECTION] (${name}) events: ${events?.length}`)
+
       switch (format) {
         case 'rss':
           return exportController.feed(req, res, events,
@@ -54,51 +61,72 @@ const collectionController = {
         case 'ics':
           return exportController.ics(req, res, events)
         default:
-          return res.json(events )
-      }      
+          return res.json(events)
+      }
     } catch (e) {
-      log.error(e)
+      log.warn('[COLLECTION] getEvents: %s', String(e))
       return res.sendStatus(404)
     }
   },
 
   // return events from collection
-  async _getEvents (name) {
+  async _getEvents ({ name, start, end, limit, include_description=false, older, reverse }) {
 
     const collection = await Collection.findOne({ where: { name } })
     if (!collection) {
-      throw new Error(`Collection ${name} not found`)
+      log.warn(`[COLLECTION] "%s" not found`, name)
+      return []
     }
 
     const filters = await Filter.findAll({ where: { collectionId: collection.id } })
+
+    // collection is empty if there are no filters
     if (!filters.length) {
+      log.debug('[COLLECTION] This collection has no filter!')
       return []
     }
-    const start = DateTime.local().toUnixInteger()
+
+    // init stardard filter
     const where = {
       // do not include parent recurrent event
       recurrent: null,
 
       // confirmed event only
       is_visible: true,
+      [Op.or]: {
+        start_datetime: { [older ? Op.lte : Op.gte]: start },
+        end_datetime: { [older ? Op.lte : Op.gte]: start }
+      }
+    }
 
-      start_datetime: { [Op.gte]: start },
+    if (end) {
+      where.start_datetime = { [older ? Op.gte : Op.lte]: end }
     }
 
     const replacements = []
     const ors = []
+
+    // collections are a set of filters to match
     filters.forEach(f => {
+
+      let conditions = []
+
       if (f.tags && f.tags.length) {
         const tags = Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=event.id AND ${Col('tagTag')} in (?)`))
         replacements.push(f.tags)
-        if (f.places && f.places.length) {
-          ors.push({ [Op.and]: [ { placeId: f.places.map(p => p.id) },tags] })
-        } else {
-          ors.push(tags)
-        }
-      } else if (f.places && f.places.length) {
-        ors.push({ placeId: f.places.map(p => p.id) })
+        conditions.push(tags)
       }
+
+      if (f.places && f.places.length) {
+          conditions.push({ placeId: f.places.map(p => p.id) })
+      }
+      
+      if (f.actors && f.actors.length) {
+        conditions.push({ apUserApId: f.actors.map(a => a.ap_id)})
+      }
+
+      if (!conditions.length) return
+      ors.push(conditions.length === 1 ? conditions[0] : { [Op.and]: conditions })
     })
 
     where[Op.and] = { [Op.or]: ors }
@@ -106,9 +134,9 @@ const collectionController = {
     const events = await Event.findAll({
       where,
       attributes: {
-        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'description', 'resources']
+        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'resources', 'ap_id', ...(!include_description ? ['description'] : [])]
       },
-      order: ['start_datetime'],
+      order: [['start_datetime', reverse ? 'DESC' : 'ASC']],
       include: [
         {
           model: Tag,
@@ -116,9 +144,9 @@ const collectionController = {
           attributes: ['tag'],
           through: { attributes: [] }
         },
-        { model: Place, required: true, attributes: ['id', 'name', 'address'] }
+        { model: Place, required: true, attributes: ['id', 'name', 'address'] },
       ],
-      // limit: max,
+      ...( limit && { limit }),
       replacements
     }).catch(e => {
       log.error('[EVENT]', e)
@@ -171,10 +199,14 @@ const collectionController = {
   },
 
   async addFilter (req, res) {
-    const { collectionId, tags, places } = req.body
+    const { collectionId, tags, places, actors } = req.body
 
     try {
-      filter = await Filter.create({ collectionId, tags, places })
+      // if (actors?.length) {
+      //   const actors_to_follow = await APUser.findAll({ where: { ap_id: { [Op.in]: actors.map(a => a.ap_id) }} })
+      //   await Promise.all(actors_to_follow.map(followActor))
+      // }
+      const filter = await Filter.create({ collectionId, tags, places, actors })
       return res.json(filter)
     } catch (e) {
       log.error(String(e))
