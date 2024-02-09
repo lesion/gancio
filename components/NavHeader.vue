@@ -49,12 +49,12 @@
               </v-list-item-content>
             </v-list-item>
 
-            <v-list-item v-if='$auth.user.is_admin' nuxt to='/admin'>
+            <v-list-item v-if='$auth.user.is_admin || $auth.user.is_editor' nuxt to='/admin'>
               <v-list-item-icon>
                 <v-icon v-text='mdiAccount' />
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title v-text="$t('common.admin')" />
+                <v-list-item-title v-text="$t(`common.${$auth.user.role}`)" />
               </v-list-item-content>
             </v-list-item>
 

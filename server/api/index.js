@@ -169,7 +169,7 @@ module.exports = () => {
     api.get('/settings/smtp', isAdmin, settingsController.getSMTPSettings)
 
     // get unconfirmed events
-    api.get('/event/unconfirmed', isAdmin, eventController.getUnconfirmed)
+    api.get('/event/unconfirmed', isAdminOrEditor, eventController.getUnconfirmed)
 
     // [un]confirm event
     api.put('/event/confirm/:event_id', isAuth, eventController.confirm)
@@ -204,12 +204,12 @@ module.exports = () => {
     api.get('/instances', isAdminOrEditor, instanceController.getAll)
     api.get('/instances/trusted', instanceController.getTrusted)
     api.get('/instances/:instance_domain', isAdminOrEditor, instanceController.get)
-    api.post('/instances/toggle_block', isAdmin, instanceController.toggleBlock)
-    api.post('/instances/toggle_user_block', isAdmin, apUserController.toggleBlock)
+    api.post('/instances/toggle_block', isAdminOrEditor, instanceController.toggleBlock)
+    api.post('/instances/toggle_user_block', isAdminOrEditor, apUserController.toggleBlock)
     api.post('/instances/add_trust', isAdmin, instanceController.addTrust)
     api.delete('/instances/trust', isAdmin, instanceController.removeTrust)
-    api.put('/resources/:resource_id', isAdmin, resourceController.hide)
-    api.delete('/resources/:resource_id', isAdmin, resourceController.remove)
+    api.put('/resources/:resource_id', isAdminOrEditor, resourceController.hide)
+    api.delete('/resources/:resource_id', isAdminOrEditor, resourceController.remove)
     api.get('/resources', isAdminOrEditor, resourceController.getAll)
 
     // - ADMIN ANNOUNCEMENTS

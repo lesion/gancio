@@ -84,7 +84,7 @@
 
 
           //- admin actions
-          template(v-if='is_mine')
+          template(v-if='can_edit')
             v-divider
             EventAdmin(:event='event')
 
@@ -240,12 +240,12 @@ export default {
     plainDescription () {
       return this.event.plain_description || ''
     },
-    is_mine () {
+    can_edit () {
       if (!this.$auth.user) {
         return false
       }
       return (
-        this.event.isMine || this.$auth.user.is_admin
+        this.event.isMine || this.$auth.user.is_admin || this.$auth.user.is_editor
       )
     },
     showResources () {

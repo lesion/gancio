@@ -216,7 +216,7 @@ const eventController = {
       log.warn(`Trying to confirm a unknown event, id: ${id}`)
       return res.sendStatus(404)
     }
-    if (!req.user.is_admin && req.user.id !== event.userId) {
+    if (!req.user.is_editor && !req.user.is_admin && req.user.id !== event.userId) {
       log.warn(`Someone not allowed is trying to confirm -> "${event.title} `)
       return res.sendStatus(403)
     }
@@ -241,7 +241,7 @@ const eventController = {
     const id = Number(req.params.event_id)
     const event = await Event.findByPk(id)
     if (!event) { return req.sendStatus(404) }
-    if (!req.user.is_admin && req.user.id !== event.userId) {
+    if (!req.user.is_editor && !req.user.is_admin && req.user.id !== event.userId) {
       log.warn(`Someone not allowed is trying to unconfirm -> "${event.title} `)
       return res.sendStatus(403)
     }
@@ -573,7 +573,7 @@ const eventController = {
   async remove(req, res) {
     const event = await Event.findByPk(req.params.id)
     // check if event is mine (or user is admin)
-    if (event && (req.user.is_admin || req.user.id === event.userId)) {
+    if (event && (req.user.is_editor || req.user.is_admin || req.user.id === event.userId)) {
       if (event.media && event.media.length && !event.recurrent) {
         try {
           const old_path = path.join(config.upload_path, event.media[0].url)
