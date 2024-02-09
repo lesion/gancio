@@ -227,7 +227,9 @@
         "allow_online_event_hint": "Nach Internetadressen fragen ",
         "allow_online_event": "Erlaube Online-Veranstaltungen",
         "colors": "Farben",
-        "delete_tag_confirm": "Soll der Tag \"{tag}\" wirklich gelöscht werden? Der Tag wird bei {n} Events gelöscht."
+        "delete_tag_confirm": "Soll der Tag \"{tag}\" wirklich gelöscht werden? Der Tag wird bei {n} Events gelöscht.",
+        "delete_collection_confirm": "Bist du sicher, dass du die Sammlung <u>{Sammlung}</u> entfernen willst?",
+        "tag_renamed": "Markierung \"{alterTag}\" umbenannt in \"{neuerTag}\"."
     },
     "settings": {
         "update_confirm": "Willst du deine Änderung speichern?",
