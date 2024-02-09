@@ -19,6 +19,14 @@ const Auth = {
     }
   },
 
+  isAdminOrEditor (req, res, next) {
+    if (req.user && req.user.is_active && (req.user.is_admin || req.user.is_editor)) {
+      next()
+    } else {
+      res.sendStatus(403)
+    }
+  },
+
   // TODO
   hasPerm (scope) {
     return (req, res, next) => {

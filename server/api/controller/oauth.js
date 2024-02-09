@@ -28,6 +28,7 @@ passport.deserializeUser(async (id, done) => {
     email: user.email,
     role: user.role,
     is_admin: user.role === 'admin',
+    is_editor: user.role === 'editor',
     is_active: user.is_active,
   }
   done(null, userInfo)

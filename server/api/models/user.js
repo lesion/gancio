@@ -30,6 +30,12 @@ module.exports = (sequelize, DataTypes) => {
         return this.role === 'admin'
       }
     },
+    is_editor: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        return this.role === 'editor'
+      }      
+    },
     is_active: DataTypes.BOOLEAN
   }, {
     scopes: {
@@ -37,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
         attributes: { exclude: ['password', 'recover_code'] }
       },
       withRecover: {
-        attributes: { exclude: ['password'] }
+        attributes: { exclude: ['password', 'insert_at', 'created_at'] }
       }
     }
   })
