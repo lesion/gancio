@@ -31,16 +31,6 @@ v-container
           v-btn(@click='newUserDialog=false' color='error' outlined) {{$t('common.cancel')}}
           v-btn(@click='createUser' :disabled='!valid' color='primary' outlined) {{$t('common.send')}}
 
-  //- CHANGE ROLE
-  v-dialog(v-model='changeRoleDialog' width=300)
-    v-card(v-if='selected_user')
-      v-card-content
-        h2 {{$t('common.change_role')}}
-        v-list(nav dense)
-          v-list-item(v-for="role in ['admin', 'editor', 'user'].filter(r => r !== selected_user.role)" :key='role' link @click='changeRole(role)')
-            v-list-item-content
-              v-list-item-title {{ role }}
-
   v-card-text
     //- USERS LIST
     v-data-table(
@@ -57,12 +47,10 @@ v-container
           template(v-slot:activator="{ on, attrs }")
             v-btn(:color='role_colors[item.role ]' v-bind='attrs' v-on="on" small label) {{ item.role }}
           v-list(width=100 nav color='secondary')
-            v-list-item(v-for="role in ['admin', 'editor', 'user'].filter(r => r !== item.role)" :key='role' link @click='changeRole(role)')
+            v-list-item(v-for="role in ['admin', 'editor', 'user'].filter(r => r !== item.role)" :key='role' link @click='changeRole(item, role)')
               v-list-item-content
                 v-list-item-title {{ role }}
 
-        //- v-select(v-model="item.role" :items='["user", "editor", "admin"]' dense hide-details
-        //-   @change="selected => changeRole(item, selected)")
       template(v-slot:item.actions='{item}')
         v-btn(text small @click='deleteUser(item)' color='error' ) {{$t('admin.delete_user')}}
 
@@ -84,7 +72,6 @@ export default {
       changeRoleDialog: false,
       role_colors: { admin: 'error', editor: 'secondary', user: 'success' },
       valid: false,
-      selected_user: null,
       new_user: {
         email: '',
         is_admin: false
@@ -125,10 +112,6 @@ export default {
       }
       user.is_active = !user.is_active
       this.$axios.$put('/user', user)
-    },
-    chooseRole (user) {
-      this.changeRoleDialog = true
-      this.selected_user = user
     },
     async changeRole (user, role) {
       // ask confirmation?

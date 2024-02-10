@@ -64,7 +64,7 @@ const userController = {
 
     if (!req.body.password) { delete req.body.password }
 
-    if ((!user.is_active && req.body.is_active) || user.recover_code) {
+    if ((!user.is_active && req.body.is_active)) {
       mail.send(user.email, 'confirm', { user, config }, res.locals.settings.locale)
     }
 
