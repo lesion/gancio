@@ -35,6 +35,7 @@ function wpgancio_save_event ($post_id) {
     return sanitize_title($tag->name);
   }
 
+  $tags = [];
   $tmp_tags = get_the_terms( $event, 'event-tag' );
   if ($tmp_tags) {
     $tags = array_map('tagName', $tmp_tags);
