@@ -63,7 +63,7 @@ function wpgancio_update_options ($old_value, $instance_url) {
     "response_type" => "code",
     "redirect_uri" => $redirect_uri,
     "scope" => "event:write",
-    "client_id" => $client_id ), "${instance_url}/oauth/authorize"));
+    "client_id" => $client_id ), "{$instance_url}/oauth/authorize"));
   // return $instance_url;
   exit;
 }

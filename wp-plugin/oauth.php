@@ -14,7 +14,7 @@ function wpgancio_delete_post ($post_id) {
     $gancio_id = get_post_meta($post_id, 'wpgancio_gancio_id', TRUE);
     if ($gancio_id) {
       $http = _wp_http_get_object();
-      $http->request( "${instance_url}/api/event/${gancio_id}", array(
+      $http->request( "{$instance_url}/api/event/{$gancio_id}", array(
         'method' => 'DELETE',
         'headers' => array (
           'Authorization' => 'Bearer ' . (get_option('wpgancio_token') ?: get_site_option('wpgancio_token'))
