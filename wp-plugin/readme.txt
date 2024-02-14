@@ -3,8 +3,8 @@ Contributors: lesion
 Donate link: https://gancio.org
 Tags: events, gancio, fediverse, AP, activity pub
 Requires at least: 4.7
-Tested up to: 6.0
-Stable tag: 1.7
+Tested up to: 6.4
+Stable tag: 1.8
 Requires PHP: 7.0
 License: AGPLv3 or later
 License URI: https://www.gnu.org/licenses/agpl-3.0.html

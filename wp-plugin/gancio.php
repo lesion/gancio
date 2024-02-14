@@ -3,7 +3,7 @@
 Plugin Name: WPGancio
 Plugin URI:  https://gancio.org
 Description: Connects an user of a gancio instance to a Wordpress user so that published events are automatically pushed with Gancio API.
-Version:     1.7
+Version:     1.8
 Author:      Gancio
 License:  AGPL 3.0
 
