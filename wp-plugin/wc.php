@@ -7,14 +7,14 @@ defined( 'ABSPATH' ) or die( 'Nope, not accessing this' );
  */
 function add_gancio_events_to_kses_allowed($the_allowed_tags)
 {
-  $the_allowed_tags['gancio-events'] = array('tags' => true, 'places' => true, 'theme' => true, 'id' => true, 'baseurl' => true);
+  $the_allowed_tags['gancio-events'] = array('tags' => true, 'places' => true, 'theme' => true, 'id' => true, 'baseurl' => true, 'collection' => true, 'maxlength' => true);
   $the_allowed_tags['gancio-event'] = array('id' => true, 'url' => true);
   return $the_allowed_tags;
 }
 add_filter('wp_kses_allowed_html', 'add_gancio_events_to_kses_allowed', 10, 1);
 
 function tinymce_init( $init ) {
-  $ext = 'gancio-event[id,url],gancio-events[baseurl,places,tags,theme,max]';
+  $ext = 'gancio-event[id,url],gancio-events[baseurl,places,tags,theme,maxlength,collection]';
   if ( isset( $init['extended_valid_elements'] ) ) {
     $init['extended_valid_elements'] .= ',' . $ext;
   } else {
@@ -38,10 +38,11 @@ function gancio_events_handler_function( $atts, $content, $tag) {
     'baseurl' => 'https://demo.gancio.org',
     'places' => '',
     'tags' => '',
+    'collection' => '',
     'theme' => 'dark',
-    'max' => null
+    'maxlength' => null
   ), $atts);
-  return '<gancio-events baseurl="' . $a['baseurl'] . '" theme="' . $a['theme'] . '" places="' . $a['places'] . '" tags="' . $a['tags'] . '"></gancio-events>';
+  return '<gancio-events baseurl="' . $a['baseurl'] . '" maxlength=' . $a['maxlength'] . ' theme="' . $a['theme'] . '" places="' . $a['places'] . '" tags="' . $a['tags'] . '" collection="' . $a['collection']. '"></gancio-events>';
 }
 
 add_action( 'init', function () {
