@@ -48,9 +48,11 @@ const collectionController = {
     const start = req.query.start_at || DateTime.local().toUnixInteger()
     const reverse = helpers.queryParamToBool(req.query.reverse)
     const older = helpers.queryParamToBool(req.query.older)
+    const show_recurrent = settings.allow_recurrent_event && helpers.queryParamToBool(req.query.show_recurrent, settings.recurrent_event_visible)
+
 
     try {
-      const events = await collectionController._getEvents({ name, start, reverse, older, limit })
+      const events = await collectionController._getEvents({ name, start, reverse, older, limit, show_recurrent })
       log.debug(`[COLLECTION] (${name}) events: ${events?.length}`)
 
       switch (format) {
@@ -70,7 +72,11 @@ const collectionController = {
   },
 
   // return events from collection
-  async _getEvents ({ name, start, end, limit, include_description=false, older, reverse }) {
+  async _getEvents ({
+    name, start, end,
+    show_recurrent=false,
+    limit, include_description=false,
+    older, reverse }) {
 
     const collection = await Collection.findOne({ where: { name } })
     if (!collection) {
@@ -98,6 +104,11 @@ const collectionController = {
         end_datetime: { [older ? Op.lte : Op.gte]: start }
       }
     }
+
+    // include recurrent events?
+    if (!show_recurrent) {
+      where.parentId = null
+    }    
 
     if (end) {
       where.start_datetime = { [older ? Op.gte : Op.lte]: end }
