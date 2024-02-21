@@ -111,7 +111,9 @@
         "pin": "Pin",
         "actors": "Nodo",
         "collection_in_home": "Mostrar una colección en el inicio",
-        "trusted_instances": "Instancias de confianza"
+        "trusted_instances": "Instancias de confianza",
+        "editor": "Editor",
+        "my_events": "Mis eventos"
     },
     "login": {
         "description": "Entrando podrás publicar nuevos eventos.",
