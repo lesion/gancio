@@ -111,7 +111,9 @@
         "pin": "Fixar",
         "actors": "Nodo",
         "collection_in_home": "Mostrar unha colección no Inicio",
-        "trusted_instances": "Instancias de confianza"
+        "trusted_instances": "Instancias de confianza",
+        "editor": "Editor",
+        "my_events": "Os meus Eventos"
     },
     "recover": {
         "not_valid_code": "Algo fallou."
