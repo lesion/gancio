@@ -75,40 +75,24 @@ module.exports = {
     res.json(ret)
   },
 
-  async followers (req, res) {
-    const settings = settingsController.settings
-    const name = req.params.name
-    const page = req.query.page
-    log.debug(`Retrieve ${name} followers`)
-    if (!name) { return res.status(400).send('Bad request.') }
-    if (name !== settings.instance_name) {
-      log.warn('No record found')
-      return res.status(404).send(`No record found for ${escape(name)}`)
-    }
-    const followers = await APUser.findAll({ where: { follower: true } })
 
-    res.type('application/activity+json; charset=utf-8')
-
-    if (!page) {
-      log.debug('No pagination')
-      return res.json({
-        '@context': 'https://www.w3.org/ns/activitystreams',
-        id: `${settings.baseurl}/federation/u/${name}/followers`,
-        type: 'OrderedCollection',
-        totalItems: followers.length,
-        first: `${settings.baseurl}/federation/u/${name}/followers?page=true`
-        // last: `${config.baseurl}/federation/u/${name}/followers?page=true`,
-        // orderedItems: followers.map(f => f.ap_id)
-      })
+  async remove (req, res) {
+    const ap_actor = await APUser.findOne({ where: { ap_id: get(req.body, 'object.id', req.body.object) }})
+    if (!ap_actor) {
+      log.info(`[FEDI] Delete of unknown object ${get(req.body, 'object.id', req.body.object)}`)
+      return res.status(404).send('Not found')
     }
-    return res.json({
-      '@context': 'https://www.w3.org/ns/activitystreams',
-      id: `${settings.baseurl}/federation/u/${name}/followers?page=${page}`,
-      type: 'OrderedCollectionPage',
-      totalItems: followers.length,
-      partOf: `${settings.baseurl}/federation/u/${name}/followers`,
-      orderedItems: followers.map(f => f.ap_id)
-    })
+
+    // check if fedi_user that requested resource removal
+    // is the same that created the resource at first place
+    if (res.locals.fedi_user.ap_id === ap_actor.ap_id) {
+      await ap_actor.destroy()
+      log.info(`[FEDI] Actor ${ap_actor.ap_id} removed`)
+      res.sendStatus(201)
+    } else {
+      log.info(`[FEDI] ${res.locals.fedi_user.ap_id} is trying to remove ${ap_actor.ap_id}?`)
+      res.sendStatus(403)
+    }
   },
 
   async outbox (req, res) {

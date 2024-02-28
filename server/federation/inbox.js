@@ -1,6 +1,7 @@
 const Follows = require('./follows')
 const Resources = require('./resources')
 const Events = require('./events')
+const Users = require('./users')
 const Ego = require('./ego')
 const log = require('../log')
 
@@ -54,7 +55,8 @@ module.exports = async (req, res) => {
         }
         await Events.remove(req, res)
       } else {
-        log.debug('[FEDI] Delete of unknown object: %s', JSON.stringify(message.object))
+        // this is probably an actor
+        await Users.remove(req, res)
       }
       break
     case 'Update':
