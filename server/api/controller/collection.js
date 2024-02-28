@@ -41,6 +41,7 @@ const collectionController = {
   },
 
   async getEvents (req, res) {
+    const settings = res.locals.settings
     const exportController = require('./export')
     const format = req.params.format || 'json'
     const name = req.params.name
