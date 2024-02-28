@@ -21,16 +21,26 @@ v-container.container.pa-0.pa-md-3
         Events(:unconfirmedEvents='unconfirmedEvents'
           @confirmed='id => { unconfirmedEvents = unconfirmedEvents.filter(e => e.id !== id)}')
 
-      //- THEME
-      v-tab(href='#theme' v-if='$auth.user.is_admin') {{$t('common.theme')}}
-      v-tab-item(value='theme')
-        Theme
-
       //- USERS
       v-tab(href='#users' v-if='$auth.user.is_admin')
         v-badge(:value='!!unconfirmedUsers.length' :content='unconfirmedUsers.length') {{$t('common.users')}}
       v-tab-item(value='users')
         Users(:users='users' @update='updateUsers')
+
+      //- Collections
+      v-tab(href='#collections' v-if='$auth.user.is_admin') {{$t('common.collections')}}
+      v-tab-item(value='collections')
+        Collections
+
+      //- FEDERATION
+      v-tab(href='#federation' v-if='$auth.user.is_admin') {{$t('common.federation')}}
+      v-tab-item(value='federation')
+        Federation
+
+      //- MODERATION
+      v-tab(v-if='settings.enable_federation' href='#moderation') {{$t('common.moderation')}}
+      v-tab-item(value='moderation')
+        Moderation
 
       //- PLACES
       v-tab(href='#places' v-if='$auth.user.is_admin') {{$t('common.places')}}
@@ -42,16 +52,16 @@ v-container.container.pa-0.pa-md-3
       v-tab-item(value='tags')
         Tags
 
+      //- THEME
+      v-tab(href='#theme' v-if='$auth.user.is_admin') {{$t('common.theme')}}
+      v-tab-item(value='theme')
+        Theme
+
       //- GEOCODING / MAPS
       v-tab(href='#geolocation' v-if='settings.allow_geolocation && $auth.user.is_admin') {{$t('admin.geolocation')}}
       v-tab-item(value='geolocation')
         client-only(placeholder='Loading...')
           Geolocation
-
-      //- Collections
-      v-tab(href='#collections' v-if='$auth.user.is_admin') {{$t('common.collections')}}
-      v-tab-item(value='collections')
-        Collections
 
       //- ANNOUNCEMENTS
       v-tab(href='#announcements' v-if='$auth.user.is_admin') {{$t('common.announcements')}}
@@ -63,15 +73,6 @@ v-container.container.pa-0.pa-md-3
       v-tab-item(value='plugins')
         Plugin
 
-      //- FEDERATION
-      v-tab(href='#federation' v-if='$auth.user.is_admin') {{$t('common.federation')}}
-      v-tab-item(value='federation')
-        Federation
-
-      //- MODERATION
-      v-tab(v-if='settings.enable_federation' href='#moderation') {{$t('common.moderation')}}
-      v-tab-item(value='moderation')
-        Moderation
 </template>
 <script>
 import { mapState } from 'vuex'
