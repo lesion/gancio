@@ -97,6 +97,24 @@ const instancesController = {
 
   },
 
+  async toggleFollow (req, res) {
+    if (!req.body.ap_id) {
+      return res.status(400).send('ap_id parameter is missing')
+    }
+
+    try {
+      const ap_actor = await APUser.findByPk(req.body.ap_id, { include: Instance })
+      if (ap_actor.following) {
+        await unfollowActor(ap_actor)
+      } else {
+        await followActor(ap_actor)
+      }
+      return res.sendStatus(200)
+    } catch (e) {
+      return res.status(400).send(e)
+    }
+  },
+
   async addTrust (req, res) {
 
     /**
@@ -130,7 +148,6 @@ const instancesController = {
           const actor = await getActor(actor_url.href, instance)
           log.debug('[FEDI] Actor %s', actor)
           await actor.update({ trusted: true })
-          await followActor(actor)
           return res.json(actor)    
         }
       } catch (e) {
@@ -171,7 +188,6 @@ const instancesController = {
         actor = await getActor(instance.applicationActor, instance)
         log.debug('[FEDI] Actor %s', actor)
         await actor.update({ trusted: true })
-        await followActor(actor)
         return res.json(actor)
       }
 
@@ -199,7 +215,6 @@ const instancesController = {
         // retrieve the AP actor and flat it as trusted
         const actor = await getActor(actorURL, instance)
         await actor.update({ trusted: true })
-        await followActor(actor)
         return res.json(actor)
       }
       return res.sendStatus(404)

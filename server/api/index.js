@@ -203,9 +203,11 @@ module.exports = () => {
     // - FEDIVERSE INSTANCES, MODERATION, RESOURCES
     api.get('/instances', isAdminOrEditor, instanceController.getAll)
     api.get('/instances/trusted', instanceController.getTrusted)
-    api.get('/instances/:instance_domain', isAdminOrEditor, instanceController.get)
+    api.get('/instances/stats', isAdminOrEditor, instanceController.stats)
+    api.put('/instances/follow', isAdminOrEditor, instanceController.toggleFollow)
     api.post('/instances/toggle_block', isAdminOrEditor, instanceController.toggleBlock)
     api.post('/instances/toggle_user_block', isAdminOrEditor, apUserController.toggleBlock)
+    api.get('/instances/:instance_domain', isAdminOrEditor, instanceController.get)
     api.post('/instances/add_trust', isAdmin, instanceController.addTrust)
     api.delete('/instances/trust', isAdmin, instanceController.removeTrust)
     api.put('/resources/:resource_id', isAdminOrEditor, resourceController.hide)

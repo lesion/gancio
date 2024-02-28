@@ -320,7 +320,8 @@
     "tilelayer_test_error": "The tilelayer service is not reachable at {service_name}",
     "geolocation": "Geolocation",
     "colors": "Colors",
-    "tag_renamed": "Tag \"{oldTag}\" renamed to \"{newTag}\""
+    "tag_renamed": "Tag \"{oldTag}\" renamed to \"{newTag}\"",
+    "stats": "{n_followers} \"actors\" are following this instance, there are {n_events} events from the fediverse and {n_resources} comments"
   },
   "auth": {
     "not_confirmed": "Not confirmed yet…",

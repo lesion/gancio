@@ -2,7 +2,7 @@
 v-container
   v-card-title {{$t('common.federation')}}
   v-card-text
-    v-switch(v-model='enable_federation'
+    v-switch.mt-0(v-model='enable_federation'
       :label="$t('admin.enable_federation')"
       persistent-hint
       inset
@@ -65,8 +65,8 @@ v-container
 
     v-btn.mt-4(@click='dialogAddInstance = true' color='primary' text) <v-icon v-text='mdiPlus'></v-icon> {{$t('admin.add_instance')}}
     v-data-table(
-      dense
       v-if='trusted_instances.length'
+      dense
       :hide-default-footer='trusted_instances.length<10'
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
       :header-props='{ sortIcon: mdiChevronDown }'
@@ -80,16 +80,19 @@ v-container
         span {{ item?.object?.summary ?? item?.instance?.data?.metadata?.nodeDescription}} / {{ item.instance.name }}
       template(v-slot:item.url="{item}")
         a(:href='item.ap_id') {{ item.ap_id }}
-      template(v-slot:item.status="{item}")
+      template(v-slot:item.following="{ item }")
+        v-switch(:input-value='item.following' :disabled='item.loading' :loading="item.loading === true" @change="() => toggleFollowing(item)" inset hide-details)
+      template(v-slot:item.follower="{item}")
         v-icon(v-if='item.following' v-text='mdiDownload')
         v-icon(v-if='item.follower' v-text='mdiUpload')
+
       template(v-slot:item.actions="{item}")
-
-        //- v-btn(icon @click='deleteInstance(item)' color='error')
-        //-   v-icon(v-text='mdiDeleteForever')
-
         v-btn(icon @click='deleteInstance(item)' color='error')
           v-icon(v-text='mdiDeleteForever')
+    
+  v-card-title Stats
+  v-card-text
+    span {{$t('admin.stats', stats)}}
 
 </template>
 <script>
@@ -103,25 +106,32 @@ export default {
       mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown, mdiDownload, mdiUpload,
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
-      instance_place: $store.state.settings.instance_place,
       trusted_instances_label: $store.state.settings.trusted_instances_label,
       url2host: $options.filters.url2host,
       dialogAddInstance: false,
+      stats: {},
       loading: false,
       trusted_instances: [],
+      loading_instances: {},
       valid: false,
       headers: [
         { value: 'logo', text: 'Logo', width: 60, sortable: false },
         { value: 'name', text: 'Name' },
         { value: 'info', text: 'Info' },
         { value: 'url', text: 'URL' },
-        { value: 'status', text: 'Status' },
+        { value: 'following', text: 'Following' },
+        { value: 'follower', text: 'Follower' },
         { value: 'actions', text: 'Actions', align: 'right' }
       ]
     }
   },
   async fetch() {
-    this.trusted_instances = await this.$axios.$get('/instances/trusted')
+    this.stats = await this.$axios.$get('/instances/stats')
+    const trusted_instances = await this.$axios.$get('/instances/trusted')
+    this.trusted_instances = trusted_instances.map(t => {
+      t.loading = false
+      return t
+    })
   },
   computed: {
     ...mapState(['settings']),
@@ -152,9 +162,6 @@ export default {
       if (!this.$refs.form.validate()) { return }
       this.loading = true
       try {
-        // if (!this.instance_url.startsWith('http')) {
-        //   this.instance_url = `https://${this.instance_url}`
-        // }
         this.instance_url = this.instance_url.replace(/\/$/, '')
         await this.$axios.$post('/instances/add_trust', { url: this.instance_url })
         this.$refs.form.reset()
@@ -177,6 +184,17 @@ export default {
       } catch (e) {
         this.$root.$message(e, { color: 'error' })
       }
+    },
+    async toggleFollowing (instance) {
+      try {
+        instance.loading = true
+        await this.$axios.$put('/instances/follow', { ap_id: instance.ap_id })
+        this.$root.$message('common.ok', { color: 'success' })
+      } catch (e) {
+        this.$root.$message(e, { color: 'error' })
+      }
+      instance.loading = false
+      this.$fetch()
     },
     save (key, value) {
       if (this.settings[key] !== value) {
