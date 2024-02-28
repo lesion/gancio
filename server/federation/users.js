@@ -6,6 +6,7 @@ const log = require('../log')
 const settingsController = require('../api/controller/settings')
 const { DateTime } = require('luxon')
 const Helpers = require('./helpers')
+const get = require('lodash/get')
 
 module.exports = {
   get (req, res) {
@@ -108,9 +109,10 @@ module.exports = {
 
 
   async remove (req, res) {
-    const ap_actor = await APUser.findOne({ where: { ap_id: get(req.body, 'object.id', req.body.object) }})
+    const ap_id = get(req.body, 'object.id', req.body.object)
+    const ap_actor = await APUser.findOne({ where: { ap_id }})
     if (!ap_actor) {
-      log.info(`[FEDI] Delete of unknown object ${get(req.body, 'object.id', req.body.object)}`)
+      log.info(`[FEDI] Delete of unknown object ${ap_id}`)
       return res.status(404).send('Not found')
     }
 

@@ -95,6 +95,11 @@ module.exports = {
     const APEvent = req.body?.object
     const ap_id = APEvent?.id ?? APEvent
 
+    if (!res.locals.fedi_user.following) {
+      log.warn(`[FEDI] APUser not followed`)
+      return res.sendStatus(404)
+    }
+
     if (!ap_id) {
       return res.sendStatus(404)
     }
