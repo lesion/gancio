@@ -1,4 +1,4 @@
-const { APUser, Instance, Resource } = require('../models/models')
+const { APUser, Instance, Resource, Event } = require('../models/models')
 const { getActor, unfollowActor, followActor, getNodeInfo, getInstance } = require('../../federation/helpers')
 const axios = require('axios')
 const get = require('lodash/get')
@@ -69,6 +69,13 @@ const instancesController = {
     return res.json(instance)
   },
 
+  // get following
+  async stats (req, res) {
+    const n_followers = await APUser.count({ where: { follower: true }, include: [Instance]})
+    const n_events = await Event.count({ where: { ap_id: { [Sequelize.Op.not]: null } } })
+    const n_resources = await Resource.count()
+    return res.json({ n_followers, n_events, n_resources })
+  },
 
   async removeTrust (req, res) {
     let ap_id = req.query.ap_id
