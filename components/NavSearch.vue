@@ -53,10 +53,11 @@ export default {
   components: { Calendar },
   computed: {
     showSearchBar () {
-      return this.$route.name === 'index'
+      return ['index'].includes(this.$route.name)
     },
     showCalendar () {
-      return (!this.settings.hide_calendar && this.$route.name === 'index')
+      return (!this.settings.hide_calendar && 
+        ['index'].includes(this.$route.name))
     },
     showCollectionsBar () {
       const show = ['index', 'collection-collection'].includes(this.$route.name)
