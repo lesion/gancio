@@ -4,6 +4,7 @@ const Events = require('./events')
 const Users = require('./users')
 const Ego = require('./ego')
 const log = require('../log')
+const { APUser, Resource } = require('../api/models/models')
 
 module.exports = async (req, res) => {
   const message = req.body
@@ -49,14 +50,19 @@ module.exports = async (req, res) => {
       if (message.object?.type==='Note') {
         await Resources.remove(req, res)
       } else if (message.object?.type === 'Event') {
-        if (!res.locals.fedi_user.following || !res.locals.fedi_user.trusted) {
-          log.warn(`[FEDI] APUser not followed or not trusted`)
-          return res.sendStatus(404)
-        }
         await Events.remove(req, res)
       } else {
-        // this is probably an actor
-        await Users.remove(req, res)
+        const ap_id = get(req.body, 'object.id', req.body.object)
+        const ap_actor = await APUser.findOne({ where: { ap_id }})
+        if (ap_actor) {
+          await Users.remove(req, res)
+        } else {
+          const resource = await Resource.findOne({ where: { ap_id }})
+          if (resource) {
+            await Resources.remove(req, res)
+          }
+        }
+    
       }
       break
     case 'Update':
