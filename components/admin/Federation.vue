@@ -32,13 +32,13 @@ v-container
     //-   persistent-hint inset
     //-   :hint="$t('admin.trusted_instances_help')")
 
-    //- template(v-if='enable_trusted_instances')
-    v-text-field.mt-4(v-model='instance_place'
-      :label="$t('admin.instance_place')"
-      persistent-hint
-      :hint="$t('admin.instance_place_help')"
-      @blur='save("instance_place", instance_place)'
-    )
+    //- //- template(v-if='enable_trusted_instances')
+    //- v-text-field.mt-4(v-model='instance_place'
+    //-   :label="$t('admin.instance_place')"
+    //-   persistent-hint
+    //-   :hint="$t('admin.instance_place_help')"
+    //-   @blur='save("instance_place", instance_place)'
+    //- )
 
     v-text-field.mt-4(v-model='trusted_instances_label'
       :label="$t('admin.trusted_instances_label')"

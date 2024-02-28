@@ -22,7 +22,6 @@ const defaultSettings = {
   instance_timezone: 'Europe/Rome',
   instance_locale: 'en',
   instance_name: 'relay',
-  instance_place: '',
   allow_registration: true,
   allow_anon_event: true,
   allow_multidate_event: true,

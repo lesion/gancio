@@ -74,7 +74,6 @@ module.exports = {
       instance_timezone: settings.instance_timezone,
       instance_locale: settings.instance_locale,
       instance_name: settings.instance_name,
-      instance_place: settings.instance_place,
       allow_registration: settings.allow_registration,
       allow_anon_event: settings.allow_anon_event,
       allow_recurrent_event: settings.allow_recurrent_event,

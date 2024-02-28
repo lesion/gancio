@@ -51,12 +51,8 @@ module.exports = {
           type: 'PropertyValue',
           name: 'Website',
           value: `<a href='${config.baseurl}'>${config.baseurl}</a>`
-        },
-        {
-          type: 'PropertyValue',
-          name: 'Place',
-          value: settings.instance_place
-        }],
+        }
+      ],
       icon: {
         type: 'Image',
         mediaType: 'image/png',
