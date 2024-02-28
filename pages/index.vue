@@ -65,7 +65,8 @@ export default {
       link: [
         { rel: 'apple-touch-icon', href: this.settings.baseurl + '/logo.png' },
         { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' },
-        { rel: 'alternate', type: 'text/calendar', title: this.settings.title, href: this.settings.baseurl + '/feed/ics' }
+        { rel: 'alternate', type: 'text/calendar', title: this.settings.title, href: this.settings.baseurl + '/feed/ics' },
+        { rel: 'me', href: `${this.settings.baseurl}/federation/u/${this.settings.instance_name}`}
       ]
     }
   },
