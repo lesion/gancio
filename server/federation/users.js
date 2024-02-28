@@ -39,12 +39,11 @@ module.exports = {
       type: 'Application',
       summary: config.description,
       name: settings.instance_name,
-      preferredUsername: name, // settings.instance_place,
+      preferredUsername: name,
       inbox: `${config.baseurl}/federation/u/${name}/inbox`,
       outbox: `${config.baseurl}/federation/u/${name}/outbox`,
       manuallyApprovesFollowers: false,
       endpoints: { sharedInbox: `${config.baseurl}/federation/u/${name}/inbox` },
-      // followers: `${config.baseurl}/federation/u/${name}/followers`,
       discoverable: true,
       indexable: true,
       attachment: [
@@ -74,6 +73,42 @@ module.exports = {
     res.type('application/activity+json; charset=utf-8')
     res.json(ret)
   },
+
+  // async followers (req, res) {
+  //   const settings = settingsController.settings
+  //   const name = req.params.name
+  //   const page = req.query.page
+  //   log.debug(`Retrieve ${name} followers`)
+  //   if (!name) { return res.status(400).send('Bad request.') }
+  //   if (name !== settings.instance_name) {
+  //     log.warn('No record found')
+  //     return res.status(404).send(`No record found for ${escape(name)}`)
+  //   }
+  //   const followers = await APUser.findAll({ where: { follower: true } })
+
+  //   res.type('application/activity+json; charset=utf-8')
+
+  //   if (!page) {
+  //     log.debug('No pagination')
+  //     return res.json({
+  //       '@context': 'https://www.w3.org/ns/activitystreams',
+  //       id: `${settings.baseurl}/federation/u/${name}/followers`,
+  //       type: 'OrderedCollection',
+  //       totalItems: followers.length,
+  //       first: `${settings.baseurl}/federation/u/${name}/followers?page=true`
+  //       // last: `${config.baseurl}/federation/u/${name}/followers?page=true`,
+  //       // orderedItems: followers.map(f => f.ap_id)
+  //     })
+  //   }
+  //   return res.json({
+  //     '@context': 'https://www.w3.org/ns/activitystreams',
+  //     id: `${settings.baseurl}/federation/u/${name}/followers?page=${page}`,
+  //     type: 'OrderedCollectionPage',
+  //     totalItems: followers.length,
+  //     partOf: `${settings.baseurl}/federation/u/${name}/followers`,
+  //     orderedItems: followers.map(f => f.ap_id)
+  //   })
+  // },
 
 
   async remove (req, res) {
