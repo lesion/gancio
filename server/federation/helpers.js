@@ -68,7 +68,7 @@ const Helpers = {
   },
 
   async signAndSend (message, inbox, method='post') {
-    log.debug('[FEDI] Sign and send %s to %s', message, inbox)
+    log.debug('[FEDI] Sign and %s %s %s', method, message, inbox)
     const inboxUrl = new url.URL(inbox)
     const privkey = settingsController.secretSettings.privateKey
     const signer = crypto.createSign('sha256')
@@ -293,7 +293,7 @@ const Helpers = {
   },
 
   async followActor (actor) {
-    log.debug(`Following actor ${actor.ap_id}`)
+    log.debug(`[FEDI] Following actor ${actor.ap_id}`)
     const body = {
       '@context': 'https://www.w3.org/ns/activitystreams',
       id: `${config.baseurl}/federation/m/${actor.ap_id}#follow`,
@@ -366,6 +366,8 @@ const Helpers = {
 
   // get Actor from URL using GET HTTP Signature 
   async getActor (URL, instance, force = false) {
+    log.debug(`[FEDI] getActor for ${URL}`)
+
     let fedi_user
 
     // try with cache first
