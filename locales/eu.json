@@ -138,7 +138,7 @@
     "register": {
         "description": "Gizarte mugimenduak beraien kabuz antolatu behar dira.<br/>\n<br/>Argitaratzen hasi baino lehen <strong>zure kontu berria onartua izan behar da</strong>, beraz, <strong>webgune honen atzean hezur-haragizko pertsonak</strong> gaudela kontuan izanik, azal iezaguzu mesedez pare bat lerrotan zer nolako ekitaldiak argitaratu nahi dituzun.",
         "error": "Errorea: ",
-        "complete": "Izen-ematea baieztatua izan behar da.",
+        "complete": "Izen-ematea baieztatu beharra dago.",
         "first_user": "Administratzailea sortu da"
     },
     "event": {
@@ -152,7 +152,7 @@
         "added": "Ekitaldia gehitu da",
         "added_anon": "Ekitaldia gehitu da, baina baieztatzeko zain dago.",
         "where_description": "Non da ekitaldia? Agertzen ez bada zuk sor dezakezu.",
-        "confirmed": "Ekitaldia egiaztatu da",
+        "confirmed": "Ekitaldia baieztatu da",
         "not_found": "Ezin da ekitaldia aurkitu",
         "remove_confirmation": "Ziur al zaude ekitaldi hau ezabatu nahi duzula?",
         "remove_recurrent_confirmation": "Ziur al zaude ekitaldi errepikari hau ezabatu nahi duzula?\nIragandako ekitaldiak mantenduko dira, baina ez da ekitaldi berririk sortuko.",
@@ -342,7 +342,7 @@
     "confirm": {
         "title": "Erabiltzaile-baieztapena",
         "not_valid": "Zerbaitek huts egiten du.",
-        "valid": "Zure kontua baieztatua izan da, orain <a href=\"/login\">saioa hasi</a> dezakezu"
+        "valid": "Zure kontua onartua izan da, orain <a href=\"/login\">saioa hasi</a> dezakezu"
     },
     "ordinal": {
         "1": "lehen",
