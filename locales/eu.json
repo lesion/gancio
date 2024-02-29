@@ -19,7 +19,7 @@
         "search": "Bilatu",
         "edit": "Editatu",
         "info": "Informazioa",
-        "confirm": "Baieztatu",
+        "confirm": "Onartu",
         "admin": "Administratu",
         "users": "Erabiltzaileak",
         "events": "Ekitaldiak",
@@ -49,7 +49,7 @@
         "disable": "Desgaitu",
         "me": "Zu",
         "password_updated": "Pasahitza aldatu da.",
-        "activate_user": "Baieztatuta",
+        "activate_user": "Onartuta",
         "displayname": "Erakutsitako izena",
         "federation": "Federazioa",
         "set_password": "Ezarri pasahitza",
@@ -110,7 +110,9 @@
         "actors": "Nodoa",
         "trusted_instances": "Instantzia fidagarriak",
         "pin": "Finkatu",
-        "collection_in_home": "Erakutsi bilduma bat hasieran"
+        "collection_in_home": "Erakutsi bilduma bat hasieran",
+        "editor": "Editorea",
+        "my_events": "Nire ekitaldiak"
     },
     "login": {
         "description": "Saioa hasten baduzu ekitaldi berriak sortu ahal izango dituzu.",
@@ -136,7 +138,7 @@
     "register": {
         "description": "Gizarte mugimenduak beraien kabuz antolatu behar dira.<br/>\n<br/>Argitaratzen hasi baino lehen <strong>zure kontu berria onartua izan behar da</strong>, beraz, <strong>webgune honen atzean hezur-haragizko pertsonak</strong> gaudela kontuan izanik, azal iezaguzu mesedez pare bat lerrotan zer nolako ekitaldiak argitaratu nahi dituzun.",
         "error": "Errorea: ",
-        "complete": "Izen-ematea baieztatua izan behar da.",
+        "complete": "Izen-ematea baieztatu beharra dago.",
         "first_user": "Administratzailea sortu da"
     },
     "event": {
@@ -150,7 +152,7 @@
         "added": "Ekitaldia gehitu da",
         "added_anon": "Ekitaldia gehitu da, baina baieztatzeko zain dago.",
         "where_description": "Non da ekitaldia? Agertzen ez bada zuk sor dezakezu.",
-        "confirmed": "Ekitaldia egiaztatu da",
+        "confirmed": "Ekitaldia baieztatu da",
         "not_found": "Ezin da ekitaldia aurkitu",
         "remove_confirmation": "Ziur al zaude ekitaldi hau ezabatu nahi duzula?",
         "remove_recurrent_confirmation": "Ziur al zaude ekitaldi errepikari hau ezabatu nahi duzula?\nIragandako ekitaldiak mantenduko dira, baina ez da ekitaldi berririk sortuko.",
@@ -316,7 +318,10 @@
         "allow_online_event_hint": "URLak eskatu ",
         "allow_online_event": "Online ekitaldiak ahalbidetu",
         "delete_tag_confirm": "Ziur al zaude \"{tag}\" etiketa ezabatu nahi duzula? Etiketa {n} ekitalditik ezabatuko da.",
-        "edit_tag_help": "Etiketa alda dezakezu, berria jarriz edo lehendik dagoen batekin bat eginez. Lotutako {n} ekitaldiak ere aldatu egingo dira."
+        "edit_tag_help": "Etiketa alda dezakezu, berria jarriz edo lehendik dagoen batekin bat eginez. Lotutako {n} ekitaldiak ere aldatu egingo dira.",
+        "tag_renamed": "\"{newTag}\" izen berria jarri zaio \"{oldTag}\" etiketari",
+        "instance_removed": "Instantzia ezabatu egin da",
+        "delete_collection_confirm": "Ziur <u>{collection}</u> bilduma ezabatu nahi duzula?"
     },
     "auth": {
         "not_confirmed": "Oraindik baieztatu gabe dago…",
@@ -337,7 +342,7 @@
     "confirm": {
         "title": "Erabiltzaile-baieztapena",
         "not_valid": "Zerbaitek huts egiten du.",
-        "valid": "Zure kontua baieztatua izan da, orain <a href=\"/login\">saioa hasi</a> dezakezu"
+        "valid": "Zure kontua onartua izan da, orain <a href=\"/login\">saioa hasi</a> dezakezu"
     },
     "ordinal": {
         "1": "lehen",
