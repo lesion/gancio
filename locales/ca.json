@@ -111,7 +111,9 @@
         "pin": "Llista-la a la pàgina principal",
         "actors": "Node",
         "collection_in_home": "Mostra una coŀlecció a l'inici",
-        "trusted_instances": "Instàncies confiables"
+        "trusted_instances": "Instàncies confiables",
+        "editor": "Editor",
+        "my_events": "Les meves activitats"
     },
     "login": {
         "description": "Amb la sessió iniciada pots afegir activitats noves.",
@@ -323,7 +325,9 @@
         "allow_online_event": "Permet activitats on-line",
         "allow_online_event_hint": "Demana urls ",
         "colors": "Colors",
-        "not_reachable_warning": "S'ha perdut la connexió amb el servidor a ({baseurl}) ! Comprova que el proxy, tallafocs i els paràmetres de xarxa estiguin ben configurats."
+        "not_reachable_warning": "S'ha perdut la connexió amb el servidor a ({baseurl}) ! Comprova que el proxy, tallafocs i els paràmetres de xarxa estiguin ben configurats.",
+        "tag_renamed": "S'ha reanomenat l'etiqueta \"{oldTag}\" com a \"{newTag}\"",
+        "instance_removed": "S'ha eliminat la instància"
     },
     "auth": {
         "not_confirmed": "Encara no s'ha confirmat…",
