@@ -1,5 +1,4 @@
 export default ({ store }, inject) => {
-
   const helper = {
     mediaURL (event, type, format = '.jpg') {
       const mediaPath = type === 'download' ? '/download/' : '/media/'

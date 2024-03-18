@@ -16,9 +16,9 @@
 </template>
 <script>
 import Appbar from '../components/Appbar.vue'
-import Snackbar from '../components/Snackbar'
-import Footer from '../components/Footer'
-import Confirm from '../components/Confirm'
+import Snackbar from '../components/Snackbar.vue'
+import Footer from '../components/Footer.vue'
+import Confirm from '../components/Confirm.vue'
 import { mapState, mapGetters } from 'vuex'
 
 export default {

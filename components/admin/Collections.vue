@@ -179,8 +179,8 @@ export default {
       collectionHeaders: [
         { value: 'name', text: this.$t('common.name') },
         // { value: 'filters', text: this.$t('common.filter') },
-        { value: 'pin', text: this.$t('common.pin'), align: 'right' },
-        { value: 'actions', text: this.$t('common.actions'), align: 'right', width: 150 }
+        { value: 'pin', text: this.$t('common.pin'), align: 'right', sortable: false },
+        { value: 'actions', text: this.$t('common.actions'), align: 'right', width: 150, sortable: false }
       ],
       filterHeaders: [
         { value: 'actors', text: this.$t('common.actors') },

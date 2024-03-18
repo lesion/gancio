@@ -108,14 +108,21 @@ export const actions = {
     commit('setFilter', { type, value })
   },
   async getEvents ({ commit, state }, params = {}) {
-    const events = await this.$api.getEvents({
-      start: params.start || this.$time.startMonth(),
-      end: params.end || null,
-      show_recurrent: state.filter.show_recurrent,
-      show_multidate: state.filter.show_multidate,
-      ...( params.query && { query: params.query }),
-      ...( params.older && { older: params.older })
-    })
-    commit('setEvents', events)
+    try {
+      const events = await this.$api.getEvents({
+        start: params.start || this.$time.startMonth(),
+        end: params.end || null,
+        show_recurrent: state.filter.show_recurrent,
+        show_multidate: state.filter.show_multidate,
+        ...( params.query && { query: params.query }),
+        ...( params.older && { older: params.older })
+      })
+      commit('setEvents', events)
+      return events
+    } catch (e) {
+      console.error('[STORE] getEvent', e)
+      commit('setEvents', [])
+      return []
+    }
   }
 }

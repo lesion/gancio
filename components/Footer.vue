@@ -45,7 +45,11 @@ export default {
     this.$root.$on('update_friendly_instances', this.$fetch)
   },
   async fetch () {
-    this.trusted_instances = await this.$axios.$get('/instances/trusted')
+    try {
+      this.trusted_instances = await this.$axios.$get('instances/trusted')
+    } catch (e) {
+      console.error('[Footer] Get trusted instances', e)
+    }
   },
   computed: {
     ...mapState(['settings']),
