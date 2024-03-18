@@ -38,6 +38,11 @@ li {
   word-break: break-word;
 }
 
+.v-application--is-ltr .v-list-item__action:first-child,
+.v-application--is-ltr .v-list-item__icon:first-child {
+  margin-right: 20px !important;
+}
+
 #home {
   max-width: 1400px;
   /* padding: 0px; */
@@ -100,6 +105,10 @@ li {
 
 .theme--light .v-menu__content {
   border: 1px solid #ccc;
+}
+
+.v-card .v-icon {
+  opacity: 0.6;
 }
 
 .v-menu__content {
