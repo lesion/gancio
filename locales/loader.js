@@ -10,5 +10,5 @@ export default async (context, locale) => {
     console.error(`Error loading locale ${locale}`, e)
   }
 
-  return localeMessages
+  return {}
 }

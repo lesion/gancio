@@ -10,40 +10,6 @@ function _initializeDB () {
   return db.initialize()
 }
 
-async function setAdmin (args) {
-  await _initializeDB()
-  const { User } = require('../api/models/models')
-  const user = await User.findOne({ where: { email: args.email } })
-  console.log()
-  if (!user) {
-    console.error(`User ${args.email} not found`)
-    return
-  }
-
-  user.is_admin = true
-  await user.save()
-  console.log(`User ${user.email} is now an administrator!`)
-  await db.close()
-}
-
-
-async function unsetAdmin (args) {
-  await _initializeDB()
-  const helpers = require('../helpers')
-  const { User } = require('../api/models/models')
-  const user = await User.findOne({ where: { email: args.email } })
-  console.log()
-  if (!user) {
-    console.error(`User ${args.email} not found`)
-    return
-  }
-
-  user.is_admin = false
-  await user.save()
-  console.log(`User ${user.email} is not an administrator anymore!`)
-  await db.close()  
-}
-
 async function resetPassword (args) {
   await _initializeDB()
   const helpers = require('../helpers')

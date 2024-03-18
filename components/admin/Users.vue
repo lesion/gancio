@@ -46,7 +46,7 @@ v-container
         v-menu(offset-y)
           template(v-slot:activator="{ on, attrs }")
             v-btn(:color='role_colors[item.role ]' v-bind='attrs' v-on="on" small label) {{ item.role }}
-          v-list(width=100 nav color='secondary')
+          v-list(width=100 nav)
             v-list-item(v-for="role in ['admin', 'editor', 'user'].filter(r => r !== item.role)" :key='role' link @click='changeRole(item, role)')
               v-list-item-content
                 v-list-item-title {{ role }}
@@ -115,8 +115,7 @@ export default {
     },
     async changeRole (user, role) {
       // ask confirmation?
-      const configMsg = user.is_admin ? 'admin.disable_admin_user_confirm' : 'admin.enable_admin_user_confirm'
-      const ret = await this.$root.$confirm(configMsg, { user: user.email })
+      const ret = await this.$root.$confirm('admin.change_role_confirm', { user: user.email, from_role: user.role, to_role: role })
       if (!ret) { return }
       try {
         await this.$axios.$put('/user', { ...user, role })
@@ -125,16 +124,6 @@ export default {
         console.error(e)
       }
       return false
-    },
-    async toggleAdmin (user) {
-      try {
-        const configMsg = user.is_admin ? 'admin.disable_admin_user_confirm' : 'admin.enable_admin_user_confirm'
-        const ret = await this.$root.$confirm(configMsg, { user: user.email })
-        if (!ret) { return }
-        user.is_admin = !user.is_admin
-        await this.$axios.$put('/user', user)
-      } catch (e) {
-      }
     },
     async createUser () {
       if (!this.$refs.user_form.validate()) { return }
