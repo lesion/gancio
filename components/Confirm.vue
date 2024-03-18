@@ -9,7 +9,9 @@ v-dialog(v-model='show'
   @keydown.esc='cancel')
   v-card
     v-card-title {{ title }}
-    v-card-text(v-show='!!message' v-html='message')
+    v-card-text(v-show='!!message')
+      span(v-html='message')
+      v-textarea(v-if='options.is_prompt' v-model='prompt')
     v-card-actions
       v-spacer
       v-btn(outlined color='error' @click='cancel') {{$t('common.cancel')}}
@@ -39,7 +41,9 @@ export default {
     reject: null,
     message: null,
     title: null,
+    prompt: '',
     options: {
+      is_prompt: false,
       color: 'danger',
       width: 450,
       zIndex: 500
@@ -60,8 +64,12 @@ export default {
   },
   created () {
     this.$root.$confirm = this.open
+    this.$root.$prompt = this.openPrompt
   },
   methods: {
+    openPrompt (message, options ) {
+      return this.open(message, { ...options, is_prompt: true })
+    },
     open (message, options = {}) {
       this.dialog = true
       this.title = options.title || this.$t('common.confirm')
@@ -73,11 +81,13 @@ export default {
       })
     },
     agree () {
-      this.resolve(true)
+      this.resolve(this.options.is_prompt ? this.prompt : true)
+      this.prompt = ''
       this.dialog = false
     },
     cancel () {
       this.resolve(false)
+      this.prompt = ''
       this.dialog = false
     }
   }
