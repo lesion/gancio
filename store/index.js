@@ -8,7 +8,7 @@ export const state = () => ({
     instance_name: '',
     allow_registration: true,
     allow_anon_event: true,
-    allow_message_users: false,
+    enable_moderation: true,
     allow_multidate_event: true,
     allow_recurrent_event: true,
     allow_online_event: true,

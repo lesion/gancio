@@ -24,6 +24,7 @@ const models = {
   Setting: require('./setting'),
   Tag: require('./tag'),
   User: require('./user'),
+  Message: require('./message')
 }
 
 const db = {
@@ -37,7 +38,7 @@ const db = {
   },
   associates () {
     const { Filter, Collection, APUser, Instance, User, Event, EventNotification, Tag,
-      OAuthCode, OAuthClient, OAuthToken, Resource, Place, Notification } = DB
+      OAuthCode, OAuthClient, OAuthToken, Resource, Place, Notification, Message } = DB
 
     Filter.belongsTo(Collection)
     Collection.hasMany(Filter)
@@ -56,6 +57,9 @@ const db = {
 
     Event.belongsTo(Place)
     Place.hasMany(Event)
+
+    Message.belongsTo(Event)
+    Event.hasMany(Message)
     
     Event.belongsTo(User)
     User.hasMany(Event)

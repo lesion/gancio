@@ -93,12 +93,17 @@ export default {
     Search
   },
   mixins: [clipboard],
-  async asyncData ({ $axios, params, store, $api, $time }) {
-    const events = await $api.getEvents({
-      start: $time.currentTimestamp(),
-      show_recurrent: false
-    })
-    return { events }
+  async asyncData ({ $api, $time }) {
+    try {
+      const events = await $api.getEvents({
+        start: $time.currentTimestamp(),
+        show_recurrent: false
+      })
+      return { events }
+    } catch (e) {
+      console.error(e)
+      return { events: [] }
+    }
   },
   data ({ $store }) {
     return {

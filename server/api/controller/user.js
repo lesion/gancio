@@ -8,20 +8,6 @@ const log = require('../../log')
 const linkify = require('linkifyjs')
 
 const userController = {
-
-  async sendMessage (req, res) {
-    if (!settingsController.settings.allow_message_users) { return res.sendStatus(404) }
-    const subject = req.body.subject
-    const message = req.body.message
-    const user = await User.findByPk(req.body.userId)
-
-    if (!user) { return res.status(404).json({ success: false, message: 'User not found!' }) }
-
-    mail.send(user.email, 'message', { subject, message }, res.locals.settings.locale)
-    
-    res.status(200).send()
-
-  },
   
   async forgotPassword (req, res) {
     const email = req.body.email

@@ -27,7 +27,7 @@ const defaultSettings = {
   allow_multidate_event: true,
   allow_recurrent_event: false,
   allow_online_event: true,
-  allow_message_users: true,
+  enable_moderation: true,
   recurrent_event_visible: false,
   allow_geolocation: false,
   geocoding_provider_type: 'Nominatim',

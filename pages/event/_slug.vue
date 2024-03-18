@@ -28,7 +28,7 @@
               .font-weight-light.p-street-address(v-if='event?.place?.name !=="online"' itemprop='address') {{event?.place?.address}}
 
             //- a.d-block(v-if='event.ap_object?.url' :href="event.ap_object?.url") {{ event.ap_object?.url }}
-            a(v-if='event?.ap_user'  :href="event?.ap_user?.object?.url ?? event?.ap_user?.ap_id") @{{event.ap_user?.object?.preferredUsername}}@{{ event.ap_user?.instanceDomain }}
+            a(v-if='event?.original_url'  :href="event?.original_url") {{event.original_url}}
 
           //- tags, hashtags
           v-container.pt-0(v-if='event?.tags?.length')
@@ -61,19 +61,19 @@
                 v-list-item-content
                   v-list-item-title(v-text="$t('common.show_map')")
 
-              //- embed
-              v-list-item(@click='showEmbed=true')
-                v-list-item-icon
-                  v-icon(v-text='mdiCodeTags')
-                v-list-item-content
-                  v-list-item-title(v-text="$t('common.embed')")
-
               //- calendar
               v-list-item(:href='`/api/event/detail/${event.slug || event.id}.ics`')
                 v-list-item-icon
                   v-icon(v-text='mdiCalendarExport')
                 v-list-item-content
                   v-list-item-title(v-text="$t('common.add_to_calendar')")
+
+              //- Report
+              v-list-item(v-if='settings.enable_moderation && !showModeration' @click='report')
+                v-list-item-icon
+                  v-icon(v-text='mdiMessageTextOutline')
+                v-list-item-content
+                  v-list-item-title(v-text="$t('common.report')")
 
               //- download flyer
               v-list-item(v-if='hasMedia' :href='$helper.mediaURL(event, "download")')
@@ -82,11 +82,18 @@
                 v-list-item-content
                   v-list-item-title(v-text="$t('event.download_flyer')")
 
+              //- embed
+              v-list-item(@click='showEmbed=true')
+                v-list-item-icon
+                  v-icon(v-text='mdiCodeTags')
+                v-list-item-content
+                  v-list-item-title(v-text="$t('common.embed')")
+
+
 
           //- admin actions
           template(v-if='can_edit')
-            v-divider
-            EventAdmin(:event='event')
+            EventAdmin(:event='event' @openModeration='openModeration=true')
 
     //- resources from fediverse
     EventResource#resources.mt-3(:event='event' v-if='showResources')
@@ -106,10 +113,12 @@
     v-dialog(v-show='settings.allow_geolocation && event.place?.latitude && event.place?.longitude' v-model='mapModal' :fullscreen='$vuetify.breakpoint.xsOnly' destroy-on-close)
       EventMapDialog(:place='event.place' @close='mapModal=false')
 
+    v-navigation-drawer(v-model='openModeration' :fullscreen='$vuetify.breakpoint.xsOnly' fixed top right width=400 temporary)
+      EventModeration(:event='event' v-if='openModeration' @close='openModeration=false')
+
 </template>
 <script>
 import { mapState } from 'vuex'
-import get from 'lodash/get'
 import { DateTime } from 'luxon'
 import clipboard from '../../assets/clipboard'
 import MyPicture from '~/components/MyPicture'
@@ -117,8 +126,9 @@ import EventAdmin from '@/components/EventAdmin'
 import EventResource from '@/components/EventResource'
 import EmbedEvent from '@/components/embedEvent'
 import EventMapDialog from '@/components/EventMapDialog'
+import EventModeration from '@/components/EventModeration'
 
-import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose, mdiMap,
+import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose, mdiMap, mdiMessageTextOutline,
   mdiEye, mdiEyeOff, mdiDelete, mdiRepeat, mdiLock, mdiFileDownloadOutline, mdiShareAll,
   mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker, mdiChevronUp, mdiMonitorAccount, mdiBookmark, mdiStar } from '@mdi/js'
 
@@ -128,6 +138,7 @@ export default {
   components: {
     EventAdmin,
     EventResource,
+    EventModeration,
     EmbedEvent,
     MyPicture,
     EventMapDialog
@@ -142,12 +153,13 @@ export default {
   },
   data ({$store}) {
     return {
-      mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar, mdiFileDownloadOutline,
+      mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar, mdiFileDownloadOutline, mdiMessageTextOutline,
       mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat, mdiMap, mdiChevronUp, mdiMonitorAccount, mdiBookmark, mdiStar, mdiShareAll,
       currentAttachment: 0,
       event: {},
       showEmbed: false,
-      mapModal: false
+      mapModal: false,
+      openModeration: false
     }
   },
   head () {
@@ -231,6 +243,9 @@ export default {
     hasOnlineLocations () {
       return this.event.online_locations && this.event.online_locations.length
     },
+    showModeration () {
+      return this.settings.enable_moderation && this.$auth?.user && (this.event.isMine || this.$auth?.user?.is_admin || this.$auth?.user?.is_editor)
+    },
     showMap () {
       return this.settings.allow_geolocation && this.event.place?.latitude && this.event.place?.longitude
     },
@@ -261,6 +276,19 @@ export default {
     window.removeEventListener('keydown', this.keyDown)
   },
   methods: {
+    async report () {
+      const message = await this.$root.$prompt(this.$t('event.report_message_confirmation'), { title: this.$t('common.report')})
+      if (!message) {
+        return
+      }
+
+      try {
+        await this.$axios.$post(`/event/messages/${this.event.id}`, { message })
+        this.$root.$message('common.sent', { color: 'success' })
+      } catch (e) {
+        this.$root.$message(e, { color: 'warning' })
+      }
+    },
     keyDown (ev) {
       if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) { return }
       if (ev.key === 'ArrowRight' && this.event.next) {

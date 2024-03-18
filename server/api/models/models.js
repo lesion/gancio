@@ -8,6 +8,7 @@
 // Filter: require('./filter'),
 // Instance: require('./instance'),
 // Notification: require('./notification'),
+// Message: require('./message'),
 // OAuthClient: require('./oauth_client'),
 // OAuthCode: require('./oauth_code'),
 // OAuthToken: require('./oauth_token'),

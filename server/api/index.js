@@ -81,7 +81,6 @@ module.exports = () => {
     api.post('/user/recover', SPAMProtectionApiRateLimiter, userController.forgotPassword)
     api.post('/user/check_recover_code', userController.checkRecoverCode)
     api.post('/user/recover_password', SPAMProtectionApiRateLimiter, userController.updatePasswordWithRecoverCode)
-    api.post('/user/send_message', isAdmin, userController.sendMessage)
 
     // register and add users
     api.post('/user/register', SPAMProtectionApiRateLimiter, userController.register)
@@ -169,12 +168,17 @@ module.exports = () => {
     api.post('/settings/smtp', isAdmin, settingsController.testSMTP)
     api.get('/settings/smtp', isAdmin, settingsController.getSMTPSettings)
 
+    // moderation
+    api.post('/event/messages/:event_id', SPAMProtectionApiRateLimiter, eventController.report)
+    api.get('/event/messages/:event_id', isAuth, eventController.getMessages)
+    
     // get unconfirmed events
     api.get('/event/unconfirmed', isAdminOrEditor, eventController.getUnconfirmed)
 
     // [un]confirm event
     api.put('/event/confirm/:event_id', isAuth, eventController.confirm)
     api.put('/event/unconfirm/:event_id', isAuth, eventController.unconfirm)
+    api.put('/event/disable_author/:event_id', isAdminOrEditor, eventController.disableAuthor)
 
     // get event
     api.get('/event/detail/:event_slug.:format?', cors, eventController.get)

@@ -1,0 +1,3 @@
+extends ../layout.pug
+block content
+  p !{t('report.content', {config, author, event, message, url: `${config.baseurl}/event/${event.slug || event.id}`})}

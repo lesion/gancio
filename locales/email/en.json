@@ -25,5 +25,9 @@
     "test": {
         "subject": "Your SMTP configuration is working",
         "content": "This is a test email, if you are reading this your configuration is working."
+    },
+    "report": {
+        "subject": "Report event [{{event.title}}] from {{author}}",
+        "content": "{{author}} reported the event {{event.title}} with the following message:<br/><pre>{{message}}</pre><br/><br/><a href='{{url}}'>Open moderation</a>"
     }
 }

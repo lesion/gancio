@@ -11,7 +11,7 @@ const Col = helpers.col
 const notifier = require('../../notifier')
 const { htmlToText } = require('html-to-text')
 
-const { Event, Resource, Tag, Place, Notification, APUser, Collection, EventNotification } = require('../models/models')
+const { Event, Resource, Tag, Place, Notification, APUser, EventNotification, Message, User } = require('../models/models')
 
 
 const exportController = require('./export')
@@ -121,7 +121,7 @@ const eventController = {
           }
         },
         attributes: {
-          exclude: ['createdAt', 'updatedAt', 'placeId']
+          exclude: ['createdAt', 'updatedAt', 'placeId', 'ap_id', 'apUserApId']
         },
         include: [
           { model: Tag, required: false, attributes: ['tag'], through: { attributes: [] } },
@@ -134,7 +134,6 @@ const eventController = {
             attributes: ['id', 'activitypub_id', 'data', 'hidden']
           },
           { model: Event, required: false, as: 'parent', attributes: ['id', 'recurrent', 'is_visible', 'start_datetime'] },
-          { model: APUser, required: false }
         ],
         order: [[Resource, 'id', 'DESC']]
       })
@@ -185,6 +184,9 @@ const eventController = {
     if (event && (event.is_visible || is_admin)) {
       event = event.get()
       event.isMine = event.userId === req.user?.id
+      event.isAnon = event.userId === null
+      event.original_url = event?.ap_object?.url || event?.ap_object?.id
+      delete event.ap_object 
       delete event.userId
       event.next = next && (next.slug || next.id)
       event.prev = prev && (prev.slug || prev.id)
@@ -204,6 +206,105 @@ const eventController = {
     } else {
       res.sendStatus(404)
     }
+  },
+
+  async disableAuthor (req, res) {
+    const eventId = Number(req.params.event_id)
+    if (!res.locals.settings.enable_moderation) {
+      return res.sendStatus(403)
+    }
+
+    const event = await Event.findByPk(eventId, { include: [ User ]})
+    if (!event) {
+      return res.sendStatus(404)
+    }
+
+    if (event.user) {
+      await event.user.update({ is_active: false })
+      res.sendStatus(200)
+    } else {
+      res.sendStatus(404)
+    }
+
+  },
+
+  // get all event moderation messages if we are admin || editor
+  // get mine and to_author moderation messages if I'm the event author
+  async getMessages (req, res) {
+
+    if (!res.locals.settings.enable_moderation) {
+      return res.sendStatus(403)
+    }
+
+    const eventId = Number(req.params.event_id)
+
+    // in case we are admin or editor return all moderation messages related to this event
+    if (req.user.is_admin || req.user.is_editor) {
+      const messages = await Message.findAll({ where: { eventId }, order: [['createdAt', 'DESC']]})
+      return res.json(messages)
+    }
+
+    const event = await Event.findByPk(eventId)
+    if (!event) {
+      return res.sendStatus(404)
+    }
+
+    if (event.userId === req.user.id) {
+      const messages = await Message.findAll({ where: { eventId, is_author_visible: true }, order: [['createdAt', 'DESC']]})
+      return res.json(messages)      
+    }
+
+    log.debug('userId: %s event ud %s', event, req.user.id)
+    return res.sendStatus(400)
+
+  },
+
+  async report (req, res) {
+    const mail = require('../mail')
+    if (!res.locals.settings.enable_moderation) {
+      return res.sendStatus(403)
+    }
+
+    const eventId = Number(req.params.event_id)
+    const event = await Event.findByPk(eventId)
+    if (!event) {
+      log.warn(`Trying to ... ${eventId}`)
+      return res.sendStatus(404)
+    }
+
+    const body = req.body
+    const isMine = req.user?.id === event.userId
+    const isAdminOrEditor = req.user?.is_editor || req.user?.is_admin
+
+    // if (!isAdminOrEditor && !isMine) {
+    //   log.warn(`Someone not allowed is trying to report on an event -> "${event.title}" isMine: ${isMine} `)
+    //   return res.sendStatus(403)
+    // }
+
+    // mail.send(user.email, 'message', { subject, message }, res.locals.settings.locale)
+
+    const author = isAdminOrEditor ? 'ADMIN' : isMine ? 'AUTHOR' : 'ANON'
+    try {
+      const message = await Message.create({
+        eventId,
+        message: body.message,
+        is_author_visible: body.is_author_visible || isMine,
+        author
+      })
+
+      const admins = await User.findAll({ where: { role: ['admin', 'editor'], is_active: true }, attributes: ['email'], raw: true })
+      console.error(admins)
+      let emails = [res.locals.settings.admin_email]
+      emails = emails.concat(admins.map(a => a.email))
+      log.info('[EVENT] Report event to %s', emails)
+      mail.send(emails, 'report', { event, message: body.message, author })
+
+      return res.json(message)
+    } catch (e) {
+      log.warn(`[EVENT] ${e}`)
+      return res.sendStatus(403)
+    }
+
   },
 
   /** confirm an anonymous event
