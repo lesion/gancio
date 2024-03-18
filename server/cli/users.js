@@ -23,7 +23,7 @@ async function setAdmin (args) {
   user.is_admin = true
   await user.save()
   console.log(`User ${user.email} is now an administrator!`)
-  await db.close()  
+  await db.close()
 }
 
 
