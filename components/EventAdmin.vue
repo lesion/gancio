@@ -41,6 +41,13 @@ span
         v-list-item-content
           v-list-item-title(v-text="$t('common.moderation')")
 
+      //- Disable author
+      v-list-item(v-if='!event.isAnon && $auth.user.is_admin' @click='disableAuthor')
+        v-list-item-icon
+          v-icon(v-text='mdiAccountOff')
+        v-list-item-content
+          v-list-item-title(v-text="$t('event.disable_author')")
+
       template(v-if='event.parentId')
         v-list-item.text-overline(v-html="$t('common.recurring_event_actions')")
 
@@ -69,13 +76,13 @@ span
 
 </template>
 <script>
-import { mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever, mdiScanner, mdiMessageTextOutline } from '@mdi/js'
+import { mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever, mdiScanner, mdiMessageTextOutline, mdiAccountOff } from '@mdi/js'
 import { mapState } from 'vuex'
 export default {
   name: 'EventAdmin',
   data () {
     return {
-      mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever, mdiScanner,  mdiMessageTextOutline,
+      mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever, mdiScanner,  mdiMessageTextOutline, mdiAccountOff,
     }
   },
   props: {
@@ -88,6 +95,17 @@ export default {
     ...mapState(['settings'])
   },
   methods: {
+    async disableAuthor () {
+      const ret = await this.$root.$confirm('event.disable_author_confirm')
+      if (!ret) { return }
+      try {
+          await this.$axios.$put(`/event/disable_author/${this.event.id}`)
+          this.$root.$message("Author disabled!", { color: 'success' })
+          this.event.isAnon = true
+      } catch (e) {
+          this.$root.$message(e, { color: 'warning' })
+      }
+    },    
     async remove (parent = false) {
       const ret = await this.$root.$confirm(`event.remove_${parent ? 'recurrent_' : ''}confirmation`)
       if (!ret) { return }

@@ -210,19 +210,28 @@ const eventController = {
 
   async disableAuthor (req, res) {
     const eventId = Number(req.params.event_id)
+    log.warn('[EVENT] Disable author of event %d', eventId)
+
     if (!res.locals.settings.enable_moderation) {
+      log.warn('[EVENT] Cannot disable author, moderation is not enabled (eventId: %d)', eventId)
       return res.sendStatus(403)
     }
 
-    const event = await Event.findByPk(eventId, { include: [ User ]})
+    const event = await Event.findByPk(eventId, { include: [{ model: User, required: true } ]})
     if (!event) {
+      log.warn('[EVENT] Disable author of not found event (eventId: %d)', eventId)
       return res.sendStatus(404)
     }
 
     if (event.user) {
-      await event.user.update({ is_active: false })
+      try {
+        await event.user.update({ is_active: false })
+      } catch (e) {
+        log.warn('[EVENT] Error on disable author for eventId: %d', eventId)
+      }
       res.sendStatus(200)
     } else {
+      log.warn('[EVENT] Author not found for eventId: %d', eventId)
       res.sendStatus(404)
     }
 
