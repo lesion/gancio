@@ -15,7 +15,7 @@ v-dialog(v-model='show'
     v-card-actions
       v-spacer
       v-btn(outlined color='error' @click='cancel') {{$t('common.cancel')}}
-      v-btn(outlined color='primary' @click='agree') {{$t('common.ok')}}
+      v-btn(outlined color='primary' @click='agree' :disabled="options.is_prompt && !prompt") {{$t('common.ok')}}
 </template>
 
 <script>
