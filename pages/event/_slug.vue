@@ -69,7 +69,7 @@
                   v-list-item-title(v-text="$t('common.add_to_calendar')")
 
               //- Report
-              v-list-item(v-if='settings.enable_moderation && !showModeration' @click='report')
+              v-list-item(v-if='settings.enable_moderation && settings.enable_report && !showModeration' @click='report')
                 v-list-item-icon
                   v-icon(v-text='mdiMessageTextOutline')
                 v-list-item-content
@@ -159,7 +159,8 @@ export default {
       event: {},
       showEmbed: false,
       mapModal: false,
-      openModeration: false
+      openModeration: false,
+      reporting: false
     }
   },
   head () {
@@ -277,11 +278,12 @@ export default {
   },
   methods: {
     async report () {
-      const message = await this.$root.$prompt(this.$t('event.report_message_confirmation'), { title: this.$t('common.report')})
+      this.reporting = true
+      const message = await this.$root.$prompt(this.$t('event.report_message_confirmation'), { title: this.$t('common.report') })
       if (!message) {
         return
       }
-
+      this.reporting = false
       try {
         await this.$axios.$post(`/event/messages/${this.event.id}`, { message })
         this.$root.$message('common.sent', { color: 'success' })
@@ -290,6 +292,9 @@ export default {
       }
     },
     keyDown (ev) {
+      if (this.openModeration || this.reporting) {
+        return
+      }
       if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) { return }
       if (ev.key === 'ArrowRight' && this.event.next) {
         this.goNext()

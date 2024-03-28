@@ -89,7 +89,7 @@ passport.use(new ClientPublicStrategy(verifyPublicClient))
 
 async function verifyToken (req, accessToken, done) {
   const token = await OAuthToken.findByPk(accessToken,
-      { include: [{ model: User, attributes: { exclude: ['password'] } }, { model: OAuthClient, as: 'client' }] })
+      { include: [{ required: true, where: { is_active: true } , model: User, attributes: { exclude: ['password'] } }, { model: OAuthClient, as: 'client' }] })
 
   if (!token) return done(null, false)
   if (token.userId) {

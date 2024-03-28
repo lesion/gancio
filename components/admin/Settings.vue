@@ -58,6 +58,8 @@ v-container
 
     v-switch.mt-1(v-model='allow_geolocation'
       inset
+      persistent-hint
+      :hint="$t('admin.allow_geolocation_hint')"
       :label="$t('admin.allow_geolocation')")
 
     v-switch.mt-1(v-model='enable_moderation'
@@ -66,6 +68,12 @@ v-container
       :hint="$t('admin.enable_moderation_hint')"
       :label="$t('admin.enable_moderation')")
 
+    v-switch.mt-1(v-model='enable_report'
+      v-if="enable_moderation"
+      inset
+      persistent-hint
+      :hint="$t('admin.enable_report_hint')"
+      :label="$t('admin.enable_report')")      
 
   v-dialog(v-model='showSMTP' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
     SMTP(@close='showSMTP = false')
@@ -144,6 +152,10 @@ export default {
     enable_moderation: {
       get () { return this.settings.enable_moderation },
       set (value) { this.setSetting({ key: 'enable_moderation', value }) }
+    },
+    enable_report: {
+      get () { return this.settings.enable_report },
+      set (value) { this.setSetting({ key: 'enable_report', value }) }
     },
     filteredTimezones () {
       const current_timezone = DateTime.local().zoneName

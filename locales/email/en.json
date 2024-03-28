@@ -27,7 +27,9 @@
         "content": "This is a test email, if you are reading this your configuration is working."
     },
     "report": {
-        "subject": "Report event [{{event.title}}] from {{author}}",
-        "content": "{{author}} reported the event {{event.title}} with the following message:<br/><pre>{{message}}</pre><br/><br/><a href='{{url}}'>Open moderation</a>"
+        "subject": "Event moderation [{{event.title}}]",
+        "content_ADMIN": "An admin commented about the event <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Open moderation</a>",
+        "content_ANON": "A visitor reported the event <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Open moderation</a>",
+        "content_AUTHOR": "The author of event <strong>{{event.title}}</strong> wrote:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Open moderation</a>"
     }
 }

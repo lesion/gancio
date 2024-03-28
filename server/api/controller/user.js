@@ -120,6 +120,7 @@ const userController = {
   async remove (req, res) {
     try {
       let user
+      // TODO: has to unset events first!
       if (req.user.is_admin && req.params.id) {
         user = await User.findByPk(req.params.id)
       } else {

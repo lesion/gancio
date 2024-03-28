@@ -78,6 +78,7 @@ module.exports = {
       allow_anon_event: settings.allow_anon_event,
       allow_recurrent_event: settings.allow_recurrent_event,
       enable_moderation: settings.enable_moderation,
+      enable_report: settings.enable_report,
       allow_multidate_event: settings.allow_multidate_event,
       allow_online_event: settings.allow_online_event,
       recurrent_event_visible: settings.recurrent_event_visible,

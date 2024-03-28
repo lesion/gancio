@@ -126,6 +126,7 @@ const eventController = {
         include: [
           { model: Tag, required: false, attributes: ['tag'], through: { attributes: [] } },
           { model: Place, attributes: ['name', 'address', 'latitude', 'longitude', 'id'] },
+          { model: User, required: false, attributes: ['is_active'] },
           {
             model: Resource,
             where: !is_admin && { hidden: false },
@@ -135,7 +136,7 @@ const eventController = {
           },
           { model: Event, required: false, as: 'parent', attributes: ['id', 'recurrent', 'is_visible', 'start_datetime'] },
         ],
-        order: [[Resource, 'id', 'DESC']]
+        order: [[Resource, 'id', 'DESC']],
       })
     } catch (e) {
       log.error('[EVENT]', e)
@@ -184,9 +185,10 @@ const eventController = {
     if (event && (event.is_visible || is_admin)) {
       event = event.get()
       event.isMine = event.userId === req.user?.id
-      event.isAnon = event.userId === null
+      event.isAnon = event.userId === null || !event?.user?.is_active
       event.original_url = event?.ap_object?.url || event?.ap_object?.id
-      delete event.ap_object 
+      delete event.ap_object
+      delete event.user
       delete event.userId
       event.next = next && (next.slug || next.id)
       event.prev = prev && (prev.slug || prev.id)
@@ -263,7 +265,6 @@ const eventController = {
       return res.json(messages)      
     }
 
-    log.debug('userId: %s event ud %s', event, req.user.id)
     return res.sendStatus(400)
 
   },
@@ -275,9 +276,9 @@ const eventController = {
     }
 
     const eventId = Number(req.params.event_id)
-    const event = await Event.findByPk(eventId)
+    const event = await Event.findByPk(eventId, { include: [{ model: User, required: false }], raw: true })
     if (!event) {
-      log.warn(`Trying to ... ${eventId}`)
+      log.warn(`[REPORT] Event does not exists: ${eventId}`)
       return res.sendStatus(404)
     }
 
@@ -285,12 +286,10 @@ const eventController = {
     const isMine = req.user?.id === event.userId
     const isAdminOrEditor = req.user?.is_editor || req.user?.is_admin
 
-    // if (!isAdminOrEditor && !isMine) {
-    //   log.warn(`Someone not allowed is trying to report on an event -> "${event.title}" isMine: ${isMine} `)
-    //   return res.sendStatus(403)
-    // }
-
-    // mail.send(user.email, 'message', { subject, message }, res.locals.settings.locale)
+    if (!isAdminOrEditor && !isMine && !res.locals.settings.enable_report) {
+      log.warn(`[REPORT] Someone not allowed is trying to report an event -> "${event.title}" isMine: ${isMine} `)
+      return res.sendStatus(403)
+    }
 
     const author = isAdminOrEditor ? 'ADMIN' : isMine ? 'AUTHOR' : 'ANON'
     try {
@@ -302,11 +301,17 @@ const eventController = {
       })
 
       const admins = await User.findAll({ where: { role: ['admin', 'editor'], is_active: true }, attributes: ['email'], raw: true })
-      console.error(admins)
       let emails = [res.locals.settings.admin_email]
-      emails = emails.concat(admins.map(a => a.email))
+      emails = emails.concat(admins?.map(a => a.email))
       log.info('[EVENT] Report event to %s', emails)
+
+      // notify admins
       mail.send(emails, 'report', { event, message: body.message, author })
+
+      // notify author
+      if (event['user.email'] && body.is_author_visible && !isMine) {
+        mail.send(event['user.email'], 'report', { event, message: body.message, author })
+      }
 
       return res.json(message)
     } catch (e) {
