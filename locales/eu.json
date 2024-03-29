@@ -138,21 +138,21 @@
     "register": {
         "description": "Gizarte mugimenduak beraien kabuz antolatu behar dira.<br/>\n<br/>Argitaratzen hasi baino lehen <strong>zure kontu berria onartua izan behar da</strong>, beraz, <strong>webgune honen atzean hezur-haragizko pertsonak</strong> gaudela kontuan izanik, azal iezaguzu mesedez pare bat lerrotan zer nolako ekitaldiak argitaratu nahi dituzun.",
         "error": "Errorea: ",
-        "complete": "Izen-ematea baieztatu beharra dago.",
+        "complete": "Izen-ematea onartu beharra dago.",
         "first_user": "Administratzailea sortu da"
     },
     "event": {
         "anon": "Anonimoa",
-        "anon_description": "Ekitaldi bat sor dezakezu saioa hasi edo izena eman gabe, baina norbaitek berau irakurri eta\ngune honetarako egokia dela baieztatu arte itxaron beharko duzu. Ez da posible izango ekitaldia aldatzerik.<br/><br/>\nHorren ordez <a href='/login'>saioa hasi</a> edo <a href='/register'>izena eman</a> dezakezu. Bestela, jarraitu aurrera eta ahalik azkarren erantzuten saiatuko gara. ",
+        "anon_description": "Saioa hasi edo izena eman gabe sor dezakezu ekitaldi bat, baina norbaitek berau irakurri eta\ngune honetarako egokia dela baieztatu arte itxaron beharko duzu. Ezingo da ekitaldia aldatu.<br/><br/>\nHorren ordez, <a href='/login'>saioa hasi</a> edo <a href='/register'>izena eman</a> dezakezu. Bestela, jarraitu aurrera eta ahal bezain azkarren erantzuten saiatuko gara. ",
         "same_day": "egun berean",
         "what_description": "Izenburua",
         "description_description": "Deskripzioa",
         "tag_description": "Etiketa",
         "media_description": "Irudi bat gehi dezakezu (hautazkoa)",
         "added": "Ekitaldia gehitu da",
-        "added_anon": "Ekitaldia gehitu da, baina baieztatzeko zain dago.",
+        "added_anon": "Ekitaldia gehitu da, baina onarpenaren zain dago.",
         "where_description": "Non da ekitaldia? Agertzen ez bada zuk sor dezakezu.",
-        "confirmed": "Ekitaldia baieztatu da",
+        "confirmed": "Ekitaldia onartu da",
         "not_found": "Ezin da ekitaldia aurkitu",
         "remove_confirmation": "Ziur al zaude ekitaldi hau ezabatu nahi duzula?",
         "remove_recurrent_confirmation": "Ziur al zaude ekitaldi errepikari hau ezabatu nahi duzula?\nIragandako ekitaldiak mantenduko dira, baina ez da ekitaldi berririk sortuko.",
@@ -187,7 +187,7 @@
         "edit_recurrent": "Editatu ekitaldi errepikaria:",
         "updated": "Ekitaldia eguneratu da",
         "saved": "Ekitaldia gorde da",
-        "remove_media_confirmation": "Irudiaren ezabaketa baieztatzen duzu?",
+        "remove_media_confirmation": "Ziur irudia ezabatu nahi duzula?",
         "alt_text_description": "Ikusmen-urritasunak dituztenentzako deskripzioa",
         "choose_focal_point": "Aukeratu arretagunea",
         "download_flyer": "Deskargatu eskuorria",
@@ -202,14 +202,14 @@
     },
     "admin": {
         "place_description": "Lekua edo helbidea oker badago, alda dezakezu.<br/>Leku honekin lotutako iraganeko eta etorkizuneko ekitaldien helbidea aldatuko da.",
-        "event_confirm_description": "Erabiltzaile anonimoek sortutako ekitaldiak hemen baieztatu ditzakezu",
+        "event_confirm_description": "Erabiltzaile anonimoek sortutako ekitaldiak hemen onartu ditzakezu",
         "delete_user": "Ezabatu",
         "remove_admin": "Kendu administratzaile baimena",
         "delete_user_confirm": "Ziur al zaude {user} ezabatu nahi duzula?",
         "user_remove_ok": "Erabiltzailea ezabatu da",
         "user_create_ok": "Erabiltzailea sortu da",
         "allow_registration_description": "Izen-emateak ahalbidetu?",
-        "allow_anon_event": "Anonimoek ekitaldiak sortzea ahalbidetu (baieztatu ondoren)?",
+        "allow_anon_event": "Erabiltzaile anonimoei ekitaldiak sortzea ahalbidetu utzi nahi diezu? Lehenengo, onartu egin beharko dituzu",
         "allow_recurrent_event": "Ekitaldi errepikariak ahalbidetu",
         "recurrent_event_visible": "Erakutsi ekitaldi errepikariak modu lehenetsian",
         "federation": "Federazioa / ActivityPub",
@@ -223,7 +223,7 @@
         "hide_boost_bookmark_help": "Fedibertsotik datozen bultzada eta laster-marka kopuruaren ikonotxoak ezkutatzen ditu",
         "block": "Blokeatu",
         "unblock": "Desblokeatu",
-        "user_add_help": "Eposta bat bidaliko diogu erabiltzaile berriari harpidetza baieztatzeko eta pasahitz bat aukeratzeko argibideekin",
+        "user_add_help": "Eposta bat bidaliko diogu erabiltzaile berriari harpidetza berresteko eta pasahitz bat aukeratzeko argibideekin",
         "resources": "Baliabideak",
         "hide_resource": "Ezkutatu baliabidea",
         "show_resource": "Erakutsi baliabidea",
@@ -267,7 +267,7 @@
         "smtp_test_success": "Probako eposta bidali da {admin_email}-(e)ra, begiratu zure sarrera-ontzia",
         "admin_email": "Administratzailearen eposta",
         "smtp_hostname": "SMTP hostname",
-        "smtp_description": "<ul><li>Administratzaileak eposta bat jaso beharko luke anonimo batek ekitaldi bat gehitzen duenean (gaituta badago).</li><li>Administratzaileak eposta bat jaso beharko luke izena emateko eskari bakoitzeko (gaituta badago).</li><li>Erabiltzaileak eposta bat jaso beharko luke izena emateko eskariarekin.</li><li>Erabiltzaileak eposta bat jaso beharko luke izen ematea baieztatzean.</li><li>Erabiltzaileak eposta bat jaso beharko luke administratzaileak zuzenean izena emanez gero.</li><li>Erabiltzaileek eposta bat jaso beharko lukete pasahitza ahazten dutenean.</li></ul>",
+        "smtp_description": "<ul><li>Administratzaileak eposta bat jaso beharko luke anonimo batek ekitaldi bat gehitzen duenean (gaituta badago).</li><li>Administratzaileak eposta bat jaso beharko luke izena emateko eskari bakoitzeko (gaituta badago).</li><li>Erabiltzaileak eposta bat jaso beharko luke izena emateko eskariarekin.</li><li>Erabiltzaileak eposta bat jaso beharko luke izen ematea berrestean.</li><li>Erabiltzaileak eposta bat jaso beharko luke administratzaileak zuzenean izena emanez gero.</li><li>Erabiltzaileek eposta bat jaso beharko lukete pasahitza ahazten dutenean.</li></ul>",
         "widget": "Tresna",
         "event_remove_ok": "Ekitaldia ezabatu da",
         "wrong_domain_warning": "config.json-en konfiguratuta dagoen baseurl <b>({baseurl})</b> ez da bisitatzen ari zaren berbera <b>({url})</b>",
@@ -324,7 +324,7 @@
         "delete_collection_confirm": "Ziur <u>{collection}</u> bilduma ezabatu nahi duzula?"
     },
     "auth": {
-        "not_confirmed": "Oraindik baieztatu gabe dago…",
+        "not_confirmed": "Oraindik ez da berretsi…",
         "fail": "Ezin izan da saioa hasi. Ziur al zaude pasahitza zuzena dela?"
     },
     "settings": {
@@ -340,7 +340,7 @@
         "email_taken": "Eposta hau dageneko hartuta dago."
     },
     "confirm": {
-        "title": "Erabiltzaile-baieztapena",
+        "title": "Erabiltzailea onartzea",
         "not_valid": "Zerbaitek huts egiten du.",
         "valid": "Zure kontua onartua izan da, orain <a href=\"/login\">saioa hasi</a> dezakezu"
     },
@@ -355,7 +355,7 @@
     "about": "\n  <p><a href='https://gancio.org'>Gancio</a> Tokiko komunitateentzako agenda partekatua da.</p>\n  ",
     "oauth": {
         "authorization_request": "<code>{app}</code> aplikazioak ondorengo baimena eskatu du <code>{instance_name}</code>(e)n:",
-        "redirected_to": "Baieztatu ondoren hona birbideratua izango zara: <code>{url}</code>",
+        "redirected_to": "Berretsi ondoren, webgune honetara joango zara: <code>{url}</code>",
         "scopes": {
             "event:write": "Sortu eta editatu zure ekitaldiak"
         }
