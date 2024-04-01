@@ -2,39 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.1](https://framagit.org/les/gancio/compare/v1.15.0...v1.15.1) (2024-04-01)
+
 ## [1.15.0](https://framagit.org/les/gancio/compare/v1.14.1...v1.15.0) (2024-04-01)
 
 
 ### Features
 
+* new Report and Moderation feature, fix [#221](https://framagit.org/les/gancio/issues/221), fix [#350](https://framagit.org/les/gancio/issues/350), fix [#220](https://framagit.org/les/gancio/issues/220) ([b40b4ba](https://framagit.org/les/gancio/commit/b40b4ba3b438f3baaffda91816e7ffd9b2836652)), ([22c2735](https://framagit.org/les/gancio/commit/22c2735e93be7ca0f912fd3fda2845c6dbcf1499)) [documentation](https://gancio.org/usage/moderation)
+* new Editor role feature, fix [#278](https://framagit.org/les/gancio/issues/221) [#38](https://framagit.org/les/gancio/-/merge_requests/38)
 * allow admins to disable event's author ([ca3ed0b](https://framagit.org/les/gancio/commit/ca3ed0b0d1eb14ecc33b830d3ca3baf26e27756d))
 * fedi stats api ([6ce0128](https://framagit.org/les/gancio/commit/6ce01287e4c676ebb0b3372ff40e344da0e18018))
-* implement a generic delete ([8399fbb](https://framagit.org/les/gancio/commit/8399fbb2de529f99609a4621fb488a6affbe3ce3))
 * new `users setrole` CLI subcommand ([40ca01c](https://framagit.org/les/gancio/commit/40ca01c48932e96b3480b3972977b730133cc96e))
-* new $prompt global method ([b1f6a2f](https://framagit.org/les/gancio/commit/b1f6a2f239d19bb56665d97a199f9989e847de57))
 * new Albanian locale ([9b1d102](https://framagit.org/les/gancio/commit/9b1d1023f6a01559309a0f63c3f76aa7f6f770ca))
 * new follow trusted instance UI, fedi stats, fix [#353](https://framagit.org/les/gancio/issues/353) ([8188d0b](https://framagit.org/les/gancio/commit/8188d0b4a018013bcdecd8ec9f8973d99e0881de))
-* new Report / Moderation feature, fix [#221](https://framagit.org/les/gancio/issues/221), fix [#350](https://framagit.org/les/gancio/issues/350), fix [#220](https://framagit.org/les/gancio/issues/220) ([b40b4ba](https://framagit.org/les/gancio/commit/b40b4ba3b438f3baaffda91816e7ffd9b2836652))
-* refactoring event moderation, report, report notification ([22c2735](https://framagit.org/les/gancio/commit/22c2735e93be7ca0f912fd3fda2845c6dbcf1499))
 
 
 ### Bug Fixes
 
-* add clean unused ap users task ([ac958b0](https://framagit.org/les/gancio/commit/ac958b0e4bacae47af5c7e9893ad6f9b3d095021))
-* add index to trusted flag ap_users, fix [#361](https://framagit.org/les/gancio/issues/361) ([fa6a7f4](https://framagit.org/les/gancio/commit/fa6a7f46a9529f8252883b5f9420dd6fe3163678))
-* allow  collection and maxlength attribute in wp plugin ([c132b6e](https://framagit.org/les/gancio/commit/c132b6ed1b702bcc6d8d7276ea12c80febcff8ef))
+* **AP:** add clean unused ap users task ([ac958b0](https://framagit.org/les/gancio/commit/ac958b0e4bacae47af5c7e9893ad6f9b3d095021))
+* **AP:** add index to trusted flag ap_users, fix [#361](https://framagit.org/les/gancio/issues/361) ([fa6a7f4](https://framagit.org/les/gancio/commit/fa6a7f46a9529f8252883b5f9420dd6fe3163678))
 * **AP:** use instance name as display name, fix [#351](https://framagit.org/les/gancio/issues/351) ([1573cb9](https://framagit.org/les/gancio/commit/1573cb967c26ffe23a083c28f9fb87f6a1507628))
+* **AP:** do not get new ap actor or instance in case of delete ([d749061](https://framagit.org/les/gancio/commit/d749061251c87cd07c125f06691448a34e0973a6))
+* **AP:** do not share followers ([85264fa](https://framagit.org/les/gancio/commit/85264faa85de04362a7756c3eaf12848d2a50990))
+* **AP:** support Gone actor Deleted when pub key is in cache ([edd3aa7](https://framagit.org/les/gancio/commit/edd3aa72a0ddbcd21f1196f49f84e203af430364))
 * **collection:** allow to specify recurrent events visibility ([4af2b63](https://framagit.org/les/gancio/commit/4af2b63bee779287ab51f4b63778d88f98cdca5d))
 * **collection:** do not limit events by default ([91d8fea](https://framagit.org/les/gancio/commit/91d8fea7c1df404bedca57b62053293c8ab6596d))
-* do not new ap actor or instance in case of delete ([d749061](https://framagit.org/les/gancio/commit/d749061251c87cd07c125f06691448a34e0973a6))
-* do not share followers ([85264fa](https://framagit.org/les/gancio/commit/85264faa85de04362a7756c3eaf12848d2a50990))
 * edit role from admin ([7daaad2](https://framagit.org/les/gancio/commit/7daaad2d582b020ffe1d1239e25367707c27184a))
 * reduce the space between icon and text and lower icon opacity, [#360](https://framagit.org/les/gancio/issues/360) ([0e3e045](https://framagit.org/les/gancio/commit/0e3e045d3faade610a59882b4ef58f2b0d7007ee))
 * rel me ([e135092](https://framagit.org/les/gancio/commit/e135092ddaffbff4411d0e70e3ee330cc4d5817d))
 * remove instance_place meta from federation ([3fcc6f7](https://framagit.org/les/gancio/commit/3fcc6f7ef22503395a450c8e69f8f2d409f774c7))
-* support Gone actor Deleted when pub key is in cache ([edd3aa7](https://framagit.org/les/gancio/commit/edd3aa72a0ddbcd21f1196f49f84e203af430364))
 * update deps ([793f2b9](https://framagit.org/les/gancio/commit/793f2b90718eb4db3f394371dfb655afd5e8e222))
-* wpgancio add php8.2 compatibility ([1718941](https://framagit.org/les/gancio/commit/17189414fdecf9c0b7cbdf50d3a7f9f2164c7f7e))
+* **WP:** allow collection and maxlength attribute in wp plugin ([c132b6e](https://framagit.org/les/gancio/commit/c132b6ed1b702bcc6d8d7276ea12c80febcff8ef))
+* **WP:** wpgancio add php8.2 compatibility ([1718941](https://framagit.org/les/gancio/commit/17189414fdecf9c0b7cbdf50d3a7f9f2164c7f7e))
 
 ### [1.14.1](https://framagit.org/les/gancio/compare/v1.14.0...v1.14.1) (2024-02-04)
 
