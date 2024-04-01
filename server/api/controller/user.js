@@ -80,6 +80,7 @@ const userController = {
       // the first registered user will be an active admin
       if (n_users === 0) {
         req.body.is_active = req.body.is_admin = true
+        req.body.role = 'admin'
         const user = await User.create(req.body)
         return res.json(user)
       }
