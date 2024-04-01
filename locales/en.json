@@ -228,7 +228,7 @@
     "allow_registration_description": "Allow open registrations?",
     "allow_anon_event": "Allow anonymous events (has to be confirmed)?",
     "enable_moderation": "Enable moderation",
-    "enable_moderation_hint": "Admins could talk each about events, optionally including event's author",
+    "enable_moderation_hint": "Admins could talk to each other about events, optionally including the author of the event",
     "enable_report": "Enable report event",
     "enable_report_hint": "Any visitor could report an event, admins are notified via e-mail",
     "allow_multidate_event": "Allow multi-day events",

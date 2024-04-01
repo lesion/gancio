@@ -212,7 +212,7 @@ const eventController = {
 
   async disableAuthor (req, res) {
     const eventId = Number(req.params.event_id)
-    log.warn('[EVENT] Disable author of event %d', eventId)
+    log.warn('[EVENT] Disable author of the event %d', eventId)
 
     if (!res.locals.settings.enable_moderation) {
       log.warn('[EVENT] Cannot disable author, moderation is not enabled (eventId: %d)', eventId)

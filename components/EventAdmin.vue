@@ -42,7 +42,7 @@ span
           v-list-item-title(v-text="$t('common.moderation')")
 
       //- Disable author
-      v-list-item(v-if='!event.isAnon && $auth.user.is_admin' @click='disableAuthor')
+      v-list-item(v-if='settings.enable_moderation && !event.isAnon && $auth.user.is_admin' @click='disableAuthor')
         v-list-item-icon
           v-icon(v-text='mdiAccountOff')
         v-list-item-content
