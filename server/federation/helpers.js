@@ -365,7 +365,7 @@ const Helpers = {
 
 
   // get Actor from URL using GET HTTP Signature 
-  async getActor (URL, instance, force = false) {
+  async getActor (URL, instance, force = false, fail_on_not_cached = false) {
     log.debug(`[FEDI] getActor for ${URL}`)
 
     let fedi_user
@@ -375,6 +375,8 @@ const Helpers = {
       fedi_user = await APUser.findByPk(URL, { include: Instance })
       if (fedi_user) {
         return fedi_user
+      } else if (fail_on_not_cached) {
+        return false
       }
     }
 
@@ -411,7 +413,7 @@ const Helpers = {
       throw new Error(nodeInfo)
     },
 
-  async getInstance (actor_url, force = false) {
+  async getInstance (actor_url, force = false, fail_on_not_cached = false) {
     log.debug(`[FEDI] getInstance for ${actor_url}`)
     actor_url = new url.URL(actor_url)
     const domain = actor_url.host
@@ -422,6 +424,8 @@ const Helpers = {
       if (instance) {
         log.debug('[FEDI] Use cached instance: %s', instance.name)
         return instance
+      } else if (fail_on_not_cached) {
+        return false
       }
     }
 
@@ -452,6 +456,8 @@ const Helpers = {
 
     const actor_url = req?.body?.actor
 
+    const isDelete = req?.body?.type === 'Delete'
+
     // do we have an actor?
     if (!actor_url) {
       log.warn(`[FEDI] Verify Signature: No actor url or empty body`)
@@ -460,9 +466,12 @@ const Helpers = {
 
     // Get instance's nodeinfo
     // getting this from db if it is not the first time we interact with it
-    const instance = await Helpers.getInstance(actor_url)
+    const instance = await Helpers.getInstance(actor_url, false, isDelete)
     if (!instance) {
       log.warn(`[FEDI] Verify Signature: Instance not found ${actor_url}`)
+      if (isDelete) {
+        return res.sendStatus(201)
+      }
       return res.status(401).send('Instance not found')
     }
 
@@ -473,10 +482,10 @@ const Helpers = {
     }
 
     // get actor
-    let ap_actor = await Helpers.getActor(actor_url, instance)
+    let ap_actor = await Helpers.getActor(actor_url, instance, false, isDelete)
     if (!ap_actor) {
       log.info(`[FEDI] Actor ${actor_url} not found`)
-      if (req?.body?.type === 'Delete') {
+      if (isDelete) {
         return res.sendStatus(201)
       }
       return res.status(401).send('Actor not found')
