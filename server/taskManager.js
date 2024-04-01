@@ -44,6 +44,8 @@ class Task {
  * - Create recurrent events
  * - Sync AP federation profiles
  * - Remove unused tags/places
+ * - Remove past federated events and related resources
+ * - Remove unused ap actors
  */
 
 class TaskManager {
@@ -76,7 +78,7 @@ class TaskManager {
     this.add(new Task({
       name: 'CLEAN_UNUSED_TAGS',
       method: tagHelpers._cleanUnused,
-      repeatDelay: day,
+      repeatDelay: day+minute,
       repeat: true,
       callAtStart: true
     }))
@@ -84,7 +86,15 @@ class TaskManager {
     this.add(new Task({
       name: 'CLEAN_FEDIVERSE_PAST_EVENT',
       method: apHelpers._cleanPastEvents,
-      repeatDelay: day,
+      repeatDelay: 6*hour+5*minute,
+      repeat: true,
+      callAtStart: true
+    }))
+
+    this.add(new Task({
+      name: 'CLEAN_FEDIVERSE_AP_USERS',
+      method: apHelpers._cleanUnusedAPUser,
+      repeatDelay: day+10*minute,
       repeat: true,
       callAtStart: true
     }))
