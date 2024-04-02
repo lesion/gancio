@@ -8,6 +8,13 @@ nav_order: 10
 All notable changes to this project will be documented in this file.
 
 
+### [1.15.2](https://framagit.org/les/gancio/compare/v1.15.1...v1.15.2) (2024-04-02)
+
+
+### Bug Fixes
+
+* maintain compatibility with node 16, fix [#366](https://framagit.org/les/gancio/issues/366) ([3f944c3](https://framagit.org/les/gancio/commit/3f944c3807bbac12fb7214b03a32176947be62d7))
+
 ## [1.15.1](https://framagit.org/les/gancio/compare/v1.14.1...v1.15.1) (2024-04-01)
 
 
