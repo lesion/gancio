@@ -152,7 +152,7 @@ const db = {
         wrap: fun => {
           return () =>
             fun(db.sequelize.queryInterface, Sequelize).catch(e => {
-              // log.error(e)
+              log.warn(e)
               return false
             })
         },
