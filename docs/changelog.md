@@ -8,6 +8,13 @@ nav_order: 10
 All notable changes to this project will be documented in this file.
 
 
+### [1.15.3](https://framagit.org/les/gancio/compare/v1.15.2...v1.15.3) (2024-04-02)
+
+
+### Bug Fixes
+
+* restore migrations log and return a promise ([65f87ad](https://framagit.org/les/gancio/commit/65f87ad81cb4eaa303dde448fa0142a99956bed9))
+
 ### [1.15.2](https://framagit.org/les/gancio/compare/v1.15.1...v1.15.2) (2024-04-02)
 
 
