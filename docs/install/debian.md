@@ -15,7 +15,7 @@ sudo apt install curl gcc g++ make wget libpq-dev
 
 1. Install Node.js & yarn
 ```bash
-curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
+curl -sL https://deb.nodesource.com/setup_18.x | sudo bash -
 sudo apt-get install -y nodejs
 sudo npm install -g yarn
 ```
