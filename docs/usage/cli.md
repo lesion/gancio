@@ -38,9 +38,10 @@ To list all users use
 
 ### Create a new user
 
-`gancio users create <username|email>` [password]
+`gancio users create <username|email> [password] [role]`
 
-To create an user with administrator privileges use the `--admin` flag, e.g. `gancio users create admin@example.com --admin`
+`role` value could be `user` (default), `admin` or `editor`, you can also specify it using `--role` flag.  
+To create an user with administrator privileges use the `--role` flag, e.g. `gancio users create admin@example.com --role admin`
 
 
 ### Remove a user
@@ -51,10 +52,10 @@ To create an user with administrator privileges use the `--admin` flag, e.g. `ga
 `gancio users reset-password <username|email>`
 
 
-### Change administrator privileges
+### Change role
 
 To add administrator privileges to an user:
-`gancio users set-admin <username|email>`  
+`gancio users set_role <username|email> admin`  
 
 To remove administrator privileges from an user:
-`gancio users unset-admin <username|email>`
+`gancio users set_role <username|email> user`

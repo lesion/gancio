@@ -7,7 +7,7 @@ parent: Usage
 has_toc: true
 ---
 
-## Moderation
+## Moderation <span class='label label-yellow'>since 1.15.1</span>
 This feature could be enabled in **Admin > Settings > Enable Moderation**.
 By default it is not enabled.
 
