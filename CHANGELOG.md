@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.4](https://framagit.org/les/gancio/compare/v1.15.3...v1.15.4) (2024-04-04)
+
+
+### Bug Fixes
+
+* set admin role during installation setup ([334b6cd](https://framagit.org/les/gancio/commit/334b6cd6867e63285a22a99fb37d3b98ebfe89dc))
+* update docs, fix [#370](https://framagit.org/les/gancio/issues/370) ([674ca3c](https://framagit.org/les/gancio/commit/674ca3cad537e648d79a3ecec24dbb18d34d7d65))
+
 ### [1.15.3](https://framagit.org/les/gancio/compare/v1.15.2...v1.15.3) (2024-04-02)
 
 
