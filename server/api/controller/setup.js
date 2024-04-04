@@ -77,7 +77,8 @@ const setupController = {
           email,
           password,
           is_admin: true,
-          is_active: true
+          is_active: true,
+          role: 'admin'
         })
 
         res.json({ password, email })
