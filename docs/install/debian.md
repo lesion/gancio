@@ -53,6 +53,14 @@ sudo adduser --group --system --shell /bin/false --home /opt/gancio gancio
 sudo yarn global add --network-timeout 1000000000 --silent {{site.url}}/latest.tgz
 ```
 
+> info "Install another release"
+> You can found old releases at [{{site.url}}/releases]({{site.url}}/releases)
+
+> info "Package verification"
+> Distributed packages are signed with [this key](/assets/underscore_to.hacklab.asc) you can verify the signature using:  
+> `gpg --verify latest.tgz.sig`
+
+
 1. Setup systemd service and reload systemd
 ```bash
 sudo wget http://gancio.org/gancio.service -O /etc/systemd/system/gancio.service
