@@ -1,3 +1,4 @@
+const get = require('lodash/get')
 const Follows = require('./follows')
 const Resources = require('./resources')
 const Events = require('./events')
