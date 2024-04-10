@@ -44,7 +44,7 @@ module.exports = {
 
     log.debug(`[FEDI] Reply from ${req.body.actor} to "${event.title}"`)
 
-    body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content || ''))
+    body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content || '', { target: '_blank', render: { email: ctx => ctx.content }}))
 
     await Resource.create({
       activitypub_id: body.object.id,
@@ -73,8 +73,7 @@ module.exports = {
       return res.sendStatus(404)
     }
 
-    // search for related event
-    body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content || ''))
+    body.object.content = helpers.sanitizeHTML(linkifyHtml(body.object.content || '', { target: '_blank', render: { email: ctx => ctx.content }}))
 
     await resource.update({
       data: body.object

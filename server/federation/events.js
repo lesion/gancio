@@ -69,7 +69,7 @@ module.exports = {
       title: APEvent.name.trim(),
       start_datetime: dayjs(APEvent.startTime).unix(),
       end_datetime: APEvent?.endTime ? dayjs(APEvent.endTime).unix() : null,
-      description: helpers.sanitizeHTML(linkifyHtml(APEvent.content)),
+      description: helpers.sanitizeHTML(linkifyHtml(APEvent.content, { target: '_blank', render: { email: ctx => ctx.content }})),
       media,
       is_visible: true,
       ap_id,

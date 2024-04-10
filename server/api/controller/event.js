@@ -476,7 +476,7 @@ const eventController = {
       const eventDetails = {
         title: body.title.trim(),
         // sanitize and linkify html
-        description: helpers.sanitizeHTML(linkifyHtml(body.description || '')),
+        description: helpers.sanitizeHTML(linkifyHtml(body.description || '', { target: '_blank', render: { email: ctx => ctx.content }})),
         multidate: body.multidate,
         start_datetime: body.start_datetime,
         end_datetime: body.end_datetime,
@@ -592,7 +592,7 @@ const eventController = {
       const eventDetails = {
         title: body.title || event.title,
         // sanitize and linkify html
-        description: helpers.sanitizeHTML(linkifyHtml(body.description || '', { target: '_blank' })) || event.description,
+        description: helpers.sanitizeHTML(linkifyHtml(body.description || '', { target: '_blank', render: { email: ctx => ctx.content }})) || event.description,
         multidate: body.multidate,
         start_datetime,
         end_datetime,
