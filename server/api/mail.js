@@ -44,9 +44,10 @@ const mail = {
         directory: path.join(__dirname, '..', '..', 'locales', 'email'),
         objectNotation: true,
         syncFiles: false,
+        retryInDefaultLocale: true,
         updateFiles: false,
-        defaultLocale: settings.instance_locale || 'en',
-        locale,
+        defaultLocale: 'en',
+        locale: settings.instance_locale,
         locales: Object.keys(locales)
       },
       transport: settings.smtp || {}
