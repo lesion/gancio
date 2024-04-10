@@ -26,7 +26,7 @@ const notifier = {
         let emails = [settingsController.settings.admin_email]
         emails = emails.concat(admins?.map(a => a.email))
         p = mail.send(emails, 'event',
-          { event, to_confirm: !event.is_visible, notification })
+          { event, to_confirm: !event.is_visible, notification }, undefined, true)
         promises.push(p)
         break
       case 'ap':

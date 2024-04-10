@@ -7,7 +7,7 @@ const { Task, TaskManager } = require('../taskManager')
 const locales = require('../../locales')
 
 const mail = {
-  send (addresses, template, locals, locale) {
+  send (addresses, template, locals, locale, bcc) {
     locale = locale || settingsController.settings.instance_locale
     if (process.env.NODE_ENV === 'production' && (!settingsController.settings.admin_email || !settingsController.settings.smtp)) {
       log.error(`Cannot send any email: SMTP Email configuration not completed!`)
@@ -17,12 +17,12 @@ const mail = {
     const task = new Task({
       name: 'MAIL',
       method: mail._send,
-      args: [addresses, template, locals, locale]
+      args: [addresses, template, locals, locale, bcc]
     })
     TaskManager.add(task)
   },
 
-  _send (addresses, template, locals, locale) {
+  _send (addresses, template, locals, locale, bcc=false) {
     locale = locale || settingsController.settings.instance_locale
     const settings = settingsController.settings
     log.info(`Send ${template} email to ${addresses} with locale ${locale}`)
@@ -61,7 +61,7 @@ const mail = {
     const msg = {
       template,
       message: {
-        to: addresses
+        [bcc ? 'bcc' : 'to']: addresses
       },
       locals: {
         ...locals,

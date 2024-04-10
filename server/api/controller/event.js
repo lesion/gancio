@@ -306,7 +306,7 @@ const eventController = {
       log.info('[EVENT] Report event to %s', emails)
 
       // notify admins
-      mail.send(emails, 'report', { event, message: body.message, author })
+      mail.send(emails, 'report', { event, message: body.message, author }, undefined, true)
 
       // notify author
       if (event['user.email'] && body.is_author_visible && !isMine) {
