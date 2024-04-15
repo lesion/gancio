@@ -113,7 +113,11 @@
         "collection_in_home": "Mostrar unha colección no Inicio",
         "trusted_instances": "Instancias de confianza",
         "editor": "Editor",
-        "my_events": "Os meus Eventos"
+        "my_events": "Os meus Eventos",
+        "report": "Denunciar evento",
+        "contact_user": "Contactar coa usuaria",
+        "role": "Rol",
+        "sent": "Enviado"
     },
     "recover": {
         "not_valid_code": "Algo fallou."
@@ -193,16 +197,24 @@
         "online_locations": "Localizacións en liña",
         "online_locations_fallback_urls": "Ligazóns de reforzo",
         "online_locations_help": "Por exemplo un URL a unha sala de videoconferencia e un URL de reforzo (máx. 3)",
-        "address_geocoded_disclaimer": "Se non atopas nos resultados o <strong>enderezo da rúa</strong> ou o <strong>número do edificio</strong> que estás a buscar, podes buscalos manualmente en 'Enderezo' e sen perder as coordenadas. Considera tamén que <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> é un proxecto aberto a colaboracións. Se usas Android, recomendamos <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> "
+        "address_geocoded_disclaimer": "Se non atopas nos resultados o <strong>enderezo da rúa</strong> ou o <strong>número do edificio</strong> que estás a buscar, podes buscalos manualmente en 'Enderezo' e sen perder as coordenadas. Considera tamén que <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> é un proxecto aberto a colaboracións. Se usas Android, recomendamos <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> ",
+        "message": "Mensaxe",
+        "message_author_hint": "Escribir mensaxe a admins",
+        "report_message_confirmation": "Cres que este evento non debería estar aquí? Dinos a razón",
+        "send_to_admins": "Enviar a admins",
+        "send_to_author_too": "Enviar a admins e creadora",
+        "disable_author": "Desactivar autora",
+        "disable_author_confirm": "Tes certeza de querer desactivar a creadora de este evento?",
+        "message_hint": "Pódeslle enviar unha mensaxe a outras Admin e optativamente tamén á persoa creadora do evento."
     },
     "admin": {
         "place_description": "Se escribiches mal o lugar ou enderezo, podes cambialo.<br/>Cambiará o enderezo de tódolos eventos actuais e pasados asociados a este lugar.",
-        "disable_user_confirm": "Tes a certeza de querer desactivar a {user}?",
+        "disable_user_confirm": "Tes a certeza de querer desactivar a <strong>{user}</strong>?",
         "federation": "Federación / ActivityPub",
         "enable_federation": "Activar a federación",
         "add_instance": "Engadir instancia",
         "select_instance_timezone": "Zona horaria",
-        "enable_resources_help": "Permite engadir recursos ao evento desde o fediverso",
+        "enable_resources_help": "Permite engadir audio, imaxes e comentarios ao evento desde o fediverso",
         "user_add_help": "Vaise enviar un email á nova usuaria con instruccións para confirmar a subscrición e elexir un contrasinal",
         "instance_name": "Nome da instancia",
         "filter_users": "Filtrar usuarias",
@@ -215,7 +227,7 @@
         "smtp_test_button": "Enviar un email de proba",
         "admin_email": "Email de Admin",
         "widget": "Trebello",
-        "delete_user_confirm": "Tes a certeza de querer eliminar a {user}?",
+        "delete_user_confirm": "Tes a certeza de querer eliminar a <strong>{user}</strong>?",
         "enable_resources": "Activar recursos",
         "hide_boost_bookmark_help": "Agocha as pequenas iconas que indican o número de promocións e marcacións que chegan desde o fediverso",
         "show_resource": "Mostrar recurso",
@@ -274,10 +286,10 @@
         "smtp_secure": "SMTP Seguro (TLS ou STARTTLS)",
         "new_collection": "Nova colección",
         "edit_collection": "Editar Colección",
-        "disable_admin_user_confirm": "Tes certeza de querer retirar os permisos de administración a {user}?",
+        "disable_admin_user_confirm": "Tes certeza de querer retirar os permisos de administración a <strong>{user}</strong>?",
         "sender_email": "Remitente",
         "collections_description": "As coleccións son agrupamentos de eventos por etiqueta ou lugar. Pode ser mostrado na páxina de inicio",
-        "enable_admin_user_confirm": "Tes a certeza de engadir permiso de admin a {user}?",
+        "enable_admin_user_confirm": "Tes a certeza de engadir permiso de admin a <strong>{user}</strong>?",
         "smtp_use_sendmail": "Usar sendmail",
         "config_plugin": "Configuración do complemento",
         "known_users": "Usuarias coñecidas",
@@ -318,7 +330,14 @@
         "allow_online_event_hint": "Solicitar URLs ",
         "not_reachable_warning": "Non me atopo ({baseurl}) no meu propio servidor! Comproba que o proxy, cortalumes e a rede están correctamente configuradas.",
         "tag_renamed": "Cambio de nome da etiqueta \"{oldTag}\" a \"{newTag}\"",
-        "instance_removed": "Eliminouse a instancia"
+        "instance_removed": "Eliminouse a instancia",
+        "enable_moderation": "Activar moderación",
+        "enable_moderation_hint": "As admins poden conversar entre elas acerca dos eventos, incluíndo opcionalmente á creadora do evento",
+        "enable_report": "Activar denuncia de eventos",
+        "enable_report_hint": "Calquera visitante pode denunciar un evento, a administración reciben notificación por correo",
+        "allow_geolocation_hint": "Establecer de xeito optativo a localización exacta do evento nun mapa xeográfico",
+        "change_role_confirm": "Tes certeza de cambiar o rol de <strong>{user}</strong> desde <strong>{from_role}</strong> a <strong>{to_role}</strong>",
+        "stats": "{n_followers} \"actores\" están a seguir a esta instancia, hai {n_events} eventos desde o fediverso e {n_resources} comentarios"
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",

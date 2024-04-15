@@ -25,5 +25,11 @@
     },
     "event_confirm": {
         "content": "Podes confirmar este evento <a href='{{url}}'>nesta páxina</a>"
+    },
+    "report": {
+        "subject": "Moderar o evento {{event.title}}",
+        "content_ANON": "Unha visitante denunciou o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Abrir moderación</a>",
+        "content_AUTHOR": "A creadora do evento <strong>{{event.title}}</strong> escribiu:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Abrir moderación</a>",
+        "content_ADMIN": "A administración comentou acerca do evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Abrir moderación</a>"
     }
 }

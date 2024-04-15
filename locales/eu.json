@@ -112,7 +112,10 @@
         "pin": "Finkatu",
         "collection_in_home": "Erakutsi bilduma bat hasieran",
         "editor": "Editorea",
-        "my_events": "Nire ekitaldiak"
+        "my_events": "Nire ekitaldiak",
+        "contact_user": "Erabiltzailea kontaktatu",
+        "report": "Gertaera jakinarazi",
+        "sent": "Bidalia"
     },
     "login": {
         "description": "Saioa hasten baduzu ekitaldi berriak sortu ahal izango dituzu.",
@@ -198,7 +201,11 @@
         "where_advanced_options_description": "Zehaztu hemen lekuaren ezaugarri gehigarriak",
         "online_locations_help": "Esaterako bideokonferentzia baten URLa eta URL alternatiboa (gehienez 3)",
         "online_locations": "Online kokapenak",
-        "online_locations_fallback_urls": "Esteka alternatiboak"
+        "online_locations_fallback_urls": "Esteka alternatiboak",
+        "message_author_hint": "Idatzi mezu bat administratzaileei",
+        "send_to_admins": "Administratzaileei bidali",
+        "send_to_author_too": "Administratzaileei eta egileari bidali",
+        "disable_author": "Egilea desgaitu"
     },
     "admin": {
         "place_description": "Lekua edo helbidea oker badago, alda dezakezu.<br/>Leku honekin lotutako iraganeko eta etorkizuneko ekitaldien helbidea aldatuko da.",
