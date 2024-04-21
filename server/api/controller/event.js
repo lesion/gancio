@@ -557,7 +557,7 @@ const eventController = {
         return res.sendStatus(404)
       }
 
-      if (!req.user.is_admin && event.userId !== req.user.id) {
+      if (!req.user.is_editor && !req.user.is_admin && event.userId !== req.user.id) {
         log.debug('[UPDATE] the user is neither an admin nor the owner of the event')
         return res.sendStatus(403)
       }
