@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.5](https://framagit.org/les/gancio/compare/v1.15.4...v1.15.5) (2024-04-21)
+
+
+### Bug Fixes
+
+* correctly set AP name, fix [#351](https://framagit.org/les/gancio/issues/351) ([620fa29](https://framagit.org/les/gancio/commit/620fa29b096cbc0d25ae780466a53db0156dd0ba))
+* do not linkify email addresses in event description, fix [#373](https://framagit.org/les/gancio/issues/373) ([c7ef359](https://framagit.org/les/gancio/commit/c7ef35912cf6d1c806c673503f9b4b6090cf0d5f))
+* Editor users cannot confirm anonymous events, fix [#376](https://framagit.org/les/gancio/issues/376) ([a1f1e02](https://framagit.org/les/gancio/commit/a1f1e02b97e9b9274124d7f16a22197caf1747df))
+* missing get import ([49dd717](https://framagit.org/les/gancio/commit/49dd7175fc30b468556f5173a904df71a2c1d5af))
+* use 'en' as fallback locale in email, fix [#374](https://framagit.org/les/gancio/issues/374) ([80efc69](https://framagit.org/les/gancio/commit/80efc69946e319f4ea06b1b87083675c2895fba1))
+* use bcc for admin emails, fix [#371](https://framagit.org/les/gancio/issues/371) ([4ba5645](https://framagit.org/les/gancio/commit/4ba5645ebf3ec71be6df5ee7559ac128cb534718))
+
 ### [1.15.4](https://framagit.org/les/gancio/compare/v1.15.3...v1.15.4) (2024-04-04)
 
 
