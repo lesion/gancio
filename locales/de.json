@@ -110,7 +110,13 @@
         "trusted_instances": "Vertrauten Instanzen",
         "actors": "Node",
         "collection_in_home": "Eine Kollektion auf Home anzeigen",
-        "pin": "Pin"
+        "pin": "Pin",
+        "sent": "Senden",
+        "my_events": "Meine Veranstaltungen",
+        "contact_user": "Benutzer kontaktieren",
+        "role": "Rolle",
+        "editor": "Bearbeiter",
+        "report": "Veranstaltung melden"
     },
     "admin": {
         "delete_footer_link_confirm": "Möchtest du diesen Link löschen?",
@@ -229,7 +235,8 @@
         "colors": "Farben",
         "delete_tag_confirm": "Soll der Tag \"{tag}\" wirklich gelöscht werden? Der Tag wird bei {n} Events gelöscht.",
         "delete_collection_confirm": "Bist du sicher, dass du die Sammlung <u>{Sammlung}</u> entfernen willst?",
-        "tag_renamed": "Hashtag \"{oldTag}\" umbenannt in \"{newTag}\"."
+        "tag_renamed": "Hashtag \"{oldTag}\" umbenannt in \"{newTag}\".",
+        "enable_moderation": "Moderation aktivieren"
     },
     "settings": {
         "update_confirm": "Willst du deine Änderung speichern?",
@@ -332,7 +339,15 @@
         "show_multidate": "Veranstaltungen mit mehreren Terminen",
         "where_advanced_options_description": "Gib hier zusätzliche Angaben zum Ort an",
         "online_locations": "Orte online",
-        "online_locations_help": "Etwa eine Internetadresse eines Videokonferenzraums und eine Alternativadresse (maximal 3)"
+        "online_locations_help": "Etwa eine Internetadresse eines Videokonferenzraums und eine Alternativadresse (maximal 3)",
+        "message": "Nachricht",
+        "message_hint": "Du sendest eine Nachricht zu den anderen Admins und optional zum Autor der Veranstaltung.",
+        "message_author_hint": "Schreibe eine Nachricht an die Admins",
+        "report_message_confirmation": "Diese Veranstaltung sollte hier nicht dargestellt werden? Schreibe uns warum.",
+        "send_to_admins": "An die Admins senden",
+        "send_to_author_too": "An die Admins und dem Autor senden",
+        "disable_author": "Autor deaktivieren",
+        "disable_author_confirm": "Bist Du dir sicher, dass dieser Autor deaktiviert werden soll?"
     },
     "register": {
         "first_user": "Admin erstellt",
