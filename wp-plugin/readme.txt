@@ -18,8 +18,15 @@ for this to work an event manager plugin is required, [Event Organiser](https://
  
 
 == Changelog ==
-= 1.8 =
+
+= 1.11 =
 * Add support to The Events Calendar WordPress plugin
+
+= 1.10 =
+* Add PHP 8.2 compatibility 
+
+= 1.8 =
+* Allow `collection` and `maxlength` attribute to shortcode
 
 = 1.7 =
 * Fix merge event tags while posting to an instance
