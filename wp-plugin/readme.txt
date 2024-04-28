@@ -3,8 +3,8 @@ Contributors: lesion, nutria
 Donate link: https://gancio.org
 Tags: events, gancio, fediverse, AP, activity pub
 Requires at least: 4.7
-Tested up to: 6.4
-Stable tag: 1.10
+Tested up to: 6.5
+Stable tag: 1.12
 Requires PHP: 7.0
 License: AGPLv3 or later
 License URI: https://www.gnu.org/licenses/agpl-3.0.html
@@ -18,6 +18,9 @@ for this to work an event manager plugin is required, [Event Organiser](https://
  
 
 == Changelog ==
+
+= 1.12 = 
+* Restore Event Organizer functionality
 
 = 1.11 =
 * Add support to The Events Calendar WordPress plugin
