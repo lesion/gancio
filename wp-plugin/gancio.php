@@ -25,13 +25,3 @@ require_once(WPGANCIO_DIR . 'settings.php');
 
 require_once(WPGANCIO_DIR . 'wc.php');
 require_once(WPGANCIO_DIR . 'oauth.php');
-
-
-
-/**
- * What does WPGancio do?
- * This plugin connects a user of a gancio instance to a Wordpress user so that events published
- * on Wordpress are automatically inserted.
- * It requires an event manager plugin, only Event Organiser (https://wp-event-organiser.com/) is
- * supported until now but to add another plugin it's easy.
- */
