@@ -175,7 +175,7 @@
         "each_month": "Ogni mese",
         "due": "alle",
         "from": "Dalle",
-        "image_too_big": "L'immagine non può essere più grande di 4MB",
+        "image_too_big": "L'immagine è troppo grande, controlla le impostazioni del server.",
         "interact_with_me": "Seguimi dal fediverso",
         "follow_me_description": "Tra i vari modi di rimanere aggiornati degli eventi pubblicati qui su {title},\npuoi seguire l'account <u>{account}</u> dal fediverso, ad esempio via Mastodon, ed eventualmente aggiungere risorse ad un evento da lì.<br/><br/>\nSe non hai mai sentito parlare di Mastodon e del fediverso ti consigliamo di leggere <a href='https://cagizero.wordpress.com/2018/10/25/cose-mastodon/'>questo articolo</a>.<br/><br/> Inserisci la tua istanza qui sotto (es. mastodon.cisti.org o mastodon.bida.im)",
         "only_future": "solo eventi futuri",
