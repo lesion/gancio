@@ -1,5 +1,5 @@
 === WPGancio ===
-Contributors: lesion
+Contributors: lesion, nutria
 Donate link: https://gancio.org
 Tags: events, gancio, fediverse, AP, activity pub
 Requires at least: 4.7
@@ -14,10 +14,13 @@ This plugin allows you to [embed](https://gancio.org/usage/embed) a list of even
 == Description ==
 This plugin allows you to [embed](https://gancio.org/usage/embed) a list of events or a single event from your [Gancio](https://gancio.org) website using a shortcode.
 It also allows you to connects a [Gancio](https://gancio.org) instance to a your wordpress website to automatically push events published on Wordpress:
-for this to work an event manager plugin is required, only [Event Organiser](https://wp-event-organiser.com/) is supported but adding another plugin it's an easy task.
+for this to work an event manager plugin is required, [Event Organiser](https://wp-event-organiser.com/) and [The Events Calendar](https://theeventscalendar.com/products/wordpress-events-calendar/) are supported. Adding another plugin it's an easy task and you have a guide available in the repo that shows you how to do it.
  
 
 == Changelog ==
+= 1.8 =
+* Add support to The Events Calendar WordPress plugin
+
 = 1.7 =
 * Fix merge event tags while posting to an instance
 
