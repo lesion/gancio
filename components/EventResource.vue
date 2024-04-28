@@ -35,7 +35,7 @@
 
     v-card.mb-3.resources(v-if='settings.enable_resources' v-for='resource in event.resources' :key='resource.id' outlined :class="{ 'vc-past': resource.hidden }")
         v-card-title
-            v-menu(v-if='$auth.user && $auth.user.is_admin' offset-y)
+            v-menu(v-if='$auth.user && ($auth.user.is_admin || $auth.user.is_editor)' offset-y)
                 template(v-slot:activator="{ on }")
                     v-btn.mr-2(v-on='on' color='primary' small icon)
                         v-icon(v-text='mdiDotsVertical')

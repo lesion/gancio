@@ -105,7 +105,7 @@ const eventController = {
 
   async get(req, res) {
     const format = req.params.format || 'json'
-    const is_admin = req.user && req.user.is_admin
+    const isAdminOrEditor = req.user?.is_editor || req.user?.is_admin
     const slug = req.params.event_slug
 
     // retrocompatibility, old events URL does not use slug, use id as fallback
@@ -129,7 +129,7 @@ const eventController = {
           { model: User, required: false, attributes: ['is_active'] },
           {
             model: Resource,
-            where: !is_admin && { hidden: false },
+            where: !isAdminOrEditor && { hidden: false },
             include: [{ model: APUser, required: false, attributes: ['object', 'ap_id'] }],
             required: false,
             attributes: ['id', 'activitypub_id', 'data', 'hidden']
@@ -182,7 +182,7 @@ const eventController = {
       order: [['start_datetime', 'DESC'], ['id', 'DESC']]
     })
 
-    if (event && (event.is_visible || is_admin)) {
+    if (event && (event.is_visible || isAdminOrEditor)) {
       event = event.get()
       event.isMine = event.userId === req.user?.id
       event.isAnon = event.userId === null || !event?.user?.is_active
