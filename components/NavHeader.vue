@@ -7,7 +7,7 @@
     <v-spacer/>
 
     <div class='d-flex'>
-      <v-btn icon large to='/about' :title='$t("common.about")' :aria-label='$t("common.about")'>
+      <v-btn icon large href='/about' :title='$t("common.about")' :aria-label='$t("common.about")'>
         <v-icon v-text='mdiInformation' />
       </v-btn>
       <v-btn icon large @click='toggleDark'>
