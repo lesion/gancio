@@ -2,6 +2,8 @@
 v-card
   v-card-title(v-text="$t('common.follow_me_title')")
   v-card-text
+    v-alert(type='warning' border='left' :icon='mdiInformation') {{$t('admin.stats', stats)}}
+
     p(v-html="$t('event.follow_me_description', { title: settings.title, account: `@${settings.instance_name}@${settings.hostname}`})")
     v-text-field(
       :rules="[$validators.required('common.url')]"
@@ -22,6 +24,7 @@ v-card
 <script>
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
+import { mdiInformation } from '@mdi/js'
 
 export default {
   name: 'FollowMe',
@@ -29,14 +32,18 @@ export default {
     { isDialog: { type: Boolean, default: false } },
   data () {
     return {
+      mdiInformation,
       instance_hostname: '',
       proceed: false,
       instance: {},
+      stats: {},
       loading: false,
       get_instance_info: debounce(this.getInstanceInfo, 300)
     }
   },
-
+  async fetch () {
+    this.stats = await this.$axios.$get('/instances/stats')
+  },
   computed: {
     ...mapState(['settings']),
     couldGo () {
