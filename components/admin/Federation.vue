@@ -75,11 +75,12 @@ v-container
       template(v-slot:item.logo="{item}")
         v-img(height=20 width=20 :src="item?.object?.icon?.url") 
       template(v-slot:item.name="{item}")
-        span @{{ item?.object?.name ?? item?.instance?.data?.metadata?.nodeName}}@{{ item.instance.domain }}
+        span {{ item.object.name }}<br/>
+        span @{{ item?.object?.preferredUsername ?? item?.instance?.data?.metadata?.nodeName}}@{{ item.instance.domain }}
       template(v-slot:item.info="{item}")
-        span {{ item?.object?.summary ?? item?.instance?.data?.metadata?.nodeDescription}} / {{ item.instance.name }}
+        span {{ item?.object?.summary ?? item?.instance?.data?.metadata?.nodeDescription}}
       template(v-slot:item.url="{item}")
-        a(:href='item.ap_id') {{ item.ap_id }}
+        a(:href='item.object.url') {{ item.object.url }}
       template(v-slot:item.following="{ item }")
         v-switch(:input-value='item.following' :disabled='item.loading' :loading="item.loading === true" @change="() => toggleFollowing(item)" inset hide-details)
       template(v-slot:item.follower="{item}")

@@ -50,18 +50,22 @@ v-container
             //- @focus='searchActors'
             v-autocomplete(v-model='filterActors'
               cache-items
-              :prepend-inner-icon="mdiTagMultiple"
+              :prepend-inner-icon="mdiWeb"
               chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
               :disabled="!collection.id"
               placeholder='Local'
               return-object
               item-value='ap_id'
-              item-text='instanceDomain'
+              item-text='ap_id'
               :delimiters="[',', ';']"
               :items="actors"
               :label="$t('common.trusted_instances')")
                 template(v-slot:item="{ item }")
-                  v-list-item-content @{{ item?.object?.preferredUsername }}@{{ item?.instanceDomain }}
+                  v-list-item-avatar
+                    v-img(:src='item?.object?.icon?.url ?? `${item.url}/favicon.ico`')                
+                  v-list-item-content
+                    v-list-item-title {{ item?.object?.name }}
+                    v-list-item-subtitle @{{ item?.object?.preferredUsername }}@{{ item?.instanceDomain }}
                 template(v-slot:selection="{ item, on, attrs, selected, parent }")
                   v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
                     :input-value="selected" label small) @{{ item?.object?.preferredUsername }}@{{ item?.instanceDomain }}
@@ -156,12 +160,12 @@ import debounce from 'lodash/debounce'
 import isEqual from 'lodash/isEqual'
 import sortBy from 'lodash/sortBy'
 
-import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle, mdiChevronDown } from '@mdi/js'
+import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle, mdiChevronDown, mdiWeb } from '@mdi/js'
 
 export default {
   data({ $store }) {
     return {
-      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle, mdiChevronDown,
+      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle, mdiChevronDown, mdiWeb,
       loading: false,
       dialog: false,
       valid: false,

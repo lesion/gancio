@@ -14,14 +14,14 @@ v-footer(aria-label='Footer')
       v-btn.ml-1(v-bind='attrs' v-on='on' color='primary' text) {{ settings.trusted_instances_label || $t('admin.trusted_instances_label_default')}}
     v-list(subheaders two-lines max-width=550)
       v-list-item(v-for='instance in trusted_instances'
-        :key='instance.name'
+        :key='instance.ap_id'
         target='_blank'
         :href='instance?.object?.url ?? instance?.ap_id'
         two-line)
         v-list-item-avatar
           v-img(:src='instance?.object?.icon?.url ?? `${instance.url}/favicon.ico`')
         v-list-item-content
-          v-list-item-title {{instance?.instance?.data?.metadata?.nodeLabel ?? instance?.object?.name ?? instance?.object?.preferredUsername }} - {{ instance?.object?.url ?? instance?.ap_id }}
+          v-list-item-title {{ instance?.object?.name ?? instance?.object?.preferredUsername }}
           v-list-item-subtitle {{ instance?.object?.summary ?? instance?.instance?.data?.metadata?.nodeDescription }}
 
   v-btn.ml-1(v-if='settings.enable_federation' color='primary' text rel='me' @click.prevent='showFollowMe=true') {{$t('event.interact_with_me')}}
