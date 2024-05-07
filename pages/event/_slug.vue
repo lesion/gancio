@@ -151,7 +151,7 @@ export default {
       error({ statusCode: 404, message: 'Event not found' })
     }
   },
-  data ({$store}) {
+  data ({$route}) {
     return {
       mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar, mdiFileDownloadOutline, mdiMessageTextOutline,
       mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat, mdiMap, mdiChevronUp, mdiMonitorAccount, mdiBookmark, mdiStar, mdiShareAll,
@@ -159,7 +159,7 @@ export default {
       event: {},
       showEmbed: false,
       mapModal: false,
-      openModeration: false,
+      openModeration: $route?.query?.moderation ? true : false,
       reporting: false
     }
   },
