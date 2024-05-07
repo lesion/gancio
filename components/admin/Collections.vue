@@ -111,7 +111,6 @@ v-container
                 //-       v-list-item-title(v-text='item.name')
                 //-       v-list-item-subtitle(v-text='item.address')
 
-        v-btn(color='primary' :loading='loading' text @click='addFilter' :disabled='loading || !filterActors.length && !filterPlaces.length && !filterTags.length') add <v-icon v-text='mdiPlus'></v-icon>
 
         v-data-table(
           :headers='filterHeaders'
@@ -132,7 +131,8 @@ v-container
 
       v-card-actions
         v-spacer
-        v-btn(@click='dialog = false' outlined color='warning') {{ $t('common.close') }}
+        v-btn(color='primary' outlined :loading='loading' text @click='addFilter' :disabled='loading || !filterActors.length && !filterPlaces.length && !filterTags.length') add <v-icon v-text='mdiPlus'></v-icon>
+        v-btn(@click='dialog = false' outlined color='warning' :disabled="loading || filterActors.length || filterPlaces.length || filterTags.length") {{ $t('common.close') }}
 
   v-card-text
     v-data-table(
