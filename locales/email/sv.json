@@ -1,1 +1,22 @@
-{}
+{
+    "register": {
+        "content": "Vi har mottagit din anmälan. Vi kommer att bekräfta den så snart som möjligt.",
+        "subject": "Anmälan mottagen"
+    },
+    "confirm": {
+        "subject": "Du kan nu börja publicera event",
+        "content": "Hej, ditt konto på <a href='{{config.baseurl}}'>{{config.title}}</a> har blivit bekräftad. Maila oss på {{config.admin_email}} för mer information."
+    },
+    "recover": {
+        "subject": "Återställ lösenord",
+        "content": "Hej, du efterfrågade lösenordsåterställning för {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Tryck här</a> för att bekräfta."
+    },
+    "admin_register": {
+        "subject": "Registrera",
+        "content": "{{user.email}} har begärt registrering för {{config.title}}: <br/>{{user.description}}</pre><br/> Bekräfta<a href='{{config.baseurl}}/admin'>här</a>."
+    },
+    "user_confirm": {
+        "subject": "Nu kan nu börja publicera event",
+        "content": "Hej, ditt konto på <a href='{{config.baseurl}}'>{{config.title}}</a> har skapats. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'> Bekräfta det och skapa ett lösenord.</a>."
+    }
+}
