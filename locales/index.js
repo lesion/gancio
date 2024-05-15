@@ -17,6 +17,7 @@ module.exports = {
   ru: 'Русский',
   sk: 'Slovak',
   sq: 'Shqiptare',
+  sv: 'Svenska',
   tr: 'Türkçe',
   zh: '中国'
 }
