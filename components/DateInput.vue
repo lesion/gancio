@@ -22,8 +22,8 @@ v-col(cols=12)
             :is-dark="is_dark"
             is-inline
             is-expanded
-            :min-date='new Date()')
-      v-col.calh.text-center(slot='placeholder')
+            :min-date='!$auth?.user?.is_admin && new Date()')
+      v-col.calh.mx-auto(slot='placeholder')
         v-progress-circular(indeterminate color='primary')
 
   div.text-center.mb-2(v-if='type === "recurrent"')
