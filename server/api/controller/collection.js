@@ -1,10 +1,9 @@
-const { Collection, Filter, Event, Tag, Place, APUser } = require('../models/models')
+const { Collection, Filter, Event, Tag, Place } = require('../models/models')
 
 const log = require('../../log')
 const { DateTime } = require('luxon')
 const { col: Col, queryParamToBool } = require('../../helpers')
 const { Op, Sequelize } = require('sequelize')
-const helpers = require('../../helpers')
 
 const collectionController = {
 
@@ -26,6 +25,9 @@ const collectionController = {
     return res.json(collections)
   },
 
+  async _getVisible () {
+    return Collection.findAll({ attributes: ['name', 'id'], where: { isTop: true }, raw: true })
+  },
 
   async togglePin (req, res) {
     const id = req.params.id
@@ -47,9 +49,9 @@ const collectionController = {
     const name = req.params.name
     const limit = req.query.max
     const start = req.query.start_at || DateTime.local().toUnixInteger()
-    const reverse = helpers.queryParamToBool(req.query.reverse)
-    const older = helpers.queryParamToBool(req.query.older)
-    const show_recurrent = settings.allow_recurrent_event && helpers.queryParamToBool(req.query.show_recurrent, settings.recurrent_event_visible)
+    const reverse = queryParamToBool(req.query.reverse)
+    const older = queryParamToBool(req.query.older)
+    const show_recurrent = settings.allow_recurrent_event && queryParamToBool(req.query.show_recurrent, settings.recurrent_event_visible)
 
 
     try {

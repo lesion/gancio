@@ -9,7 +9,7 @@ const announceController = {
   },
 
   _getVisible () {
-    return Announcement.findAll({ where: { visible: true }, raw: true })
+    return Announcement.findAll({ attributes: ['title', 'id'], where: { visible: true }, raw: true })
   },
 
   async add (req, res) {

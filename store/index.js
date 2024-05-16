@@ -37,6 +37,7 @@ export const state = () => ({
     show_multidate: null,
   },
   announcements: [],
+  collections: [],
   events: []
 })
 
@@ -62,6 +63,9 @@ export const mutations = {
   setAnnouncements (state, announcements) {
     state.announcements = announcements
   },
+  setCollections (state, collections) {
+    state.collections = collections
+  },  
   setEvents (state, events) {
     state.events = Object.freeze(events)
   },
@@ -85,6 +89,8 @@ export const actions = {
 
     if (res.locals.status === 'READY') {
       commit('setAnnouncements', res.locals.announcements)
+      commit('setCollections', res.locals.collections)
+      commit('setEvents', res.locals.events)
     }
   },
   async updateAnnouncements ({ commit }) {
@@ -93,6 +99,9 @@ export const actions = {
   },
   setAnnouncements ({ commit }, announcements) {
     commit('setAnnouncements', announcements)
+  },
+  setCollections ({ commit }, collections) {
+    commit('setCollections', collections)
   },
   async setSetting ({ commit }, setting) {
     await this.$axios.$post('/settings', setting)

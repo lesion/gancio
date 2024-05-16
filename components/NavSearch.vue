@@ -42,14 +42,11 @@ export default {
   data: ({ $store }) => ({
     oldRoute: '',
     mdiClose, mdiCog, mdiMagnify,
-    collections: [],
+    collections: $store.state.collections,
     show_recurrent: $store.state.settings.recurrent_event_visible,
     show_multidate: true,
     query: ''
   }),
-  async fetch () {
-    this.collections = await this.$axios.$get('collections', { params: { pin: 'true' } }).catch(_e => [])
-  },
   components: { Calendar },
   computed: {
     showSearchBar () {
@@ -63,7 +60,6 @@ export default {
       const show = ['index', 'collection-collection'].includes(this.$route.name)
       if (show && this.oldRoute !== this.$route.name) {
         this.oldRoute = this.$route.name
-        this.$fetch()
       }
       return show
     },

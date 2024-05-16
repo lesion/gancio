@@ -916,7 +916,6 @@ const eventController = {
     const older = req.query.older || false
 
     const show_multidate = settings.allow_multidate_event && helpers.queryParamToBool(req.query.show_multidate, true)
-
     const show_recurrent = settings.allow_recurrent_event && helpers.queryParamToBool(req.query.show_recurrent, settings.recurrent_event_visible)
 
     let events = []

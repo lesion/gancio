@@ -7,7 +7,7 @@
       <v-fade-transition hide-on-leave>
         <nuxt />
       </v-fade-transition>
-    </v-main>
+    </v-main> 
     <Footer/>
 
   </v-app>

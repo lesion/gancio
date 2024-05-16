@@ -2,7 +2,7 @@
 v-container.px-2.px-sm-6.pt-0#home
 
   //- Announcements
-  #announcements.mt-2.mt-sm-4(v-if='announcements.length')
+  #announcements.mt-2.mt-sm-4(v-if='announcements?.length')
     Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
 
   //- Events
@@ -27,6 +27,7 @@ export default {
   components: { Event, Announcement, ThemeView },
   middleware: 'setup',
   fetch () {
+    if (process.server) return
     if (this.filter.query) {
       return this.getEvents({
         query: this.filter.query,

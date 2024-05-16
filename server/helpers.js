@@ -254,6 +254,31 @@ module.exports = {
     }
   },
 
+  /**
+   * Pre-load the data needed to load the first page saving the first 3 API calls from the server (the load goes from 0.8s to 0.2s)
+  */
+  async initLocals (res) {
+    if (config.status !== 'READY') return
+    const announceController = require('./api/controller/announce')
+    const collectionController = require('./api/controller/collection')
+    const eventController = require('./api/controller/event')
+    const { DateTime } = require('luxon')
+    const show_multidate = res.locals.settings.allow_multidate_event
+    const show_recurrent = res.locals.settings.allow_recurrent_event
+
+    const ret = await Promise.allSettled([
+      announceController._getVisible(),
+      collectionController._getVisible(),
+      eventController._select({
+        start: DateTime.local().toUnixInteger(),
+        show_multidate, show_recurrent })
+    ])
+    
+    res.locals.announcements = ret[0]?.value
+    res.locals.collections = ret[1]?.value
+    res.locals.events = ret[2]?.value
+  },
+
   getWeekdayN(date, n, weekday) {
     let cursor
     if (n === -1) {
