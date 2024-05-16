@@ -422,6 +422,23 @@ const eventController = {
     next()
   },
 
+  async assignToAuthor (req, res) {
+    const body = req.body
+    const event = await Event.findByPk(body.id)
+    if (!event) {
+      log.debug('[UPDATE] Event not found: %s', body?.id)
+      return res.sendStatus(404)
+    }
+
+    try {
+      await event.update({ userId: body.user_id })
+      return res.sendStatus(200)
+    } catch (e) {
+      log.warn(e)
+      return res.status(400).send(e)
+    }
+  },
+
   async add(req, res) {
     // req.err comes from multer streaming error
     if (req.err) {

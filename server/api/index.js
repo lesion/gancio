@@ -148,6 +148,7 @@ module.exports = () => {
     // api.get('/event/search', eventController.search)
 
     api.put('/event', isAuth, upload.single('image'), eventController.update)
+    api.put('/event/assign_to_author', isAdmin, eventController.assignToAuthor)
     api.get('/event/import', eventController.isAnonEventAllowed, helpers.importURL)
 
     // remove event

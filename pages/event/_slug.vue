@@ -93,7 +93,7 @@
 
           //- admin actions
           template(v-if='can_edit')
-            EventAdmin(:event='event' @openModeration='openModeration=true')
+            EventAdmin(:event='event' @openModeration='openModeration=true' @openAssignAuthor='openAssignAuthor=true')
 
     //- resources from fediverse
     EventResource#resources.mt-3(:event='event' v-if='showResources')
@@ -112,6 +112,9 @@
 
     v-dialog(v-show='settings.allow_geolocation && event.place?.latitude && event.place?.longitude' v-model='mapModal' :fullscreen='$vuetify.breakpoint.xsOnly' destroy-on-close)
       EventMapDialog(:place='event.place' @close='mapModal=false')
+
+    v-dialog(v-if='$auth?.user?.is_admin' v-model='openAssignAuthor' :fullscreen='$vuetify.breakpoint.xsOnly' destroy-on-close width=400)
+      EventAssignAuthor(:event='event' @close='openAssignAuthor=false')
 
     v-navigation-drawer(v-model='openModeration' :fullscreen='$vuetify.breakpoint.xsOnly' fixed top right width=400 temporary)
       EventModeration(:event='event' v-if='openModeration' @close='openModeration=false')
@@ -139,6 +142,7 @@ export default {
     EventAdmin,
     EventResource,
     EventModeration,
+    EventAssignAuthor: () => import(/* webpackChunkName: "admin" */ '@/components/EventAssignAuthor'),
     EmbedEvent,
     MyPicture,
     EventMapDialog
@@ -160,6 +164,7 @@ export default {
       showEmbed: false,
       mapModal: false,
       openModeration: $route?.query?.moderation ? true : false,
+      openAssignAuthor: false,
       reporting: false
     }
   },

@@ -48,6 +48,12 @@ span
         v-list-item-content
           v-list-item-title(v-text="$t('event.disable_author')")
 
+      v-list-item(v-if='event.isAnon && $auth?.user?.is_admin' @click='$emit("openAssignAuthor")')
+        v-list-item-icon
+            v-icon(v-text='mdiClipboardAccount')
+        v-list-item-content
+          v-list-item-title(v-text="$t('event.assign_to_user')")
+
       template(v-if='event.parentId')
         v-list-item.text-overline(v-html="$t('common.recurring_event_actions')")
 
@@ -57,7 +63,6 @@ span
             v-icon(v-text='event.parent.is_visible ? mdiPause : mdiPlay')
           v-list-item-content
             v-list-item-title(v-text="$t(`common.${event.parent.is_visible ? 'pause': 'start'}`)")
-
 
         //- Edit event
         v-list-item(:to='`/add/${event.parentId}`')
@@ -76,13 +81,15 @@ span
 
 </template>
 <script>
-import { mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever, mdiScanner, mdiMessageTextOutline, mdiAccountOff } from '@mdi/js'
+import { mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever, mdiScanner,
+  mdiMessageTextOutline, mdiAccountOff, mdiClipboardAccount } from '@mdi/js'
 import { mapState } from 'vuex'
 export default {
   name: 'EventAdmin',
   data () {
     return {
-      mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever, mdiScanner,  mdiMessageTextOutline, mdiAccountOff,
+      mdiChevronUp, mdiRepeat, mdiDelete, mdiCalendarEdit, mdiEyeOff, mdiEye, mdiPause, mdiPlay, mdiDeleteForever, mdiScanner,
+      mdiMessageTextOutline, mdiAccountOff, mdiClipboardAccount
     }
   },
   props: {

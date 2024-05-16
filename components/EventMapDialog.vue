@@ -12,7 +12,7 @@ v-card
   v-card-actions.py-4
     HowToArriveNav.pl-1(:place='place')
     v-spacer
-    v-btn(@click='$emit("close")' outlined) Close
+    v-btn(@click='$emit("close")' outlined) {{ $t('common.close') }}
 </template>
 <script>
 
