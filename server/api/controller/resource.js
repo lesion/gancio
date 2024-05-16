@@ -35,7 +35,7 @@ const resourceController = {
       hidden: r.hidden,
       created: r.createdAt,
       data: {
-        content: r.data.content
+        content: r.data?.content
       },
       event: {
         id: r.event.id,

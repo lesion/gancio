@@ -104,6 +104,12 @@ module.exports = {
     skipSettingLocaleOnNavigate: true,
   },
 
+  render: {
+    static: {
+      maxAge: "6000000"
+    }
+  },
+
   serverMiddleware: ['server/routes'],
 
   /*
@@ -147,6 +153,12 @@ module.exports = {
     defaultAssets: false,    
     optionsPath: './vuetify.options.js'
   },
+  hooks: {
+    listen(server) {
+      server.keepAliveTimeout = 35000;
+      server.headersTimeout = 36000;
+    }
+  },  
   build: {
     extend(config, { isDev, isClient }) {
       // ..

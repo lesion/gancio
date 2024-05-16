@@ -219,7 +219,7 @@ const instancesController = {
         // search for actor url
         const actorURL = webfinger?.links.find(l => l.rel === 'self').href
 
-        // retrieve the AP actor and flat it as trusted
+        // retrieve the AP actor and flag it as trusted
         const actor = await getActor(actorURL, instance)
         await actor.update({ trusted: true })
         return res.json(actor)
