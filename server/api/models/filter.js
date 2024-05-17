@@ -6,6 +6,9 @@ module.exports = (sequelize, DataTypes) =>
       primaryKey: true,
       autoIncrement: true,
     },
+    negate: {
+      type: DataTypes.BOOLEAN
+    },
     tags: {
       type: DataTypes.JSON,
     },

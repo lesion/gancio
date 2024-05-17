@@ -45,10 +45,10 @@ const collectionController = {
   async getEvents (req, res) {
     const settings = res.locals.settings
     const exportController = require('./export')
-    const format = req.params.format || 'json'
+    const format = req.params?.format ?? 'json'
     const name = req.params.name
-    const limit = req.query.max
-    const start = req.query.start_at || DateTime.local().toUnixInteger()
+    const limit = req.query?.max ?? 10
+    const start = req.query?.start_at ?? DateTime.local().toUnixInteger()
     const reverse = queryParamToBool(req.query.reverse)
     const older = queryParamToBool(req.query.older)
     const show_recurrent = settings.allow_recurrent_event && queryParamToBool(req.query.show_recurrent, settings.recurrent_event_visible)
@@ -78,15 +78,17 @@ const collectionController = {
   async _getEvents ({
     name, start, end,
     show_recurrent=false,
-    limit, include_description=false,
+    limit=10, include_description=false,
     older, reverse }) {
 
+    // get the collection from specified name
     const collection = await Collection.findOne({ where: { name } })
     if (!collection) {
       log.warn(`[COLLECTION] "%s" not found`, name)
       return []
     }
 
+    // and all related filters
     const filters = await Filter.findAll({ where: { collectionId: collection.id } })
 
     // collection is empty if there are no filters
@@ -118,32 +120,40 @@ const collectionController = {
     }
 
     const replacements = []
-    const ors = []
-
+    const conditions = []
+    const negatedConditions = []
+    
     // collections are a set of filters to match
     filters.forEach(f => {
 
-      let conditions = []
+      let tmpConditions = []
 
       if (f.tags && f.tags.length) {
         const tags = Sequelize.fn('EXISTS', Sequelize.literal(`SELECT 1 FROM event_tags WHERE ${Col('event_tags.eventId')}=event.id AND ${Col('tagTag')} in (?)`))
         replacements.push(f.tags)
-        conditions.push(tags)
+        tmpConditions.push(tags)
       }
 
       if (f.places && f.places.length) {
-          conditions.push({ placeId: f.places.map(p => p.id) })
+          tmpConditions.push({ placeId: f.places.map(p => p.id) })
       }
       
       if (f.actors && f.actors.length) {
-        conditions.push({ apUserApId: f.actors.map(a => a.ap_id)})
+        tmpConditions.push({ apUserApId: f.actors.map(a => a.ap_id)})
       }
 
-      if (!conditions.length) return
-      ors.push(conditions.length === 1 ? conditions[0] : { [Op.and]: conditions })
+      if (!tmpConditions.length) return
+      if (f.negate) {
+        negatedConditions.push(tmpConditions.length === 1 ? tmpConditions[0] : { [Op.and]: tmpConditions })
+      } else {
+        conditions.push(tmpConditions.length === 1 ? tmpConditions[0] : { [Op.and]: tmpConditions })
+      }
     })
 
-    where[Op.and] = { [Op.or]: ors }
+    where[Op.and] = {
+      ...(negatedConditions.length > 0 && { [Op.not]: negatedConditions}),
+      ...(conditions.length > 0 && { [Op.or]: conditions })
+    }
 
     const events = await Event.findAll({
       where,
@@ -213,14 +223,10 @@ const collectionController = {
   },
 
   async addFilter (req, res) {
-    const { collectionId, tags, places, actors } = req.body
+    const { collectionId, tags, places, actors, negate } = req.body
 
     try {
-      // if (actors?.length) {
-      //   const actors_to_follow = await APUser.findAll({ where: { ap_id: { [Op.in]: actors.map(a => a.ap_id) }} })
-      //   await Promise.all(actors_to_follow.map(followActor))
-      // }
-      const filter = await Filter.create({ collectionId, tags, places, actors })
+      const filter = await Filter.create({ collectionId, tags, places, actors, negate })
       return res.json(filter)
     } catch (e) {
       log.error(String(e))

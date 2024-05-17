@@ -28,7 +28,7 @@ v-container
 
   v-btn(color='primary' text @click='newCollection') <v-icon v-text='mdiPlus'></v-icon> {{ $t('admin.new_collection') }}
 
-  v-dialog(v-model='dialog' width='900' destroy-on-close :fullscreen='$vuetify.breakpoint.xsOnly')
+  v-dialog(v-model='dialog' max-width='8000' width='800' destroy-on-close :fullscreen='$vuetify.breakpoint.xsOnly')
     v-card
       v-card-title {{ $t('admin.edit_collection') }}
       v-card-text
@@ -45,7 +45,7 @@ v-container
           h3(v-else class='text-h5' v-text='collection.name')
 
         v-row
-          v-col(cols=4)
+          v-col(cols=6)
             //- @input.native='searchActors'
             //- @focus='searchActors'
             v-autocomplete(v-model='filterActors'
@@ -55,6 +55,7 @@ v-container
               :disabled="!collection.id"
               placeholder='Local'
               return-object
+              hide-details
               item-value='ap_id'
               item-text='ap_id'
               :delimiters="[',', ';']"
@@ -70,23 +71,7 @@ v-container
                   v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
                     :input-value="selected" label small) @{{ item?.object?.preferredUsername }}@{{ item?.instanceDomain }}
 
-          v-col(cols=4)
-            v-autocomplete(v-model='filterTags'
-              cache-items
-              :prepend-inner-icon="mdiTagMultiple"
-              chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-              :disabled="!collection.id"
-              placeholder='All'
-              @input.native='searchTags'
-              @focus='searchTags'
-              :delimiters="[',', ';']"
-              :items="tags"
-              :label="$t('common.tags')")
-                template(v-slot:selection="{ item, on, attrs, selected, parent }")
-                  v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
-                    :input-value="selected" label small) {{ item }}
-
-          v-col(cols=4)
+          v-col(cols=6)
             v-autocomplete(v-model='filterPlaces'
               cache-items
               :prepend-inner-icon="mdiMapMarker"
@@ -94,6 +79,7 @@ v-container
               auto-select-first
               clearable
               return-object
+              hide-details
               item-text='name'
               :disabled="!collection.id"
               @input.native="searchPlaces"
@@ -105,12 +91,32 @@ v-container
                   v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
                     :input-value="selected" label small) {{ item.name }}
 
+          v-col(cols=6)
+            v-autocomplete(v-model='filterTags'
+              cache-items
+              :prepend-inner-icon="mdiTagMultiple"
+              chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
+              :disabled="!collection.id"
+              hide-details
+              placeholder='All'
+              @input.native='searchTags'
+              @focus='searchTags'
+              :delimiters="[',', ';']"
+              :items="tags"
+              :label="$t('common.tags')")
+                template(v-slot:selection="{ item, on, attrs, selected, parent }")
+                  v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+                    :input-value="selected" label small) {{ item }}
+
+
+
                 //- template(v-slot:item="{ item, attrs, on }")
                 //-   v-list-item(v-bind='attrs' v-on='on')
                 //-     v-list-item-content(two-line)
                 //-       v-list-item-title(v-text='item.name')
                 //-       v-list-item-subtitle(v-text='item.address')
-
+          v-col(cols=3)
+            v-switch(inset v-model='negateFilter' label='Not')
 
         v-data-table(
           :headers='filterHeaders'
@@ -121,6 +127,8 @@ v-container
             template(v-slot:item.actions='{ item }')
               v-btn(@click='removeFilter(item)' color='error' icon)
                 v-icon(v-text='mdiDeleteForever')
+            template(v-slot:item.negate='{ item }')
+              v-icon(v-text='item.negate ? mdiNotEqualVariant : mdiEqualBox' :color='item.negate ? "warning" : "success"')
             template(v-slot:item.tags='{ item }')
               v-chip.ma-1(small label v-for='tag in item.tags' v-text='tag' :key='tag')
             template(v-slot:item.places='{ item }')
@@ -131,8 +139,8 @@ v-container
 
       v-card-actions
         v-spacer
-        v-btn(color='primary' outlined :loading='loading' text @click='addFilter' :disabled='loading || !filterActors.length && !filterPlaces.length && !filterTags.length') add <v-icon v-text='mdiPlus'></v-icon>
-        v-btn(@click='dialog = false' outlined color='warning' :disabled="loading || filterActors.length || filterPlaces.length || filterTags.length") {{ $t('common.close') }}
+        v-btn(color='primary' outlined :loading='loading' text @click='addFilter' :disabled='loading || filterActors.length<1 && filterPlaces.length<1 && filterTags.length<1') add <v-icon v-text='mdiPlus'></v-icon>
+        v-btn(@click='dialog = false' outlined color='warning' :disabled="loading || filterActors.length>0 || filterPlaces.length>0 || filterTags.length>0") {{ $t('common.close') }}
 
   v-card-text
     v-data-table(
@@ -160,12 +168,14 @@ import debounce from 'lodash/debounce'
 import isEqual from 'lodash/isEqual'
 import sortBy from 'lodash/sortBy'
 
-import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle, mdiChevronDown, mdiWeb } from '@mdi/js'
+import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever,
+  mdiCloseCircle, mdiChevronDown, mdiWeb, mdiInformation, mdiNotEqualVariant, mdiEqualBox } from '@mdi/js'
 
 export default {
   data({ $store }) {
     return {
-      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiCloseCircle, mdiChevronDown, mdiWeb,
+      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever,
+      mdiCloseCircle, mdiChevronDown, mdiWeb, mdiInformation, mdiEqualBox, mdiNotEqualVariant,
       loading: false,
       dialog: false,
       valid: false,
@@ -173,6 +183,7 @@ export default {
       filterTags: [],
       filterPlaces: [],
       filterActors: [],
+      negateFilter: false,
       actors: [],
       tags: [],
       places: [],
@@ -187,6 +198,7 @@ export default {
         { value: 'actions', text: this.$t('common.actions'), align: 'right', width: 150, sortable: false }
       ],
       filterHeaders: [
+        { value: 'negate', text: '', width: 20, sortable: false },
         { value: 'actors', text: this.$t('common.actors') },
         { value: 'tags', text: this.$t('common.tags') },
         { value: 'places', text: this.$t('common.places') },
@@ -235,7 +247,7 @@ export default {
       const tags = this.filterTags
       const places = this.filterPlaces.map(p => ({ id: p.id, name: p.name }))
       const actors = this.filterActors.map(a => ({ ap_id: a.ap_id, name: a.object?.preferredUsername ?? a.object?.username, domain: a.instanceDomain  }))
-      const filter = { collectionId: this.collection.id, tags, places, actors }
+      const filter = { collectionId: this.collection.id, tags, places, actors, negate: this.negateFilter }
 
       // tags and places are JSON field and there's no way to use them inside a unique constrain
       const alreadyExists = this.filters.find(f =>
@@ -244,7 +256,10 @@ export default {
         isEqual(sortBy(f.actors), sortBy(filter.actors))
       )
 
-      if (alreadyExists) return
+      if (alreadyExists) {
+        this.$root.$message('Already exists', { color: 'warning' })
+        return
+      }
 
       const ret = await this.$axios.$post('/filter', filter )
       this.$fetch()
@@ -252,6 +267,7 @@ export default {
       this.filterTags = []
       this.filterPlaces = []
       this.filterActors = []
+      this.negateFilter = false
       this.loading = false
     },
     async editCollection(collection) {
