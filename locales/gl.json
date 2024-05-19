@@ -179,7 +179,7 @@
         "normal_description": "Elixe o día.",
         "recurrent_1w_days": "Cada {days}",
         "recurrent_1m_ordinal": "O {n} {days} de cada mes",
-        "image_too_big": "A imaxe non pode superar os 4MB",
+        "image_too_big": "A imaxe subida é demasiado grande. Comproba a configuración do teu servidor.",
         "recurrent_1m_days": "O {days} de cada mes",
         "each_2w": "Cada dúas semanas",
         "follow_me_description": "Un dos xeitos de recibir actualizacións dos eventos que se publican aquí en {title},\né seguindo a conta <u>{account}</u> no fediverso, por exemplo a través de Mastodon, e posiblemente tamén engadir recursos para un evento desde alí.<br/><br/>\nSe non escoitaches falar de Mastodon e o fediverso recomendámosche ler <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>este artigo</a>.<br/><br/>Escribe aquí a túa instancia (ex. mastodon.social)",
@@ -205,7 +205,9 @@
         "send_to_author_too": "Enviar a admins e creadora",
         "disable_author": "Desactivar autora",
         "disable_author_confirm": "Tes certeza de querer desactivar a creadora de este evento?",
-        "message_hint": "Pódeslle enviar unha mensaxe a outras Admin e optativamente tamén á persoa creadora do evento."
+        "message_hint": "Pódeslle enviar unha mensaxe a outras Admin e optativamente tamén á persoa creadora do evento.",
+        "assign_to_user": "Asignar á usuaria",
+        "assign_to_user_description": "Podes asignar un evento anónimo a unha usuaria. Isto permitirá que a usuaria seleccionada poida modificar o evento."
     },
     "admin": {
         "place_description": "Se escribiches mal o lugar ou enderezo, podes cambialo.<br/>Cambiará o enderezo de tódolos eventos actuais e pasados asociados a este lugar.",
@@ -337,7 +339,8 @@
         "enable_report_hint": "Calquera visitante pode denunciar un evento, a administración reciben notificación por correo",
         "allow_geolocation_hint": "Establecer de xeito optativo a localización exacta do evento nun mapa xeográfico",
         "change_role_confirm": "Tes certeza de cambiar o rol de <strong>{user}</strong> desde <strong>{from_role}</strong> a <strong>{to_role}</strong>",
-        "stats": "{n_followers} \"actores\" están a seguir a esta instancia, hai {n_events} eventos desde o fediverso e {n_resources} comentarios"
+        "stats": "{n_followers} \"actores\" están a seguir a esta instancia, hai {n_events} eventos desde o fediverso e {n_resources} comentarios",
+        "plugins_description": "Os Complementos son pequenas pezas de código que proporcionan características adicionais á aplicación. Habitualmente están escritos por desenvolvedoras externas ao proxecto que aproveitan o <a href=\"https://gancio.org/dev/plugins\">sistema de complementos</a> para, principalmente, pero non limitado, enviar eventos a outras plataformas ou canles."
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",
