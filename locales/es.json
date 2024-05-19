@@ -179,7 +179,7 @@
         "each_month": "Cada mes",
         "due": "a las",
         "from": "Desde las",
-        "image_too_big": "La imagen no puede ser mayor a 4 MB",
+        "image_too_big": "La imagen cargada es demasiado grande. Verifique la configuración de su servidor.",
         "interact_with_me_at": "Sígueme en el fediverso en",
         "show_recurrent": "Eventos recurrentes",
         "show_past": "eventos pasados",
@@ -214,7 +214,9 @@
         "disable_author": "Desactivar autor",
         "disable_author_confirm": "¿Estás seguro de que quieres desactivar al autor de este evento?",
         "report_message_confirmation": "¿Crees que este evento no debería estar aquí? Danos una razón",
-        "message_hint": "Podrías enviar un mensaje a otros administradores y, opcionalmente, a la persona autora del evento."
+        "message_hint": "Podrías enviar un mensaje a otros administradores y, opcionalmente, a la persona autora del evento.",
+        "assign_to_user": "Asignar al usuario",
+        "assign_to_user_description": "Puede asignar un evento anónimo a un usuario. Esto permitirá al usuario seleccionado modificar el evento."
     },
     "admin": {
         "place_description": "En el caso de que un lugar sea incorrecto o cambie de dirección, puedes cambiarlo. <br/> Todos los eventos presentes y pasados asociados con este lugar cambiarán de dirección.",
@@ -344,7 +346,8 @@
         "enable_report": "Habilitar informes de eventos",
         "allow_geolocation_hint": "Establecer opcionalmente la ubicación exacta de un evento en un mapa",
         "enable_report_hint": "Cualquier visitante puede informar de un suceso y los administradores reciben una notificación por correo electrónico",
-        "stats": "{n_followers} \"actores\" están siguiendo esta instancia, hay {n_events} eventos de fediverse y {n_resources} comentarios"
+        "stats": "{n_followers} \"actores\" están siguiendo esta instancia, hay {n_events} eventos de fediverse y {n_resources} comentarios",
+        "plugins_description": "Los plugins son pequeños fragmentos de código que proporcionan características adicionales a la aplicación principal. Por lo general, están escritos por desarrolladores externos al proyecto que aprovechan el sistema <a href=\"https://gancio.org/dev/plugins\">plugin</a> para, en su mayoría, pero no limitarse a enviar eventos a otras plataformas y canales."
     },
     "auth": {
         "not_confirmed": "Todavía no hemos confirmado este email…",
