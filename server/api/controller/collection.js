@@ -47,7 +47,7 @@ const collectionController = {
     const exportController = require('./export')
     const format = req.params?.format ?? 'json'
     const name = req.params.name
-    const limit = req.query?.max ?? 10
+    const limit = req.query?.max
     const start = req.query?.start_at ?? DateTime.local().toUnixInteger()
     const reverse = queryParamToBool(req.query.reverse)
     const older = queryParamToBool(req.query.older)
@@ -78,7 +78,7 @@ const collectionController = {
   async _getEvents ({
     name, start, end,
     show_recurrent=false,
-    limit=10, include_description=false,
+    limit, include_description=false,
     older, reverse }) {
 
     // get the collection from specified name
@@ -170,7 +170,7 @@ const collectionController = {
         },
         { model: Place, required: true, attributes: ['id', 'name', 'address'] },
       ],
-      ...( limit && { limit }),
+      ...( limit > 0 && { limit }),
       replacements
     }).catch(e => {
       log.error('[EVENT]', e)
