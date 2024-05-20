@@ -37,7 +37,11 @@ export default {
     ...mapGetters(['is_dark'])
   },
   created () {
-    this.$vuetify.theme.dark = this.is_dark
+    try {
+      this.$vuetify.theme.dark = this.is_dark
+    } catch (e) {
+      console.error(e)
+    }
   }
 }
 </script>
