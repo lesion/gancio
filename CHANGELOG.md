@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://framagit.org/les/gancio/compare/v1.15.5...v1.16.0) (2024-05-20)
+
+
+### Features
+
+*  Disable/enable Download of Flyer-Images? fix [#389](https://framagit.org/les/gancio/issues/389) ([93fd6a8](https://framagit.org/les/gancio/commit/93fd6a8748ca050c1505e4d7492b729e947fe90a))
+* add Exclusion filters in collections, fix [#393](https://framagit.org/les/gancio/issues/393) ([dc8294d](https://framagit.org/les/gancio/commit/dc8294d15efad68e9805738a033634f1c605091e))
+
+
+### Bug Fixes
+
+* Add option to transfer anon event ownership, fix [#394](https://framagit.org/les/gancio/issues/394) ([7b748bd](https://framagit.org/les/gancio/commit/7b748bd49ca8bdd011e9755309f871237685793b))
+* Allow admins to add past events [#396](https://framagit.org/les/gancio/issues/396) ([bbad9d1](https://framagit.org/les/gancio/commit/bbad9d127d1a55a85174a289b5b7722b266d9ca0))
+* better editor support, fix [#376](https://framagit.org/les/gancio/issues/376) ([cfd6dd8](https://framagit.org/les/gancio/commit/cfd6dd8ab7d59beb90ba57092ca58dcfce57137c))
+* **fedi:** better remote AP instance display, help address [#387](https://framagit.org/les/gancio/issues/387) ([c38e5d9](https://framagit.org/les/gancio/commit/c38e5d984e52f55a1ea6aba29e86493cfb86d7e3))
+* improve loading time from 0.8s to 0.2s ([ecab6d4](https://framagit.org/les/gancio/commit/ecab6d482137474a097658017ad553702f76d1db))
+* keepAlive, ,add some cache time to "static" img ([63086de](https://framagit.org/les/gancio/commit/63086de9f053a3c058d951664284670e458cda73))
+* open moderation panel when coming from moderation email ([e0765dc](https://framagit.org/les/gancio/commit/e0765dcf2b03af855d437920ac5a02dcf28a97f3))
+* prepare Swedish locale ([35cddce](https://framagit.org/les/gancio/commit/35cddcec6f86cdc0901ece4f13afdfdbc963bca1))
+* show number of fediverse 'followers on main site', fix [#359](https://framagit.org/les/gancio/issues/359) ([1a45247](https://framagit.org/les/gancio/commit/1a45247a1e4cc91e5795946f6f405f918f121832))
+* too big image msg, fix [#378](https://framagit.org/les/gancio/issues/378) ([e750331](https://framagit.org/les/gancio/commit/e7503314730b2bc01da98d69d3fd3b93d307a297))
+* use href for navbar /about link enable to make a redirect, fix [#385](https://framagit.org/les/gancio/issues/385) ([e17ee49](https://framagit.org/les/gancio/commit/e17ee4982cf76cb4414205ffa3b9e426bf39fbb8))
+* **UX:** Improve collections interactions, fix [#375](https://framagit.org/les/gancio/issues/375) ([bb371b5](https://framagit.org/les/gancio/commit/bb371b55f5b8bf522ad3f12a1db096b648af8204))
+* **WP:** release 1.12 ([b40bef4](https://framagit.org/les/gancio/commit/b40bef4fea5536bc73c04e96f62da7d53e1e8cb2))
+
 ### [1.15.5](https://framagit.org/les/gancio/compare/v1.15.4...v1.15.5) (2024-04-21)
 
 
