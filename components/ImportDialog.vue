@@ -30,7 +30,7 @@ v-card
 </template>
 <script>
 import { mdiAttachment } from '@mdi/js'
-import ical from 'ical.js'
+import ical from 'ical.js/dist/ical.es5.cjs'
 import get from 'lodash/get'
 
 export default {
