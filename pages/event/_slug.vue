@@ -76,7 +76,7 @@
                   v-list-item-title(v-text="$t('common.report')")
 
               //- download flyer
-              v-list-item(v-if='hasMedia' :href='$helper.mediaURL(event, "download")')
+              v-list-item(v-if='hasMedia && settings.show_download_media' :href='$helper.mediaURL(event, "download")')
                 v-list-item-icon
                   v-icon(v-text='mdiFileDownloadOutline')
                 v-list-item-content

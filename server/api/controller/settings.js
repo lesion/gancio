@@ -27,6 +27,7 @@ const defaultSettings = {
   allow_multidate_event: true,
   allow_recurrent_event: false,
   allow_online_event: true,
+  show_download_media: true,
   enable_moderation: false,
   enable_report: false,
   recurrent_event_visible: false,

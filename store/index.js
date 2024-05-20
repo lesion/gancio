@@ -13,6 +13,7 @@ export const state = () => ({
     allow_multidate_event: true,
     allow_recurrent_event: true,
     allow_online_event: true,
+    show_download_media: true,
     allow_geolocation: false,
     recurrent_event_visible: false,
     geocoding_provider_type: '',

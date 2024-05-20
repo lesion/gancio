@@ -81,6 +81,7 @@ module.exports = {
       enable_report: settings.enable_report,
       allow_multidate_event: settings.allow_multidate_event,
       allow_online_event: settings.allow_online_event,
+      show_download_media: settings.show_download_media,
       recurrent_event_visible: settings.recurrent_event_visible,
       enable_federation: settings.enable_federation,
       enable_resources: settings.enable_resources,

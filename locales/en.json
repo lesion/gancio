@@ -340,7 +340,9 @@
     "geolocation": "Geolocation",
     "colors": "Colors",
     "tag_renamed": "Tag \"{oldTag}\" renamed to \"{newTag}\"",
-    "stats": "{n_followers} \"actors\" are following this instance, there are {n_events} events from the fediverse and {n_resources} comments"
+    "stats": "{n_followers} \"actors\" are following this instance, there are {n_events} events from the fediverse and {n_resources} comments",
+    "show_download_media": "Show download media action",
+    "show_download_media_hint": "Display a download media button in event's page"
   },
   "auth": {
     "not_confirmed": "Not confirmed yet…",

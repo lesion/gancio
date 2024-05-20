@@ -56,19 +56,25 @@ v-container
       inset
       :label="$t('admin.allow_online_event')")
 
-    v-switch.mt-1(v-model='allow_geolocation'
+    v-switch.mt-3(v-model='allow_geolocation'
       inset
       persistent-hint
       :hint="$t('admin.allow_geolocation_hint')"
       :label="$t('admin.allow_geolocation')")
 
-    v-switch.mt-1(v-model='enable_moderation'
+    v-switch.mt-3(v-model='show_download_media'
+      inset
+      persistent_hint
+      :hint="$t('admin.show_download_media_hint')"
+      :label="$t('admin.show_download_media')")
+
+    v-switch.mt-3(v-model='enable_moderation'
       inset
       persistent-hint
       :hint="$t('admin.enable_moderation_hint')"
       :label="$t('admin.enable_moderation')")
 
-    v-switch.mt-1(v-model='enable_report'
+    v-switch.mt-3(v-model='enable_report'
       v-if="enable_moderation"
       inset
       persistent-hint
@@ -145,6 +151,10 @@ export default {
       get () { return this.settings.allow_geolocation },
       set (value) { this.setSetting({ key: 'allow_geolocation', value }) }
     },
+    show_download_media: {
+      get () { return this.settings.show_download_media },
+      set (value) { this.setSetting({ key: 'show_download_media', value }) }
+    },    
     allow_online_event: {
       get () { return this.settings.allow_online_event },
       set (value) { this.setSetting({ key: 'allow_online_event', value }) }
