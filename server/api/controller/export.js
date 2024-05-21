@@ -27,7 +27,7 @@ const exportController = {
 
       if (tags && places) {
         where[Op.or] = {
-          placeId: places ? places.split(',') : [],
+          placeId: places ? places.split(',').map(Number).filter(a => a) : [],
           '$tags.tag$': tags.split(',')
         }
       }
@@ -37,7 +37,7 @@ const exportController = {
       }
 
       if (places) {
-        where.placeId = places.split(',')
+        where.placeId = places.split(',').map(Number).filter(a => a)
       }
 
     }
