@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.1](https://framagit.org/les/gancio/compare/v1.16.0...v1.16.1) (2024-05-23)
+
+
+### Bug Fixes
+
+* do not expose application actor if federation is not enabled ([5f43ab0](https://framagit.org/les/gancio/commit/5f43ab002eb20b2109235ddba70a8fb77f1c6623))
+* get collection when collection_in_home in SSR ([53171d2](https://framagit.org/les/gancio/commit/53171d2c7efd60e3bca387a9780626e6eaa06e05))
+* places param validation in ics/rss feed ([731b334](https://framagit.org/les/gancio/commit/731b334a43bb6f3a2fdcfa21e556e996b69d0f50))
+
 ## [1.16.0](https://framagit.org/les/gancio/compare/v1.15.5...v1.16.0) (2024-05-20)
 
 
