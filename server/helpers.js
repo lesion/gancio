@@ -266,13 +266,14 @@ module.exports = {
     const { DateTime } = require('luxon')
     const show_multidate = res.locals.settings.allow_multidate_event
     const show_recurrent = res.locals.settings.allow_recurrent_event
+    const collection_in_home = res.locals.settings.collection_in_home
 
     const ret = await Promise.allSettled([
       announceController._getVisible(),
       collectionController._getVisible(),
-      eventController._select({
-        start: DateTime.local().toUnixInteger(),
-        show_multidate, show_recurrent })
+      collection_in_home ?
+        collectionController._getEvents({ name: collection_in_home, start: DateTime.local().toUnixInteger(), show_recurrent }) :
+        eventController._select({ start: DateTime.local().toUnixInteger(), show_multidate, show_recurrent })
     ])
     
     res.locals.announcements = ret[0]?.value
