@@ -1,17 +1,26 @@
-<template lang="pug">
-v-container.px-2.px-sm-6.pt-0#home
+<template>
+<v-container class='px-2 px-sm-6 pt-0' id='home'>
 
-  //- Announcements
-  #announcements.mt-2.mt-sm-4(v-if='announcements?.length')
-    Announcement(v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement')
+    <!-- Announcements -->
+    <section id='announcements' class='mt-2 mt-sm-4' v-if='announcements?.length'>
+      <Announcement v-for='announcement in announcements' :key='`a_${announcement.id}`' :announcement='announcement' />
+    </section>
+    
+    <!-- Events -->
+    <section id='events' class='mt-sm-4 mt-2' v-if='!$fetchState.pending'>
+      <v-lazy class='event v-card' :value='idx<9'
+        v-for='(event, idx) in visibleEvents' :key='event.id'
+        :min-height='hide_thumbs ? 105 : undefined'
+        :options="{ threshold: .5, rootMargin: '500px' }"
+        :class="{ 'theme--dark': is_dark }">
+        <Event :event='event' :lazy='idx>9' />
+      </v-lazy>
+    </section>
+    <section class='text-center' v-else>
+      <v-progress-circular class='mt-5 justify-center align-center mx-auto' color='primary' indeterminate model-value='20' />
+    </section>
 
-  //- Events
-  #events.mt-sm-4.mt-2(v-if='!$fetchState.pending')
-    v-lazy.event.v-card(:value='idx<9' v-for='(event, idx) in visibleEvents' :key='event.id' :min-height='hide_thumbs ? 105 : undefined' :options="{ threshold: .5, rootMargin: '500px' }" :class="{ 'theme--dark': is_dark }")
-      Event(:event='event' :lazy='idx>9')
-  .text-center(v-else)
-    v-progress-circular.justify-center.align-center(color='primary' indeterminate model-value='20')
-
+</v-container>
 </template>
 
 <script>

@@ -1,9 +1,9 @@
 <template lang="pug">
-div.h-event(itemscope itemtype="https://schema.org/Event")
+article.h-event(itemscope itemtype="https://schema.org/Event")
   nuxt-link(:to='`/event/${event.slug || event.id}`' itemprop="url")
     MyPicture(v-if='!hide_thumbs' :event='event' thumb :lazy='lazy')
     v-icon.float-right.mr-1(v-if='event.parentId' color='success' v-text='mdiRepeat')
-    .title.p-name(itemprop="name") {{ event.title }}
+    h1.title.p-name(itemprop="name") {{ event.title }}
 
   v-card-text.body.pt-0.pb-0
     time.dt-start.subtitle-1(:datetime='$time.unixFormat(event.start_datetime, "yyyy-MM-dd HH:mm")' itemprop="startDate" :content="$time.unixFormat(event.start_datetime, \"yyyy-MM-dd'T'HH:mm\")")  <v-icon v-text='mdiCalendar'></v-icon> {{ $time.when(event) }}
