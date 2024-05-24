@@ -349,7 +349,8 @@
         "stats": "{n_followers} \"actores\" están siguiendo esta instancia, hay {n_events} eventos de fediverse y {n_resources} comentarios",
         "plugins_description": "Los plugins son pequeños fragmentos de código que proporcionan características adicionales a la aplicación principal. Por lo general, están escritos por desarrolladores externos al proyecto que aprovechan el sistema <a href=\"https://gancio.org/dev/plugins\">plugin</a> para, en su mayoría, pero no limitarse a enviar eventos a otras plataformas y canales.",
         "show_download_media": "Mostrar acción de descarga de medios",
-        "show_download_media_hint": "Mostrar un botón de descarga de medios en la página del evento"
+        "show_download_media_hint": "Mostrar un botón de descarga de medios en la página del evento",
+        "allow_event_without_end_time": "Permitir eventos sin hora de finalización"
     },
     "auth": {
         "not_confirmed": "Todavía no hemos confirmado este email…",
