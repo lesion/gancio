@@ -52,6 +52,10 @@ v-container
       inset
       :label="$t('admin.recurrent_event_visible')")
 
+    v-switch.mt-1(v-model='allow_event_without_end_time'
+      inset
+      :label="$t('admin.allow_event_without_end_time')")
+
     v-switch.mt-1(v-model='allow_online_event'
       inset
       :label="$t('admin.allow_online_event')")
@@ -138,6 +142,10 @@ export default {
     allow_recurrent_event: {
       get () { return this.settings.allow_recurrent_event },
       set (value) { this.setSetting({ key: 'allow_recurrent_event', value }) }
+    },
+    allow_event_without_end_time: {
+      get () { return this.settings.allow_event_without_end_time },
+      set (value) { this.setSetting({ key: 'allow_event_without_end_time', value }) }
     },
     allow_multidate_event: {
       get () { return this.settings.allow_multidate_event },

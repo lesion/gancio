@@ -12,6 +12,7 @@ export const state = () => ({
     enable_report: false,
     allow_multidate_event: true,
     allow_recurrent_event: true,
+    allow_event_without_end_time: true,
     allow_online_event: true,
     show_download_media: true,
     allow_geolocation: false,

@@ -182,6 +182,7 @@
         "title_description": "Dieses wird im Seitentitel, in der Betreffzeile von E-Mails, beim Export von RSS-Feeds und ICS angezeigt.",
         "description_description": "Erscheint in der Kopfzeile neben dem Titel",
         "allow_recurrent_event": "Wiederkehrende Veranstaltungen erlauben",
+        "allow_event_without_end_time": "Erlaube Veranstaltungen ohne Endzeit",
         "recurrent_event_visible": "Wiederkehrende Veranstaltungen sind standardmäßig sichtbar",
         "enable_federation": "Federation aktivieren",
         "allow_anon_event": "Kann man auch anonyme Veranstaltungen (vorausgesetzt, diese werden genehmigt) eintragen?",

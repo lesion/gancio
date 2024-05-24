@@ -77,6 +77,7 @@ module.exports = {
       allow_registration: settings.allow_registration,
       allow_anon_event: settings.allow_anon_event,
       allow_recurrent_event: settings.allow_recurrent_event,
+      allow_event_without_end_time: settings.allow_event_without_end_time,
       enable_moderation: settings.enable_moderation,
       enable_report: settings.enable_report,
       allow_multidate_event: settings.allow_multidate_event,
