@@ -76,7 +76,7 @@ const collectionController = {
 
   // return events from collection
   async _getEvents ({
-    name, start, end,
+    name, start=DateTime.local().toUnixInteger(), end,
     show_recurrent=false,
     limit, include_description=false,
     older, reverse }) {

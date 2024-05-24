@@ -12,7 +12,7 @@ const exportController = {
     const format = req.params.format || 'json'
     const tags = req.query.tags
     const places = req.query.places
-    const collection = req.query.collection
+    const collection = req.query?.collection ?? res.locals.settings.collection_in_home
     const show_recurrent = !!req.query.show_recurrent
 
     const opt = {
