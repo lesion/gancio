@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.2](https://framagit.org/les/gancio/compare/v1.16.1...v1.16.2) (2024-05-24)
+
+
+### Bug Fixes
+
+* export rss/ics collection when collection_in_home ([baffd80](https://framagit.org/les/gancio/commit/baffd8088d8298f548cecf759074effb04811fa0))
+* start SEO Improvement and template refactoring, addressing [#399](https://framagit.org/les/gancio/issues/399) ([a58bc6a](https://framagit.org/les/gancio/commit/a58bc6a94066a2aa312ece3641dae5266705d443))
+
 ### [1.16.1](https://framagit.org/les/gancio/compare/v1.16.0...v1.16.1) (2024-05-23)
 
 
