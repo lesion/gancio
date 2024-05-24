@@ -26,6 +26,7 @@ const defaultSettings = {
   allow_anon_event: true,
   allow_multidate_event: true,
   allow_recurrent_event: false,
+  allow_event_without_end_time: true,
   allow_online_event: true,
   show_download_media: true,
   enable_moderation: false,

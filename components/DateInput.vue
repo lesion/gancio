@@ -83,6 +83,7 @@ v-col(cols=12)
             :disabled='!value.fromHour'
             readonly
             :prepend-icon="mdiClockTimeEightOutline"
+            :rules="[settings.allow_event_without_end_time ? true : $validators.required('event.due')]"
             v-bind="attrs"
             v-on="on")
         v-time-picker(

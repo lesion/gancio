@@ -235,6 +235,7 @@
     "enable_report_hint": "Any visitor could report an event, admins are notified via e-mail",
     "allow_multidate_event": "Allow multi-day events",
     "allow_recurrent_event": "Allow recurring events",
+    "allow_event_without_end_time": "Allow events without end time",
     "allow_online_event": "Allow online events",
     "allow_geolocation": "Allow events geolocation",
     "allow_geolocation_hint": "Optionally set the exact location of an event on a geographic map",
