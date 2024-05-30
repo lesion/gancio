@@ -244,7 +244,11 @@
         "enable_report": "Habilitar reportar evento",
         "enable_report_hint": "Qualquer visitante pode reportar um evento, admins serão notificadas por e-mail",
         "allow_geolocation_hint": "Opcionalmente definir a localização exata do evento em um mapa",
-        "instance_removed": "Instância removida"
+        "instance_removed": "Instância removida",
+        "allow_event_without_end_time": "Permitir eventos sem hora final",
+        "show_download_media": "Exibir ação de baixar media",
+        "show_download_media_hint": "Exibir botão de baixar media na página do evento",
+        "plugins_description": "Plugins são pequenos códigos que fornecem funcionalidades adicionais à aplicação principal. Eles são geralmente escrito por desenvolvedoras externas ao projeto que se aproveitam do <a href=\"https://gancio.org/dev/plugins\">sistema de plugins</a>, principalmente, mas não limitado a enviar eventos para outras plataformas e canais."
     },
     "event": {
         "follow_me_description": "Uma das maneiras de se manter atualizado com os eventos publicados aqui em {title},\né seguir a conta <u>{account}</u> no Fediverso, por exemplo, via Mastodon, e possivelmente adicionar recursos para um evento a partir de lá.<br/><br/>\nSe nunca ouviu falar sobre Mastodon ou no Fediverso nós recomendamos ler <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>este artigo</a>.<br/><br/>Entre com o seu domínio abaixo (e.g. mastodon.social)",
@@ -286,7 +290,7 @@
         "recurrent_2m_ordinal": "{n} {days} a cada dois meses",
         "due": "até",
         "from": "De",
-        "image_too_big": "A imagem não pode ser maior que 4MB",
+        "image_too_big": "Imagem enviada é muito grande. Verifique as configurações do servidor.",
         "interact_with_me_at": "Interaja comigo no Fediverso atráves de",
         "remove_recurrent_confirmation": "Têm a certeza que quer remover este evento recorrente?\nEventos passados serão mantidos, mas nenhum evento seguinte será criado.",
         "import_URL": "Importar a partir de URL",
@@ -312,7 +316,9 @@
         "send_to_admins": "Enviar para admins",
         "send_to_author_too": "Enviar para admins e autora",
         "disable_author": "Desabilitar autora",
-        "disable_author_confirm": "Você tem certeza que quer desabilitar a autora deste evento?"
+        "disable_author_confirm": "Você tem certeza que quer desabilitar a autora deste evento?",
+        "assign_to_user": "Atribuir para a usuária",
+        "assign_to_user_description": "Você pode atribuir um evento anônimo para uma usuária. Isso permitirá que a usuária selecionada possa modificar o evento."
     },
     "confirm": {
         "not_valid": "Algo deu errado.",
