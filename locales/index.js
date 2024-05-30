@@ -12,7 +12,7 @@ module.exports = {
   nl: 'Dutch',
   pl: 'Polski',
   pt: 'Português',
-  'pt-BR': 'Português (Brasilian)',
+  'pt-BR': 'Português (Brasil)',
   ro: 'Românesc',
   ru: 'Русский',
   sk: 'Slovak',
