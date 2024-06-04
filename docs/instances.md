@@ -17,6 +17,7 @@ nav_order: 7
 - [www.attoppa.it](https://www.attoppa.it/) (Catania, Italy)
 - [nanassa.com/](https://nanassa.com/) (Stretto di Messina, Italy)
 - [camifa.net](https://camifa.net/) (Cosenza, Italy)
+- [fuorinellanebbia.it](https://www.fuorinellanebbia.it) (Ravenna e Ferrara, Italy)
 - [agenda.reteappenninica.it](https://agenda.reteappenninica.it) (Appennini, Italy)
 - [bcn.convoca.la](https://bcn.convoca.la/) (Barcelona)
 - [mad.convoca.la](https://mad.convoca.la/) (Madrid)
