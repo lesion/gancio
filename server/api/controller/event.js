@@ -618,7 +618,7 @@ const eventController = {
       }
 
       // remove old media in case a new one is uploaded
-      if ((req.file || /^https?:\/\//.test(body.image_url)) && !event.recurrent && event.media && event.media.length) {
+      if (!event.recurrent && !event.parentId && (req.file || /^https?:\/\//.test(body.image_url)) && event.media && event.media.length) {
         try {
           const old_path = path.resolve(config.upload_path, event.media[0].url)
           const old_thumb_path = path.resolve(config.upload_path, 'thumb', event.media[0].url)
@@ -706,7 +706,7 @@ const eventController = {
     const event = await Event.findByPk(req.params.id)
     // check if event is mine (or user is admin)
     if (event && (req.user.is_editor || req.user.is_admin || req.user.id === event.userId)) {
-      if (event.media && event.media.length && !event.recurrent) {
+      if (event.media && event.media.length && !event.recurrent && !event.parentId) {
         try {
           const old_path = path.join(config.upload_path, event.media[0].url)
           const old_thumb_path = path.join(config.upload_path, 'thumb', event.media[0].url)
