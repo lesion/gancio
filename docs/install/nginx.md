@@ -86,7 +86,7 @@ server {
 
   location / {
 
-    add_header Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval';";
+    add_header Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' blob: data: https://*.openstreetmap.org";
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
 
     # reverse proxy
