@@ -60,25 +60,25 @@ v-container
       inset
       :label="$t('admin.allow_online_event')")
 
-    v-switch.mt-3(v-model='allow_geolocation'
+    v-switch.mt-4(v-model='allow_geolocation'
       inset
       persistent-hint
       :hint="$t('admin.allow_geolocation_hint')"
       :label="$t('admin.allow_geolocation')")
 
-    v-switch.mt-3(v-model='show_download_media'
+    v-switch.mt-4(v-model='show_download_media'
       inset
-      persistent_hint
+      persistent-hint
       :hint="$t('admin.show_download_media_hint')"
       :label="$t('admin.show_download_media')")
 
-    v-switch.mt-3(v-model='enable_moderation'
+    v-switch.mt-4(v-model='enable_moderation'
       inset
       persistent-hint
       :hint="$t('admin.enable_moderation_hint')"
       :label="$t('admin.enable_moderation')")
 
-    v-switch.mt-3(v-model='enable_report'
+    v-switch.mt-4(v-model='enable_report'
       v-if="enable_moderation"
       inset
       persistent-hint
