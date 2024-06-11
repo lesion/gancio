@@ -49,6 +49,14 @@
               </v-list-item-content>
             </v-list-item>
 
+            <v-list-item nuxt to='/my_events'>
+              <v-list-item-icon><v-icon v-text='mdiCalendarAccount'></v-icon></v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="$t('common.my_events')"/>
+              </v-list-item-content>
+            </v-list-item>
+
+
             <v-list-item v-if='$auth.user.is_admin || $auth.user.is_editor' nuxt to='/admin'>
               <v-list-item-icon>
                 <v-icon v-text='mdiAccount' />
@@ -85,12 +93,12 @@
 </template>
 <script>
 
-import { mdiLogin, mdiDotsVertical, mdiLogout, mdiAccount, mdiCog, mdiInformation, mdiContrastCircle } from '@mdi/js'
+import { mdiLogin, mdiDotsVertical, mdiLogout, mdiAccount, mdiCog, mdiInformation, mdiContrastCircle, mdiCalendarAccount } from '@mdi/js'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   data () {
-    return { mdiLogin, mdiDotsVertical, mdiLogout, mdiAccount, mdiCog, mdiInformation, mdiContrastCircle }
+    return { mdiLogin, mdiDotsVertical, mdiLogout, mdiAccount, mdiCog, mdiInformation, mdiContrastCircle, mdiCalendarAccount }
   },
   computed: {
     ...mapGetters(['hide_thumbs', 'is_dark']),
