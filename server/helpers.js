@@ -112,7 +112,10 @@ module.exports = {
   serveStatic() {
     const router = express.Router()
     // serve images/thumb
-    router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' }), (_req, res) => res.sendStatus(404))
+    router.use('/media/', express.static(config.upload_path, { immutable: true, maxAge: '1y' }), 
+      (req, res) => res.redirect('/fallbackimage.png')
+    )
+    
     router.use('/download/:filename', (req, res) => {
       res.download(req.params.filename, undefined, { root: config.upload_path }, err => {
         if (err) {
@@ -143,7 +146,7 @@ module.exports = {
 
     router.use('/favicon.ico', (req, res, next) => {
       const faviconPath = res.locals.settings.logo ? res.locals.settings.logo + '.png' : './assets/favicon.ico'
-      return express.static(faviconPath, { maxAge: '10m' })(req, res, next)
+      return express.static(faviconPath, { immutable: true, maxAge: '10m' })(req, res, next)
     })
 
     return router
