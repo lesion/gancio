@@ -207,7 +207,7 @@ const Helpers = {
    *  Event object.type
    *  Create / Announce
    */
-  async parseAPEvent (message) {
+  async parseAPEvent (message, actor=message?.actor) {
       const tagController = require('../api/controller/tag')
 
       // has to have an object and a type property..
@@ -313,7 +313,7 @@ const Helpers = {
     }
     
     for(const event of events) {
-      await Helpers.parseAPEvent(event).catch(e => {
+      await Helpers.parseAPEvent(event, actor.ap_id).catch(e => {
         console.error(e.message)
         console.error(e.error)
         console.error(e)
@@ -324,7 +324,6 @@ const Helpers = {
   async getOutbox(actor, limit) {
     log.debug('[FEDI] Get %s outbox', actor?.ap_id)
     
-    let events = []
     if (!actor?.object?.outbox) return
     try {
       let collection = await Helpers.signAndSend('', actor?.object?.outbox, 'get')
