@@ -5,7 +5,7 @@ const apHelpers = require('./helpers/ap.js')
 // const notifier = require('./notifier')
 
 const loopInterval = 10 // process.env.NODE_ENV === 'production' ? 1 : 1
-const minute = 6 / loopInterval
+const minute = 6 * loopInterval
 const hour = minute * 60
 const day = hour * 24
 
