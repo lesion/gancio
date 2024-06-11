@@ -153,7 +153,7 @@ const instancesController = {
 
           log.info(`[FEDI] Adding trusted instance ${instance_url} and actor ${actor_url.href}...`)
           const actor = await getActor(actor_url.href, instance, true)
-          log.debug('[FEDI] Actor %s', actor)
+          log.debug('[FEDI] Actor %s', actor.ap_id)
           await actor.update({ trusted: true })
           return res.json(actor)    
         }
@@ -171,7 +171,7 @@ const instancesController = {
       url = url.replace(/\/$/, '')
 
       log.info(`[FEDI] Adding trusted instance ${url} ...`)
-      instance = await getInstance(url)
+      instance = await getInstance(url, true)
       if (!instance) {
         return res.sendStatus(404)
       }
@@ -192,7 +192,7 @@ const instancesController = {
       // ok this wasn't an actor, let's use the applicationActor if exists
       if (instance?.applicationActor) {
         log.debug('[FEDI] This node supports FEP-2677 and applicationActor is: %s', instance.applicationActor)
-        actor = await getActor(instance.applicationActor, instance)
+        actor = await getActor(instance.applicationActor, instance, true)
         log.debug('[FEDI] Actor %s', actor)
         await actor.update({ trusted: true })
         return res.json(actor)
@@ -220,7 +220,7 @@ const instancesController = {
         const actorURL = webfinger?.links.find(l => l.rel === 'self').href
 
         // retrieve the AP actor and flag it as trusted
-        const actor = await getActor(actorURL, instance)
+        const actor = await getActor(actorURL, instance, true)
         await actor.update({ trusted: true })
         return res.json(actor)
       }
