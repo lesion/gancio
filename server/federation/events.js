@@ -15,7 +15,8 @@ module.exports = {
     try {
       await Helpers.parseAPEvent(req.body)
     } catch (e) {
-      return res.status(400).send(e?.message ?? e)
+      log.error('[FEDI] Error parsing AP Event: %s', e?.message ?? e)
+      return res.status(400).send("Error parsing AP Event")
     }
 
     return res.sendStatus(201)
@@ -30,11 +31,15 @@ module.exports = {
     const ap_id = APEvent?.id ?? APEvent
 
     if (!ap_id) {
+      log.warning('[FEDI] id not found in body.object')
       return res.sendStatus(404)
     }
 
     const event = await Event.findOne({ where: { ap_id }, include: [APUser]})
-    if (!event) { return res.sendStatus(404)}
+    if (!event) {
+      log.warning('[FEDI] Event with this ap_id not found: %s', ap_id)
+      return res.sendStatus(404)
+    }
 
     // is the owner the same?
     if (res.locals.fedi_user.ap_id !== event?.ap_user?.ap_id) {
