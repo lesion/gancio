@@ -591,7 +591,7 @@ const eventController = {
 
         if (Number(end_datetime) > 1000*24*60*60*365) {
         log.debug('[UPDATE] end_datetime is too much in the future')
-          return res.status(400).send('are you sure?')
+          return res.status(400).send('end_datetime is too much in the future')
         }
       }
 
@@ -602,7 +602,7 @@ const eventController = {
 
       if (Number(start_datetime) > 1000*24*60*60*365) {
         log.debug('[UPDATE] start_datetime is too much in the future')
-        return res.status(400).send('are you sure?')
+        return res.status(400).send('start_datetime is too much in the future')
       }
 
       const recurrent = body.recurrent ? JSON.parse(body.recurrent) : null
