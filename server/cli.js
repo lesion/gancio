@@ -15,6 +15,18 @@ async function start () {
     })
 }
 
+async function migrate () {
+  const config = require('./config')
+  if (config.status  === 'SETUP') {
+    console.error('> Cannot run database migration before setup')
+    return
+  }
+  const db = require('./api/models/index')
+  db.connect()
+  await db.sequelize.authenticate()
+  await db.runMigrations()
+}
+
 console.info(`📅 ${pkg.name} - v${pkg.version} - ${pkg.description} (nodejs: ${process.version})`)
 
 require('yargs')
@@ -28,6 +40,7 @@ require('yargs')
       process.env.config_path = absolute_config_path
       return absolute_config_path
     }})
+  .command(['migrate'], 'Run database migration', migrate)
   .command(['start', 'run', '$0'], 'Start gancio', {}, start)
   .command(['users'], 'Manage users', usersCLI)
   .help('h')
