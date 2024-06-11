@@ -139,7 +139,7 @@ const instancesController = {
       const [ user, instance_url ] = url.replace(/^@/,'').split('@')
       log.debug('[FEDI] Adds user: %s and instance: %s because url was: %s', user, instance_url, url)
       try {
-        instance = await getInstance('https://' + instance_url)
+        instance = await getInstance('https://' + instance_url, true)
         if (!instance) { 
           return res.sendStatus(404)
         }
@@ -152,7 +152,7 @@ const instancesController = {
           }
 
           log.info(`[FEDI] Adding trusted instance ${instance_url} and actor ${actor_url.href}...`)
-          const actor = await getActor(actor_url.href, instance)
+          const actor = await getActor(actor_url.href, instance, true)
           log.debug('[FEDI] Actor %s', actor)
           await actor.update({ trusted: true })
           return res.json(actor)    
