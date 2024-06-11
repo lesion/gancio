@@ -344,8 +344,12 @@ const eventController = {
 
       res.sendStatus(200)
 
-      // send notification
-      notifier.notifyEvent('Create', event.id)
+      if (event.recurrent) {
+        eventController._createRecurrent()
+      } else {
+        // send notification
+        notifier.notifyEvent('Create', event.id)
+      }
     } catch (e) {
       log.error('[EVENT]', e)
       res.sendStatus(404)
@@ -547,11 +551,10 @@ const eventController = {
 
       // create recurrent instances of event if needed
       // without waiting for the task manager
-      if (event.recurrent) {
+      if (event.recurrent && event.is_visible) {
         eventController._createRecurrent()
       } else {
         // send notifications
-        const notifier = require('../../notifier')
         notifier.notifyEvent('Create', event.id)
       }
     } catch (e) {
@@ -688,11 +691,10 @@ const eventController = {
 
       // create recurrent instances of event if needed
       // without waiting for the task manager
-      if (event.recurrent) {
+      if (event.recurrent && event.is_visible) {
         eventController._createRecurrent()
       } else {
         if (!event.ap_id) {
-          const notifier = require('../../notifier')
           notifier.notifyEvent('Update', event.id)
         }
       }
@@ -719,7 +721,6 @@ const eventController = {
 
       // notify local events only
       if (!event.ap_id) {
-        const notifier = require('../../notifier')
         await notifier.notifyEvent('Delete', event.id)
       }
 

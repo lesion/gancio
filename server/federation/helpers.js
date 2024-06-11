@@ -207,7 +207,7 @@ const Helpers = {
    *  Event object.type
    *  Create / Announce
    */
-  async parseAPEvent (message, actor) {
+  async parseAPEvent (message) {
       const tagController = require('../api/controller/tag')
 
       // has to have an object and a type property..
@@ -273,7 +273,7 @@ const Helpers = {
           is_visible: true,
           ap_id,
           ap_object: APEvent, 
-          apUserApId: actor.ap_id,
+          apUserApId: message?.actor,
         }).catch(e => {
           console.error(e)
           console.error(e?.message)
@@ -313,7 +313,7 @@ const Helpers = {
     }
     
     for(const event of events) {
-      await Helpers.parseAPEvent(event, actor).catch(e => {
+      await Helpers.parseAPEvent(event).catch(e => {
         console.error(e.message)
         console.error(e.error)
         console.error(e)
