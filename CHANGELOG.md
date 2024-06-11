@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.17.0](https://framagit.org/les/gancio/compare/v1.16.2...v1.17.0) (2024-06-11)
+
+
+### Features
+
+* add new `migrate` CLI command ([f0c3699](https://framagit.org/les/gancio/commit/f0c3699ab6bff16266300f6c07783a850d65aec9))
+* move my events management to a specific page ([42c8408](https://framagit.org/les/gancio/commit/42c8408f9c1f45b241b138f055e3dbf3f8d04e6e))
+
+
+### Bug Fixes
+
+* confirmation is missing on anon recurrent event, fix [#406](https://framagit.org/les/gancio/issues/406) ([1d29574](https://framagit.org/les/gancio/commit/1d295744d8bbfc19be5e5eb2b047d2ac251fbf7f))
+* do not use cached instances when adding trust ([854b6a1](https://framagit.org/les/gancio/commit/854b6a13839c0f532ab0ac2c866e067ee7194935))
+* improve federation logging ([7440bdf](https://framagit.org/les/gancio/commit/7440bdf77a0295ca3d9646f1f1ded54cf6b755b2))
+* nginx CSP docs config example ([7d5ad0d](https://framagit.org/les/gancio/commit/7d5ad0d4a5d06d570c6a9ecec14a5da388fde248))
+* Some recurrent issues are losing their images while changing it in some specific event, fix [#403](https://framagit.org/les/gancio/issues/403) ([ed6cf76](https://framagit.org/les/gancio/commit/ed6cf763e8929b21664956c5834889f71ea18309))
+* use correct actor when parsing event ([8a74726](https://framagit.org/les/gancio/commit/8a74726eb97b5ab5edd183417ad891fa111c9a3b))
+* use fallback image on 404 ([4bb7167](https://framagit.org/les/gancio/commit/4bb716744d9d51095af72983d032eec1ceac9301))
+
 ### [1.16.2](https://framagit.org/les/gancio/compare/v1.16.1...v1.16.2) (2024-05-24)
 
 
