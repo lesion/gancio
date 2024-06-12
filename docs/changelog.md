@@ -8,7 +8,7 @@ nav_order: 10
 All notable changes to this project will be documented in this file.
 
 
-## [1.17.0](https://framagit.org/les/gancio/compare/v1.16.2...v1.17.0) (2024-06-11)
+## [1.17.1](https://framagit.org/les/gancio/compare/v1.16.2...v1.17.1) (2024-06-12)
 
 
 ### Features
@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+* re-implement task / event_notification ([45ab2df](https://framagit.org/les/gancio/commit/45ab2dfffac593d1d580723fb1e7f75519905aa4))
 * confirmation is missing on anon recurrent event, fix [#406](https://framagit.org/les/gancio/issues/406) ([1d29574](https://framagit.org/les/gancio/commit/1d295744d8bbfc19be5e5eb2b047d2ac251fbf7f))
 * do not use cached instances when adding trust ([854b6a1](https://framagit.org/les/gancio/commit/854b6a13839c0f532ab0ac2c866e067ee7194935))
 * improve federation logging ([7440bdf](https://framagit.org/les/gancio/commit/7440bdf77a0295ca3d9646f1f1ded54cf6b755b2))
@@ -26,7 +27,6 @@ All notable changes to this project will be documented in this file.
 * Some recurrent issues are losing their images while changing it in some specific event, fix [#403](https://framagit.org/les/gancio/issues/403) ([ed6cf76](https://framagit.org/les/gancio/commit/ed6cf763e8929b21664956c5834889f71ea18309))
 * use correct actor when parsing event ([8a74726](https://framagit.org/les/gancio/commit/8a74726eb97b5ab5edd183417ad891fa111c9a3b))
 * use fallback image on 404 ([4bb7167](https://framagit.org/les/gancio/commit/4bb716744d9d51095af72983d032eec1ceac9301))
-
 
 ### [1.16.2](https://framagit.org/les/gancio/compare/v1.16.1...v1.16.2) (2024-05-24)
 
