@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.1](https://framagit.org/les/gancio/compare/v1.17.0...v1.17.1) (2024-06-12)
+
+
+### Bug Fixes
+
+* re-implement task / event_notification ([45ab2df](https://framagit.org/les/gancio/commit/45ab2dfffac593d1d580723fb1e7f75519905aa4))
+
 ## [1.17.0](https://framagit.org/les/gancio/compare/v1.16.2...v1.17.0) (2024-06-11)
 
 
