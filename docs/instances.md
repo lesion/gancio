@@ -9,7 +9,6 @@ nav_order: 7
 - [gancio.cisti.org](https://gancio.cisti.org) (Turin, Italy)
 - [lapunta.org](https://lapunta.org) (Florence, Italy)
 - [sapratza.in](https://sapratza.in/) (Sardinia, Italy)
-- [ponente.rocks](https://ponente.rocks) (Ponente Ligure, Italy)
 - [puntello.org](https://puntello.org) (Milan, Italy)
 - [lasitua.org](https://lasitua.org) (Brescia, Italy)
 - [balotta.org](https://balotta.org) (Bologna, Italy)
@@ -17,6 +16,7 @@ nav_order: 7
 - [www.attoppa.it](https://www.attoppa.it/) (Catania, Italy)
 - [nanassa.com/](https://nanassa.com/) (Stretto di Messina, Italy)
 - [camifa.net](https://camifa.net/) (Cosenza, Italy)
+- [jamme.la](https://jamme.la/) (Napoli, Italy)
 - [fuorinellanebbia.it](https://www.fuorinellanebbia.it) (Ravenna e Ferrara, Italy)
 - [agenda.reteappenninica.it](https://agenda.reteappenninica.it) (Appennini, Italy)
 - [bcn.convoca.la](https://bcn.convoca.la/) (Barcelona)
@@ -39,5 +39,7 @@ nav_order: 7
 - [cloudspeakers.org](https://cloudspeakers.org/) (Utrecht?)
 - [eventos.lhc.net.br](https://eventos.lhc.net.br/) (Campinas)
 
+
+You can also check federated instances [here](http://demo.fedilist.com/instance?q=&ip=&software=gancio&registrations=&onion=)
 
 <small>Do you want your instance to appear here or to be removed? [Write us]({% link contact.md %}).</small>
