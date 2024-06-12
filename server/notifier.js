@@ -58,7 +58,7 @@ const notifier = {
       }
     }
 
-    const notifications = await Notification.findAll({ where: { action }, include: [Event] })
+    const notifications = await Notification.findAll({ where: { action }})
 
     // get notification that matches with selected event
     return notifications.filter(notification => match(event, notification.filters))
@@ -67,28 +67,27 @@ const notifier = {
   async notifyEvent (action, eventId) {
 
     const event = await Event.findByPk(eventId, {
-      include: [Tag, Place, Notification, User]
+      include: [Tag, Place, User]
     })
     
+    // emit this notification to plugins
     notifier.emitter.emit(action, event.get({ plain: true, raw: true }))
     log.debug('[NOTIFY] %s, %s [%d]', action, event.title, event.id)
 
-    // insert notifications
+    // select valid notification for this event
     const notifications = await notifier.getNotifications(event, action)
-    await event.addNotifications(notifications)
-    const event_notifications = await event.getNotifications({ through: { where: { status: 'new' } } })
 
-    const promises = event_notifications.map(async notification => {
+    const promises = notifications.map(async notification => {
+      const event_notification = await EventNotification.create({ eventId: event.id, notificationId: notification.id, status: 'sending' })
       try {
-        await notification.event_notification.update({ status: 'sending' })
         await notifier.sendNotification(notification, event)
-        notification.event_notification.status = 'sent'
-      } catch (err) {
-        log.error('[NOTIFY EVENT]', err)
-        notification.event_notification.status = 'error'
+        await event_notification.update({ status: 'sent' })
+      } catch (e) {
+        log.error('[NOTIFY EVENT]', e)
+        await event_notification.update({ status: 'error', error: String(e) })
       }
-      return notification.event_notification.save()
     })
+
     return Promise.all(promises)
   },
 

@@ -67,8 +67,10 @@ const db = {
     Event.belongsToMany(Tag, { through: 'event_tags' })
     Tag.belongsToMany(Event, { through: 'event_tags' })
     
-    Event.belongsToMany(Notification, { through: EventNotification })
-    Notification.belongsToMany(Event, { through: EventNotification })
+    // Event.belongsToMany(Notification, { through: EventNotification })
+    // Notification.belongsToMany(Event, { through: EventNotification })
+    Event.hasMany(EventNotification)
+    Notification.hasMany(EventNotification)
     
     Event.hasMany(Resource)
     Resource.belongsTo(Event)
@@ -142,7 +144,7 @@ const db = {
     }
   },
   async runMigrations() {
-    const logging = config.status !== 'READY' ? false : log.debug.bind(log)
+    const logging = log.debug.bind(log) // config.status !== 'READY' ? false : log.debug.bind(log)
 
     const umzug = new Umzug({
       storage: 'sequelize',
