@@ -9,15 +9,16 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'Announcement',
-  asyncData ({ params, error, store }) {
+  async asyncData ({ params, error, $axios }) {
     try {
-      const id = Number(params.id)
-      const announcement = store.state.announcements.find(a => a.id === id)
+      const announcement_id = Number(params.id)
+      const announcement = await $axios.$get(`/announcements/${announcement_id}`)
       if (!announcement) {
         error({ statusCode: 404, message: 'Announcement not found' })
       }
       return { announcement }
     } catch (e) {
+      console.error(e)
       error({ statusCode: 404, message: 'Announcement not found' })
     }
   },

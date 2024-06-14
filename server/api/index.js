@@ -224,6 +224,7 @@ module.exports = () => {
     api.get('/announcements', isAdmin, announceController.getAll)
     api.post('/announcements', isAdmin, announceController.add)
     api.put('/announcements/:announce_id', isAdmin, announceController.update)
+    api.get('/announcements/:announce_id', announceController.get)
     api.delete('/announcements/:announce_id', isAdmin, announceController.remove)
 
     // - COLLECTIONS

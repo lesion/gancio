@@ -8,6 +8,18 @@ const announceController = {
     return res.json(announces)
   },
 
+  async get (req, res) {
+    const announce_id = req.params.announce_id
+
+    try {
+      const announce = await Announcement.findByPk(announce_id)
+      return res.json(announce)
+    } catch (e) {
+      log.error('Get announcement failed:', String(e))
+      return res.sendStatus(404)      
+    }
+  },
+
   _getVisible () {
     return Announcement.findAll({ attributes: ['title', 'id'], where: { visible: true }, raw: true })
   },
