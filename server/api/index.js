@@ -235,6 +235,7 @@ module.exports = () => {
     api.put('/collection/toggle/:id', isAdmin, collectionController.togglePin)
     api.get('/filter/:collection_id', isAdmin, collectionController.getFilters)
     api.post('/filter', isAdmin, collectionController.addFilter)
+    api.put('/filter/:id', isAdmin, collectionController.updateFilter)
     api.delete('/filter/:id', isAdmin, collectionController.removeFilter)
 
     // - PLUGINS

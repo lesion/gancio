@@ -234,6 +234,25 @@ const collectionController = {
     }
   },
 
+  async updateFilter (req, res) {
+    const { tags, places, actors, negate } = req.body
+    const filter_id = req.params.id
+
+
+    const filter = await Filter.findByPk(filter_id)
+    if (!filter) {
+      return res.sendStatus(404)
+    }
+
+    try {
+      await filter.update({ tags, places, actors, negate })
+      return res.json(filter)
+    } catch (e) {
+      log.error(String(e))
+      return res.sendStatus(400)
+    }    
+  },
+
   async removeFilter (req, res) {
     const filter_id = req.params.id
     log.info(`Remove filter ${filter_id}`)

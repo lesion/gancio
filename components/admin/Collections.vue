@@ -92,7 +92,7 @@ v-container
                     :input-value="selected" label small) {{ item.name }}
 
           v-col(cols=6)
-            v-autocomplete(v-model='filterTags'
+            v-combobox(v-model='filterTags'
               cache-items
               :prepend-inner-icon="mdiTagMultiple"
               chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
@@ -125,6 +125,8 @@ v-container
           :header-props='{ sortIcon: mdiChevronDown }'
           :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }')
             template(v-slot:item.actions='{ item }')
+              v-btn(@click='editFilter(item)' color='primary' icon)
+                v-icon(v-text='mdiPencil')
               v-btn(@click='removeFilter(item)' color='error' icon)
                 v-icon(v-text='mdiDeleteForever')
             template(v-slot:item.negate='{ item }')
@@ -139,7 +141,8 @@ v-container
 
       v-card-actions
         v-spacer
-        v-btn(color='primary' outlined :loading='loading' text @click='addFilter' :disabled='loading || filterActors.length<1 && filterPlaces.length<1 && filterTags.length<1') add <v-icon v-text='mdiPlus'></v-icon>
+        v-btn(color='primary' v-if='editFilterId === false' outlined :loading='loading' text @click='addFilter' :disabled='loading || filterActors.length<1 && filterPlaces.length<1 && filterTags.length<1') add <v-icon v-text='mdiPlus'></v-icon>
+        v-btn(color='primary' v-else outlined :loading='loading' text @click='addFilter' :disabled='loading || filterActors.length<1 && filterPlaces.length<1 && filterTags.length<1') save
         v-btn(@click='dialog = false' outlined color='warning' :disabled="loading || filterActors.length>0 || filterPlaces.length>0 || filterTags.length>0") {{ $t('common.close') }}
 
   v-card-text
@@ -191,6 +194,7 @@ export default {
       filters: [],
       tagName: '',
       placeName: '',
+      editFilterId: false,
       collectionHeaders: [
         { value: 'name', text: this.$t('common.name') },
         // { value: 'filters', text: this.$t('common.filter') },
@@ -202,7 +206,7 @@ export default {
         { value: 'actors', text: this.$t('common.actors') },
         { value: 'tags', text: this.$t('common.tags') },
         { value: 'places', text: this.$t('common.places') },
-        { value: 'actions', text: this.$t('common.actions'), align: 'right' }
+        { value: 'actions', text: this.$t('common.actions'), align: 'right', sortable: false }
       ],
       in_home: $store.state.settings.collection_in_home !== null,
     }
@@ -210,6 +214,7 @@ export default {
   async fetch() {
     this.collections = await this.$axios.$get('/collections?withFilters=true')
     this.actors = await this.$axios.$get('/instances/trusted')
+    // this.actors.unshift({ ap_id: null, object: { ap_id: null, preferredUsername: 'local', name: 'local' } })
   },
   computed: {
     ...mapState(['settings']),
@@ -256,18 +261,26 @@ export default {
         isEqual(sortBy(f.actors), sortBy(filter.actors))
       )
 
-      if (alreadyExists) {
-        this.$root.$message('Already exists', { color: 'warning' })
-        return
+      let res
+      if (this.editFilterId !== false) {
+        await this.$axios.$put(`/filter/${this.editFilterId}`, filter)
+      } else {
+        if (alreadyExists) {
+          this.$root.$message('Already exists', { color: 'warning' })
+          this.loading = false
+          return
+        }
+        await this.$axios.$post('/filter', filter )
       }
 
-      const ret = await this.$axios.$post('/filter', filter )
       this.$fetch()
-      this.filters.push(ret)
+      this.filters = await this.$axios.$get(`/filter/${this.collection.id}`)
+
       this.filterTags = []
       this.filterPlaces = []
       this.filterActors = []
       this.negateFilter = false
+      this.editFilterId = false
       this.loading = false
     },
     async editCollection(collection) {
@@ -296,6 +309,13 @@ export default {
         const err = get(e, 'response.data.errors[0].message', e)
         this.$root.$message(this.$t(err), { color: 'error' })        
       }
+    },
+    async editFilter(filter) {
+      this.filterActors = filter.actors
+      this.filterPlaces = filter.places
+      this.filterTags = filter.tags
+      this.negateFilter = filter.negate
+      this.editFilterId = filter.id
     },
     async removeFilter(filter) {
       try {
