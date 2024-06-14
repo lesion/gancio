@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.2](https://framagit.org/les/gancio/compare/v1.17.1...v1.17.2) (2024-06-14)
+
+
+### Bug Fixes
+
+* allow to edit collection filter ([8842bda](https://framagit.org/les/gancio/commit/8842bdab32e6122145f878a578692a62df128441))
+* announcements is not visible, fix [#409](https://framagit.org/les/gancio/issues/409) ([a55c699](https://framagit.org/les/gancio/commit/a55c6999fd9e41c99d4fbccd41d0823d0e6f212a))
+
 ## [1.17.1](https://framagit.org/les/gancio/compare/v1.16.2...v1.17.1) (2024-06-12)
 
 
