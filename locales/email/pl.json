@@ -5,7 +5,7 @@
     },
     "confirm": {
         "subject": "Możesz teraz zacząć tworzenie wydarzeń",
-        "content": "Cześć, Twoje konto na<a href='{{config.baseurl}}'>{{config.title}}</a> zostaąło zatwierdzone. Napisz do nas na {{config.admin_email}} jeżeli potrzebujesz jakichś informacji."
+        "content": "Cześć, Twoje konto na<a href='{{config.baseurl}}'>{{config.title}}</a> zostało zatwierdzone. Napisz do nas na {{config.admin_email}} jeżeli potrzebujesz jakichś informacji."
     },
     "user_confirm": {
         "subject": "Możesz teraz zacząć tworzenie wydarzeń",
@@ -25,5 +25,11 @@
     "test": {
         "subject": "Serwer SMTP skonfigurowany prawidłowo",
         "content": "Jest to e-mail testowy. Jeśli go czytasz, konfiguracja przebiegła pomyślnie."
+    },
+    "report": {
+        "content_ANON": "Odwiedzający zgłosił wydarzenie<strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Otwórz moderację</a>",
+        "content_ADMIN": "Admin skomentował wydarzenie<strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Otwórz wydarzenie</a>",
+        "content_AUTHOR": "Autor wydarzenia napisał <strong>{{event.title}}</strong> wrote:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Otwórz moderację</a>",
+        "subject": "Moderacja wydarzenia [{{event.title}}]"
     }
 }
