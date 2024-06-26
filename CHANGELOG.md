@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file. See [standa
 * choose lowercase unique tag ([a8bfc10](https://framagit.org/les/gancio/commit/a8bfc108a21783b8b75ed08265e09da6c370e5e6))
 * do not get AP events in next/prev if not collection in home ([3bde4ff](https://framagit.org/les/gancio/commit/3bde4ffe8f3884daba9f111bfd5a0b62c0b56e7b))
 * do not include old trusted_instances in store ([7c48b71](https://framagit.org/les/gancio/commit/7c48b71af31740b15ecf63e43e00301be36e153a))
-* handle express asynx errors ([da40af8](https://framagit.org/les/gancio/commit/da40af8a75e368ce65aa8ed30dee60eaca045acf))
+* handle express async errors ([da40af8](https://framagit.org/les/gancio/commit/da40af8a75e368ce65aa8ed30dee60eaca045acf))
 * refactoring online locations UI, fix [#400](https://framagit.org/les/gancio/issues/400) ([a60051b](https://framagit.org/les/gancio/commit/a60051bdefa427f824d8d07594d543feb338ea81))
 
 ### [1.17.2](https://framagit.org/les/gancio/compare/v1.17.1...v1.17.2) (2024-06-14)
