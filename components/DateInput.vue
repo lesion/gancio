@@ -1,7 +1,7 @@
 <template lang="pug">
 v-col(cols=12)
   .text-center
-    v-btn-toggle.v-col-6.flex-column.flex-sm-row(v-if="!event.parentId && !event.recurrent" v-model='type' color='primary' @change='type => change("type", type)')
+    v-btn-toggle.flex-wrap.flex-row(v-if="!event.parentId && !event.recurrent" v-model='type' color='primary' @change='type => change("type", type)')
       v-btn(value='normal' label="normal") {{ $t('event.normal') }}
       v-btn(v-if='settings.allow_multidate_event' value='multidate' label='multidate') {{ $t('event.multidate') }}
       v-btn(v-if='settings.allow_recurrent_event' value='recurrent' label="recurrent") {{ $t('event.recurrent') }}
