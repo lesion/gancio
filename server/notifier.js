@@ -66,9 +66,8 @@ const notifier = {
 
   async notifyEvent (action, eventId) {
 
-    const event = await Event.findByPk(eventId, {
-      include: [Tag, Place, User]
-    })
+    const event = await Event.findByPk(eventId, { include: [ { model: Tag, attributes: ['tag'], through: { attributes: [] }}, Place],
+      attributes: { exclude: ['userId', 'placeId', 'image_path', 'ap_object', 'ap_id', 'apUserApId', 'likes', 'boost'] } })
     
     // emit this notification to plugins
     notifier.emitter.emit(action, event.get({ plain: true, raw: true }))
