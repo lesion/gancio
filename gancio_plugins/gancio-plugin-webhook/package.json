@@ -1,0 +1,10 @@
+{
+  "name": "gancio-plugin-webhook",
+  "version": "1.0.0",
+  "description": "Webhook plugin for Gancio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "AGPL-3.0-or-later"
+}
