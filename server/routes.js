@@ -1,4 +1,5 @@
 const express = require('express')
+require('express-async-errors')
 const app = express()
 const initialize = require('./initialize.server')
 
@@ -66,8 +67,8 @@ async function main () {
 
   // // Handle 500
   app.use((error, _req, res, _next) => {
-    log.error('[ERROR]' + error)
-    return res.status(500).send('500: Internal Server Error')
+    log.error('[ERROR] %s', error)
+    return res.sendStatus(500) //.send('500: Internal Server Error')
   })
 
   // remaining request goes to nuxt

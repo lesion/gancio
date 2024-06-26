@@ -337,7 +337,7 @@ module.exports = {
     }
   },
 
-  async isGeocodingEnabled(req, res, next) {
+  isGeocodingEnabled(req, res, next) {
     if (res.locals.settings.allow_geolocation) {
       next()
     } else {
