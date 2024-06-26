@@ -26,7 +26,6 @@ export const state = () => ({
     enable_resources: false,
     hide_boosts: true,
     enable_trusted_instances: true,
-    trusted_instances: [],
     trusted_instances_label: '',
     footerLinks: [],
     hide_thumbs: false,

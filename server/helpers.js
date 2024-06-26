@@ -88,7 +88,6 @@ module.exports = {
       enable_resources: settings.enable_resources,
       hide_boosts: settings.hide_boosts,
       enable_trusted_instances: settings.enable_trusted_instances,
-      trusted_instances: settings.trusted_instances,
       trusted_instances_label: settings.trusted_instances_label,
       'theme.is_dark': settings['theme.is_dark'],
       dark_colors: settings.dark_colors,
