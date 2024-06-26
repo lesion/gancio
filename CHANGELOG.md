@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.18.0](https://framagit.org/les/gancio/compare/v1.17.2...v1.18.0) (2024-06-26)
+
+
+### Features
+
+* new webhook plugin, fix [#414](https://framagit.org/les/gancio/issues/414) ([d86d64d](https://framagit.org/les/gancio/commit/d86d64d97056ee1f407aa754caea823d58f1a6c0))
+
+
+### Bug Fixes
+
+* add logo to event if from federation, refactoring event component fix [#412](https://framagit.org/les/gancio/issues/412) ([f1a2bcb](https://framagit.org/les/gancio/commit/f1a2bcb6fa25d4ed97999e1460dbd79854f4c3dc))
+* better test plugin error handling ([e916594](https://framagit.org/les/gancio/commit/e91659408b98517316593bebd0b796d618f7a336))
+* choose lowercase unique tag ([a8bfc10](https://framagit.org/les/gancio/commit/a8bfc108a21783b8b75ed08265e09da6c370e5e6))
+* do not get AP events in next/prev if not collection in home ([3bde4ff](https://framagit.org/les/gancio/commit/3bde4ffe8f3884daba9f111bfd5a0b62c0b56e7b))
+* do not include old trusted_instances in store ([7c48b71](https://framagit.org/les/gancio/commit/7c48b71af31740b15ecf63e43e00301be36e153a))
+* handle express asynx errors ([da40af8](https://framagit.org/les/gancio/commit/da40af8a75e368ce65aa8ed30dee60eaca045acf))
+* refactoring online locations UI, fix [#400](https://framagit.org/les/gancio/issues/400) ([a60051b](https://framagit.org/les/gancio/commit/a60051bdefa427f824d8d07594d543feb338ea81))
+
 ### [1.17.2](https://framagit.org/les/gancio/compare/v1.17.1...v1.17.2) (2024-06-14)
 
 
