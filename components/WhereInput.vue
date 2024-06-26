@@ -1,6 +1,6 @@
 <template lang="pug">
 v-row.mb-4
-  v-col(cols=12 md=6)
+  v-col(cols=12 md=4)
     //- this is the name used by people
     v-combobox(ref='place'
       :rules="[$validators.required('common.where')]"
@@ -26,50 +26,48 @@ v-row.mb-4
             v-list-item-subtitle(v-text='item.address')
 
 
-  v-col(cols=12 md=6)
-    v-row.mx-0.my-0.align-center.justify-center
+  v-col(cols=12 :md='settings.allow_online_event?5:8' v-if="!isOnLine")
+    v-text-field.mr-4(ref='address'
+      v-model='value.address'
+      :prepend-icon='mdiMap'
+      :disabled='disableAddress'
+      :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
+      :label="$t('common.address')"
+      :hint="$t('event.address_description')"
+      persistent-hint)
+      template(v-slot:append v-if="showAdvancedDialogButton")
+        TBtn(@click="whereInputAdvancedDialog = true" tooltip='admin.geolocation' small)
+          v-icon(v-text='mdiMapSearch')
 
-      v-text-field.mr-4(ref='address' v-if="value.name?.toLocaleLowerCase() !== 'online' || !settings.allow_online_event"
-        v-model='value.address'
-        :prepend-icon='mdiMap'
-        :disabled='disableAddress'
-        :rules="[ v => disableAddress ? true : $validators.required('common.address')(v)]"
-        :label="$t('common.address')"
-        :hint="$t('event.address_description')"
-        persistent-hint)
-        template(v-slot:append v-if="showAdvancedDialogButton")
-          v-icon(v-text='mdiCog'
-            @click="whereInputAdvancedDialog = true")
+  v-col(cols=12 :md='isOnLine?8:3' v-if='settings.allow_online_event')
+    v-combobox.mr-4(v-model="onlineLocations"
+      :prepend-icon='mdiLink'
+      :hint="$t('event.online_locations_help')"
+      :label="$t('event.online_locations')"
+      :rules="isOnLine ? [$validators.required('event.online_locations')] : []"
+      clearable chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
+      :delimiters="[',', ';', '; ']"
+      :items="onlineLocations"
+      @change='selectLocations')
+      template(v-slot:selection="{ item, index, on, attrs, selected, parent }")
+        v-chip(v-bind="attrs" :outlined='index !== 0'
+          close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+          :input-value="selected" label small) {{ item }}
 
-      v-combobox.mr-4(v-model="onlineLocations" v-else
-        :prepend-icon='mdiLink'
-        :hint="$t('event.online_locations_help')"
-        :label="$t('event.online_locations')"
-        :rules="[$validators.required('event.online_locations')]"
-        clearable chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-        :delimiters="[',', ';', '; ']"
-        :items="onlineLocations"
-        @change='selectLocations')
-        template(v-slot:selection="{ item, index, on, attrs, selected, parent }")
-          v-chip(v-bind="attrs" :outlined='index !== 0'
-            close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
-            :input-value="selected" label small) {{ item }}
-        //- template(v-slot:append)
-        //-   v-icon(v-text='mdiCog' :disabled='!value.name' @click="whereInputAdvancedDialog = true") 
-
-    v-dialog(v-model='whereInputAdvancedDialog' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly' dense)
-      WhereInputAdvanced(ref='whereAdvanced' :place.sync='value' :event='event'
-        @close='whereInputAdvancedDialog = false && this.$refs.address.blur()'
-        :onlineLocations.sync="onlineLocations"
-        @update:onlineLocations="selectLocations")
+  v-dialog(v-model='whereInputAdvancedDialog' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly' dense)
+    WhereInputAdvanced(ref='whereAdvanced' :place.sync='value' :event='event'
+      @close='whereInputAdvancedDialog = false && this.$refs.address.blur()'
+      :onlineLocations.sync="onlineLocations"
+      @update:onlineLocations="selectLocations")
 
     
 </template>
 <script>
-import { mdiMap, mdiMapMarker, mdiPlus, mdiCog, mdiLink, mdiCloseCircle, mdiLaptopAccount } from '@mdi/js'
+import { mdiMap, mdiMapMarker, mdiPlus, mdiCog, mdiLink, mdiCloseCircle, mdiLaptopAccount, mdiMapSearch } from '@mdi/js'
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
 import WhereInputAdvanced from './WhereInputAdvanced.vue'
+import TBtn from '../components/TBtn.vue'
 
 export default {
   name: 'WhereInput',
@@ -77,10 +75,10 @@ export default {
     value: { type: Object, default: () => ({}) },
     event: { type: Object, default: () => null },
   },
-  components: { WhereInputAdvanced },
+  components: { WhereInputAdvanced, TBtn },
   data ( {$store} ) {
     return {
-      mdiMap, mdiMapMarker, mdiPlus, mdiCog, mdiLink, mdiCloseCircle, mdiLaptopAccount,
+      mdiMap, mdiMapMarker, mdiPlus, mdiCog, mdiLink, mdiCloseCircle, mdiLaptopAccount, mdiMapSearch,
       places: [],
       place: { isNew: false, name: '' },
       placeName: '',
@@ -91,17 +89,21 @@ export default {
   },
   computed: {
     ...mapState(['settings']),
+    isOnLine () {
+      return this.settings.allow_online_event && this.place.name === 'online'
+    },
     showAdvancedDialogButton () {
+
 
       if (!this.place.name) return false
     
-      // do not show advanced dialog button in case geolocation and online events are not allowed
-      if (!(this.settings.allow_geolocation || this.settings.allow_online_event)) {
+      // do not show advanced dialog button in case geolocation is not allowed
+      if (!(this.settings.allow_geolocation)) {
         return false
       }
 
       // known places already have coords
-      if (!this.place.isNew && !this.settings.allow_online_event) return false
+      if (!this.place.isNew) return false
 
       return true
     }
@@ -114,7 +116,7 @@ export default {
   methods: {
     search: debounce(async function(ev) {
       const search = ev ? ev.target.value.trim().toLowerCase() : ''
-      this.places = await this.$axios.$get('place', { params: { search } })
+      this.places = await this.$axios.$get('place', { params: { search } }).catch()
 
       // Filter out the place with name 'online' if not allowed
       if (this.places.length) {
@@ -170,16 +172,6 @@ export default {
             this.place.latitude = p.latitude
             this.place.longitude = p.longitude
           }
-          // If 'event only online' is not allowed: reset place and online_locations
-          // if (this.place.name === 'online') {
-          //   if (!this.settings.allow_event_only_online) {
-          //     this.$nextTick(() => { this.$refs.place && this.$refs.place.setValue('') && this.$refs.place.focus() })
-          //     this.event.online_locations = []
-          //     return
-          //   } else {
-          //     this.event_online_only = true
-          //   }
-          // } 
           this.disableAddress = false
           this.$refs.place.blur()
           this.$nextTick(() => { this.$refs.address && this.$refs.address.focus() })
@@ -204,18 +196,6 @@ export default {
         })
       }
     },
-  //   changeEventOnlyOnline(v) {
-  //     this.event_only_online = v
-  //     // console.log(this.event_only_online)
-  //     if (this.event_only_online) { this.place.name = this.place.address = 'online' }
-  //     if (!this.event_only_online) { this.place.name = this.place.address = ''; this.onlineLocations = [] }
-  //     this.place.latitude = null
-  //     this.place.longitude = null
-
-  //     // Update onlineLocations
-  //     this.event.online_locations && this.selectLocations()
-  //     this.$emit('input', { ...this.place })
-  //   },
   }
 }
 </script>

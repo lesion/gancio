@@ -39,23 +39,7 @@ v-card
     p.mt-4(v-if='place.isNew' v-html="$t('event.address_geocoded_disclaimer')")
 
     Map.mt-4(:place='place' draggable=true
-      v-if="(settings.allow_geolocation && place.name !== 'online' && place.latitude && place.longitude)"  )
-
-  v-divider(v-if='settings.allow_online_event && showGeocoded')
-
-  v-card-text.mt-6(v-if='settings.allow_online_event')
-    v-combobox(v-model="onlineLocations_update" 
-      :prepend-icon='mdiLink'
-      :hint="$t('event.online_locations_help')"
-      :label="$t('event.online_locations')"
-      clearable chips small-chips multiple deletable-chips hide-no-data hide-selected persistent-hint
-      :delimiters="[',', ';']"
-      :items="onlineLocations_update")
-      template(v-slot:selection="{ item, index, on, attrs, selected, parent }")
-        v-chip(v-bind="attrs" :outlined='index !== 0'
-          close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
-          :input-value="selected" label small) {{ item }}
-
+      v-if="(settings.allow_geolocation && place.latitude && place.longitude)"  )
 
   v-card-actions
     v-spacer
@@ -74,7 +58,6 @@ export default {
   props: {
     place: { type: Object, default: () => ({}) },
     event: { type: Object, default: () => null },
-    onlineLocations: { type: Array, default: [] }
   },
   components: {
     [process.client && 'Map']: () => import('@/components/Map.vue')
@@ -100,12 +83,6 @@ export default {
     showGeocoded () {
       return this.settings.allow_geolocation && this.place.name !== 'online' && this.place.isNew
     },
-    onlineLocations_update: {
-      get () { return this.onlineLocations },
-      set (value) {
-        this.$emit('update:onlineLocations', value)
-      }
-    },
   },
   methods: {
     close() {
@@ -120,8 +97,12 @@ export default {
       const searchCoordinates = pre_searchCoordinates.replace('/', ',')
       if (searchCoordinates.length) {
         this.loading = true
-        const ret = await this.$axios.$get(`placeOSM/${this.currentGeocodingProvider.commonName}/${searchCoordinates}`)
-        this.addressList = this.currentGeocodingProvider.mapQueryResults(ret)
+        try {
+          const ret = await this.$axios.$get(`placeOSM/${this.currentGeocodingProvider.commonName}/${searchCoordinates}`)
+          this.addressList = this.currentGeocodingProvider.mapQueryResults(ret)
+        } catch (e) {
+          console.error(e)
+        }
         this.loading = false
       }
     }, 1000),

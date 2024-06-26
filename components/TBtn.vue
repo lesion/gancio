@@ -1,11 +1,11 @@
 <template>
     <v-tooltip top>
         <template v-slot:activator="{ on, attrs}">
-            <v-btn v-bind="attrs" :to='to' :large="large" icon v-on="on" @click='$emit("click")' :color='color'>
+            <v-btn v-bind="attrs" :to='to' :large="large" :small="small" text icon v-on="on" @click='$emit("click")' :color='color'>
                 <slot />
             </v-btn>
         </template>
-        <span>{{ tooltip }}</span>
+        <span>{{ $t(tooltip) }}</span>
     </v-tooltip>
 </template>
 <script>
@@ -15,7 +15,8 @@ export default {
         tooltip: String,
         color: String,
         to: String,
-        large: { type: Boolean, default: false }
+        large: { type: Boolean, default: false },
+        small: { type: Boolean, default: false }
     }
 }
 </script>

@@ -202,7 +202,7 @@
     "where_advanced_options": "Place - Advanced options",
     "where_advanced_options_description": "Define here additional place properties",
     "online_locations": "Online locations",
-    "online_locations_help": "For instance an url to a videconference room and a fallback url (max. 3)",
+    "online_locations_help": "URL of a videoconference room or RSVP URL (max. 3)",
     "online_locations_fallback_urls": "Fallback links",
     "address_geocoded_disclaimer": "If you cannot find the <strong>street address</strong> or the <strong>housenumber</strong> you are looking for in the geocoding results, you can manually insert them in the 'Address' field without loose the coordinates. Consider also that the <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> project is open to contributions. If you have Android, we recommend <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> ",
     "message": "Message",
