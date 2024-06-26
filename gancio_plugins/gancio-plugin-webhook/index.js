@@ -65,10 +65,6 @@ const plugin = {
   },
 
   _send (event, action) {
-    console.error(JSON.stringify({
-      action,
-      event
-    }))
     
     return fetch(plugin.settings.endpoint, {
       method: 'POST',

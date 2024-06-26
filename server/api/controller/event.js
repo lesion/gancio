@@ -853,7 +853,7 @@ const eventController = {
       where,
       attributes: {
         exclude: [
-          'likes', 'boost', 'userId', 'createdAt', 'resources', 'placeId', 'image_path',
+          'likes', 'boost', 'userId', 'createdAt', 'resources', 'placeId', 'image_path', 'ap_object', 'ap_id',
           ...(!include_parent ? ['recurrent']: []),
           ...(!include_unconfirmed ? ['is_visible']: []),
           ...(!include_description ? ['description']: [])
@@ -879,6 +879,12 @@ const eventController = {
     return events.map(e => {
       e = e.get()
       e.tags = e.tags ? e.tags.map(t => t && t.tag) : []
+      if (!e.multidate) {
+        delete e.multidate
+      }
+      if (!e.image_path) {
+        delete e.image_path
+      }
       return e
     })
   },

@@ -1,4 +1,4 @@
-const { Collection, Filter, Event, Tag, Place } = require('../models/models')
+const { Collection, Filter, Event, Tag, Place, APUser } = require('../models/models')
 
 const log = require('../../log')
 const { DateTime } = require('luxon')
@@ -158,7 +158,8 @@ const collectionController = {
     const events = await Event.findAll({
       where,
       attributes: {
-        exclude: ['likes', 'boost', 'userId', 'is_visible', 'createdAt', 'resources', 'ap_id', ...(!include_description ? ['description'] : [])]
+        exclude: ['likes', 'boost', 'userId', 'is_visible', 'placeId', 'apUserApId',
+          'createdAt', 'resources', 'ap_object', ...(!include_description ? ['description'] : [])]
       },
       order: [['start_datetime', reverse ? 'DESC' : 'ASC']],
       include: [
@@ -169,6 +170,7 @@ const collectionController = {
           through: { attributes: [] }
         },
         { model: Place, required: true, attributes: ['id', 'name', 'address'] },
+        { model: APUser, required: false, attributes: ['object'] }
       ],
       ...( limit > 0 && { limit }),
       replacements
@@ -180,6 +182,21 @@ const collectionController = {
     return events.map(e => {
       e = e.get()
       e.tags = e.tags ? e.tags.map(t => t && t.tag) : []
+      if (!e.multidate) {
+        delete e.multidate
+      }
+      if (!e.image_path) {
+        delete e.image_path
+      }
+      if (!e.recurrent) {
+        delete e.recurrent
+      }
+      if (!e.parentId) {
+        delete e.parentId
+      }
+      if (e.ap_user) {
+        e.ap_user = { image: e.ap_user?.object?.icon?.url ?? `${e.ap_user?.url}/favicon.ico` }
+      }
       return e
     })
 
