@@ -43,9 +43,9 @@ export default {
   },
   async created () {
     this.$root.$on('update_friendly_instances', async () => {
-      this.trusted_instances = await this.$axios.$get('instances/trusted')
+      this.trusted_instances = await this.$axios.$get('instances/trusted').catch()
     })
-    this.trusted_instances = await this.$axios.$get('instances/trusted')
+    this.trusted_instances = await this.$axios.$get('instances/trusted').catch()
   },
   computed: {
     ...mapState(['settings']),
