@@ -47,7 +47,7 @@ v-container.container.pa-0.pa-md-3
             v-col(cols=12 md=6)
               MediaInput(v-model='event.media[0]' :event='event' @remove='event.media = []')
 
-            //- tags
+            //- TAGS
             v-col(cols=12 md=6)
               v-combobox(:value='event.tags'
                 :prepend-icon="mdiTagMultiple"
@@ -63,16 +63,16 @@ v-container.container.pa-0.pa-md-3
                   v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
                     :input-value="selected" label small) {{ item }}
 
-    v-card-actions
-      v-spacer
-      v-btn(@click='done' :loading='loading' :disabled='!valid || loading' outlined
-        color='primary') {{ edit ? $t('common.save') : $t('common.send') }}
+    <v-card-actions>
+      <v-spacer />
+      <v-btn @click='done' :loading='loading' :disabled='!valid || loading' outlined color='primary'>{{ edit ? $t('common.save') : $t('common.send') }}</v-btn>
+    </v-card-actions>
 
 </template>
 <script>
 import { mapState } from 'vuex'
 import debounce from 'lodash/debounce'
-import uniq from 'lodash/uniq'
+import uniqBy from 'lodash/uniqBy'
 
 import { mdiFileImport, mdiFormatTitle, mdiTagMultiple, mdiCloseCircle } from '@mdi/js'
 
@@ -184,7 +184,7 @@ export default {
   computed: mapState(['settings']),
   methods: {
     updateTags (tags) {
-      this.event.tags = uniq(tags.map(t => t.trim()).filter(t => t))
+      this.event.tags = uniqBy(tags.map(t => t.trim()), t => t.toLocaleLowerCase()).filter(t => t)
     },
     searchTags: debounce(async function (ev) {
       const search = ev.target.value
