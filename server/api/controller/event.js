@@ -103,6 +103,11 @@ const eventController = {
     })
   },
 
+  /**
+   * /event/detail/:event_slug.:format?
+   * get event details 
+   * this is also used to get next/prev event
+   */
   async get(req, res) {
     const format = req.params.format || 'json'
     const isAdminOrEditor = req.user?.is_editor || req.user?.is_admin
@@ -153,6 +158,7 @@ const eventController = {
       where: {
         id: { [Op.not]: event.id },
         is_visible: true,
+        ...(!res.locals.settings.collection_in_home && ({ ap_id: null }) ),
         recurrent: null,
         [Op.or]: [
           { start_datetime: { [Op.gt]: event.start_datetime } },
@@ -170,6 +176,7 @@ const eventController = {
       where: {
         is_visible: true,
         id: { [Op.not]: event.id },
+        ...(!res.locals.settings.collection_in_home && ({ ap_id: null }) ),
         recurrent: null,
         [Op.or]: [
           { start_datetime: { [Op.lt]: event.start_datetime } },
