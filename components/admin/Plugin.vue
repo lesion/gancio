@@ -66,18 +66,22 @@ export default {
   computed: mapState(['settings']),
   methods: {
     ...mapActions(['setSetting']),
-    async saveSettings() {
+    async saveSettings(close=true) {
       this.loading = true
       await this.setSetting({
         key: 'plugin_' + this.selectedPlugin.name,
         value: this.selectedPlugin.settingsValue
       })
       this.loading = false
-      this.dialog = false
+      if (close) {
+        this.dialog = false
+      }
     },
     async testPlugin() {
-      await this.saveSettings()
-      this.$axios.$post(`/plugin/test/${this.selectedPlugin.name}`)
+      await this.saveSettings(false)
+      this.$axios.$post(`/plugin/test/${this.selectedPlugin.name}`).catch( e => {
+        this.$root.$message(e?.response?.data?.message ?? e, { color: 'warning'})
+      })
     },
     toggleEnable(plugin) {
       this.$axios.$put(`/plugin/${plugin.name}`)

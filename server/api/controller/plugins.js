@@ -62,19 +62,22 @@ const pluginController = {
       return res.sendStatus(404)
     }
 
-    await plugin.onTest()
+    try {
+      await plugin.onTest()
+    } catch (response) {
+      return res.status(400).send({ message: String(response) })
+    }
     res.sendStatus(200)
   },
 
   unloadPlugin(pluginName) {
     const plugin = pluginController.plugins.find(p => p.configuration.name === pluginName)
-    const settings = settingsController.settings['plugin_' + pluginName]
     if (!plugin) {
       log.warn(`Plugin ${pluginName} not found`)
       return
     }
     const notifier = require('../../notifier')
-    log.info('Unload plugin ' + plugin)
+    log.info('Unload plugin ' + plugin.configuration.name)
     if (typeof plugin.onEventCreate === 'function') {
       notifier.emitter.off('Create', plugin.onEventCreate)
     }
