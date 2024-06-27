@@ -7,6 +7,13 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### [1.18.1](https://framagit.org/les/gancio/compare/v1.18.0...v1.18.1) (2024-06-27)
+
+
+### Bug Fixes
+
+* update yarn.lock, fix [#418](https://framagit.org/les/gancio/issues/418) ([a1dfa44](https://framagit.org/les/gancio/commit/a1dfa449fa669e1dbf7f93cdeb61ef27903cb41d))
+
 ## [1.18.0](https://framagit.org/les/gancio/compare/v1.17.2...v1.18.0) (2024-06-26)
 
 
