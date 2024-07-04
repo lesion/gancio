@@ -204,7 +204,7 @@
         "where_advanced_options": "Lugar - Opciones avanzadas",
         "where_advanced_options_description": "Define aquí otras propiedades para el lugar",
         "online_locations": "Ubicaciones en línea",
-        "online_locations_help": "Por ejemplo, una url a una sala de videoconferencia y una url alternativa (máx. 3)",
+        "online_locations_help": "URL de una sala de videoconferencia o URL RSVP (máximo 3)",
         "online_locations_fallback_urls": "Enlaces alternativos",
         "address_geocoded_disclaimer": "Si no puede encontrar la <strong>dirección de la calle</strong> o el <strong>número de la casa</strong> que está buscando en los resultados de la codificación geográfica, puedes insertarlos manualmente en el campo 'Dirección' sin perder las coordenadas. Considera también que el proyecto <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> está abierto a contribuciones. Si tienes Android, te recomendamos <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> ",
         "message": "Mensaje",
