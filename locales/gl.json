@@ -196,7 +196,7 @@
         "where_advanced_options_description": "Indica aquí detalles adicionais sobre o lugar",
         "online_locations": "Localizacións en liña",
         "online_locations_fallback_urls": "Ligazóns de reforzo",
-        "online_locations_help": "Por exemplo un URL a unha sala de videoconferencia e un URL de reforzo (máx. 3)",
+        "online_locations_help": "URL dunha sala de videoconferencia ou URL de RSVP (máx. 3)",
         "address_geocoded_disclaimer": "Se non atopas nos resultados o <strong>enderezo da rúa</strong> ou o <strong>número do edificio</strong> que estás a buscar, podes buscalos manualmente en 'Enderezo' e sen perder as coordenadas. Considera tamén que <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> é un proxecto aberto a colaboracións. Se usas Android, recomendamos <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> ",
         "message": "Mensaxe",
         "message_author_hint": "Escribir mensaxe a admins",
