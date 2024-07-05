@@ -46,8 +46,6 @@ v-container
 
         v-row
           v-col(cols=6)
-            //- @input.native='searchActors'
-            //- @focus='searchActors'
             v-autocomplete(v-model='filterActors'
               cache-items
               :prepend-inner-icon="mdiWeb"
@@ -108,13 +106,6 @@ v-container
                   v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
                     :input-value="selected" label small) {{ item }}
 
-
-
-                //- template(v-slot:item="{ item, attrs, on }")
-                //-   v-list-item(v-bind='attrs' v-on='on')
-                //-     v-list-item-content(two-line)
-                //-       v-list-item-title(v-text='item.name')
-                //-       v-list-item-subtitle(v-text='item.address')
           v-col(cols=3)
             v-switch(inset v-model='negateFilter' label='Not')
 
@@ -141,8 +132,8 @@ v-container
 
       v-card-actions
         v-spacer
-        v-btn(color='primary' v-if='editFilterId === false' outlined :loading='loading' text @click='addFilter' :disabled='loading || filterActors.length<1 && filterPlaces.length<1 && filterTags.length<1') add <v-icon v-text='mdiPlus'></v-icon>
-        v-btn(color='primary' v-else outlined :loading='loading' text @click='addFilter' :disabled='loading || filterActors.length<1 && filterPlaces.length<1 && filterTags.length<1') save
+        v-btn(color='primary' v-if='editFilterId === false' outlined :loading='loading' text @click='addFilter' :disabled='loading || filterActors.length<1 && filterPlaces.length<1 && filterTags.length<1') {{ $t('common.add')}} <v-icon v-text='mdiPlus'></v-icon>
+        v-btn(color='primary' v-else outlined :loading='loading' text @click='addFilter' :disabled='loading || filterActors.length<1 && filterPlaces.length<1 && filterTags.length<1') {{ $t('common.save') }}
         v-btn(@click='dialog = false' outlined color='warning' :disabled="loading || filterActors.length>0 || filterPlaces.length>0 || filterTags.length>0") {{ $t('common.close') }}
 
   v-card-text
@@ -153,8 +144,6 @@ v-container
       :header-props='{ sortIcon: mdiChevronDown }'
       :footer-props='{ prevIcon: mdiChevronLeft, nextIcon: mdiChevronRight }'
     )
-      //- template(v-slot:item.filters='{ item }')
-      //-   span {{ collectionFilters(item) }}
       template(v-slot:item.pin='{ item }')
         v-switch.float-right(:input-value='item.isTop' @change="togglePinCollection(item)" inset hide-details)
       template(v-slot:item.actions='{ item }')
@@ -214,7 +203,6 @@ export default {
   async fetch() {
     this.collections = await this.$axios.$get('/collections?withFilters=true')
     this.actors = await this.$axios.$get('/instances/trusted')
-    // this.actors.unshift({ ap_id: null, object: { ap_id: null, preferredUsername: 'local', name: 'local' } })
   },
   computed: {
     ...mapState(['settings']),
@@ -236,22 +224,12 @@ export default {
     searchPlaces: debounce(async function (ev) {
       this.places = await this.$axios.$get(`/place?search=${ev.target.value}`)
     }, 100),
-    // searchActors: debounce(async function (ev) {
-    //   this.actors = await this.$axios.$get(`/instances/trusted?search=${ev.target.value}`)
-    // }, 100),
-    // collectionFilters(collection) {
-    //   return collection.filters.map(f => {
-    //     const tags = f.tags?.join(', ')
-    //     const places = f.places?.map(p => p.name).join(', ')
-    //     const actors = f.actors?.map(a => a.name).join(', ')
-    //     return '(' + (tags && places ? tags + ' - ' + places : tags + places) + ')'
-    //   }).join(' - ')
-    // },
+
     async addFilter() {
       this.loading = true
       const tags = this.filterTags
       const places = this.filterPlaces.map(p => ({ id: p.id, name: p.name }))
-      const actors = this.filterActors.map(a => ({ ap_id: a.ap_id, name: a.object?.preferredUsername ?? a.object?.username, domain: a.instanceDomain  }))
+      const actors = this.filterActors.map(a => ({ ap_id: a.ap_id, name: a.object?.preferredUsername ?? a.object?.username ?? a?.name, domain: a?.instanceDomain ?? a.domain  }))
       const filter = { collectionId: this.collection.id, tags, places, actors, negate: this.negateFilter }
 
       // tags and places are JSON field and there's no way to use them inside a unique constrain
@@ -261,7 +239,6 @@ export default {
         isEqual(sortBy(f.actors), sortBy(filter.actors))
       )
 
-      let res
       if (this.editFilterId !== false) {
         await this.$axios.$put(`/filter/${this.editFilterId}`, filter)
       } else {
