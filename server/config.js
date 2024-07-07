@@ -39,7 +39,7 @@ let config = {
       const configContent = fs.readFileSync(config_path)
       config = Object.assign(config, JSON.parse(configContent))
       config.status = 'CONFIGURED'
-      if (!config.hostname) {
+      if (!config.hostname && config.baseurl) {
         config.hostname = new URL.URL(config.baseurl).hostname
       }
     } else {
