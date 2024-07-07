@@ -10,6 +10,16 @@
 
   <v-img contain v-if='event?.ap_user?.image' :src='event?.ap_user?.image' max-height=30  max-width=30 style="position: absolute; top: 5px; right: 5px;" />
 
+  <div v-if="isPast" style="
+  position: absolute;
+  background: #6b6b6b;
+  box-shadow: 0 0 0 999px #6b6b6b;
+  clip-path: inset(0 -100%);
+  inset: 0 0 auto auto;
+  transform-origin: 0 0;
+  transform: translate(29.3%) rotate(45deg);
+">Past event</div>
+
   <v-card-text class='body pt-0 pb-0'>
 
     <time class='dt-start subtitle-1' :datetime='$time.unixFormat(event.start_datetime, "yyyy-MM-dd HH:mm")'
@@ -25,8 +35,6 @@
       <span itemprop='name'>{{ event.place.name }}</span>
     </nuxt-link>
     <div class='d-none' itemprop='address'>{{ event.place.address }}</div>
-    <div class='d-block' v-if="isPast">This event is in the past.</div>
-
   </v-card-text>
 
   <v-card-actions class='flex-wrap'>
