@@ -64,7 +64,6 @@ export default {
     ...mapGetters(['hide_thumbs']),
     isPast() {
       const now = new Date();
-      console.log(now, this.event.start_datetime)
       if (this.event.end_datetime) {
         return new Date(this.event.end_datetime*1000) < now;
       } else {
