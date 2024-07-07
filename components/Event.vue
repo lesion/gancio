@@ -1,7 +1,7 @@
 <template>
 <article class='h-event' itemscope itemtype="https://schema.org/Event">
 
-  
+
   <nuxt-link :to='`/event/${event.slug || event.id}`' itemprop="url">
     <MyPicture v-if='!hide_thumbs' :event='event' thumb :lazy='lazy' />
     <v-icon class='float-right mr-1' v-if='event.parentId' color='success' v-text='mdiRepeat' />
@@ -25,6 +25,7 @@
       <span itemprop='name'>{{ event.place.name }}</span>
     </nuxt-link>
     <div class='d-none' itemprop='address'>{{ event.place.address }}</div>
+    <div class='d-block' v-if="isPast">This event is in the past.</div>
 
   </v-card-text>
 
@@ -51,6 +52,17 @@ export default {
     event: { type: Object, default: () => ({}) },
     lazy: Boolean
   },
-  computed: mapGetters(['hide_thumbs'])
+  computed: {
+    ...mapGetters(['hide_thumbs']),
+    isPast() {
+      const now = new Date();
+      console.log(now, this.event.start_datetime)
+      if (this.event.end_datetime) {
+        return new Date(this.event.end_datetime*1000) < now;
+      } else {
+        return new Date(this.event.start_datetime*1000) < now;
+      }
+    }
+  }
 }
 </script>
