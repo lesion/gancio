@@ -25,5 +25,11 @@
     "test": {
         "subject": "La configuració SMTP funciona",
         "content": "Aquest és un correu de prova, si llegeixes això és que la configuració funciona."
+    },
+    "report": {
+        "subject": "Moderació d'activitats [{{event.title}}]",
+        "content_AUTHOR": "L'autori de l'activitat <strong>{{event.title}}</strong> ha escrit:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Obre la pàgina de moderació</a>",
+        "content_ANON": "Uni visitant ha denunciat aquesta activitat <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Obre la pàgina de moderació</a>",
+        "content_ADMIN": "Uni admin ha comentat l'activitat <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Obre la pàgina de moderació</a>"
     }
 }
