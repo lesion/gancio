@@ -1,1 +1,35 @@
-{}
+{
+    "report": {
+        "subject": "Moderação de evento [{{event.title}}]",
+        "content_ADMIN": "Um admin comentou sobre o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderação aberta</a>",
+        "content_ANON": "Um visitante reportou o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderação aberta</a>",
+        "content_AUTHOR": "O autor do evento <strong>{{event.title}}</strong> escreveu:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderação aberta</a>"
+    },
+    "register": {
+        "subject": "Pedido de registo recebido",
+        "content": "Recebemos o pedido de registo. Vamos confirmar assim que possível."
+    },
+    "confirm": {
+        "subject": "Você pode agora começar a publicar eventos",
+        "content": "Olá, sua conta em <a href='{{config.baseurl}}'>{{config.title}}</a> foi confirmada. Escreva para {{config.admin_email}} para obter qualquer informação."
+    },
+    "user_confirm": {
+        "subject": "Você pode agora começar a publicar eventos",
+        "content": "Olá, a sua conta em <a href='{{config.baseurl}}'>{{config.title}}</a> foi criada. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confirme e escolha uma palavra-passe.</a>."
+    },
+    "recover": {
+        "subject": "Recuperação da palavra-passe",
+        "content": "Olá, solicitou a recuperação da sua palavra-passe em {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Clique aqui</a> para confirmar."
+    },
+    "admin_register": {
+        "subject": "Novo registo",
+        "content": "{{user.email}} pediu o registo em {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confirme <a href='{{config.baseurl}}/admin'>aqui</a>."
+    },
+    "event_confirm": {
+        "content": "Pode confirmar este evento <a href='{{url}}'>nesta página</a>"
+    },
+    "test": {
+        "subject": "A sua configuração SMTP funciona",
+        "content": "Este é um e-mail de teste, se estiver a ler isto, a sua configuração funciona."
+    }
+}
