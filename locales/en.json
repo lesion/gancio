@@ -343,7 +343,11 @@
     "tag_renamed": "Tag \"{oldTag}\" renamed to \"{newTag}\"",
     "stats": "{n_followers} \"actors\" are following this instance, there are {n_events} events from the fediverse and {n_resources} comments",
     "show_download_media": "Show download media action",
-    "show_download_media_hint": "Display a download media button in event's page"
+    "show_download_media_hint": "Display a download media button in event's page",
+    "custom_js": "Custom Javascript Code",
+    "custom_css": "Custom CSS Style",
+    "custom_js_help": "You can integrate some javascript code that will be loaded for each user by writing in this textarea below. You probably want to read the <a href='https://gancio.org/usage/custom_js'>documentation</a> first.",
+    "custom_css_help": "You can customize some stylesheet too, read some example <a href='https://gancio.org/usage/custom_css'>here</a>."
   },
   "auth": {
     "not_confirmed": "Not confirmed yet…",

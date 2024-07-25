@@ -55,7 +55,9 @@ const defaultSettings = {
   plugins: [],
   admin_email: config.admin_email || '',
   smtp: config.smtp || {},
-  collection_in_home: null
+  collection_in_home: null,
+  custom_js: '',
+  custom_css: ''
 }
 
 /**

@@ -23,11 +23,20 @@ import { mapState, mapGetters } from 'vuex'
 
 export default {
   head () {
+    const custom_script = [{ type: 'application/javascript', defer: true, src: '/custom_js', body: true }]
+    const custom_style = [{ rel: 'stylesheet', href: this.settings.baseurl + '/custom_css'}]
     return {
       htmlAttrs: {
         lang: this.locale
       },
-      link: [{ rel: 'icon', type: 'image/png', href: this.settings.baseurl + '/logo.png' }],
+      link: [
+        { rel: 'icon', type: 'image/png', href: this.settings.baseurl + '/logo.png' },
+        ...custom_style
+      ],
+      script: [
+        { src: '/gancio-events.es.js', body: true, defer: true },
+        ...custom_script
+      ]
     }
   },
   name: 'Default',

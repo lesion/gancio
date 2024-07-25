@@ -119,6 +119,16 @@ v-container
             v-btn.float-right(icon color='error' @click.stop='removeFooterLink(link)')
               v-icon(v-text='mdiDeleteForever')
 
+  v-card-title {{$t('admin.custom_js')}}
+  v-card-subtitle(v-html="$t('admin.custom_js_help')")
+  v-card-text
+    v-textarea(:value='custom_js' @change='v => custom_js = v' :label='$t("admin.custom_js")' outlined)
+
+  v-card-title {{$t('admin.custom_css')}}
+  v-card-subtitle(v-html="$t('admin.custom_css_help')")
+  v-card-text
+    v-textarea(:value='custom_css' @change='v => custom_css = v' :label='$t("admin.custom_css")' outlined)
+
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
@@ -158,7 +168,15 @@ export default {
     hide_calendar: {
       get () { return this.settings.hide_calendar },
       set (value) { this.setSetting({ key: 'hide_calendar', value }) }
-    }
+    },
+    custom_js: {
+      get () { return this.settings.custom_js },
+      set (value) { this.setSetting({ key: 'custom_js', value })}
+    },
+    custom_css: {
+      get () { return this.settings.custom_css },
+      set (value) { this.setSetting({ key: 'custom_css', value })}
+    }    
   },
   methods: {
     ...mapActions(['setSetting', 'setLocalSetting']),

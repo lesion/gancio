@@ -16,7 +16,6 @@ module.exports = {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' }
     ],
-    script: [{ src: '/gancio-events.es.js', async: true, body: true }],
   },
   dev: isDev,
   server: config.server,

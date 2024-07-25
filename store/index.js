@@ -78,8 +78,14 @@ export const mutations = {
 export const actions = {
   // this method is called server side only for each request for nuxt
   // we use it to get configuration from db, set locale, etc...
-  nuxtServerInit ({ commit }, { res, app }) {
+  nuxtServerInit ({ commit }, { res, req, app }) {
     if (res.locals && res.locals.settings) {
+      // TODO: this is temporary, see #431
+      if (!req?.user?.is_admin) {
+        delete res.locals.settings.custom_js
+        delete res.locals.settings.custom_css
+        delete res.locals.settings.admin_email
+      }
       commit('setSettings', res.locals.settings)
       commit('setFilter', {  type: 'show_recurrent',
           value: res.locals.settings.allow_recurrent_event && res.locals.settings.recurrent_event_visible })

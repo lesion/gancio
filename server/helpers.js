@@ -63,7 +63,6 @@ module.exports = {
 
   async initSettings(_req, res, next) {
     // initialize settings
-    // res.locals.settings = cloneDeep(settingsController.settings)
     const settings = settingsController.settings
     res.locals.settings = {
       title: settings.title || config.title,
@@ -103,7 +102,9 @@ module.exports = {
       footerLinks: settings.footerLinks,
       admin_email: settings.admin_email,
       about: settings.about,
-      collection_in_home: settings.collection_in_home
+      collection_in_home: settings.collection_in_home,
+      custom_js: settings.custom_js,
+      custom_css: settings.custom_css
     }
     next()
   },
@@ -146,6 +147,14 @@ module.exports = {
     router.use('/favicon.ico', (req, res, next) => {
       const faviconPath = res.locals.settings.logo ? res.locals.settings.logo + '.png' : './assets/favicon.ico'
       return express.static(faviconPath, { immutable: true, maxAge: '10m' })(req, res, next)
+    })
+
+    router.use('/custom_js', (_req, res, next) => {
+      return res.type('application/javascript').send(res.locals.settings?.custom_js ?? '')
+    })
+
+    router.use('/custom_css', (_req, res, next) => {
+      return res.type('text/css').send(res.locals.settings?.custom_css ?? '')
     })
 
     return router
