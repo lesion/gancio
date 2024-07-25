@@ -25,5 +25,11 @@
     "recover": {
         "subject": "Recuperação da palavra-passe",
         "content": "Olá, solicitou a recuperação da sua palavra-passe em {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Clique aqui</a> para confirmar."
+    },
+    "report": {
+        "subject": "Moderação de evento [{{event.title}}]",
+        "content_ADMIN": "Um admin comentou sobre o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderação aberta</a>",
+        "content_ANON": "Um visitante reportou o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderação aberta</a>",
+        "content_AUTHOR": "O autor do evento <strong>{{event.title}}</strong> escreveu:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderação aberta</a>"
     }
 }
