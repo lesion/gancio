@@ -200,6 +200,7 @@ const eventController = {
       event.next = next && (next.slug || next.id)
       event.prev = prev && (prev.slug || prev.id)
       event.tags = event.tags.map(t => t.tag)
+      event.end_datetime = Number(event.end_datetime) || null
       event.plain_description = htmlToText(event.description, event.description.replace('\n', '').slice(0, 1000) )
 
       if (format === 'json') {
@@ -484,6 +485,10 @@ const eventController = {
         return res.status(400).send(`Wrong format for start datetime`)
       }
 
+      if (body.end_datetime && !Number(body.end_datetime)) {
+        return res.status(400).send(`Wrong format for end datetime`)
+      }
+
       if (Number(body.start_datetime) > 1000*24*60*60*365) {
         return res.status(400).send('are you sure?')
       }
@@ -506,8 +511,8 @@ const eventController = {
         // sanitize and linkify html
         description: helpers.sanitizeHTML(linkifyHtml(body.description || '', { target: '_blank', render: { email: ctx => ctx.content }})),
         multidate: body.multidate,
-        start_datetime: body.start_datetime,
-        end_datetime: body.end_datetime,
+        start_datetime: Number(body.start_datetime),
+        end_datetime: Number(body.end_datetime) || null,
         online_locations: body.online_locations,
         recurrent,
         // publish this event only if authenticated
@@ -832,7 +837,6 @@ const eventController = {
 
     if (query) {
       replacements.push(query)
-      replacements.push(query)
       where[Op.or] =
         [
           { title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', '%' + query + '%') },
@@ -879,6 +883,7 @@ const eventController = {
     return events.map(e => {
       e = e.get()
       e.tags = e.tags ? e.tags.map(t => t && t.tag) : []
+      e.end_datetime = Number(e.end_datetime) || null
       if (!e.multidate) {
         delete e.multidate
       }

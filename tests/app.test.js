@@ -290,6 +290,20 @@ describe('Events', () => {
       .expect(400)
   })
 
+
+  test('should validate end_datime', async () => {
+    const event = {
+      title: ' test title 5',
+      start_datetime: dayjs().unix() + 1000,
+      end_datetime: "Antani",
+      place_id: places[0],
+    }
+
+    const response = await request(app).post('/api/event')
+      .send(event)
+      .expect(400)
+  })
+
   test('should trim tags and title', async () => {
     const event = {
       title: ' test title 4 ',
