@@ -157,8 +157,8 @@ const eventController = {
       attributes: ['id', 'slug'],
       where: {
         id: { [Op.not]: event.id },
-        is_visible: true,
-        ...(!res.locals.settings.collection_in_home && ({ ap_id: null }) ),
+        ...( !isAdminOrEditor && ({ is_visible: true })),
+        ...( !res.locals.settings.collection_in_home && ({ ap_id: null }) ),
         recurrent: null,
         [Op.or]: [
           { start_datetime: { [Op.gt]: event.start_datetime } },
@@ -174,9 +174,9 @@ const eventController = {
     const prev = await Event.findOne({
       attributes: ['id', 'slug'],
       where: {
-        is_visible: true,
-        id: { [Op.not]: event.id },
+        ...( !isAdminOrEditor && ({ is_visible: true })),
         ...(!res.locals.settings.collection_in_home && ({ ap_id: null }) ),
+        id: { [Op.not]: event.id },
         recurrent: null,
         [Op.or]: [
           { start_datetime: { [Op.lt]: event.start_datetime } },
