@@ -1,24 +1,15 @@
 <template>
-<article class='h-event' itemscope itemtype="https://schema.org/Event">
+<article class='h-event' :class="{ 'is-past': isPast }" itemscope itemtype="https://schema.org/Event">
 
 
   <nuxt-link :to='`/event/${event.slug || event.id}`' itemprop="url">
     <MyPicture v-if='!hide_thumbs' :event='event' thumb :lazy='lazy' />
-    <v-icon class='float-right mr-1' v-if='event.parentId' color='success' v-text='mdiRepeat' />
+    <v-icon class='float-right mt-1 mr-1' v-if='isPast' color='success' v-text='mdiTimerSandComplete' />
+    <v-icon class='float-right mt-1 mr-1' v-if='event.parentId' color='success' v-text='mdiRepeat' />
     <h1 class='title p-name' itemprop="name">{{ event.title }}</h1>
   </nuxt-link>
 
   <v-img contain v-if='event?.ap_user?.image' :src='event?.ap_user?.image' max-height=30  max-width=30 style="position: absolute; top: 5px; right: 5px;" />
-
-  <div v-if="isPast" style="
-  position: absolute;
-  background: #6b6b6b;
-  box-shadow: 0 0 0 999px #6b6b6b;
-  clip-path: inset(0 -100%);
-  inset: 0 0 auto auto;
-  transform-origin: 0 0;
-  transform: translate(29.3%) rotate(45deg);
-">Past event</div>
 
   <v-card-text class='body pt-0 pb-0'>
 
@@ -47,11 +38,11 @@
 <script>
 import { mapGetters } from 'vuex'
 import MyPicture from '~/components/MyPicture'
-import { mdiRepeat, mdiCalendar, mdiMapMarker } from '@mdi/js'
+import { mdiRepeat, mdiCalendar, mdiMapMarker, mdiTimerSandComplete } from '@mdi/js'
 
 export default {
   data() {
-    return { mdiRepeat, mdiMapMarker, mdiCalendar }
+    return { mdiRepeat, mdiMapMarker, mdiCalendar, mdiTimerSandComplete }
   },
   components: {
     MyPicture
