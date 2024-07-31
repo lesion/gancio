@@ -932,6 +932,7 @@ const eventController = {
     return res.json(events.map(e => {
       e = e.get()
       e.tags = e.tags ? e.tags.map(t => t && t.tag) : []
+      e.end_datetime = Number(e.end_datetime) || null
       return e
     }))
 
