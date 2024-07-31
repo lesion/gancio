@@ -132,12 +132,12 @@ const Helpers = {
     for (const sharedInbox in recipients) {
       log.debug(`Notify ${sharedInbox} with event ${event.title} cc => ${recipients[sharedInbox].length}`)
       const body = {
-        id: `${config.baseurl}/federation/m/${event.id}#create`,
+        id: `${config.baseurl}/federation/m/${event.id}#${type}-${event.updatedAt.getTime()}`,
         type,
         to: ['https://www.w3.org/ns/activitystreams#Public'],
         cc: [...recipients[sharedInbox], `${config.baseurl}/federation/u/${settingsController.settings.instance_name}/followers`],
         actor: `${config.baseurl}/federation/u/${settingsController.settings.instance_name}`,
-        object: event.toAP(settingsController.settings, recipients[sharedInbox])
+        object: event.toAP(settingsController.settings, recipients[sharedInbox], type)
       }
       body['@context'] = [
         'https://www.w3.org/ns/activitystreams',

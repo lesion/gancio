@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   })
   
-  Event.prototype.toAP = function (settings, to = ['https://www.w3.org/ns/activitystreams#Public']) {
+  Event.prototype.toAP = function (settings, to = ['https://www.w3.org/ns/activitystreams#Public'], type = 'Create') {
 
     const username = settings.instance_name
     const opt = {
@@ -91,6 +91,7 @@ module.exports = (sequelize, DataTypes) => {
         href: `${config.baseurl}/tag/${tag.tag}`
       })),
       published: this.createdAt,
+      ...( type != 'Create' ? { updated: this.updatedAt } : {} ),
       attributedTo: `${config.baseurl}/federation/u/${username}`,
       to: ['https://www.w3.org/ns/activitystreams#Public'],
       cc: [`${config.baseurl}/federation/u/${username}/followers`],
