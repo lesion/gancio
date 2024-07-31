@@ -38,9 +38,9 @@ const resourceController = {
         content: r.data?.content
       },
       event: {
-        id: r.event.id,
-        title: r.event.title,
-        slug: r.event.slug
+        id: r.event?.id,
+        title: r.event?.title,
+        slug: r.event?.slug
       },
       ap_user: {
         url: get(r, 'ap_user.object.url', ''),
