@@ -272,12 +272,12 @@ export default {
           this.$root.$message(this.$auth.loggedIn ? (this.edit ? 'event.saved' : 'event.added') : 'event.added_anon', { color: 'success' })
         })
       } catch (e) {
-        switch (e.request.status) {
+        switch (e?.request?.status) {
           case 413:
             this.$root.$message('event.image_too_big', { color: 'error' })
             break
           default:
-            this.$root.$message(e.response ? e.response.data : e, { color: 'error' })
+            this.$root.$message(e?.response?.data ?? e, { color: 'error' })
         }
         this.loading = false
       }
