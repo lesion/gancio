@@ -255,6 +255,8 @@ export default {
         formData.append('end_datetime', this.$time.fromDateInput(this.date.due, this.date.dueHour || '23:59'))
       } else if (this.date.dueHour) {
         formData.append('end_datetime', this.$time.fromDateInput(this.date.due, this.date.dueHour))
+      } else {
+        formData.append('end_datetime', '')
       }
 
       if (this.edit) {

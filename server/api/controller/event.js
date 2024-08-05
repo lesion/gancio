@@ -594,8 +594,8 @@ const eventController = {
         return res.sendStatus(403)
       }
 
-      const start_datetime = body.start_datetime || event.start_datetime
-      const end_datetime = body.end_datetime || event.end_datetime || null
+      const start_datetime = Number(body.start_datetime || event.start_datetime)
+      const end_datetime = body.end_datetime === '' ? null : Number(body.end_datetime || event.end_datetime) || null
 
       // // validate start_datetime and end_datetime
       if (end_datetime) {
@@ -604,18 +604,18 @@ const eventController = {
           return res.status(400).send(`start datetime is greater than end datetime`)
         }
 
-        if (Number(end_datetime) > 1000*24*60*60*365) {
+        if (end_datetime > 1000*24*60*60*365) {
         log.debug('[UPDATE] end_datetime is too much in the future')
           return res.status(400).send('end_datetime is too much in the future')
         }
       }
 
-      if (!Number(start_datetime)) {
+      if (!start_datetime) {
         log.debug('[UPDATE] start_datetime has to be a number')
         return res.status(400).send(`Wrong format for start datetime`)
       }
 
-      if (Number(start_datetime) > 1000*24*60*60*365) {
+      if (start_datetime > 1000*24*60*60*365) {
         log.debug('[UPDATE] start_datetime is too much in the future')
         return res.status(400).send('start_datetime is too much in the future')
       }
