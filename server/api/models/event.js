@@ -46,7 +46,6 @@ module.exports = (sequelize, DataTypes) => {
       zone: settings.instance_timezone,
       locale: settings.instance_locale
     }
-    // const tags = this.tags && this.tags.map(t => t.tag.replace(/[#]/g, '_'))
     const summary = `${this.place && this.place.name}, ${DateTime.fromSeconds(this.start_datetime, opt).toFormat('EEEE, d MMMM (HH:mm)')}`
     
     let attachment = []
