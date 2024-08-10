@@ -56,9 +56,7 @@ v-row.mb-4
 
   v-dialog(v-model='whereInputAdvancedDialog' destroy-on-close max-width='700px' :fullscreen='$vuetify.breakpoint.xsOnly' dense)
     WhereInputAdvanced(ref='whereAdvanced' :place.sync='value' :event='event'
-      @close='whereInputAdvancedDialog = false && this.$refs.address.blur()'
-      :onlineLocations.sync="onlineLocations"
-      @update:onlineLocations="selectLocations")
+      @close='whereInputAdvancedDialog = false && this.$refs.address.blur()')
 
     
 </template>
@@ -90,7 +88,7 @@ export default {
   computed: {
     ...mapState(['settings']),
     isOnLine () {
-      return this.settings.allow_online_event && this.place.name === 'online'
+      return this.settings.allow_online_event && this.value.name === 'online'
     },
     showAdvancedDialogButton () {
 
@@ -183,17 +181,16 @@ export default {
       this.event.online_locations = []
 
       if (this.onlineLocations) {
-        // Insert up to 3 online location: the main one and 2 fallback
-        if (this.onlineLocations.length > 3) {
-          this.$nextTick(() => this.onlineLocations = this.onlineLocations.slice(0, 3))
-        }
-        // Remove duplicates
-        this.$nextTick(() => this.onlineLocations = [...new Set(this.onlineLocations)])
-        
         this.onlineLocations.forEach((item, i) => {
-          if (!item.startsWith('http')) { this.onlineLocations[i] = `https://${item}` }
-          this.event.online_locations[i] = this.onlineLocations[i]
+          if (!item.startsWith('http')) { item = `https://${item}` }
+          this.onlineLocations[i] = item
         })
+        // Remove duplicates
+        this.onlineLocations = [...new Set(this.onlineLocations)]
+        // Insert up to 3 online location: the main one and 2 fallback
+        this.onlineLocations = this.onlineLocations.slice(0, 3)  
+        
+        this.event.online_locations = this.onlineLocations
       }
     },
   }
