@@ -17,6 +17,10 @@ has_toc: false
 - [Install using Docker]({% link install/docker.md %})
 - [Install using YunoHost](https://apps.yunohost.org/app/gancio)
 
+## Other methods
+
+- [Install with fly.io](https://rennerocha.com/posts/configuring-self-hosted-calendar-for-small-community/)
+
 ### Post installation
 - [Setup a backup]({% link install/backup.md %})
 
