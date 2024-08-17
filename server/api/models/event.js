@@ -46,7 +46,9 @@ module.exports = (sequelize, DataTypes) => {
       zone: settings.instance_timezone,
       locale: settings.instance_locale
     }
-    const summary = `${this.place && this.place.name}, ${DateTime.fromSeconds(this.start_datetime, opt).toFormat('EEEE, d MMMM (HH:mm)')}`
+
+    const datetime = DateTime.fromSeconds(this.start_datetime, opt).toLocaleString({ weekday: 'long', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' })
+    const summary = `${this.place && this.place.name}, ${datetime}`
     
     let attachment = []
 

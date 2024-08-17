@@ -55,6 +55,7 @@ export default ({ app, store }, inject) => {
 
     when (event) {
       const currentYear = app.$time.currentYear()
+      const addTimezone = event.ap_id || event.place.name === 'online'
 
       const opt = {
         zone: store.state.settings.instance_timezone,
@@ -62,7 +63,7 @@ export default ({ app, store }, inject) => {
       }
 
       const start = DateTime.fromSeconds(event.start_datetime, opt)
-      let time = start.toLocaleString({ weekday: 'long', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+      let time = start.toLocaleString({ weekday: 'long', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', ...( addTimezone && { timeZoneName: 'short' }) })
       const end = event.end_datetime && DateTime.fromSeconds(event.end_datetime, opt)
 
       if (end) {
