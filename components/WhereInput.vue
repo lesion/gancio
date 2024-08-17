@@ -74,7 +74,7 @@ export default {
     event: { type: Object, default: () => null },
   },
   components: { WhereInputAdvanced, TBtn },
-  data ( {$store} ) {
+  data () {
     return {
       mdiMap, mdiMapMarker, mdiPlus, mdiCog, mdiLink, mdiCloseCircle, mdiLaptopAccount, mdiMapSearch,
       places: [],
