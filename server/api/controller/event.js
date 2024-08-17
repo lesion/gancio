@@ -961,6 +961,7 @@ const eventController = {
         name: settings.collection_in_home,
         start,
         end,
+        show_recurrent,
         limit
       })
     } else {
