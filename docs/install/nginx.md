@@ -68,10 +68,10 @@ If you run multiple gancio's instances on the same nginx (e.g. a `prod` and a `t
 ### Add the proxy_cache directive inside the server block
 
 ```nginx
-proxy_cache_path /var/cache/nginx/gancio keys_zone=gancio_cache:1g max_size=80m inactive=1w use_temp_path=off;
+proxy_cache_path /var/cache/nginx/gancio keys_zone=gancio_cache:10m max_size=150m inactive=1w use_temp_path=off;
 
 upstream gancio {
-  server http://127.0.0.1:13120;
+  server 127.0.0.1:13120;
   keepalive 16;
 }
 
