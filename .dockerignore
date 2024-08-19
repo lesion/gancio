@@ -1,0 +1,9 @@
+Dockerfile
+node_modules
+webcomponents
+yunohost
+releases
+uploads
+_nuxt2
+wp_plugin
+tests
