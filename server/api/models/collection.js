@@ -16,5 +16,8 @@ module.exports = (sequelize, DataTypes) =>
     },
     isTop: { // is this collection shown in top navbar in home page?
       type: DataTypes.BOOLEAN
+    },
+    sortIndex: {
+      type: DataTypes.INTEGER,
     }
   }, { timestamps: false })

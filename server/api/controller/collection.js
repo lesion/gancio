@@ -13,12 +13,12 @@ const collectionController = {
     const pin = req.query.pin
     let collections
     if (withFilters) {
-      collections = await Collection.findAll({ include: [ Filter ] })
+      collections = await Collection.findAll({ include: [ Filter ], order: [['sortIndex', 'asc']] })
     } else {
       if (pin) {
-        collections = await Collection.findAll({ where: { isTop: true }})
+        collections = await Collection.findAll({ where: { isTop: true }, order: [['sortIndex','asc']]})
       } else {
-        collections = await Collection.findAll()
+        collections = await Collection.findAll({ order: [['sortIndex', 'asc']]})
       }
     }
 
@@ -26,7 +26,22 @@ const collectionController = {
   },
 
   async _getVisible () {
-    return Collection.findAll({ attributes: ['name', 'id'], where: { isTop: true }, raw: true })
+    return Collection.findAll({ attributes: ['name', 'id'], where: { isTop: true }, raw: true, order: [['sortIndex', 'asc']] })
+  },
+
+  async moveUp (req, res) {
+    const sortIndex = Number(req.params.sort_index)
+    try {
+      const collections = await Collection.findAll({ where: { sortIndex: { [Op.lte]: sortIndex } }, limit: 2, order:[['sortIndex', 'desc']] })
+      if (collections.length !== 2) { return res.sendStatus(404) }
+      const tmpSortIndex = collections[0].sortIndex
+      await collections[0].update({ sortIndex: collections[1].sortIndex })
+      await collections[1].update({ sortIndex: tmpSortIndex })
+      res.sendStatus(200)
+    } catch (e) {
+      log.error(e)
+      res.sendStatus(404)
+    }
   },
 
   async togglePin (req, res) {
@@ -213,6 +228,7 @@ const collectionController = {
     log.info(`Create collection: ${req.body.name}`)
     try {
       const collection = await Collection.create(collectionDetail)
+      await collection.update({ sortIndex: collection.id })
       res.json(collection)
     } catch (e) {
       log.error(`Create collection failed ${e}`)
@@ -285,8 +301,6 @@ const collectionController = {
       res.sendStatus(404)
     }
   },
-
-
 
 }
 
