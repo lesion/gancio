@@ -233,6 +233,7 @@ module.exports = () => {
     api.post('/collections', isAdmin, collectionController.add)
     api.delete('/collection/:id', isAdmin, collectionController.remove)
     api.put('/collection/toggle/:id', isAdmin, collectionController.togglePin)
+    api.put('/collection/moveup/:sort_index', isAdmin, collectionController.moveUp)
     api.get('/filter/:collection_id', isAdmin, collectionController.getFilters)
     api.post('/filter', isAdmin, collectionController.addFilter)
     api.put('/filter/:id', isAdmin, collectionController.updateFilter)

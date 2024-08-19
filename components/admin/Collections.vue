@@ -146,7 +146,9 @@ v-container
     )
       template(v-slot:item.pin='{ item }')
         v-switch.float-right(:input-value='item.isTop' @change="togglePinCollection(item)" inset hide-details)
-      template(v-slot:item.actions='{ item }')
+      template(v-slot:item.actions='{ item, index }')
+        v-btn(v-if='index>0' icon color='warn' @click.stop='moveUp(item)')
+          v-icon(v-text='mdiChevronUp')
         v-btn(@click='editCollection(item)' color='primary' icon)
           v-icon(v-text='mdiPencil')
         v-btn(@click='removeCollection(item)' color='error' icon)
@@ -160,13 +162,13 @@ import debounce from 'lodash/debounce'
 import isEqual from 'lodash/isEqual'
 import sortBy from 'lodash/sortBy'
 
-import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever,
+import { mdiPencil, mdiChevronLeft, mdiChevronRight, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiChevronUp,
   mdiCloseCircle, mdiChevronDown, mdiWeb, mdiInformation, mdiNotEqualVariant, mdiEqualBox } from '@mdi/js'
 
 export default {
   data({ $store }) {
     return {
-      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever,
+      mdiPencil, mdiChevronRight, mdiChevronLeft, mdiMagnify, mdiPlus, mdiTagMultiple, mdiMapMarker, mdiDeleteForever, mdiChevronUp,
       mdiCloseCircle, mdiChevronDown, mdiWeb, mdiInformation, mdiEqualBox, mdiNotEqualVariant,
       loading: false,
       dialog: false,
@@ -278,13 +280,22 @@ export default {
       this.$fetch()
       this.loading = false
     },
+    async moveUp (collection) {
+      try {
+        await this.$axios.$put(`/collection/moveup/${collection.sortIndex}`)
+        this.$fetch()
+      } catch (e) {
+        const err = get(e, 'response.data.errors[0].message', e)
+        this.$root.$message(this.$t(err), { color: 'error' })
+      }
+    },
     async togglePinCollection (collection) {
       try {
         await this.$axios.$put(`/collection/toggle/${collection.id}`)
         collection.isTop = !collection.isTop
       } catch (e) {
         const err = get(e, 'response.data.errors[0].message', e)
-        this.$root.$message(this.$t(err), { color: 'error' })        
+        this.$root.$message(this.$t(err), { color: 'error' })
       }
     },
     async editFilter(filter) {
