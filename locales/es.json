@@ -1,6 +1,6 @@
 {
     "common": {
-        "add_event": "Nuevo evento",
+        "add_event": "Añadir evento",
         "next": "Continúa",
         "export": "Exporta",
         "send": "Envía",
@@ -204,7 +204,7 @@
         "where_advanced_options": "Lugar - Opciones avanzadas",
         "where_advanced_options_description": "Define aquí otras propiedades para el lugar",
         "online_locations": "Ubicaciones en línea",
-        "online_locations_help": "URL de una sala de videoconferencia o URL RSVP (máximo 3)",
+        "online_locations_help": "URL de una sala de videoconferencia o URL de RSVP (máx. 3)",
         "online_locations_fallback_urls": "Enlaces alternativos",
         "address_geocoded_disclaimer": "Si no puede encontrar la <strong>dirección de la calle</strong> o el <strong>número de la casa</strong> que está buscando en los resultados de la codificación geográfica, puedes insertarlos manualmente en el campo 'Dirección' sin perder las coordenadas. Considera también que el proyecto <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> está abierto a contribuciones. Si tienes Android, te recomendamos <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> ",
         "message": "Mensaje",
@@ -350,7 +350,11 @@
         "plugins_description": "Los plugins son pequeños fragmentos de código que proporcionan características adicionales a la aplicación principal. Por lo general, están escritos por desarrolladores externos al proyecto que aprovechan el sistema <a href=\"https://gancio.org/dev/plugins\">plugin</a> para, en su mayoría, pero no limitarse a enviar eventos a otras plataformas y canales.",
         "show_download_media": "Mostrar acción de descarga de medios",
         "show_download_media_hint": "Mostrar un botón de descarga de medios en la página del evento",
-        "allow_event_without_end_time": "Permitir eventos sin hora de finalización"
+        "allow_event_without_end_time": "Permitir eventos sin hora de finalización",
+        "custom_js": "Código Javascript personalizado",
+        "custom_css_help": "También puedes personalizar alguna hoja de estilo, lee algún ejemplo <a href='https://gancio.org/usage/custom_css'>aquí</a>.",
+        "custom_css": "Estilo CSS personalizado",
+        "custom_js_help": "Puedes integrar algún código javascript que se cargará para cada usuario escribiendo en el área de texto a continuación. Probablemente quieras leer primero la <a href='https://gancio.org/usage/custom_js'>documentation</a>."
     },
     "auth": {
         "not_confirmed": "Todavía no hemos confirmado este email…",
