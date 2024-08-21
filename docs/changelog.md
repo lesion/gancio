@@ -7,6 +7,33 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+
+## [1.19.0](https://framagit.org/les/gancio/compare/v1.18.1...v1.19.0) (2024-08-21)
+
+
+### Features
+
+* allow to sort collections from admin panel, fix [#437](https://framagit.org/les/gancio/issues/437) ([cf1effd](https://framagit.org/les/gancio/commit/cf1effd66d178a2585355c24e275a7d074d4fe09), [094a64b](https://framagit.org/les/gancio/commit/094a64b168a697c22707b38b5a5535097fb2acb1))
+* custom javascript and CSS, fix [#413](https://framagit.org/les/gancio/issues/413) ([ba9ed8a](https://framagit.org/les/gancio/commit/ba9ed8af34f7cfb1781fb31fcfdbce662ac1d356))
+
+
+### Bug Fixes
+
+* Allow migration with minimal config ([4d45d27](https://framagit.org/les/gancio/commit/4d45d2770f6b5f51265cde955dc1c1dad60d16f6))
+* display timezone name in some representation (fix [#349](https://framagit.org/les/gancio/issues/349)): ([0d581ce](https://framagit.org/les/gancio/commit/0d581cec69d80fba80a624a8079c9256553f27de))
+* docker compose mariadb/postgres healtcheck, fix [#397](https://framagit.org/les/gancio/issues/397) ([30c932a](https://framagit.org/les/gancio/commit/30c932a7f28a30865c1fb8b89f61c09df2989bc9))
+* edit Collection filters ([c8ccf64](https://framagit.org/les/gancio/commit/c8ccf64c548128910fda7a316a549c0998c4463c))
+* empty event rendering due to bad end_datetime, fix [#426](https://framagit.org/les/gancio/issues/426) ([9b7b1f2](https://framagit.org/les/gancio/commit/9b7b1f289f0c3c99da2065d9d5db450adae1a9d9))
+* hide event ending at 00:00 in the next day, fix [#352](https://framagit.org/les/gancio/issues/352) ([10a2aa0](https://framagit.org/les/gancio/commit/10a2aa0e7cca78ccec6386b5f6c195454e791d60))
+* incosistent navigation among published and not published events, fix [#428](https://framagit.org/les/gancio/issues/428) ([3b750c8](https://framagit.org/les/gancio/commit/3b750c89ab652b6e76471ee02b8479ca5943934d))
+* online_locations and hide/show address in edit mode ([684547c](https://framagit.org/les/gancio/commit/684547cb8bc230ecc73b424c072de8ca434378cb))
+* refactoring update and allow to remove end_datetime from an event ([a10ccb3](https://framagit.org/les/gancio/commit/a10ccb30071bdba032d1a39ae6f514475c005e8c))
+* show event saving unconfirmed event when logged, fix [#427](https://framagit.org/les/gancio/issues/427) ([58a1e97](https://framagit.org/les/gancio/commit/58a1e9780e0854a2197a26b44a823f9d31eb0097))
+* show recurrent events when collections in home mode, fix [#441](https://framagit.org/les/gancio/issues/441) ([bfdd91a](https://framagit.org/les/gancio/commit/bfdd91a6be8a3876581d069e24a451d8261de601))
+* small issue introduced with [#54](https://framagit.org/les/gancio/issues/54) ([e9c89d4](https://framagit.org/les/gancio/commit/e9c89d4ab8ad51f487499b0da2e0fbaa09091fd9)), closes [#158](https://framagit.org/les/gancio/issues/158)
+* use a unique AP object identifier, add update field ([4efc342](https://framagit.org/les/gancio/commit/4efc3422de8a7d9204ab534602bf8b9d84f3ba01))
+
+
 ### [1.18.1](https://framagit.org/les/gancio/compare/v1.18.0...v1.18.1) (2024-06-27)
 
 

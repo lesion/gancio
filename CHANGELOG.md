@@ -7,8 +7,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Features
 
-* allow to sort collection from admin panel, fix [#437](https://framagit.org/les/gancio/issues/437) ([cf1effd](https://framagit.org/les/gancio/commit/cf1effd66d178a2585355c24e275a7d074d4fe09))
-* allow to sort collection in homepage, fix [#437](https://framagit.org/les/gancio/issues/437) ([094a64b](https://framagit.org/les/gancio/commit/094a64b168a697c22707b38b5a5535097fb2acb1))
+* allow to sort collections from admin panel, fix [#437](https://framagit.org/les/gancio/issues/437) ([cf1effd](https://framagit.org/les/gancio/commit/cf1effd66d178a2585355c24e275a7d074d4fe09), [094a64b](https://framagit.org/les/gancio/commit/094a64b168a697c22707b38b5a5535097fb2acb1))
 * custom javascript and CSS, fix [#413](https://framagit.org/les/gancio/issues/413) ([ba9ed8a](https://framagit.org/les/gancio/commit/ba9ed8af34f7cfb1781fb31fcfdbce662ac1d356))
 
 
