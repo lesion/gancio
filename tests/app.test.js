@@ -638,8 +638,6 @@ describe('Collection', () => {
   })
 
   test('should change collections order', async () =>{
-    console.error(collections)
-    console.error(`/api/collection/moveup/${collections[1].sortIndex}`)
     let response = await request(app).put(`/api/collection/moveup/${collections[1].sortIndex}`)
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
