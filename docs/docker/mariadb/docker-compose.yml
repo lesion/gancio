@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: mariadb
+    image: mariadb:11
     container_name: mariadb
     volumes:
       - ./db:/var/lib/mysql
@@ -14,6 +14,12 @@ services:
       - MARIADB_PASSWORD=gancio
       - MARIADB_RANDOM_ROOT_PASSWORD=yes
     restart: always
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--mariadbupgrade"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
   gancio:
     restart: always
     image: cisti/gancio
@@ -33,4 +39,6 @@ services:
     ports:
       - "127.0.0.1:13120:13120"
     depends_on:
-        - db
+        db:
+          condition: service_healthy
+
