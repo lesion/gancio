@@ -20,7 +20,7 @@
         "content": "Ola, a túa conta en <a href='{{config.baseurl}}'>{{config.title}}</a> foi confirmada. Escríbenos a {{config.admin_email}} se precisas máis información."
     },
     "user_confirm": {
-        "content": "Ola, creouse a túa conta en <a href='{{config.baseurl}}'>{{config.title}}</a>. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Debes confirmala e elexir un contrasinal</a>.",
+        "content": "Ola, creouse a túa conta en <a href='{{config.baseurl}}'>{{config.title}}</a>. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Debes confirmala e establecer un contrasinal</a>.",
         "subject": "Xa podes comezar a publicar eventos"
     },
     "event_confirm": {
