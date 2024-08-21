@@ -221,14 +221,14 @@ const collectionController = {
     const collectionDetail = {
       name: req.body.name,
       isActor: true,
-      isTop: true
+      isTop: true,
+      sortIndex: Sequelize.literal(`(SELECT MAX(${Col('collections.sortIndex')})+1 from collections)`)
     }
 
     // TODO: validation
     log.info(`Create collection: ${req.body.name}`)
     try {
       const collection = await Collection.create(collectionDetail)
-      await collection.update({ sortIndex: collection.id })
       res.json(collection)
     } catch (e) {
       log.error(`Create collection failed ${e}`)
