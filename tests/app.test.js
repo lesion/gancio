@@ -47,7 +47,7 @@ beforeAll(async () => {
     await sequelize.query('DELETE FROM event_notifications')
     // await sequelize.query('PRAGMA foreign_keys = ON')
   } catch (e) {
-    console.error(e)
+    // console.error(e)
   }
 })
 
@@ -528,7 +528,7 @@ describe('Collection', () => {
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
     expect(response.body.id).toBeDefined()
-    collections.push(response.body.id)
+    collections.push(response.body)
   })
 
   test('should do not have any event when no filters', async () => {
@@ -541,11 +541,11 @@ describe('Collection', () => {
   test('should add a new filter', async () => {
     await request(app)
       .post('/api/filter')
-      .send({ collectionId: collections[0], tags: ['test'] })
+      .send({ collectionId: collections[0].id, tags: ['test'] })
       .expect(403)
 
     const response = await request(app).post('/api/filter')
-      .send({ collectionId: collections[0], tags: ['test'] })
+      .send({ collectionId: collections[0].id, tags: ['test'] })
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
@@ -607,7 +607,7 @@ describe('Collection', () => {
   test('shoud filter for tags', async () => {
     await request(app)
       .post('/api/filter')
-      .send({ collectionId: collections[0], tags: ['test'] })
+      .send({ collectionId: collections[0].id, tags: ['test'] })
       .auth(token.access_token, { type: 'bearer' })
       .expect(200)
 
@@ -617,6 +617,39 @@ describe('Collection', () => {
       .expect(200)
 
     expect(response.body.length).toBe(1)
+
+  })
+
+  test('should create a second collection', async () => {
+    let response = await request(app).post('/api/collections')
+      .send({ name: 'second collection' })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+    expect(response.body.id).toBeDefined()
+    collections.push(response.body)
+
+    response = await request(app)
+      .get('/api/collections')
+      .expect(200)
+    expect(response.body?.length).toBe(2)
+    expect(response.body[0].id).toBe(collections[0].id)
+    expect(response.body[1].id).toBe(collections[1].id)
+
+  })
+
+  test('should change collections order', async () =>{
+    console.error(collections)
+    console.error(`/api/collection/moveup/${collections[1].sortIndex}`)
+    let response = await request(app).put(`/api/collection/moveup/${collections[1].sortIndex}`)
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
+
+    response = await request(app)
+      .get('/api/collections')
+      .expect(200)
+    expect(response.body?.length).toBe(2)
+    expect(response.body[0].id).toBe(collections[1].id)
+    expect(response.body[1].id).toBe(collections[0].id)
 
   })
 })
