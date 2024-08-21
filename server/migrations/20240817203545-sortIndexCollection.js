@@ -1,4 +1,5 @@
 'use strict';
+const Collection = require('../api/models/collection')
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -6,7 +7,8 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()
     try {
       await queryInterface.addColumn('collections', 'sortIndex', { type: Sequelize.INTEGER })
-      await queryInterface.sequelize.query('UPDATE collections set sortIndex=id')
+      const collection = Collection(queryInterface.sequelize, Sequelize.DataTypes)
+      await collection.update({ sortIndex: Sequelize.col('id')}, { where: {}, transaction })
       return transaction.commit()
     } catch (e) {
        if (transaction) {
