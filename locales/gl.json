@@ -217,7 +217,7 @@
         "add_instance": "Engadir instancia",
         "select_instance_timezone": "Zona horaria",
         "enable_resources_help": "Permite engadir audio, imaxes e comentarios ao evento desde o fediverso",
-        "user_add_help": "Vaise enviar un email á nova usuaria con instruccións para confirmar a subscrición e elexir un contrasinal",
+        "user_add_help": "Vaise enviar un correo á nova usuaria con instruccións para confirmar a subscrición e establecer un contrasinal",
         "instance_name": "Nome da instancia",
         "filter_users": "Filtrar usuarias",
         "title_description": "Utilízase no título da páxina, no asunto do email e para as fontes RSS e ICS exportadas.",
@@ -343,7 +343,11 @@
         "plugins_description": "Os Complementos son pequenas pezas de código que proporcionan características adicionais á aplicación. Habitualmente están escritos por desenvolvedoras externas ao proxecto que aproveitan o <a href=\"https://gancio.org/dev/plugins\">sistema de complementos</a> para, principalmente, pero non limitado, enviar eventos a outras plataformas ou canles.",
         "show_download_media": "Mostrar acción de descarga multimedia",
         "show_download_media_hint": "Mostrar botón de descarga multimedia na páxina do evento",
-        "allow_event_without_end_time": "Permitir eventos sen hora de finalización"
+        "allow_event_without_end_time": "Permitir eventos sen hora de finalización",
+        "custom_js": "Código Javascript personal",
+        "custom_css": "Estilo CSS personal",
+        "custom_js_help": "Podes integrar código javascript escribíndoo na área de texto que se cargará para cada usuaria. Pode que queiras ler a <a href='https://gancio.org/usage/custom_js'>documentación</a> relacionada.",
+        "custom_css_help": "Tamén podes personalizar as follas de estilo, <a href='https://gancio.org/usage/custom_css'>aquí</a> tes algún exemplo."
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",
