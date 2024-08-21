@@ -44,7 +44,7 @@ beforeAll(async () => {
     await sequelize.query('DELETE FROM filters')
     await sequelize.query('DELETE FROM collections')
     await sequelize.query('DELETE FROM notifications')
-    await sequelize.query('DELETE FROM event_notifications')
+    await sequelize.query('DELETE FROM tasks')
     // await sequelize.query('PRAGMA foreign_keys = ON')
   } catch (e) {
     console.error(e)
