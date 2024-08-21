@@ -13,9 +13,9 @@ sudo apt install curl gcc g++ make wget libpq-dev
 ```
 
 
-1. Install Node.js & yarn
+1. Install Node.js & yarn package manager
 ```bash
-curl -sL https://deb.nodesource.com/setup_18.x | sudo bash -
+curl -sL https://deb.nodesource.com/setup_20.x | sudo bash -
 sudo apt-get install -y nodejs
 sudo npm install -g yarn
 ```
@@ -52,6 +52,9 @@ sudo adduser --group --system --shell /bin/false --home /opt/gancio gancio
 ```bash
 sudo yarn global add --network-timeout 1000000000 --silent {{site.url}}/latest.tgz
 ```
+
+> Note "Use yarn"
+> Only `yarn` is supported as package manager
 
 > info "Install another release"
 > You can found old releases at [{{site.url}}/releases]({{site.url}}/releases)

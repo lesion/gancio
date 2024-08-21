@@ -3,6 +3,7 @@ node_modules
 webcomponents
 yunohost
 releases
+!releases/latest.tgz
 uploads
 _nuxt2
 wp_plugin
