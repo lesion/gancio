@@ -5,10 +5,10 @@
     },
     "recover": {
         "subject": "Recuperación do contrasinal",
-        "content": "Ola, pediches recuperar o contrasinal en {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Preme aquí</a> para confirmalo."
+        "content": "Ola, pediches recuperar o contrasinal en {{config.title}}. <a href='{{{config.baseurl}}}/recover/{{user.recover_code}}'>Preme aquí</a> para confirmalo."
     },
     "admin_register": {
-        "content": "{{user.email}} solicitou rexistrarse en {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confírmao <a href='{{config.baseurl}}/admin'>aquí</a>.",
+        "content": "{{user.email}} solicitou rexistrarse en {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confírmao <a href='{{{config.baseurl}}}/admin'>aquí</a>.",
         "subject": "Nova conta"
     },
     "test": {
@@ -17,10 +17,10 @@
     },
     "confirm": {
         "subject": "Xa podes comezar a publicar eventos",
-        "content": "Ola, a túa conta en <a href='{{config.baseurl}}'>{{config.title}}</a> foi confirmada. Escríbenos a {{config.admin_email}} se precisas máis información."
+        "content": "Ola, a túa conta en <a href='{{{config.baseurl}}}'>{{config.title}}</a> foi confirmada. Escríbenos a {{config.admin_email}} se precisas máis información."
     },
     "user_confirm": {
-        "content": "Ola, creouse a túa conta en <a href='{{config.baseurl}}'>{{config.title}}</a>. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Debes confirmala e establecer un contrasinal</a>.",
+        "content": "Ola, creouse a túa conta en <a href='{{{config.baseurl}}}'>{{config.title}}</a>. <a href='{{{config.baseurl}}}/user_confirm/{{user.recover_code}}'>Debes confirmala e establecer un contrasinal</a>.",
         "subject": "Xa podes comezar a publicar eventos"
     },
     "event_confirm": {

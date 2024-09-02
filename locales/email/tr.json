@@ -5,19 +5,19 @@
     },
     "user_confirm": {
         "subject": "Şimdi etkinlik paylaşmaya başlayabilirsin",
-        "content": "Merhaba, <a href='{{config.baseurl}}'>{{config.title}}</a> sunucusundaki hesabın yaratıldı.<a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'> Onayle ve bir parola seç.</a>."
+        "content": "Merhaba, <a href='{{{config.baseurl}}}'>{{config.title}}</a> sunucusundaki hesabın yaratıldı.<a href='{{{config.baseurl}}}/user_confirm/{{user.recover_code}}'> Onayle ve bir parola seç.</a>."
     },
     "admin_register": {
         "subject": "Yeni kayıt",
-        "content": "{{user.email}}, {{config.title}} sunucusuna kayıt isteği gönderdi: <br/><pre>{{user.description}}</pre><br/> <a href='{{config.baseurl}}/admin'>Onayla</a>."
+        "content": "{{user.email}}, {{config.title}} sunucusuna kayıt isteği gönderdi: <br/><pre>{{user.description}}</pre><br/> <a href='{{{config.baseurl}}}/admin'>Onayla</a>."
     },
     "confirm": {
         "subject": "Şimdi etkinlik paylaşmaya başlayabilirsin",
-        "content": "Merhaba, <a href='{{config.baseurl}}'>{{config.title}}</a> sunucusundaki hesabın onaylandı. Bize ulaşmak için {{config.admin_email}} adresine eposta atabilirsin."
+        "content": "Merhaba, <a href='{{{config.baseurl}}}'>{{config.title}}</a> sunucusundaki hesabın onaylandı. Bize ulaşmak için {{config.admin_email}} adresine eposta atabilirsin."
     },
     "recover": {
         "subject": "Parola Sıfırlama",
-        "content": "Merhaba, {{config.title}} sunucunda paralanı sıfırlamak istedin.<a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Sıfırlamayı onayla</a>."
+        "content": "Merhaba, {{config.title}} sunucunda paralanı sıfırlamak istedin.<a href='{{{config.baseurl}}}/recover/{{user.recover_code}}'>Sıfırlamayı onayla</a>."
     },
     "test": {
         "content": "Bu bir deneme epostasıdır. Bu epostayı okuyabiliyorsan ayarların çalışıyor demektir.",

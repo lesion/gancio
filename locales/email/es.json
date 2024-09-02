@@ -5,22 +5,22 @@
     },
     "confirm": {
         "subject": "Puedes empezar a publicar eventos",
-        "content": "Hola, tu cuenta en <a href='{{config.baseurl}}'>{{config.title}}</a> ha sido confirmada. Escríbemos a {{config.admin_email}} para cualquier información y siéntete como en casa."
+        "content": "Hola, tu cuenta en <a href='{{{config.baseurl}}}'>{{config.title}}</a> ha sido confirmada. Escríbemos a {{config.admin_email}} para cualquier información y siéntete como en casa."
     },
     "recover": {
         "subject": "Recuperar password",
-        "content": "Hola, has pedido recuperar tu contraseña en {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Pulsa aquí</a> para confirmar."
+        "content": "Hola, has pedido recuperar tu contraseña en {{config.title}}. <a href='{{{config.baseurl}}}/recover/{{user.recover_code}}'>Pulsa aquí</a> para confirmar."
     },
     "common": {
         "press_here": "Premi qui"
     },
     "user_confirm": {
         "subject": "Ahora puedes empezar a publicar eventos",
-        "content": "Hola, tu cuenta en <a href='{{config.baseurl}}'>{{config.title}}</a> ha sido creada. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confirma y elige un password.</a>."
+        "content": "Hola, tu cuenta en <a href='{{{config.baseurl}}}'>{{config.title}}</a> ha sido creada. <a href='{{{config.baseurl}}}/user_confirm/{{user.recover_code}}'>Confirma y elige un password.</a>."
     },
     "admin_register": {
         "subject": "Nuevo registro",
-        "content": "{{user.email}} ha pedido registrarse en {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confírmalo <a href='{{config.baseurl}}/admin'>aquí</a>."
+        "content": "{{user.email}} ha pedido registrarse en {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confírmalo <a href='{{{config.baseurl}}}/admin'>aquí</a>."
     },
     "event_confirm": {
         "content": "Puede confirmar este evento <a href='{{url}}'>aquí</a>"

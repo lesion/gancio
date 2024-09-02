@@ -5,10 +5,10 @@
     },
     "recover": {
         "subject": "Wachtwoordherstel",
-        "content": "Hoi, je hebt om herstel van je wachtwoord gevraagd op {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Klik hier</a> om te bevestigen."
+        "content": "Hoi, je hebt om herstel van je wachtwoord gevraagd op {{config.title}}. <a href='{{{config.baseurl}}}/recover/{{user.recover_code}}'>Klik hier</a> om te bevestigen."
     },
     "admin_register": {
-        "content": "{{user.email}} heeft een registratieverzoek gedaan op {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Bevestig het verzoek <a href='{{config.baseurl}}/admin'>hier</a>.",
+        "content": "{{user.email}} heeft een registratieverzoek gedaan op {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Bevestig het verzoek <a href='{{{config.baseurl}}}/admin'>hier</a>.",
         "subject": "Nieuwe registratie"
     },
     "report": {
@@ -19,11 +19,11 @@
     },
     "confirm": {
         "subject": "Je kunt vanaf nu evenementen publiceren",
-        "content": "Hoi, jouw account op <a href='{{config.baseurl}}'>{{config.title}}</a> is bevestigd. Stuur een mailtje naar {{config.admin_email}} voor meer informatie."
+        "content": "Hoi, jouw account op <a href='{{{config.baseurl}}}'>{{config.title}}</a> is bevestigd. Stuur een mailtje naar {{config.admin_email}} voor meer informatie."
     },
     "user_confirm": {
         "subject": "Je kunt vanaf nu evenementen publiceren",
-        "content": "Hoi, jouw account op <a href='{{config.baseurl}}'>{{config.title}}</a> is aangemaakt. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Bevestig dit en stel een wachtwoord in.</a>."
+        "content": "Hoi, jouw account op <a href='{{{config.baseurl}}}'>{{config.title}}</a> is aangemaakt. <a href='{{{config.baseurl}}}/user_confirm/{{user.recover_code}}'>Bevestig dit en stel een wachtwoord in.</a>."
     },
     "event_confirm": {
         "content": "Bevestig het evenement op <a href='{{url}}'>deze pagina</a>"

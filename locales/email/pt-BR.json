@@ -4,7 +4,7 @@
         "content": "Recebemos a solicitação de registro. Iremos confirmá-la assim que possível."
     },
     "confirm": {
-        "content": "Olá, sua conta em <a href='{{config.baseurl}}'>{{config.title}}</a> foi confirmada. Escreva para nós em {{config.admin_email}} para qualquer informação.",
+        "content": "Olá, sua conta em <a href='{{{config.baseurl}}}'>{{config.title}}</a> foi confirmada. Escreva para nós em {{config.admin_email}} para qualquer informação.",
         "subject": "Agora você pode começar a publicar eventos"
     },
     "event_confirm": {
@@ -16,15 +16,15 @@
     },
     "user_confirm": {
         "subject": "Agora você pode começar a publicar eventos",
-        "content": "Olá, sua conta em <a href='{{config.baseurl}}'>{{config.title}}</a> foi criada. <a href='{{config.baseurl}}/user_confirm/{{user.recover_code}}'>Confirme-a e escolha uma senha.</a>."
+        "content": "Olá, sua conta em <a href='{{{config.baseurl}}}'>{{config.title}}</a> foi criada. <a href='{{{config.baseurl}}}/user_confirm/{{user.recover_code}}'>Confirme-a e escolha uma senha.</a>."
     },
     "admin_register": {
         "subject": "Novo registro",
-        "content": "{{user.email}} solicitou o registro em {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confirme seu registro <a href='{{config.baseurl}}/admin'>aqui</a>."
+        "content": "{{user.email}} solicitou o registro em {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confirme seu registro <a href='{{{config.baseurl}}}/admin'>aqui</a>."
     },
     "recover": {
         "subject": "Recuperação de senha",
-        "content": "Olá, você solicitou a recuperação de senha em {{config.title}}. <a href='{{config.baseurl}}/recover/{{user.recover_code}}'>Clique aqui</a> para confirmar."
+        "content": "Olá, você solicitou a recuperação de senha em {{config.title}}. <a href='{{{config.baseurl}}}/recover/{{user.recover_code}}'>Clique aqui</a> para confirmar."
     },
     "report": {
         "content_ADMIN": "Uma admin comentou sobre o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderação aberta</a>",
