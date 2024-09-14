@@ -7,6 +7,13 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### [1.19.1](https://framagit.org/les/gancio/compare/v1.19.0...v1.19.1) (2024-09-13)
+
+
+### Bug Fixes
+
+* i18n in email-templates is using handlebars that in some release escapes url in interpolation, fix [#442](https://framagit.org/les/gancio/issues/442) ([1ef0bb2](https://framagit.org/les/gancio/commit/1ef0bb20a4adde7e664d2ca37b5d33a82d92e7ef))
+
 
 ## [1.19.0](https://framagit.org/les/gancio/compare/v1.18.1...v1.19.0) (2024-08-21)
 
