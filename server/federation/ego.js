@@ -5,8 +5,8 @@ const log = require('../log')
 module.exports = {
   async boost (req, res) {
     if (typeof req.body?.object !== 'string') {
-      log.debug('[FEDI] Igonre Boost for a whole object? %s', JSON.stringify(req.body?.object))
-      return res.status(404).send('?')
+      log.debug('[FEDI] Ignore Announce for a whole object (Announce are currently supported for internal events only): %s', JSON.stringify(req.body?.object))
+      return res.status(404).send('Announce is supported for internal events only')
     }
     const match = req.body?.object?.match(`${config.baseurl}/federation/m/(.*)`)
     if (!match || match.length < 2) {
