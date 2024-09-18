@@ -545,6 +545,9 @@ const eventController = {
       // create/assign tags
       let tags = []
       if (body.tags) {
+        if (!Array.isArray(body.tags)) {
+          return res.status(400).send('tags field must be an array')
+        }
         tags = await tagController._findOrCreate(body.tags)
         await event.setTags(tags)
       }
@@ -691,6 +694,9 @@ const eventController = {
       // create/assign tags
       let tags = []
       if (body.tags) {
+        if (!Array.isArray(body.tags)) {
+          return res.status(400).send('tags field must be an array')
+        }
         tags = await tagController._findOrCreate(body.tags)
       }
       await event.setTags(tags)

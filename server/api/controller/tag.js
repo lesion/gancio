@@ -11,7 +11,7 @@ module.exports = {
 
   async _findOrCreate (tags) {
     // trim tags
-    const trimmedTags = tags.map(t => t.trim())
+    const trimmedTags = tags?.map(t => t.trim())
 
     // search for already existing tags (case insensitive, note that LOWER sql function is not the same as toLocaleLowerCase due to #329)
     const existingTags = await sequelize.query(`SELECT * FROM ${escapeCol('tags')} where LOWER(${escapeCol('tag')}) in (${tags.map(t => 'LOWER(?)').join(',')})`,
