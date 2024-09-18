@@ -13,6 +13,7 @@ Is it possible to modify the style by integrating some custom css in `Admin > Th
 Don't imagine you can accomplish miracles because the templates are not designed to be easily modified,
 but don't be afraid to [open an issue](https://framagit.org/les/gancio/-/issues) or even better a PR to add some css selectors or some usage examples to this page.
 
+Also that for every element you want to change the style to, you need to overload the style already there: css has an order to choose which one to use, in case of conflict the more specific selector win (or you need to specify !important).
 
 ### Remove navbar
 ```css
@@ -21,5 +22,15 @@ but don't be afraid to [open an issue](https://framagit.org/les/gancio/-/issues)
 }
 ```
 
+### Fixed footer
+```css
+footer.v-footer {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+}
+```
+
 > info "References"
 > [#413](https://framagit.org/les/gancio/-/issues/413)
+> [#451](https://framagit.org/les/gancio/-/issues/451)
