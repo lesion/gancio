@@ -962,7 +962,7 @@ const eventController = {
     const show_recurrent = settings.allow_recurrent_event && helpers.queryParamToBool(req.query.show_recurrent, settings.recurrent_event_visible)
 
     let events = []
-    if (settings.collection_in_home && !(tags || places)) {
+    if (settings.collection_in_home && !(tags || places || query)) {
       events = await collectionController._getEvents({
         name: settings.collection_in_home,
         start,
