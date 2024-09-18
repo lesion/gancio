@@ -72,13 +72,15 @@ module.exports = {
    * sorted by usage
   */
   async search (req, res) {
-    const search = req.query.search
+    const search = req?.query?.search
+    let where = { }
+    if (search) {
+      where = { tag: { [Op.like]: `%${search}%` } }
+    }
     const tags = await Tag.findAll({
       order: [[fn('COUNT', col('tag.tag')), 'DESC']],
       attributes: ['tag'],
-      where: {
-        tag: { [Op.like]: `%${search}%` }
-      },
+      where,
       include: [{ model: Event, where: { is_visible: true }, attributes: [], through: { attributes: [] }, required: true }],
       group: ['tag.tag'],
       limit: 10,
