@@ -177,6 +177,9 @@ export default {
       disableAddress: false
     }
   },
+  mounted () {
+    this.$nextTick( async () => this.tags = await this.$axios.$get('/tag') )
+  },
   head() {
     return {
       title: `${this.settings.title} - ${this.$t('common.add_event')}`

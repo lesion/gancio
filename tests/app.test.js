@@ -401,6 +401,16 @@ describe('Tags', () => {
     expect(event.body.tags).toStrictEqual(['ciao'])
   })
 
+  test('should not allow non-array tags field', async () => {
+    const response = await request(app).post('/api/event')
+      .send({ title: 'test non-array tags', place_id: places[1], start_datetime: dayjs().unix() + 1000, tags: 'Tag1' })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(400)
+
+    expect(response.text).toBe('tags field must be an array')
+
+  })
+
   test('should create event trimming tags / ignore sensitiviness', async () => {
     const ret = await request(app).post('/api/event')
       .send({ title: 'test trimming tags', place_id: places[1], start_datetime: dayjs().unix() + 1000, tags: ['Tag1', 'taG2 '] })
@@ -477,7 +487,7 @@ describe('Place', () => {
       .expect(200)
 
     expect(response.body.place.name).toBe('place name 2')
-    expect(response.body.events.length).toBe(3)
+    expect(response.body.events.length).toBe(4)
     expect(response.body.events[0].place.name).toBe('place name 2')
   })
 

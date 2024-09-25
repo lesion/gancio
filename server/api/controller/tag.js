@@ -11,7 +11,7 @@ module.exports = {
 
   async _findOrCreate (tags) {
     // trim tags
-    const trimmedTags = tags.map(t => t.trim())
+    const trimmedTags = tags?.map(t => t.trim())
 
     // search for already existing tags (case insensitive, note that LOWER sql function is not the same as toLocaleLowerCase due to #329)
     const existingTags = await sequelize.query(`SELECT * FROM ${escapeCol('tags')} where LOWER(${escapeCol('tag')}) in (${tags.map(t => 'LOWER(?)').join(',')})`,
@@ -72,13 +72,15 @@ module.exports = {
    * sorted by usage
   */
   async search (req, res) {
-    const search = req.query.search
+    const search = req?.query?.search
+    let where = { }
+    if (search) {
+      where = { tag: { [Op.like]: `%${search}%` } }
+    }
     const tags = await Tag.findAll({
       order: [[fn('COUNT', col('tag.tag')), 'DESC']],
       attributes: ['tag'],
-      where: {
-        tag: { [Op.like]: `%${search}%` }
-      },
+      where,
       include: [{ model: Event, where: { is_visible: true }, attributes: [], through: { attributes: [] }, required: true }],
       group: ['tag.tag'],
       limit: 10,
