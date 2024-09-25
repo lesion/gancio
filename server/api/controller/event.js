@@ -747,8 +747,6 @@ const eventController = {
         await Resource.destroy({ where: { eventId: event.id }})
         await EventNotification.destroy({ where: { eventId: event.id }})
         
-        // and finally remove the event
-        await event.destroy()
       } catch (e) {
         console.error(e)
       }
@@ -757,7 +755,7 @@ const eventController = {
 
       // notify local events only
       if (!event.ap_id) {
-        notifier.notifyEvent('Delete', event.id)
+        notifier.notifyEvent('Delete', event.id).finally(() => event.destroy())
       }
 
 

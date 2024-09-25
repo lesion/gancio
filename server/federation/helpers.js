@@ -4,7 +4,7 @@ const config = require('../config')
 const httpSignature = require('@peertube/http-signature')
 const { APUser, Instance, Event } = require('../api/models/models')
 const dayjs = require('dayjs')
-
+const { Task, TaskManager } = require('../taskManager')
 const url = require('url')
 const settingsController = require('../api/controller/settings')
 const log = require('../log')
@@ -165,7 +165,13 @@ const Helpers = {
             "@id": "toot:focalPoint"
           }
         }]
-      await Helpers.signAndSend(JSON.stringify(body), sharedInbox)
+        const task = new Task({
+          name: 'AP',
+          method: Helpers.signAndSend,
+          args: [JSON.stringify(body), sharedInbox]
+        })
+        TaskManager.add(task)
+    
     }
   },
 
