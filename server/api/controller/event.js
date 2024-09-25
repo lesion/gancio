@@ -731,11 +731,6 @@ const eventController = {
         }
       }
 
-      // notify local events only
-      if (!event.ap_id) {
-        await notifier.notifyEvent('Delete', event.id)
-      }
-
       // unassociate child events
       if (event.recurrent) {
         await Event.update({ parentId: null }, { where: { parentId: event.id } })
@@ -753,6 +748,13 @@ const eventController = {
       }
 
       res.sendStatus(200)
+
+      // notify local events only
+      if (!event.ap_id) {
+        notifier.notifyEvent('Delete', event.id)
+      }
+
+
     } else {
       res.sendStatus(403)
     }
