@@ -7,6 +7,18 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### [1.19.2](https://framagit.org/les/gancio/compare/v1.19.1...v1.19.2) (2024-09-25)
+
+
+### Bug Fixes
+
+* add custom css documentation on fixed footer, fix [#451](https://framagit.org/les/gancio/issues/451) ([0f2d51b](https://framagit.org/les/gancio/commit/0f2d51bec49226411139c2888483d11794b33c93))
+* avoid collection in home usage on query, fix [#458](https://framagit.org/les/gancio/issues/458) ([1c8eb72](https://framagit.org/les/gancio/commit/1c8eb72ad171e8b627f4d9d3153ca3904312e6df))
+* do not wait for Delete notification ([65ba705](https://framagit.org/les/gancio/commit/65ba7054fb5f0572cdfc7082a6fa2eec3550fbb7))
+* show frequent tags by default when filling tags without typing, fix [#452](https://framagit.org/les/gancio/issues/452) ([ad014db](https://framagit.org/les/gancio/commit/ad014db451bd09c62a5f7320681d9bd8f062f95d))
+* validate tag, fix [#464](https://framagit.org/les/gancio/issues/464) ([c693007](https://framagit.org/les/gancio/commit/c693007fc40709337b59f3a46909a6e93a748b31))
+
+
 ### [1.19.1](https://framagit.org/les/gancio/compare/v1.19.0...v1.19.1) (2024-09-13)
 
 
