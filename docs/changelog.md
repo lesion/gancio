@@ -7,6 +7,13 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### [1.19.3](https://framagit.org/les/gancio/compare/v1.19.2...v1.19.3) (2024-09-25)
+
+### Bug Fixes
+
+* send AP event with task manager, fix destroy event ([9f438d9](https://framagit.org/les/gancio/commit/9f438d97fc166fdf65dc3a7ed8bd2a69115ed357))
+
+
 ### [1.19.2](https://framagit.org/les/gancio/compare/v1.19.1...v1.19.2) (2024-09-25)
 
 
