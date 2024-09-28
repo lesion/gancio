@@ -73,7 +73,10 @@ export default {
   computed: mapState(['settings']),
   watch: {
     'smtp.secure' (value) {
-      this.smtp.port = value ? 465 : 587
+      console.error(this.smtp.port)
+      if ([465, 587].includes(this.smtp.port) || !this.smtp.port) {
+        this.smtp.port = value ? 465 : 587
+      }
     }
   },
   methods: {
