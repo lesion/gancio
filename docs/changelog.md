@@ -7,6 +7,14 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### [1.19.4](https://framagit.org/les/gancio/compare/v1.19.3...v1.19.4) (2024-09-28)
+
+
+### Bug Fixes
+
+* do not update SMTP port on user custom port, fix [#471](https://framagit.org/les/gancio/issues/471) ([f9d9bad](https://framagit.org/les/gancio/commit/f9d9badd24ab78dd22b2afd783f666368a034746))
+* really fix [#419](https://framagit.org/les/gancio/issues/419), include federated events when query is specified ([412f8cc](https://framagit.org/les/gancio/commit/412f8cc5f0a891ed8115b69fd040c0ba1f56a6bb))
+
 ### [1.19.3](https://framagit.org/les/gancio/compare/v1.19.2...v1.19.3) (2024-09-25)
 
 ### Bug Fixes
