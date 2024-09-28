@@ -19,6 +19,7 @@ config/development.json
 thumb
 docs/_site
 .vscode
+package
 
 ### Node template
 # Logs

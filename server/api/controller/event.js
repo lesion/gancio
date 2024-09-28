@@ -786,13 +786,15 @@ const eventController = {
     include_description=false }) {
 
     const where = {
-
-      apUserApId: null,
-
       [Op.or]: {
         start_datetime: { [older ? Op.lte : Op.gte]: start },
         end_datetime: { [older ? Op.lte : Op.gte]: start }
       }
+    }
+
+    // do not include federated events in homepage
+    if (!query) {
+      where.apUserApId = null
     }
 
     if (user_id) {
