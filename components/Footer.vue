@@ -8,7 +8,7 @@ v-footer(aria-label='Footer')
     :key='link.label' color='primary' text
     :href='link.href' :to='link.to' :target="link.href && '_blank'") {{link.label}}
 
-  v-menu(v-if='settings.enable_trusted_instances && trusted_instances?.length'
+  v-menu(v-if='settings.enable_federation && settings.enable_trusted_instances && trusted_instances?.length'
     offset-y bottom open-on-hover transition="slide-y-transition")
     template(v-slot:activator="{ on, attrs }")
       v-btn.ml-1(v-bind='attrs' v-on='on' color='primary' text) {{ settings.trusted_instances_label || $t('admin.trusted_instances_label_default')}}
