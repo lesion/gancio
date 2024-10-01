@@ -16,7 +16,8 @@ but don't be afraid to [open an issue](https://framagit.org/les/gancio/-/issues)
 
 ## Examples:
 
-### Integrate Plausible
+### Integrate Plausible ([https://plausible.io/](https://plausible.io/))
+
 ```js
 var script = document.createElement('script');
 script.defer = true;
@@ -25,8 +26,16 @@ script.dataset.domain = "yourdomain.com";
 
 document.getElementsByTagName('head')[0].appendChild(script);
 ```
+### Integrate Umami ([https://umami.is/](https://umami.is/))
 
+```js
+    var el = document.createElement('script');
+    el.setAttribute('src', 'http://mywebsite.com/umami.js');
+    el.setAttribute('data-website-id', 'your-website-id-string-of-numbers');
+    document.body.appendChild(el);
+```
 
 > info "References"
 > [#413](https://framagit.org/les/gancio/-/issues/413), [#320](https://framagit.org/les/gancio/-/issues/320)
+[#467](https://framagit.org/les/gancio/-/issues/467)
 
