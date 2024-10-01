@@ -36,6 +36,5 @@ document.body.appendChild(el);
 ```
 
 > info "References"
-> [#413](https://framagit.org/les/gancio/-/issues/413), [#320](https://framagit.org/les/gancio/-/issues/320)
-[#467](https://framagit.org/les/gancio/-/issues/467)
+> [#413](https://framagit.org/les/gancio/-/issues/413), [#320](https://framagit.org/les/gancio/-/issues/320), [#467](https://framagit.org/les/gancio/-/issues/467)
 
