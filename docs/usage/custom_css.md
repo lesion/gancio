@@ -22,13 +22,35 @@ Also note that for every element you want to change the style to, you need to ov
 }
 ```
 
+### Fixed navbar
+```css
+/* fixed navbar */
+nav {
+ margin-top: 80px;
+}
+
+nav > div:first-of-type {
+ position: fixed;
+ width: 100%;
+ top: 0px;
+ z-index: 1;
+ background-color: #272727;
+}
+
+```
+
 ### Fixed footer
 ```css
+/* fixed footer */
 footer.v-footer {
   position: fixed;
   bottom: 0px;
   width: 100%;
 }
+
+div.v-application--wrap {
+  margin-bottom: 48px;
+} 
 ```
 
 > info "References"

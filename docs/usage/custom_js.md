@@ -29,10 +29,10 @@ document.getElementsByTagName('head')[0].appendChild(script);
 ### Integrate Umami ([https://umami.is/](https://umami.is/))
 
 ```js
-    var el = document.createElement('script');
-    el.setAttribute('src', 'http://mywebsite.com/umami.js');
-    el.setAttribute('data-website-id', 'your-website-id-string-of-numbers');
-    document.body.appendChild(el);
+var el = document.createElement('script');
+el.setAttribute('src', 'http://mywebsite.com/umami.js');
+el.setAttribute('data-website-id', 'your-website-id-string-of-numbers');
+document.body.appendChild(el);
 ```
 
 > info "References"
