@@ -60,7 +60,6 @@ describe('Nodeinfo', () => {
     const response = await request(app).get('/.well-known/nodeinfo')
       .expect('Content-Type', /application\/json/)
       .expect(200)
-
   })
 
   test('shoud support nodeinfo 2.0 and 2.1', async () => {
@@ -77,6 +76,40 @@ describe('Nodeinfo', () => {
       .expect(200)
       expect(response.body.links.find(l => l.rel === 'https://www.w3.org/ns/activitystreams#Application').href).toBe('http://localhost:13120/federation/u/relay')
   })
+})
 
+describe('Webfinger', () => {
+  test('should return a 404 on bad request', () => {
+    request(app).get('/.well-known/webfinger')
+      .expect(400)
+  })
 
+  test('should return webfinger response', async () => {
+    const response = await request(app).get('/.well-known/webfinger?resource=acct:relay@localhost:13120')
+      .expect(200)
+      .expect('Content-Type', 'application/jrd+json; charset=utf-8')
+    
+    expect(response.body.subject).toBe('acct:relay@localhost:13120')
+  })
+})
+
+describe('AP', () => {
+  test('should return the AP Actor', async () => {
+    const response = await request(app).get('/federation/u/relay')
+      .expect(200)
+      .expect('Content-Type', /json/)
+
+    expect(response.body.type).toBe('Application')
+  })
+
+  // test('should not allow to create a new Event from a random instance', async () => {
+  //   const response = await request(app)
+  //     .post('/federation/u/relay/inbox')
+  //     .send({
+  //       actor: 'http://localhost:13120/federation/u/relay'
+  //     })
+  //     .expect(401)
+
+  //   console.error(response)
+  // })
 })
