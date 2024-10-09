@@ -320,7 +320,7 @@ module.exports = {
       const event = await eventController._get(req.params.slug)
       if (event) {
         log.debug('[FEDI] APRedirect for %s', event.title)
-        return res.redirect(`/federation/m/${event.id}`)
+        return res.redirect(event?.ap_id ?? `/federation/m/${event.id}`)
       }
       log.warn('[FEDI] Accept JSON but event not found: %s', req.params.slug)
     }
