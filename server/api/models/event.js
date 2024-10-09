@@ -72,7 +72,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     return {
-      id: `${config.baseurl}/federation/m/${this.id}`,
+      id: this?.ap_id ?? `${config.baseurl}/federation/m/${this.id}`,
       name: this.title,
       url: `${config.baseurl}/event/${this.slug || this.id}`,
       type: 'Event',
