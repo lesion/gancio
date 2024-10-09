@@ -45,7 +45,12 @@ router.get('/webfinger', allowFederation, (req, res) => {
         rel: 'self',
         type: 'application/activity+json',
         href: `${settings.baseurl}/federation/u/${name}`
-      }
+      },
+      {
+        "href" : settings.baseurl + '/logo.png',
+        "rel" : "http://webfinger.net/rel/avatar",
+        "type" : "image/png"
+     }
     ]
   }
   res.set('Content-Type', 'application/jrd+json')
