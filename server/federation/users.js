@@ -65,7 +65,7 @@ module.exports = {
         owner: `${config.baseurl}/federation/u/${name}`,
         publicKeyPem: settings.publicKey
       },
-      url: config.baseurl,
+      url: `${config.baseurl}/federation/u/${name}`
     }
     res.type('application/activity+json; charset=utf-8')
     res.json(ret)
