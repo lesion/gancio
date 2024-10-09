@@ -7,6 +7,17 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+### [1.19.5](https://framagit.org/les/gancio/compare/v1.19.4...v1.19.5) (2024-10-09)
+
+
+### Bug Fixes
+
+* add avatar in webfinger response ([82079ae](https://framagit.org/les/gancio/commit/82079ae4b24e4a0e796d3bb2af3f2227620fdffb))
+* behavior when clicking a Gancio AP handle in Mastodon, fix [#470](https://framagit.org/les/gancio/issues/470) ([8082e46](https://framagit.org/les/gancio/commit/8082e46a4694ae7c1258e5fff57d597b6314c5a7))
+* disable trusted instances in footer when federation is disabled ([efd928d](https://framagit.org/les/gancio/commit/efd928da9538a730ba090944610e362732050189))
+* redirect to original ap_id, fix [#472](https://framagit.org/les/gancio/issues/472) ([9c721e1](https://framagit.org/les/gancio/commit/9c721e1164b0dff8759a7981dbd733fcbfedd24e))
+* use correct content-type for webfinger response ([daa12f5](https://framagit.org/les/gancio/commit/daa12f5123984a4ac6bfee5805d6bdde046de4a7))
+* use original ap_id as id in AP representation, ref [#472](https://framagit.org/les/gancio/issues/472) ([74af4b4](https://framagit.org/les/gancio/commit/74af4b4e311cd3548358363675995fcce3de37ce))
 ### [1.19.4](https://framagit.org/les/gancio/compare/v1.19.3...v1.19.4) (2024-09-28)
 
 
