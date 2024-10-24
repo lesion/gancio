@@ -1,1 +1,35 @@
-{}
+{
+    "user_confirm": {
+        "subject": "Цяпер вы можаце пачаць публікацыю падзеі",
+        "content": "Прывітанне, ваш уліковы запіс на <a href='{{{config.baseurl}}}'>{{config.title}}</a> быў створаны. <a href='{{{config.baseurl}}}/user_confirm/{{user.recover_code}}'>Пацвердзіце гэта і стварыце пароль.</a>."
+    },
+    "report": {
+        "subject": "Мадэрацыя мерапрыемства [{{event.title}}]",
+        "content_ANON": "Наведвальнік паведаміў пра падзею <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Адкрыць мадэрацыю</a>",
+        "content_ADMIN": "Адміністратар пракаментаваў падзею <strong>{{event.title}}</strong><br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Адкрыць мадэрацыю</a>",
+        "content_AUTHOR": "Аўтар падзеі <strong>{{event.title}}</strong> напісаў:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Адкрыць мадэрацыю</a>"
+    },
+    "register": {
+        "subject": "Атрыманы запыт на рэгістрацыю",
+        "content": "Мы атрымалі запыт на рэгістрацыю. Мы пацвердзім гэта як мага хутчэй."
+    },
+    "confirm": {
+        "subject": "Цяпер вы можаце пачаць публікацыю падзей",
+        "content": "Прывітанне, ваш уліковы запіс на <a href='{{{config.baseurl}}}'>{{config.title}}</a> быў пацверджаны. Пішыце нам на {{config.admin_email}} па любых пытаннях."
+    },
+    "recover": {
+        "subject": "Аднаўленне пароля",
+        "content": "Прывітанне, вы запыталі аднаўленне пароля на {{config.title}}. <a href='{{{config.baseurl}}}/recover/{{user.recover_code}}'>Націсніце тут</a>, каб пацвердзіць."
+    },
+    "admin_register": {
+        "subject": "Новая рэгістрацыя",
+        "content": "{{user.email}} запытаў рэгістрацыю на {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Пацвердзіце гэта <a href='{{ {config.baseurl}}}/admin'>тут</a>."
+    },
+    "event_confirm": {
+        "content": "Вы можаце пацвердзіць гэту падзею на <a href='{{url}}'>гэтай старонцы</a>"
+    },
+    "test": {
+        "subject": "Ваша канфігурацыя SMTP працуе",
+        "content": "Гэта тэставы ліст, калі вы яго чытаеце, ваша канфігурацыя працуе."
+    }
+}
