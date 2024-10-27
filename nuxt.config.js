@@ -91,7 +91,7 @@ module.exports = {
       name: locales[key],
       file: `${key}.json`,
       file: 'loader.js',
-      iso: key
+      language: key
     })),
     vueI18n: {
       fallbackLocale: 'en',

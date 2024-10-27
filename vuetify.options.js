@@ -1,5 +1,5 @@
 const minifyTheme = require('minify-css-string').default
-import { ca, cs, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, tr, sk, sv, ro, ru, zhHans  } from 'vuetify/es5/locale'
+import { be, ca, cs, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, tr, sk, sv, ro, ru, zhHans  } from 'vuetify/es5/locale'
 
 export default ({ res, nuxtState }) => {
 
@@ -7,7 +7,7 @@ export default ({ res, nuxtState }) => {
   const is_dark = nuxtState?.state?.localSettings['theme.is_dark'] ?? settings['theme.is_dark']
 
   return {
-    lang: { locales: { ca, cs, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, sv, tr, ro, ru, zhHans } },
+    lang: { locales: { be, ca, cs, de, en, es, eu, fr, gl, it, nb, nl, pl, pt, sk, sv, tr, ro, ru, zhHans } },
     theme: {
       options: {
         customProperties: false,
