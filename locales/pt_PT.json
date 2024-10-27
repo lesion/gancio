@@ -199,7 +199,8 @@
         "follow_me_description": "Uma das maneiras de se manter atualizado com os eventos publicados aqui em {title},\né seguir a conta <u>{account}</u> no Fediverso, por exemplo, via Mastodon, e possivelmente adicionar recursos para um evento a partir de lá.<br/><br/>\nSe nunca ouviu falar sobre Mastodon ou no Fediverso nós recomendamos ler <a href='https://www.savjee.be/videos/simply-explained/mastodon-and-fediverse-explained/'>este artigo</a>.<br/><br/>Entre com o seu domínio abaixo (e.g. mastodon.social)",
         "import_URL": "Importar a partir de URL",
         "import_description": "Pode importar eventos de outras plataformas e de outros domínios via formatos padrão (ICS e H-Event)",
-        "address_geocoded_disclaimer": "Se não conseguir encontrar o <strong>endereço da rua</strong> ou a <strong>porta da casa</strong> que procura nos resultados da geocodificação, pode inseri-los manualmente no campo “Endereço” sem perder as coordenadas. Considere também que o projeto <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> está aberto a contribuições. Se tiver Android, recomendamos o <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a>. "
+        "address_geocoded_disclaimer": "Se não conseguir encontrar o <strong>endereço da rua</strong> ou a <strong>porta da casa</strong> que procura nos resultados da geocodificação, pode inseri-los manualmente no campo “Endereço” sem perder as coordenadas. Considere também que o projeto <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> está aberto a contribuições. Se tiver Android, recomendamos o <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a>. ",
+        "online_locations_help": "URL de uma sala de videoconferência ou URL de RSVP (máx. 3)"
     },
     "admin": {
         "user_create_ok": "Usuário criado",
@@ -330,7 +331,11 @@
         "hide_resource": "Ocultar recurso",
         "delete_resource": "Remover recurso",
         "block_user": "Bloquear usuário",
-        "config_plugin": "Configuração da extensão"
+        "config_plugin": "Configuração da extensão",
+        "custom_js": "Código Javascript Personalizado",
+        "custom_css": "Estilo CSS Personalizado",
+        "custom_js_help": "Pode integrar algum código javascript que será carregado para cada utilizador, escrevendo nesta área de texto abaixo. Provavelmente deseja ler primeiro a <a href='https://gancio.org/usage/custom_js'>documentação</a>.",
+        "custom_css_help": "Também pode personalizar algumas folhas de estilo, leia alguns exemplos <a href='https://gancio.org/usage/custom_css'>aqui</a>."
     },
     "settings": {
         "password_updated": "Senha alterada.",
