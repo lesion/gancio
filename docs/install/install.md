@@ -14,6 +14,7 @@ has_toc: false
 ## Install
 
 - [Install on Debian]({% link install/debian.md %})
+- [Install on NixOS]({% link install/nixos.md %})
 - [Install using Docker]({% link install/docker.md %})
 - [Install using YunoHost](https://apps.yunohost.org/app/gancio)
 
