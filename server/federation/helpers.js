@@ -165,6 +165,7 @@ const Helpers = {
             "@id": "toot:focalPoint"
           }
         }]
+        body.object.tag.push({type: 'Hashtag', name: config.default_fedi_hashtag, href: `/tags/${config.default_fedi_hashtag}`})
         const task = new Task({
           name: 'AP',
           method: Helpers.signAndSend,

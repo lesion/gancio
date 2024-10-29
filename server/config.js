@@ -10,6 +10,7 @@ let config = {
     host: process.env.GANCIO_HOST || '0.0.0.0',
     port: process.env.GANCIO_PORT || 13120
   },
+  default_fedi_hashtag: '',
   log_level: 'debug',
   log_path: path.resolve(process.env.cwd || '', 'logs'),
   db: {},
