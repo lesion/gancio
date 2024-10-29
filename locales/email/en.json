@@ -20,7 +20,7 @@
         "content": "{{user.email}} has requested registration on {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confirm it <a href='{{{config.baseurl}}}/admin'>here</a>."
     },
     "event_confirm": {
-        "content": "You can confirm this event at <a href='{{url}}'>this page</a>"
+        "content": "You can confirm this event at <a href='{{{url}}}'>this page</a>"
     },
     "test": {
         "subject": "Your SMTP configuration is working",
@@ -28,8 +28,8 @@
     },
     "report": {
         "subject": "Event moderation [{{event.title}}]",
-        "content_ADMIN": "An admin commented about the event <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Open moderation</a>",
-        "content_ANON": "A visitor reported the event <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Open moderation</a>",
-        "content_AUTHOR": "The author of event <strong>{{event.title}}</strong> wrote:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Open moderation</a>"
+        "content_ADMIN": "An admin commented about the event <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Open moderation</a>",
+        "content_ANON": "A visitor reported the event <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Open moderation</a>",
+        "content_AUTHOR": "The author of event <strong>{{event.title}}</strong> wrote:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Open moderation</a>"
     }
 }
