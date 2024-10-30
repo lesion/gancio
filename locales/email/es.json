@@ -23,16 +23,16 @@
         "content": "{{user.email}} ha pedido registrarse en {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confírmalo <a href='{{{config.baseurl}}}/admin'>aquí</a>."
     },
     "event_confirm": {
-        "content": "Puede confirmar este evento <a href='{{url}}'>aquí</a>"
+        "content": "Puede confirmar este evento <a href='{{{url}}}'>aquí</a>"
     },
     "test": {
         "subject": "Tu configuración SMTP funciona",
         "content": "Esto es un email de prueba. Si estás leyendo esto es que tu configuración funciona."
     },
     "report": {
-        "content_ADMIN": "Un administrador comentó sobre el evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderación abierta</a>",
-        "content_AUTHOR": "El autor del evento <strong>{{event.title}}</strong> escribió:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderación abierta</a>",
+        "content_ADMIN": "Un administrador comentó sobre el evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Moderación abierta</a>",
+        "content_AUTHOR": "El autor del evento <strong>{{event.title}}</strong> escribió:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Moderación abierta</a>",
         "subject": "Moderación de eventos [{{event.title}}]",
-        "content_ANON": "Un visitante ha informado del evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderación abierta</a>"
+        "content_ANON": "Un visitante ha informado del evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Moderación abierta</a>"
     }
 }

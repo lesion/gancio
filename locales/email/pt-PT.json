@@ -1,9 +1,9 @@
 {
     "report": {
         "subject": "Moderação de evento [{{event.title}}]",
-        "content_ADMIN": "Um admin comentou sobre o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderação aberta</a>",
-        "content_ANON": "Um visitante reportou o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderação aberta</a>",
-        "content_AUTHOR": "O autor do evento <strong>{{event.title}}</strong> escreveu:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderação aberta</a>"
+        "content_ADMIN": "Um admin comentou sobre o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Moderação aberta</a>",
+        "content_ANON": "Um visitante reportou o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Moderação aberta</a>",
+        "content_AUTHOR": "O autor do evento <strong>{{event.title}}</strong> escreveu:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Moderação aberta</a>"
     },
     "register": {
         "subject": "Pedido de registo recebido",
@@ -26,7 +26,7 @@
         "content": "{{user.email}} pediu o registo em {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Confirme <a href='{{{config.baseurl}}}/admin'>aqui</a>."
     },
     "event_confirm": {
-        "content": "Pode confirmar este evento <a href='{{url}}'>nesta página</a>"
+        "content": "Pode confirmar este evento <a href='{{{url}}}'>nesta página</a>"
     },
     "test": {
         "subject": "A sua configuração SMTP funciona",

@@ -20,7 +20,7 @@
         "content": "{{user.email}} si vyžiadal registráciu na {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Potvrďte ju <a href='{{{config.baseurl}}}/admin'>tu</a>."
     },
     "event_confirm": {
-        "content": "Potvrdiť podujatie môžete na <a href='{{url}}'>tejto stránke</a>"
+        "content": "Potvrdiť podujatie môžete na <a href='{{{url}}}'>tejto stránke</a>"
     },
     "test": {
         "subject": "Vaša SMTP konfigurácia funguje",

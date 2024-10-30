@@ -20,7 +20,7 @@
         "content": "{{user.email}} ha soŀlicitat registrar-se a {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Respon a la soŀlicitud <a href='{{{config.baseurl}}}/admin'>aquí</a>."
     },
     "event_confirm": {
-        "content": "Pots confirmar aquesta activitat a <a href='{{url}}'>la pàgina de confirmació</a>"
+        "content": "Pots confirmar aquesta activitat a <a href='{{{url}}}'>la pàgina de confirmació</a>"
     },
     "test": {
         "subject": "La configuració SMTP funciona",
@@ -28,8 +28,8 @@
     },
     "report": {
         "subject": "Moderació d'activitats [{{event.title}}]",
-        "content_AUTHOR": "L'autori de l'activitat <strong>{{event.title}}</strong> ha escrit:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Obre la pàgina de moderació</a>",
-        "content_ANON": "Uni visitant ha denunciat aquesta activitat <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Obre la pàgina de moderació</a>",
-        "content_ADMIN": "Uni admin ha comentat l'activitat <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Obre la pàgina de moderació</a>"
+        "content_AUTHOR": "L'autori de l'activitat <strong>{{event.title}}</strong> ha escrit:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Obre la pàgina de moderació</a>",
+        "content_ANON": "Uni visitant ha denunciat aquesta activitat <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Obre la pàgina de moderació</a>",
+        "content_ADMIN": "Uni admin ha comentat l'activitat <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Obre la pàgina de moderació</a>"
     }
 }

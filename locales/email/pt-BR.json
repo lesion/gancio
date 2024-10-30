@@ -8,7 +8,7 @@
         "subject": "Agora você pode começar a publicar eventos"
     },
     "event_confirm": {
-        "content": "Você pode confirmar este evento <a href='{{url}}'>nesta página</a>"
+        "content": "Você pode confirmar este evento <a href='{{{url}}}'>nesta página</a>"
     },
     "test": {
         "subject": "Sua configuração SMTP está funcionando",
@@ -27,9 +27,9 @@
         "content": "Olá, você solicitou a recuperação de senha em {{config.title}}. <a href='{{{config.baseurl}}}/recover/{{user.recover_code}}'>Clique aqui</a> para confirmar."
     },
     "report": {
-        "content_ADMIN": "Uma admin comentou sobre o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderação aberta</a>",
-        "content_AUTHOR": "A autora do evento <strong>{{event.title}}</strong> escreveu:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderação aberta</a>",
+        "content_ADMIN": "Uma admin comentou sobre o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Moderação aberta</a>",
+        "content_AUTHOR": "A autora do evento <strong>{{event.title}}</strong> escreveu:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Moderação aberta</a>",
         "subject": "Moderação de evento [{{event.title}}]",
-        "content_ANON": "Uma visitante reportou o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Moderação aberta</a>"
+        "content_ANON": "Uma visitante reportou o evento <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Moderação aberta</a>"
     }
 }

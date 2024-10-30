@@ -12,10 +12,10 @@
         "subject": "Nieuwe registratie"
     },
     "report": {
-        "content_ADMIN": "Een administrator heeft commentaar gegeven over evenement <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Open commentaarn</a>",
+        "content_ADMIN": "Een administrator heeft commentaar gegeven over evenement <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Open commentaarn</a>",
         "subject": "Evenement moderator [{{event.title}}]",
-        "content_ANON": "Een bezoeker heeft het evenement <strong>{{event.title}}</strong>: gemeld<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Open commentaar</a>",
-        "content_AUTHOR": "De maker van evenement <strong>{{event.title}}</strong> schreef:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Open commentaar</a>"
+        "content_ANON": "Een bezoeker heeft het evenement <strong>{{event.title}}</strong>: gemeld<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Open commentaar</a>",
+        "content_AUTHOR": "De maker van evenement <strong>{{event.title}}</strong> schreef:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Open commentaar</a>"
     },
     "confirm": {
         "subject": "Je kunt vanaf nu evenementen publiceren",
@@ -26,7 +26,7 @@
         "content": "Hoi, jouw account op <a href='{{{config.baseurl}}}'>{{config.title}}</a> is aangemaakt. <a href='{{{config.baseurl}}}/user_confirm/{{user.recover_code}}'>Bevestig dit en stel een wachtwoord in.</a>."
     },
     "event_confirm": {
-        "content": "Bevestig het evenement op <a href='{{url}}'>deze pagina</a>"
+        "content": "Bevestig het evenement op <a href='{{{url}}}'>deze pagina</a>"
     },
     "test": {
         "subject": "Jouw SMTP configuratie werkt",
