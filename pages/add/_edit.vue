@@ -259,7 +259,7 @@ export default {
       formData.append('start_datetime', this.$time.fromDateInput(this.date.from, this.date.fromHour))
       if (!!this.date.multidate) {
         formData.append('end_datetime', this.$time.fromDateInput(this.date.due, this.date.dueHour || '23:59'))
-      } else if (this.date.dueHour) {
+      } else if (this.date.dueHour && this.date.due) {
         formData.append('end_datetime', this.$time.fromDateInput(this.date.due, this.date.dueHour))
       } else {
         formData.append('end_datetime', '')
