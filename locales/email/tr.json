@@ -24,6 +24,6 @@
         "subject": "SMTP ayarların çalışıyor"
     },
     "event_confirm": {
-        "content": "Bu etkinliği <a href='{{url}}'>bu sayfada</a> onaylayabilirsin"
+        "content": "Bu etkinliği <a href='{{{url}}}'>bu sayfada</a> onaylayabilirsin"
     }
 }

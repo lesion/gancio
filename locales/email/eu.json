@@ -20,7 +20,7 @@
         "content": "{{user.email}}-(e)k {{config.title}}-n izena ematea eskatu du: <br/><pre>{{user.description}}</pre><br/> Baieztatu ezazu horrela dela <a href='{{{config.baseurl}}}/admin'>hemen</a>."
     },
     "event_confirm": {
-        "content": "Ekitaldi hau <a href='{{url}}'>hemen</a> baieztatu dezakezu"
+        "content": "Ekitaldi hau <a href='{{{url}}}'>hemen</a> baieztatu dezakezu"
     },
     "test": {
         "subject": "Zure SMTP konfigurazioa badabil",

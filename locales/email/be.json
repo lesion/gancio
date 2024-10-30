@@ -5,9 +5,9 @@
     },
     "report": {
         "subject": "Мадэрацыя мерапрыемства [{{event.title}}]",
-        "content_ANON": "Наведвальнік паведаміў пра падзею <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Адкрыць мадэрацыю</a>",
-        "content_ADMIN": "Адміністратар пракаментаваў падзею <strong>{{event.title}}</strong><br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Адкрыць мадэрацыю</a>",
-        "content_AUTHOR": "Аўтар падзеі <strong>{{event.title}}</strong> напісаў:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Адкрыць мадэрацыю</a>"
+        "content_ANON": "Наведвальнік паведаміў пра падзею <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Адкрыць мадэрацыю</a>",
+        "content_ADMIN": "Адміністратар пракаментаваў падзею <strong>{{event.title}}</strong><br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Адкрыць мадэрацыю</a>",
+        "content_AUTHOR": "Аўтар падзеі <strong>{{event.title}}</strong> напісаў:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Адкрыць мадэрацыю</a>"
     },
     "register": {
         "subject": "Атрыманы запыт на рэгістрацыю",
@@ -23,10 +23,10 @@
     },
     "admin_register": {
         "subject": "Новая рэгістрацыя",
-        "content": "{{user.email}} запытаў рэгістрацыю на {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Пацвердзіце гэта <a href='{{ {config.baseurl}}}/admin'>тут</a>."
+        "content": "{{user.email}} запытаў рэгістрацыю на {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Пацвердзіце гэта <a href='{{{config.baseurl}}}/admin'>тут</a>."
     },
     "event_confirm": {
-        "content": "Вы можаце пацвердзіць гэту падзею на <a href='{{url}}'>гэтай старонцы</a>"
+        "content": "Вы можаце пацвердзіць гэту падзею на <a href='{{{url}}}'>гэтай старонцы</a>"
     },
     "test": {
         "subject": "Ваша канфігурацыя SMTP працуе",

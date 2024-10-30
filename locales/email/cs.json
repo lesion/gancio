@@ -8,7 +8,7 @@
         "subject": "Nyní můžeš začít zveřejňovat události"
     },
     "event_confirm": {
-        "content": "Tuto událost můžeš potvrdit na <a href='{{url}}'>této stránce </a>"
+        "content": "Tuto událost můžeš potvrdit na <a href='{{{url}}}'>této stránce </a>"
     },
     "admin_register": {
         "subject": "Nová registrace",

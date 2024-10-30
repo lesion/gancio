@@ -8,7 +8,7 @@
         "subject": "Acum puteți începe să publicați evenimente"
     },
     "event_confirm": {
-        "content": "Puteți confirma acest eveniment la <a href='{{url}}'>această pagină</a>"
+        "content": "Puteți confirma acest eveniment la <a href='{{{url}}}'>această pagină</a>"
     },
     "admin_register": {
         "subject": "Înregistrare nouă",

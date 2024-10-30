@@ -20,16 +20,16 @@
         "content": "{{user.email}} poprosił(a) o rejestrację na {{config.title}}: <br/><pre>{{user.description}}</pre><br/> Zatwierdź ją <a href='{{{config.baseurl}}}/admin'>tutaj</a>."
     },
     "event_confirm": {
-        "content": "Żeby potwierdzić to wydarzenie wejdź w <a href='{{url}}'>ten link</a>"
+        "content": "Żeby potwierdzić to wydarzenie wejdź w <a href='{{{url}}}'>ten link</a>"
     },
     "test": {
         "subject": "Serwer SMTP skonfigurowany prawidłowo",
         "content": "Jest to e-mail testowy. Jeśli go czytasz, konfiguracja przebiegła pomyślnie."
     },
     "report": {
-        "content_ANON": "Odwiedzający zgłosił wydarzenie<strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Otwórz moderację</a>",
-        "content_ADMIN": "Admin skomentował wydarzenie<strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Otwórz wydarzenie</a>",
-        "content_AUTHOR": "Autor wydarzenia napisał <strong>{{event.title}}</strong> wrote:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{url}}'>Otwórz moderację</a>",
+        "content_ANON": "Odwiedzający zgłosił wydarzenie<strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Otwórz moderację</a>",
+        "content_ADMIN": "Admin skomentował wydarzenie<strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Otwórz wydarzenie</a>",
+        "content_AUTHOR": "Autor wydarzenia napisał <strong>{{event.title}}</strong> wrote:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Otwórz moderację</a>",
         "subject": "Moderacja wydarzenia [{{event.title}}]"
     }
 }
