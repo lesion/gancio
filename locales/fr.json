@@ -127,9 +127,9 @@
         "import_URL": "Importer à partir d'une URL",
         "remove_recurrent_confirmation": "Êtes-vous sûr·e de vouloir supprimer cet évènement récurrent ?\nLes évènements passés seront conservés, mais aucun évènement futur de sera créé.",
         "interact_with_me": "Me suivre",
-        "image_too_big": "L'image ne peut pas dépasser 4 Mo",
-        "due": "au",
-        "from": "Du",
+        "image_too_big": "L'image ne peut pas dépasser 4 Mo. Vérifiez la configuration de votre serveur.",
+        "due": "à",
+        "from": "De",
         "each_month": "Chaque mois",
         "each_week": "Chaque semaine",
         "recurrent_1m_days": "Chaque {days} du mois",
@@ -178,7 +178,7 @@
         "online_locations_fallback_urls": "Liens alternatifs",
         "where_advanced_options_description": "Définir ici les propriétés additionnelles du lieu",
         "online_locations": "Localisations en ligne",
-        "online_locations_help": "Par exemple l'URL d'un salon de visioconférence et une URL alternative (max. 3)",
+        "online_locations_help": "URL de vidéoconférence ou d'inscription (max. 3)",
         "address_geocoded_disclaimer": "Si vous ne pouvez pas trouver l'<strong>adresse</strong> our le <strong>numéro</strong> que vous cherchez dans les résultats de géocodage, vous pouvez les insérer manuellement dans le champ 'Adresse' sans coordonnées précises. Par ailleurs considérez que le projet <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> est ouvert aux contributions pour corriger cela. Si vous avez un téléphone Android, nous recommendons <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> ",
         "message_hint": "Vous pouvez envoyer un message aux autres administrateurs et optionnellement à la personne désignée auteur de l'évènement.",
         "message": "Message",
@@ -187,7 +187,9 @@
         "send_to_admins": "Envoyer aux administrateurs",
         "send_to_author_too": "Envoyer aux administrateurs et à l'auteur",
         "disable_author": "Désactiver l'auteur",
-        "disable_author_confirm": "Êtes-vous sur de vouloir désactiver l'auteur de cet évènement ?"
+        "disable_author_confirm": "Êtes-vous sur de vouloir désactiver l'auteur de cet évènement ?",
+        "assign_to_user": "Attribuer à un utilisateur",
+        "assign_to_user_description": "Vous pouvez attribuer un événement anonyme à un utilisateur qui pourra alors modifier l'événement."
     },
     "register": {
         "description": "Les mouvements sociaux doivent s'organiser et s'autofinancer.<br/>\n<br/>Avant de pouvoir publier, <strong> le compte doit être approuvé</strong>, considérez que <strong> derrière ce site vous trouverez de vraies personnes</strong>, à qui vous pouvez écrire en deux lignes pour exprimer les évènements que vous souhaiteriez publier.",
@@ -332,7 +334,17 @@
         "enable_moderation": "Activer la modération",
         "enable_report": "Activer le signalement d'évènement",
         "enable_report_hint": "N'importe quel visiteur pourrait signaler un évènement, les administrateurs sont notifiés via courriel",
-        "instance_removed": "Instance supprimée"
+        "instance_removed": "Instance supprimée",
+        "custom_css_help": "Vous pouvez également personnaliser des feuilles de style, lisez quelques exemples <a href='https://gancio.org/usage/custom_css'>here</a>.",
+        "allow_event_without_end_time": "Autoriser les événements sans heure de fin",
+        "stats": "{n_followers} « acteurs » suivent cette instance, il y a {n_events} événements du fediverse et des {n_resources} commentaires",
+        "custom_css": "Code CSS Additionnel",
+        "custom_js": "Code Javascript additionnel",
+        "custom_js_help": "Vous pouvez intégrer du code javascript dans la zone de texte ci-dessous, il sera chargé pour chaque utilisateur. Vous souhaitez probablement lire la <a href='https://gancio.org/usage/custom_js'>documentation</a> d'abord.",
+        "not_reachable_warning": "Impossible de joindre l'URL publique ({baseurl}) à partir du serveur ! Veuillez vérifier que le proxy, le pare-feu et le réseau sont correctement configurés.",
+        "plugins_description": "Les plugins sont de petits morceaux de code qui fournissent des fonctionnalités supplémentaires à l'application principale. Ils sont généralement écrits par des développeurs externes au projet et tirent parti du e <a href=\"https://gancio.org/dev/plugins\">système de plugins</a> pour, notamment, envoyer des événements à d'autres plateformes et canaux.",
+        "show_download_media": "Afficher l'action de téléchargement de l'image",
+        "show_download_media_hint": "Afficher un bouton de téléchargement du flyer sur la page de l'événement"
     },
     "oauth": {
         "scopes": {
