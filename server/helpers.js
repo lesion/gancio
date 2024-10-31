@@ -104,7 +104,8 @@ module.exports = {
       about: settings.about,
       collection_in_home: settings.collection_in_home,
       custom_js: settings.custom_js,
-      custom_css: settings.custom_css
+      custom_css: settings.custom_css,
+      default_fedi_hashtags: settings.default_fedi_hashtags
     }
     next()
   },

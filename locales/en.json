@@ -347,7 +347,9 @@
     "custom_js": "Custom Javascript Code",
     "custom_css": "Custom CSS Style",
     "custom_js_help": "You can integrate some javascript code that will be loaded for each user by writing in this textarea below. You probably want to read the <a href='https://gancio.org/usage/custom_js'>documentation</a> first.",
-    "custom_css_help": "You can customize some stylesheet too, read some example <a href='https://gancio.org/usage/custom_css'>here</a>."
+    "custom_css_help": "You can customize some stylesheet too, read some example <a href='https://gancio.org/usage/custom_css'>here</a>.",
+    "default_fedi_hashtags": "Default fediverse hashtags",
+    "default_fedi_hashtags_help": "The specified tags will be added to events sent to the fediverse"
   },
   "auth": {
     "not_confirmed": "Not confirmed yet…",
