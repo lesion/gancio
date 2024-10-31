@@ -210,7 +210,11 @@ export default {
       if (what === 'type') {
         if (typeof value === 'undefined') { this.type = 'normal' }
         if (value === 'recurrent') {
-          this.$emit('input', { ...this.value, due: null, dueHour: null, recurrent: { frequency: '1w' }, multidate: false })
+          if (this.value.multidate && this.value.due) {
+            this.$emit('input', { ...this.value, due: this.value.from, recurrent: { frequency: '1w' }, multidate: false })
+          } else {
+            this.$emit('input', { ...this.value, recurrent: { frequency: '1w' }, multidate: false })
+          }
         } else if (value === 'multidate') {
           this.$emit('input', { ...this.value, recurrent: null, multidate: true })
         } else {
