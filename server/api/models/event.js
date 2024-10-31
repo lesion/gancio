@@ -1,3 +1,4 @@
+const union = require('lodash/union')
 const config = require('../../config')
 const { DateTime } = require('luxon')
 
@@ -71,20 +72,18 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
 
-    let tags = this.tags?.map(tag => ({
-        type: 'Hashtag',
-        name: '#' + tag.tag,
-        href: `${config.baseurl}/tag/${tag.tag}`
-      })) ?? []
+    let tags = this.tags.map(tag => tag.tag)
     
     // add default fedi hashtags if needed on local events only
     if (!this.ap_id && settings.default_fedi_hashtags.length) {
-      settings.default_fedi_hashtags.foreach(t => tags.push({
-        type: 'Hashtag',
-        name: '#' + t,
-        href: `${config.baseurl}/tag/${t}`
-      }))
+      tags = union(tags, settings.default_fedi_hashtags)
     }
+
+    tags = tags?.map(tag => ({
+      type: 'Hashtag',
+      name: '#' + tag,
+      href: `${config.baseurl}/tag/${tag}`
+    })) ?? []
 
     return {
       id: this?.ap_id ?? `${config.baseurl}/federation/m/${this.id}`,
