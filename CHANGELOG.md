@@ -8,15 +8,13 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 * add Belarusian language ([4ecf8ff](https://framagit.org/les/gancio/commit/4ecf8ff1f693561cb795b88caf7e2c3cf332b52d))
-* Show if an event is in the past ([e3a6f1b](https://framagit.org/les/gancio/commit/e3a6f1b5f5d28bfd15d800decc8c3b82a5123764))
-
+* show a small timer-sand-complete ⌛ icon on past events ([ac07dff](https://framagit.org/les/gancio/commit/ac07dff2910e87af1801f6324dbf1b8a9f685480))
 
 ### Bug Fixes
 
-* clean due date when switching to recurrent ([eb3935d](https://framagit.org/les/gancio/commit/eb3935d2e61cd2f0182dfcdf97d0a54b60280a95))
-* do not escape url in html template / other languages ([279c3a8](https://framagit.org/les/gancio/commit/279c3a8b6ec9adc8f5fb69a439c7c25627448c3b))
-* preserve due date and time when switching to recurrent on new event ([64997d3](https://framagit.org/les/gancio/commit/64997d312c017958acd3dd44163a7285ac640667)), closes [#333](https://framagit.org/les/gancio/issues/333)
+* do escape url in html template / other languages ([279c3a8](https://framagit.org/les/gancio/commit/279c3a8b6ec9adc8f5fb69a439c7c25627448c3b))
 * reset due date on recurring selection only if coming from multidate selection ([f8b4b7c](https://framagit.org/les/gancio/commit/f8b4b7c764b0037e689fe650009718ce6de2b67d))
+
 
 ### [1.19.5](https://framagit.org/les/gancio/compare/v1.19.4...v1.19.5) (2024-10-09)
 

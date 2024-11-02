@@ -7,6 +7,20 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+## [1.20.0](https://framagit.org/les/gancio/compare/v1.19.5...v1.20.0) (2024-11-02)
+
+
+### Features
+
+* add Belarusian language ([4ecf8ff](https://framagit.org/les/gancio/commit/4ecf8ff1f693561cb795b88caf7e2c3cf332b52d))
+* show a small timer-sand-complete ⌛ icon on past events ([ac07dff](https://framagit.org/les/gancio/commit/ac07dff2910e87af1801f6324dbf1b8a9f685480))
+
+### Bug Fixes
+
+* do escape url in html template / other languages ([279c3a8](https://framagit.org/les/gancio/commit/279c3a8b6ec9adc8f5fb69a439c7c25627448c3b))
+* reset due date on recurring selection only if coming from multidate selection ([f8b4b7c](https://framagit.org/les/gancio/commit/f8b4b7c764b0037e689fe650009718ce6de2b67d))
+
+
 ### [1.19.5](https://framagit.org/les/gancio/compare/v1.19.4...v1.19.5) (2024-10-09)
 
 
@@ -18,6 +32,8 @@ All notable changes to this project will be documented in this file.
 * redirect to original ap_id, fix [#472](https://framagit.org/les/gancio/issues/472) ([9c721e1](https://framagit.org/les/gancio/commit/9c721e1164b0dff8759a7981dbd733fcbfedd24e))
 * use correct content-type for webfinger response ([daa12f5](https://framagit.org/les/gancio/commit/daa12f5123984a4ac6bfee5805d6bdde046de4a7))
 * use original ap_id as id in AP representation, ref [#472](https://framagit.org/les/gancio/issues/472) ([74af4b4](https://framagit.org/les/gancio/commit/74af4b4e311cd3548358363675995fcce3de37ce))
+
+
 ### [1.19.4](https://framagit.org/les/gancio/compare/v1.19.3...v1.19.4) (2024-09-28)
 
 
