@@ -40,6 +40,19 @@ v-container
     //-   @blur='save("instance_place", instance_place)'
     //- )
 
+    v-combobox.mt-4(v-model='default_fedi_hashtags'
+      :prepend-icon="mdiTagMultiple"
+      :label="$t('admin.default_fedi_hashtags')"
+      persistent-hint inset multiple
+      :delimiters="[',', ';']"
+      chips small-chips deletable-chips
+      :hint="$t('admin.default_fedi_hashtags_help')"
+      @blur='save("default_fedi_hashtags", default_fedi_hashtags)')
+      template(v-slot:selection="{ item, on, attrs, selected, parent }")
+                  v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
+                    :input-value="selected" label small) {{ item }}
+
+
     v-text-field.mt-4(v-model='trusted_instances_label'
       :label="$t('admin.trusted_instances_label')"
       persistent-hint inset
@@ -98,13 +111,13 @@ v-container
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown, mdiDownload, mdiUpload } from '@mdi/js'
+import { mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown, mdiDownload, mdiUpload, mdiTagMultiple, mdiCloseCircle } from '@mdi/js'
 
 export default {
   name: 'Federation',
   data ({ $store, $options }) {
     return {
-      mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown, mdiDownload, mdiUpload,
+      mdiDeleteForever, mdiPlus, mdiChevronLeft, mdiChevronRight, mdiChevronDown, mdiDownload, mdiUpload, mdiCloseCircle, mdiTagMultiple,
       instance_url: '',
       instance_name: $store.state.settings.instance_name,
       trusted_instances_label: $store.state.settings.trusted_instances_label,
@@ -144,6 +157,10 @@ export default {
       get () { return this.settings.enable_resources },
       set (value) { this.setSetting({ key: 'enable_resources', value }) }
     },
+    default_fedi_hashtags: {
+      get () { return this.settings.default_fedi_hashtags },
+      set (value) { this.setSetting({ key: 'default_fedi_hashtags', value }) }
+    },    
     hide_boosts: {
       get () { return this.settings.hide_boosts },
       set (value) { this.setSetting({ key: 'hide_boosts', value }) }

@@ -56,6 +56,7 @@ const defaultSettings = {
   admin_email: config.admin_email || '',
   smtp: config.smtp || {},
   collection_in_home: null,
+  default_fedi_hashtags: [],
   custom_js: '',
   custom_css: ''
 }
