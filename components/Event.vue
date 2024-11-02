@@ -1,11 +1,10 @@
 <template>
 <article class='h-event' :class="{ 'is-past': isPast }" itemscope itemtype="https://schema.org/Event">
 
-
   <nuxt-link :to='`/event/${event.slug || event.id}`' itemprop="url">
     <MyPicture v-if='!hide_thumbs' :event='event' thumb :lazy='lazy' />
-    <v-icon class='float-right mt-1 mr-1' v-if='isPast' color='success' v-text='mdiTimerSandComplete' />
     <v-icon class='float-right mt-1 mr-1' v-if='event.parentId' color='success' v-text='mdiRepeat' />
+    <v-icon class='float-right mt-1 mr-1' v-if='isPast' color='warning' v-text='mdiTimerSandComplete'/>
     <h1 class='title p-name' itemprop="name">{{ event.title }}</h1>
   </nuxt-link>
 
@@ -54,11 +53,11 @@ export default {
   computed: {
     ...mapGetters(['hide_thumbs']),
     isPast() {
-      const now = new Date();
+      const now = new Date()
       if (this.event.end_datetime) {
-        return new Date(this.event.end_datetime*1000) < now;
+        return new Date(this.event.end_datetime*1000) < now
       } else {
-        return new Date(this.event.start_datetime*1000) < now;
+        return new Date((3*60*60+this.event.start_datetime)*1000) < now
       }
     }
   }
