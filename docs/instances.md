@@ -23,6 +23,7 @@ nav_order: 7
 - [mad.convoca.la](https://mad.convoca.la/) (Madrid)
 - [www.aleale.org](https://www.aleale.org/) (Montpellier)
 - [agenda.arree.bzh](https://agenda.arree.bzh/) (Monts d'Arrée, Bretagne)
+- [agenda.rouen-luttes.org](https://agenda.rouen-luttes.org/) (Rouen)
 - [www.not-quite-there-yet.net](https://www.not-quite-there-yet.net/) (Toulouse)
 - [bonn.jetzt](https://bonn.jetzt/) (Digital-Events aus Bonn, Rhein-Sieg und der Region)
 - [quest.livellosegreto.it](https://quest.livellosegreto.it/)
