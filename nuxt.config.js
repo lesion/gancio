@@ -89,7 +89,6 @@ module.exports = {
     locales: Object.keys(locales).map(key => ({
       code: key,
       name: locales[key],
-      file: `${key}.json`,
       file: 'loader.js',
       language: key
     })),
@@ -101,6 +100,7 @@ module.exports = {
     lazy: true,
     strategy: 'no_prefix',
     skipSettingLocaleOnNavigate: true,
+    defaultLocale: 'en',
   },
 
   render: {
