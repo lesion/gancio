@@ -1,5 +1,5 @@
 module.exports = {
-  be: 'беларускі',
+  be: 'Беларуская',
   ca: 'Català',
   cs: 'Czech',
   de: 'Deutsch',
