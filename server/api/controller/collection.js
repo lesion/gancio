@@ -154,7 +154,12 @@ const collectionController = {
       }
       
       if (f.actors && f.actors.length) {
-        tmpConditions.push({ apUserApId: f.actors.map(a => a.ap_id)})
+        // search for local instance
+        if (f.actors.find(a => a.ap_id === null)) {
+          tmpConditions.push({ [Op.or]: [{ apUserApId: f.actors.map(a => a.ap_id).filter(a => a)}, { apUserApId: null }]})
+        } else {
+          tmpConditions.push({ apUserApId: f.actors.map(a => a.ap_id) })
+        }
       }
 
       if (!tmpConditions.length) return
