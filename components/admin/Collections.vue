@@ -42,7 +42,7 @@ v-container
               template(v-slot:append-outer v-if='!collection.id')
                 v-btn(text @click='saveCollection' color='primary' :loading='loading'
                   :disabled='!valid || loading || !!collection.id') {{ $t('common.save') }}
-          h3(v-else class='text-h5' v-text='collection.name')
+          h3(v-else class='text-h6' v-text='collection.name')
 
         v-row
           v-col(cols=6)
@@ -61,13 +61,13 @@ v-container
               :label="$t('common.trusted_instances')")
                 template(v-slot:item="{ item }")
                   v-list-item-avatar
-                    v-img(:src='item?.object?.icon?.url ?? `${item.url}/favicon.ico`')                
+                    v-img(:src="$format.actor(item, 'icon')")
                   v-list-item-content
-                    v-list-item-title {{ item?.object?.name }}
-                    v-list-item-subtitle @{{ item?.object?.preferredUsername }}@{{ item?.instanceDomain }}
+                    v-list-item-title {{ $format.actor(item, 'title')}}
+                    v-list-item-subtitle {{ $format.actor(item, 'label') }}
                 template(v-slot:selection="{ item, on, attrs, selected, parent }")
                   v-chip(v-bind="attrs" close :close-icon='mdiCloseCircle' @click:close='parent.selectItem(item)'
-                    :input-value="selected" label small) @{{ item?.object?.preferredUsername }}@{{ item?.instanceDomain }}
+                    :input-value="selected" label small) {{$format.actor(item, 'label')}}
 
           v-col(cols=6)
             v-autocomplete(v-model='filterPlaces'
@@ -127,7 +127,7 @@ v-container
             template(v-slot:item.places='{ item }')
               v-chip.ma-1(small label v-for='place in item.places' v-text='place.name' :key='place.id' )
             template(v-slot:item.actors='{ item }')
-              v-chip.ma-1(small label v-for='actor in item.actors' :key='actor.ap_id' ) @{{ actor.name }}@{{ actor?.domain }}
+              v-chip.ma-1(small label v-for='actor in item.actors' :key='actor.ap_id' ) {{ $format.actor(actor, 'filter') }}
 
 
       v-card-actions
@@ -205,6 +205,9 @@ export default {
   async fetch() {
     this.collections = await this.$axios.$get('/collections?withFilters=true')
     this.actors = await this.$axios.$get('/instances/trusted')
+
+    // add local instance
+    this.actors.unshift({ ap_id: null })
   },
   computed: {
     ...mapState(['settings']),

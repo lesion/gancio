@@ -46,6 +46,7 @@ module.exports = {
     '@/plugins/validators', // inject validators
     '@/plugins/api', // api helpers
     '@/plugins/i18n',
+    '@/plugins/formatter',
     { src: '@/plugins/v-calendar', ssr: false } // v-calendar
   ],
 
