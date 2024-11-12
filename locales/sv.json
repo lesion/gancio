@@ -64,7 +64,10 @@
         "disable_author_confirm": "Är du säker att du vill deaktivera skaparen av detta evenemang?",
         "normal_description": "Välj dagen.",
         "anon": "Anonym",
-        "anon_description": "Du kan lägga till ett evenemang utan att registrera dig eller logga in, men du måste vänta på att någon läser det\noch bekräftar att det är ett lämpligt evenemang. Det kommer inte att vara möjligt att ändra det.<br/><br/>\nDu kan istället <a href='/login'>logga in</a> eller <a href='/register'>registrera dig</a>. Annars, gå vidare och få ett svar så snart som möjligt. "
+        "anon_description": "Du kan lägga till ett evenemang utan att registrera dig eller logga in, men du måste vänta på att någon läser det\noch bekräftar att det är ett lämpligt evenemang. Det kommer inte att vara möjligt att ändra det.<br/><br/>\nDu kan istället <a href='/login'>logga in</a> eller <a href='/register'>registrera dig</a>. Annars, gå vidare och få ett svar så snart som möjligt. ",
+        "recurrent_2w_days": "En {days} varannan",
+        "recurrent_2m_days": "Den {days} varannan månad",
+        "recurrent_2m_ordinal": "Varje {n} {days} i månaden varannan"
     },
     "admin": {
         "enable_resources": "Aktivera resurser",
