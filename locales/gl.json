@@ -340,7 +340,7 @@
         "allow_geolocation_hint": "Establecer de xeito optativo a localización exacta do evento nun mapa xeográfico",
         "change_role_confirm": "Tes certeza de cambiar o rol de <strong>{user}</strong> desde <strong>{from_role}</strong> a <strong>{to_role}</strong>",
         "stats": "{n_followers} \"actores\" están a seguir a esta instancia, hai {n_events} eventos desde o fediverso e {n_resources} comentarios",
-        "plugins_description": "Os Complementos son pequenas pezas de código que proporcionan características adicionais á aplicación. Habitualmente están escritos por desenvolvedoras externas ao proxecto que aproveitan o <a href=\"https://gancio.org/dev/plugins\">sistema de complementos</a> para, principalmente, pero non limitado, enviar eventos a outras plataformas ou canles.",
+        "plugins_description": "Os Complementos son pequenas pezas de código que proporcionan características adicionais á aplicación. Habitualmente están escritos por desenvolvedoras externas ao proxecto que aproveitan o <a href=\"https://gancio.org/dev/plugins\">sistema de complementos</a> para principalmente enviar eventos a outras plataformas ou canles.",
         "show_download_media": "Mostrar acción de descarga multimedia",
         "show_download_media_hint": "Mostrar botón de descarga multimedia na páxina do evento",
         "allow_event_without_end_time": "Permitir eventos sen hora de finalización",
