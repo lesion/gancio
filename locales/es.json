@@ -347,7 +347,7 @@
         "allow_geolocation_hint": "Establecer opcionalmente la ubicación exacta de un evento en un mapa",
         "enable_report_hint": "Cualquier visitante puede informar de un suceso y los administradores reciben una notificación por correo electrónico",
         "stats": "{n_followers} \"actores\" están siguiendo esta instancia, hay {n_events} eventos de fediverse y {n_resources} comentarios",
-        "plugins_description": "Los plugins son pequeños fragmentos de código que proporcionan características adicionales a la aplicación principal. Por lo general, están escritos por desarrolladores externos al proyecto que aprovechan el sistema <a href=\"https://gancio.org/dev/plugins\">plugin</a> para, en su mayoría, pero no limitarse a enviar eventos a otras plataformas y canales.",
+        "plugins_description": "Los plugins son pequeños fragmentos de código que aportan funciones adicionales a la aplicación principal. Suelen estar escritos por desarrolladores externos al proyecto que aprovechan el <a href=\"https://gancio.org/dev/plugins\"> sistema de plugins </a> , principalmente para enviar eventos a otras plataformas y canales.",
         "show_download_media": "Mostrar acción de descarga de medios",
         "show_download_media_hint": "Mostrar un botón de descarga de medios en la página del evento",
         "allow_event_without_end_time": "Permitir eventos sin hora de finalización",
