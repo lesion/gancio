@@ -244,7 +244,8 @@
         "enable_report_hint": "Alle Besuchenden können ein Ereignis melden, worauf die Admins eine Email erhalten",
         "allow_geolocation_hint": "Optional die genaue Position des Ereignis auf einer Karte eintragen",
         "instance_removed": "Instanz entfernt",
-        "edit_tag_help": "Du kannst das Schlagwort ändern, indem du es mit einem neuen Schlagwort ersetzt oder mit einem bestehenden zusammenlegst. Die {n} verknüpften Veranstaltungen werden entsprechend angepasst."
+        "edit_tag_help": "Du kannst das Schlagwort ändern, indem du es mit einem neuen Schlagwort ersetzt oder mit einem bestehenden zusammenlegst. Die {n} verknüpften Veranstaltungen werden entsprechend angepasst.",
+        "not_reachable_warning": "Ich kann mich selbst ({baseurl}) von dem Server erreichen. Bitte überprüfe, dass Proxy, Firewall und Netzwerk richtig konfiguriert sind."
     },
     "settings": {
         "update_confirm": "Willst du deine Änderung speichern?",
