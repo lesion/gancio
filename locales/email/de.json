@@ -13,7 +13,7 @@
     },
     "confirm": {
         "content": "Hallo, dein Account auf <a href='{{{config.baseurl}}}'>{{config.title}}</a> wurde bestätigt. Anfragen kannst du an {{config.admin_email}} stellen.",
-        "subject": "Du kannst jetzt damit beginnen, Events zu veröffentlichen"
+        "subject": "Du kannst jetzt damit beginnen, Veranstaltungen zu veröffentlichen"
     },
     "register": {
         "content": "Wir haben die Registrierungsanfrage erhalten. Wir werden sie so bald wie möglich bestätigen.",
