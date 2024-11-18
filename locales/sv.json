@@ -202,7 +202,9 @@
         "geocoding_provider": "Geokodningstjänst",
         "stats": "{n_followers} \"aktörer\" följer denna instans,det finns {n_events} händelser från fediversum och {n_resources} kommentarer",
         "show_download_media": "Visa \"ladda ner media\"",
-        "show_download_media_hint": "Visa en \"ladda ner media\" knapp i eventsidan"
+        "show_download_media_hint": "Visa en \"ladda ner media\" knapp i eventsidan",
+        "default_fedi_hashtags": "Standard hashtags för fediverse",
+        "default_fedi_hashtags_help": "De angivna taggarna kommer att läggas till i händelser som skickas till Fediverse"
     },
     "validators": {
         "latitude": "Skriv en valid latitud (-90 < latitud < 90)",
