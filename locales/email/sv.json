@@ -18,5 +18,18 @@
     "user_confirm": {
         "subject": "Nu kan nu börja publicera event",
         "content": "Hej, ditt konto på <a href='{{{config.baseurl}}}'>{{config.title}}</a> har skapats. <a href='{{{config.baseurl}}}/user_confirm/{{user.recover_code}}'> Bekräfta det och skapa ett lösenord.</a>."
+    },
+    "event_confirm": {
+        "content": "Du kan bekräfta detta evenemang på <a href='{{{url}}}'>denna sida</a>"
+    },
+    "test": {
+        "subject": "Din SMTP-konfiguration fungerar",
+        "content": "Det här är ett test e-post, ifall du läser detta så fungerar din konfiguration."
+    },
+    "report": {
+        "subject": "Evenemang moderering [{{event.title}}]",
+        "content_ADMIN": "En administratör kommenterade om evenemanget <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Öppna moderering</a>",
+        "content_ANON": "En besökare anmälde evenemanget <strong>{{event.title}}</strong>:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Öppna moderering</a>",
+        "content_AUTHOR": "Skaparen av evenemanget <strong>{{event.title}}</strong>skrev:<br/><blockquote>{{message}}</blockquote><br/><br/><a href='{{{url}}}'>Öppna moderering</a>"
     }
 }
