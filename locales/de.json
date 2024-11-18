@@ -242,7 +242,9 @@
         "enable_moderation_hint": "Admins können über das Ereignis diskutieren, optional unter Einbezug der Person, welche das Ereignis erstellte",
         "enable_report": "Erlaube das Melden von Ereignissen",
         "enable_report_hint": "Alle Besuchenden können ein Ereignis melden, worauf die Admins eine Email erhalten",
-        "allow_geolocation_hint": "Optional die genaue Position des Ereignis auf einer Karte eintragen"
+        "allow_geolocation_hint": "Optional die genaue Position des Ereignis auf einer Karte eintragen",
+        "instance_removed": "Instanz entfernt",
+        "edit_tag_help": "Du kannst das Schlagwort ändern indem du es mit einem neuen Schlagwort ersetzt oder mit einem bestehenden zusammenlegst. Die {n} verknüpften Veranstaltungen werden dabei auch geändert."
     },
     "settings": {
         "update_confirm": "Willst du deine Änderung speichern?",
@@ -355,7 +357,8 @@
         "disable_author": "Autor deaktivieren",
         "disable_author_confirm": "Bist Du dir sicher, dass dieser Autor deaktiviert werden soll?",
         "assign_to_user": "Jemandem zuweisen",
-        "assign_to_user_description": "Du kannst einen anonym eingetragenen Ereignis ein:e Benuter:in zuweisen. Dies erlaubt ihm/ihr, dieses Ereignis zu ändern."
+        "assign_to_user_description": "Du kannst einen anonym eingetragenen Ereignis ein:e Benuter:in zuweisen. Dies erlaubt ihm/ihr, dieses Ereignis zu ändern.",
+        "address_geocoded_disclaimer": "Falls du die <strong>Adresse</strong> oder die <strong>Hausnummer</strong> nicht in den Ergebnissen des Geo-Codings finden kannst, kannst du sie manuell in das Feld \"Adresse\" eintragen ohne die Koordinaten zu verlieren. Bedenke, dass das <a target=\"_blank\" href=\"https://www.openstreetmap.org/\">OpenStreetMap</a>-Projekt offen für Mitwirkung ist. Falls du Android nutzt, empfehlen wir <a target=\"_blank\" href=\"https://f-droid.org/en/packages/de.westnordost.streetcomplete/\">StreetComplete</a> "
     },
     "register": {
         "first_user": "Admin erstellt",
