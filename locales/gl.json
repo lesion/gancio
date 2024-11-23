@@ -347,7 +347,9 @@
         "custom_js": "Código Javascript personal",
         "custom_css": "Estilo CSS personal",
         "custom_js_help": "Podes integrar código javascript escribíndoo na área de texto que se cargará para cada usuaria. Pode que queiras ler a <a href='https://gancio.org/usage/custom_js'>documentación</a> relacionada.",
-        "custom_css_help": "Tamén podes personalizar as follas de estilo, <a href='https://gancio.org/usage/custom_css'>aquí</a> tes algún exemplo."
+        "custom_css_help": "Tamén podes personalizar as follas de estilo, <a href='https://gancio.org/usage/custom_css'>aquí</a> tes algún exemplo.",
+        "default_fedi_hashtags": "Cancelos predeterminados no fediverso",
+        "default_fedi_hashtags_help": "Os cancelos indicados engadiranse aos eventos enviados ao fediverso"
     },
     "auth": {
         "not_confirmed": "Aínda non foi confirmado…",
