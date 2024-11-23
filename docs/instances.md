@@ -27,11 +27,12 @@ nav_order: 7
 - [www.not-quite-there-yet.net](https://www.not-quite-there-yet.net/) (Toulouse)
 - [bonn.jetzt](https://bonn.jetzt/) (Digital-Events aus Bonn, Rhein-Sieg und der Region)
 - [quest.livellosegreto.it](https://quest.livellosegreto.it/)
-- [https://agenda.lanbroa.eus/](https://agenda.lanbroa.eus/) (Lanbroa)
+- [agenda.lanbroa.eus](https://agenda.lanbroa.eus/) (Lanbroa)
 - [ezkerraldea.euskaragendak.eus](https://ezkerraldea.euskaragendak.eus/)
 - [www.bilbi.info](https://www.bilbi.info/) (barrio Bilbao La Vieja, San Francisco y Zabala)
 - [calendari.cc](https://calendari.cc) (Valencia)
-- [https://montreal.askapunk.net/](montreal.askapunk.net) (Montreal)
+- [montreal.askapunk.net](montreal.askapunk.net) (Montreal)
+- [calendrigeek.com](https://calendrigeek.com) (Abitibi-Témiscamingue, Québec, Canada)
 - [agenda.eskoria.eus](https://agenda.eskoria.eus/)
 - [lakelogaztetxea.net](https://lakelogaztetxea.net)
 - [lubakiagenda.net](https://lubakiagenda.net/)
@@ -39,6 +40,7 @@ nav_order: 7
 - [calendario.extinctionrebellion.es](https://calendario.extinctionrebellion.es/)
 - [cloudspeakers.org](https://cloudspeakers.org/) (Utrecht?)
 - [eventos.lhc.net.br](https://eventos.lhc.net.br/) (Campinas)
+- [berlin.askapunk.de](https://berlin.askapunk.de) (diy shows and similar events in berlin)
 
 
 You can also check federated instances [here](http://demo.fedilist.com/instance?q=&ip=&software=gancio&registrations=&onion=)
