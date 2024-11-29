@@ -352,7 +352,13 @@
         "allow_geolocation_hint": "Opcionalment, posa la ubicació exacta d'una activitat en un mapa",
         "allow_event_without_end_time": "Permet activitats sense hora d'acabament",
         "show_download_media": "Mostra l'acció de descarregar els mitjans",
-        "show_download_media_hint": "Mostra un botó en la pàgina de cada activitat per descarregar-ne els mitjans"
+        "show_download_media_hint": "Mostra un botó en la pàgina de cada activitat per descarregar-ne els mitjans",
+        "custom_js": "Codi Javascript personalitzat",
+        "custom_css": "Estils CSS personalitzats",
+        "custom_css_help": "També pots personalitzar els estils, consulta'n un exemple a <a href='https://gancio.org/usage/custom_css'>la documentació</a>.",
+        "custom_js_help": "Pots integrar codi javascript escrivint-lo o copiant-lo en la caixa de text de sota. Cada usuàriï el carregarà en visitar la web. Pots llegir <a href='https://gancio.org/usage/custom_js'>la documentació dels scripts</a> per una explicació més detallada.",
+        "default_fedi_hashtags": "Etiquetes predeterminades pel fedivers",
+        "default_fedi_hashtags_help": "Les etiquetes següents s'afegiran a les activitats quan s'enviïn al fedivers"
     },
     "auth": {
         "not_confirmed": "Encara no s'ha confirmat…",
