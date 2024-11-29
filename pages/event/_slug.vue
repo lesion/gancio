@@ -14,6 +14,7 @@
         v-card(outlined)
           v-container.eventDetails
             v-icon.float-right(v-if='event.parentId' color='success' v-text='mdiRepeat')
+            v-icon.float-right.mr-1(v-if='isPast' color='warning' v-text='mdiTimerSandComplete')
             time.dt-start(:datetime='$time.unixFormat(event.start_datetime, "yyyy-MM-dd HH:mm")' itemprop="startDate" :content='$time.unixFormat(event.start_datetime, "yyyy-MM-dd\'T\'HH:mm")')
               v-icon(v-text='mdiCalendar' small)
               span.ml-2.text-uppercase {{$time.when(event)}}
@@ -132,7 +133,7 @@ import EventMapDialog from '@/components/EventMapDialog'
 import EventModeration from '@/components/EventModeration'
 
 import { mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiClose, mdiMap, mdiMessageTextOutline,
-  mdiEye, mdiEyeOff, mdiDelete, mdiRepeat, mdiLock, mdiFileDownloadOutline, mdiShareAll,
+  mdiEye, mdiEyeOff, mdiDelete, mdiRepeat, mdiLock, mdiFileDownloadOutline, mdiShareAll, mdiTimerSandComplete,
   mdiCalendarExport, mdiCalendar, mdiContentCopy, mdiMapMarker, mdiChevronUp, mdiMonitorAccount, mdiBookmark, mdiStar } from '@mdi/js'
 
 export default {
@@ -157,7 +158,7 @@ export default {
   },
   data ({$route}) {
     return {
-      mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar, mdiFileDownloadOutline, mdiMessageTextOutline,
+      mdiArrowLeft, mdiArrowRight, mdiDotsVertical, mdiCodeTags, mdiCalendarExport, mdiCalendar, mdiFileDownloadOutline, mdiMessageTextOutline, mdiTimerSandComplete,
       mdiMapMarker, mdiContentCopy, mdiClose, mdiDelete, mdiEye, mdiEyeOff, mdiRepeat, mdiMap, mdiChevronUp, mdiMonitorAccount, mdiBookmark, mdiStar, mdiShareAll,
       currentAttachment: 0,
       event: {},
@@ -273,6 +274,14 @@ export default {
       return this.settings.enable_federation &&
       ( (!this.settings.hide_boosts && (this.event.boost?.length || this.event?.likes?.length)) ||
       ( this.settings.enable_resources && this.event?.resources?.length))      
+    },
+    isPast() {
+      const now = new Date()
+      if (this.event.end_datetime) {
+        return new Date(this.event.end_datetime*1000) < now
+      } else {
+        return new Date((3*60*60+this.event.start_datetime)*1000) < now
+      }
     }
   },
   mounted () {
