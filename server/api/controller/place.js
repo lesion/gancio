@@ -18,7 +18,7 @@ module.exports = {
 
     const format = req.params.format || 'json'
     log.debug(`Events for place: ${placeName}`)
-    const events = await eventController._select({ places: String(place.id), show_recurrent: true, show_multidate: true, reverse: true, start: 0, include_description: true })
+    const events = await eventController._select({ places: String(place.id), show_recurrent: true, show_multidate: true }) 
 
     switch (format) {
       case 'rss':

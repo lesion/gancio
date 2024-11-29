@@ -35,7 +35,7 @@ export default {
     Event, 
     HowToArriveNav,
     [process.client && 'Map']: () => import('@/components/Map.vue')
-   },
+  },
   data() {
     return { mapHeight: "14rem" }
   },
@@ -55,12 +55,11 @@ export default {
   },
   async asyncData({ $axios, params, error }) {
     try {
-      const events = await $axios.$get(`/place/${encodeURIComponent(params.place)}`)
-      return events
+      const { events, place } = await $axios.$get(`/place/${encodeURIComponent(params.place)}`)
+      return { place, events }
     } catch (e) {
       error({ statusCode: 404, message: 'Place not found!' })
     }
   }
-
 }
 </script>
