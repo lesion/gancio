@@ -18,13 +18,14 @@
     <time class='d-none dt-end' v-if='event.end_datetime' itemprop="endDate"
       :content="$time.unixFormat(event.end_datetime,'yyyy-MM-dd\'T\'HH:mm')"> {{ $time.unixFormat(event.end_datetime)}}</time>
 
-    <nuxt-link class='place d-block p-location pl-0' text
-      :to='`/place/${encodeURIComponent(event.place.name)}`'
-      itemprop="location" itemscope itemtype="https://schema.org/Place">
-      <v-icon v-text='mdiMapMarker'></v-icon>
-      <span itemprop='name'>{{ event.place.name }}</span>
-    </nuxt-link>
-    <div class='d-none' itemprop='address'>{{ event.place.address }}</div>
+    <div class='p-location' itemprop="location" itemscope itemtype="https://schema.org/Place">
+      <nuxt-link class='place d-block pl-0' text
+        :to='`/place/${encodeURIComponent(event.place.name)}`'>
+        <v-icon v-text='mdiMapMarker'></v-icon>
+        <span itemprop='name'>{{ event.place.name }}</span>
+      </nuxt-link>
+      <div class='d-none p-street-address' itemprop='address'>{{ event.place.address }}</div>
+    </div>
   </v-card-text>
 
   <v-card-actions class='flex-wrap'>
