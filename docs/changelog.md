@@ -7,6 +7,20 @@ nav_order: 10
 
 All notable changes to this project will be documented in this file.
 
+## [1.21.0](https://framagit.org/les/gancio/compare/v1.20.0...v1.21.0) (2024-11-30)
+
+
+### Features
+
+* Collection filters should include the local instance in "Trusted Instances", fix [#482](https://framagit.org/les/gancio/issues/482) ([58bbb54](https://framagit.org/les/gancio/commit/58bbb5483f510f1fc6c7aaffc926fa5cda531d83))
+
+
+### Bug Fixes
+
+* add isPast icon in event's page too ([147ce9a](https://framagit.org/les/gancio/commit/147ce9a7a8e8e91bd39d253f4e63a68281841a35))
+* show only future events in Tag and Place pages, fix [#331](https://framagit.org/les/gancio/issues/331) ([fcec5ae](https://framagit.org/les/gancio/commit/fcec5ae75622b9efd7252ab620f81a4d1b5ec951))
+* use 'en' as default locale, fix [#481](https://framagit.org/les/gancio/issues/481) ([4e5ffa9](https://framagit.org/les/gancio/commit/4e5ffa98457a5627134c3771cfdf82f9cb86d8e0))
+
 ## [1.20.0](https://framagit.org/les/gancio/compare/v1.19.5...v1.20.0) (2024-11-02)
 
 
