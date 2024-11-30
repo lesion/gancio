@@ -106,7 +106,7 @@ routeAPI.get('/test', (req, res) => {
 })
 ```
 
-This endpoint will be exposed at <your_instance>/api/plugin/<your_plugin_name>/test
+This endpoint will be exposed at `<your_instance>/api/plugin/<your_plugin_name>/test`
   
 
 ## Access to DB <span class='label label-yellow'>since 1.6.4</span>
