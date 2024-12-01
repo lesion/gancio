@@ -62,21 +62,28 @@ export default {
     }
   },
   head () {
+    const i18nHead = this.$nuxtI18nHead({ addSeoAttributes: true })
     return {
       title: this.settings.title,
+      htmlAttrs: {
+        lang: this.settings.instance_locale,
+        ...i18nHead.htmlAttrs
+      },
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         { hid: 'description', name: 'description', content: this.settings?.description },
         { hid: 'og-description', name: 'og:description', content: this.settings?.description },
         { hid: 'og-title', property: 'og:title', content: this.settings.title },
         { hid: 'og-url', property: 'og:url', content: this.settings.baseurl },
-        { property: 'og:image', content: this.settings.baseurl + '/logo.png' }
+        { property: 'og:image', content: this.settings.baseurl + '/logo.png' },
+        ...i18nHead.meta
       ],
       link: [
         { rel: 'apple-touch-icon', href: this.settings.baseurl + '/logo.png' },
         { rel: 'alternate', type: 'application/rss+xml', title: this.settings.title, href: this.settings.baseurl + '/feed/rss' },
         { rel: 'alternate', type: 'text/calendar', title: this.settings.title, href: this.settings.baseurl + '/feed/ics' },
-        { rel: 'me', href: `${this.settings.baseurl}/federation/u/${this.settings.instance_name}`}
+        { rel: 'me', href: `${this.settings.baseurl}/federation/u/${this.settings.instance_name}`},
+        ...i18nHead.link
       ]
     }
   },

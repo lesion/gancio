@@ -5,7 +5,7 @@
     <MyPicture v-if='!hide_thumbs' :event='event' thumb :lazy='lazy' />
     <v-icon class='float-right mt-1 mr-1' v-if='event.parentId' color='success' v-text='mdiRepeat' />
     <v-icon class='float-right mt-1 mr-1' v-if='isPast' color='warning' v-text='mdiTimerSandComplete'/>
-    <h1 class='title p-name' itemprop="name">{{ event.title }}</h1>
+    <h2 class='title p-name' itemprop="name">{{ event.title }}</h2>
   </nuxt-link>
 
   <v-img contain v-if='event?.ap_user?.image' :src='event?.ap_user?.image' max-height=30  max-width=30 style="position: absolute; top: 5px; right: 5px;" />

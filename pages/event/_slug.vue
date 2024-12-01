@@ -3,7 +3,7 @@
     //- EVENT PAGE
     //- gancio supports microformats (http://microformats.org/wiki/h-event)
     //- and microdata https://schema.org/Event
-    .title.text-center.text-md-h4.text-h5.pa-6
+    h1.title.text-center.text-md-h4.text-h5.pa-6
       strong.p-name.text--primary(itemprop="name") {{event.title}}
     v-row
       v-col.col-12.col-md-8.pr-sm-2.pr-md-0
