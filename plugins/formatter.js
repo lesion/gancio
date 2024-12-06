@@ -15,7 +15,7 @@ export default ({ app, store }, inject) => {
         }
       } else if (context === 'icon') {
         if (actor?.ap_id) {
-          return actor?.object?.icon?.url ?? `${item.url}/favicon.ico`
+          return actor?.object?.icon?.url ?? `${actor?.instanceDomain ?? actor?.domain ?? ''  }/favicon.ico`
         } else {
           return store.state.settings.baseurl + '/logo.png'
         }
