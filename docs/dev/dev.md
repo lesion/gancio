@@ -39,12 +39,14 @@ cp config.example.json config.json
 ./node_modules/.bin/sequelize db:migrate
 ```
 
-6. Create a first admin user
-You can skip this step and register an user from the UI, the first registered user will be an active administrator.
+6. Create a first admin user  
 
 ```bash
 ./server/cli.js users create admin secret-password admin
 ```
+
+You can skip this step and directly register an user from the UI, the first registered user will be an active administrator.
+
 
 7. Hacking
 ```bash
