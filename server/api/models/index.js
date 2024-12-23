@@ -82,7 +82,6 @@ const db = {
     Event.belongsTo(Event, { as: 'parent' })
     
     SequelizeSlugify.slugifyModel(Event, { source: ['title'], overwrite: false })
-    SequelizeSlugify.slugifyModel(Place, { source: ['name'], overwrite: false })
 
   },
   close() {
