@@ -6,6 +6,11 @@ module.exports = (sequelize, DataTypes) =>
     index: true,
     allowNull: false
   },
+  slug: {
+    type: DataTypes.STRING,
+    index: true,
+    unique: true
+  },
   address: DataTypes.STRING,
   latitude: DataTypes.FLOAT,
   longitude: DataTypes.FLOAT,
