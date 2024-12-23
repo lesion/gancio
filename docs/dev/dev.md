@@ -29,17 +29,26 @@ git clone https://framagit.org/les/gancio
 yarn
 ```
 
-4. Run db migrations
+4. Use a default sqlite configuration
+```bash
+cp config.example.json config.json
+```
+
+5. Run db migrations
 ```bash
 ./node_modules/.bin/sequelize db:migrate
 ```
 
-5. Hacking
+6. Create a first admin user
+You can skip this step and register an user from the UI, the first registered user will be an active administrator.
+
+```bash
+./server/cli.js users create admin secret-password admin
+```
+
+7. Hacking
 ```bash
 yarn dev
 ```
-
-> warning "Warning"
-> You need to register a first user, this will be an active administrator!
 
 Please use the [issues](https://framagit.org/les/gancio/-/issues) to discuss any modification.

@@ -1,0 +1,27 @@
+{
+  "baseurl": "http://127.0.0.1:13120",
+  "server": {
+    "host": "127.0.0.1",
+    "port": 13120
+  },
+  "log_level": "debug",
+  "log_path": "./logs",
+  "db": {
+    "dialect": "sqlite",
+    "storage": "./gancio.sqlite",
+    "logging": false
+  },
+  "user_locale": "./user_locale",
+  "upload_path": "./uploads",
+  "proxy": {
+    "protocol": "",
+    "hostname": "",
+    "host": "",
+    "port": "",
+    "auth": {
+      "username": "",
+      "password": ""
+    },
+    "headers": {}
+  }
+}
