@@ -45,8 +45,6 @@ cp config.example.json config.json
 ./server/cli.js users create admin secret-password admin
 ```
 
-You can skip this step and directly register an user from the UI, the first registered user will be an active administrator.
-
 
 7. Hacking
 ```bash
