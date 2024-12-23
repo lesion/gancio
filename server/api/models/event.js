@@ -93,6 +93,7 @@ module.exports = (sequelize, DataTypes) => {
       startTime: DateTime.fromSeconds(this.start_datetime, opt).toISO(),
       ...( this.end_datetime ? { endTime : DateTime.fromSeconds(this.end_datetime, opt).toISO() } : {} ),
       location: {
+        id: `${config.baseurl}/federation/p/${this.place.slug}`,
         type: 'Place',
         name: this.place.name,
         address: this.place.address,
