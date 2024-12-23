@@ -478,10 +478,6 @@ const eventController = {
         if (Number(body.end_datetime) > 1000*24*60*60*365) {
           return res.status(400).send('are you sure?')
         }
-
-        if (!req.user.is_admin && Number(body.start_datetime) < DateTime.local().toUnixInteger()) {
-          return res.status(400).send('Only administrators could add a past event')
-        }
   
       }
 
