@@ -178,6 +178,7 @@ const Helpers = {
   async parsePlace (APEvent) {
     const eventController = require('../api/controller/event')
     let place
+    
     if (APEvent?.location) {
       place = {
         place_name: APEvent.location?.name,
@@ -233,7 +234,7 @@ const Helpers = {
 
         const APEvent = message.object
 
-        // validate coming events
+        // validate incoming events
         const required_fields = ['name', 'startTime', 'id']
         let missing_field = required_fields.find(required_field => !APEvent[required_field])
         if (missing_field) {

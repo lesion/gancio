@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
 
   /**
    * @description WIP -> https://codeberg.org/fediverse/fep/src/commit/4a75a1bc50bc6d19fc1e6112f02c52621bc178fe/fep/8a8e/fep-8a8e.md#location
-   * @todo support PlaceAddress type
+   * @todo support PostalAddress type
    * @returns ActivityStream location representation
    */
   Place.prototype.toAP = function () {
@@ -28,8 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       type: 'Place',
       name: this.name,
       address: this.address,
-      latitude: this.latitude,
-      longitude: this.longitude
+      ...( this.latitude && this.longitude && ({ latitude: this.latitude, longitude: this.longitude}))
     }
   }
 
