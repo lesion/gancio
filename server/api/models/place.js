@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
       index: true,
       allowNull: false
     },
+    ap_id: {
+      type: DataTypes.STRING,
+      index: true
+    },
     address: DataTypes.STRING,
     latitude: DataTypes.FLOAT,
     longitude: DataTypes.FLOAT,
@@ -20,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
    */
   Place.prototype.toAP = function () {
     return {
-      id: `${config.baseurl}/federation/p/${this.id}`,
+      id: this?.ap_id ?? `${config.baseurl}/federation/p/${this.id}`,
       type: 'Place',
       name: this.name,
       address: this.address,
