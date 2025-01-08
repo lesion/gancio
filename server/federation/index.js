@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 // const cors = require('cors')
 const Users = require('./users')
+const Places = require('./places')
 const { Event, User, Tag, Place } = require('../api/models/models')
 
 const settingsController =  require('../api/controller/settings')
@@ -74,6 +75,8 @@ router.get('/u/:name/outbox', Users.outbox)
 // router.get('/u/:name/followers', Users.followers)
 
 router.get('/u/:name', Users.get)
+
+router.get('/p/:id', Places.get)
 
 // Handle 404
 router.use((req, res) => {
