@@ -52,14 +52,28 @@ module.exports = (sequelize, DataTypes) => {
     const summary = `${this.place && this.place.name}, ${datetime}`
     
     let attachment = []
+    let location = []
 
     if (this?.online_locations?.length) {
+      location = this.online_locations.map(url => ({
+        type: 'VirtualLocation',
+        url
+      }))
       attachment = this.online_locations.map( href => ({
         type: 'Link',
         mediaType: 'text/html',
         name: href,
         href
       }))
+    }
+
+    if (this.place.name !== 'online') {
+      location.push(this.place.toAP())
+    }
+
+    // in case we only have a single location (the common case) do not use an array to simplify federation parser
+    if (location.length === 1) {
+      location = location[0]
     }
         
     if (this?.media?.length) {
@@ -92,14 +106,7 @@ module.exports = (sequelize, DataTypes) => {
       type: 'Event',
       startTime: DateTime.fromSeconds(this.start_datetime, opt).toISO(),
       ...( this.end_datetime ? { endTime : DateTime.fromSeconds(this.end_datetime, opt).toISO() } : {} ),
-      location: {
-        id: this.place?.ap_id ?? `${config.baseurl}/federation/p/${this.place.id}`,
-        type: 'Place',
-        name: this.place.name,
-        address: this.place.address,
-        latitude: this.place.latitude,
-        longitude: this.place.longitude
-      },
+      location,
       attachment,
       tag: tags,
       published: this.createdAt,
