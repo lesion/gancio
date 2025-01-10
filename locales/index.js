@@ -19,6 +19,7 @@ module.exports = {
   sk: 'Slovak',
   sq: 'Shqiptare',
   sv: 'Svenska',
+  ta: 'தமிழ், Tamil',
   tr: 'Türkçe',
   zh: '中国'
 }
