@@ -7,7 +7,7 @@ v-card
     v-row.my-4.d-flex.flex-column.align-center.text-center
       .text-h6
         v-icon(v-text='mdiMapMarker' )
-        nuxt-link.ml-2.text-decoration-none(v-text="place.name" :to='`/place/${place.name}`')
+        nuxt-link.ml-2.text-decoration-none(v-text="place.name" :to='`/place/${place.id}/${encodeURIComponent(place.name)}`')
         .mx-2(v-text="`${place.address}`")
   v-card-actions.py-4
     HowToArriveNav.pl-1(:place='place')

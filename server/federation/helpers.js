@@ -288,7 +288,9 @@ const Helpers = {
           return false
         })
     
-        await event.setPlace(place)
+        if (place) {
+          await event.setPlace(place)
+        }
     
         // create/assign tags
         let tags = []

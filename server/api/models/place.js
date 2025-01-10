@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
   const Place = sequelize.define('place', {
     name: {
       type: DataTypes.STRING,
-      unique: true,
       index: true,
       allowNull: false
     },
@@ -18,9 +17,10 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   /**
-   * @description WIP -> https://codeberg.org/fediverse/fep/src/commit/4a75a1bc50bc6d19fc1e6112f02c52621bc178fe/fep/8a8e/fep-8a8e.md#location
-   * @todo support PostalAddress type
    * @returns ActivityStream location representation
+   * @link https://www.w3.org/TR/activitystreams-vocabulary/#places
+   * @todo support PostalAddress type
+   * @link WIP -> https://codeberg.org/fediverse/fep/src/commit/4a75a1bc50bc6d19fc1e6112f02c52621bc178fe/fep/8a8e/fep-8a8e.md#location
    */
   Place.prototype.toAP = function () {
     return {
