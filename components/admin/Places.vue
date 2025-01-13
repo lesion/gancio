@@ -84,7 +84,7 @@ v-container
       template(v-slot:item.actions='{ item }')
         v-btn(@click='editPlace(item)' color='primary' icon)
           v-icon(v-text='mdiPencil')
-        nuxt-link(:to='`/place/${item.name}`')
+        nuxt-link(:to='`/place/${item.id}/${encodeURIComponent(item.name)}`')
           v-icon(v-text='mdiEye')
 
 </template>

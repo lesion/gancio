@@ -1,0 +1,6 @@
+{
+  "id" : "http://localhost:13120/federation/p/3",
+  "name" : "Location with a simple string address",
+  "address": "Simple string address",
+  "type" : "Place"
+}

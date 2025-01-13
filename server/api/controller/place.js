@@ -9,22 +9,22 @@ const { Op, where, col, fn, cast } = require('sequelize')
 module.exports = {
 
   async getEvents (req, res) {
-    const placeName = req.params.placeName
-    const place = await Place.findOne({ where: { name: placeName }})
+    const placeNameOrId = req.params.placeNameOrId
+    const place = await Place.findOne({ where: { [Op.or]: { id: placeNameOrId, name: placeNameOrId }}})
     if (!place) {
-      log.warn(`Place ${placeName} not found`)
+      log.warn(`Place ${placeNameOrId} not found`)
       return res.sendStatus(404)
     }
 
     const format = req.params.format || 'json'
-    log.debug(`Events for place: ${placeName}`)
+    log.debug(`Events for place: ${place.name}`)
     const events = await eventController._select({ places: String(place.id), show_recurrent: true, show_multidate: true }) 
 
     switch (format) {
       case 'rss':
         return exportController.feed(req, res, events,
             `${res.locals.settings.title} - Place @${place.name}`,
-            `${res.locals.settings.baseurl}/feed/rss/place/${place.name}`)
+            `${res.locals.settings.baseurl}/feed/rss/place/${place.id}`)
       case 'ics':
         return exportController.ics(req, res, events)
       default:

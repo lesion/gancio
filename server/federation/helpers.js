@@ -175,38 +175,72 @@ const Helpers = {
     }
   },
 
-  async parsePlace (APEvent) {
+
+  /**
+   * Parses the location of an ActivityPub Event to extract physical and online locations.
+   * @link https://www.w3.org/TR/activitystreams-vocabulary/#places
+   * @link https://codeberg.org/fediverse/fep/src/commit/4a75a1bc50bc6d19fc1e6112f02c52621bc178fe/fep/8a8e/fep-8a8e.md#location
+   * @param {Object} APEvent - The ActivityPub Event object
+   * @returns {Array} An array containing the Place and a list of online locations
+   */
+  async parsePlace(APEvent) {
     const eventController = require('../api/controller/event')
-    let place
-    if (APEvent?.location) {
+    let place = null
+
+    if (!APEvent?.location) {
+      log.warn(`[FEDI] Event "${APEvent?.name}" has no location field`)
+      return [null, null]
+    }
+
+    const locations = Array.isArray(APEvent.location) ? APEvent.location : [APEvent.location]
+
+    // find the first physical place from locations
+    let APPlace = locations.find(location => location.address && !location?.address?.url) || locations.find(location => !location.address?.url)
+
+    // get the list of online locations
+    let onlineLocations = locations.filter(location => location?.address?.url).map(location => location.address.url)
+
+    // we have a physical place
+    if (APPlace) {
       place = {
-        place_name: APEvent.location?.name,
-        place_address: APEvent.location?.address?.streetAddress ?? APEvent.location?.address?.addressLocality ?? APEvent.location?.address?.addressCountry ?? APEvent.location?.address ?? '',
-        place_latitude: APEvent.location?.latitude,
-        place_longitude: APEvent.location?.longitude
+        place_name: APPlace?.name,
+        ...(APPlace?.id && { place_ap_id: APPlace.id }),
+        ...(APPlace?.latitude && APPlace?.longitude && { place_latitude: APPlace.latitude, place_longitude: APPlace.longitude }),
       }
+    // no physical but at least virtual location
+    } else if (onlineLocations.length) {
+      place = {
+        place_name: 'online'
+      }
+    // nothing...
+    } else {
+      log.warn(`[FEDI] No Physical nor Virtual location: ${JSON.stringify(APEvent.location)}`)
+      return [null, null]
     }
 
-    // could have online locations too
-    let online_locations = []
-    if (APEvent?.attachment?.length) {
-      online_locations = APEvent.attachment.filter(a => a?.type === 'Link' && a?.href).map(a => a.href)
-    }
-
-    if (!place) {
-      if (online_locations) {
-        place = { place_name: 'online' }
+    // the `address` field could be Text, PostalAddress or VirtualLocation, we do support the name as a fallback
+    const addr = APPlace?.address
+    if (addr) {
+      if (typeof addr === 'string') {
+        place.place_address = addr
+      } else if ( addr?.streetAddress || addr?.addressLocality || addr?.addressCountry || addr?.addressRegion ) {
+        place.place_address = [ addr?.streetAddress, addr?.addressLocality, addr?.addressRegion, addr?.addressCountry].filter(part => part).join(', ')
+      } else if (addr?.url) {
+        place.place_name = 'online'
       } else {
-        throw new Error ('No location nor online location')
+        console.warn(`[FEDI] Event "${APEvent?.name}" has bad address location: ${JSON.stringify(APPlace?.address)}`)
       }
+    } else {
+      place.place_address = place.place_name
     }
 
     place = await eventController._findOrCreatePlace(place)
+
     if (!place) {
-      throw new Error('Place not found nor created')
+        throw new Error('Place not found nor created')
     }
 
-    return [place, online_locations]
+    return [place, onlineLocations]
   },
 
   /**
@@ -233,7 +267,7 @@ const Helpers = {
 
         const APEvent = message.object
 
-        // validate coming events
+        // validate incoming events
         const required_fields = ['name', 'startTime', 'id']
         let missing_field = required_fields.find(required_field => !APEvent[required_field])
         if (missing_field) {
@@ -287,7 +321,9 @@ const Helpers = {
           return false
         })
     
-        await event.setPlace(place)
+        if (place) {
+          await event.setPlace(place)
+        }
     
         // create/assign tags
         let tags = []

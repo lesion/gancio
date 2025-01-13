@@ -55,7 +55,7 @@ export default {
   },
   async asyncData({ $axios, params, error }) {
     try {
-      const { events, place } = await $axios.$get(`/place/${encodeURIComponent(params.place)}`)
+      const { events, place } = await $axios.$get(`/place/${params.id}`)
       return { place, events }
     } catch (e) {
       error({ statusCode: 404, message: 'Place not found!' })
