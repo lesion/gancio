@@ -19,14 +19,19 @@ has_children: true
 
 ### Testing on your own machine
 
-2. Download source
+1. Download source
 ```bash
 git clone https://framagit.org/les/gancio
 ```
 
-3. Install dependencies
+2. Install dependencies
 ```bash
 yarn
+```
+
+3. Use a default sqlite configuration
+```bash
+cp config.example.json config.json
 ```
 
 4. Run db migrations
@@ -34,12 +39,17 @@ yarn
 ./node_modules/.bin/sequelize db:migrate
 ```
 
-5. Hacking
+5. Create a first admin user  
+```bash
+./server/cli.js users create admin secretpassword admin
+```
+
+6. Hacking
 ```bash
 yarn dev
 ```
 
-> warning "Warning"
-> You need to register a first user, this will be an active administrator!
+> info "Info"
+> You can skip step n.5 and register the user from the UI, the first registered user will be an active administrator.
 
 Please use the [issues](https://framagit.org/les/gancio/-/issues) to discuss any modification.

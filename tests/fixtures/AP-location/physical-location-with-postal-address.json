@@ -1,0 +1,13 @@
+{
+  "id" : "http://localhost:13120/federation/p/2",
+  "name" : "Location with a postal address",
+  "address": {
+    "type": "PostalAddress",
+    "addressCountry": "Austria",
+    "addressLocality": "Fediverse Town",
+    "addressRegion": "Steiermark",
+    "postalCode": "8010",
+    "streetAddress": "15 Fediverse Street"    
+  },
+  "type" : "Place"
+}

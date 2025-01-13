@@ -102,6 +102,66 @@ describe('AP', () => {
     expect(response.body.type).toBe('Application')
   })
 
+
+  describe('Location', () => {
+
+    test('should fail parsing a location without a name', async () => {
+      const { parsePlace } = require('../server/federation/helpers.js')
+      const location = require('./fixtures/AP-location/bad-location-without-a-name.json')
+      expect(parsePlace({ location })).rejects.toThrow()
+    })
+
+    test ('should parse a location with only a name', async () => {
+      const { parsePlace } = require('../server/federation/helpers.js')
+      const location = require('./fixtures/AP-location/physical-location-without-id.json')
+      let [place] = await parsePlace({ location })
+      expect(place.name).toBe('Location without id')
+      expect(place.ap_id).toBeUndefined()
+      expect(place.id).toBe(1)
+    })
+
+    test ('should parse a location with id and name', async () => {
+      const { parsePlace } = require('../server/federation/helpers.js')
+      const location = require('./fixtures/AP-location/physical-location-no-address.json')
+      let [place] = await parsePlace({ location })
+      expect(place.name).toBe('Location with a name')
+      expect(place.address).toBe('Location with a name')
+      expect(place.id).toBe(2)
+    })
+
+    test ('should parse a location with a simple string address', async () => {
+      const { parsePlace } = require('../server/federation/helpers.js')
+      const location = require('./fixtures/AP-location/physical-location-with-simple-string-address.json')
+      let [place] = await parsePlace({ location })
+      expect(place.name).toBe('Location with a simple string address')
+    })
+
+    test ('should parse a location with a postal address', async () => {
+      const { parsePlace } = require('../server/federation/helpers.js')
+      const location = require('./fixtures/AP-location/physical-location-with-postal-address.json')
+      let [place] = await parsePlace({ location })
+      expect(place.name).toBe('Location with a postal address')
+    })
+
+    test ('should parse a virtual location', async () => {
+      const { parsePlace } = require('../server/federation/helpers.js')
+      const location = require('./fixtures/AP-location/virtual-location.json')
+      let [place, online_locations] = await parsePlace({ location })
+      expect(place.name).toBe('online')
+      expect(online_locations.length).toBe(1)
+      expect(online_locations[0]).toBe("https://virtual.location.org")
+    })
+
+    test ('should parse a mixed location', async () => {
+      const { parsePlace } = require('../server/federation/helpers.js')
+      const location = require('./fixtures/AP-location/multiple-mixed-locations.json')
+      let [place, online_locations] = await parsePlace({ location })
+      expect(place.name).toBe('Location with a name')
+      expect(online_locations.length).toBe(2)
+      expect(online_locations[0]).toBe('https://virtual.location.org')
+    })
+  })
+
   // test('should not allow to create a new Event from a random instance', async () => {
   //   const response = await request(app)
   //     .post('/federation/u/relay/inbox')

@@ -20,7 +20,7 @@
 
     <div class='p-location' itemprop="location" itemscope itemtype="https://schema.org/Place">
       <nuxt-link class='place d-block pl-0' text
-        :to='`/place/${encodeURIComponent(event.place.name)}`'>
+        :to='`/place/${event.place.id}/${encodeURIComponent(event.place.name)}`'>
         <v-icon v-text='mdiMapMarker'></v-icon>
         <span itemprop='name'>{{ event.place.name }}</span>
       </nuxt-link>

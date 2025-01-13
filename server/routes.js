@@ -42,7 +42,7 @@ async function main () {
     // rss / ics feed
     app.use(helpers.feedRedirect)
     app.get('/feed/:format/tag/:tag', cors(), tagController.getEvents)
-    app.get('/feed/:format/place/:placeName', cors(), placeController.getEvents)
+    app.get('/feed/:format/place/:placeNameOrId', cors(), placeController.getEvents)
     app.get('/feed/:format/collection/:name', cors(), collectionController.getEvents)
     app.get('/feed/:format', cors(), exportController.export)
     

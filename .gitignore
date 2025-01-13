@@ -7,6 +7,7 @@
 *.sqlite
 _*.js
 config*.json
+!config.example.json
 tests/seeds/testdb.sqlite
 gancio.sqlite
 db.sqlite

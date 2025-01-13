@@ -190,7 +190,7 @@ module.exports = () => {
 
     // - PLACES
     api.get('/places', isAdmin, placeController.getAll)
-    api.get('/place/:placeName', cors, placeController.getEvents)
+    api.get('/place/:placeNameOrId', cors, placeController.getEvents)
     api.get('/place', cors, placeController.search)
     api.put('/place', isAdmin, placeController.updatePlace)
 
