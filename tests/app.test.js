@@ -186,7 +186,6 @@ describe('Events', () => {
     await Promise.all(promises)
   })
 
-
   test('should create anon event only when allowed', async () => {
     await request(app).post('/api/settings')
       .send({ key: 'allow_anon_event', value: false })
@@ -302,6 +301,35 @@ describe('Events', () => {
     const response = await request(app).post('/api/event')
       .send(event)
       .expect(400)
+  })
+
+  test('should not allow create anonymous event in the past', async() => {
+    const time_in_past = dayjs().unix() - 1;
+
+    await request(app).post('/api/event')
+      .send({
+        title: 'anonymous event in the past',
+        place_id: places[0],
+        start_datetime: time_in_past
+      })
+      .expect(400)
+      .then(response => {
+        expect(response.text)
+          .toEqual('Anonymous user cannot create past events')
+      })
+  })
+
+  test('should allow create event in the past when authenticated', async() => {
+    const time_in_past = dayjs().unix() - 1
+
+    await request(app).post('/api/event')
+      .send({
+        title: 'authenticated event in the past',
+        place_id: places[0],
+        start_datetime: time_in_past
+      })
+      .auth(token.access_token, { type: 'bearer' })
+      .expect(200)
   })
 
   test('should trim tags and title', async () => {
