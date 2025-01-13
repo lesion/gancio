@@ -1,11 +1,12 @@
 module.exports = {
-  be: 'Беларуская',
+  be: 'Belarus, Беларуская',
   ca: 'Català',
   cs: 'Czech',
   de: 'Deutsch',
   en: 'English',
   es: 'Español',
   eu: 'Euskara',
+  fi: 'Finnish, Suomen',
   fr: 'Francais',
   gl: 'Galego',
   it: 'Italiano',
@@ -15,11 +16,11 @@ module.exports = {
   pt: 'Português',
   'pt-BR': 'Português (Brasil)',
   ro: 'Românesc',
-  ru: 'Русский',
+  ru: 'Russian, Русский',
   sk: 'Slovak',
-  sq: 'Shqiptare',
-  sv: 'Svenska',
-  ta: 'தமிழ், Tamil',
-  tr: 'Türkçe',
-  zh: '中国'
+  sq: 'Albanian, Shqiptare',
+  sv: 'Swedish, Svenska',
+  ta: 'Tamil, தமிழ்',
+  tr: 'Turkish, Türkçe',
+  zh: 'Chinese, 中国'
 }
