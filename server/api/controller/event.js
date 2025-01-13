@@ -41,7 +41,7 @@ const eventController = {
     const place_name = body.place_name && body.place_name.trim()
     const place_address = body.place_address && body.place_address.trim()
     if (!place_name || !place_address && place_name?.toLocaleLowerCase() !== 'online') {
-      throw new Error(`place_id or place_name and place_address are required: ${JSON.stringify(body)}`)
+      throw new Error('place_id or place_name and place_address are required')
     }
     let place = await Place.findOne({ where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Sequelize.Op.eq, place_name.toLocaleLowerCase()) })
     if (!place) {
@@ -476,28 +476,42 @@ const eventController = {
         return res.status(400).send(`${missing_field} required`)
       }
 
+      const is_anonymous = !req.user
+      const now = DateTime.local().toUnixInteger()
+      const start_datetime = Number(body.start_datetime)
+
       // validate start_datetime and end_datetime
       if (body.end_datetime) {
         if (body.start_datetime > body.end_datetime) {
+          log.debug('[EVENT] start_datetime is greated than end_datetime')
           return res.status(400).send(`start datetime is greater than end datetime`)
         }
 
         if (Number(body.end_datetime) > 1000*24*60*60*365) {
+          log.debug('[EVENT] end_datetime is too much in the future')
           return res.status(400).send('are you sure?')
         }
   
       }
 
-      if (!Number(body.start_datetime)) {
+      if (!start_datetime) {
+        log.debug('[EVENT] start_datetime has to be a number')
         return res.status(400).send(`Wrong format for start datetime`)
       }
 
       if (body.end_datetime && !Number(body.end_datetime)) {
+        log.debug('[EVENT] start_datetime has to be a number')
         return res.status(400).send(`Wrong format for end datetime`)
       }
 
-      if (Number(body.start_datetime) > 1000*24*60*60*365) {
+      if (start_datetime > 1000*24*60*60*365) {
+        log.debug('[EVENT] start_datetime is too much in the future')
         return res.status(400).send('are you sure?')
+      }
+
+      if(is_anonymous && start_datetime < now) {
+        log.debug('[EVENT] Anonymous users cannot create past events')
+        return res.status(400).send('Anonymous user cannot create past events')
       }
 
       // find or create the place
@@ -512,18 +526,17 @@ const eventController = {
         return res.status(400).send(e.message)
       }
 
-
       const eventDetails = {
         title: body.title.trim(),
         // sanitize and linkify html
         description: helpers.sanitizeHTML(linkifyHtml(body.description || '', { target: '_blank', render: { email: ctx => ctx.content }})),
         multidate: body.multidate,
-        start_datetime: Number(body.start_datetime),
+        start_datetime,
         end_datetime: Number(body.end_datetime) || null,
         online_locations: body.online_locations,
         recurrent,
         // publish this event only if authenticated
-        is_visible: !!req.user
+        is_visible: !is_anonymous
       }
 
       if (req.file || body.image_url) {
@@ -607,7 +620,7 @@ const eventController = {
       const start_datetime = Number(body.start_datetime || event.start_datetime)
       const end_datetime = body.end_datetime === '' ? null : Number(body.end_datetime || event.end_datetime) || null
 
-      // // validate start_datetime and end_datetime
+      // validate start_datetime and end_datetime
       if (end_datetime) {
         if (start_datetime > end_datetime) {
           log.debug('[UPDATE] start_datetime is greated than end_datetime')
