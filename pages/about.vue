@@ -21,6 +21,9 @@ export default {
   },
   head () {
     return {
+      htmlAttrs: {
+        lang: this.settings.instance_locale
+      },
       title: `${this.settings.title} - ${this.$t('common.info')}`
     }
   },

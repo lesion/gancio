@@ -24,6 +24,9 @@ export default {
     const title = `${this.settings.title} #${tag}`
     return {
       title,
+      htmlAttrs: {
+        lang: this.settings.instance_locale
+      },      
       link: [
         { rel: 'alternate', type: 'application/rss+xml', title, href: this.settings.baseurl + `/feed/rss/tag/${tag}` },
         { rel: 'alternate', type: 'text/calendar', title, href: this.settings.baseurl + `/feed/ics/tag/${tag}` }

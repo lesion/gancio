@@ -188,6 +188,9 @@ export default {
 
     return {
       title: `${this.settings.title} - ${this.event.title}`,
+      htmlAttrs: {
+        lang: this.settings.instance_locale
+      },      
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         {
