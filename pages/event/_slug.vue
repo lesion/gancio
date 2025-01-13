@@ -102,10 +102,10 @@
     //- Next/prev arrow
     .text-center.mt-5.mb-5
       v-btn.mr-2(nuxt icon outlined color='primary'
-        :to='`/event/${event.prev ? event.prev : (event.slug || event.id)}`' :disabled='!event.prev')
+        :to='event.prev && `/event/${event.prev}`' :disabled='!event.prev')
         v-icon(v-text='mdiArrowLeft')
       v-btn(nuxt bottom right outlined icon color='primary'
-        :to='`/event/${event.next ? event.next : (event.slug || event.id)}`' :disabled='!event.next')
+        :to='event.next && `/event/${event.next}`' :disabled='!event.next')
         v-icon(v-text='mdiArrowRight')
 
     v-dialog(v-model='showEmbed' width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
