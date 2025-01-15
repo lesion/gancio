@@ -30,6 +30,9 @@ export default {
       return {}
     }
     return {
+      htmlAttrs: {
+        lang: this.settings.instance_locale
+      },
       title: `${this.settings.title} - ${this.announcement.title}`
     }
   },

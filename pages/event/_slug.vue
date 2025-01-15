@@ -3,7 +3,7 @@
     //- EVENT PAGE
     //- gancio supports microformats (http://microformats.org/wiki/h-event)
     //- and microdata https://schema.org/Event
-    .title.text-center.text-md-h4.text-h5.pa-6
+    h1.title.text-center.text-md-h4.text-h5.pa-6
       strong.p-name.text--primary(itemprop="name") {{event.title}}
     v-row
       v-col.col-12.col-md-8.pr-sm-2.pr-md-0
@@ -102,10 +102,10 @@
     //- Next/prev arrow
     .text-center.mt-5.mb-5
       v-btn.mr-2(nuxt icon outlined color='primary'
-        :to='`/event/${event.prev}`' :disabled='!event.prev')
+        :to='event.prev && `/event/${event.prev}`' :disabled='!event.prev')
         v-icon(v-text='mdiArrowLeft')
       v-btn(nuxt bottom right outlined icon color='primary'
-        :to='`/event/${event.next}`' :disabled='!event.next')
+        :to='event.next && `/event/${event.next}`' :disabled='!event.next')
         v-icon(v-text='mdiArrowRight')
 
     v-dialog(v-model='showEmbed' width='700px' :fullscreen='$vuetify.breakpoint.xsOnly')
@@ -188,6 +188,9 @@ export default {
 
     return {
       title: `${this.settings.title} - ${this.event.title}`,
+      htmlAttrs: {
+        lang: this.settings.instance_locale
+      },      
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         {
