@@ -92,7 +92,7 @@
     "umzug": "^2.3.0",
     "v-calendar": "^2.4.2",
     "vue2-leaflet": "^2.7.1",
-    "vuetify": "2.6.14",
+    "vuetify": "3.0.0",
     "winston": "^3.13.0",
     "winston-daily-rotate-file": "^5.0.0",
     "yargs": "^17.7.2"
