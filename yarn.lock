@@ -1676,10 +1676,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@ladjs/consolidate@^1.0.1":
-  version "1.0.3"
-  resolved "https://registry.npmjs.org/@ladjs/consolidate/-/consolidate-1.0.3.tgz"
-  integrity sha512-zyUeV5nkEFz7FH88pz+moVeMMOygTx1zL5bjXGHCVX5MMpmAtFf5piaQlBDk3nClGoUs8vjYI9TKsbXldGv0VA==
+"@ladjs/consolidate@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@ladjs/consolidate/-/consolidate-1.0.4.tgz#31d9604a0e3de6616aeba062c4390c5aa0e5c04d"
+  integrity sha512-ErvBg5acSqns86V/xW7gjqqnBBs6thnpMB0gGc3oM7WHsV8PWrnBtKI6dumHDT3UT/zEOfGzp7dmSFqWoCXKWQ==
 
 "@ladjs/country-language@^0.2.1":
   version "0.2.1"
@@ -3875,7 +3875,7 @@ cheerio-select@^2.1.0:
     domhandler "^5.0.3"
     domutils "^3.0.1"
 
-cheerio@1.0.0-rc.12, cheerio@^1.0.0-rc.12:
+cheerio@1.0.0-rc.12:
   version "1.0.0-rc.12"
   resolved "https://registry.npmjs.org/cheerio/-/cheerio-1.0.0-rc.12.tgz"
   integrity sha512-VqR8m68vM46BNnuZ5NtnGBKIE/DfN0cRIzg9n40EIq9NOv90ayxLBXA8fXC5gquFRGJSTRqBq25Jt2ECLR431Q==
@@ -5219,18 +5219,19 @@ elliptic@^6.5.3, elliptic@^6.5.5:
     minimalistic-assert "^1.0.1"
     minimalistic-crypto-utils "^1.0.1"
 
-email-templates@^11.1.1:
-  version "11.1.1"
-  resolved "https://registry.npmjs.org/email-templates/-/email-templates-11.1.1.tgz"
-  integrity sha512-MEf/KlM/FokY7Hy3MBLZI5S4lOna0a2SX0tVzKc+VWSIc5/dq19wDkRVl28RgWtKK0Dfb+Z0iqbuk2BnIRfyDg==
+email-templates@^12.0.2:
+  version "12.0.3"
+  resolved "https://registry.yarnpkg.com/email-templates/-/email-templates-12.0.3.tgz#e35a6528460d9d3b838468d05fedde1299ad5281"
+  integrity sha512-tCjkmZYakXkKfL3/qZJ7esCa04KP5zIpcuEjw9EPLQrLbTUUkX6w9MMc37zGj2nJvIpFBc1lUudHi5DkZqiNJQ==
   dependencies:
-    "@ladjs/consolidate" "^1.0.1"
+    "@ladjs/consolidate" "^1.0.4"
     "@ladjs/i18n" "^8.0.3"
     get-paths "^0.0.7"
     html-to-text "^9.0.5"
-    juice "^9.0.0"
+    juice "^10.0.0"
     lodash "^4.17.21"
-    nodemailer "^6.9.3"
+    nodemailer "^6.9.14"
+  optionalDependencies:
     preview-email "^3.0.17"
 
 emittery@^0.13.1:
@@ -7877,12 +7878,12 @@ jstransformer@1.0.0:
     is-promise "^2.0.0"
     promise "^7.0.1"
 
-juice@^9.0.0:
-  version "9.1.0"
-  resolved "https://registry.npmjs.org/juice/-/juice-9.1.0.tgz"
-  integrity sha512-odblShmPrUoHUwRuC8EmLji5bPP2MLO1GL+gt4XU3tT2ECmbSrrMjtMQaqg3wgMFP2zvUzdPZGfxc5Trk3Z+fQ==
+juice@^10.0.0:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/juice/-/juice-10.0.1.tgz#a1492091ef739e4771b9f60aad1a608b5a8ea3ba"
+  integrity sha512-ZhJT1soxJCkOiO55/mz8yeBKTAJhRzX9WBO+16ZTqNTONnnVlUPyVBIzQ7lDRjaBdTbid+bAnyIon/GM3yp4cA==
   dependencies:
-    cheerio "^1.0.0-rc.12"
+    cheerio "1.0.0-rc.12"
     commander "^6.1.0"
     mensch "^0.3.4"
     slick "^1.12.2"
@@ -8990,7 +8991,12 @@ nodemailer@6.9.11:
   resolved "https://registry.npmjs.org/nodemailer/-/nodemailer-6.9.11.tgz"
   integrity sha512-UiAkgiERuG94kl/3bKfE8o10epvDnl0vokNEtZDPTq9BWzIl6EFT9336SbIT4oaTBD8NmmUTLsQyXHV82eXSWg==
 
-nodemailer@^6.9.2, nodemailer@^6.9.3:
+nodemailer@^6.9.14:
+  version "6.10.1"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.10.1.tgz#cbc434c54238f83a51c07eabd04e2b3e832da623"
+  integrity sha512-Z+iLaBGVaSjbIzQ4pX6XV41HrooLsQ10ZWPUehGmuantvzWoDVBnmsdUcOIDM1t+yPor5pDhVlDESgOMEGxhHA==
+
+nodemailer@^6.9.2:
   version "6.9.13"
   resolved "https://registry.npmjs.org/nodemailer/-/nodemailer-6.9.13.tgz"
   integrity sha512-7o38Yogx6krdoBf3jCAqnIN4oSQFx+fMa0I7dK1D+me9kBxx12D+/33wSb+fhOCtIxvYJ+4x4IMEhmhCKfAiOA==
